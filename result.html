@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Check Result — CTGBoardRanking</title>
+
+    <meta name="description"
+          content="Check individual Chattogram Board result">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .result-hero {
+            max-width: 1000px;
+            margin: auto;
+            padding: 90px 20px 50px;
+            text-align: center;
+        }
+
+        .result-hero h1 {
+            font-size: clamp(45px, 7vw, 75px);
+            line-height: .98;
+            letter-spacing: -4px;
+            margin-top: 12px;
+        }
+
+        .result-hero h1 span {
+            color: var(--blue);
+        }
+
+        .result-hero p {
+            max-width: 600px;
+            margin: 20px auto;
+            color: var(--muted);
+            font-size: 17px;
+        }
+
+        .result-container {
+            max-width: 850px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        /* SEARCH CARD */
+
+        .search-card {
+            background: rgba(255,255,255,.85);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .search-card h2 {
+            font-size: 25px;
+            margin-bottom: 7px;
+        }
+
+        .search-card p {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 13px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin: 0 0 7px 4px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: #f5f5f7;
+            color: var(--text);
+            font-family: inherit;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--blue);
+        }
+
+        .search-button {
+            width: 100%;
+            border: 0;
+            margin-top: 16px;
+            padding: 15px;
+            border-radius: 14px;
+            background: var(--blue);
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .25s;
+        }
+
+        .search-button:hover {
+            background: var(--blue-dark);
+            transform: translateY(-2px);
+        }
+
+        /* RESULT */
+
+        #resultArea {
+            display: none;
+            margin-top: 25px;
+        }
+
+        .result-card {
+            background: rgba(255,255,255,.9);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .result-header {
+            padding: 30px;
+            background: linear-gradient(
+                135deg,
+                #eef6ff,
+                #ffffff
+            );
+            border-bottom: 1px solid var(--border);
+        }
+
+        .result-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-header h2 {
+            font-size: 28px;
+            margin-top: 5px;
+        }
+
+        .result-status {
+            background: #e8f7ef;
+            color: #16834b;
+            padding: 8px 13px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .student-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 25px 30px;
+        }
+
+        .info-box {
+            padding: 15px;
+            background: #f5f5f7;
+            border-radius: 15px;
+        }
+
+        .info-box span {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            margin-bottom: 5px;
+        }
+
+        .info-box strong {
+            font-size: 13px;
+        }
+
+        /* SUBJECT TABLE */
+
+        .subject-table {
+            margin: 0 30px 25px;
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            overflow: hidden;
+        }
+
+        .subject-header,
+        .subject-row {
+            display: grid;
+            grid-template-columns: 1fr 110px 100px;
+            padding: 14px 17px;
+            align-items: center;
+        }
+
+        .subject-header {
+            background: #f5f5f7;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .subject-row {
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .grade {
+            font-weight: 700;
+        }
+
+        /* SUMMARY */
+
+        .result-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 0 30px 30px;
+        }
+
+        .summary-box {
+            text-align: center;
+            padding: 20px;
+            border-radius: 18px;
+            background: #f5f5f7;
+        }
+
+        .summary-box strong {
+            display: block;
+            font-size: 25px;
+        }
+
+        .summary-box span {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .rank-box {
+            background: #eef6ff;
+        }
+
+        .error-message {
+            display: none;
+            margin-top: 15px;
+            padding: 13px;
+            text-align: center;
+            border-radius: 13px;
+            background: #fff0f0;
+            color: #c62828;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+
+            .result-hero {
+                padding-top: 65px;
+            }
+
+            .result-hero h1 {
+                letter-spacing: -3px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .student-info {
+                grid-template-columns: 1fr 1fr;
+                padding: 20px;
+            }
+
+            .result-header {
+                padding: 25px 20px;
+            }
+
+            .subject-table {
+                margin-left: 20px;
+                margin-right: 20px;
+                overflow-x: auto;
+            }
+
+            .subject-header,
+            .subject-row {
+                min-width: 420px;
+            }
+
+            .result-summary {
+                grid-template-columns: 1fr;
+                padding: 0 20px 20px;
+            }
+        }
+
+        @media (max-width: 450px) {
+
+            .student-info {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <a href="index.html" class="logo">
+        <span class="logo-mark">C</span>
+        <span>CTGBoardRanking</span>
+    </a>
+
+    <nav class="nav-links">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="student-ranking.html">
+            Student Ranking
+        </a>
+
+        <a href="rankings.html">
+            Institution Ranking
+        </a>
+
+        <a href="district.html">
+            Districts
+        </a>
+
+        <a href="statistics.html">
+            Statistics
+        </a>
+
+    </nav>
+
+    <button
+        class="theme-btn"
+        id="themeBtn">
+        ◐
+    </button>
+
+</header>
+
+
+<main>
+
+<!-- HERO -->
+
+<section class="result-hero">
+
+    <span class="eyebrow">
+        CHITTAGONG BOARD
+    </span>
+
+    <h1>
+        Check your<br>
+        <span>result.</span>
+    </h1>
+
+    <p>
+        Enter your examination information
+        to view your individual result.
+    </p>
+
+</section>
+
+
+<section class="result-container">
+
+
+    <!-- SEARCH -->
+
+    <div class="search-card">
+
+        <h2>
+            Find Result
+        </h2>
+
+        <p>
+            Enter your year and roll number.
+        </p>
+
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    YEAR
+                </label>
+
+                <select id="year">
+
+                    <option value="2026">
+                        2026
+                    </option>
+
+                    <option value="2025">
+                        2025
+                    </option>
+
+                    <option value="2024">
+                        2024
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    EXAM
+                </label>
+
+                <select id="exam">
+
+                    <option value="ssc">
+                        SSC
+                    </option>
+
+                    <option value="hsc">
+                        HSC
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    ROLL NUMBER
+                </label>
+
+                <input
+                    type="number"
+                    id="roll"
+                    placeholder="Enter roll number">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    REGISTRATION NUMBER
+                </label>
+
+                <input
+                    type="number"
+                    id="registration"
+                    placeholder="Optional">
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="search-button"
+            id="searchButton">
+
+            View Result →
+
+        </button>
+
+
+        <div
+            class="error-message"
+            id="errorMessage">
+
+            Please enter a valid roll number.
+
+        </div>
+
+    </div>
+
+
+    <!-- RESULT -->
+
+    <div id="resultArea">
+
+        <div class="result-card">
+
+
+            <!-- HEADER -->
+
+            <div class="result-header">
+
+                <div class="result-header-top">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            EXAMINATION RESULT
+                        </span>
+
+                        <h2 id="studentName">
+                            Student Name
+                        </h2>
+
+                    </div>
+
+                    <span class="result-status">
+                        PASSED
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- INFO -->
+
+            <div class="student-info">
+
+                <div class="info-box">
+
+                    <span>
+                        ROLL
+                    </span>
+
+                    <strong id="showRoll">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span>
+                        REGISTRATION
+                    </span>
+
+                    <strong id="showRegistration">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span>
+                        YEAR
+                    </span>
+
+                    <strong id="showYear">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span>
+                        GROUP
+                    </span>
+
+                    <strong>
+                        Science
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span>
+                        INSTITUTION
+                    </span>
+
+                    <strong>
+                        Institution Name
+                    </strong>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span>
+                        DISTRICT
+                    </span>
+
+                    <strong>
+                        Chattogram
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- SUBJECTS -->
+
+            <div class="subject-table">
+
+                <div class="subject-header">
+
+                    <div>
+                        SUBJECT
+                    </div>
+
+                    <div>
+                        MARKS
+                    </div>
+
+                    <div>
+                        GRADE
+                    </div>
+
+                </div>
+
+
+                <div class="subject-row">
+
+                    <div>
+                        Bangla
+                    </div>
+
+                    <div>
+                        —
+                    </div>
+
+                    <div class="grade">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="subject-row">
+
+                    <div>
+                        English
+                    </div>
+
+                    <div>
+                        —
+                    </div>
+
+                    <div class="grade">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="subject-row">
+
+                    <div>
+                        Mathematics
+                    </div>
+
+                    <div>
+                        —
+                    </div>
+
+                    <div class="grade">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="subject-row">
+
+                    <div>
+                        Physics
+                    </div>
+
+                    <div>
+                        —
+                    </div>
+
+                    <div class="grade">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="subject-row">
+
+                    <div>
+                        Chemistry
+                    </div>
+
+                    <div>
+                        —
+                    </div>
+
+                    <div class="grade">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="subject-row">
+
+                    <div>
+                        Biology
+                    </div>
+
+                    <div>
+                        —
+                    </div>
+
+                    <div class="grade">
+                        —
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SUMMARY -->
+
+            <div class="result-summary">
+
+                <div class="summary-box">
+
+                    <strong id="totalMarks">
+                        —
+                    </strong>
+
+                    <span>
+                        TOTAL MARKS
+                    </span>
+
+                </div>
+
+
+                <div class="summary-box">
+
+                    <strong id="gpa">
+                        —
+                    </strong>
+
+                    <span>
+                        GPA
+                    </span>
+
+                </div>
+
+
+                <div class="summary-box rank-box">
+
+                    <strong id="rank">
+                        —
+                    </strong>
+
+                    <span>
+                        STUDENT RANK
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+    <div class="footer-main">
+
+        <div>
+
+            <div class="footer-logo">
+
+                <span class="logo-mark">
+                    C
+                </span>
+
+                CTGBoardRanking
+
+            </div>
+
+            <p>
+                Chattogram Board Education Rankings.
+            </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="student-ranking.html">
+                Student Ranking
+            </a>
+
+            <a href="rankings.html">
+                Institution Ranking
+            </a>
+
+            <a href="district.html">
+                Districts
+            </a>
+
+            <a href="statistics.html">
+                Statistics
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <span>
+            © 2026 CTGBoardRanking
+        </span>
+
+        <span>
+            Education Data & Statistics
+        </span>
+
+    </div>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+
+<script>
+
+const searchButton =
+    document.getElementById("searchButton");
+
+const errorMessage =
+    document.getElementById("errorMessage");
+
+const resultArea =
+    document.getElementById("resultArea");
+
+const rollInput =
+    document.getElementById("roll");
+
+const registrationInput =
+    document.getElementById("registration");
+
+const yearInput =
+    document.getElementById("year");
+
+
+searchButton.addEventListener(
+    "click",
+    function () {
+
+        const roll =
+            rollInput.value.trim();
+
+        const registration =
+            registrationInput.value.trim();
+
+        const year =
+            yearInput.value;
+
+
+        if (!roll) {
+
+            errorMessage.style.display =
+                "block";
+
+            resultArea.style.display =
+                "none";
+
+            return;
+        }
+
+
+        errorMessage.style.display =
+            "none";
+
+
+        /*
+         * DEMO RESULT
+         *
+         * Later this section will be
+         * replaced with Supabase query.
+         */
+
+        document.getElementById(
+            "showRoll"
+        ).textContent = roll;
+
+
+        document.getElementById(
+            "showRegistration"
+        ).textContent =
+            registration || "Not provided";
+
+
+        document.getElementById(
+            "showYear"
+        ).textContent = year;
+
+
+        resultArea.style.display =
+            "block";
+
+
+        resultArea.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+);
+
+
+/* ENTER KEY */
+
+rollInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Enter") {
+            searchButton.click();
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
