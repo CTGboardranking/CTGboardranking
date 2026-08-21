@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Ranking — CTGBoardRanking</title>
+
+    <meta name="description"
+          content="Chattogram Board Student Ranking">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .student-hero {
+            max-width: 1100px;
+            margin: auto;
+            padding: 90px 20px 50px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .back-link:hover {
+            color: var(--blue);
+        }
+
+        .student-hero h1 {
+            font-size: clamp(45px, 7vw, 76px);
+            line-height: .98;
+            letter-spacing: -4px;
+            margin-top: 10px;
+        }
+
+        .student-hero h1 span {
+            color: var(--blue);
+        }
+
+        .student-hero p {
+            color: var(--muted);
+            max-width: 650px;
+            margin-top: 20px;
+            font-size: 17px;
+        }
+
+        .student-content {
+            max-width: 1100px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .ranking-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 35px;
+        }
+
+        .control-card {
+            background: rgba(255,255,255,.82);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .control-card label {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .control-card select,
+        .student-search {
+            width: 100%;
+            padding: 13px;
+            border-radius: 13px;
+            border: 1px solid var(--border);
+            background: rgba(245,245,247,.8);
+            color: var(--text);
+            font-family: inherit;
+            outline: none;
+        }
+
+        .group-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        .group-tab {
+            border: 1px solid var(--border);
+            background: var(--white);
+            color: var(--muted);
+            padding: 11px 18px;
+            border-radius: 50px;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .group-tab.active {
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        .ranking-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            margin-bottom: 20px;
+        }
+
+        .ranking-title h2 {
+            font-size: 32px;
+            letter-spacing: -1.5px;
+        }
+
+        .ranking-title p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .student-search {
+            margin-bottom: 18px;
+            background: white;
+        }
+
+        .student-list {
+            background: rgba(255,255,255,.88);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .student-row {
+            display: grid;
+            grid-template-columns: 70px 1fr 180px 120px;
+            align-items: center;
+            gap: 15px;
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--border);
+            transition: .2s;
+        }
+
+        .student-row:last-child {
+            border-bottom: none;
+        }
+
+        .student-row:hover {
+            background: rgba(0,113,227,.035);
+        }
+
+        .student-rank {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--muted);
+        }
+
+        .student-rank.gold {
+            color: #c68a00;
+        }
+
+        .student-name strong,
+        .student-name span {
+            display: block;
+        }
+
+        .student-name strong {
+            font-size: 15px;
+        }
+
+        .student-name span {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+        .student-institution strong,
+        .student-institution span {
+            display: block;
+        }
+
+        .student-institution strong {
+            font-size: 13px;
+        }
+
+        .student-institution span {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .student-score strong {
+            font-size: 17px;
+        }
+
+        .student-score span {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .empty-message {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+        }
+
+        @media (max-width: 800px) {
+
+            .student-hero {
+                padding-top: 65px;
+            }
+
+            .ranking-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .ranking-title {
+                display: block;
+            }
+
+            .ranking-title p {
+                margin-top: 6px;
+            }
+
+            .student-row {
+                grid-template-columns: 45px 1fr 80px;
+                padding: 18px;
+                gap: 10px;
+            }
+
+            .student-institution {
+                display: none;
+            }
+
+        }
+
+        @media (max-width: 500px) {
+
+            .student-hero h1 {
+                letter-spacing: -3px;
+            }
+
+            .student-row {
+                grid-template-columns: 42px 1fr 65px;
+            }
+
+            .student-score strong {
+                font-size: 14px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <a href="index.html" class="logo">
+        <span class="logo-mark">C</span>
+        <span>CTGBoardRanking</span>
+    </a>
+
+    <nav class="nav-links">
+
+        <a href="index.html">Home</a>
+
+        <a href="student-ranking.html" class="active">
+            Student Ranking
+        </a>
+
+        <a href="rankings.html">
+            Institution Ranking
+        </a>
+
+        <a href="district.html">
+            Districts
+        </a>
+
+        <a href="statistics.html">
+            Statistics
+        </a>
+
+    </nav>
+
+    <button
+        class="theme-btn"
+        id="themeBtn"
+        aria-label="Toggle dark mode">
+        ◐
+    </button>
+
+</header>
+
+
+<main>
+
+<section class="student-hero">
+
+    <a href="index.html" class="back-link">
+        ← Back to Home
+    </a>
+
+    <span class="eyebrow">
+        CHITTAGONG BOARD
+    </span>
+
+    <h1>
+        Student<br>
+        <span>Ranking.</span>
+    </h1>
+
+    <p>
+        Explore top-performing students by group and academic year.
+    </p>
+
+</section>
+
+
+<section class="student-content">
+
+    <!-- YEAR -->
+
+    <div class="ranking-controls">
+
+        <div class="control-card">
+
+            <label>
+                ACADEMIC YEAR
+            </label>
+
+            <select id="yearSelect">
+
+                <option value="2026">
+                    2026
+                </option>
+
+                <option value="2025">
+                    2025
+                </option>
+
+                <option value="2024">
+                    2024
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="control-card">
+
+            <label>
+                RANKING
+            </label>
+
+            <select id="rankingType">
+
+                <option value="student">
+                    Student Ranking
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <!-- GROUP TABS -->
+
+    <div class="group-tabs">
+
+        <button
+            class="group-tab active"
+            data-group="science">
+
+            🔬 Science
+
+        </button>
+
+        <button
+            class="group-tab"
+            data-group="business">
+
+            💼 Business Studies
+
+        </button>
+
+        <button
+            class="group-tab"
+            data-group="humanities">
+
+            🎓 Humanities
+
+        </button>
+
+    </div>
+
+
+    <!-- TITLE -->
+
+    <div class="ranking-title">
+
+        <div>
+
+            <span class="eyebrow">
+                TOP PERFORMERS
+            </span>
+
+            <h2 id="groupTitle">
+                Science Students
+            </h2>
+
+        </div>
+
+        <p id="yearText">
+            2026 · Chattogram Board
+        </p>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <input
+        type="search"
+        id="studentSearch"
+        class="student-search"
+        placeholder="Search student or institution..."
+        autocomplete="off">
+
+
+    <!-- STUDENT LIST -->
+
+    <div class="student-list">
+
+        <div id="studentRows">
+
+
+            <!-- 1 -->
+
+            <div class="student-row">
+
+                <div class="student-rank gold">
+                    01
+                </div>
+
+                <div class="student-name">
+
+                    <strong>
+                        Student Name
+                    </strong>
+
+                    <span>
+                        Roll: —
+                    </span>
+
+                </div>
+
+                <div class="student-institution">
+
+                    <strong>
+                        Institution Name
+                    </strong>
+
+                    <span>
+                        Chattogram
+                    </span>
+
+                </div>
+
+                <div class="student-score">
+
+                    <strong>
+                        —
+                    </strong>
+
+                    <span>
+                        SCORE / GPA
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- 2 -->
+
+            <div class="student-row">
+
+                <div class="student-rank">
+                    02
+                </div>
+
+                <div class="student-name">
+
+                    <strong>
+                        Student Name
+                    </strong>
+
+                    <span>
+                        Roll: —
+                    </span>
+
+                </div>
+
+                <div class="student-institution">
+
+                    <strong>
+                        Institution Name
+                    </strong>
+
+                    <span>
+                        Chattogram
+                    </span>
+
+                </div>
+
+                <div class="student-score">
+
+                    <strong>
+                        —
+                    </strong>
+
+                    <span>
+                        SCORE / GPA
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- 3 -->
+
+            <div class="student-row">
+
+                <div class="student-rank">
+                    03
+                </div>
+
+                <div class="student-name">
+
+                    <strong>
+                        Student Name
+                    </strong>
+
+                    <span>
+                        Roll: —
+                    </span>
+
+                </div>
+
+                <div class="student-institution">
+
+                    <strong>
+                        Institution Name
+                    </strong>
+
+                    <span>
+                        Chattogram
+                    </span>
+
+                </div>
+
+                <div class="student-score">
+
+                    <strong>
+                        —
+                    </strong>
+
+                    <span>
+                        SCORE / GPA
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- 4 -->
+
+            <div class="student-row">
+
+                <div class="student-rank">
+                    04
+                </div>
+
+                <div class="student-name">
+
+                    <strong>
+                        Student Name
+                    </strong>
+
+                    <span>
+                        Roll: —
+                    </span>
+
+                </div>
+
+                <div class="student-institution">
+
+                    <strong>
+                        Institution Name
+                    </strong>
+
+                    <span>
+                        Chattogram
+                    </span>
+
+                </div>
+
+                <div class="student-score">
+
+                    <strong>
+                        —
+                    </strong>
+
+                    <span>
+                        SCORE / GPA
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- 5 -->
+
+            <div class="student-row">
+
+                <div class="student-rank">
+                    05
+                </div>
+
+                <div class="student-name">
+
+                    <strong>
+                        Student Name
+                    </strong>
+
+                    <span>
+                        Roll: —
+                    </span>
+
+                </div>
+
+                <div class="student-institution">
+
+                    <strong>
+                        Institution Name
+                    </strong>
+
+                    <span>
+                        Chattogram
+                    </span>
+
+                </div>
+
+                <div class="student-score">
+
+                    <strong>
+                        —
+                    </strong>
+
+                    <span>
+                        SCORE / GPA
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div
+            id="emptyMessage"
+            class="empty-message">
+
+            No student found.
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+    <div class="footer-main">
+
+        <div>
+
+            <div class="footer-logo">
+
+                <span class="logo-mark">
+                    C
+                </span>
+
+                CTGBoardRanking
+
+            </div>
+
+            <p>
+                Chattogram Board Education Rankings.
+            </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="student-ranking.html">
+                Student Ranking
+            </a>
+
+            <a href="rankings.html">
+                Institution Ranking
+            </a>
+
+            <a href="district.html">
+                Districts
+            </a>
+
+            <a href="statistics.html">
+                Statistics
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <span>
+            © 2026 CTGBoardRanking
+        </span>
+
+        <span>
+            Education Data & Statistics
+        </span>
+
+    </div>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+
+<script>
+
+    /* =========================
+       GROUP
+    ========================= */
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    let currentGroup =
+        params.get("group") || "science";
+
+
+    const groupTitle =
+        document.getElementById("groupTitle");
+
+    const yearSelect =
+        document.getElementById("yearSelect");
+
+    const yearText =
+        document.getElementById("yearText");
+
+    const tabs =
+        document.querySelectorAll(".group-tab");
+
+
+    function updateGroup() {
+
+        let name = "Science";
+
+        if (currentGroup === "business") {
+            name = "Business Studies";
+        }
+
+        if (currentGroup === "humanities") {
+            name = "Humanities";
+        }
+
+        groupTitle.textContent =
+            name + " Students";
+
+        yearText.textContent =
+            yearSelect.value +
+            " · Chattogram Board";
+
+
+        tabs.forEach(tab => {
+
+            tab.classList.toggle(
+                "active",
+                tab.dataset.group === currentGroup
+            );
+
+        });
+
+    }
+
+
+    tabs.forEach(tab => {
+
+        tab.addEventListener(
+            "click",
+            () => {
+
+                currentGroup =
+                    tab.dataset.group;
+
+                updateGroup();
+
+                const newUrl =
+                    "student-ranking.html?group=" +
+                    currentGroup;
+
+                history.replaceState(
+                    null,
+                    "",
+                    newUrl
+                );
+
+            }
+        );
+
+    });
+
+
+    yearSelect.addEventListener(
+        "change",
+        updateGroup
+    );
+
+
+    /* =========================
+       SEARCH
+    ========================= */
+
+    const search =
+        document.getElementById(
+            "studentSearch"
+        );
+
+    const rows =
+        document.querySelectorAll(
+            ".student-row"
+        );
+
+    const empty =
+        document.getElementById(
+            "emptyMessage"
+        );
+
+
+    search.addEventListener(
+        "input",
+        function () {
+
+            const value =
+                this.value
+                .toLowerCase()
+                .trim();
+
+            let count = 0;
+
+            rows.forEach(row => {
+
+                const text =
+                    row.textContent
+                    .toLowerCase();
+
+                if (
+                    text.includes(value)
+                ) {
+
+                    row.style.display =
+                        "grid";
+
+                    count++;
+
+                } else {
+
+                    row.style.display =
+                        "none";
+
+                }
+
+            });
+
+
+            empty.style.display =
+                count === 0 ?
+                "block" :
+                "none";
+
+        }
+    );
+
+
+    updateGroup();
+
+</script>
+
+</body>
+</html>
