@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Rankings — CTGBoardRanking</title>
+
+    <meta name="description"
+          content="Chattogram Board Institution and District Rankings">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        /* =========================
+           RANKING PAGE
+        ========================= */
+
+        .ranking-hero {
+            max-width: 1100px;
+            margin: auto;
+            padding: 90px 20px 55px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 30px;
+            transition: .2s;
+        }
+
+        .back-link:hover {
+            color: var(--blue);
+        }
+
+        .ranking-hero h1 {
+            font-size: clamp(44px, 7vw, 72px);
+            line-height: 1;
+            letter-spacing: -4px;
+            margin-top: 12px;
+        }
+
+        .ranking-hero h1 span {
+            color: var(--blue);
+        }
+
+        .ranking-hero p {
+            color: var(--muted);
+            max-width: 650px;
+            margin-top: 20px;
+            font-size: 17px;
+        }
+
+
+        /* FILTER */
+
+        .filters {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px 50px;
+        }
+
+        .filter-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            padding: 15px;
+            background: rgba(255,255,255,.78);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+        }
+
+        .filter-item label {
+            display: block;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin: 0 0 7px 5px;
+        }
+
+        .filter-item select,
+        .search-box input {
+            width: 100%;
+            border: 1px solid var(--border);
+            background: rgba(245,245,247,.8);
+            color: var(--text);
+            border-radius: 13px;
+            padding: 13px 14px;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .filter-item select:focus,
+        .search-box input:focus {
+            border-color: var(--blue);
+        }
+
+
+        /* CONTENT */
+
+        .ranking-content {
+            max-width: 1100px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .content-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            margin-bottom: 25px;
+        }
+
+        .content-heading h2 {
+            font-size: 32px;
+            letter-spacing: -1.5px;
+        }
+
+        .content-heading p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+
+        /* PODIUM */
+
+        .podium {
+            display: grid;
+            grid-template-columns: 1fr 1.15fr 1fr;
+            gap: 14px;
+            align-items: end;
+            margin-bottom: 35px;
+        }
+
+        .podium-card {
+            background: rgba(255,255,255,.85);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 28px 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .podium-card.first {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            transform: translateY(-12px);
+        }
+
+        .medal {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .podium-rank {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .podium-card h3 {
+            font-size: 18px;
+            margin: 8px 0 3px;
+        }
+
+        .podium-card p {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .podium-score {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .podium-score small {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+
+        /* SEARCH */
+
+        .search-box {
+            margin-bottom: 18px;
+        }
+
+        .search-box input {
+            background: white;
+            padding: 15px 17px;
+        }
+
+
+        /* TABLE */
+
+        .ranking-table {
+            background: rgba(255,255,255,.88);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .table-header,
+        .table-row {
+            display: grid;
+            grid-template-columns: 70px 1fr 130px 120px 110px;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-header {
+            padding: 17px 24px;
+            background: rgba(245,245,247,.8);
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .8px;
+        }
+
+        .table-row {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border);
+            transition: .2s;
+        }
+
+        .table-row:hover {
+            background: rgba(0,113,227,.035);
+        }
+
+        .rank {
+            font-weight: 800;
+            color: var(--muted);
+        }
+
+        .rank.top {
+            color: #c68a00;
+        }
+
+        .institution-name strong,
+        .institution-name span {
+            display: block;
+        }
+
+        .institution-name strong {
+            font-size: 14px;
+        }
+
+        .institution-name span {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+        .data-value {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .data-label {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        .empty-state {
+            padding: 55px 20px;
+            text-align: center;
+            color: var(--muted);
+            display: none;
+        }
+
+
+        /* RESPONSIVE */
+
+        @media (max-width: 800px) {
+
+            .ranking-hero {
+                padding-top: 65px;
+            }
+
+            .ranking-hero h1 {
+                letter-spacing: -3px;
+            }
+
+            .filter-box {
+                grid-template-columns: 1fr;
+            }
+
+            .podium {
+                grid-template-columns: 1fr;
+                align-items: stretch;
+            }
+
+            .podium-card.first {
+                order: -1;
+                transform: none;
+            }
+
+            .table-header {
+                display: none;
+            }
+
+            .table-row {
+                grid-template-columns: 45px 1fr;
+                padding: 18px;
+            }
+
+            .table-row .data-column {
+                display: none;
+            }
+
+            .content-heading {
+                display: block;
+            }
+
+            .content-heading p {
+                margin-top: 7px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<header class="navbar">
+
+    <a href="index.html" class="logo">
+        <span class="logo-mark">C</span>
+        <span>CTGBoardRanking</span>
+    </a>
+
+    <nav class="nav-links">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="rankings.html" class="active">
+            Rankings
+        </a>
+
+        <a href="institution.html">
+            Institutions
+        </a>
+
+        <a href="district.html">
+            Districts
+        </a>
+
+        <a href="statistics.html">
+            Statistics
+        </a>
+
+    </nav>
+
+    <button
+        class="theme-btn"
+        id="themeBtn"
+        aria-label="Toggle dark mode">
+        ◐
+    </button>
+
+</header>
+
+
+<main>
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="ranking-hero">
+
+    <a href="index.html" class="back-link">
+        ← Back to Home
+    </a>
+
+    <span class="eyebrow">
+        CHITTAGONG BOARD
+    </span>
+
+    <h1>
+        Institution<br>
+        <span>Rankings.</span>
+    </h1>
+
+    <p>
+        Explore institution performance by academic group,
+        year and ranking category.
+    </p>
+
+</section>
+
+
+<!-- =========================
+     FILTERS
+========================= -->
+
+<section class="filters">
+
+    <div class="filter-box">
+
+        <div class="filter-item">
+
+            <label>YEAR</label>
+
+            <select id="yearFilter">
+
+                <option value="2026">
+                    2026
+                </option>
+
+                <option value="2025">
+                    2025
+                </option>
+
+                <option value="2024">
+                    2024
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="filter-item">
+
+            <label>GROUP</label>
+
+            <select id="groupFilter">
+
+                <option value="science">
+                    Science
+                </option>
+
+                <option value="business">
+                    Business Studies
+                </option>
+
+                <option value="humanities">
+                    Humanities
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="filter-item">
+
+            <label>RANKING TYPE</label>
+
+            <select id="typeFilter">
+
+                <option value="institution">
+                    Institution Ranking
+                </option>
+
+                <option value="district">
+                    District Ranking
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     RANKING CONTENT
+========================= -->
+
+<section class="ranking-content">
+
+    <div class="content-heading">
+
+        <div>
+
+            <span class="eyebrow">
+                TOP PERFORMANCE
+            </span>
+
+            <h2 id="rankingTitle">
+                Science Rankings
+            </h2>
+
+        </div>
+
+        <p id="resultInfo">
+            2026 · Chattogram Board
+        </p>
+
+    </div>
+
+
+    <!-- PODIUM -->
+
+    <div class="podium">
+
+        <div class="podium-card">
+
+            <div class="medal">
+                🥈
+            </div>
+
+            <span class="podium-rank">
+                #2
+            </span>
+
+            <h3>
+                Institution Name
+            </h3>
+
+            <p>
+                Chattogram
+            </p>
+
+            <div class="podium-score">
+                —
+                <small>
+                    PASS RATE
+                </small>
+            </div>
+
+        </div>
+
+
+        <div class="podium-card first">
+
+            <div class="medal">
+                🥇
+            </div>
+
+            <span class="podium-rank">
+                #1
+            </span>
+
+            <h3>
+                Institution Name
+            </h3>
+
+            <p>
+                Chattogram
+            </p>
+
+            <div class="podium-score">
+                —
+                <small>
+                    PASS RATE
+                </small>
+            </div>
+
+        </div>
+
+
+        <div class="podium-card">
+
+            <div class="medal">
+                🥉
+            </div>
+
+            <span class="podium-rank">
+                #3
+            </span>
+
+            <h3>
+                Institution Name
+            </h3>
+
+            <p>
+                Chattogram
+            </p>
+
+            <div class="podium-score">
+                —
+                <small>
+                    PASS RATE
+                </small>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="search-box">
+
+        <input
+            type="search"
+            id="searchInput"
+            placeholder="Search institution..."
+            autocomplete="off">
+
+    </div>
+
+
+    <!-- TABLE -->
+
+    <div class="ranking-table">
+
+        <div class="table-header">
+
+            <div>RANK</div>
+            <div>INSTITUTION</div>
+            <div>STUDENTS</div>
+            <div>PASS RATE</div>
+            <div>GPA-5</div>
+
+        </div>
+
+
+        <div id="rankingRows">
+
+            <div class="table-row">
+
+                <div class="rank top">
+                    01
+                </div>
+
+                <div class="institution-name">
+                    <strong>
+                        Institution Name
+                    </strong>
+
+                    <span>
+                        Chattogram
+                    </span>
+                </div>
+
+                <div class="data-column">
+                    <span class="data-value">—</span>
+                    <span class="data-label">STUDENTS</span>
+                </div>
+
+                <div class="data-column">
+                    <span class="data-value">—</span>
+                    <span class="data-label">PASS RATE</span>
+                </div>
+
+                <div class="data-column">
+                    <span class="data-value">—</span>
+                    <span class="data-label">GPA-5</span>
+                </div>
+
+            </div>
+
+
+            <div class="table-row">
+
+                <div class="rank">
+                    02
+                </div>
+
+                <div class="institution-name">
+                    <strong>
+                        Institution Name
+                    </strong>
+
+                    <span>
+                        Chattogram
+                    </span>
+                </div>
+
+                <div class="data-column">
+                    <span class="data-value">—</span>
+                    <span class="data-label">STUDENTS</span>
+                </div>
+
+                <div class="data-column">
+                    <span class="data-value">—</span>
+                    <span class="data-label">PASS RATE</span>
+                </div>
+
+                <div class="data-column">
+                    <span class="data-value">—</span>
+                    <span class="data-label">GPA-5</span>
+                </div>
+
+            </div>
+
+
+            <div class="table-row">
+
+                <div class="rank">
+                    03
+                </div>
+
+                <div class="institution-name">
+                    <strong>
+                        Institution Name
+                    </strong>
+
+                    <span>
+                        Chattogram
+                    </span>
+                </div>
+
+                <div class="data-column">
+                    <span class="data-value">—</span>
+                    <span class="data-label">STUDENTS</span>
+                </div>
+
+                <div class="data-column">
+                    <span class="data-value">—</span>
+                    <span class="data-label">PASS RATE</span>
+                </div>
+
+                <div class="data-column">
+                    <span class="data-value">—</span>
+                    <span class="data-label">GPA-5</span>
+                </div>
+
+            </div>
+
+
+            <div class="table-row">
+
+                <div class="rank">
+                    04
+                </div>
+
+                <div class="institution-name">
+                    <strong>
+                        Institution Name
+                    </strong>
+
+                    <span>
+                        Chattogram
+                    </span>
+                </div>
+
+                <div class="data-column">
+                    <span class="data-value">—</span>
+                    <span class="data-label">STUDENTS</span>
+                </div>
+
+                <div class="data-column">
+                    <span class="data-value">—</span>
+                    <span class="data-label">PASS RATE</span>
+                </div>
+
+                <div class="data-column">
+                    <span class="data-value">—</span>
+                    <span class="data-label">GPA-5</span>
+                </div>
+
+            </div>
+
+
+            <div class="table-row">
+
+                <div class="rank">
+                    05
+                </div>
+
+                <div class="institution-name">
+                    <strong>
+                        Institution Name
+                    </strong>
+
+                    <span>
+                        Chattogram
+                    </span>
+                </div>
+
+                <div class="data-column">
+                    <span class="data-value">—</span>
+                    <span class="data-label">STUDENTS</span>
+                </div>
+
+                <div class="data-column">
+                    <span class="data-value">—</span>
+                    <span class="data-label">PASS RATE</span>
+                </div>
+
+                <div class="data-column">
+                    <span class="data-value">—</span>
+                    <span class="data-label">GPA-5</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="empty-state" id="emptyState">
+            No institution found.
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    <div class="footer-main">
+
+        <div>
+
+            <div class="footer-logo">
+
+                <span class="logo-mark">
+                    C
+                </span>
+
+                CTGBoardRanking
+
+            </div>
+
+            <p>
+                Chattogram Board Education Rankings.
+            </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="rankings.html">
+                Rankings
+            </a>
+
+            <a href="institution.html">
+                Institutions
+            </a>
+
+            <a href="district.html">
+                Districts
+            </a>
+
+            <a href="statistics.html">
+                Statistics
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <span>
+            © 2026 CTGBoardRanking
+        </span>
+
+        <span>
+            Education Data & Statistics
+        </span>
+
+    </div>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+
+<script>
+
+    /* =========================
+       URL GROUP
+    ========================= */
+
+    const params =
+        new URLSearchParams(window.location.search);
+
+    const urlGroup =
+        params.get("group");
+
+    const groupFilter =
+        document.getElementById("groupFilter");
+
+    if (urlGroup) {
+
+        const allowedGroups = [
+            "science",
+            "business",
+            "humanities"
+        ];
+
+        if (allowedGroups.includes(urlGroup)) {
+            groupFilter.value = urlGroup;
+        }
+
+    }
+
+
+    /* =========================
+       GROUP TITLE
+    ========================= */
+
+    const rankingTitle =
+        document.getElementById("rankingTitle");
+
+    const yearFilter =
+        document.getElementById("yearFilter");
+
+    const resultInfo =
+        document.getElementById("resultInfo");
+
+
+    function updateTitle() {
+
+        let group =
+            groupFilter.value;
+
+        let groupName =
+            "Science";
+
+        if (group === "business") {
+            groupName = "Business Studies";
+        }
+
+        if (group === "humanities") {
+            groupName = "Humanities";
+        }
+
+        rankingTitle.textContent =
+            groupName + " Rankings";
+
+        resultInfo.textContent =
+            yearFilter.value +
+            " · Chattogram Board";
+
+    }
+
+
+    groupFilter.addEventListener(
+        "change",
+        updateTitle
+    );
+
+    yearFilter.addEventListener(
+        "change",
+        updateTitle
+    );
+
+
+    /* =========================
+       SEARCH
+    ========================= */
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const rankingRows =
+        document.querySelectorAll(
+            "#rankingRows .table-row"
+        );
+
+    const emptyState =
+        document.getElementById("emptyState");
+
+
+    searchInput.addEventListener(
+        "input",
+        function () {
+
+            const search =
+                this.value
+                .toLowerCase()
+                .trim();
+
+            let visible = 0;
+
+            rankingRows.forEach(row => {
+
+                const name =
+                    row.querySelector(
+                        ".institution-name"
+                    );
+
+                const text =
+                    name ?
+                    name.textContent.toLowerCase() :
+                    "";
+
+                if (
+                    text.includes(search)
+                ) {
+
+                    row.style.display =
+                        "grid";
+
+                    visible++;
+
+                } else {
+
+                    row.style.display =
+                        "none";
+
+                }
+
+            });
+
+
+            emptyState.style.display =
+                visible === 0 ?
+                "block" :
+                "none";
+
+        }
+    );
+
+
+    updateTitle();
+
+</script>
+
+</body>
+</html>
