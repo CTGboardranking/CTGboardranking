@@ -227,6 +227,52 @@
     color:#d93025;
 }
 
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.pagination {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    padding:25px 15px;
+    border-top:1px solid var(--border);
+}
+
+.pagination button {
+    border:1px solid var(--border);
+    background:var(--white);
+    color:var(--text);
+    padding:10px 18px;
+    border-radius:12px;
+    font-family:inherit;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.pagination button:hover:not(:disabled) {
+    background:var(--text);
+    color:var(--bg);
+}
+
+.pagination button:disabled {
+    opacity:.4;
+    cursor:not-allowed;
+}
+
+.pagination-info {
+    min-width:90px;
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    font-weight:700;
+}
+
+
 @media(max-width:800px) {
 
     .student-hero {
@@ -257,6 +303,7 @@
 
 }
 
+
 @media(max-width:500px) {
 
     .student-hero h1 {
@@ -269,6 +316,21 @@
 
     .student-score strong {
         font-size:14px;
+    }
+
+    .pagination {
+        gap:8px;
+        padding:20px 10px;
+    }
+
+    .pagination button {
+        padding:9px 13px;
+        font-size:12px;
+    }
+
+    .pagination-info {
+        min-width:70px;
+        font-size:12px;
     }
 
 }
@@ -522,6 +584,43 @@ Student ranking data could not be loaded.
 </div>
 
 
+<!-- PAGINATION -->
+
+<div
+    id="pagination"
+    class="pagination"
+    style="display:none;">
+
+<button
+    id="prevPage"
+    type="button"
+    disabled>
+
+← Previous
+
+</button>
+
+
+<span
+    id="paginationInfo"
+    class="pagination-info">
+
+Page 1
+
+</span>
+
+
+<button
+    id="nextPage"
+    type="button">
+
+Next →
+
+</button>
+
+</div>
+
+
 </div>
 
 
@@ -609,6 +708,10 @@ let currentGroup = "Science";
 
 let currentSearch = "";
 
+let currentPage = 1;
+
+const PAGE_SIZE = 100;
+
 
 const rowsContainer =
     document.getElementById("studentRows");
@@ -628,6 +731,18 @@ const groupTitle =
 const yearText =
     document.getElementById("yearText");
 
+const pagination =
+    document.getElementById("pagination");
+
+const prevPage =
+    document.getElementById("prevPage");
+
+const nextPage =
+    document.getElementById("nextPage");
+
+const paginationInfo =
+    document.getElementById("paginationInfo");
+
 
 
 /* =========================================================
@@ -640,6 +755,7 @@ async function loadStudents() {
 
         const response =
             await fetch(DATA_URL);
+
 
         if (!response.ok) {
 
@@ -702,6 +818,9 @@ async function loadStudents() {
 
         errorMessage.style.display =
             "block";
+
+        pagination.style.display =
+            "none";
 
     }
 
@@ -842,7 +961,7 @@ function sortStudents(list) {
 
 
 /* =========================================================
-   RENDER TOP 100
+   RENDER STUDENTS + PAGINATION
 ========================================================= */
 
 function renderStudents() {
@@ -862,14 +981,52 @@ function renderStudents() {
         sortStudents(filtered);
 
 
-    const top100 =
-        filtered.slice(0,100);
+    const totalStudents =
+        filtered.length;
 
 
-    if (!top100.length) {
+    const totalPages =
+        Math.ceil(
+            totalStudents /
+            PAGE_SIZE
+        );
+
+
+    if (
+        totalPages > 0 &&
+        currentPage > totalPages
+    ) {
+
+        currentPage =
+            totalPages;
+
+    }
+
+
+    const startIndex =
+        (currentPage - 1) *
+        PAGE_SIZE;
+
+
+    const endIndex =
+        startIndex +
+        PAGE_SIZE;
+
+
+    const pageStudents =
+        filtered.slice(
+            startIndex,
+            endIndex
+        );
+
+
+    if (!pageStudents.length) {
 
         emptyMessage.style.display =
             "block";
+
+        pagination.style.display =
+            "none";
 
         return;
 
@@ -880,7 +1037,7 @@ function renderStudents() {
         "none";
 
 
-    top100.forEach(
+    pageStudents.forEach(
         (student,index) => {
 
 
@@ -895,7 +1052,9 @@ function renderStudents() {
 
 
             const rank =
-                index + 1;
+                startIndex +
+                index +
+                1;
 
 
             const rankClass =
@@ -986,6 +1145,37 @@ function renderStudents() {
         }
     );
 
+
+    /* =====================================================
+       UPDATE PAGINATION
+    ===================================================== */
+
+    if (totalPages <= 1) {
+
+        pagination.style.display =
+            "none";
+
+    }
+
+    else {
+
+        pagination.style.display =
+            "flex";
+
+
+        paginationInfo.textContent =
+            `Page ${currentPage} of ${totalPages}`;
+
+
+        prevPage.disabled =
+            currentPage <= 1;
+
+
+        nextPage.disabled =
+            currentPage >= totalPages;
+
+    }
+
 }
 
 
@@ -1038,6 +1228,9 @@ document
                     tab.dataset.group;
 
 
+                currentPage = 1;
+
+
                 document
                     .querySelectorAll(
                         ".group-tab"
@@ -1078,6 +1271,89 @@ searchInput.addEventListener(
                 .toLowerCase()
                 .trim();
 
+
+        currentPage = 1;
+
+
+        renderStudents();
+
+    }
+);
+
+
+
+/* =========================================================
+   PREVIOUS PAGE
+========================================================= */
+
+prevPage.addEventListener(
+    "click",
+    () => {
+
+        if (currentPage <= 1) {
+            return;
+        }
+
+
+        currentPage--;
+
+
+        renderStudents();
+
+
+        window.scrollTo({
+            top: 450,
+            behavior: "smooth"
+        });
+
+    }
+);
+
+
+
+/* =========================================================
+   NEXT PAGE
+========================================================= */
+
+nextPage.addEventListener(
+    "click",
+    () => {
+
+        currentPage++;
+
+
+        renderStudents();
+
+
+        window.scrollTo({
+            top: 450,
+            behavior: "smooth"
+        });
+
+    }
+);
+
+
+
+/* =========================================================
+   YEAR
+========================================================= */
+
+const yearSelect =
+    document.getElementById(
+        "yearSelect"
+    );
+
+
+yearSelect.addEventListener(
+    "change",
+    () => {
+
+        currentPage = 1;
+
+        yearText.textContent =
+            yearSelect.value +
+            " · Chattogram Board";
 
         renderStudents();
 
