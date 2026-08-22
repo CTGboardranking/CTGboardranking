@@ -19,8 +19,9 @@ BASE_URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/resultm.php"
 
 TIMEOUT = 30
 
+
 # ============================================================
-# LOAD INSTITUTIONS
+# HEADER
 # ============================================================
 
 print("=" * 60, flush=True)
@@ -29,46 +30,92 @@ print("=" * 60, flush=True)
 
 print(f"Loading: {INPUT_FILE}", flush=True)
 
+
+# ============================================================
+# LOAD INSTITUTIONS
+# ============================================================
+
 with open(INPUT_FILE, "r", encoding="utf-8") as f:
-    institutions = json.load(f)
+    data = json.load(f)
+
 
 # ------------------------------------------------------------
-# NORMALIZE INSTITUTION DATA
+# DETECT JSON STRUCTURE
 # ------------------------------------------------------------
 
-if isinstance(institutions, dict):
+if isinstance(data, list):
 
-    normalized = []
+    institutions = data
 
-    for key, value in institutions.items():
+elif isinstance(data, dict):
 
-        if isinstance(value, dict):
+    # Normal expected structure
+    if isinstance(data.get("institutions"), list):
 
-            item = value.copy()
+        institutions = data["institutions"]
 
-            # If EIIN is missing, use dictionary key as EIIN
-            if not item.get("eiin"):
-                item["eiin"] = str(key)
+    # Alternative structure
+    elif isinstance(data.get("data"), list):
 
-            normalized.append(item)
+        institutions = data["data"]
 
-    institutions = normalized
+    else:
 
-elif isinstance(institutions, list):
-
-    # Already correct format
-    institutions = institutions
+        raise ValueError(
+            "ERROR: Could not find 'institutions' array "
+            "inside institutions.json"
+        )
 
 else:
 
     raise ValueError(
-        "institutions.json must contain a JSON list or dictionary"
+        "ERROR: Invalid institutions.json format"
     )
+
+
+# ============================================================
+# VALIDATE INSTITUTIONS
+# ============================================================
+
+valid_institutions = []
+
+for item in institutions:
+
+    if not isinstance(item, dict):
+        continue
+
+    eiin = str(
+        item.get("eiin", "")
+    ).strip()
+
+    if not eiin:
+        continue
+
+    # Ignore obvious metadata/non-EIIN entries
+    if eiin.lower() in (
+        "metadata",
+        "data",
+        "institutions"
+    ):
+        continue
+
+    valid_institutions.append(item)
+
+
+institutions = valid_institutions
 
 total = len(institutions)
 
-print(f"Total institutions: {total}", flush=True)
-print(f"TEST LIMIT: {TEST_LIMIT}", flush=True)
+print(
+    f"Total institutions: {total}",
+    flush=True
+)
+
+print(
+    f"TEST LIMIT: {TEST_LIMIT}",
+    flush=True
+)
+
 
 # ============================================================
 # LOAD PREVIOUS RESULTS
@@ -80,12 +127,43 @@ if os.path.exists(OUTPUT_FILE):
 
     try:
 
-        with open(OUTPUT_FILE, "r", encoding="utf-8") as f:
+        with open(
+            OUTPUT_FILE,
+            "r",
+            encoding="utf-8"
+        ) as f:
+
             old_results = json.load(f)
 
         if isinstance(old_results, list):
 
-            results = old_results
+            # ------------------------------------------------
+            # CLEAN OLD INVALID RESULTS
+            # ------------------------------------------------
+
+            cleaned_results = []
+
+            for item in old_results:
+
+                if not isinstance(item, dict):
+                    continue
+
+                eiin = str(
+                    item.get("eiin", "")
+                ).strip()
+
+                # Remove accidental metadata record
+                if eiin.lower() in (
+                    "",
+                    "metadata",
+                    "data",
+                    "institutions"
+                ):
+                    continue
+
+                cleaned_results.append(item)
+
+            results = cleaned_results
 
         else:
 
@@ -94,12 +172,16 @@ if os.path.exists(OUTPUT_FILE):
                 flush=True
             )
 
+            results = []
+
         print("=" * 60, flush=True)
         print("RESUME MODE", flush=True)
+
         print(
             f"Previously collected: {len(results)}",
             flush=True
         )
+
         print("=" * 60, flush=True)
 
     except Exception as e:
@@ -115,10 +197,37 @@ if os.path.exists(OUTPUT_FILE):
         )
 
         print(
-            "Error:",
-            e,
+            f"Error: {e}",
             flush=True
         )
+
+
+# ============================================================
+# SAVE CLEANED RESULTS
+# ============================================================
+
+try:
+
+    with open(
+        OUTPUT_FILE,
+        "w",
+        encoding="utf-8"
+    ) as f:
+
+        json.dump(
+            results,
+            f,
+            ensure_ascii=False,
+            indent=2
+        )
+
+except Exception as e:
+
+    print(
+        f"WARNING: Could not clean output file: {e}",
+        flush=True
+    )
+
 
 # ============================================================
 # EXISTING EIIN SET
@@ -138,10 +247,13 @@ for item in results:
     if eiin:
         existing_eiins.add(eiin)
 
+
 print(
-    f"Existing EIIN records: {len(existing_eiins)}",
+    f"Existing EIIN records: "
+    f"{len(existing_eiins)}",
     flush=True
 )
+
 
 # ============================================================
 # SESSION
@@ -166,6 +278,7 @@ session.headers.update({
     "Referer": BASE_URL
 
 })
+
 
 # ============================================================
 # PARSE RESULT
@@ -203,9 +316,10 @@ def parse_result(html, institution):
     passing_rate = None
     gpa5 = None
 
-    # --------------------------------------------------------
+
+    # ========================================================
     # TABLE PARSING
-    # --------------------------------------------------------
+    # ========================================================
 
     tables = soup.find_all("table")
 
@@ -232,6 +346,7 @@ def parse_result(html, institution):
                 strip=True
             )
 
+
             # APP / APPEARED
             if (
                 "APP" in key
@@ -248,6 +363,7 @@ def parse_result(html, institution):
                         match.group()
                     )
 
+
             # PASS
             elif "PASS" in key:
 
@@ -261,7 +377,8 @@ def parse_result(html, institution):
                         match.group()
                     )
 
-            # PERCENT / PASSING RATE
+
+            # PERCENT / RATE
             elif (
                 "PERCENT" in key
                 or "RATE" in key
@@ -276,6 +393,7 @@ def parse_result(html, institution):
                     passing_rate = float(
                         match.group()
                     )
+
 
             # GPA-5
             elif (
@@ -294,9 +412,10 @@ def parse_result(html, institution):
                         match.group()
                     )
 
-    # --------------------------------------------------------
+
+    # ========================================================
     # FALLBACK TEXT PARSING
-    # --------------------------------------------------------
+    # ========================================================
 
     if appeared is None:
 
@@ -311,6 +430,7 @@ def parse_result(html, institution):
                 match.group(1)
             )
 
+
     if passed is None:
 
         match = re.search(
@@ -323,6 +443,7 @@ def parse_result(html, institution):
             passed = int(
                 match.group(1)
             )
+
 
     if passing_rate is None:
 
@@ -338,6 +459,7 @@ def parse_result(html, institution):
                 match.group(1)
             )
 
+
     if gpa5 is None:
 
         match = re.search(
@@ -351,9 +473,10 @@ def parse_result(html, institution):
                 match.group(1)
             )
 
-    # --------------------------------------------------------
-    # CALCULATE PASSING RATE IF NOT FOUND
-    # --------------------------------------------------------
+
+    # ========================================================
+    # CALCULATE PASSING RATE
+    # ========================================================
 
     if (
         passing_rate is None
@@ -367,9 +490,10 @@ def parse_result(html, institution):
             2
         )
 
-    # --------------------------------------------------------
-    # RETURN RESULT
-    # --------------------------------------------------------
+
+    # ========================================================
+    # RETURN
+    # ========================================================
 
     return {
 
@@ -413,21 +537,21 @@ limit = min(
 )
 
 print("=" * 60, flush=True)
-print("STARTING COLLECTION", flush=True)
+
+print(
+    "STARTING COLLECTION",
+    flush=True
+)
+
 print(
     f"Target: {limit} institutions",
     flush=True
 )
+
 print("=" * 60, flush=True)
 
+
 for index in range(limit):
-
-    # --------------------------------------------------------
-    # SAFETY CHECK
-    # --------------------------------------------------------
-
-    if index >= len(institutions):
-        break
 
     institution = institutions[index]
 
@@ -435,11 +559,16 @@ for index in range(limit):
 
         print(
             f"[{index + 1}/{limit}] "
-            f"SKIP - invalid institution data",
+            f"SKIP - invalid institution",
             flush=True
         )
 
         continue
+
+
+    # ========================================================
+    # EIIN
+    # ========================================================
 
     eiin = str(
         institution.get(
@@ -447,6 +576,7 @@ for index in range(limit):
             ""
         )
     ).strip()
+
 
     name = institution.get(
         "institution_name",
@@ -456,9 +586,10 @@ for index in range(limit):
         )
     )
 
-    # --------------------------------------------------------
-    # SKIP INVALID EIIN
-    # --------------------------------------------------------
+
+    # ========================================================
+    # INVALID EIIN
+    # ========================================================
 
     if not eiin:
 
@@ -470,9 +601,25 @@ for index in range(limit):
 
         continue
 
-    # --------------------------------------------------------
-    # SKIP ALREADY COLLECTED
-    # --------------------------------------------------------
+
+    if eiin.lower() in (
+        "metadata",
+        "data",
+        "institutions"
+    ):
+
+        print(
+            f"[{index + 1}/{limit}] "
+            f"SKIP - invalid EIIN: {eiin}",
+            flush=True
+        )
+
+        continue
+
+
+    # ========================================================
+    # ALREADY COLLECTED
+    # ========================================================
 
     if eiin in existing_eiins:
 
@@ -483,6 +630,11 @@ for index in range(limit):
         )
 
         continue
+
+
+    # ========================================================
+    # INFORMATION
+    # ========================================================
 
     print("-" * 60, flush=True)
 
@@ -501,9 +653,10 @@ for index in range(limit):
         flush=True
     )
 
-    # --------------------------------------------------------
+
+    # ========================================================
     # REQUEST
-    # --------------------------------------------------------
+    # ========================================================
 
     try:
 
@@ -515,10 +668,12 @@ for index in range(limit):
             timeout=TIMEOUT
         )
 
+
         print(
             f"HTTP: {response.status_code}",
             flush=True
         )
+
 
         if response.status_code != 200:
 
@@ -533,14 +688,16 @@ for index in range(limit):
 
             continue
 
-        # ----------------------------------------------------
+
+        # ====================================================
         # PARSE
-        # ----------------------------------------------------
+        # ====================================================
 
         result = parse_result(
             response.text,
             institution
         )
+
 
         print(
             f"APP: {result['appeared']}",
@@ -563,9 +720,10 @@ for index in range(limit):
             flush=True
         )
 
-        # ----------------------------------------------------
-        # SAVE IMMEDIATELY
-        # ----------------------------------------------------
+
+        # ====================================================
+        # SAVE
+        # ====================================================
 
         results.append(
             result
@@ -575,16 +733,18 @@ for index in range(limit):
             eiin
         )
 
-        # Make sure output directory exists
+
         output_dir = os.path.dirname(
             OUTPUT_FILE
         )
 
         if output_dir:
+
             os.makedirs(
                 output_dir,
                 exist_ok=True
             )
+
 
         with open(
             OUTPUT_FILE,
@@ -599,10 +759,12 @@ for index in range(limit):
                 indent=2
             )
 
+
         print(
             f"SAVED: {len(results)} results",
             flush=True
         )
+
 
     except requests.exceptions.Timeout:
 
@@ -612,12 +774,14 @@ for index in range(limit):
             flush=True
         )
 
+
     except requests.exceptions.RequestException as e:
 
         print(
             f"ERROR: Request failed - {e}",
             flush=True
         )
+
 
     except Exception as e:
 
@@ -626,9 +790,10 @@ for index in range(limit):
             flush=True
         )
 
-    # --------------------------------------------------------
+
+    # ========================================================
     # DELAY
-    # --------------------------------------------------------
+    # ========================================================
 
     time.sleep(
         REQUEST_DELAY
@@ -640,7 +805,12 @@ for index in range(limit):
 # ============================================================
 
 print("=" * 60, flush=True)
-print("COLLECTION COMPLETED", flush=True)
+
+print(
+    "COLLECTION COMPLETED",
+    flush=True
+)
+
 print("=" * 60, flush=True)
 
 print(
