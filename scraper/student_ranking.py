@@ -228,8 +228,9 @@ def main():
             f"Rank #{student['rank']} | "
             f"Roll: {student['roll']} | "
             f"{student['name']} | "
-            f"GPA: {student['gpa']} | "
             f"Total Marks: {student['total_marks']} | "
+            f"Institute: {student['institute']} | "
+            f"GPA: {student['gpa']} | "
             f"Score: {student['score']}"
         )
 
