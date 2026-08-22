@@ -24,4 +24,4 @@ jobs:
 
       - name: Run Result Test
         run: |
-          python institution-collector/test_result.py
+          python -u institution-collector/collect_student_results.py
