@@ -12,13 +12,7 @@ from urllib.parse import urljoin
 BASE_URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/"
 INDIVIDUAL_URL = BASE_URL + "individual/"
 
-TEST_ROLLS = [
-    "100001",
-    "100002",
-    "100003",
-    "100004",
-    "100005"
-]
+ROLL = "100001"
 
 OUTPUT_DIR = "scraper"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
