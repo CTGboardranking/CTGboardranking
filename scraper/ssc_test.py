@@ -46,17 +46,23 @@ ROLL_RANGES = {
 # BATCH SETTINGS
 # ============================================================
 
-# প্রতি GitHub Actions run-এ সর্বোচ্চ কতটি নতুন roll চেষ্টা করবে
 BATCH_SIZE = 5000
 
-# Request-এর মাঝে বিরতি
-MIN_DELAY = 1.0
-MAX_DELAY = 2.0
+# Faster but still keeps a small delay between requests
+MIN_DELAY = 0.2
+MAX_DELAY = 0.5
 
-# একই request ব্যর্থ হলে retry
 MAX_RETRIES = 3
 
 REQUEST_TIMEOUT = 30
+
+
+# ============================================================
+# COLLECTION INFO
+# ============================================================
+
+YEAR = 2026
+BOARD = "Chattogram Board"
 
 # ============================================================
 # HEADERS
