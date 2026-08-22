@@ -428,11 +428,11 @@
 
                 <select id="exam">
 
-                    <option value="ssc">
+                    <option value="SSC">
                         SSC
                     </option>
 
-                    <option value="hsc">
+                    <option value="HSC">
                         HSC
                     </option>
 
@@ -783,7 +783,7 @@ const rollInput =
 
 
 /* ==========================================
-   SEARCH
+   SEARCH RESULT
 ========================================== */
 
 searchButton.addEventListener(
@@ -817,7 +817,7 @@ async function searchResult() {
     }
 
 
-    if (!/^\d+$/.test(roll)) {
+    if (!/^[0-9]+$/.test(roll)) {
 
         showError(
             "Roll number must contain numbers only."
@@ -838,27 +838,52 @@ async function searchResult() {
     try {
 
         /*
-         * IMPORTANT:
-         * Roll দিয়েই সরাসরি student_results
-         * থেকে search করা হচ্ছে।
+         * IMPORTANT
+         *
+         * Database:
+         * student_results
+         *
+         * roll column:
+         * TEXT
+         *
+         * তাই roll-কে TEXT হিসেবেই
+         * সরাসরি search করা হচ্ছে।
+         *
+         * Year এবং Exam search-এর
+         * জন্য ব্যবহার করা হচ্ছে না।
+         *
+         * ফলে শুধু Roll Number দিলেই
+         * result পাওয়া যাবে।
          */
+
 
         const {
             data,
             error
         } = await supabaseClient
             .from("student_results")
-            .select("*")
-            .eq("roll", roll)
-            .order("year", {
-                ascending: false
-            })
+            .select(
+                "id,year,exam,roll,registration,student_name,institution,institution_code,district,group_name,total_marks,gpa,result_status"
+            )
+            .eq(
+                "roll",
+                roll
+            )
             .limit(1);
 
 
         console.log(
-            "Student query:",
-            data,
+            "ROLL SEARCH:",
+            roll
+        );
+
+        console.log(
+            "RESULT:",
+            data
+        );
+
+        console.log(
+            "ERROR:",
             error
         );
 
@@ -866,7 +891,7 @@ async function searchResult() {
         if (error) {
 
             console.error(
-                "Supabase error:",
+                "Supabase query error:",
                 error
             );
 
@@ -893,12 +918,19 @@ async function searchResult() {
         }
 
 
+        /*
+         * প্রথম matching student
+         */
+
         const student =
             data[0];
 
 
         /*
-         * Subject data
+         * Subject table এখন optional।
+         *
+         * student_subject_results table
+         * না থাকলেও মূল result বন্ধ হবে না।
          */
 
         let subjects = [];
@@ -906,30 +938,49 @@ async function searchResult() {
 
         if (student.id) {
 
-            const subjectResponse =
-                await supabaseClient
-                    .from("student_subject_results")
+            try {
+
+                const {
+                    data: subjectData,
+                    error: subjectError
+                } = await supabaseClient
+                    .from(
+                        "student_subject_results"
+                    )
                     .select("*")
                     .eq(
                         "student_result_id",
                         student.id
                     )
-                    .order("id", {
-                        ascending: true
-                    });
+                    .order(
+                        "id",
+                        {
+                            ascending: true
+                        }
+                    );
 
 
-            console.log(
-                "Subjects:",
-                subjectResponse.data,
-                subjectResponse.error
-            );
+                console.log(
+                    "SUBJECT RESULT:",
+                    subjectData
+                );
 
 
-            if (!subjectResponse.error) {
+                if (!subjectError) {
 
-                subjects =
-                    subjectResponse.data || [];
+                    subjects =
+                        subjectData || [];
+
+                }
+
+            } catch (subjectError) {
+
+                console.log(
+                    "Subject table unavailable. Main result will still show.",
+                    subjectError
+                );
+
+                subjects = [];
 
             }
 
@@ -980,7 +1031,6 @@ function displayResult(
         "studentName"
     ).textContent =
         student.student_name ||
-        student.name ||
         "—";
 
 
@@ -988,7 +1038,6 @@ function displayResult(
         "resultStatus"
     ).textContent =
         student.result_status ||
-        student.result ||
         "—";
 
 
@@ -1003,7 +1052,6 @@ function displayResult(
         "showRegistration"
     ).textContent =
         student.registration ||
-        student.registration_number ||
         "—";
 
 
@@ -1018,7 +1066,6 @@ function displayResult(
         "showGroup"
     ).textContent =
         student.group_name ||
-        student.group ||
         "—";
 
 
@@ -1026,8 +1073,6 @@ function displayResult(
         "showInstitution"
     ).textContent =
         student.institution ||
-        student.institution_name ||
-        student.college_name ||
         "—";
 
 
@@ -1042,7 +1087,6 @@ function displayResult(
         "totalMarks"
     ).textContent =
         student.total_marks ??
-        student.total ??
         "—";
 
 
@@ -1050,7 +1094,6 @@ function displayResult(
         "gpa"
     ).textContent =
         student.gpa ??
-        student.GPA ??
         "—";
 
 
@@ -1060,7 +1103,9 @@ function displayResult(
         "—";
 
 
-    /* SUBJECT TABLE */
+    /* ======================================
+       SUBJECT TABLE
+    ====================================== */
 
     const table =
         document.querySelector(
@@ -1099,7 +1144,7 @@ function displayResult(
             <div class="subject-row">
 
                 <div>
-                    No subject data
+                    Subject details unavailable
                 </div>
 
                 <div>
@@ -1180,6 +1225,10 @@ function displayResult(
     }
 
 
+    /*
+     * Show result
+     */
+
     resultArea.style.display =
         "block";
 
@@ -1214,11 +1263,26 @@ function showError(message) {
 function escapeHTML(value) {
 
     return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -1231,7 +1295,11 @@ rollInput.addEventListener(
     "keydown",
     function(event) {
 
-        if (event.key === "Enter") {
+        if (
+            event.key === "Enter"
+        ) {
+
+            event.preventDefault();
 
             searchResult();
 
