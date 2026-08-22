@@ -1,0 +1,67 @@
+name: Student Results Collection
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  collect-student-results:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4
+
+      - name: Collect Student Results
+        run: |
+          python -u institution-collector/collect_student_results.py
+
+      - name: Show output statistics
+        run: |
+          echo "=============================================="
+          echo "Student result collection finished"
+          echo "=============================================="
+
+          if [ -f institution-collector/student_results.json ]; then
+            echo "student_results.json exists"
+
+            python - <<'PY'
+          import json
+
+          path = "institution-collector/student_results.json"
+
+          with open(path, "r", encoding="utf-8") as f:
+              data = json.load(f)
+
+          print("Total student records:", len(data))
+          PY
+          else
+            echo "ERROR: student_results.json not found"
+            exit 1
+          fi
+
+      - name: Commit student results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add institution-collector/student_results.json
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update student results"
+            git push
+          fi
