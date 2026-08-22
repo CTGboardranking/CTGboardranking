@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -16,6 +18,10 @@ rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 
 <style>
+
+/* =========================================================
+   HERO
+========================================================= */
 
 .ranking-hero{
     max-width:1100px;
@@ -50,6 +56,11 @@ rel="stylesheet">
     font-size:17px;
 }
 
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
 .filters{
     max-width:1100px;
     margin:auto;
@@ -61,6 +72,7 @@ rel="stylesheet">
     grid-template-columns:1fr 1fr 1fr;
     gap:12px;
     padding:15px;
+
     background:rgba(255,255,255,.78);
     border:1px solid var(--border);
     border-radius:22px;
@@ -78,17 +90,30 @@ rel="stylesheet">
 
 .filter-item select,
 .search-box input{
+
     width:100%;
     box-sizing:border-box;
+
     border:1px solid var(--border);
+
     background:rgba(245,245,247,.8);
+
     color:var(--text);
+
     border-radius:13px;
+
     padding:13px 14px;
+
     font-family:inherit;
     font-size:14px;
+
     outline:none;
 }
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
 
 .ranking-content{
     max-width:1100px;
@@ -113,6 +138,11 @@ rel="stylesheet">
     font-size:13px;
 }
 
+
+/* =========================================================
+   PODIUM
+========================================================= */
+
 .podium{
     display:grid;
     grid-template-columns:1fr 1.15fr 1fr;
@@ -122,17 +152,25 @@ rel="stylesheet">
 }
 
 .podium-card{
+
     background:rgba(255,255,255,.88);
+
     border:1px solid var(--border);
+
     border-radius:24px;
+
     padding:28px 20px;
+
     text-align:center;
+
     box-shadow:var(--shadow);
 }
 
 .podium-card.first{
+
     padding-top:40px;
     padding-bottom:40px;
+
     transform:translateY(-12px);
 }
 
@@ -141,245 +179,453 @@ rel="stylesheet">
 }
 
 .podium-rank{
+
     color:var(--muted);
+
     font-size:11px;
+
     font-weight:700;
 }
 
 .podium-card h3{
+
     font-size:17px;
+
     margin:8px 0 4px;
+
     word-break:break-word;
 }
 
 .podium-card p{
+
     color:var(--muted);
+
     font-size:12px;
 }
 
 .podium-value{
+
     margin-top:18px;
+
     font-size:22px;
+
     font-weight:800;
 }
 
 .podium-value small{
+
     display:block;
+
     color:var(--muted);
+
     font-size:10px;
+
     font-weight:500;
+
     margin-top:3px;
 }
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
 
 .search-box{
     margin-bottom:18px;
 }
 
 .search-box input{
+
     background:white;
+
     padding:15px 17px;
 }
 
+
+/* =========================================================
+   TABLE
+========================================================= */
+
 .ranking-table{
+
     background:rgba(255,255,255,.9);
+
     border:1px solid var(--border);
+
     border-radius:24px;
+
     overflow:hidden;
+
     box-shadow:var(--shadow);
 }
 
 .table-header,
 .table-row{
+
     display:grid;
-    grid-template-columns:70px minmax(0,1fr) 180px 150px;
+
+    grid-template-columns:
+        70px
+        minmax(250px,1fr)
+        180px
+        150px;
+
     align-items:center;
+
     gap:10px;
 }
 
 .table-header{
+
     padding:17px 24px;
+
     background:rgba(245,245,247,.8);
+
     color:var(--muted);
+
     font-size:10px;
+
     font-weight:700;
+
     letter-spacing:.8px;
 }
 
 .table-row{
+
     padding:19px 24px;
+
     border-top:1px solid var(--border);
 }
 
 .table-row:hover{
+
     background:rgba(0,113,227,.035);
 }
 
 .rank{
+
     font-weight:800;
+
     color:var(--muted);
 }
 
 .rank.top{
+
     color:#c68a00;
 }
 
-.institution-name{
-    min-width:0;
-}
-
 .institution-name strong{
+
     display:block;
+
     font-size:14px;
+
     line-height:1.4;
-    word-break:break-word;
 }
 
 .institution-name span{
+
     display:block;
+
     color:var(--muted);
+
     font-size:11px;
+
     margin-top:3px;
 }
 
 .data-value{
+
     font-size:14px;
+
     font-weight:700;
 }
 
 .data-label{
+
     display:block;
+
     color:var(--muted);
+
     font-size:10px;
+
     margin-top:3px;
 }
+
+
+/* =========================================================
+   STATES
+========================================================= */
 
 .loading-state,
 .empty-state,
 .error-state{
+
     padding:55px 20px;
+
     text-align:center;
+
     color:var(--muted);
 }
 
 .empty-state,
 .error-state{
+
     display:none;
 }
 
 .error-state{
+
     color:#d93025;
 }
 
-/* PAGINATION */
+
+/* =========================================================
+   PAGINATION
+========================================================= */
 
 .pagination{
+
     display:none;
+
     justify-content:center;
+
     align-items:center;
+
     gap:12px;
+
     padding:25px 15px;
+
     border-top:1px solid var(--border);
-    flex-wrap:wrap;
 }
 
 .pagination button{
-    border:1px solid var(--border);
-    background:var(--white);
-    color:var(--text);
-    padding:10px 18px;
-    border-radius:12px;
-    font-family:inherit;
-    font-size:13px;
-    font-weight:700;
-    cursor:pointer;
-    transition:.2s;
-}
 
-.pagination button:hover:not(:disabled){
-    background:var(--blue);
-    color:white;
-    border-color:var(--blue);
+    border:1px solid var(--border);
+
+    background:var(--white);
+
+    color:var(--text);
+
+    padding:10px 18px;
+
+    border-radius:12px;
+
+    font-family:inherit;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    cursor:pointer;
 }
 
 .pagination button:disabled{
+
     opacity:.4;
+
     cursor:not-allowed;
 }
 
 .pagination-info{
+
     min-width:110px;
+
     text-align:center;
+
     color:var(--muted);
+
     font-size:13px;
+
     font-weight:700;
 }
 
 
-/* MOBILE */
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media(max-width:800px){
 
     .ranking-hero{
+
         padding-top:65px;
     }
 
     .filter-box{
+
         grid-template-columns:1fr;
     }
 
     .podium{
+
         grid-template-columns:1fr;
     }
 
     .podium-card.first{
+
         order:-1;
+
         transform:none;
     }
 
-    .table-header{
-        display:none;
-    }
-
-    .table-row{
-        grid-template-columns:42px minmax(0,1fr);
-        padding:18px;
-        gap:10px;
-    }
-
-    .table-row .data-column{
-        display:none;
-    }
-
     .content-heading{
+
         display:block;
     }
 
     .content-heading p{
+
         margin-top:7px;
     }
 
-    .pagination{
-        display:flex;
-        padding:20px 10px;
+
+    /*
+       Mobile table scroll
+       সব column দেখা যাবে
+    */
+
+    .ranking-table{
+
+        overflow-x:auto;
+
+        -webkit-overflow-scrolling:touch;
+    }
+
+
+    .table-header,
+    .table-row{
+
+        min-width:520px;
+
+        grid-template-columns:
+            55px
+            minmax(190px,1fr)
+            125px
+            120px;
+
         gap:8px;
     }
 
-    .pagination button{
-        padding:10px 13px;
+
+    .table-header{
+
+        display:grid;
+
+        padding:15px 14px;
+
+        font-size:9px;
+    }
+
+
+    .table-row{
+
+        display:grid;
+
+        padding:17px 14px;
+    }
+
+
+    .institution-name strong{
+
         font-size:12px;
     }
 
-    .pagination-info{
-        min-width:85px;
+
+    .institution-name span{
+
+        font-size:10px;
+    }
+
+
+    .data-value{
+
         font-size:12px;
+    }
+
+
+    .data-label{
+
+        font-size:8px;
+    }
+
+
+    /*
+       Pagination mobile
+    */
+
+    .pagination{
+
+        display:flex;
+
+        min-width:0;
+
+        gap:8px;
+
+        padding:20px 10px;
+    }
+
+
+    .pagination button{
+
+        padding:9px 12px;
+
+        font-size:12px;
+    }
+
+
+    .pagination-info{
+
+        min-width:80px;
+
+        font-size:11px;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media(max-width:480px){
+
+    .ranking-content{
+
+        padding:15px;
+    }
+
+    .ranking-hero{
+
+        padding-left:15px;
+        padding-right:15px;
+    }
+
+    .filters{
+
+        padding-left:15px;
+        padding-right:15px;
+    }
+
+    .table-header,
+    .table-row{
+
+        min-width:500px;
     }
 
 }
 
 </style>
+
 </head>
 
+
 <body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
 
 <header class="navbar">
 
@@ -429,38 +675,71 @@ aria-label="Toggle dark mode">
 </header>
 
 
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
 <main>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
 
 <section class="ranking-hero">
 
-<a href="index.html" class="back-link">
+<a
+href="index.html"
+class="back-link">
+
 ← Back to Home
+
 </a>
 
+
 <span class="eyebrow">
+
 CHITTAGONG BOARD
+
 </span>
 
+
 <h1>
-Institution<br>
+
+Institution
+<br>
+
 <span>Rankings.</span>
+
 </h1>
 
+
 <p>
-All institutions based on collected SSC result data.
-Compare Passing Rate and Total GPA-5.
+
+All institutions ranked using Passing Rate,
+Total GPA-5 and Total Students.
+
 </p>
 
 </section>
 
 
+
+<!-- =====================================================
+     FILTERS
+===================================================== -->
+
 <section class="filters">
 
 <div class="filter-box">
 
+
 <div class="filter-item">
 
-<label>YEAR</label>
+<label>
+YEAR
+</label>
 
 <select id="yearFilter">
 
@@ -473,9 +752,12 @@ Compare Passing Rate and Total GPA-5.
 </div>
 
 
+
 <div class="filter-item">
 
-<label>GROUP</label>
+<label>
+GROUP
+</label>
 
 <select id="groupFilter">
 
@@ -500,9 +782,12 @@ Science Irregular
 </div>
 
 
+
 <div class="filter-item">
 
-<label>RANKING TYPE</label>
+<label>
+RANKING TYPE
+</label>
 
 <select id="typeFilter">
 
@@ -514,35 +799,60 @@ Institution Ranking
 
 </div>
 
+
 </div>
 
 </section>
 
 
+
+<!-- =====================================================
+     RANKING CONTENT
+===================================================== -->
+
 <section class="ranking-content">
 
+
 <div class="content-heading">
+
 
 <div>
 
 <span class="eyebrow">
+
 INSTITUTION PERFORMANCE
+
 </span>
 
+
 <h2 id="rankingTitle">
+
 Science Rankings
+
 </h2>
 
 </div>
 
+
 <p id="resultInfo">
+
 2026 · Chattogram Board
+
 </p>
+
 
 </div>
 
 
+
+<!-- =====================================================
+     PODIUM
+===================================================== -->
+
 <div class="podium">
+
+
+<!-- SECOND -->
 
 <div class="podium-card">
 
@@ -562,6 +872,7 @@ Science Rankings
 —
 </p>
 
+
 <div class="podium-value">
 
 <span id="podium2Pass">
@@ -576,6 +887,9 @@ PASSING RATE
 
 </div>
 
+
+
+<!-- FIRST -->
 
 <div class="podium-card first">
 
@@ -595,6 +909,7 @@ PASSING RATE
 —
 </p>
 
+
 <div class="podium-value">
 
 <span id="podium1Pass">
@@ -609,6 +924,9 @@ PASSING RATE
 
 </div>
 
+
+
+<!-- THIRD -->
 
 <div class="podium-card">
 
@@ -628,6 +946,7 @@ PASSING RATE
 —
 </p>
 
+
 <div class="podium-value">
 
 <span id="podium3Pass">
@@ -642,8 +961,14 @@ PASSING RATE
 
 </div>
 
+
 </div>
 
+
+
+<!-- =====================================================
+     SEARCH
+===================================================== -->
 
 <div class="search-box">
 
@@ -656,7 +981,13 @@ autocomplete="off">
 </div>
 
 
+
+<!-- =====================================================
+     TABLE
+===================================================== -->
+
 <div class="ranking-table">
+
 
 <div class="table-header">
 
@@ -679,16 +1010,21 @@ TOTAL GPA-5
 </div>
 
 
+
 <div id="rankingRows">
 
 <div class="loading-state">
+
 Loading institution ranking...
-</div>
 
 </div>
 
+</div>
 
-<div id="emptyState"
+
+
+<div
+id="emptyState"
 class="empty-state">
 
 No institution found.
@@ -696,7 +1032,9 @@ No institution found.
 </div>
 
 
-<div id="errorState"
+
+<div
+id="errorState"
 class="error-state">
 
 Institution ranking data could not be loaded.
@@ -704,7 +1042,13 @@ Institution ranking data could not be loaded.
 </div>
 
 
-<div id="pagination"
+
+<!-- =====================================================
+     PAGINATION
+===================================================== -->
+
+<div
+id="pagination"
 class="pagination">
 
 <button
@@ -736,6 +1080,7 @@ Next →
 
 </div>
 
+
 </div>
 
 </section>
@@ -743,9 +1088,15 @@ Next →
 </main>
 
 
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
 <footer>
 
 <div class="footer-main">
+
 
 <div>
 
@@ -759,11 +1110,15 @@ CTGBoardRanking
 
 </div>
 
+
 <p>
+
 Chattogram Board Education Rankings.
+
 </p>
 
 </div>
+
 
 
 <div class="footer-links">
@@ -786,7 +1141,9 @@ Statistics
 
 </div>
 
+
 </div>
+
 
 
 <div class="footer-bottom">
@@ -804,19 +1161,25 @@ Education Data & Statistics
 </footer>
 
 
+
 <script src="script.js"></script>
+
 
 
 <script>
 
 /* =========================================================
-   DATA
+   DATA URL
 ========================================================= */
 
 const DATA_URL =
     "scraper/students.json?v=" +
     Date.now();
 
+
+/* =========================================================
+   VARIABLES
+========================================================= */
 
 let allStudents = [];
 
@@ -832,8 +1195,8 @@ let currentPage = 1;
 
 
 /*
- * প্রতি পেজে 100টি Institution
- */
+   প্রতি পেজে ১০০টি institution
+*/
 
 const PAGE_SIZE = 100;
 
@@ -843,40 +1206,64 @@ const PAGE_SIZE = 100;
 ========================================================= */
 
 const yearFilter =
-    document.getElementById("yearFilter");
+    document.getElementById(
+        "yearFilter"
+    );
 
 const groupFilter =
-    document.getElementById("groupFilter");
+    document.getElementById(
+        "groupFilter"
+    );
 
 const rankingTitle =
-    document.getElementById("rankingTitle");
+    document.getElementById(
+        "rankingTitle"
+    );
 
 const resultInfo =
-    document.getElementById("resultInfo");
+    document.getElementById(
+        "resultInfo"
+    );
 
 const searchInput =
-    document.getElementById("searchInput");
+    document.getElementById(
+        "searchInput"
+    );
 
 const rankingRows =
-    document.getElementById("rankingRows");
+    document.getElementById(
+        "rankingRows"
+    );
 
 const emptyState =
-    document.getElementById("emptyState");
+    document.getElementById(
+        "emptyState"
+    );
 
 const errorState =
-    document.getElementById("errorState");
+    document.getElementById(
+        "errorState"
+    );
 
 const pagination =
-    document.getElementById("pagination");
+    document.getElementById(
+        "pagination"
+    );
 
 const prevPage =
-    document.getElementById("prevPage");
+    document.getElementById(
+        "prevPage"
+    );
 
 const nextPage =
-    document.getElementById("nextPage");
+    document.getElementById(
+        "nextPage"
+    );
 
 const paginationInfo =
-    document.getElementById("paginationInfo");
+    document.getElementById(
+        "paginationInfo"
+    );
 
 
 /* =========================================================
@@ -959,11 +1346,19 @@ function toNumber(value){
 
 function normalizeText(value){
 
-    return String(value || "")
-        .trim()
-        .toLowerCase()
-        .replace(/[_-]+/g," ")
-        .replace(/\s+/g," ");
+    return String(
+        value || ""
+    )
+    .trim()
+    .toLowerCase()
+    .replace(
+        /[_-]+/g,
+        " "
+    )
+    .replace(
+        /\s+/g,
+        " "
+    );
 
 }
 
@@ -1093,45 +1488,50 @@ function getInstitutionName(student){
     ){
 
         if (
-            student[key] !== undefined &&
-            student[key] !== null
+            student[key] === undefined ||
+            student[key] === null
         ){
 
-            const name =
-                String(
-                    student[key]
-                ).trim();
-
-
-            if (!name){
-
-                continue;
-
-            }
-
-
-            const lower =
-                name.toLowerCase();
-
-
-            if (
-                lower === "college a" ||
-                lower === "college b" ||
-                lower === "college c" ||
-                lower === "college d" ||
-                lower === "institution a" ||
-                lower === "institution b" ||
-                lower === "institution name"
-            ){
-
-                continue;
-
-            }
-
-
-            return name;
+            continue;
 
         }
+
+
+        const name =
+            String(
+                student[key]
+            ).trim();
+
+
+        if (!name){
+
+            continue;
+
+        }
+
+
+        const lower =
+            name.toLowerCase();
+
+
+        if (
+            lower === "college a" ||
+            lower === "college b" ||
+            lower === "college c" ||
+            lower === "college d" ||
+            lower === "institution a" ||
+            lower === "institution b" ||
+            lower === "institution c" ||
+            lower === "institution d" ||
+            lower === "institution name"
+        ){
+
+            continue;
+
+        }
+
+
+        return name;
 
     }
 
@@ -1319,9 +1719,7 @@ function buildInstitutionRanking(){
                 );
 
 
-            if (
-                !map.has(key)
-            ){
+            if (!map.has(key)){
 
                 map.set(
                     key,
@@ -1335,11 +1733,11 @@ function buildInstitutionRanking(){
                                 student
                             ),
 
-                        students:0,
+                        students: 0,
 
-                        passed:0,
+                        passed: 0,
 
-                        totalGPA5:0
+                        totalGPA5: 0
 
                     }
                 );
@@ -1351,8 +1749,16 @@ function buildInstitutionRanking(){
                 map.get(key);
 
 
+            /*
+             * Total Students
+             */
+
             item.students++;
 
+
+            /*
+             * Passed Students
+             */
 
             if (
                 isPassed(student)
@@ -1364,7 +1770,10 @@ function buildInstitutionRanking(){
 
 
             /*
-             * GPA 5 count
+             * Total GPA-5
+             *
+             * GPA 5.00 পাওয়া
+             * প্রত্যেক student = 1
              */
 
             if (
@@ -1385,6 +1794,10 @@ function buildInstitutionRanking(){
         );
 
 
+    /*
+     * Passing Rate
+     */
+
     result.forEach(
         item => {
 
@@ -1401,11 +1814,13 @@ function buildInstitutionRanking(){
 
 
     /*
-     * Ranking:
+     * =====================================================
+     * RANKING ORDER
      *
      * 1. Passing Rate
      * 2. Total GPA-5
-     * 3. Students
+     * 3. Total Students
+     * =====================================================
      */
 
     result.sort(
@@ -1449,11 +1864,11 @@ function buildInstitutionRanking(){
     /*
      * গুরুত্বপূর্ণ:
      *
-     * এখানে আর slice(0,100)
-     * ব্যবহার করা হচ্ছে না।
+     * এখানে আর slice(0,100) নেই।
      *
-     * তাই 276টি Institution থাকলে
-     * 276টিই ranking-এ থাকবে।
+     * তাই 276, 500, 1000
+     * institution হলেও
+     * সবগুলো ranking-এ থাকবে।
      */
 
     institutionData =
@@ -1468,12 +1883,29 @@ function buildInstitutionRanking(){
 
 function escapeHTML(value){
 
-    return String(value || "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+    return String(
+        value || ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
 
 }
 
@@ -1495,9 +1927,7 @@ function updateTitle(){
 
     resultInfo.textContent =
         yearFilter.value +
-        " · Chattogram Board · " +
-        institutionData.length +
-        " Institutions";
+        " · Chattogram Board";
 
 }
 
@@ -1522,72 +1952,72 @@ function updatePodium(data){
         "podium1Name"
     ).textContent =
         first
-        ? first.institution
-        : "—";
+            ? first.institution
+            : "—";
 
 
     document.getElementById(
         "podium1District"
     ).textContent =
         first
-        ? first.district
-        : "—";
+            ? first.district
+            : "—";
 
 
     document.getElementById(
         "podium1Pass"
     ).textContent =
         first
-        ? first.passRate.toFixed(2) + "%"
-        : "—";
+            ? first.passRate.toFixed(2) + "%"
+            : "—";
 
 
     document.getElementById(
         "podium2Name"
     ).textContent =
         second
-        ? second.institution
-        : "—";
+            ? second.institution
+            : "—";
 
 
     document.getElementById(
         "podium2District"
     ).textContent =
         second
-        ? second.district
-        : "—";
+            ? second.district
+            : "—";
 
 
     document.getElementById(
         "podium2Pass"
     ).textContent =
         second
-        ? second.passRate.toFixed(2) + "%"
-        : "—";
+            ? second.passRate.toFixed(2) + "%"
+            : "—";
 
 
     document.getElementById(
         "podium3Name"
     ).textContent =
         third
-        ? third.institution
-        : "—";
+            ? third.institution
+            : "—";
 
 
     document.getElementById(
         "podium3District"
     ).textContent =
         third
-        ? third.district
-        : "—";
+            ? third.district
+            : "—";
 
 
     document.getElementById(
         "podium3Pass"
     ).textContent =
         third
-        ? third.passRate.toFixed(2) + "%"
-        : "—";
+            ? third.passRate.toFixed(2) + "%"
+            : "—";
 
 }
 
@@ -1609,7 +2039,8 @@ function applySearch(){
         filteredData =
             institutionData.slice();
 
-    }else{
+    }
+    else{
 
         filteredData =
             institutionData.filter(
@@ -1635,6 +2066,7 @@ function applySearch(){
 
     currentPage = 1;
 
+
     renderTable();
 
 }
@@ -1647,6 +2079,7 @@ function applySearch(){
 function renderTable(){
 
     rankingRows.innerHTML = "";
+
 
     emptyState.style.display =
         "none";
@@ -1668,7 +2101,7 @@ function renderTable(){
 
 
     /*
-     * মোট কত পেজ
+     * Total pages
      */
 
     const totalPages =
@@ -1679,7 +2112,7 @@ function renderTable(){
 
 
     /*
-     * Current page ঠিক রাখা
+     * Safety
      */
 
     if (
@@ -1716,7 +2149,9 @@ function renderTable(){
         (item,index) => {
 
             const actualRank =
-                start + index + 1;
+                start +
+                index +
+                1;
 
 
             const row =
@@ -1733,8 +2168,8 @@ function renderTable(){
 
                 <div class="rank ${
                     actualRank <= 3
-                    ? "top"
-                    : ""
+                        ? "top"
+                        : ""
                 }">
 
                     ${String(
@@ -1810,8 +2245,7 @@ function renderTable(){
 
 
     /*
-     * Pagination সবসময় থাকবে
-     * যখন একের বেশি page থাকে।
+     * Pagination
      */
 
     if (
@@ -1821,7 +2255,8 @@ function renderTable(){
         pagination.style.display =
             "flex";
 
-    }else{
+    }
+    else{
 
         pagination.style.display =
             "none";
@@ -1852,20 +2287,13 @@ function renderTable(){
 
 function renderRanking(){
 
-    currentGroup =
-        groupFilter.value;
-
-
-    buildInstitutionRanking();
-
-
     updateTitle();
 
+    buildInstitutionRanking();
 
     updatePodium(
         institutionData
     );
-
 
     applySearch();
 
@@ -1889,9 +2317,7 @@ async function loadStudents(){
             );
 
 
-        if (
-            !response.ok
-        ){
+        if (!response.ok){
 
             throw new Error(
                 "HTTP " +
@@ -1904,6 +2330,10 @@ async function loadStudents(){
         const data =
             await response.json();
 
+
+        /*
+         * Support different JSON formats
+         */
 
         if (
             Array.isArray(data)
@@ -1966,8 +2396,8 @@ async function loadStudents(){
 
 
         console.log(
-            "Institutions found:",
-            institutionData.length
+            "First student:",
+            allStudents[0]
         );
 
 
@@ -2014,8 +2444,6 @@ groupFilter.addEventListener(
         currentGroup =
             this.value;
 
-        currentPage = 1;
-
         renderRanking();
 
     }
@@ -2029,8 +2457,6 @@ groupFilter.addEventListener(
 yearFilter.addEventListener(
     "change",
     function(){
-
-        currentPage = 1;
 
         renderRanking();
 
@@ -2048,8 +2474,6 @@ searchInput.addEventListener(
 
         currentSearch =
             this.value;
-
-        currentPage = 1;
 
         applySearch();
 
@@ -2073,14 +2497,18 @@ prevPage.addEventListener(
 
             renderTable();
 
+
             window.scrollTo({
 
                 top:
-                    document.querySelector(
+                    document
+                    .querySelector(
                         ".ranking-table"
-                    ).offsetTop - 100,
+                    )
+                    .offsetTop - 100,
 
-                behavior:"smooth"
+                behavior:
+                    "smooth"
 
             });
 
@@ -2114,14 +2542,18 @@ nextPage.addEventListener(
 
             renderTable();
 
+
             window.scrollTo({
 
                 top:
-                    document.querySelector(
+                    document
+                    .querySelector(
                         ".ranking-table"
-                    ).offsetTop - 100,
+                    )
+                    .offsetTop - 100,
 
-                behavior:"smooth"
+                behavior:
+                    "smooth"
 
             });
 
@@ -2140,4 +2572,5 @@ loadStudents();
 </script>
 
 </body>
+
 </html>
