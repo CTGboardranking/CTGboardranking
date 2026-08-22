@@ -16,25 +16,52 @@ WEIGHTS = {
 }
 
 
-def clamp(value, minimum=0, maximum=100):
-    return max(minimum, min(value, maximum))
+GRADE_WEIGHTS = {
+    "A+": 100,
+    "A": 90,
+    "A-": 80,
+    "B": 70,
+    "C": 60,
+    "D": 50,
+    "F": 0
+}
 
 
-def calculate_gpa_score(average_gpa):
+def clamp(
+    value,
+    minimum=0,
+    maximum=100
+):
+    return max(
+        minimum,
+        min(value, maximum)
+    )
+
+
+def calculate_gpa_score(
+    average_gpa
+):
     """
-    Average GPA:
-    0 GPA  -> 0 score
-    5 GPA  -> 100 score
+    Convert Average GPA (0-5)
+    to a 0-100 score.
     """
+
+    if average_gpa <= 0:
+        return 0
+
     return clamp(
         (average_gpa / 5.0) * 100
     )
 
 
-def calculate_gpa5_rate(total_students, gpa5_count):
+def calculate_gpa5_rate(
+    total_students,
+    gpa5_count
+):
     """
-    Percentage of students achieving GPA 5.
+    GPA-5 percentage among students.
     """
+
     if total_students <= 0:
         return 0
 
@@ -43,11 +70,31 @@ def calculate_gpa5_rate(total_students, gpa5_count):
     )
 
 
-def calculate_grade_performance(grade_distribution):
+def calculate_pass_rate(
+    total_students,
+    passed_students
+):
     """
-    Weighted subject-grade performance.
+    Actual student pass rate.
 
-    Grade weights:
+    Pass Rate =
+    Passed Students / Total Students × 100
+    """
+
+    if total_students <= 0:
+        return 0
+
+    return clamp(
+        (passed_students / total_students) * 100
+    )
+
+
+def calculate_grade_performance(
+    grade_distribution
+):
+    """
+    Weighted grade performance.
+
     A+ = 100
     A  = 90
     A- = 80
@@ -57,79 +104,36 @@ def calculate_grade_performance(grade_distribution):
     F  = 0
     """
 
-    grade_weights = {
-        "A+": 100,
-        "A": 90,
-        "A-": 80,
-        "B": 70,
-        "C": 60,
-        "D": 50,
-        "F": 0
-    }
-
     total = 0
     weighted = 0
 
-    for grade, weight in grade_weights.items():
+    for grade, weight in GRADE_WEIGHTS.items():
 
         count = grade_distribution.get(
             grade,
             0
         )
 
-        if not isinstance(count, (int, float)):
+        if not isinstance(
+            count,
+            (int, float)
+        ):
             count = 0
 
         if count < 0:
             count = 0
 
         total += count
-        weighted += count * weight
 
-    if total == 0:
+        weighted += (
+            count * weight
+        )
+
+    if total <= 0:
         return 0
 
     return clamp(
         weighted / total
-    )
-
-
-def calculate_pass_rate(
-    grade_distribution
-):
-    """
-    Pass rate based on subject-grade
-    distribution.
-
-    F = failed grade.
-    """
-
-    total = sum(
-        grade_distribution.get(
-            grade,
-            0
-        )
-        for grade in [
-            "A+",
-            "A",
-            "A-",
-            "B",
-            "C",
-            "D",
-            "F"
-        ]
-    )
-
-    if total == 0:
-        return 0
-
-    passed = total - grade_distribution.get(
-        "F",
-        0
-    )
-
-    return clamp(
-        (passed / total) * 100
     )
 
 
@@ -139,12 +143,22 @@ def calculate_final_score(
     grade_performance,
     pass_rate
 ):
+    """
+    Final Institution Ranking Score.
+
+    Average GPA       = 40%
+    GPA-5 Rate        = 30%
+    Grade Performance = 20%
+    Pass Rate         = 10%
+    """
+
+    gpa_score = calculate_gpa_score(
+        average_gpa
+    )
 
     score = (
 
-        calculate_gpa_score(
-            average_gpa
-        )
+        gpa_score
         * WEIGHTS["average_gpa"]
         / 100
 
@@ -175,6 +189,10 @@ def calculate_final_score(
 
 def main():
 
+    # -----------------------------
+    # Check input
+    # -----------------------------
+
     if not os.path.exists(
         INPUT_FILE
     ):
@@ -186,15 +204,31 @@ def main():
 
         sys.exit(1)
 
+    # -----------------------------
+    # Load data
+    # -----------------------------
+
     with open(
         INPUT_FILE,
         "r",
         encoding="utf-8"
     ) as file:
 
-        institutions = json.load(
-            file
-        )
+        try:
+
+            institutions = json.load(
+                file
+            )
+
+        except json.JSONDecodeError as e:
+
+            print(
+                "Invalid JSON:"
+            )
+
+            print(e)
+
+            sys.exit(1)
 
     if not isinstance(
         institutions,
@@ -207,6 +241,10 @@ def main():
 
         sys.exit(1)
 
+    # -----------------------------
+    # Calculate ranking
+    # -----------------------------
+
     rankings = []
 
     for institution in institutions:
@@ -216,8 +254,23 @@ def main():
             "Unknown"
         )
 
+        district = institution.get(
+            "district",
+            "Unknown"
+        )
+
         total_students = institution.get(
             "total_students",
+            0
+        )
+
+        passed_students = institution.get(
+            "passed_students",
+            0
+        )
+
+        failed_students = institution.get(
+            "failed_students",
             0
         )
 
@@ -236,18 +289,29 @@ def main():
             {}
         )
 
+        # -------------------------
+        # Individual metrics
+        # -------------------------
+
         gpa5_rate = calculate_gpa5_rate(
             total_students,
             gpa5_count
         )
 
-        grade_performance = calculate_grade_performance(
-            grades
+        pass_rate = calculate_pass_rate(
+            total_students,
+            passed_students
         )
 
-        pass_rate = calculate_pass_rate(
-            grades
+        grade_performance = (
+            calculate_grade_performance(
+                grades
+            )
         )
+
+        # -------------------------
+        # Final score
+        # -------------------------
 
         final_score = calculate_final_score(
             average_gpa,
@@ -258,10 +322,26 @@ def main():
 
         rankings.append({
 
-            "institute": name,
+            "institute":
+                name,
+
+            "district":
+                district,
 
             "total_students":
                 total_students,
+
+            "passed_students":
+                passed_students,
+
+            "failed_students":
+                failed_students,
+
+            "pass_percentage":
+                round(
+                    pass_rate,
+                    2
+                ),
 
             "gpa_5_count":
                 gpa5_count,
@@ -281,27 +361,28 @@ def main():
                     2
                 ),
 
-            "pass_rate":
-                round(
-                    pass_rate,
-                    2
-                ),
-
             "score":
                 final_score
         })
 
-    # Highest score first
+    # -----------------------------
+    # Sort
+    # -----------------------------
+
     rankings.sort(
         key=lambda x: (
             -x["score"],
             -x["average_gpa"],
             -x["gpa_5_percentage"],
+            -x["pass_percentage"],
             x["institute"]
         )
     )
 
-    # Assign ranking positions
+    # -----------------------------
+    # Assign ranks
+    # -----------------------------
+
     for position, item in enumerate(
         rankings,
         start=1
@@ -309,7 +390,10 @@ def main():
 
         item["rank"] = position
 
+    # -----------------------------
     # Save JSON
+    # -----------------------------
+
     with open(
         OUTPUT_FILE,
         "w",
@@ -323,6 +407,10 @@ def main():
             indent=2
         )
 
+    # -----------------------------
+    # Print ranking
+    # -----------------------------
+
     print(
         "\n===== INSTITUTION RANKING =====\n"
     )
@@ -332,11 +420,15 @@ def main():
         print(
             f"Rank #{item['rank']} | "
             f"{item['institute']} | "
+            f"District: {item['district']} | "
             f"Score: {item['score']} | "
+            f"Students: {item['total_students']} | "
+            f"Passed: {item['passed_students']} | "
+            f"Failed: {item['failed_students']} | "
+            f"Pass: {item['pass_percentage']}% | "
             f"GPA-5: {item['gpa_5_count']} "
             f"({item['gpa_5_percentage']}%) | "
-            f"Average GPA: "
-            f"{item['average_gpa']}"
+            f"Average GPA: {item['average_gpa']}"
         )
 
     print(
