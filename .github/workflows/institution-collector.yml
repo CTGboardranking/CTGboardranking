@@ -1,0 +1,42 @@
+name: Institution Data Collector
+
+on:
+  workflow_dispatch:
+
+jobs:
+  collect-institutions:
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4
+
+      - name: Run Institution Collector
+        run: |
+          cd institution-collector
+          python collect_institutions.py
+
+      - name: Commit Institution Data
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add institution-collector/institutions.json
+
+          git diff --cached --quiet || git commit -m "Update institution data"
+
+          git push
