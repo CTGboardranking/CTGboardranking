@@ -1,5 +1,7 @@
 import os
 import json
+import time
+import random
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
@@ -12,15 +14,46 @@ from urllib.parse import urljoin
 BASE_URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/"
 INDIVIDUAL_URL = BASE_URL + "individual/"
 
-TEST_ROLLS = [
-    "100001",
-    "100002",
-    "100003",
-    "100004",
-    "100005"
-]
-
 OUTPUT_DIR = "scraper"
+
+STUDENTS_FILE = os.path.join(
+    OUTPUT_DIR,
+    "students.json"
+)
+
+SUMMARY_FILE = os.path.join(
+    OUTPUT_DIR,
+    "student_collection_summary.json"
+)
+
+FAILED_FILE = os.path.join(
+    OUTPUT_DIR,
+    "failed_rolls.json"
+)
+
+# ------------------------------------------------------------
+# Roll ranges
+# ------------------------------------------------------------
+
+ROLL_RANGES = {
+    "Science": (100001, 132961),
+    "Science Irregular": (700001, 723917),
+    "Humanities": (300001, 331193),
+    "Business Studies": (500001, 541800),
+}
+
+# ------------------------------------------------------------
+# Safe batch settings
+# ------------------------------------------------------------
+
+BATCH_SIZE = 100
+
+MIN_DELAY = 1.0
+MAX_DELAY = 2.0
+
+MAX_RETRIES = 3
+
+REQUEST_TIMEOUT = 30
 
 os.makedirs(
     OUTPUT_DIR,
@@ -32,10 +65,11 @@ os.makedirs(
 # HEADERS
 # ============================================================
 
-headers = {
+HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Linux; Android 10; Mobile) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "AppleWebKit/537.36 "
+        "(KHTML, like Gecko) "
         "Chrome/131.0.0.0 Mobile Safari/537.36"
     ),
     "Accept": (
@@ -54,7 +88,7 @@ headers = {
 session = requests.Session()
 
 session.headers.update(
-    headers
+    HEADERS
 )
 
 
@@ -72,18 +106,17 @@ def clean_text(value):
     ).strip()
 
 
-def save_json(
-    filename,
-    data
-):
+def save_json(filename, data):
 
-    filepath = os.path.join(
+    path = os.path.join(
         OUTPUT_DIR,
         filename
     )
 
+    temp_path = path + ".tmp"
+
     with open(
-        filepath,
+        temp_path,
         "w",
         encoding="utf-8"
     ) as file:
@@ -95,9 +128,39 @@ def save_json(
             indent=2
         )
 
+    os.replace(
+        temp_path,
+        path
+    )
+
+
+def load_json(filename, default):
+
+    path = os.path.join(
+        OUTPUT_DIR,
+        filename
+    )
+
+    if not os.path.exists(path):
+        return default
+
+    try:
+
+        with open(
+            path,
+            "r",
+            encoding="utf-8"
+        ) as file:
+
+            return json.load(file)
+
+    except Exception:
+
+        return default
+
 
 # ============================================================
-# PARSE GPA
+# GPA
 # ============================================================
 
 def parse_gpa(value):
@@ -107,30 +170,25 @@ def parse_gpa(value):
     if not value:
         return None
 
-    # Examples:
-    # GPA=5.00
-    # GPA = 5.00
-    # 5.00
+    upper = value.upper()
 
-    if "GPA=" in value:
+    if "GPA=" in upper:
 
-        value = value.split(
+        value = upper.split(
             "GPA=",
             1
         )[1].strip()
 
-    elif "GPA =" in value:
+    elif "GPA =" in upper:
 
-        value = value.split(
+        value = upper.split(
             "GPA =",
             1
         )[1].strip()
 
     try:
 
-        return float(
-            value
-        )
+        return float(value)
 
     except ValueError:
 
@@ -138,57 +196,34 @@ def parse_gpa(value):
 
 
 # ============================================================
-# PARSE SUBJECT MARK
+# SUBJECT RESULT
 # ============================================================
 
-def parse_subject_result(
-    value
-):
+def parse_subject_result(value):
 
-    value = clean_text(
-        value
-    )
+    value = clean_text(value)
 
     mark = None
     grade = ""
-
-    # Example:
-    # 127(A-)
-    # 158(A)
-    # 096(A+)
 
     if "(" in value:
 
         mark_text = (
             value
-            .split(
-                "(",
-                1
-            )[0]
+            .split("(", 1)[0]
             .strip()
         )
 
         grade_text = (
             value
-            .split(
-                "(",
-                1
-            )[1]
-            .replace(
-                ")",
-                ""
-            )
+            .split("(", 1)[1]
+            .replace(")", "")
             .strip()
         )
 
         try:
-
-            mark = int(
-                mark_text
-            )
-
+            mark = int(mark_text)
         except ValueError:
-
             mark = None
 
         grade = grade_text
@@ -196,20 +231,15 @@ def parse_subject_result(
     else:
 
         try:
-
-            mark = int(
-                value
-            )
-
+            mark = int(value)
         except ValueError:
-
             mark = None
 
     return mark, grade
 
 
 # ============================================================
-# FIND VALUE AFTER LABEL
+# FIND VALUE
 # ============================================================
 
 def find_value_after_label(
@@ -217,30 +247,29 @@ def find_value_after_label(
     label
 ):
 
-    label_lower = label.lower()
+    label = label.lower().strip()
 
-    for index, value in enumerate(
-        values
-    ):
+    for i, value in enumerate(values):
 
-        if clean_text(value).lower() == label_lower:
+        if clean_text(value).lower() == label:
 
-            if index + 1 < len(values):
+            if i + 1 < len(values):
 
                 return clean_text(
-                    values[index + 1]
+                    values[i + 1]
                 )
 
     return ""
 
 
 # ============================================================
-# PARSE STUDENT RESULT
+# PARSE RESULT
 # ============================================================
 
 def parse_result(
     html,
-    requested_roll
+    requested_roll,
+    group_name
 ):
 
     soup = BeautifulSoup(
@@ -248,15 +277,15 @@ def parse_result(
         "html.parser"
     )
 
-    result_data = {
+    result = {
 
-        "roll": requested_roll,
+        "roll": str(requested_roll),
 
         "name": "",
 
         "board": "",
 
-        "group": "",
+        "group": group_name,
 
         "session": "",
 
@@ -273,14 +302,10 @@ def parse_result(
 
 
     # ========================================================
-    # BASIC INFORMATION
+    # BASIC DATA
     # ========================================================
 
-    rows = soup.find_all(
-        "tr"
-    )
-
-    for row in rows:
+    for row in soup.find_all("tr"):
 
         cells = row.find_all(
             ["th", "td"]
@@ -300,160 +325,36 @@ def parse_result(
             continue
 
 
-        # ----------------------------------------------------
-        # ROLL
-        # ----------------------------------------------------
+        fields = [
+            ("Roll No", "roll"),
+            ("Name", "name"),
+            ("Board", "board"),
+            ("Group", "group"),
+            ("Session", "session"),
+            ("Type", "type"),
+            ("Institute", "institute"),
+            ("District", "district"),
+        ]
 
-        if "Roll No" in values:
 
-            roll_value = find_value_after_label(
+        for label, key in fields:
+
+            value = find_value_after_label(
                 values,
-                "Roll No"
+                label
             )
 
-            if roll_value:
+            if value:
 
-                result_data["roll"] = (
-                    roll_value
-                )
+                result[key] = value
 
 
-        # ----------------------------------------------------
-        # NAME
-        # ----------------------------------------------------
+        result_value = find_value_after_label(
+            values,
+            "Result"
+        )
 
-        if "Name" in values:
-
-            name_value = find_value_after_label(
-                values,
-                "Name"
-            )
-
-            if name_value:
-
-                result_data["name"] = (
-                    name_value
-                )
-
-
-        # ----------------------------------------------------
-        # BOARD
-        # ----------------------------------------------------
-
-        if "Board" in values:
-
-            board_value = find_value_after_label(
-                values,
-                "Board"
-            )
-
-            if board_value:
-
-                result_data["board"] = (
-                    board_value
-                )
-
-
-        # ----------------------------------------------------
-        # GROUP
-        # ----------------------------------------------------
-
-        if "Group" in values:
-
-            group_value = find_value_after_label(
-                values,
-                "Group"
-            )
-
-            if group_value:
-
-                result_data["group"] = (
-                    group_value
-                )
-
-
-        # ----------------------------------------------------
-        # SESSION
-        # ----------------------------------------------------
-
-        if "Session" in values:
-
-            session_value = find_value_after_label(
-                values,
-                "Session"
-            )
-
-            if session_value:
-
-                result_data["session"] = (
-                    session_value
-                )
-
-
-        # ----------------------------------------------------
-        # TYPE
-        # ----------------------------------------------------
-
-        if "Type" in values:
-
-            type_value = find_value_after_label(
-                values,
-                "Type"
-            )
-
-            if type_value:
-
-                result_data["type"] = (
-                    type_value
-                )
-
-
-        # ----------------------------------------------------
-        # INSTITUTE
-        # ----------------------------------------------------
-
-        if "Institute" in values:
-
-            institute_value = find_value_after_label(
-                values,
-                "Institute"
-            )
-
-            if institute_value:
-
-                result_data["institute"] = (
-                    institute_value
-                )
-
-
-        # ----------------------------------------------------
-        # DISTRICT
-        # ----------------------------------------------------
-
-        if "District" in values:
-
-            district_value = find_value_after_label(
-                values,
-                "District"
-            )
-
-            if district_value:
-
-                result_data["district"] = (
-                    district_value
-                )
-
-
-        # ----------------------------------------------------
-        # RESULT / GPA
-        # ----------------------------------------------------
-
-        if "Result" in values:
-
-            result_value = find_value_after_label(
-                values,
-                "Result"
-            )
+        if result_value:
 
             gpa = parse_gpa(
                 result_value
@@ -461,14 +362,14 @@ def parse_result(
 
             if gpa is not None:
 
-                result_data["gpa"] = gpa
+                result["gpa"] = gpa
 
 
     # ========================================================
-    # FALLBACK: SEARCH PAGE TEXT FOR GPA
+    # GPA FALLBACK
     # ========================================================
 
-    if result_data["gpa"] is None:
+    if result["gpa"] is None:
 
         page_text = clean_text(
             soup.get_text(
@@ -477,49 +378,35 @@ def parse_result(
             )
         )
 
-        if "GPA=" in page_text:
+        upper = page_text.upper()
+
+        if "GPA=" in upper:
 
             try:
 
-                gpa_text = (
-                    page_text
-                    .split(
-                        "GPA=",
-                        1
-                    )[1]
-                    .split(
-                        " ",
-                        1
-                    )[0]
+                value = (
+                    upper
+                    .split("GPA=", 1)[1]
+                    .split(" ", 1)[0]
+                    .strip()
                 )
 
-                result_data["gpa"] = float(
-                    gpa_text
-                )
+                result["gpa"] = float(value)
 
-            except (
-                ValueError,
-                IndexError
-            ):
+            except Exception:
 
                 pass
 
 
     # ========================================================
-    # SUBJECT TABLE
+    # SUBJECTS
     # ========================================================
 
-    seen_subjects = set()
+    seen = set()
 
-    for table in soup.find_all(
-        "table"
-    ):
+    for table in soup.find_all("table"):
 
-        table_rows = table.find_all(
-            "tr"
-        )
-
-        for row in table_rows:
+        for row in table.find_all("tr"):
 
             cells = row.find_all(
                 ["th", "td"]
@@ -538,38 +425,28 @@ def parse_result(
             if len(values) < 3:
                 continue
 
-
             code = values[0]
 
-            # Subject code must be numeric
             if not code.isdigit():
                 continue
 
-
             subject = values[1]
 
-            mark_grade_value = values[2]
-
             mark, grade = parse_subject_result(
-                mark_grade_value
+                values[2]
             )
 
-
-            # Avoid duplicate subjects
-            subject_key = (
+            key = (
                 code,
                 subject
             )
 
-            if subject_key in seen_subjects:
+            if key in seen:
                 continue
 
-            seen_subjects.add(
-                subject_key
-            )
+            seen.add(key)
 
-
-            result_data["subjects"].append({
+            result["subjects"].append({
 
                 "code": code,
 
@@ -582,47 +459,108 @@ def parse_result(
 
 
     # ========================================================
-    # CLEAN FINAL VALUES
+    # CLEAN
     # ========================================================
 
-    result_data["roll"] = clean_text(
-        result_data["roll"]
-    )
+    for key in [
+        "roll",
+        "name",
+        "board",
+        "group",
+        "session",
+        "type",
+        "institute",
+        "district"
+    ]:
 
-    result_data["name"] = clean_text(
-        result_data["name"]
-    )
-
-    result_data["board"] = clean_text(
-        result_data["board"]
-    )
-
-    result_data["group"] = clean_text(
-        result_data["group"]
-    )
-
-    result_data["session"] = clean_text(
-        result_data["session"]
-    )
-
-    result_data["type"] = clean_text(
-        result_data["type"]
-    )
-
-    result_data["institute"] = clean_text(
-        result_data["institute"]
-    )
-
-    result_data["district"] = clean_text(
-        result_data["district"]
-    )
+        result[key] = clean_text(
+            result[key]
+        )
 
 
-    return result_data
+    return result
 
 
 # ============================================================
-# 1. OPEN INDIVIDUAL RESULT PAGE
+# LOAD EXISTING DATA
+# ============================================================
+
+students = load_json(
+    "students.json",
+    []
+)
+
+failed_rolls = load_json(
+    "failed_rolls.json",
+    []
+)
+
+
+if not isinstance(
+    students,
+    list
+):
+
+    students = []
+
+
+if not isinstance(
+    failed_rolls,
+    list
+):
+
+    failed_rolls = []
+
+
+# ============================================================
+# EXISTING ROLLS
+# ============================================================
+
+existing_rolls = set()
+
+for student in students:
+
+    roll = str(
+        student.get(
+            "roll",
+            ""
+        )
+    ).strip()
+
+    if roll:
+
+        existing_rolls.add(
+            roll
+        )
+
+
+failed_set = set()
+
+for item in failed_rolls:
+
+    if isinstance(
+        item,
+        dict
+    ):
+
+        roll = str(
+            item.get(
+                "roll",
+                ""
+            )
+        )
+
+    else:
+
+        roll = str(item)
+
+    if roll:
+
+        failed_set.add(roll)
+
+
+# ============================================================
+# OPEN RESULT PAGE
 # ============================================================
 
 print(
@@ -632,26 +570,20 @@ print(
 try:
 
     page = session.get(
-
         INDIVIDUAL_URL,
-
         headers={
             "Referer": BASE_URL
         },
-
-        timeout=30,
-
-        allow_redirects=True
+        timeout=REQUEST_TIMEOUT
     )
+
+    page.raise_for_status()
 
 except requests.RequestException as error:
 
-    print(
-        "GET Error:",
-        repr(error)
+    raise SystemExit(
+        f"Could not open result page: {error}"
     )
-
-    raise SystemExit(1)
 
 
 print(
@@ -659,40 +591,9 @@ print(
     page.status_code
 )
 
-print(
-    "GET Final URL:",
-    page.url
-)
-
-print(
-    "GET Page Size:",
-    len(page.content)
-)
-
-
-with open(
-    os.path.join(
-        OUTPUT_DIR,
-        "individual_page.html"
-    ),
-    "w",
-    encoding="utf-8"
-) as file:
-
-    file.write(
-        page.text
-    )
-
-
-if page.status_code != 200:
-
-    raise SystemExit(
-        "Could not open SSC result page."
-    )
-
 
 # ============================================================
-# 2. FIND FORM
+# FIND FORM
 # ============================================================
 
 soup = BeautifulSoup(
@@ -700,14 +601,12 @@ soup = BeautifulSoup(
     "html.parser"
 )
 
-form = soup.find(
-    "form"
-)
+form = soup.find("form")
 
 if not form:
 
     raise SystemExit(
-        "ERROR: No form found."
+        "ERROR: Result form not found."
     )
 
 
@@ -721,7 +620,7 @@ form_action = clean_text(
 form_method = clean_text(
     form.get(
         "method",
-        "get"
+        "post"
     )
 ).lower()
 
@@ -733,40 +632,26 @@ FORM_ACTION_URL = urljoin(
 
 
 print(
-    "\n===== FORM ====="
-)
-
-print(
-    "Method:",
+    "Form method:",
     form_method
 )
 
 print(
-    "Action:",
-    form_action
-)
-
-print(
-    "Resolved URL:",
+    "Form URL:",
     FORM_ACTION_URL
 )
 
 
 # ============================================================
-# 3. COLLECT FORM FIELDS
+# COLLECT FORM FIELDS
 # ============================================================
 
 base_form_data = {}
 
 
-# ---------- INPUT ----------
-for inp in form.find_all(
-    "input"
-):
+for inp in form.find_all("input"):
 
-    name = inp.get(
-        "name"
-    )
+    name = inp.get("name")
 
     if not name:
         continue
@@ -775,11 +660,6 @@ for inp in form.find_all(
         "type",
         "text"
     ).lower()
-
-    value = inp.get(
-        "value",
-        ""
-    )
 
     if input_type in [
         "submit",
@@ -790,124 +670,73 @@ for inp in form.find_all(
 
         continue
 
-
     if input_type in [
         "checkbox",
         "radio"
     ]:
 
-        if not inp.has_attr(
-            "checked"
-        ):
+        if not inp.has_attr("checked"):
 
             continue
 
-
-    base_form_data[name] = value
-
-
-# ---------- SELECT ----------
-for select in form.find_all(
-    "select"
-):
-
-    name = select.get(
-        "name"
+    base_form_data[name] = inp.get(
+        "value",
+        ""
     )
+
+
+for select in form.find_all("select"):
+
+    name = select.get("name")
 
     if not name:
         continue
-
 
     selected = select.find(
         "option",
         selected=True
     )
 
+    if not selected:
 
-    if selected:
-
-        value = selected.get(
-            "value",
-            selected.get_text(
-                strip=True
-            )
-        )
-
-    else:
-
-        first = select.find(
+        selected = select.find(
             "option"
         )
 
-        if first:
+    if selected:
 
-            value = first.get(
-                "value",
-                first.get_text(
-                    strip=True
-                )
-            )
-
-        else:
-
-            value = ""
-
-
-    base_form_data[name] = value
-
-
-# ---------- TEXTAREA ----------
-for textarea in form.find_all(
-    "textarea"
-):
-
-    name = textarea.get(
-        "name"
-    )
-
-    if not name:
-        continue
-
-    base_form_data[name] = (
-        textarea.get_text()
-    )
+        base_form_data[name] = selected.get(
+            "value",
+            selected.get_text(strip=True)
+        )
 
 
 # ============================================================
-# 4. SUBMIT FIELD
+# SUBMIT BUTTON
 # ============================================================
 
 submit_fields = {}
 
-
-for button in form.find_all(
+for element in form.find_all(
     ["input", "button"]
 ):
 
-    button_type = button.get(
+    element_type = element.get(
         "type",
         ""
     ).lower()
 
-    name = button.get(
-        "name"
-    )
-
+    name = element.get("name")
 
     if (
-        button_type == "submit"
+        element_type == "submit"
         and name
     ):
 
-        value = button.get(
+        submit_fields[name] = element.get(
             "value",
-            button.get_text(
-                strip=True
-            )
+            element.get_text(strip=True)
         )
-
-        submit_fields[name] = value
 
 
 if not submit_fields:
@@ -917,36 +746,40 @@ if not submit_fields:
     }
 
 
-print(
-    "\nSubmit fields:",
-    submit_fields
+# ============================================================
+# GENERATE ROLLS
+# ============================================================
+
+def generate_rolls():
+
+    for group_name, (
+        start,
+        end
+    ) in ROLL_RANGES.items():
+
+        for roll in range(
+            start,
+            end + 1
+        ):
+
+            yield (
+                group_name,
+                roll
+            )
+
+
+# ============================================================
+# BATCH COLLECTION
+# ============================================================
+
+processed_this_run = 0
+success_this_run = 0
+failed_this_run = 0
+
+total_target = sum(
+    end - start + 1
+    for start, end in ROLL_RANGES.values()
 )
-
-
-# ============================================================
-# 5. SAVE FORM DATA
-# ============================================================
-
-save_json(
-    "form_data.json",
-    {
-        "form_action": FORM_ACTION_URL,
-        "method": form_method,
-        "fields": base_form_data,
-        "submit_fields": submit_fields
-    }
-)
-
-
-# ============================================================
-# 6. COLLECT MULTIPLE STUDENTS
-# ============================================================
-
-students = []
-
-successful_rolls = []
-
-failed_rolls = []
 
 
 print(
@@ -954,12 +787,22 @@ print(
 )
 
 print(
-    "STARTING MULTI-ROLL COLLECTION"
+    "SSC DATA COLLECTION"
 )
 
 print(
-    "Rolls:",
-    ", ".join(TEST_ROLLS)
+    "Total target rolls:",
+    total_target
+)
+
+print(
+    "Already collected:",
+    len(existing_rolls)
+)
+
+print(
+    "Batch size:",
+    BATCH_SIZE
 )
 
 print(
@@ -967,25 +810,44 @@ print(
 )
 
 
-for index, roll in enumerate(
-    TEST_ROLLS,
-    start=1
-):
+for group_name, roll in generate_rolls():
+
+    roll = str(roll)
+
+    # --------------------------------------------------------
+    # Resume support
+    # --------------------------------------------------------
+
+    if roll in existing_rolls:
+
+        continue
+
+
+    if roll in failed_set:
+
+        continue
+
+
+    # --------------------------------------------------------
+    # Batch limit
+    # --------------------------------------------------------
+
+    if processed_this_run >= BATCH_SIZE:
+
+        break
+
+
+    processed_this_run += 1
 
     print(
-        f"\n===== STUDENT "
-        f"{index}/{len(TEST_ROLLS)} ====="
-    )
-
-    print(
-        "Submitting Roll:",
-        roll
+        f"\n[{processed_this_run}/{BATCH_SIZE}] "
+        f"{group_name} | Roll: {roll}"
     )
 
 
-    # ========================================================
-    # FORM DATA
-    # ========================================================
+    # --------------------------------------------------------
+    # Prepare POST data
+    # --------------------------------------------------------
 
     form_data = dict(
         base_form_data
@@ -993,322 +855,241 @@ for index, roll in enumerate(
 
     form_data["roll"] = roll
 
-
     for key, value in submit_fields.items():
 
         form_data[key] = value
 
 
-    save_json(
-        f"form_data_{roll}.json",
-        form_data
-    )
+    # --------------------------------------------------------
+    # Request
+    # --------------------------------------------------------
 
+    result = None
 
-    # ========================================================
-    # POST
-    # ========================================================
+    for attempt in range(
+        1,
+        MAX_RETRIES + 1
+    ):
 
-    post_headers = {
+        try:
 
-        "Referer":
-            page.url,
+            result = session.post(
 
-        "Origin":
-            "https://sresult.bise-ctg.gov.bd",
+                FORM_ACTION_URL,
 
-        "Content-Type":
-            "application/x-www-form-urlencoded",
+                data=form_data,
 
-        "Accept":
-            (
-                "text/html,application/xhtml+xml,"
-                "application/xml;q=0.9,*/*;q=0.8"
+                headers={
+                    "Referer": page.url,
+                    "Origin":
+                        "https://sresult.bise-ctg.gov.bd",
+                },
+
+                timeout=REQUEST_TIMEOUT
             )
-    }
+
+            break
+
+        except requests.RequestException as error:
+
+            print(
+                f"Request error "
+                f"(attempt {attempt}):",
+                error
+            )
+
+            if attempt < MAX_RETRIES:
+
+                time.sleep(
+                    attempt * 2
+                )
 
 
-    try:
+    # --------------------------------------------------------
+    # Request failed
+    # --------------------------------------------------------
 
-        result = session.post(
-
-            FORM_ACTION_URL,
-
-            data=form_data,
-
-            headers=post_headers,
-
-            timeout=30,
-
-            allow_redirects=True
-        )
-
-    except requests.RequestException as error:
-
-        print(
-            "POST Error:",
-            repr(error)
-        )
+    if result is None:
 
         failed_rolls.append({
 
             "roll": roll,
 
-            "error": repr(error)
+            "group": group_name,
+
+            "error":
+                "Request failed after retries"
         })
+
+        failed_set.add(roll)
+
+        failed_this_run += 1
 
         continue
 
 
     print(
-        "POST Status:",
+        "HTTP:",
         result.status_code
     )
 
-    print(
-        "Final URL:",
-        result.url
-    )
 
-    print(
-        "Response Size:",
-        len(result.content)
-    )
-
-
-    # ========================================================
-    # SAVE HTML
-    # ========================================================
-
-    with open(
-        os.path.join(
-            OUTPUT_DIR,
-            f"result_page_{roll}.html"
-        ),
-        "w",
-        encoding="utf-8"
-    ) as file:
-
-        file.write(
-            result.text
-        )
-
-
-    # ========================================================
-    # SAVE HEADERS
-    # ========================================================
-
-    save_json(
-        f"response_headers_{roll}.json",
-        dict(result.headers)
-    )
-
-
-    # ========================================================
-    # SAVE REDIRECT HISTORY
-    # ========================================================
-
-    history = []
-
-
-    for response in result.history:
-
-        history.append({
-
-            "status_code":
-                response.status_code,
-
-            "url":
-                response.url,
-
-            "headers":
-                dict(response.headers)
-        })
-
-
-    save_json(
-        f"response_history_{roll}.json",
-        history
-    )
-
-
-    # ========================================================
-    # HTTP ERROR
-    # ========================================================
+    # --------------------------------------------------------
+    # HTTP error
+    # --------------------------------------------------------
 
     if result.status_code >= 400:
-
-        print(
-            "HTTP ERROR:",
-            result.status_code
-        )
-
-
-        save_json(
-            f"error_{roll}.json",
-            {
-
-                "status_code":
-                    result.status_code,
-
-                "url":
-                    result.url,
-
-                "body":
-                    result.text[:10000]
-            }
-        )
-
 
         failed_rolls.append({
 
             "roll": roll,
+
+            "group": group_name,
 
             "error":
                 f"HTTP {result.status_code}"
         })
 
+        failed_set.add(roll)
+
+        failed_this_run += 1
 
         continue
 
 
-    # ========================================================
-    # PARSE RESULT
-    # ========================================================
+    # --------------------------------------------------------
+    # Parse
+    # --------------------------------------------------------
 
     parsed = parse_result(
         result.text,
-        roll
+        roll,
+        group_name
     )
 
 
-    # ========================================================
-    # CHECK RESULT
-    # ========================================================
+    # --------------------------------------------------------
+    # Validate
+    # --------------------------------------------------------
 
-    if not parsed["institute"]:
+    if not parsed.get("institute"):
 
         print(
-            "WARNING: No institute found."
+            "No result found."
         )
 
+        # Do not treat every no-result page as
+        # a permanent technical failure.
 
         failed_rolls.append({
 
             "roll": roll,
 
+            "group": group_name,
+
             "error":
-                "Result data not found"
+                "Result not found"
         })
 
+        failed_set.add(roll)
 
-        save_json(
-            f"failed_result_{roll}.json",
-            parsed
-        )
-
+        failed_this_run += 1
 
         continue
 
 
-    # ========================================================
-    # SAVE PARSED RESULT
-    # ========================================================
-
-    save_json(
-        f"parsed_result_{roll}.json",
-        parsed
-    )
-
-
-    # Compatibility file
-    save_json(
-        "parsed_result.json",
-        parsed
-    )
-
-
-    # ========================================================
-    # ADD STUDENT
-    # ========================================================
+    # --------------------------------------------------------
+    # Save student
+    # --------------------------------------------------------
 
     students.append(
         parsed
     )
 
-    successful_rolls.append(
+    existing_rolls.add(
         roll
     )
 
+    success_this_run += 1
+
 
     print(
-        "\nStudent found:"
-    )
-
-    print(
-        "Roll:",
-        parsed["roll"]
-    )
-
-    print(
-        "Name:",
-        parsed["name"]
-    )
-
-    print(
-        "Institute:",
-        parsed["institute"]
-    )
-
-    print(
-        "District:",
-        parsed["district"]
-    )
-
-    print(
-        "GPA:",
+        "FOUND:",
+        parsed["name"],
+        "| Institute:",
+        parsed["institute"],
+        "| GPA:",
         parsed["gpa"]
     )
 
-    print(
-        "Subjects:",
-        len(parsed["subjects"])
+
+    # --------------------------------------------------------
+    # Incremental save
+    # --------------------------------------------------------
+
+    save_json(
+        "students.json",
+        students
+    )
+
+    save_json(
+        "failed_rolls.json",
+        failed_rolls
+    )
+
+
+    # --------------------------------------------------------
+    # Polite delay
+    # --------------------------------------------------------
+
+    time.sleep(
+        random.uniform(
+            MIN_DELAY,
+            MAX_DELAY
+        )
     )
 
 
 # ============================================================
-# 7. SAVE STUDENTS.JSON
-# ============================================================
-
-save_json(
-    "students.json",
-    students
-)
-
-
-# ============================================================
-# 8. COLLECTION SUMMARY
+# SAVE SUMMARY
 # ============================================================
 
 summary = {
 
-    "requested_rolls":
-        TEST_ROLLS,
+    "year": 2026,
 
-    "successful_rolls":
-        successful_rolls,
+    "board":
+        "Chattogram Board",
 
-    "failed_rolls":
-        failed_rolls,
+    "target_rolls":
+        total_target,
 
-    "total_requested":
-        len(TEST_ROLLS),
+    "collected_total":
+        len(students),
 
-    "total_successful":
-        len(successful_rolls),
+    "existing_before_run":
+        len(existing_rolls)
+        - success_this_run,
 
-    "total_failed":
-        len(failed_rolls)
+    "processed_this_run":
+        processed_this_run,
+
+    "successful_this_run":
+        success_this_run,
+
+    "failed_this_run":
+        failed_this_run,
+
+    "remaining_estimate":
+        max(
+            total_target
+            - len(existing_rolls)
+            - len(failed_set),
+            0
+        ),
+
+    "roll_ranges":
+        ROLL_RANGES
 }
 
 
@@ -1317,27 +1098,14 @@ save_json(
     summary
 )
 
-
-# ============================================================
-# 9. SAVE COOKIES
-# ============================================================
-
-cookies = {}
-
-
-for cookie in session.cookies:
-
-    cookies[cookie.name] = cookie.value
-
-
 save_json(
-    "cookies.json",
-    cookies
+    "failed_rolls.json",
+    failed_rolls
 )
 
 
 # ============================================================
-# 10. FINAL OUTPUT
+# FINAL
 # ============================================================
 
 print(
@@ -1345,7 +1113,7 @@ print(
 )
 
 print(
-    "===== STUDENT COLLECTION COMPLETE ====="
+    "===== COLLECTION BATCH COMPLETE ====="
 )
 
 print(
@@ -1353,72 +1121,40 @@ print(
 )
 
 print(
-    "Requested:",
-    len(TEST_ROLLS)
+    "Processed this run:",
+    processed_this_run
 )
 
 print(
-    "Successful:",
-    len(successful_rolls)
+    "Successful this run:",
+    success_this_run
 )
 
 print(
-    "Failed:",
-    len(failed_rolls)
+    "Failed this run:",
+    failed_this_run
 )
 
-
-if successful_rolls:
-
-    print(
-        "\nSuccessful rolls:"
-    )
-
-    for roll in successful_rolls:
-
-        print(
-            "  ✓",
-            roll
-        )
-
-
-if failed_rolls:
-
-    print(
-        "\nFailed rolls:"
-    )
-
-    for item in failed_rolls:
-
-        print(
-            "  ✗",
-            item["roll"],
-            "-",
-            item["error"]
-        )
-
-
 print(
-    "\nSaved:",
-    "scraper/students.json"
+    "Total students saved:",
+    len(students)
 )
 
 print(
     "Saved:",
-    "scraper/student_collection_summary.json"
+    STUDENTS_FILE
 )
 
 print(
-    "\n===== DONE ====="
+    "Saved:",
+    SUMMARY_FILE
 )
 
+print(
+    "Saved:",
+    FAILED_FILE
+)
 
-# ============================================================
-# REQUIRE AT LEAST ONE RESULT
-# ============================================================
-
-if not students:
-
-    raise SystemExit(
-        "No student results were collected."
-    )
+print(
+    "========================================"
+)
