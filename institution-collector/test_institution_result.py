@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 
 RESULT_URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/"
 
-TEST_EIIN = "YOUR_EIIN_HERE"
+TEST_EIIN = "104275"
 
 
 HEADERS = {
