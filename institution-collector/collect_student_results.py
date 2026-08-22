@@ -13,7 +13,7 @@ INPUT_FILE = "institution-collector/institutions.json"
 OUTPUT_FILE = "institution-collector/student_results.json"
 
 REQUEST_DELAY = 0.3
-TEST_LIMIT = 1286
+TEST_LIMIT = 1
 
 BASE_URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/resultm.php"
 
