@@ -25,21 +25,63 @@ jobs:
         run: |
           pip install requests beautifulsoup4
 
-      - name: Collect Institution Results
-        run: |
-          python institution-collector/collect_results.py
-
-      - name: Show Result File
+      - name: Check Collector
         run: |
           echo "=============================================="
-          echo "INSTITUTION RESULT FILE"
+          echo "CHECKING COLLECTOR"
+          echo "=============================================="
+
+          python --version
+
+          echo ""
+          echo "Collector file:"
+          ls -lh institution-collector/collect_results.py
+
+          echo ""
+          echo "Institution file:"
+          ls -lh institution-collector/institutions.json
+
+          echo ""
+          echo "=============================================="
+
+      - name: Collect Institution Results
+        env:
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python -u institution-collector/collect_results.py
+
+      - name: Show Result Summary
+        run: |
+          echo "=============================================="
+          echo "INSTITUTION RESULT SUMMARY"
           echo "=============================================="
 
           if [ -f institution-collector/institution_results.json ]; then
-            cat institution-collector/institution_results.json
+
+            echo "Result file found."
+
+            python - <<'PY'
+          import json
+
+          file = "institution-collector/institution_results.json"
+
+          with open(file, "r", encoding="utf-8") as f:
+              data = json.load(f)
+
+          print("Results collected:", len(data))
+          print("Output:", file)
+
+          if data:
+              print("")
+              print("First result:")
+              print(json.dumps(data[0], ensure_ascii=False, indent=2))
+          PY
+
           else
+
             echo "institution_results.json NOT FOUND"
             exit 1
+
           fi
 
       - name: Save Results
@@ -49,6 +91,9 @@ jobs:
 
           git add institution-collector/institution_results.json
 
-          git diff --cached --quiet || git commit -m "Update institution results"
-
-          git push
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update institution results"
+            git push
+          fi
