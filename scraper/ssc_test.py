@@ -31,9 +31,9 @@ FAILED_FILE = os.path.join(
     "failed_rolls.json"
 )
 
-# ------------------------------------------------------------
-# Roll ranges
-# ------------------------------------------------------------
+# ============================================================
+# SSC 2026 ROLL RANGES
+# ============================================================
 
 ROLL_RANGES = {
     "Science": (100001, 132961),
@@ -42,18 +42,26 @@ ROLL_RANGES = {
     "Business Studies": (500001, 541800),
 }
 
-# ------------------------------------------------------------
-# Safe batch settings
-# ------------------------------------------------------------
 
-BATCH_SIZE = 100
+# ============================================================
+# BATCH SETTINGS
+# ============================================================
 
+# প্রতি GitHub Actions run-এ সর্বোচ্চ কতটি নতুন roll চেষ্টা করবে
+BATCH_SIZE = 500
+
+# Request-এর মাঝে বিরতি
 MIN_DELAY = 1.0
 MAX_DELAY = 2.0
 
+# একই request ব্যর্থ হলে retry
 MAX_RETRIES = 3
 
 REQUEST_TIMEOUT = 30
+
+YEAR = 2026
+BOARD = "Chattogram Board"
+
 
 os.makedirs(
     OUTPUT_DIR,
@@ -72,11 +80,14 @@ HEADERS = {
         "(KHTML, like Gecko) "
         "Chrome/131.0.0.0 Mobile Safari/537.36"
     ),
+
     "Accept": (
         "text/html,application/xhtml+xml,"
         "application/xml;q=0.9,*/*;q=0.8"
     ),
+
     "Accept-Language": "en-US,en;q=0.9",
+
     "Connection": "keep-alive",
 }
 
@@ -160,7 +171,7 @@ def load_json(filename, default):
 
 
 # ============================================================
-# GPA
+# GPA PARSER
 # ============================================================
 
 def parse_gpa(value):
@@ -196,7 +207,7 @@ def parse_gpa(value):
 
 
 # ============================================================
-# SUBJECT RESULT
+# SUBJECT RESULT PARSER
 # ============================================================
 
 def parse_subject_result(value):
@@ -222,8 +233,11 @@ def parse_subject_result(value):
         )
 
         try:
+
             mark = int(mark_text)
+
         except ValueError:
+
             mark = None
 
         grade = grade_text
@@ -231,15 +245,18 @@ def parse_subject_result(value):
     else:
 
         try:
+
             mark = int(value)
+
         except ValueError:
+
             mark = None
 
     return mark, grade
 
 
 # ============================================================
-# FIND VALUE
+# FIND VALUE AFTER LABEL
 # ============================================================
 
 def find_value_after_label(
@@ -302,7 +319,7 @@ def parse_result(
 
 
     # ========================================================
-    # BASIC DATA
+    # BASIC INFORMATION
     # ========================================================
 
     for row in soup.find_all("tr"):
@@ -391,7 +408,9 @@ def parse_result(
                     .strip()
                 )
 
-                result["gpa"] = float(value)
+                result["gpa"] = float(
+                    value
+                )
 
             except Exception:
 
@@ -459,7 +478,7 @@ def parse_result(
 
 
     # ========================================================
-    # CLEAN
+    # CLEAN VALUES
     # ========================================================
 
     for key in [
@@ -479,6 +498,28 @@ def parse_result(
 
 
     return result
+
+
+# ============================================================
+# GENERATE ALL ROLLS
+# ============================================================
+
+def generate_rolls():
+
+    for group_name, (
+        start,
+        end
+    ) in ROLL_RANGES.items():
+
+        for roll in range(
+            start,
+            end + 1
+        ):
+
+            yield (
+                group_name,
+                roll
+            )
 
 
 # ============================================================
@@ -513,7 +554,7 @@ if not isinstance(
 
 
 # ============================================================
-# EXISTING ROLLS
+# EXISTING SUCCESSFUL ROLLS
 # ============================================================
 
 existing_rolls = set()
@@ -534,31 +575,6 @@ for student in students:
         )
 
 
-failed_set = set()
-
-for item in failed_rolls:
-
-    if isinstance(
-        item,
-        dict
-    ):
-
-        roll = str(
-            item.get(
-                "roll",
-                ""
-            )
-        )
-
-    else:
-
-        roll = str(item)
-
-    if roll:
-
-        failed_set.add(roll)
-
-
 # ============================================================
 # OPEN RESULT PAGE
 # ============================================================
@@ -570,11 +586,16 @@ print(
 try:
 
     page = session.get(
+
         INDIVIDUAL_URL,
+
         headers={
             "Referer": BASE_URL
         },
-        timeout=REQUEST_TIMEOUT
+
+        timeout=REQUEST_TIMEOUT,
+
+        allow_redirects=True
     )
 
     page.raise_for_status()
@@ -589,6 +610,11 @@ except requests.RequestException as error:
 print(
     "GET Status:",
     page.status_code
+)
+
+print(
+    "GET URL:",
+    page.url
 )
 
 
@@ -643,7 +669,7 @@ print(
 
 
 # ============================================================
-# COLLECT FORM FIELDS
+# COLLECT FORM INPUTS
 # ============================================================
 
 base_form_data = {}
@@ -685,6 +711,10 @@ for inp in form.find_all("input"):
     )
 
 
+# ============================================================
+# SELECT FIELDS
+# ============================================================
+
 for select in form.find_all("select"):
 
     name = select.get("name")
@@ -707,7 +737,9 @@ for select in form.find_all("select"):
 
         base_form_data[name] = selected.get(
             "value",
-            selected.get_text(strip=True)
+            selected.get_text(
+                strip=True
+            )
         )
 
 
@@ -735,7 +767,9 @@ for element in form.find_all(
 
         submit_fields[name] = element.get(
             "value",
-            element.get_text(strip=True)
+            element.get_text(
+                strip=True
+            )
         )
 
 
@@ -746,35 +780,15 @@ if not submit_fields:
     }
 
 
-# ============================================================
-# GENERATE ROLLS
-# ============================================================
-
-def generate_rolls():
-
-    for group_name, (
-        start,
-        end
-    ) in ROLL_RANGES.items():
-
-        for roll in range(
-            start,
-            end + 1
-        ):
-
-            yield (
-                group_name,
-                roll
-            )
+print(
+    "Submit fields:",
+    submit_fields
+)
 
 
 # ============================================================
-# BATCH COLLECTION
+# TOTAL ROLLS
 # ============================================================
-
-processed_this_run = 0
-success_this_run = 0
-failed_this_run = 0
 
 total_target = sum(
     end - start + 1
@@ -782,12 +796,26 @@ total_target = sum(
 )
 
 
+# ============================================================
+# COLLECTION COUNTERS
+# ============================================================
+
+processed_this_run = 0
+success_this_run = 0
+not_found_this_run = 0
+error_this_run = 0
+
+
 print(
     "\n========================================"
 )
 
 print(
-    "SSC DATA COLLECTION"
+    "SSC 2026 DATA COLLECTION"
+)
+
+print(
+    "========================================"
 )
 
 print(
@@ -801,6 +829,14 @@ print(
 )
 
 print(
+    "Remaining:",
+    max(
+        total_target - len(existing_rolls),
+        0
+    )
+)
+
+print(
     "Batch size:",
     BATCH_SIZE
 )
@@ -810,20 +846,22 @@ print(
 )
 
 
-for group_name, roll in generate_rolls():
+# ============================================================
+# MAIN COLLECTION LOOP
+# ============================================================
 
-    roll = str(roll)
+for group_name, roll_number in generate_rolls():
+
+    roll = str(
+        roll_number
+    )
+
 
     # --------------------------------------------------------
-    # Resume support
+    # Already collected
     # --------------------------------------------------------
 
     if roll in existing_rolls:
-
-        continue
-
-
-    if roll in failed_set:
 
         continue
 
@@ -839,15 +877,16 @@ for group_name, roll in generate_rolls():
 
     processed_this_run += 1
 
+
     print(
         f"\n[{processed_this_run}/{BATCH_SIZE}] "
         f"{group_name} | Roll: {roll}"
     )
 
 
-    # --------------------------------------------------------
-    # Prepare POST data
-    # --------------------------------------------------------
+    # ========================================================
+    # FORM DATA
+    # ========================================================
 
     form_data = dict(
         base_form_data
@@ -855,16 +894,20 @@ for group_name, roll in generate_rolls():
 
     form_data["roll"] = roll
 
+
     for key, value in submit_fields.items():
 
         form_data[key] = value
 
 
-    # --------------------------------------------------------
-    # Request
-    # --------------------------------------------------------
+    # ========================================================
+    # REQUEST
+    # ========================================================
 
-    result = None
+    response = None
+
+    last_error = None
+
 
     for attempt in range(
         1,
@@ -873,7 +916,7 @@ for group_name, roll in generate_rolls():
 
         try:
 
-            result = session.post(
+            response = session.post(
 
                 FORM_ACTION_URL,
 
@@ -883,18 +926,24 @@ for group_name, roll in generate_rolls():
                     "Referer": page.url,
                     "Origin":
                         "https://sresult.bise-ctg.gov.bd",
+                    "Content-Type":
+                        "application/x-www-form-urlencoded",
                 },
 
-                timeout=REQUEST_TIMEOUT
+                timeout=REQUEST_TIMEOUT,
+
+                allow_redirects=True
             )
 
             break
 
         except requests.RequestException as error:
 
+            last_error = error
+
             print(
                 f"Request error "
-                f"(attempt {attempt}):",
+                f"(attempt {attempt}/{MAX_RETRIES}):",
                 error
             )
 
@@ -905,72 +954,73 @@ for group_name, roll in generate_rolls():
                 )
 
 
-    # --------------------------------------------------------
-    # Request failed
-    # --------------------------------------------------------
+    # ========================================================
+    # REQUEST FAILED
+    # ========================================================
 
-    if result is None:
+    if response is None:
 
-        failed_rolls.append({
+        print(
+            "REQUEST FAILED:",
+            roll
+        )
 
-            "roll": roll,
-
-            "group": group_name,
-
-            "error":
-                "Request failed after retries"
-        })
-
-        failed_set.add(roll)
-
-        failed_this_run += 1
+        error_this_run += 1
 
         continue
 
 
     print(
         "HTTP:",
-        result.status_code
+        response.status_code
     )
 
 
-    # --------------------------------------------------------
-    # HTTP error
-    # --------------------------------------------------------
+    # ========================================================
+    # SERVER ERROR
+    # ========================================================
 
-    if result.status_code >= 400:
+    if response.status_code >= 500:
 
-        failed_rolls.append({
+        print(
+            "Server error — will retry on next run."
+        )
 
-            "roll": roll,
-
-            "group": group_name,
-
-            "error":
-                f"HTTP {result.status_code}"
-        })
-
-        failed_set.add(roll)
-
-        failed_this_run += 1
+        error_this_run += 1
 
         continue
 
 
-    # --------------------------------------------------------
-    # Parse
-    # --------------------------------------------------------
+    # ========================================================
+    # CLIENT ERROR
+    # ========================================================
+
+    if response.status_code >= 400:
+
+        print(
+            "HTTP error:",
+            response.status_code
+        )
+
+        error_this_run += 1
+
+        continue
+
+
+    # ========================================================
+    # PARSE
+    # ========================================================
 
     parsed = parse_result(
-        result.text,
+        response.text,
         roll,
         group_name
     )
 
 
-    # --------------------------------------------------------
-    # Validate
-    # --------------------------------------------------------
+    # ========================================================
+    # RESULT NOT FOUND
+    # ========================================================
 
     if not parsed.get("institute"):
 
@@ -978,69 +1028,87 @@ for group_name, roll in generate_rolls():
             "No result found."
         )
 
-        # Do not treat every no-result page as
-        # a permanent technical failure.
+        # IMPORTANT:
+        # Don't permanently mark this roll as failed.
+        # It will be checked again in a future run.
 
-        failed_rolls.append({
+        not_found_this_run += 1
 
-            "roll": roll,
-
-            "group": group_name,
-
-            "error":
-                "Result not found"
-        })
-
-        failed_set.add(roll)
-
-        failed_this_run += 1
+        time.sleep(
+            random.uniform(
+                MIN_DELAY,
+                MAX_DELAY
+            )
+        )
 
         continue
 
 
-    # --------------------------------------------------------
-    # Save student
-    # --------------------------------------------------------
-
-    students.append(
-        parsed
-    )
-
-    existing_rolls.add(
-        roll
-    )
-
-    success_this_run += 1
-
+    # ========================================================
+    # SUCCESS
+    # ========================================================
 
     print(
         "FOUND:",
-        parsed["name"],
-        "| Institute:",
-        parsed["institute"],
-        "| GPA:",
-        parsed["gpa"]
+        parsed.get("name", "")
+    )
+
+    print(
+        "Institute:",
+        parsed.get("institute", "")
+    )
+
+    print(
+        "District:",
+        parsed.get("district", "")
+    )
+
+    print(
+        "GPA:",
+        parsed.get("gpa")
+    )
+
+    print(
+        "Subjects:",
+        len(
+            parsed.get(
+                "subjects",
+                []
+            )
+        )
     )
 
 
-    # --------------------------------------------------------
-    # Incremental save
-    # --------------------------------------------------------
+    # ========================================================
+    # DUPLICATE PROTECTION
+    # ========================================================
+
+    if roll not in existing_rolls:
+
+        students.append(
+            parsed
+        )
+
+        existing_rolls.add(
+            roll
+        )
+
+        success_this_run += 1
+
+
+    # ========================================================
+    # SAVE IMMEDIATELY
+    # ========================================================
 
     save_json(
         "students.json",
         students
     )
 
-    save_json(
-        "failed_rolls.json",
-        failed_rolls
-    )
 
-
-    # --------------------------------------------------------
-    # Polite delay
-    # --------------------------------------------------------
+    # ========================================================
+    # DELAY
+    # ========================================================
 
     time.sleep(
         random.uniform(
@@ -1051,15 +1119,24 @@ for group_name, roll in generate_rolls():
 
 
 # ============================================================
+# CALCULATE REMAINING
+# ============================================================
+
+remaining = max(
+    total_target - len(existing_rolls),
+    0
+)
+
+
+# ============================================================
 # SAVE SUMMARY
 # ============================================================
 
 summary = {
 
-    "year": 2026,
+    "year": YEAR,
 
-    "board":
-        "Chattogram Board",
+    "board": BOARD,
 
     "target_rolls":
         total_target,
@@ -1067,9 +1144,8 @@ summary = {
     "collected_total":
         len(students),
 
-    "existing_before_run":
-        len(existing_rolls)
-        - success_this_run,
+    "remaining":
+        remaining,
 
     "processed_this_run":
         processed_this_run,
@@ -1077,16 +1153,14 @@ summary = {
     "successful_this_run":
         success_this_run,
 
-    "failed_this_run":
-        failed_this_run,
+    "not_found_this_run":
+        not_found_this_run,
 
-    "remaining_estimate":
-        max(
-            total_target
-            - len(existing_rolls)
-            - len(failed_set),
-            0
-        ),
+    "errors_this_run":
+        error_this_run,
+
+    "batch_size":
+        BATCH_SIZE,
 
     "roll_ranges":
         ROLL_RANGES
@@ -1098,14 +1172,9 @@ save_json(
     summary
 )
 
-save_json(
-    "failed_rolls.json",
-    failed_rolls
-)
-
 
 # ============================================================
-# FINAL
+# FINAL OUTPUT
 # ============================================================
 
 print(
@@ -1113,7 +1182,7 @@ print(
 )
 
 print(
-    "===== COLLECTION BATCH COMPLETE ====="
+    "===== SSC COLLECTION BATCH COMPLETE ====="
 )
 
 print(
@@ -1121,23 +1190,33 @@ print(
 )
 
 print(
-    "Processed this run:",
+    "Processed:",
     processed_this_run
 )
 
 print(
-    "Successful this run:",
+    "Successful:",
     success_this_run
 )
 
 print(
-    "Failed this run:",
-    failed_this_run
+    "Not found:",
+    not_found_this_run
+)
+
+print(
+    "Errors:",
+    error_this_run
 )
 
 print(
     "Total students saved:",
     len(students)
+)
+
+print(
+    "Remaining:",
+    remaining
 )
 
 print(
@@ -1151,10 +1230,28 @@ print(
 )
 
 print(
-    "Saved:",
-    FAILED_FILE
+    "========================================"
 )
 
 print(
-    "========================================"
+    "===== DONE ====="
 )
+
+
+# ============================================================
+# IMPORTANT
+# ============================================================
+
+if processed_this_run == 0:
+
+    if remaining == 0:
+
+        print(
+            "\nALL AVAILABLE ROLLS HAVE BEEN PROCESSED."
+        )
+
+    else:
+
+        print(
+            "\nNo new rolls processed."
+        )
