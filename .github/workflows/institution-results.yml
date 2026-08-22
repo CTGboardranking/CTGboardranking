@@ -15,6 +15,8 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -25,20 +27,20 @@ jobs:
         run: |
           pip install requests beautifulsoup4
 
-      - name: Check Collector
+      - name: Check Files
         run: |
           echo "=============================================="
-          echo "CHECKING COLLECTOR"
+          echo "CHECKING FILES"
           echo "=============================================="
 
           python --version
 
           echo ""
-          echo "Collector file:"
+          echo "Collector:"
           ls -lh institution-collector/collect_results.py
 
           echo ""
-          echo "Institution file:"
+          echo "Institutions:"
           ls -lh institution-collector/institutions.json
 
           echo ""
@@ -75,6 +77,10 @@ jobs:
               print("")
               print("First result:")
               print(json.dumps(data[0], ensure_ascii=False, indent=2))
+
+              print("")
+              print("Last result:")
+              print(json.dumps(data[-1], ensure_ascii=False, indent=2))
           PY
 
           else
@@ -98,6 +104,7 @@ jobs:
 
           git commit -m "Update institution results"
 
-          git pull --rebase origin main
+          git fetch origin main
+          git rebase origin/main
 
           git push origin main
