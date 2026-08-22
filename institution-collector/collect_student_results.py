@@ -23,7 +23,7 @@ REQUEST_DELAY = 0.3
 # None = সব institution
 # ------------------------------------------------------------
 
-TEST_LIMIT = 1
+TEST_LIMIT = 5
 
 BASE_URL = (
     "https://sresult.bise-ctg.gov.bd/"
