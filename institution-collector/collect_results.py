@@ -1,633 +1,410 @@
 import json
+import os
 import time
-import re
 import requests
 from bs4 import BeautifulSoup
 
-
-# =========================================================
+# ============================================================
 # SETTINGS
-# =========================================================
+# ============================================================
 
 INPUT_FILE = "institution-collector/institutions.json"
-
 OUTPUT_FILE = "institution-collector/institution_results.json"
 
-BASE_URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/"
-
-RESULT_URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/resultm.php"
-
+REQUEST_DELAY = 0.3
 TEST_LIMIT = 1286
 
-REQUEST_DELAY = 0.3
+BASE_URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/resultm.php"
 
+TIMEOUT = 30
 
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Linux; Android 10; Mobile) "
-        "AppleWebKit/537.36 "
-        "(KHTML, like Gecko) "
-        "Chrome/140.0 Mobile Safari/537.36"
-    ),
-    "Referer": BASE_URL
-}
+# ============================================================
+# LOAD INSTITUTIONS
+# ============================================================
 
+print("=" * 60, flush=True)
+print("SSC 2026 INSTITUTION RESULT COLLECTOR", flush=True)
+print("=" * 60, flush=True)
 
-# =========================================================
-# NUMBER
-# =========================================================
+print(f"Loading: {INPUT_FILE}", flush=True)
 
-def to_number(value):
+with open(INPUT_FILE, "r", encoding="utf-8") as f:
+    institutions = json.load(f)
 
-    if value is None:
-        return 0
+total = len(institutions)
 
-    value = str(value).strip()
+print(f"Total institutions: {total}", flush=True)
+print(f"TEST LIMIT: {TEST_LIMIT}", flush=True)
 
-    value = value.replace(",", "")
+# ============================================================
+# LOAD PREVIOUS RESULTS
+# ============================================================
 
-    value = value.replace("%", "")
+results = []
+
+if os.path.exists(OUTPUT_FILE):
 
     try:
 
-        return float(value)
+        with open(OUTPUT_FILE, "r", encoding="utf-8") as f:
+            old_results = json.load(f)
 
-    except:
+        if isinstance(old_results, list):
+            results = old_results
 
-        return 0
+        print("=" * 60, flush=True)
+        print("RESUME MODE", flush=True)
+        print(f"Previously collected: {len(results)}", flush=True)
+        print("=" * 60, flush=True)
 
+    except Exception as e:
 
-# =========================================================
-# EIIN
-# =========================================================
+        print("Could not load previous result file.", flush=True)
+        print("Starting from beginning.", flush=True)
+        print("Error:", e, flush=True)
 
-def get_eiin(item):
+# ============================================================
+# EXISTING EIIN SET
+# ============================================================
 
-    keys = [
-        "eiin",
-        "EIIN",
-        "institute_code",
-        "institution_code",
-        "code"
-    ]
+existing_eiins = set()
 
-    for key in keys:
+for item in results:
 
-        if key in item:
+    eiin = str(item.get("eiin", "")).strip()
 
-            value = str(
-                item[key]
-            ).strip()
+    if eiin:
+        existing_eiins.add(eiin)
 
-            if value:
+print(f"Existing EIIN records: {len(existing_eiins)}", flush=True)
 
-                return value
+# ============================================================
+# SESSION
+# ============================================================
 
-    return ""
+session = requests.Session()
 
+session.headers.update({
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/131.0.0.0 Safari/537.36"
+    )
+})
 
-# =========================================================
-# INSTITUTION NAME
-# =========================================================
-
-def get_name(item):
-
-    keys = [
-        "institution",
-        "institution_name",
-        "institutionName",
-        "institute",
-        "institute_name",
-        "college",
-        "college_name",
-        "name"
-    ]
-
-    for key in keys:
-
-        if key in item:
-
-            value = str(
-                item[key]
-            ).strip()
-
-            if value:
-
-                return value
-
-    return ""
-
-
-# =========================================================
+# ============================================================
 # PARSE RESULT
-# =========================================================
+# ============================================================
 
-def parse_result(html, eiin):
+def parse_result(html, institution):
 
-    soup = BeautifulSoup(
-        html,
-        "html.parser"
-    )
+    soup = BeautifulSoup(html, "html.parser")
 
+    text = soup.get_text(" ", strip=True)
 
-    text = soup.get_text(
-        " ",
-        strip=True
-    )
+    institution_name = institution.get("institution_name", "")
+    district = institution.get("district", "")
+    thana = institution.get("thana", "")
 
+    appeared = None
+    passed = None
+    passing_rate = None
+    gpa5 = None
 
-    result = {
+    # --------------------------------------------------------
+    # TABLE PARSING
+    # --------------------------------------------------------
 
-        "eiin": eiin,
+    tables = soup.find_all("table")
 
-        "institution_name": "",
+    for table in tables:
 
-        "district": "",
+        rows = table.find_all("tr")
 
-        "thana": "",
+        for row in rows:
 
-        "appeared": 0,
+            cells = row.find_all(["td", "th"])
 
-        "passed": 0,
+            if len(cells) < 2:
+                continue
 
-        "passing_rate": 0,
+            key = cells[0].get_text(" ", strip=True).upper()
+            value = cells[1].get_text(" ", strip=True)
 
-        "gpa5": 0
+            if "APP" in key:
+                try:
+                    appeared = int(value)
+                except:
+                    pass
 
+            elif "PASS" == key:
+                try:
+                    passed = int(value)
+                except:
+                    pass
+
+            elif "PERCENT" in key:
+
+                try:
+                    passing_rate = float(
+                        value.replace("%", "").strip()
+                    )
+                except:
+                    pass
+
+            elif "GPA5" in key or "GPA-5" in key:
+
+                try:
+                    gpa5 = int(value)
+                except:
+                    pass
+
+    # --------------------------------------------------------
+    # FALLBACK TEXT PARSING
+    # --------------------------------------------------------
+
+    import re
+
+    if appeared is None:
+
+        match = re.search(
+            r"APP\s*:\s*(\d+)",
+            text,
+            re.IGNORECASE
+        )
+
+        if match:
+            appeared = int(match.group(1))
+
+    if passed is None:
+
+        match = re.search(
+            r"PASS\s*:\s*(\d+)",
+            text,
+            re.IGNORECASE
+        )
+
+        if match:
+            passed = int(match.group(1))
+
+    if passing_rate is None:
+
+        match = re.search(
+            r"PERCENT\s*:\s*([\d.]+)\s*%",
+            text,
+            re.IGNORECASE
+        )
+
+        if match:
+            passing_rate = float(match.group(1))
+
+    if gpa5 is None:
+
+        match = re.search(
+            r"GPA5\s*:\s*(\d+)",
+            text,
+            re.IGNORECASE
+        )
+
+        if match:
+            gpa5 = int(match.group(1))
+
+    # --------------------------------------------------------
+    # RETURN
+    # --------------------------------------------------------
+
+    return {
+        "eiin": str(institution.get("eiin", "")),
+        "institution_name": institution_name,
+        "district": district,
+        "thana": thana,
+        "appeared": appeared,
+        "passed": passed,
+        "passing_rate": passing_rate,
+        "gpa5": gpa5
     }
 
 
-    # -----------------------------------------------------
-    # INSTITUTE NAME
-    # -----------------------------------------------------
+# ============================================================
+# COLLECTION
+# ============================================================
 
-    match = re.search(
-        r"INSTITUTE NAME\s*:\s*(.*?)\(\s*"
-        + re.escape(eiin)
-        + r"\s*\)",
-        text,
-        re.IGNORECASE
+limit = min(TEST_LIMIT, total)
+
+print("=" * 60, flush=True)
+print("STARTING COLLECTION", flush=True)
+print(f"Target: {limit} institutions", flush=True)
+print("=" * 60, flush=True)
+
+for index in range(limit):
+
+    institution = institutions[index]
+
+    eiin = str(institution.get("eiin", "")).strip()
+
+    name = institution.get(
+        "institution_name",
+        institution.get("name", "")
     )
 
-
-    if match:
-
-        result["institution_name"] = (
-            match.group(1).strip()
-        )
-
-
-    # -----------------------------------------------------
-    # DISTRICT
-    # -----------------------------------------------------
-
-    match = re.search(
-        r"ZILLA\s*:\s*(.*?)\(\s*\d+\s*\)",
-        text,
-        re.IGNORECASE
-    )
-
-
-    if match:
-
-        result["district"] = (
-            match.group(1).strip()
-        )
-
-
-    # -----------------------------------------------------
-    # THANA
-    # -----------------------------------------------------
-
-    match = re.search(
-        r"THANA\s*:\s*(.*?)\(\s*\d+\s*\)",
-        text,
-        re.IGNORECASE
-    )
-
-
-    if match:
-
-        result["thana"] = (
-            match.group(1).strip()
-        )
-
-
-    # -----------------------------------------------------
-    # APP
-    # -----------------------------------------------------
-
-    match = re.search(
-        r"\bAPP\s*:\s*([0-9,]+)",
-        text,
-        re.IGNORECASE
-    )
-
-
-    if match:
-
-        result["appeared"] = int(
-            to_number(
-                match.group(1)
-            )
-        )
-
-
-    # -----------------------------------------------------
-    # PASS
-    # -----------------------------------------------------
-
-    match = re.search(
-        r"\bPASS\s*:\s*([0-9,]+)",
-        text,
-        re.IGNORECASE
-    )
-
-
-    if match:
-
-        result["passed"] = int(
-            to_number(
-                match.group(1)
-            )
-        )
-
-
-    # -----------------------------------------------------
-    # PERCENT
-    # -----------------------------------------------------
-
-    match = re.search(
-        r"\bPERCENT\s*:\s*([0-9.]+)\s*%",
-        text,
-        re.IGNORECASE
-    )
-
-
-    if match:
-
-        result["passing_rate"] = round(
-            to_number(
-                match.group(1)
-            ),
-            2
-        )
-
-
-    # -----------------------------------------------------
-    # GPA5
-    # -----------------------------------------------------
-
-    match = re.search(
-        r"\bGPA5\s*:\s*([0-9,]+)",
-        text,
-        re.IGNORECASE
-    )
-
-
-    if match:
-
-        result["gpa5"] = int(
-            to_number(
-                match.group(1)
-            )
-        )
-
-
-    return result
-
-
-# =========================================================
-# MAIN
-# =========================================================
-
-def main():
-
-    print("=" * 60)
-
-    print(
-        "SSC 2026 INSTITUTION RESULT COLLECTOR"
-    )
-
-    print("=" * 60)
-
-
-    # -----------------------------------------------------
-    # LOAD INSTITUTIONS
-    # -----------------------------------------------------
-
-    print()
-
-    print(
-        "Loading:",
-        INPUT_FILE
-    )
-
-
-    with open(
-        INPUT_FILE,
-        "r",
-        encoding="utf-8"
-    ) as file:
-
-        data = json.load(file)
-
-
-    if isinstance(data, list):
-
-        institutions = data
-
-    elif isinstance(data, dict):
-
-        if isinstance(
-            data.get("institutions"),
-            list
-        ):
-
-            institutions = (
-                data["institutions"]
-            )
-
-        elif isinstance(
-            data.get("data"),
-            list
-        ):
-
-            institutions = (
-                data["data"]
-            )
-
-        elif isinstance(
-            data.get("results"),
-            list
-        ):
-
-            institutions = (
-                data["results"]
-            )
-
-        else:
-
-            raise ValueError(
-                "Unknown institutions.json format"
-            )
-
-    else:
-
-        raise ValueError(
-            "Invalid institutions.json"
-        )
-
-
-    print()
-
-    print(
-        "Total institutions:",
-        len(institutions)
-    )
-
-
-    # -----------------------------------------------------
-    # TEST LIMIT
-    # -----------------------------------------------------
-
-    test_institutions = (
-        institutions[:TEST_LIMIT]
-    )
-
-
-    print()
-
-    print(
-        "TEST LIMIT:",
-        TEST_LIMIT
-    )
-
-
-    # -----------------------------------------------------
-    # SESSION
-    # -----------------------------------------------------
-
-    session = requests.Session()
-
-
-    results = []
-
-
-    # -----------------------------------------------------
-    # COLLECT
-    # -----------------------------------------------------
-
-    for index, institution in enumerate(
-        test_institutions,
-        start=1
-    ):
-
-        eiin = get_eiin(
-            institution
-        )
-
-
-        name = get_name(
-            institution
-        )
-
-
-        print()
-
-        print("-" * 60)
+    # --------------------------------------------------------
+    # SKIP ALREADY COLLECTED
+    # --------------------------------------------------------
+
+    if eiin in existing_eiins:
 
         print(
-            f"[{index}/{len(test_institutions)}]"
+            f"[{index + 1}/{limit}] SKIP - already collected: "
+            f"{eiin}",
+            flush=True
+        )
+
+        continue
+
+    print("-" * 60, flush=True)
+
+    print(
+        f"[{index + 1}/{limit}]",
+        flush=True
+    )
+
+    print(
+        f"EIIN: {eiin}",
+        flush=True
+    )
+
+    print(
+        f"Institution: {name}",
+        flush=True
+    )
+
+    # --------------------------------------------------------
+    # REQUEST
+    # --------------------------------------------------------
+
+    try:
+
+        response = session.post(
+            BASE_URL,
+            data={"eiin": eiin},
+            timeout=TIMEOUT
         )
 
         print(
-            "EIIN:",
-            eiin
+            f"HTTP: {response.status_code}",
+            flush=True
         )
 
-        print(
-            "Institution:",
-            name
-        )
-
-
-        if not eiin:
+        if response.status_code != 200:
 
             print(
-                "SKIPPED: EIIN not found"
+                "ERROR: HTTP status is not 200",
+                flush=True
             )
+
+            time.sleep(REQUEST_DELAY)
 
             continue
 
+        # ----------------------------------------------------
+        # PARSE
+        # ----------------------------------------------------
 
-        try:
-
-            # -------------------------------------------------
-            # INITIAL REQUEST
-            # -------------------------------------------------
-
-            session.get(
-                BASE_URL,
-                headers=HEADERS,
-                timeout=30
-            )
-
-
-            # -------------------------------------------------
-            # RESULT REQUEST
-            # -------------------------------------------------
-
-            response = session.post(
-
-                RESULT_URL,
-
-                data={
-                    "eiin": eiin
-                },
-
-                headers=HEADERS,
-
-                timeout=30
-            )
-
-
-            print(
-                "HTTP:",
-                response.status_code
-            )
-
-
-            if response.status_code != 200:
-
-                print(
-                    "FAILED HTTP STATUS"
-                )
-
-                continue
-
-
-            result = parse_result(
-                response.text,
-                eiin
-            )
-
-
-            # -------------------------------------------------
-            # FALLBACK NAME
-            # -------------------------------------------------
-
-            if not result[
-                "institution_name"
-            ]:
-
-                result[
-                    "institution_name"
-                ] = name
-
-
-            results.append(
-                result
-            )
-
-
-            print(
-                "APP:",
-                result["appeared"]
-            )
-
-
-            print(
-                "PASS:",
-                result["passed"]
-            )
-
-
-            print(
-                "PASSING RATE:",
-                str(
-                    result["passing_rate"]
-                ) + "%"
-            )
-
-
-            print(
-                "GPA-5:",
-                result["gpa5"]
-            )
-
-
-        except Exception as error:
-
-            print(
-                "ERROR:",
-                error
-            )
-
-
-        # -----------------------------------------------------
-        # DELAY
-        # -----------------------------------------------------
-
-        time.sleep(
-            REQUEST_DELAY
+        result = parse_result(
+            response.text,
+            institution
         )
 
-
-    # ---------------------------------------------------------
-    # SAVE
-    # ---------------------------------------------------------
-
-    print()
-
-    print("=" * 60)
-
-    print(
-        "SAVING RESULT DATA"
-    )
-
-    print("=" * 60)
-
-
-    with open(
-        OUTPUT_FILE,
-        "w",
-        encoding="utf-8"
-    ) as file:
-
-        json.dump(
-            results,
-            file,
-            ensure_ascii=False,
-            indent=2
+        print(
+            f"APP: {result['appeared']}",
+            flush=True
         )
 
+        print(
+            f"PASS: {result['passed']}",
+            flush=True
+        )
 
-    print()
+        print(
+            f"PASSING RATE: {result['passing_rate']}%",
+            flush=True
+        )
 
-    print(
-        "Results collected:",
-        len(results)
-    )
+        print(
+            f"GPA-5: {result['gpa5']}",
+            flush=True
+        )
+
+        # ----------------------------------------------------
+        # SAVE IMMEDIATELY
+        # ----------------------------------------------------
+
+        results.append(result)
+
+        existing_eiins.add(eiin)
+
+        with open(
+            OUTPUT_FILE,
+            "w",
+            encoding="utf-8"
+        ) as f:
+
+            json.dump(
+                results,
+                f,
+                ensure_ascii=False,
+                indent=2
+            )
+
+        print(
+            f"SAVED: {len(results)} results",
+            flush=True
+        )
+
+    except requests.exceptions.Timeout:
+
+        print(
+            "ERROR: Request timeout - skipping institution",
+            flush=True
+        )
+
+    except requests.exceptions.RequestException as e:
+
+        print(
+            f"ERROR: Request failed - {e}",
+            flush=True
+        )
+
+    except Exception as e:
+
+        print(
+            f"ERROR: {e}",
+            flush=True
+        )
+
+    # --------------------------------------------------------
+    # DELAY
+    # --------------------------------------------------------
+
+    time.sleep(REQUEST_DELAY)
 
 
-    print(
-        "Output:",
-        OUTPUT_FILE
-    )
+# ============================================================
+# FINAL SUMMARY
+# ============================================================
 
+print("=" * 60, flush=True)
+print("COLLECTION COMPLETED", flush=True)
+print("=" * 60, flush=True)
 
-    print()
+print(
+    f"Results collected: {len(results)}",
+    flush=True
+)
 
-    print("=" * 60)
+print(
+    f"Output: {OUTPUT_FILE}",
+    flush=True
+)
 
-    print(
-        "COLLECTION TEST COMPLETED"
-    )
-
-    print("=" * 60)
-
-
-if __name__ == "__main__":
-
-    main()
+print("=" * 60, flush=True)
