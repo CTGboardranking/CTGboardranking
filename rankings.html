@@ -1,31 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Rankings — CTGBoardRanking</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin>
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet">
-
-<link rel="stylesheet"
-      href="style.css">
-
+<link rel="stylesheet" href="style.css">
 
 <style>
-
-/* =========================================================
-   HERO
-========================================================= */
 
 .ranking-hero{
     max-width:1100px;
@@ -59,11 +49,6 @@
     margin-top:20px;
     font-size:17px;
 }
-
-
-/* =========================================================
-   FILTERS
-========================================================= */
 
 .filters{
     max-width:1100px;
@@ -105,11 +90,6 @@
     outline:none;
 }
 
-
-/* =========================================================
-   CONTENT
-========================================================= */
-
 .ranking-content{
     max-width:1100px;
     margin:auto;
@@ -132,11 +112,6 @@
     color:var(--muted);
     font-size:13px;
 }
-
-
-/* =========================================================
-   PODIUM
-========================================================= */
 
 .podium{
     display:grid;
@@ -196,11 +171,6 @@
     margin-top:3px;
 }
 
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
 .search-box{
     margin-bottom:18px;
 }
@@ -210,13 +180,7 @@
     padding:15px 17px;
 }
 
-
-/* =========================================================
-   TABLE
-========================================================= */
-
 .ranking-table{
-    width:100%;
     background:rgba(255,255,255,.9);
     border:1px solid var(--border);
     border-radius:24px;
@@ -227,43 +191,27 @@
 .table-header,
 .table-row{
     display:grid;
-
-    grid-template-columns:
-        70px
-        minmax(180px,1fr)
-        150px
-        150px;
-
+    grid-template-columns:70px minmax(0,1fr) 180px 150px;
     align-items:center;
-
     gap:10px;
 }
 
 .table-header{
     padding:17px 24px;
-
-    background:
-        rgba(245,245,247,.8);
-
+    background:rgba(245,245,247,.8);
     color:var(--muted);
-
     font-size:10px;
-
     font-weight:700;
-
     letter-spacing:.8px;
 }
 
 .table-row{
     padding:19px 24px;
-
-    border-top:
-        1px solid var(--border);
+    border-top:1px solid var(--border);
 }
 
 .table-row:hover{
-    background:
-        rgba(0,113,227,.035);
+    background:rgba(0,113,227,.035);
 }
 
 .rank{
@@ -293,10 +241,6 @@
     margin-top:3px;
 }
 
-.data-column{
-    min-width:0;
-}
-
 .data-value{
     font-size:14px;
     font-weight:700;
@@ -308,11 +252,6 @@
     font-size:10px;
     margin-top:3px;
 }
-
-
-/* =========================================================
-   STATES
-========================================================= */
 
 .loading-state,
 .empty-state,
@@ -331,61 +270,35 @@
     color:#d93025;
 }
 
-
-/* =========================================================
-   PAGINATION
-========================================================= */
+/* PAGINATION */
 
 .pagination{
-
     display:none;
-
     justify-content:center;
-
     align-items:center;
-
     gap:12px;
-
     padding:25px 15px;
-
-    border-top:
-        1px solid var(--border);
+    border-top:1px solid var(--border);
+    flex-wrap:wrap;
 }
 
 .pagination button{
-
-    border:
-        1px solid var(--border);
-
-    background:
-        var(--white);
-
-    color:
-        var(--text);
-
-    padding:
-        10px 18px;
-
-    border-radius:
-        12px;
-
-    font-family:
-        inherit;
-
-    font-size:
-        13px;
-
-    font-weight:
-        700;
-
-    cursor:
-        pointer;
-
+    border:1px solid var(--border);
+    background:var(--white);
+    color:var(--text);
+    padding:10px 18px;
+    border-radius:12px;
+    font-family:inherit;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.2s;
 }
 
-.pagination button:hover{
-    background:
-        rgba(0,113,227,.06);
+.pagination button:hover:not(:disabled){
+    background:var(--blue);
+    color:white;
+    border-color:var(--blue);
 }
 
 .pagination button:disabled{
@@ -394,58 +307,24 @@
 }
 
 .pagination-info{
-
-    min-width:
-        110px;
-
-    text-align:
-        center;
-
-    color:
-        var(--muted);
-
-    font-size:
-        13px;
-
-    font-weight:
-        700;
+    min-width:110px;
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    font-weight:700;
 }
 
 
-/* =========================================================
-   MOBILE
-========================================================= */
+/* MOBILE */
 
 @media(max-width:800px){
 
     .ranking-hero{
-        padding:
-            65px
-            16px
-            40px;
-    }
-
-    .ranking-hero h1{
-        letter-spacing:-3px;
-    }
-
-    .ranking-hero p{
-        font-size:15px;
-    }
-
-    .filters{
-        padding:
-            0
-            16px
-            35px;
+        padding-top:65px;
     }
 
     .filter-box{
         grid-template-columns:1fr;
-    }
-
-    .ranking-content{
-        padding:16px;
     }
 
     .podium{
@@ -457,6 +336,20 @@
         transform:none;
     }
 
+    .table-header{
+        display:none;
+    }
+
+    .table-row{
+        grid-template-columns:42px minmax(0,1fr);
+        padding:18px;
+        gap:10px;
+    }
+
+    .table-row .data-column{
+        display:none;
+    }
+
     .content-heading{
         display:block;
     }
@@ -465,199 +358,36 @@
         margin-top:7px;
     }
 
-
-    /* MOBILE TABLE */
-
-    .ranking-table{
-        border-radius:18px;
-        overflow:hidden;
+    .pagination{
+        display:flex;
+        padding:20px 10px;
+        gap:8px;
     }
 
-    .table-header,
-    .table-row{
-
-        grid-template-columns:
-            42px
-            minmax(120px,1fr)
-            88px
-            82px;
-
-        gap:6px;
-    }
-
-    .table-header{
-
-        padding:
-            13px
-            10px;
-
-        font-size:
-            8px;
-
-        letter-spacing:
-            .3px;
-
-        white-space:
-            nowrap;
-    }
-
-    .table-row{
-
-        padding:
-            15px
-            10px;
-    }
-
-    .rank{
+    .pagination button{
+        padding:10px 13px;
         font-size:12px;
     }
 
-    .institution-name strong{
-        font-size:11px;
-        line-height:1.3;
-    }
-
-    .institution-name span{
-        font-size:9px;
-        margin-top:2px;
-    }
-
-    .data-value{
-        font-size:11px;
-        white-space:nowrap;
-    }
-
-    .data-label{
-        font-size:7px;
-        line-height:1.1;
-        margin-top:2px;
-    }
-
-
-    /* PAGINATION MOBILE */
-
-    .pagination{
-
-        gap:7px;
-
-        padding:
-            20px
-            8px;
-    }
-
-    .pagination button{
-
-        padding:
-            9px
-            11px;
-
-        font-size:
-            11px;
-    }
-
     .pagination-info{
-
-        min-width:
-            80px;
-
-        font-size:
-            11px;
-    }
-
-}
-
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media(max-width:390px){
-
-    .ranking-content{
-        padding:12px;
-    }
-
-    .table-header,
-    .table-row{
-
-        grid-template-columns:
-            35px
-            minmax(105px,1fr)
-            78px
-            72px;
-
-        gap:4px;
-    }
-
-    .table-header{
-
-        padding:
-            12px
-            7px;
-
-        font-size:
-            7px;
-    }
-
-    .table-row{
-
-        padding:
-            14px
-            7px;
-    }
-
-    .institution-name strong{
-        font-size:10px;
-    }
-
-    .institution-name span{
-        font-size:8px;
-    }
-
-    .data-value{
-        font-size:10px;
-    }
-
-    .pagination button{
-
-        padding:
-            8px
-            9px;
-
-        font-size:
-            10px;
-    }
-
-    .pagination-info{
-        min-width:
-            70px;
-
-        font-size:
-            10px;
+        min-width:85px;
+        font-size:12px;
     }
 
 }
 
 </style>
-
 </head>
-
 
 <body>
 
-
 <header class="navbar">
-
 
 <a href="index.html" class="logo">
 
-<span class="logo-mark">
-C
-</span>
+<span class="logo-mark">C</span>
 
-<span>
-CTGBoardRanking
-</span>
+<span>CTGBoardRanking</span>
 
 </a>
 
@@ -699,63 +429,38 @@ aria-label="Toggle dark mode">
 </header>
 
 
-
 <main>
-
 
 <section class="ranking-hero">
 
-
-<a
-href="index.html"
-class="back-link">
-
+<a href="index.html" class="back-link">
 ← Back to Home
-
 </a>
-
 
 <span class="eyebrow">
 CHITTAGONG BOARD
 </span>
 
-
 <h1>
-
-Institution
-
-<br>
-
-<span>
-Rankings.
-</span>
-
+Institution<br>
+<span>Rankings.</span>
 </h1>
 
-
 <p>
-
-Top 100 institutions based on collected SSC result data.
+All institutions based on collected SSC result data.
 Compare Passing Rate and Total GPA-5.
-
 </p>
 
 </section>
 
 
-
 <section class="filters">
-
 
 <div class="filter-box">
 
-
 <div class="filter-item">
 
-<label>
-YEAR
-</label>
-
+<label>YEAR</label>
 
 <select id="yearFilter">
 
@@ -768,13 +473,9 @@ YEAR
 </div>
 
 
-
 <div class="filter-item">
 
-<label>
-GROUP
-</label>
-
+<label>GROUP</label>
 
 <select id="groupFilter">
 
@@ -799,13 +500,9 @@ Science Irregular
 </div>
 
 
-
 <div class="filter-item">
 
-<label>
-RANKING TYPE
-</label>
-
+<label>RANKING TYPE</label>
 
 <select id="typeFilter">
 
@@ -817,25 +514,20 @@ Institution Ranking
 
 </div>
 
-
 </div>
 
 </section>
 
 
-
 <section class="ranking-content">
 
-
 <div class="content-heading">
-
 
 <div>
 
 <span class="eyebrow">
-TOP 100 PERFORMANCE
+INSTITUTION PERFORMANCE
 </span>
-
 
 <h2 id="rankingTitle">
 Science Rankings
@@ -843,41 +535,32 @@ Science Rankings
 
 </div>
 
-
 <p id="resultInfo">
 2026 · Chattogram Board
 </p>
 
-
 </div>
-
 
 
 <div class="podium">
 
-
 <div class="podium-card">
-
 
 <div class="medal">
 🥈
 </div>
 
-
 <span class="podium-rank">
 #2
 </span>
-
 
 <h3 id="podium2Name">
 —
 </h3>
 
-
 <p id="podium2District">
 —
 </p>
-
 
 <div class="podium-value">
 
@@ -885,40 +568,32 @@ Science Rankings
 —
 </span>
 
-
 <small>
 PASSING RATE
 </small>
 
 </div>
 
-
 </div>
 
 
-
 <div class="podium-card first">
-
 
 <div class="medal">
 🥇
 </div>
 
-
 <span class="podium-rank">
 #1
 </span>
-
 
 <h3 id="podium1Name">
 —
 </h3>
 
-
 <p id="podium1District">
 —
 </p>
-
 
 <div class="podium-value">
 
@@ -926,40 +601,32 @@ PASSING RATE
 —
 </span>
 
-
 <small>
 PASSING RATE
 </small>
 
 </div>
 
-
 </div>
 
 
-
 <div class="podium-card">
-
 
 <div class="medal">
 🥉
 </div>
 
-
 <span class="podium-rank">
 #3
 </span>
-
 
 <h3 id="podium3Name">
 —
 </h3>
 
-
 <p id="podium3District">
 —
 </p>
-
 
 <div class="podium-value">
 
@@ -967,23 +634,18 @@ PASSING RATE
 —
 </span>
 
-
 <small>
 PASSING RATE
 </small>
 
 </div>
 
-
 </div>
 
-
 </div>
-
 
 
 <div class="search-box">
-
 
 <input
 type="search"
@@ -991,57 +653,42 @@ id="searchInput"
 placeholder="Search institution name..."
 autocomplete="off">
 
-
 </div>
-
 
 
 <div class="ranking-table">
 
-
 <div class="table-header">
-
 
 <div>
 RANK
 </div>
 
-
 <div>
 INSTITUTION NAME
 </div>
-
 
 <div>
 PASSING RATE
 </div>
 
-
 <div>
 TOTAL GPA-5
 </div>
 
-
 </div>
-
 
 
 <div id="rankingRows">
 
-
 <div class="loading-state">
-
-Loading Top 100 institution ranking...
+Loading institution ranking...
+</div>
 
 </div>
 
 
-</div>
-
-
-
-<div
-id="emptyState"
+<div id="emptyState"
 class="empty-state">
 
 No institution found.
@@ -1049,9 +696,7 @@ No institution found.
 </div>
 
 
-
-<div
-id="errorState"
+<div id="errorState"
 class="error-state">
 
 Institution ranking data could not be loaded.
@@ -1059,11 +704,8 @@ Institution ranking data could not be loaded.
 </div>
 
 
-
-<div
-id="pagination"
+<div id="pagination"
 class="pagination">
-
 
 <button
 id="prevPage"
@@ -1079,7 +721,7 @@ disabled>
 id="paginationInfo"
 class="pagination-info">
 
-Page 1 / 1
+Page 1
 
 </span>
 
@@ -1092,9 +734,7 @@ Next →
 
 </button>
 
-
 </div>
-
 
 </div>
 
@@ -1103,15 +743,11 @@ Next →
 </main>
 
 
-
 <footer>
-
 
 <div class="footer-main">
 
-
 <div>
-
 
 <div class="footer-logo">
 
@@ -1123,68 +759,52 @@ CTGBoardRanking
 
 </div>
 
-
 <p>
 Chattogram Board Education Rankings.
 </p>
 
-
 </div>
 
 
-
 <div class="footer-links">
-
 
 <a href="rankings.html">
 Rankings
 </a>
 
-
 <a href="institution.html">
 Institutions
 </a>
-
 
 <a href="district.html">
 Districts
 </a>
 
-
 <a href="statistics.html">
 Statistics
 </a>
 
-
 </div>
 
-
 </div>
-
 
 
 <div class="footer-bottom">
-
 
 <span>
 © 2026 CTGBoardRanking
 </span>
 
-
 <span>
 Education Data & Statistics
 </span>
 
-
 </div>
-
 
 </footer>
 
 
-
 <script src="script.js"></script>
-
 
 
 <script>
@@ -1212,11 +832,10 @@ let currentPage = 1;
 
 
 /*
- * Top 100 থাকবে
- * কিন্তু প্রতি Page-এ 25টি দেখাবে
+ * প্রতি পেজে 100টি Institution
  */
 
-const PAGE_SIZE = 25;
+const PAGE_SIZE = 100;
 
 
 /* =========================================================
@@ -1224,75 +843,40 @@ const PAGE_SIZE = 25;
 ========================================================= */
 
 const yearFilter =
-    document.getElementById(
-        "yearFilter"
-    );
-
+    document.getElementById("yearFilter");
 
 const groupFilter =
-    document.getElementById(
-        "groupFilter"
-    );
-
+    document.getElementById("groupFilter");
 
 const rankingTitle =
-    document.getElementById(
-        "rankingTitle"
-    );
-
+    document.getElementById("rankingTitle");
 
 const resultInfo =
-    document.getElementById(
-        "resultInfo"
-    );
-
+    document.getElementById("resultInfo");
 
 const searchInput =
-    document.getElementById(
-        "searchInput"
-    );
-
+    document.getElementById("searchInput");
 
 const rankingRows =
-    document.getElementById(
-        "rankingRows"
-    );
-
+    document.getElementById("rankingRows");
 
 const emptyState =
-    document.getElementById(
-        "emptyState"
-    );
-
+    document.getElementById("emptyState");
 
 const errorState =
-    document.getElementById(
-        "errorState"
-    );
-
+    document.getElementById("errorState");
 
 const pagination =
-    document.getElementById(
-        "pagination"
-    );
-
+    document.getElementById("pagination");
 
 const prevPage =
-    document.getElementById(
-        "prevPage"
-    );
-
+    document.getElementById("prevPage");
 
 const nextPage =
-    document.getElementById(
-        "nextPage"
-    );
-
+    document.getElementById("nextPage");
 
 const paginationInfo =
-    document.getElementById(
-        "paginationInfo"
-    );
+    document.getElementById("paginationInfo");
 
 
 /* =========================================================
@@ -1306,7 +890,9 @@ function getValue(
 ){
 
     if (!obj){
+
         return fallback;
+
     }
 
 
@@ -1373,19 +959,11 @@ function toNumber(value){
 
 function normalizeText(value){
 
-    return String(
-        value || ""
-    )
-    .trim()
-    .toLowerCase()
-    .replace(
-        /[_-]+/g,
-        " "
-    )
-    .replace(
-        /\s+/g,
-        " "
-    );
+    return String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[_-]+/g," ")
+        .replace(/\s+/g," ");
 
 }
 
@@ -1397,9 +975,7 @@ function normalizeText(value){
 function normalizeGroup(value){
 
     const group =
-        normalizeText(
-            value
-        );
+        normalizeText(value);
 
 
     if (
@@ -1528,7 +1104,9 @@ function getInstitutionName(student){
 
 
             if (!name){
+
                 continue;
+
             }
 
 
@@ -1697,9 +1275,7 @@ function isPassed(student){
     }
 
 
-    return getGPA(
-        student
-    ) > 0;
+    return getGPA(student) > 0;
 
 }
 
@@ -1717,9 +1293,7 @@ function buildInstitutionRanking(){
     const selected =
         allStudents.filter(
             student =>
-                matchesGroup(
-                    student
-                )
+                matchesGroup(student)
         );
 
 
@@ -1733,7 +1307,9 @@ function buildInstitutionRanking(){
 
 
             if (!institution){
+
                 return;
+
             }
 
 
@@ -1743,7 +1319,9 @@ function buildInstitutionRanking(){
                 );
 
 
-            if (!map.has(key)){
+            if (
+                !map.has(key)
+            ){
 
                 map.set(
                     key,
@@ -1757,14 +1335,11 @@ function buildInstitutionRanking(){
                                 student
                             ),
 
-                        students:
-                            0,
+                        students:0,
 
-                        passed:
-                            0,
+                        passed:0,
 
-                        totalGPA5:
-                            0
+                        totalGPA5:0
 
                     }
                 );
@@ -1780,9 +1355,7 @@ function buildInstitutionRanking(){
 
 
             if (
-                isPassed(
-                    student
-                )
+                isPassed(student)
             ){
 
                 item.passed++;
@@ -1795,9 +1368,7 @@ function buildInstitutionRanking(){
              */
 
             if (
-                getGPA(
-                    student
-                ) >= 5
+                getGPA(student) >= 5
             ){
 
                 item.totalGPA5++;
@@ -1830,11 +1401,11 @@ function buildInstitutionRanking(){
 
 
     /*
-     * Ranking order:
+     * Ranking:
      *
      * 1. Passing Rate
      * 2. Total GPA-5
-     * 3. Total Students
+     * 3. Students
      */
 
     result.sort(
@@ -1876,14 +1447,17 @@ function buildInstitutionRanking(){
 
 
     /*
-     * Top 100 only
+     * গুরুত্বপূর্ণ:
+     *
+     * এখানে আর slice(0,100)
+     * ব্যবহার করা হচ্ছে না।
+     *
+     * তাই 276টি Institution থাকলে
+     * 276টিই ranking-এ থাকবে।
      */
 
     institutionData =
-        result.slice(
-            0,
-            100
-        );
+        result;
 
 }
 
@@ -1894,29 +1468,12 @@ function buildInstitutionRanking(){
 
 function escapeHTML(value){
 
-    return String(
-        value || ""
-    )
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-    .replace(
-        /</g,
-        "&lt;"
-    )
-    .replace(
-        />/g,
-        "&gt;"
-    )
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-    .replace(
-        /'/g,
-        "&#039;"
-    );
+    return String(value || "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
 }
 
@@ -1938,7 +1495,9 @@ function updateTitle(){
 
     resultInfo.textContent =
         yearFilter.value +
-        " · Chattogram Board";
+        " · Chattogram Board · " +
+        institutionData.length +
+        " Institutions";
 
 }
 
@@ -1963,72 +1522,72 @@ function updatePodium(data){
         "podium1Name"
     ).textContent =
         first
-            ? first.institution
-            : "—";
+        ? first.institution
+        : "—";
 
 
     document.getElementById(
         "podium1District"
     ).textContent =
         first
-            ? first.district
-            : "—";
+        ? first.district
+        : "—";
 
 
     document.getElementById(
         "podium1Pass"
     ).textContent =
         first
-            ? first.passRate.toFixed(2) + "%"
-            : "—";
+        ? first.passRate.toFixed(2) + "%"
+        : "—";
 
 
     document.getElementById(
         "podium2Name"
     ).textContent =
         second
-            ? second.institution
-            : "—";
+        ? second.institution
+        : "—";
 
 
     document.getElementById(
         "podium2District"
     ).textContent =
         second
-            ? second.district
-            : "—";
+        ? second.district
+        : "—";
 
 
     document.getElementById(
         "podium2Pass"
     ).textContent =
         second
-            ? second.passRate.toFixed(2) + "%"
-            : "—";
+        ? second.passRate.toFixed(2) + "%"
+        : "—";
 
 
     document.getElementById(
         "podium3Name"
     ).textContent =
         third
-            ? third.institution
-            : "—";
+        ? third.institution
+        : "—";
 
 
     document.getElementById(
         "podium3District"
     ).textContent =
         third
-            ? third.district
-            : "—";
+        ? third.district
+        : "—";
 
 
     document.getElementById(
         "podium3Pass"
     ).textContent =
         third
-            ? third.passRate.toFixed(2) + "%"
-            : "—";
+        ? third.passRate.toFixed(2) + "%"
+        : "—";
 
 }
 
@@ -2050,9 +1609,7 @@ function applySearch(){
         filteredData =
             institutionData.slice();
 
-    }
-
-    else{
+    }else{
 
         filteredData =
             institutionData.filter(
@@ -2078,7 +1635,6 @@ function applySearch(){
 
     currentPage = 1;
 
-
     renderTable();
 
 }
@@ -2090,9 +1646,7 @@ function applySearch(){
 
 function renderTable(){
 
-    rankingRows.innerHTML =
-        "";
-
+    rankingRows.innerHTML = "";
 
     emptyState.style.display =
         "none";
@@ -2105,21 +1659,37 @@ function renderTable(){
         emptyState.style.display =
             "block";
 
-
         pagination.style.display =
             "none";
-
 
         return;
 
     }
 
 
+    /*
+     * মোট কত পেজ
+     */
+
     const totalPages =
         Math.ceil(
             filteredData.length /
             PAGE_SIZE
         );
+
+
+    /*
+     * Current page ঠিক রাখা
+     */
+
+    if (
+        currentPage > totalPages
+    ){
+
+        currentPage =
+            totalPages;
+
+    }
 
 
     const start =
@@ -2146,9 +1716,7 @@ function renderTable(){
         (item,index) => {
 
             const actualRank =
-                start +
-                index +
-                1;
+                start + index + 1;
 
 
             const row =
@@ -2165,16 +1733,13 @@ function renderTable(){
 
                 <div class="rank ${
                     actualRank <= 3
-                        ? "top"
-                        : ""
+                    ? "top"
+                    : ""
                 }">
 
                     ${String(
                         actualRank
-                    ).padStart(
-                        2,
-                        "0"
-                    )}
+                    ).padStart(2,"0")}
 
                 </div>
 
@@ -2188,7 +1753,6 @@ function renderTable(){
                         )}
 
                     </strong>
-
 
                     <span>
 
@@ -2209,7 +1773,6 @@ function renderTable(){
 
                     </span>
 
-
                     <span class="data-label">
 
                         PASSING RATE
@@ -2226,7 +1789,6 @@ function renderTable(){
                         ${item.totalGPA5}
 
                     </span>
-
 
                     <span class="data-label">
 
@@ -2248,8 +1810,8 @@ function renderTable(){
 
 
     /*
-     * Pagination always appears
-     * when more than one page exists.
+     * Pagination সবসময় থাকবে
+     * যখন একের বেশি page থাকে।
      */
 
     if (
@@ -2259,9 +1821,7 @@ function renderTable(){
         pagination.style.display =
             "flex";
 
-    }
-
-    else{
+    }else{
 
         pagination.style.display =
             "none";
@@ -2292,10 +1852,14 @@ function renderTable(){
 
 function renderRanking(){
 
-    updateTitle();
+    currentGroup =
+        groupFilter.value;
 
 
     buildInstitutionRanking();
+
+
+    updateTitle();
 
 
     updatePodium(
@@ -2320,8 +1884,7 @@ async function loadStudents(){
             await fetch(
                 DATA_URL,
                 {
-                    cache:
-                        "no-store"
+                    cache:"no-store"
                 }
             );
 
@@ -2343,9 +1906,7 @@ async function loadStudents(){
 
 
         if (
-            Array.isArray(
-                data
-            )
+            Array.isArray(data)
         ){
 
             allStudents =
@@ -2405,8 +1966,8 @@ async function loadStudents(){
 
 
         console.log(
-            "First student:",
-            allStudents[0]
+            "Institutions found:",
+            institutionData.length
         );
 
 
@@ -2443,7 +2004,7 @@ async function loadStudents(){
 
 
 /* =========================================================
-   GROUP EVENT
+   GROUP CHANGE
 ========================================================= */
 
 groupFilter.addEventListener(
@@ -2453,9 +2014,7 @@ groupFilter.addEventListener(
         currentGroup =
             this.value;
 
-
         currentPage = 1;
-
 
         renderRanking();
 
@@ -2464,7 +2023,7 @@ groupFilter.addEventListener(
 
 
 /* =========================================================
-   YEAR EVENT
+   YEAR CHANGE
 ========================================================= */
 
 yearFilter.addEventListener(
@@ -2473,7 +2032,6 @@ yearFilter.addEventListener(
 
         currentPage = 1;
 
-
         renderRanking();
 
     }
@@ -2481,7 +2039,7 @@ yearFilter.addEventListener(
 
 
 /* =========================================================
-   SEARCH EVENT
+   SEARCH
 ========================================================= */
 
 searchInput.addEventListener(
@@ -2491,9 +2049,7 @@ searchInput.addEventListener(
         currentSearch =
             this.value;
 
-
         currentPage = 1;
-
 
         applySearch();
 
@@ -2515,9 +2071,7 @@ prevPage.addEventListener(
 
             currentPage--;
 
-
             renderTable();
-
 
             window.scrollTo({
 
@@ -2526,8 +2080,7 @@ prevPage.addEventListener(
                         ".ranking-table"
                     ).offsetTop - 100,
 
-                behavior:
-                    "smooth"
+                behavior:"smooth"
 
             });
 
@@ -2559,9 +2112,7 @@ nextPage.addEventListener(
 
             currentPage++;
 
-
             renderTable();
-
 
             window.scrollTo({
 
@@ -2570,8 +2121,7 @@ nextPage.addEventListener(
                         ".ranking-table"
                     ).offsetTop - 100,
 
-                behavior:
-                    "smooth"
+                behavior:"smooth"
 
             });
 
@@ -2588,7 +2138,6 @@ nextPage.addEventListener(
 loadStudents();
 
 </script>
-
 
 </body>
 </html>
