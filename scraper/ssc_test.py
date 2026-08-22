@@ -419,26 +419,32 @@ def parse_result(
         if not values:
             continue
 
+# ----------------------------------------------------
+# Roll + Name
+# ----------------------------------------------------
 
-        # ----------------------------------------------------
-        # Roll + Name
-        # ----------------------------------------------------
+if "Roll No" in values:
 
-        if "Roll No" in values:
+    idx = values.index("Roll No")
 
-            idx = values.index(
-                "Roll No"
-            )
+    # Expected:
+    # Roll No | 100001 | Name | SHUVOJIT GHOSH
 
-            if idx + 2 < len(values):
+    if idx + 1 < len(values):
+        result_data["roll"] = values[idx + 1]
 
-                result_data["roll"] = (
-                    values[idx + 1]
-                )
+    # Find "Name" anywhere after Roll No
+    for i in range(
+        idx + 1,
+        len(values) - 1
+    ):
 
-                result_data["name"] = (
-                    values[idx + 2]
-                )
+        if values[i].strip().lower() == "name":
+
+            result_data["name"] = values[i + 1]
+
+            break
+        
 
 
         # ----------------------------------------------------
@@ -1130,3 +1136,8 @@ if not students:
     raise SystemExit(
         "No student results were collected."
     )
+
+if not students:
+
+    raise SystemExit(
+        "No student results were collected."
