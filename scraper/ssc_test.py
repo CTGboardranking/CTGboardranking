@@ -1,7 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
 
-URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/individual/"
+BASE_URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/"
+INDIVIDUAL_URL = BASE_URL + "individual/"
+RESULT_URL = BASE_URL + "result.php"
+
+ROLL = "100001"
 
 headers = {
     "User-Agent": (
@@ -9,48 +13,94 @@ headers = {
         "AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/131.0.0.0 Mobile Safari/537.36"
     ),
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept": (
+        "text/html,application/xhtml+xml,"
+        "application/xml;q=0.9,*/*;q=0.8"
+    ),
     "Accept-Language": "en-US,en;q=0.9",
+    "Referer": INDIVIDUAL_URL
 }
 
 session = requests.Session()
 
-print("Connecting to Chattogram Board...")
+print("Opening SSC Individual Result page...")
 
-response = session.get(
-    URL,
+r = session.get(
+    INDIVIDUAL_URL,
     headers=headers,
     timeout=30
 )
 
-print("HTTP Status:", response.status_code)
-print("Page Size:", len(response.content))
+print("GET Status:", r.status_code)
 
-if response.status_code != 200:
-    raise SystemExit(1)
+if r.status_code != 200:
+    raise SystemExit("Could not open individual result page.")
 
-soup = BeautifulSoup(response.text, "html.parser")
+print("Submitting Roll:", ROLL)
 
-print("\n===== FORMS =====")
+data = {
+    "roll": ROLL,
+    "button2": "Submit"
+}
 
-for i, form in enumerate(soup.find_all("form"), 1):
+result = session.post(
+    RESULT_URL,
+    data=data,
+    headers=headers,
+    timeout=30,
+    allow_redirects=True
+)
 
-    print(f"\nFORM {i}")
-    print("Action:", form.get("action"))
-    print("Method:", form.get("method"))
+print("POST Status:", result.status_code)
+print("Final URL:", result.url)
+print("Result Page Size:", len(result.content))
 
-    for inp in form.find_all(["input", "select", "button"]):
+# Save returned HTML
+with open(
+    "scraper/result_page.html",
+    "w",
+    encoding="utf-8"
+) as f:
+    f.write(result.text)
 
-        print(
-            " ",
-            inp.name,
-            "name=",
-            inp.get("name"),
-            "type=",
-            inp.get("type"),
-            "value=",
-            inp.get("value")
+print("\n===== RESULT PAGE TEXT =====\n")
+
+soup = BeautifulSoup(result.text, "html.parser")
+
+text = soup.get_text(
+    "\n",
+    strip=True
+)
+
+print(text[:5000])
+
+print("\n===== TABLES =====")
+
+tables = soup.find_all("table")
+
+print("Tables found:", len(tables))
+
+for i, table in enumerate(tables, 1):
+
+    print(f"\n--- TABLE {i} ---")
+
+    rows = table.find_all("tr")
+
+    for row in rows:
+
+        cells = row.find_all(
+            ["th", "td"]
         )
 
-print("\n===== PAGE TEXT =====")
-print(soup.get_text(" ", strip=True)[:1500])
+        values = [
+            cell.get_text(
+                " ",
+                strip=True
+            )
+            for cell in cells
+        ]
+
+        if values:
+            print(values)
+
+print("\n===== DONE =====")
