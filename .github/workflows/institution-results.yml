@@ -93,7 +93,11 @@ jobs:
 
           if git diff --cached --quiet; then
             echo "No changes to commit."
-          else
-            git commit -m "Update institution results"
-            git push
+            exit 0
           fi
+
+          git commit -m "Update institution results"
+
+          git pull --rebase origin main
+
+          git push origin main
