@@ -17,9 +17,9 @@ BASE_URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/"
 
 RESULT_URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/resultm.php"
 
-TEST_LIMIT = 10
+TEST_LIMIT = 1286
 
-REQUEST_DELAY = 1.0
+REQUEST_DELAY = 0.3
 
 
 HEADERS = {
