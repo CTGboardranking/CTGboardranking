@@ -28,6 +28,10 @@ jobs:
         run: |
           python scraper/institution_stats.py
 
+      - name: Convert institution CSV
+        run: |
+          python scraper/csv_to_institutions.py
+
       - name: Calculate institution ranking
         run: |
           python scraper/ranking_engine.py
