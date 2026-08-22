@@ -10,9 +10,23 @@ OUTPUT_FILE = "scraper/institutions.json"
 
 REQUIRED_COLUMNS = [
     "Institute",
+    "District",
     "Total Students",
+    "Passed Students",
+    "Failed Students",
     "GPA 5 Count",
     "Average GPA",
+    "A+",
+    "A",
+    "A-",
+    "B",
+    "C",
+    "D",
+    "F"
+]
+
+
+GRADES = [
     "A+",
     "A",
     "A-",
@@ -100,8 +114,30 @@ def convert(rows):
             )
             continue
 
+        district = str(
+            row.get(
+                "District",
+                ""
+            )
+        ).strip()
+
+        if not district:
+            print(
+                f"Skipping row {row_number}: "
+                "District is empty."
+            )
+            continue
+
         total_students = number(
             row.get("Total Students")
+        )
+
+        passed_students = number(
+            row.get("Passed Students")
+        )
+
+        failed_students = number(
+            row.get("Failed Students")
         )
 
         gpa_5_count = number(
@@ -114,15 +150,7 @@ def convert(rows):
 
         grade_distribution = {}
 
-        for grade in [
-            "A+",
-            "A",
-            "A-",
-            "B",
-            "C",
-            "D",
-            "F"
-        ]:
+        for grade in GRADES:
 
             grade_distribution[grade] = number(
                 row.get(grade)
@@ -132,8 +160,16 @@ def convert(rows):
 
             "institute": institute,
 
+            "district": district,
+
             "total_students":
                 int(total_students),
+
+            "passed_students":
+                int(passed_students),
+
+            "failed_students":
+                int(failed_students),
 
             "gpa_5_count":
                 int(gpa_5_count),
@@ -150,7 +186,9 @@ def convert(rows):
 
 def main():
 
-    if not os.path.exists(INPUT_FILE):
+    if not os.path.exists(
+        INPUT_FILE
+    ):
 
         raise SystemExit(
             f"\nInput file not found:\n"
