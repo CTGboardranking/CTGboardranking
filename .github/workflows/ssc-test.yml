@@ -63,101 +63,61 @@ jobs:
         run: |
           python scraper/board_ranking.py
 
-      - name: Show generated files
+      - name: Show collection summary
         if: always()
         run: |
           echo "========================================"
-          echo "GENERATED SCRAPER FILES"
+          echo "SSC COLLECTION SUMMARY"
           echo "========================================"
 
-          find scraper -maxdepth 1 -type f -printf "%f\n" | sort
+          if [ -f scraper/student_collection_summary.json ]; then
+            cat scraper/student_collection_summary.json
+          else
+            echo "student_collection_summary.json not found"
+          fi
 
           echo ""
           echo "========================================"
-          echo "STUDENT DATA"
+          echo "STUDENT COUNT"
           echo "========================================"
 
           if [ -f scraper/students.json ]; then
             python - <<'PY'
-          import json
+import json
 
-          path = "scraper/students.json"
+path = "scraper/students.json"
 
-          with open(path, "r", encoding="utf-8") as f:
-              data = json.load(f)
+with open(path, "r", encoding="utf-8") as f:
+    data = json.load(f)
 
-          print("Students:", len(data))
+print("Total students:", len(data))
 
-          if data:
-              print("First student:", data[0].get("name"))
-              print("First roll:", data[0].get("roll"))
-              print("First institute:", data[0].get("institute"))
-              print("First GPA:", data[0].get("gpa"))
-          PY
+if data:
+    print("First roll:", data[0].get("roll"))
+    print("Last roll:", data[-1].get("roll"))
+PY
           else
             echo "students.json not found"
           fi
 
-          echo ""
-          echo "========================================"
-          echo "INSTITUTION DATA"
-          echo "========================================"
-
-          if [ -f scraper/institution_stats.json ]; then
-            python - <<'PY'
-          import json
-
-          path = "scraper/institution_stats.json"
-
-          with open(path, "r", encoding="utf-8") as f:
-              data = json.load(f)
-
-          print("Institutions:", len(data))
-
-          for item in data[:5]:
-              print(
-                  "Rank #{} | {} | Students: {} | GPA-5: {} | Score: {}".format(
-                      item.get("rank"),
-                      item.get("institute"),
-                      item.get("total_students"),
-                      item.get("gpa_5_count"),
-                      item.get("institution_score")
-                  )
-              )
-          PY
-          else
-            echo "institution_stats.json not found"
-          fi
-
-      - name: Commit generated ranking data
+      - name: Commit updated ranking data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add scraper/*.json
+          git add scraper/
 
           if git diff --cached --quiet; then
-            echo "No new data changes to commit."
+            echo "No changes detected."
           else
             git commit -m "Update SSC ranking data"
             git push
           fi
 
-      - name: Upload SSC data
+      - name: Upload SSC data backup
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: ssc-data
           path: scraper/
           if-no-files-found: warn
-
-      - name: Final status
-        if: always()
-        run: |
-          echo ""
-          echo "========================================"
-          echo "SSC WORKFLOW COMPLETE"
-          echo "========================================"
-          echo "Generated ranking data has been processed."
-          echo "JSON data has been committed when changes were found."
-          echo "========================================"
