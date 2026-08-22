@@ -2,7 +2,7 @@ import json
 import os
 
 
-INPUT_FILE = "scraper/institutions.json"
+INPUT_FILE = "scraper/validated_institutions.json"
 OUTPUT_FILE = "scraper/institution_ranking.json"
 
 
