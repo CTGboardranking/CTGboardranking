@@ -98,5 +98,15 @@
     "passed": 9,
     "passing_rate": 45.0,
     "gpa5": 0
+  },
+  {
+    "eiin": "metadata",
+    "institution_name": "",
+    "district": "",
+    "thana": "",
+    "appeared": null,
+    "passed": null,
+    "passing_rate": null,
+    "gpa5": null
   }
 ]
