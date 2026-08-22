@@ -2,7 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 
 
-RESULT_URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/"
+BASE_URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/"
+
+RESULT_URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/resultm.php"
 
 EIIN = "103086"
 
@@ -13,33 +15,76 @@ HEADERS = {
         "AppleWebKit/537.36 "
         "(KHTML, like Gecko) "
         "Chrome/140.0 Mobile Safari/537.36"
-    )
+    ),
+    "Referer": BASE_URL
 }
 
 
 def main():
 
     print("=" * 60)
-    print("SSC 2026 INSTITUTION RESULT TEST")
+    print("SSC 2026 INSTITUTION RESULT POST TEST")
     print("=" * 60)
 
     print()
     print("EIIN:", EIIN)
 
     print()
-    print("URL:")
+    print("POST URL:")
+
     print(RESULT_URL)
+
+
+    session = requests.Session()
+
 
     try:
 
-        response = requests.get(
-            RESULT_URL,
+        first_response = session.get(
+            BASE_URL,
             headers=HEADERS,
             timeout=30
         )
 
+
         print()
-        print("HTTP Status:", response.status_code)
+        print(
+            "Initial HTTP Status:",
+            first_response.status_code
+        )
+
+
+        first_response.raise_for_status()
+
+
+    except Exception as error:
+
+        print()
+        print("INITIAL REQUEST ERROR:")
+
+        print(error)
+
+        return
+
+
+    try:
+
+        response = session.post(
+            RESULT_URL,
+            data={
+                "eiin": EIIN
+            },
+            headers=HEADERS,
+            timeout=30
+        )
+
+
+        print()
+        print(
+            "POST HTTP Status:",
+            response.status_code
+        )
+
 
         print(
             "Content-Type:",
@@ -49,17 +94,21 @@ def main():
             )
         )
 
+
         print(
             "Response Length:",
             len(response.text)
         )
 
+
         response.raise_for_status()
+
 
     except Exception as error:
 
         print()
-        print("REQUEST ERROR:")
+        print("POST REQUEST ERROR:")
+
         print(error)
 
         return
@@ -77,6 +126,7 @@ def main():
     print()
     print("PAGE TITLE:")
 
+
     if title:
 
         print(
@@ -92,58 +142,11 @@ def main():
 
 
     print()
-    print("FORMS:")
-
-    forms = soup.find_all("form")
-
-    print(
-        "Total forms:",
-        len(forms)
-    )
-
-
-    for number, form in enumerate(
-        forms,
-        start=1
-    ):
-
-        print()
-        print(
-            "Form",
-            number
-        )
-
-        print(
-            "Action:",
-            form.get("action")
-        )
-
-        print(
-            "Method:",
-            form.get("method")
-        )
-
-
-        inputs = form.find_all("input")
-
-
-        for field in inputs:
-
-            print(
-                "INPUT:",
-                "name=",
-                field.get("name"),
-                "| type=",
-                field.get("type"),
-                "| value=",
-                field.get("value")
-            )
-
-
-    print()
     print("TABLES:")
 
+
     tables = soup.find_all("table")
+
 
     print(
         "Total tables:",
@@ -151,24 +154,64 @@ def main():
     )
 
 
-    for number, table in enumerate(
+    for table_number, table in enumerate(
         tables,
         start=1
     ):
 
         rows = table.find_all("tr")
 
+
+        print()
         print(
-            "Table",
-            number,
-            "| rows:",
+            "TABLE",
+            table_number,
+            "| Rows:",
             len(rows)
         )
 
 
+        for row in rows[:10]:
+
+            cells = row.find_all(
+                ["th", "td"]
+            )
+
+
+            values = [
+                cell.get_text(
+                    " ",
+                    strip=True
+                )
+                for cell in cells
+            ]
+
+
+            if values:
+
+                print(
+                    " | ".join(values)
+                )
+
+
+    print()
+    print("IMPORTANT TEXT:")
+
+
+    text = soup.get_text(
+        " ",
+        strip=True
+    )
+
+
+    print(
+        text[:3000]
+    )
+
+
     print()
     print("=" * 60)
-    print("TEST COMPLETED")
+    print("POST TEST COMPLETED")
     print("=" * 60)
 
 
