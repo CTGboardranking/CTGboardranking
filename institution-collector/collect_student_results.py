@@ -13,11 +13,17 @@ INPUT_FILE = "institution-collector/institutions.json"
 OUTPUT_FILE = "institution-collector/student_results.json"
 
 REQUEST_DELAY = 0.3
+
+# প্রথমে 1 দিয়ে TEST করো
 TEST_LIMIT = 1
 
-BASE_URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/resultm.php"
+BASE_URL = (
+    "https://sresult.bise-ctg.gov.bd/"
+    "to_ssc_26_ctg/resultm.php"
+)
 
 TIMEOUT = 30
+
 
 # ============================================================
 # START
@@ -27,23 +33,65 @@ print("=" * 70, flush=True)
 print("SSC 2026 STUDENT RESULT COLLECTOR", flush=True)
 print("=" * 70, flush=True)
 
+
 # ============================================================
 # LOAD INSTITUTIONS
 # ============================================================
 
-print(f"Loading: {INPUT_FILE}", flush=True)
+print(
+    f"Loading: {INPUT_FILE}",
+    flush=True
+)
 
-with open(INPUT_FILE, "r", encoding="utf-8") as f:
-    institutions = json.load(f)
+with open(
+    INPUT_FILE,
+    "r",
+    encoding="utf-8"
+) as f:
 
-if not isinstance(institutions, list):
-    raise ValueError("institutions.json must contain a JSON array")
+    raw_data = json.load(f)
 
-print(f"Raw records: {len(institutions)}", flush=True)
 
-# ------------------------------------------------------------
-# Remove metadata/header records
-# ------------------------------------------------------------
+# ============================================================
+# SUPPORT YOUR institutions.json FORMAT
+# ============================================================
+
+if isinstance(raw_data, dict):
+
+    if isinstance(
+        raw_data.get("institutions"),
+        list
+    ):
+
+        institutions = raw_data["institutions"]
+
+    else:
+
+        raise ValueError(
+            "institutions.json does not contain "
+            "'institutions' array"
+        )
+
+elif isinstance(raw_data, list):
+
+    institutions = raw_data
+
+else:
+
+    raise ValueError(
+        "Invalid institutions.json format"
+    )
+
+
+print(
+    f"Raw institutions: {len(institutions)}",
+    flush=True
+)
+
+
+# ============================================================
+# VALID INSTITUTIONS
+# ============================================================
 
 valid_institutions = []
 
@@ -52,33 +100,28 @@ for item in institutions:
     if not isinstance(item, dict):
         continue
 
-    eiin = str(item.get("eiin", "")).strip()
+    eiin = str(
+        item.get(
+            "eiin",
+            ""
+        )
+    ).strip()
 
-    # metadata/header object skip
     if not eiin:
         continue
 
-    if eiin.lower() in {
-        "metadata",
-        "meta",
-        "eiin_code",
-        "eiin"
-    }:
-        continue
-
-    # EIIN should normally be numeric
     if not eiin.isdigit():
-        print(
-            f"SKIP invalid EIIN: {eiin}",
-            flush=True
-        )
         continue
 
-    valid_institutions.append(item)
+    valid_institutions.append(
+        item
+    )
+
 
 institutions = valid_institutions
 
 total = len(institutions)
+
 
 print(
     f"Valid institutions: {total}",
@@ -90,13 +133,16 @@ print(
     flush=True
 )
 
+
 # ============================================================
-# LOAD PREVIOUS STUDENT RESULTS
+# LOAD PREVIOUS RESULTS
 # ============================================================
 
 results = []
 
-if os.path.exists(OUTPUT_FILE):
+if os.path.exists(
+    OUTPUT_FILE
+):
 
     try:
 
@@ -108,53 +154,76 @@ if os.path.exists(OUTPUT_FILE):
 
             old_results = json.load(f)
 
-        if isinstance(old_results, list):
+
+        if isinstance(
+            old_results,
+            list
+        ):
 
             results = old_results
 
-        print("=" * 70, flush=True)
-        print("RESUME MODE", flush=True)
+
         print(
-            f"Previously collected student records: {len(results)}",
+            "=" * 70,
             flush=True
         )
-        print("=" * 70, flush=True)
+
+        print(
+            "RESUME MODE",
+            flush=True
+        )
+
+        print(
+            f"Previously collected: {len(results)}",
+            flush=True
+        )
+
+        print(
+            "=" * 70,
+            flush=True
+        )
+
 
     except Exception as e:
 
         print(
-            "Could not load previous student result file.",
+            "Could not load previous result file.",
             flush=True
         )
 
         print(
-            "Starting from empty result list.",
+            f"Error: {e}",
             flush=True
         )
 
-        print(
-            "Error:",
-            e,
-            flush=True
-        )
 
 # ============================================================
-# EXISTING STUDENT KEYS
+# EXISTING KEYS
 # ============================================================
 
 existing_keys = set()
 
 for item in results:
 
-    if not isinstance(item, dict):
+    if not isinstance(
+        item,
+        dict
+    ):
+
         continue
 
     eiin = str(
-        item.get("eiin", "")
+        item.get(
+            "eiin",
+            ""
+        )
     ).strip()
 
     roll = str(
-        item.get("roll", "")
+        item.get(
+            "roll",
+            ""
+        )
     ).strip()
 
     if eiin and roll:
@@ -163,10 +232,13 @@ for item in results:
             f"{eiin}:{roll}"
         )
 
+
 print(
-    f"Existing EIIN+Roll records: {len(existing_keys)}",
+    f"Existing EIIN+Roll records: "
+    f"{len(existing_keys)}",
     flush=True
 )
+
 
 # ============================================================
 # SESSION
@@ -182,8 +254,9 @@ session.headers.update({
         "Chrome/131.0.0.0 Safari/537.36",
 
     "Accept":
-        "text/html,application/xhtml+xml,application/xml;q=0.9,"
-        "image/avif,image/webp,image/apng,*/*;q=0.8",
+        "text/html,application/xhtml+xml,"
+        "application/xml;q=0.9,image/avif,"
+        "image/webp,*/*;q=0.8",
 
     "Accept-Language":
         "en-US,en;q=0.9",
@@ -192,6 +265,7 @@ session.headers.update({
         "keep-alive"
 
 })
+
 
 # ============================================================
 # HELPERS
@@ -209,126 +283,66 @@ def clean_text(value):
     ).strip()
 
 
-def normalize_key(value):
+def number(value):
 
-    value = clean_text(value)
-
-    value = value.lower()
-
-    value = value.replace(
-        ":",
-        ""
-    )
-
-    value = value.replace(
-        "-",
-        " "
-    )
-
-    value = value.replace(
-        "_",
-        " "
-    )
-
-    value = re.sub(
-        r"\s+",
-        " ",
+    value = clean_text(
         value
     )
-
-    return value.strip()
-
-
-def safe_number(value):
-
-    value = clean_text(value)
 
     value = value.replace(
         ",",
         ""
     )
 
-    value = value.replace(
-        "%",
-        ""
-    )
-
     match = re.search(
-        r"-?\d+(?:\.\d+)?",
+        r"\d+(?:\.\d+)?",
         value
     )
 
     if not match:
         return None
 
-    number = float(
+    n = float(
         match.group(0)
     )
 
-    if number.is_integer():
-        return int(number)
+    if n.is_integer():
 
-    return number
+        return int(n)
+
+    return n
 
 
-def get_institution_name(institution):
+def institution_name(item):
 
-    for key in [
-        "institution_name",
-        "institutionName",
-        "name",
-        "college_name",
-        "collegeName",
-        "school_name",
-        "schoolName"
-    ]:
-
-        value = institution.get(
-            key,
+    return clean_text(
+        item.get(
+            "institution_name",
             ""
         )
-
-        if clean_text(value):
-
-            return clean_text(value)
-
-    return ""
+    )
 
 
-def get_district(institution):
+def district_name(item):
 
-    for key in [
-        "district",
-        "District",
-        "district_name",
-        "districtName"
-    ]:
-
-        value = institution.get(
-            key,
-            ""
+    return clean_text(
+        item.get(
+            "district",
+            "Chattogram"
         )
-
-        if clean_text(value):
-
-            return clean_text(value)
-
-    return "Chattogram"
+    )
 
 
 # ============================================================
-# LABEL DETECTION
+# FIND ROLL
 # ============================================================
 
-def find_value_by_labels(soup, labels):
+def find_rolls(soup):
 
-    wanted = [
-        normalize_key(x)
-        for x in labels
-    ]
+    rolls = set()
 
     # --------------------------------------------------------
-    # TABLE CELLS
+    # Search table rows
     # --------------------------------------------------------
 
     for row in soup.find_all("tr"):
@@ -337,7 +351,7 @@ def find_value_by_labels(soup, labels):
             ["td", "th"]
         )
 
-        if len(cells) < 2:
+        if not cells:
             continue
 
         values = [
@@ -350,157 +364,23 @@ def find_value_by_labels(soup, labels):
             for cell in cells
         ]
 
-        normalized = [
-            normalize_key(x)
-            for x in values
-        ]
+        for value in values:
 
-        for i, key in enumerate(normalized):
-
-            for label in wanted:
-
-                if (
-                    key == label
-                    or label in key
-                ):
-
-                    if i + 1 < len(values):
-
-                        value = values[i + 1]
-
-                        if value:
-
-                            return value
-
-    # --------------------------------------------------------
-    # TEXT / DIV / SPAN
-    # --------------------------------------------------------
-
-    for element in soup.find_all(
-        ["td", "th", "div", "span", "p", "li"]
-    ):
-
-        text = clean_text(
-            element.get_text(
-                " ",
-                strip=True
-            )
-        )
-
-        normalized = normalize_key(
-            text
-        )
-
-        for label in wanted:
-
-            pattern = (
-                r"^"
-                + re.escape(label)
-                + r"\s*[:\-]?\s*(.+)$"
+            matches = re.findall(
+                r"\b\d{6,8}\b",
+                value
             )
 
-            match = re.search(
-                pattern,
-                normalized,
-                re.IGNORECASE
-            )
+            for roll in matches:
 
-            if match:
-
-                return clean_text(
-                    match.group(1)
+                rolls.add(
+                    roll
                 )
 
-    return ""
 
-
-# ============================================================
-# ROLL
-# ============================================================
-
-def find_roll(soup):
-
-    value = find_value_by_labels(
-        soup,
-        [
-            "roll",
-            "roll no",
-            "roll no.",
-            "roll number",
-            "student roll"
-        ]
-    )
-
-    if value:
-
-        match = re.search(
-            r"\b\d{4,10}\b",
-            value
-        )
-
-        if match:
-
-            return match.group(0)
-
-    # fallback whole page
-    text = clean_text(
-        soup.get_text(
-            " ",
-            strip=True
-        )
-    )
-
-    patterns = [
-
-        r"ROLL\s*(?:NO|NUMBER)?\s*[:\-]?\s*(\d{4,10})",
-
-        r"ROLL\s*[:\-]\s*(\d{4,10})"
-
-    ]
-
-    for pattern in patterns:
-
-        match = re.search(
-            pattern,
-            text,
-            re.IGNORECASE
-        )
-
-        if match:
-
-            return match.group(1)
-
-    return ""
-
-
-# ============================================================
-# GPA
-# ============================================================
-
-def find_gpa(soup):
-
-    value = find_value_by_labels(
-        soup,
-        [
-            "gpa",
-            "gpa final",
-            "final gpa",
-            "grade point average"
-        ]
-    )
-
-    if value:
-
-        match = re.search(
-            r"\b[0-5](?:\.\d+)?\b",
-            value
-        )
-
-        if match:
-
-            return float(
-                match.group(0)
-            )
+    # --------------------------------------------------------
+    # Search complete text
+    # --------------------------------------------------------
 
     text = clean_text(
         soup.get_text(
@@ -509,92 +389,88 @@ def find_gpa(soup):
         )
     )
 
-    patterns = [
+    matches = re.findall(
+        r"\b\d{6,8}\b",
+        text
+    )
 
-        r"GPA\s*[:\-]?\s*([0-5](?:\.\d+)?)",
+    for roll in matches:
 
-        r"FINAL\s+GPA\s*[:\-]?\s*([0-5](?:\.\d+)?)"
-
-    ]
-
-    for pattern in patterns:
-
-        match = re.search(
-            pattern,
-            text,
-            re.IGNORECASE
+        rolls.add(
+            roll
         )
 
-        if match:
 
-            return float(
-                match.group(1)
-            )
-
-    return None
+    return sorted(
+        rolls
+    )
 
 
 # ============================================================
-# RESULT STATUS
+# FIND STUDENT TABLE
 # ============================================================
 
-def find_result_status(soup):
+def inspect_tables(soup):
 
-    value = find_value_by_labels(
-        soup,
-        [
-            "result",
-            "status"
-        ]
+    tables = soup.find_all(
+        "table"
     )
 
-    if value:
-
-        value_upper = value.upper()
-
-        if "PASS" in value_upper:
-
-            return "PASS"
-
-        if "FAIL" in value_upper:
-
-            return "FAIL"
-
-        return value
-
-    text = clean_text(
-        soup.get_text(
-            " ",
-            strip=True
-        )
+    print(
+        f"TABLES FOUND: {len(tables)}",
+        flush=True
     )
 
-    if re.search(
-        r"\bPASS\b",
-        text,
-        re.IGNORECASE
+    for index, table in enumerate(
+        tables,
+        start=1
     ):
 
-        return "PASS"
+        rows = table.find_all(
+            "tr"
+        )
 
-    if re.search(
-        r"\bFAIL\b",
-        text,
-        re.IGNORECASE
-    ):
+        print(
+            f"  Table {index}: "
+            f"{len(rows)} rows",
+            flush=True
+        )
 
-        return "FAIL"
+        if rows:
 
-    return ""
+            first_row = rows[0]
+
+            values = [
+                clean_text(
+                    cell.get_text(
+                        " ",
+                        strip=True
+                    )
+                )
+                for cell in first_row.find_all(
+                    ["td", "th"]
+                )
+            ]
+
+            if values:
+
+                print(
+                    "    Columns:",
+                    " | ".join(values[:15]),
+                    flush=True
+                )
 
 
 # ============================================================
-# SUBJECT PARSER
+# PARSE STUDENT ROWS
 # ============================================================
 
-def parse_subjects(soup):
+def parse_student_rows(
+    soup,
+    institution
+):
 
-    subjects = {}
+    students = []
 
     tables = soup.find_all(
         "table"
@@ -625,194 +501,83 @@ def parse_subjects(soup):
                 for cell in cells
             ]
 
-            # remove empty cells
-            values = [
-                x for x in values
-                if x
-            ]
-
-            if len(values) < 2:
-                continue
-
-            # ------------------------------------------------
-            # Header detection
-            # ------------------------------------------------
-
             joined = " ".join(
-                normalize_key(x)
-                for x in values
+                values
             )
 
-            if (
-                "subject" in joined
-                and (
-                    "mark" in joined
-                    or "grade" in joined
-                )
-            ):
-
-                continue
-
             # ------------------------------------------------
-            # Try to identify subject row
+            # Find roll in row
             # ------------------------------------------------
 
-            subject = values[0]
-
-            if not subject:
-                continue
-
-            subject_normalized = normalize_key(
-                subject
+            roll_match = re.search(
+                r"\b\d{6,8}\b",
+                joined
             )
 
-            # Ignore summary rows
-            ignored = [
-
-                "total",
-                "grand total",
-                "gpa",
-                "result",
-                "status",
-                "pass",
-                "percentage",
-                "percent",
-                "app",
-                "passed"
-
-            ]
-
-            if any(
-                x == subject_normalized
-                or x in subject_normalized
-                for x in ignored
-            ):
-
+            if not roll_match:
                 continue
 
-            marks = None
-            grade = ""
+            roll = roll_match.group(
+                0
+            )
 
             # ------------------------------------------------
-            # Find numeric marks
+            # Try GPA
             # ------------------------------------------------
 
-            for value in values[1:]:
+            gpa = None
 
-                number = safe_number(
+            for value in values:
+
+                match = re.search(
+                    r"\b([0-5]\.\d{1,2})\b",
                     value
                 )
 
-                if (
-                    number is not None
-                    and 0 <= number <= 200
-                ):
+                if match:
 
-                    # Avoid GPA-like values
-                    if number > 5:
+                    gpa = float(
+                        match.group(1)
+                    )
 
-                        marks = number
-                        break
-
-            # ------------------------------------------------
-            # Find grade
-            # ------------------------------------------------
-
-            for value in values[1:]:
-
-                upper = value.upper()
-
-                if upper in [
-                    "A+",
-                    "A",
-                    "A-",
-                    "B",
-                    "C",
-                    "D",
-                    "F"
-                ]:
-
-                    grade = upper
                     break
 
             # ------------------------------------------------
-            # Save
+            # Save raw row
             # ------------------------------------------------
 
-            if (
-                marks is not None
-                or grade
-            ):
+            students.append({
 
-                subjects[subject] = {
+                "eiin":
+                    str(
+                        institution.get(
+                            "eiin",
+                            ""
+                        )
+                    ),
 
-                    "marks": marks,
+                "institution_name":
+                    institution_name(
+                        institution
+                    ),
 
-                    "grade": grade
+                "district":
+                    district_name(
+                        institution
+                    ),
 
-                }
+                "roll":
+                    roll,
 
-    return subjects
+                "gpa":
+                    gpa,
 
+                "raw_row":
+                    values
 
-# ============================================================
-# PARSE COMPLETE STUDENT RESULT
-# ============================================================
+            })
 
-def parse_student_result(
-    html,
-    institution
-):
-
-    soup = BeautifulSoup(
-        html,
-        "html.parser"
-    )
-
-    roll = find_roll(
-        soup
-    )
-
-    gpa = find_gpa(
-        soup
-    )
-
-    result_status = find_result_status(
-        soup
-    )
-
-    subjects = parse_subjects(
-        soup
-    )
-
-    return {
-
-        "eiin": str(
-            institution.get(
-                "eiin",
-                ""
-            )
-        ).strip(),
-
-        "institution_name":
-            get_institution_name(
-                institution
-            ),
-
-        "district":
-            get_district(
-                institution
-            ),
-
-        "roll": roll,
-
-        "gpa": gpa,
-
-        "result": result_status,
-
-        "subjects": subjects
-
-    }
+    return students
 
 
 # ============================================================
@@ -844,13 +609,21 @@ limit = min(
     total
 )
 
+
 print("=" * 70, flush=True)
-print("STARTING STUDENT COLLECTION", flush=True)
+
+print(
+    "STARTING STUDENT COLLECTION",
+    flush=True
+)
+
 print(
     f"Target institutions: {limit}",
     flush=True
 )
+
 print("=" * 70, flush=True)
+
 
 for index in range(limit):
 
@@ -863,11 +636,14 @@ for index in range(limit):
         )
     ).strip()
 
-    name = get_institution_name(
+    name = institution_name(
         institution
     )
 
-    print("-" * 70, flush=True)
+    print(
+        "-" * 70,
+        flush=True
+    )
 
     print(
         f"[{index + 1}/{limit}]",
@@ -884,24 +660,31 @@ for index in range(limit):
         flush=True
     )
 
-    # --------------------------------------------------------
+
+    # ========================================================
     # REQUEST
-    # --------------------------------------------------------
+    # ========================================================
 
     try:
 
         response = session.post(
+
             BASE_URL,
+
             data={
                 "eiin": eiin
             },
+
             timeout=TIMEOUT
+
         )
+
 
         print(
             f"HTTP: {response.status_code}",
             flush=True
         )
+
 
         if response.status_code != 200:
 
@@ -910,59 +693,89 @@ for index in range(limit):
                 flush=True
             )
 
-            time.sleep(
-                REQUEST_DELAY
-            )
-
             continue
 
-        # ----------------------------------------------------
-        # PARSE
-        # ----------------------------------------------------
 
-        parsed = parse_student_result(
+        # ====================================================
+        # PARSE HTML
+        # ====================================================
+
+        soup = BeautifulSoup(
             response.text,
+            "html.parser"
+        )
+
+
+        # ====================================================
+        # DEBUG TABLE STRUCTURE
+        # ====================================================
+
+        inspect_tables(
+            soup
+        )
+
+
+        # ====================================================
+        # FIND ROLLS
+        # ====================================================
+
+        rolls = find_rolls(
+            soup
+        )
+
+
+        print(
+            f"ROLLS DETECTED: {len(rolls)}",
+            flush=True
+        )
+
+
+        if rolls:
+
+            print(
+                "Detected rolls:",
+                ", ".join(
+                    rolls[:20]
+                ),
+                flush=True
+            )
+
+
+        # ====================================================
+        # PARSE STUDENT ROWS
+        # ====================================================
+
+        students = parse_student_rows(
+            soup,
             institution
         )
 
-        roll = parsed.get(
-            "roll",
-            ""
-        )
 
-        gpa = parsed.get(
-            "gpa"
-        )
+        # ====================================================
+        # IF NO STUDENTS
+        # ====================================================
 
-        result_status = parsed.get(
-            "result",
-            ""
-        )
-
-        subjects = parsed.get(
-            "subjects",
-            {}
-        )
-
-        # ----------------------------------------------------
-        # IMPORTANT
-        # ----------------------------------------------------
-
-        # If this page is an institution summary
-        # rather than an individual student result,
-        # it may not contain a roll.
-        #
-        # We DO NOT save such a record as a student.
-
-        if not roll:
+        if not students:
 
             print(
-                "NO STUDENT ROLL FOUND",
+                "",
                 flush=True
             )
 
             print(
-                "This page may be institution summary data.",
+                "NO STUDENT ROW FOUND",
+                flush=True
+            )
+
+            print(
+                "The current result page appears "
+                "to be institution summary data.",
+                flush=True
+            )
+
+            print(
+                "Student-level endpoint/parameter "
+                "needs to be identified.",
                 flush=True
             )
 
@@ -972,74 +785,62 @@ for index in range(limit):
 
             continue
 
-        key = (
-            f"{eiin}:{roll}"
-        )
 
-        if key in existing_keys:
+        # ====================================================
+        # SAVE STUDENTS
+        # ====================================================
 
-            print(
-                f"SKIP existing student: {roll}",
-                flush=True
+        new_count = 0
+
+
+        for student in students:
+
+            roll = str(
+                student.get(
+                    "roll",
+                    ""
+                )
+            ).strip()
+
+
+            key = (
+                f"{eiin}:{roll}"
             )
 
-            time.sleep(
-                REQUEST_DELAY
+
+            if key in existing_keys:
+
+                continue
+
+
+            results.append(
+                student
             )
 
-            continue
 
-        # ----------------------------------------------------
-        # SHOW
-        # ----------------------------------------------------
-
-        print(
-            f"ROLL: {roll}",
-            flush=True
-        )
-
-        print(
-            f"GPA: {gpa}",
-            flush=True
-        )
-
-        print(
-            f"RESULT: {result_status}",
-            flush=True
-        )
-
-        print(
-            f"SUBJECTS FOUND: {len(subjects)}",
-            flush=True
-        )
-
-        for subject, data in subjects.items():
-
-            print(
-                f"  {subject}: "
-                f"{data.get('marks')} "
-                f"/ {data.get('grade')}",
-                flush=True
+            existing_keys.add(
+                key
             )
 
-        # ----------------------------------------------------
-        # SAVE
-        # ----------------------------------------------------
 
-        results.append(
-            parsed
-        )
+            new_count += 1
 
-        existing_keys.add(
-            key
-        )
 
         save_results()
 
+
         print(
-            f"SAVED: {len(results)} student records",
+            f"NEW STUDENTS SAVED: {new_count}",
             flush=True
         )
+
+
+        print(
+            f"TOTAL STUDENT RECORDS: "
+            f"{len(results)}",
+            flush=True
+        )
+
 
     except requests.exceptions.Timeout:
 
@@ -1048,12 +849,14 @@ for index in range(limit):
             flush=True
         )
 
+
     except requests.exceptions.RequestException as e:
 
         print(
-            f"ERROR: Request failed - {e}",
+            f"ERROR: Request failed: {e}",
             flush=True
         )
+
 
     except Exception as e:
 
@@ -1062,17 +865,23 @@ for index in range(limit):
             flush=True
         )
 
+
     time.sleep(
         REQUEST_DELAY
     )
 
 
 # ============================================================
-# FINAL SUMMARY
+# FINAL
 # ============================================================
 
 print("=" * 70, flush=True)
-print("STUDENT COLLECTION COMPLETED", flush=True)
+
+print(
+    "STUDENT COLLECTION COMPLETED",
+    flush=True
+)
+
 print("=" * 70, flush=True)
 
 print(
