@@ -771,3 +771,20 @@ body.dark .humanities {
     }
 
 }
+
+.unofficial-notice { width: 100%; padding: 28px 20px; margin-top: 40px; background: #f8f9fb; border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; }
+
+.unofficial-notice-inner { max-width: 1100px; margin: 0 auto; text-align: center; }
+
+.unofficial-notice h3 { margin: 0 0 12px; font-size: 18px; font-weight: 700; color: #1f2937; }
+
+.unofficial-notice p { margin: 7px 0; font-size: 13px; line-height: 1.7; color: #6b7280; }
+
+.unofficial-notice strong { color: #374151; }
+
+@media (max-width: 600px) { .unofficial-notice { padding: 24px 16px; }
+
+.unofficial-notice h3 { font-size: 16px; } .unofficial-notice p { font-size: 12px; } 
+
+}
+
