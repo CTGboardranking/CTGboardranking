@@ -3,13 +3,19 @@ name: SSC Test
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -18,9 +24,10 @@ jobs:
 
       - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install requests beautifulsoup4
 
-      - name: Run SSC test
+      - name: Run SSC data collection
         run: |
           python scraper/ssc_test.py
 
@@ -56,10 +63,101 @@ jobs:
         run: |
           python scraper/board_ranking.py
 
-      - name: Upload SSC debug files
+      - name: Show generated files
+        if: always()
+        run: |
+          echo "========================================"
+          echo "GENERATED SCRAPER FILES"
+          echo "========================================"
+
+          find scraper -maxdepth 1 -type f -printf "%f\n" | sort
+
+          echo ""
+          echo "========================================"
+          echo "STUDENT DATA"
+          echo "========================================"
+
+          if [ -f scraper/students.json ]; then
+            python - <<'PY'
+          import json
+
+          path = "scraper/students.json"
+
+          with open(path, "r", encoding="utf-8") as f:
+              data = json.load(f)
+
+          print("Students:", len(data))
+
+          if data:
+              print("First student:", data[0].get("name"))
+              print("First roll:", data[0].get("roll"))
+              print("First institute:", data[0].get("institute"))
+              print("First GPA:", data[0].get("gpa"))
+          PY
+          else
+            echo "students.json not found"
+          fi
+
+          echo ""
+          echo "========================================"
+          echo "INSTITUTION DATA"
+          echo "========================================"
+
+          if [ -f scraper/institution_stats.json ]; then
+            python - <<'PY'
+          import json
+
+          path = "scraper/institution_stats.json"
+
+          with open(path, "r", encoding="utf-8") as f:
+              data = json.load(f)
+
+          print("Institutions:", len(data))
+
+          for item in data[:5]:
+              print(
+                  "Rank #{} | {} | Students: {} | GPA-5: {} | Score: {}".format(
+                      item.get("rank"),
+                      item.get("institute"),
+                      item.get("total_students"),
+                      item.get("gpa_5_count"),
+                      item.get("institution_score")
+                  )
+              )
+          PY
+          else
+            echo "institution_stats.json not found"
+          fi
+
+      - name: Commit generated ranking data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add scraper/*.json
+
+          if git diff --cached --quiet; then
+            echo "No new data changes to commit."
+          else
+            git commit -m "Update SSC ranking data"
+            git push
+          fi
+
+      - name: Upload SSC data
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: ssc-test-page
+          name: ssc-data
           path: scraper/
-          if-no-files-found: error
+          if-no-files-found: warn
+
+      - name: Final status
+        if: always()
+        run: |
+          echo ""
+          echo "========================================"
+          echo "SSC WORKFLOW COMPLETE"
+          echo "========================================"
+          echo "Generated ranking data has been processed."
+          echo "JSON data has been committed when changes were found."
+          echo "========================================"
