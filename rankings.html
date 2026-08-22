@@ -1,18 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Rankings — CTGBoardRanking</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="style.css">
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet">
+
+<link rel="stylesheet"
+      href="style.css">
+
 
 <style>
+
+/* =========================================================
+   HERO
+========================================================= */
 
 .ranking-hero{
     max-width:1100px;
@@ -46,6 +59,11 @@
     margin-top:20px;
     font-size:17px;
 }
+
+
+/* =========================================================
+   FILTERS
+========================================================= */
 
 .filters{
     max-width:1100px;
@@ -87,6 +105,11 @@
     outline:none;
 }
 
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
 .ranking-content{
     max-width:1100px;
     margin:auto;
@@ -109,6 +132,11 @@
     color:var(--muted);
     font-size:13px;
 }
+
+
+/* =========================================================
+   PODIUM
+========================================================= */
 
 .podium{
     display:grid;
@@ -168,6 +196,11 @@
     margin-top:3px;
 }
 
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
 .search-box{
     margin-bottom:18px;
 }
@@ -176,6 +209,11 @@
     background:white;
     padding:15px 17px;
 }
+
+
+/* =========================================================
+   TABLE
+========================================================= */
 
 .ranking-table{
     width:100%;
@@ -189,27 +227,43 @@
 .table-header,
 .table-row{
     display:grid;
-    grid-template-columns:70px minmax(180px,1fr) 150px 150px;
+
+    grid-template-columns:
+        70px
+        minmax(180px,1fr)
+        150px
+        150px;
+
     align-items:center;
+
     gap:10px;
 }
 
 .table-header{
     padding:17px 24px;
-    background:rgba(245,245,247,.8);
+
+    background:
+        rgba(245,245,247,.8);
+
     color:var(--muted);
+
     font-size:10px;
+
     font-weight:700;
+
     letter-spacing:.8px;
 }
 
 .table-row{
     padding:19px 24px;
-    border-top:1px solid var(--border);
+
+    border-top:
+        1px solid var(--border);
 }
 
 .table-row:hover{
-    background:rgba(0,113,227,.035);
+    background:
+        rgba(0,113,227,.035);
 }
 
 .rank{
@@ -255,6 +309,11 @@
     margin-top:3px;
 }
 
+
+/* =========================================================
+   STATES
+========================================================= */
+
 .loading-state,
 .empty-state,
 .error-state{
@@ -272,25 +331,61 @@
     color:#d93025;
 }
 
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
 .pagination{
+
     display:none;
+
     justify-content:center;
+
     align-items:center;
+
     gap:12px;
+
     padding:25px 15px;
-    border-top:1px solid var(--border);
+
+    border-top:
+        1px solid var(--border);
 }
 
 .pagination button{
-    border:1px solid var(--border);
-    background:var(--white);
-    color:var(--text);
-    padding:10px 18px;
-    border-radius:12px;
-    font-family:inherit;
-    font-size:13px;
-    font-weight:700;
-    cursor:pointer;
+
+    border:
+        1px solid var(--border);
+
+    background:
+        var(--white);
+
+    color:
+        var(--text);
+
+    padding:
+        10px 18px;
+
+    border-radius:
+        12px;
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+}
+
+.pagination button:hover{
+    background:
+        rgba(0,113,227,.06);
 }
 
 .pagination button:disabled{
@@ -299,11 +394,21 @@
 }
 
 .pagination-info{
-    min-width:110px;
-    text-align:center;
-    color:var(--muted);
-    font-size:13px;
-    font-weight:700;
+
+    min-width:
+        110px;
+
+    text-align:
+        center;
+
+    color:
+        var(--muted);
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
 }
 
 
@@ -314,7 +419,10 @@
 @media(max-width:800px){
 
     .ranking-hero{
-        padding:65px 16px 40px;
+        padding:
+            65px
+            16px
+            40px;
     }
 
     .ranking-hero h1{
@@ -326,7 +434,10 @@
     }
 
     .filters{
-        padding:0 16px 35px;
+        padding:
+            0
+            16px
+            35px;
     }
 
     .filter-box{
@@ -359,11 +470,12 @@
 
     .ranking-table{
         border-radius:18px;
-        overflow-x:hidden;
+        overflow:hidden;
     }
 
     .table-header,
     .table-row{
+
         grid-template-columns:
             42px
             minmax(120px,1fr)
@@ -374,14 +486,26 @@
     }
 
     .table-header{
-        padding:13px 10px;
-        font-size:8px;
-        letter-spacing:.3px;
-        white-space:nowrap;
+
+        padding:
+            13px
+            10px;
+
+        font-size:
+            8px;
+
+        letter-spacing:
+            .3px;
+
+        white-space:
+            nowrap;
     }
 
     .table-row{
-        padding:15px 10px;
+
+        padding:
+            15px
+            10px;
     }
 
     .rank{
@@ -407,7 +531,37 @@
         font-size:7px;
         line-height:1.1;
         margin-top:2px;
-        white-space:normal;
+    }
+
+
+    /* PAGINATION MOBILE */
+
+    .pagination{
+
+        gap:7px;
+
+        padding:
+            20px
+            8px;
+    }
+
+    .pagination button{
+
+        padding:
+            9px
+            11px;
+
+        font-size:
+            11px;
+    }
+
+    .pagination-info{
+
+        min-width:
+            80px;
+
+        font-size:
+            11px;
     }
 
 }
@@ -425,6 +579,7 @@
 
     .table-header,
     .table-row{
+
         grid-template-columns:
             35px
             minmax(105px,1fr)
@@ -435,12 +590,20 @@
     }
 
     .table-header{
-        padding:12px 7px;
-        font-size:7px;
+
+        padding:
+            12px
+            7px;
+
+        font-size:
+            7px;
     }
 
     .table-row{
-        padding:14px 7px;
+
+        padding:
+            14px
+            7px;
     }
 
     .institution-name strong{
@@ -455,9 +618,28 @@
         font-size:10px;
     }
 
+    .pagination button{
+
+        padding:
+            8px
+            9px;
+
+        font-size:
+            10px;
+    }
+
+    .pagination-info{
+        min-width:
+            70px;
+
+        font-size:
+            10px;
+    }
+
 }
 
 </style>
+
 </head>
 
 
@@ -465,6 +647,7 @@
 
 
 <header class="navbar">
+
 
 <a href="index.html" class="logo">
 
@@ -522,6 +705,7 @@ aria-label="Toggle dark mode">
 
 <section class="ranking-hero">
 
+
 <a
 href="index.html"
 class="back-link">
@@ -539,6 +723,7 @@ CHITTAGONG BOARD
 <h1>
 
 Institution
+
 <br>
 
 <span>
@@ -560,6 +745,7 @@ Compare Passing Rate and Total GPA-5.
 
 
 <section class="filters">
+
 
 <div class="filter-box">
 
@@ -643,6 +829,7 @@ Institution Ranking
 
 <div class="content-heading">
 
+
 <div>
 
 <span class="eyebrow">
@@ -661,6 +848,7 @@ Science Rankings
 2026 · Chattogram Board
 </p>
 
+
 </div>
 
 
@@ -669,6 +857,7 @@ Science Rankings
 
 
 <div class="podium-card">
+
 
 <div class="medal">
 🥈
@@ -703,11 +892,13 @@ PASSING RATE
 
 </div>
 
+
 </div>
 
 
 
 <div class="podium-card first">
+
 
 <div class="medal">
 🥇
@@ -742,11 +933,13 @@ PASSING RATE
 
 </div>
 
+
 </div>
 
 
 
 <div class="podium-card">
+
 
 <div class="medal">
 🥉
@@ -781,6 +974,7 @@ PASSING RATE
 
 </div>
 
+
 </div>
 
 
@@ -790,11 +984,13 @@ PASSING RATE
 
 <div class="search-box">
 
+
 <input
 type="search"
 id="searchInput"
 placeholder="Search institution name..."
 autocomplete="off">
+
 
 </div>
 
@@ -804,6 +1000,7 @@ autocomplete="off">
 
 
 <div class="table-header">
+
 
 <div>
 RANK
@@ -824,17 +1021,20 @@ PASSING RATE
 TOTAL GPA-5
 </div>
 
+
 </div>
 
 
 
 <div id="rankingRows">
 
+
 <div class="loading-state">
 
 Loading Top 100 institution ranking...
 
 </div>
+
 
 </div>
 
@@ -879,7 +1079,7 @@ disabled>
 id="paginationInfo"
 class="pagination-info">
 
-Page 1
+Page 1 / 1
 
 </span>
 
@@ -912,6 +1112,7 @@ Next →
 
 <div>
 
+
 <div class="footer-logo">
 
 <span class="logo-mark">
@@ -927,35 +1128,43 @@ CTGBoardRanking
 Chattogram Board Education Rankings.
 </p>
 
+
 </div>
 
 
 
 <div class="footer-links">
 
+
 <a href="rankings.html">
 Rankings
 </a>
+
 
 <a href="institution.html">
 Institutions
 </a>
 
+
 <a href="district.html">
 Districts
 </a>
+
 
 <a href="statistics.html">
 Statistics
 </a>
 
+
 </div>
+
 
 </div>
 
 
 
 <div class="footer-bottom">
+
 
 <span>
 © 2026 CTGBoardRanking
@@ -966,7 +1175,9 @@ Statistics
 Education Data & Statistics
 </span>
 
+
 </div>
+
 
 </footer>
 
@@ -999,8 +1210,13 @@ let currentSearch = "";
 
 let currentPage = 1;
 
-const PAGE_SIZE = 100;
 
+/*
+ * Top 100 থাকবে
+ * কিন্তু প্রতি Page-এ 25টি দেখাবে
+ */
+
+const PAGE_SIZE = 25;
 
 
 /* =========================================================
@@ -1008,41 +1224,75 @@ const PAGE_SIZE = 100;
 ========================================================= */
 
 const yearFilter =
-    document.getElementById("yearFilter");
+    document.getElementById(
+        "yearFilter"
+    );
+
 
 const groupFilter =
-    document.getElementById("groupFilter");
+    document.getElementById(
+        "groupFilter"
+    );
+
 
 const rankingTitle =
-    document.getElementById("rankingTitle");
+    document.getElementById(
+        "rankingTitle"
+    );
+
 
 const resultInfo =
-    document.getElementById("resultInfo");
+    document.getElementById(
+        "resultInfo"
+    );
+
 
 const searchInput =
-    document.getElementById("searchInput");
+    document.getElementById(
+        "searchInput"
+    );
+
 
 const rankingRows =
-    document.getElementById("rankingRows");
+    document.getElementById(
+        "rankingRows"
+    );
+
 
 const emptyState =
-    document.getElementById("emptyState");
+    document.getElementById(
+        "emptyState"
+    );
+
 
 const errorState =
-    document.getElementById("errorState");
+    document.getElementById(
+        "errorState"
+    );
+
 
 const pagination =
-    document.getElementById("pagination");
+    document.getElementById(
+        "pagination"
+    );
+
 
 const prevPage =
-    document.getElementById("prevPage");
+    document.getElementById(
+        "prevPage"
+    );
+
 
 const nextPage =
-    document.getElementById("nextPage");
+    document.getElementById(
+        "nextPage"
+    );
+
 
 const paginationInfo =
-    document.getElementById("paginationInfo");
-
+    document.getElementById(
+        "paginationInfo"
+    );
 
 
 /* =========================================================
@@ -1067,7 +1317,9 @@ function getValue(
         if (
             obj[key] !== undefined &&
             obj[key] !== null &&
-            String(obj[key]).trim() !== ""
+            String(
+                obj[key]
+            ).trim() !== ""
         ){
 
             return obj[key];
@@ -1080,7 +1332,6 @@ function getValue(
     return fallback;
 
 }
-
 
 
 /* =========================================================
@@ -1116,21 +1367,27 @@ function toNumber(value){
 }
 
 
-
 /* =========================================================
    NORMALIZE TEXT
 ========================================================= */
 
 function normalizeText(value){
 
-    return String(value || "")
-        .trim()
-        .toLowerCase()
-        .replace(/[_-]+/g," ")
-        .replace(/\s+/g," ");
+    return String(
+        value || ""
+    )
+    .trim()
+    .toLowerCase()
+    .replace(
+        /[_-]+/g,
+        " "
+    )
+    .replace(
+        /\s+/g,
+        " "
+    );
 
 }
-
 
 
 /* =========================================================
@@ -1140,7 +1397,9 @@ function normalizeText(value){
 function normalizeGroup(value){
 
     const group =
-        normalizeText(value);
+        normalizeText(
+            value
+        );
 
 
     if (
@@ -1185,7 +1444,6 @@ function normalizeGroup(value){
 }
 
 
-
 /* =========================================================
    GROUP MATCH
 ========================================================= */
@@ -1216,7 +1474,6 @@ function matchesGroup(student){
     return actual === selected;
 
 }
-
 
 
 /* =========================================================
@@ -1306,7 +1563,6 @@ function getInstitutionName(student){
 }
 
 
-
 /* =========================================================
    DISTRICT
 ========================================================= */
@@ -1325,7 +1581,6 @@ function getDistrict(student){
     );
 
 }
-
 
 
 /* =========================================================
@@ -1349,7 +1604,6 @@ function getGPA(student){
     );
 
 }
-
 
 
 /* =========================================================
@@ -1376,7 +1630,9 @@ function isPassed(student){
     ){
 
         const value =
-            normalizeText(direct);
+            normalizeText(
+                direct
+            );
 
 
         if (
@@ -1441,10 +1697,11 @@ function isPassed(student){
     }
 
 
-    return getGPA(student) > 0;
+    return getGPA(
+        student
+    ) > 0;
 
 }
-
 
 
 /* =========================================================
@@ -1460,7 +1717,9 @@ function buildInstitutionRanking(){
     const selected =
         allStudents.filter(
             student =>
-                matchesGroup(student)
+                matchesGroup(
+                    student
+                )
         );
 
 
@@ -1489,6 +1748,7 @@ function buildInstitutionRanking(){
                 map.set(
                     key,
                     {
+
                         institution:
                             institution,
 
@@ -1497,11 +1757,15 @@ function buildInstitutionRanking(){
                                 student
                             ),
 
-                        students:0,
+                        students:
+                            0,
 
-                        passed:0,
+                        passed:
+                            0,
 
-                        totalGPA5:0
+                        totalGPA5:
+                            0
+
                     }
                 );
 
@@ -1516,7 +1780,9 @@ function buildInstitutionRanking(){
 
 
             if (
-                isPassed(student)
+                isPassed(
+                    student
+                )
             ){
 
                 item.passed++;
@@ -1526,12 +1792,12 @@ function buildInstitutionRanking(){
 
             /*
              * GPA 5 count
-             *
-             * GPA >= 5
              */
 
             if (
-                getGPA(student) >= 5
+                getGPA(
+                    student
+                ) >= 5
             ){
 
                 item.totalGPA5++;
@@ -1564,7 +1830,7 @@ function buildInstitutionRanking(){
 
 
     /*
-     * Ranking:
+     * Ranking order:
      *
      * 1. Passing Rate
      * 2. Total GPA-5
@@ -1609,6 +1875,10 @@ function buildInstitutionRanking(){
     );
 
 
+    /*
+     * Top 100 only
+     */
+
     institutionData =
         result.slice(
             0,
@@ -1618,22 +1888,37 @@ function buildInstitutionRanking(){
 }
 
 
-
 /* =========================================================
    ESCAPE HTML
 ========================================================= */
 
 function escapeHTML(value){
 
-    return String(value || "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+    return String(
+        value || ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
 
 }
-
 
 
 /* =========================================================
@@ -1656,7 +1941,6 @@ function updateTitle(){
         " · Chattogram Board";
 
 }
-
 
 
 /* =========================================================
@@ -1749,7 +2033,6 @@ function updatePodium(data){
 }
 
 
-
 /* =========================================================
    SEARCH
 ========================================================= */
@@ -1795,10 +2078,10 @@ function applySearch(){
 
     currentPage = 1;
 
+
     renderTable();
 
 }
-
 
 
 /* =========================================================
@@ -1863,7 +2146,9 @@ function renderTable(){
         (item,index) => {
 
             const actualRank =
-                start + index + 1;
+                start +
+                index +
+                1;
 
 
             const row =
@@ -1886,7 +2171,10 @@ function renderTable(){
 
                     ${String(
                         actualRank
-                    ).padStart(2,"0")}
+                    ).padStart(
+                        2,
+                        "0"
+                    )}
 
                 </div>
 
@@ -1959,6 +2247,11 @@ function renderTable(){
     );
 
 
+    /*
+     * Pagination always appears
+     * when more than one page exists.
+     */
+
     if (
         totalPages > 1
     ){
@@ -1993,7 +2286,6 @@ function renderTable(){
 }
 
 
-
 /* =========================================================
    MAIN RENDER
 ========================================================= */
@@ -2002,16 +2294,18 @@ function renderRanking(){
 
     updateTitle();
 
+
     buildInstitutionRanking();
+
 
     updatePodium(
         institutionData
     );
 
+
     applySearch();
 
 }
-
 
 
 /* =========================================================
@@ -2026,7 +2320,8 @@ async function loadStudents(){
             await fetch(
                 DATA_URL,
                 {
-                    cache:"no-store"
+                    cache:
+                        "no-store"
                 }
             );
 
@@ -2048,7 +2343,9 @@ async function loadStudents(){
 
 
         if (
-            Array.isArray(data)
+            Array.isArray(
+                data
+            )
         ){
 
             allStudents =
@@ -2145,9 +2442,8 @@ async function loadStudents(){
 }
 
 
-
 /* =========================================================
-   EVENTS
+   GROUP EVENT
 ========================================================= */
 
 groupFilter.addEventListener(
@@ -2158,21 +2454,35 @@ groupFilter.addEventListener(
             this.value;
 
 
+        currentPage = 1;
+
+
         renderRanking();
 
     }
 );
 
+
+/* =========================================================
+   YEAR EVENT
+========================================================= */
 
 yearFilter.addEventListener(
     "change",
     function(){
 
+        currentPage = 1;
+
+
         renderRanking();
 
     }
 );
 
+
+/* =========================================================
+   SEARCH EVENT
+========================================================= */
 
 searchInput.addEventListener(
     "input",
@@ -2182,11 +2492,18 @@ searchInput.addEventListener(
             this.value;
 
 
+        currentPage = 1;
+
+
         applySearch();
 
     }
 );
 
+
+/* =========================================================
+   PREVIOUS
+========================================================= */
 
 prevPage.addEventListener(
     "click",
@@ -2209,7 +2526,8 @@ prevPage.addEventListener(
                         ".ranking-table"
                     ).offsetTop - 100,
 
-                behavior:"smooth"
+                behavior:
+                    "smooth"
 
             });
 
@@ -2218,6 +2536,10 @@ prevPage.addEventListener(
     }
 );
 
+
+/* =========================================================
+   NEXT
+========================================================= */
 
 nextPage.addEventListener(
     "click",
@@ -2248,7 +2570,8 @@ nextPage.addEventListener(
                         ".ranking-table"
                     ).offsetTop - 100,
 
-                behavior:"smooth"
+                behavior:
+                    "smooth"
 
             });
 
@@ -2256,7 +2579,6 @@ nextPage.addEventListener(
 
     }
 );
-
 
 
 /* =========================================================
