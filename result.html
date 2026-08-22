@@ -76,7 +76,7 @@
 
         .form-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 13px;
         }
 
@@ -89,8 +89,7 @@
             margin: 0 0 7px 4px;
         }
 
-        .form-group input,
-        .form-group select {
+        .form-group input {
             width: 100%;
             padding: 14px;
             border: 1px solid var(--border);
@@ -101,8 +100,7 @@
             outline: none;
         }
 
-        .form-group input:focus,
-        .form-group select:focus {
+        .form-group input:focus {
             border-color: var(--blue);
         }
 
@@ -124,6 +122,12 @@
         .search-button:hover {
             background: var(--blue-dark);
             transform: translateY(-2px);
+        }
+
+        .search-button:disabled {
+            opacity: .65;
+            cursor: wait;
+            transform: none;
         }
 
         /* RESULT */
@@ -279,10 +283,6 @@
                 letter-spacing: -3px;
             }
 
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
             .student-info {
                 grid-template-columns: 1fr 1fr;
                 padding: 20px;
@@ -378,7 +378,7 @@
     </h1>
 
     <p>
-        Enter your examination information
+        Enter your roll number
         to view your individual result.
     </p>
 
@@ -397,7 +397,7 @@
         </h2>
 
         <p>
-            Enter your year and roll number.
+            Enter your roll number.
         </p>
 
 
@@ -406,73 +406,15 @@
             <div class="form-group">
 
                 <label>
-                    YEAR
-                </label>
-
-                <select id="year">
-
-                    <option value="2026">
-                        2026
-                    </option>
-
-                    <option value="2025">
-                        2025
-                    </option>
-
-                    <option value="2024">
-                        2024
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    EXAM
-                </label>
-
-                <select id="exam">
-
-                    <option value="ssc">
-                        SSC
-                    </option>
-
-                    <option value="hsc">
-                        HSC
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
                     ROLL NUMBER
                 </label>
 
                 <input
-                    type="number"
+                    type="text"
                     id="roll"
+                    inputmode="numeric"
+                    autocomplete="off"
                     placeholder="Enter roll number">
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    REGISTRATION NUMBER
-                </label>
-
-                <input
-                    type="number"
-                    id="registration"
-                    placeholder="Optional">
 
             </div>
 
@@ -491,8 +433,6 @@
         <div
             class="error-message"
             id="errorMessage">
-
-            Please enter a valid roll number.
 
         </div>
 
@@ -782,6 +722,22 @@ const supabaseClient =
 
 
 /* ==========================================
+   FIXED RESULT SETTINGS
+========================================== */
+
+/*
+   User শুধু Roll Number দিবে।
+
+   Year = 2026
+   Exam = SSC
+   Registration = null
+*/
+
+const RESULT_YEAR = 2026;
+const RESULT_EXAM = "ssc";
+
+
+/* ==========================================
    ELEMENTS
 ========================================== */
 
@@ -797,18 +753,9 @@ const resultArea =
 const rollInput =
     document.getElementById("roll");
 
-const registrationInput =
-    document.getElementById("registration");
-
-const yearInput =
-    document.getElementById("year");
-
-const examInput =
-    document.getElementById("exam");
-
 
 /* ==========================================
-   SEARCH RESULT
+   SEARCH BUTTON
 ========================================== */
 
 searchButton.addEventListener(
@@ -817,20 +764,17 @@ searchButton.addEventListener(
 );
 
 
+/* ==========================================
+   SEARCH RESULT
+========================================== */
+
 async function searchResult() {
 
     const roll =
         rollInput.value.trim();
 
-    const registration =
-        registrationInput.value.trim();
 
-    const year =
-        Number(yearInput.value);
-
-    const exam =
-        examInput.value;
-
+    /* Hide previous result/error */
 
     errorMessage.style.display =
         "none";
@@ -839,11 +783,29 @@ async function searchResult() {
         "none";
 
 
+    /* Validate Roll */
+
     if (!roll) {
 
         showError(
             "Please enter your roll number."
         );
+
+        rollInput.focus();
+
+        return;
+    }
+
+
+    /* Only numbers allowed */
+
+    if (!/^\d+$/.test(roll)) {
+
+        showError(
+            "Please enter a valid roll number."
+        );
+
+        rollInput.focus();
 
         return;
     }
@@ -857,15 +819,26 @@ async function searchResult() {
 
     try {
 
+        /*
+         * Supabase RPC
+         *
+         * Only user input:
+         * p_roll
+         *
+         * Automatically:
+         * p_year = 2026
+         * p_exam = ssc
+         * p_registration = null
+         */
+
         const { data, error } =
             await supabaseClient.rpc(
                 "get_student_result",
                 {
-                    p_year: year,
-                    p_exam: exam,
+                    p_year: RESULT_YEAR,
+                    p_exam: RESULT_EXAM,
                     p_roll: roll,
-                    p_registration:
-                        registration || null
+                    p_registration: null
                 }
             );
 
@@ -875,6 +848,8 @@ async function searchResult() {
             data
         );
 
+
+        /* Supabase error */
 
         if (error) {
 
@@ -891,22 +866,31 @@ async function searchResult() {
         }
 
 
+        /* No result */
+
         if (!data) {
 
             showError(
-                "No result found for this roll number."
+                "No result found for Roll " +
+                roll +
+                "."
             );
 
             return;
         }
 
 
+        /* Display */
+
         displayResult(data);
 
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Search error:",
+            error
+        );
 
         showError(
             "Something went wrong. Please try again."
@@ -932,11 +916,15 @@ async function searchResult() {
 function displayResult(data) {
 
     const student =
-        data.student;
+        data.student || data;
 
     const subjects =
-        data.subjects || [];
+        Array.isArray(data.subjects)
+            ? data.subjects
+            : [];
 
+
+    /* Student Name */
 
     document.getElementById(
         "studentName"
@@ -944,11 +932,15 @@ function displayResult(data) {
         student.student_name || "—";
 
 
+    /* Result Status */
+
     document.getElementById(
         "resultStatus"
     ).textContent =
         student.result_status || "—";
 
+
+    /* Roll */
 
     document.getElementById(
         "showRoll"
@@ -956,17 +948,23 @@ function displayResult(data) {
         student.roll || "—";
 
 
+    /* Registration */
+
     document.getElementById(
         "showRegistration"
     ).textContent =
         student.registration || "—";
 
 
+    /* Year */
+
     document.getElementById(
         "showYear"
     ).textContent =
-        student.year || "—";
+        student.year || RESULT_YEAR;
 
+
+    /* Group */
 
     document.getElementById(
         "showGroup"
@@ -974,11 +972,15 @@ function displayResult(data) {
         student.group_name || "—";
 
 
+    /* Institution */
+
     document.getElementById(
         "showInstitution"
     ).textContent =
         student.institution || "—";
 
+
+    /* District */
 
     document.getElementById(
         "showDistrict"
@@ -986,11 +988,15 @@ function displayResult(data) {
         student.district || "—";
 
 
+    /* Total Marks */
+
     document.getElementById(
         "totalMarks"
     ).textContent =
         student.total_marks ?? "—";
 
+
+    /* GPA */
 
     document.getElementById(
         "gpa"
@@ -998,13 +1004,17 @@ function displayResult(data) {
         student.gpa ?? "—";
 
 
+    /* Rank */
+
     document.getElementById(
         "rank"
     ).textContent =
         "—";
 
 
-    /* SUBJECT TABLE */
+    /* ======================================
+       SUBJECT TABLE
+    ====================================== */
 
     const table =
         document.querySelector(
@@ -1033,6 +1043,8 @@ function displayResult(data) {
     `;
 
 
+    /* No subject */
+
     if (subjects.length === 0) {
 
         table.innerHTML += `
@@ -1055,7 +1067,11 @@ function displayResult(data) {
 
         `;
 
-    } else {
+    }
+
+    /* Subjects */
+
+    else {
 
         subjects.forEach(
             function(subject) {
@@ -1064,6 +1080,7 @@ function displayResult(data) {
                     document.createElement(
                         "div"
                     );
+
 
                 row.className =
                     "subject-row";
@@ -1090,13 +1107,17 @@ function displayResult(data) {
                 `;
 
 
-                table.appendChild(row);
+                table.appendChild(
+                    row
+                );
 
             }
         );
 
     }
 
+
+    /* Show Result */
 
     resultArea.style.display =
         "block";
