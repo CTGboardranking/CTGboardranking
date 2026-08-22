@@ -1,191 +1,400 @@
 [
   {
     "institute": "DR. KHASTAGIR GOVT. GIRLS' HIGH SCHOOL, CHATTOGRAM",
-    "total_students": 322,
-    "gpa_5_count": 283,
-    "gpa_5_percentage": 87.89,
-    "average_gpa": 4.9579,
-    "institution_score": 99.16,
+    "total_students": 404,
+    "gpa_5_count": 319,
+    "gpa_5_percentage": 78.96,
+    "average_gpa": 4.8782,
+    "institution_score": 97.56,
     "grade_distribution": {
-      "A+": 3530,
-      "A-": 75,
-      "A": 214,
-      "B": 21,
-      "C": 3,
-      "F": 4,
-      "X": 17
+      "A+": 4172,
+      "A-": 167,
+      "A": 377,
+      "B": 78,
+      "C": 19,
+      "F": 6,
+      "X": 27,
+      "D": 2
     },
     "subject_statistics": [
       {
         "code": "101",
         "subject": "BANGLA-I",
-        "students_with_marks": 321,
-        "average_mark": 171.67,
+        "students_with_marks": 402,
+        "average_mark": 169.13,
         "grade_distribution": {
-          "A+": 277,
-          "A": 37,
-          "A-": 5,
-          "B": 2,
-          "X": 1
+          "A+": 329,
+          "A": 55,
+          "A-": 12,
+          "B": 5,
+          "X": 2,
+          "C": 1
         }
       },
       {
         "code": "107",
         "subject": "ENGLISH-I",
-        "students_with_marks": 321,
-        "average_mark": 174.64,
+        "students_with_marks": 402,
+        "average_mark": 169.98,
         "grade_distribution": {
-          "A+": 294,
-          "A": 25,
-          "B": 1,
-          "A-": 1,
-          "X": 1
+          "A+": 328,
+          "A": 51,
+          "B": 6,
+          "A-": 15,
+          "X": 2,
+          "C": 2
         }
       },
       {
         "code": "109",
         "subject": "MATHEMATICS",
-        "students_with_marks": 319,
-        "average_mark": 90.24,
+        "students_with_marks": 400,
+        "average_mark": 86.53,
         "grade_distribution": {
-          "A+": 274,
-          "B": 7,
-          "A-": 20,
-          "A": 18,
-          "X": 2,
-          "F": 1
+          "A+": 309,
+          "B": 19,
+          "A-": 32,
+          "A": 29,
+          "X": 3,
+          "F": 1,
+          "C": 9,
+          "D": 2
         }
       },
       {
         "code": "150",
         "subject": "BANGLADESH AND GLOBAL STUDIES",
-        "students_with_marks": 320,
-        "average_mark": 88.67,
+        "students_with_marks": 401,
+        "average_mark": 86.41,
         "grade_distribution": {
-          "A+": 287,
-          "A": 23,
-          "A-": 10,
-          "X": 2
+          "A+": 330,
+          "A": 41,
+          "A-": 20,
+          "X": 3,
+          "B": 8,
+          "C": 2
         }
       },
       {
         "code": "112",
         "subject": "HINDU RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 77,
-        "average_mark": 94.35,
+        "students_with_marks": 89,
+        "average_mark": 94.15,
         "grade_distribution": {
-          "A+": 75,
-          "A": 2
+          "A+": 86,
+          "A": 3
         }
       },
       {
         "code": "136",
         "subject": "PHYSICS",
-        "students_with_marks": 318,
-        "average_mark": 86.07,
+        "students_with_marks": 399,
+        "average_mark": 84.19,
         "grade_distribution": {
-          "A-": 19,
-          "A+": 249,
-          "A": 41,
-          "B": 8,
-          "X": 2,
-          "C": 1,
+          "A-": 32,
+          "A+": 289,
+          "A": 58,
+          "B": 18,
+          "X": 3,
+          "C": 2,
           "F": 2
         }
       },
       {
         "code": "137",
         "subject": "CHEMISTRY",
-        "students_with_marks": 319,
-        "average_mark": 91.33,
+        "students_with_marks": 400,
+        "average_mark": 88.98,
         "grade_distribution": {
-          "A+": 286,
-          "A": 26,
-          "A-": 5,
+          "A+": 330,
+          "A": 45,
+          "A-": 16,
           "F": 1,
-          "X": 2,
-          "B": 2
+          "X": 3,
+          "B": 9
         }
       },
       {
         "code": "126",
         "subject": "HIGHER MATHEMATICS",
-        "students_with_marks": 320,
-        "average_mark": 92.35,
+        "students_with_marks": 399,
+        "average_mark": 89.83,
         "grade_distribution": {
-          "A+": 292,
-          "A": 19,
-          "X": 2,
-          "A-": 8,
-          "C": 1
+          "A+": 336,
+          "A": 36,
+          "X": 3,
+          "A-": 20,
+          "C": 1,
+          "B": 6,
+          "F": 2
         }
       },
       {
         "code": "154",
         "subject": "Information And Communication Technology",
-        "students_with_marks": 321,
-        "average_mark": 47.81,
+        "students_with_marks": 402,
+        "average_mark": 47.3,
         "grade_distribution": {
-          "A+": 319,
-          "A": 2,
-          "X": 1
+          "A+": 396,
+          "A": 6,
+          "X": 2
         }
       },
       {
         "code": "138",
         "subject": "BIOLOGY",
-        "students_with_marks": 320,
-        "average_mark": 91.05,
+        "students_with_marks": 401,
+        "average_mark": 88.84,
         "grade_distribution": {
-          "A+": 300,
-          "A": 13,
-          "A-": 6,
-          "X": 2,
-          "B": 1
+          "A+": 346,
+          "A": 33,
+          "A-": 16,
+          "X": 3,
+          "B": 6
         }
       },
       {
         "code": "147",
         "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
-        "students_with_marks": 322,
-        "average_mark": 50.0,
+        "students_with_marks": 404,
+        "average_mark": 50.5,
         "grade_distribution": {
-          "A+": 322
+          "A+": 404
         }
       },
       {
         "code": "156",
         "subject": "Career Education",
-        "students_with_marks": 322,
+        "students_with_marks": 404,
         "average_mark": 50.0,
         "grade_distribution": {
-          "A+": 322
+          "A+": 404
         }
       },
       {
         "code": "111",
         "subject": "ISLAM AND MORAL EDUCATION",
-        "students_with_marks": 235,
-        "average_mark": 91.62,
+        "students_with_marks": 302,
+        "average_mark": 89.92,
         "grade_distribution": {
-          "A+": 225,
-          "A": 8,
-          "C": 1,
-          "X": 2,
-          "A-": 1
+          "A+": 276,
+          "A": 19,
+          "C": 2,
+          "X": 3,
+          "A-": 4,
+          "B": 1
         }
       },
       {
         "code": "113",
         "subject": "BUDDHIST RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 8,
-        "average_mark": 93.88,
+        "students_with_marks": 10,
+        "average_mark": 91.9,
         "grade_distribution": {
-          "A+": 8
+          "A+": 9,
+          "A": 1
         }
       }
     ],
     "rank": 1
+  },
+  {
+    "institute": "CHITTAGONG GOVT. HIGH SCHOOL, CHATTOGRAM",
+    "total_students": 293,
+    "gpa_5_count": 191,
+    "gpa_5_percentage": 65.19,
+    "average_gpa": 4.811,
+    "institution_score": 96.22,
+    "grade_distribution": {
+      "A-": 198,
+      "A": 432,
+      "C": 23,
+      "A+": 2767,
+      "B": 81,
+      "F": 12,
+      "D": 3
+    },
+    "subject_statistics": [
+      {
+        "code": "101",
+        "subject": "BANGLA-I",
+        "students_with_marks": 293,
+        "average_mark": 159.19,
+        "grade_distribution": {
+          "A-": 34,
+          "B": 11,
+          "A+": 173,
+          "A": 74,
+          "C": 1
+        }
+      },
+      {
+        "code": "107",
+        "subject": "ENGLISH-I",
+        "students_with_marks": 293,
+        "average_mark": 164.44,
+        "grade_distribution": {
+          "A": 60,
+          "A-": 23,
+          "A+": 206,
+          "B": 3,
+          "C": 1
+        }
+      },
+      {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 290,
+        "average_mark": 81.69,
+        "grade_distribution": {
+          "C": 15,
+          "A-": 28,
+          "A+": 184,
+          "A": 41,
+          "F": 3,
+          "B": 19,
+          "D": 3
+        }
+      },
+      {
+        "code": "150",
+        "subject": "BANGLADESH AND GLOBAL STUDIES",
+        "students_with_marks": 293,
+        "average_mark": 83.97,
+        "grade_distribution": {
+          "A-": 27,
+          "A+": 212,
+          "A": 43,
+          "B": 10,
+          "C": 1
+        }
+      },
+      {
+        "code": "111",
+        "subject": "ISLAM AND MORAL EDUCATION",
+        "students_with_marks": 166,
+        "average_mark": 87.74,
+        "grade_distribution": {
+          "A+": 143,
+          "A": 15,
+          "A-": 6,
+          "B": 2
+        }
+      },
+      {
+        "code": "136",
+        "subject": "PHYSICS",
+        "students_with_marks": 291,
+        "average_mark": 81.71,
+        "grade_distribution": {
+          "B": 15,
+          "A": 62,
+          "A+": 180,
+          "A-": 31,
+          "C": 3,
+          "F": 2
+        }
+      },
+      {
+        "code": "137",
+        "subject": "CHEMISTRY",
+        "students_with_marks": 292,
+        "average_mark": 86.93,
+        "grade_distribution": {
+          "B": 9,
+          "A": 42,
+          "A+": 221,
+          "A-": 20,
+          "F": 1
+        }
+      },
+      {
+        "code": "138",
+        "subject": "BIOLOGY",
+        "students_with_marks": 293,
+        "average_mark": 86.58,
+        "grade_distribution": {
+          "A": 39,
+          "A+": 233,
+          "A-": 15,
+          "B": 6
+        }
+      },
+      {
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 293,
+        "average_mark": 47.01,
+        "grade_distribution": {
+          "A+": 284,
+          "A": 9
+        }
+      },
+      {
+        "code": "126",
+        "subject": "HIGHER MATHEMATICS",
+        "students_with_marks": 287,
+        "average_mark": 88.16,
+        "grade_distribution": {
+          "A-": 11,
+          "A": 41,
+          "A+": 227,
+          "F": 6,
+          "B": 6,
+          "C": 2
+        }
+      },
+      {
+        "code": "147",
+        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
+        "students_with_marks": 293,
+        "average_mark": 50.51,
+        "grade_distribution": {
+          "A+": 293
+        }
+      },
+      {
+        "code": "156",
+        "subject": "Career Education",
+        "students_with_marks": 293,
+        "average_mark": 50.0,
+        "grade_distribution": {
+          "A+": 293
+        }
+      },
+      {
+        "code": "112",
+        "subject": "HINDU RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 109,
+        "average_mark": 91.25,
+        "grade_distribution": {
+          "A+": 103,
+          "A": 4,
+          "A-": 2
+        }
+      },
+      {
+        "code": "113",
+        "subject": "BUDDHIST RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 16,
+        "average_mark": 89.62,
+        "grade_distribution": {
+          "A+": 14,
+          "A": 2
+        }
+      },
+      {
+        "code": "114",
+        "subject": "CHRISTIAN RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 2,
+        "average_mark": 80.0,
+        "grade_distribution": {
+          "A+": 1,
+          "A-": 1
+        }
+      }
+    ],
+    "rank": 2
   },
   {
     "institute": "GOVT. MUSLIM HIGH SCHOOL, CHATTOGRAM",
@@ -355,7 +564,181 @@
         }
       }
     ],
-    "rank": 2
+    "rank": 3
+  },
+  {
+    "institute": "AUNKUR SOCIETY GIRLS' HIGH SCHOOL, CHATTOGRAM",
+    "total_students": 124,
+    "gpa_5_count": 61,
+    "gpa_5_percentage": 49.19,
+    "average_gpa": 4.7091,
+    "institution_score": 94.18,
+    "grade_distribution": {
+      "A": 266,
+      "A+": 1046,
+      "C": 11,
+      "A-": 119,
+      "B": 45,
+      "D": 1
+    },
+    "subject_statistics": [
+      {
+        "code": "101",
+        "subject": "BANGLA-I",
+        "students_with_marks": 124,
+        "average_mark": 157.88,
+        "grade_distribution": {
+          "A": 50,
+          "A+": 64,
+          "A-": 10
+        }
+      },
+      {
+        "code": "107",
+        "subject": "ENGLISH-I",
+        "students_with_marks": 124,
+        "average_mark": 160.38,
+        "grade_distribution": {
+          "A+": 73,
+          "A": 38,
+          "A-": 10,
+          "B": 3
+        }
+      },
+      {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 124,
+        "average_mark": 75.4,
+        "grade_distribution": {
+          "C": 9,
+          "A+": 58,
+          "A": 22,
+          "A-": 18,
+          "B": 16,
+          "D": 1
+        }
+      },
+      {
+        "code": "150",
+        "subject": "BANGLADESH AND GLOBAL STUDIES",
+        "students_with_marks": 124,
+        "average_mark": 78.57,
+        "grade_distribution": {
+          "A-": 13,
+          "A+": 69,
+          "A": 31,
+          "B": 10,
+          "C": 1
+        }
+      },
+      {
+        "code": "111",
+        "subject": "ISLAM AND MORAL EDUCATION",
+        "students_with_marks": 103,
+        "average_mark": 84.89,
+        "grade_distribution": {
+          "A+": 77,
+          "A": 21,
+          "A-": 5
+        }
+      },
+      {
+        "code": "136",
+        "subject": "PHYSICS",
+        "students_with_marks": 124,
+        "average_mark": 77.43,
+        "grade_distribution": {
+          "A-": 27,
+          "A": 26,
+          "A+": 62,
+          "B": 9
+        }
+      },
+      {
+        "code": "137",
+        "subject": "CHEMISTRY",
+        "students_with_marks": 124,
+        "average_mark": 83.95,
+        "grade_distribution": {
+          "A": 23,
+          "A+": 87,
+          "A-": 12,
+          "B": 2
+        }
+      },
+      {
+        "code": "138",
+        "subject": "BIOLOGY",
+        "students_with_marks": 124,
+        "average_mark": 84.0,
+        "grade_distribution": {
+          "A-": 12,
+          "A+": 86,
+          "A": 26
+        }
+      },
+      {
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 124,
+        "average_mark": 46.4,
+        "grade_distribution": {
+          "A": 3,
+          "A+": 121
+        }
+      },
+      {
+        "code": "126",
+        "subject": "HIGHER MATHEMATICS",
+        "students_with_marks": 124,
+        "average_mark": 82.28,
+        "grade_distribution": {
+          "A": 26,
+          "A+": 80,
+          "A-": 12,
+          "B": 5,
+          "C": 1
+        }
+      },
+      {
+        "code": "147",
+        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
+        "students_with_marks": 124,
+        "average_mark": 50.0,
+        "grade_distribution": {
+          "A+": 124
+        }
+      },
+      {
+        "code": "156",
+        "subject": "Career Education",
+        "students_with_marks": 124,
+        "average_mark": 50.0,
+        "grade_distribution": {
+          "A+": 124
+        }
+      },
+      {
+        "code": "112",
+        "subject": "HINDU RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 13,
+        "average_mark": 92.62,
+        "grade_distribution": {
+          "A+": 13
+        }
+      },
+      {
+        "code": "113",
+        "subject": "BUDDHIST RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 8,
+        "average_mark": 91.88,
+        "grade_distribution": {
+          "A+": 8
+        }
+      }
+    ],
+    "rank": 4
   },
   {
     "institute": "CHATTOGRAM CANTONMENT BOARD HIGH SCHOOL, CHATTOGRAM",
@@ -546,7 +929,7 @@
         }
       }
     ],
-    "rank": 3
+    "rank": 5
   },
   {
     "institute": "BAIZID MODEL SCHOOL, CHATTOGRAM",
@@ -705,7 +1088,7 @@
         }
       }
     ],
-    "rank": 4
+    "rank": 6
   },
   {
     "institute": "MADARSHA HIGH SCHOOL, CHATTOGRAM",
@@ -887,7 +1270,7 @@
         }
       }
     ],
-    "rank": 5
+    "rank": 7
   },
   {
     "institute": "SANDWIP ANANDA PATHSHALA, CHATTOGRAM",
@@ -1048,7 +1431,7 @@
         }
       }
     ],
-    "rank": 6
+    "rank": 8
   },
   {
     "institute": "KESHUYA HIGH SCHOOL, CHATTOGRAM",
@@ -1183,7 +1566,7 @@
         }
       }
     ],
-    "rank": 7
+    "rank": 9
   },
   {
     "institute": "MOHANOGAR MIR SIRAZUL ISLAM HIGH SCHOOL, CHATTOGRAM",
@@ -1344,7 +1727,7 @@
         }
       }
     ],
-    "rank": 8
+    "rank": 10
   },
   {
     "institute": "FOTEYABAD MOHAKHALI GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -1522,7 +1905,7 @@
         }
       }
     ],
-    "rank": 9
+    "rank": 11
   },
   {
     "institute": "AMILAISH KANCHANA BANGA CHANDRA GHOSH INSTITUTE, CHATTOGRAM",
@@ -1693,7 +2076,7 @@
         }
       }
     ],
-    "rank": 10
+    "rank": 12
   },
   {
     "institute": "SOUTH SWANDIP ABEDA FOYEZ GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -1857,7 +2240,7 @@
         }
       }
     ],
-    "rank": 11
+    "rank": 13
   },
   {
     "institute": "JANAKALYAN MODEL HIGH SCHOOL, CHATTOGRAM",
@@ -2017,7 +2400,7 @@
         }
       }
     ],
-    "rank": 12
+    "rank": 14
   },
   {
     "institute": "GASBARIA NITTYANANDA GOURACHANDRA GOVT.MODEL HIGH SCHOOL, CHATTOGRAM",
@@ -2190,7 +2573,7 @@
         }
       }
     ],
-    "rank": 13
+    "rank": 15
   },
   {
     "institute": "SOUTH SWANDIP HIGH SCHOOL, CHATTOGRAM",
@@ -2362,7 +2745,7 @@
         }
       }
     ],
-    "rank": 14
+    "rank": 16
   },
   {
     "institute": "CHITTAGONG CITY CORPORATION MUNICIPAL MODEL SCHOOL AND COLLEGE, CHATTOGRAM",
@@ -2555,7 +2938,7 @@
         }
       }
     ],
-    "rank": 15
+    "rank": 17
   },
   {
     "institute": "MOGDHARA SCHOOL AND COLLEGE, CHATTOGRAM",
@@ -2703,7 +3086,7 @@
         }
       }
     ],
-    "rank": 16
+    "rank": 18
   },
   {
     "institute": "AUCHIA GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -2852,7 +3235,7 @@
         }
       }
     ],
-    "rank": 17
+    "rank": 19
   },
   {
     "institute": "KANCHONA GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -3027,7 +3410,7 @@
         }
       }
     ],
-    "rank": 18
+    "rank": 20
   },
   {
     "institute": "BAKOLIA ADARSHA GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -3235,7 +3618,7 @@
         }
       }
     ],
-    "rank": 19
+    "rank": 21
   },
   {
     "institute": "JABEN NOOR SULTAN HIGH SCHOOL, CHATTOGRAM",
@@ -3397,7 +3780,7 @@
         }
       }
     ],
-    "rank": 20
+    "rank": 22
   },
   {
     "institute": "LAMABAZAR ASAD ALI SOWDAGAR CITY CORPORATION HIGH SCHOOL, CHATTOGRAM",
@@ -3574,7 +3957,7 @@
         }
       }
     ],
-    "rank": 21
+    "rank": 23
   },
   {
     "institute": "ARMED POLICE BATTLION PUBLIC SCHOOL, CHATTOGRAM",
@@ -3773,7 +4156,7 @@
         }
       }
     ],
-    "rank": 22
+    "rank": 24
   },
   {
     "institute": "C D A GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -3960,7 +4343,7 @@
         }
       }
     ],
-    "rank": 23
+    "rank": 25
   },
   {
     "institute": "IMARATUNNESA CITY CORP. GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -4135,7 +4518,7 @@
         }
       }
     ],
-    "rank": 24
+    "rank": 26
   },
   {
     "institute": "BARA DAROGAHAT ABDUR RAUF MEMORIAL HIGH SCHOOL, CHATTOGRAM",
@@ -4287,7 +4670,7 @@
         }
       }
     ],
-    "rank": 25
+    "rank": 27
   },
   {
     "institute": "FATEYABAD SHOILABALA CITY CORPORATION GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -4449,7 +4832,7 @@
         }
       }
     ],
-    "rank": 26
+    "rank": 28
   },
   {
     "institute": "KADAM MOBARAK CITY CORP. HIGH SCHOOL, CHATTOGRAM",
@@ -4627,7 +5010,7 @@
         }
       }
     ],
-    "rank": 27
+    "rank": 29
   },
   {
     "institute": "BOTTALI SHAH MOHSEN AULIA (R.) HIGH SCHOOL, CHATTOGRAM",
@@ -4814,7 +5197,7 @@
         }
       }
     ],
-    "rank": 28
+    "rank": 30
   },
   {
     "institute": "UPAKULIYO ADARSHA HIGH SCHOOL, CHATTOGRAM",
@@ -4972,7 +5355,7 @@
         }
       }
     ],
-    "rank": 29
+    "rank": 31
   },
   {
     "institute": "MIRZAKHIL MODEL GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -5129,7 +5512,7 @@
         }
       }
     ],
-    "rank": 30
+    "rank": 32
   },
   {
     "institute": "FATEHABAD MODEL MULTILATERAL HIGH SCHOOL, CHATTOGRAM",
@@ -5310,7 +5693,7 @@
         }
       }
     ],
-    "rank": 31
+    "rank": 33
   },
   {
     "institute": "POLOGROUND HIGH SCHOOL, CHATTOGRAM",
@@ -5478,7 +5861,7 @@
         }
       }
     ],
-    "rank": 32
+    "rank": 34
   },
   {
     "institute": "BANSKHALI GOVERNMENT HIGH SCHOOL , CHATTOGRAM",
@@ -5650,7 +6033,7 @@
         }
       }
     ],
-    "rank": 33
+    "rank": 35
   },
   {
     "institute": "PATIYA MODEL HIGH SCHOOL, CHATTOGRAM",
@@ -5853,7 +6236,7 @@
         }
       }
     ],
-    "rank": 34
+    "rank": 36
   },
   {
     "institute": "KUYAISH BURISHCHAR SAMMILANI HIGH SCHOOL, CHATTOGRAM",
@@ -6031,7 +6414,7 @@
         }
       }
     ],
-    "rank": 35
+    "rank": 37
   },
   {
     "institute": "BARKAL S. Z. HIGH SCHOOL, CHATTOGRAM",
@@ -6206,7 +6589,7 @@
         }
       }
     ],
-    "rank": 36
+    "rank": 38
   },
   {
     "institute": "PURBA BAKOLIA CITY CORP. GIRLS HIGH SCHOOL AND COLLEGE, CHATTOGRAM",
@@ -6381,7 +6764,7 @@
         }
       }
     ],
-    "rank": 37
+    "rank": 39
   },
   {
     "institute": "NANGALMORA HIGH SCHOOL, CHATTOGRAM",
@@ -6536,7 +6919,7 @@
         }
       }
     ],
-    "rank": 38
+    "rank": 40
   },
   {
     "institute": "ENAYET PUR HIGH SCHOOL, CHATTOGRAM",
@@ -6710,7 +7093,7 @@
         }
       }
     ],
-    "rank": 39
+    "rank": 41
   },
   {
     "institute": "SUCHIYA RAMKRISHNA HIGH SCHOOL, CHATTOGRAM",
@@ -6863,7 +7246,7 @@
         }
       }
     ],
-    "rank": 40
+    "rank": 42
   },
   {
     "institute": "ABDUL LATIF KHAN HIGH SCHOOL, CHATTOGRAM",
@@ -7060,7 +7443,7 @@
         }
       }
     ],
-    "rank": 41
+    "rank": 43
   },
   {
     "institute": "BORKAL ABDUL HAI ANOWARA BEGUM GIRL'S HIGH SCHOOL, CHATTOGRAM",
@@ -7213,7 +7596,7 @@
         }
       }
     ],
-    "rank": 42
+    "rank": 44
   },
   {
     "institute": "WAZEDIA HIGH SCHOOL, CHATTOGRAM",
@@ -7378,7 +7761,7 @@
         }
       }
     ],
-    "rank": 43
+    "rank": 45
   },
   {
     "institute": "SWANDIP PUBLIC HIGH SCHOOL, CHATTOGRAM",
@@ -7552,7 +7935,7 @@
         }
       }
     ],
-    "rank": 44
+    "rank": 46
   },
   {
     "institute": "DOHAJARI JAMIJURY ABDUR RAHMAN HIGH SCHOOL, CHATTOGRAM",
@@ -7726,7 +8109,7 @@
         }
       }
     ],
-    "rank": 45
+    "rank": 47
   },
   {
     "institute": "CHAMU DARIA UNITED INSTITUTE, CHATTOGRAM",
@@ -7891,7 +8274,7 @@
         }
       }
     ],
-    "rank": 46
+    "rank": 48
   },
   {
     "institute": "GUAPANCHAK HIGH SCHOOL, CHATTOGRAM",
@@ -8063,7 +8446,7 @@
         }
       }
     ],
-    "rank": 47
+    "rank": 49
   },
   {
     "institute": "SATKANIA MODEL HIGH SCHOOL, CHATTOGRAM",
@@ -8239,7 +8622,7 @@
         }
       }
     ],
-    "rank": 48
+    "rank": 50
   },
   {
     "institute": "PATHARGHATA CITY CORP. BOYS HIGH SCHOOL, CHATTOGRAM",
@@ -8416,7 +8799,7 @@
         }
       }
     ],
-    "rank": 49
+    "rank": 51
   },
   {
     "institute": "PURBA BAKALIA CITY CORPORATION HIGH SCHOOL, CHATTOGRAM",
@@ -8593,7 +8976,7 @@
         }
       }
     ],
-    "rank": 50
+    "rank": 52
   },
   {
     "institute": "CHHANUA KADERIA HIGH SCHOOL, CHATTOGRAM",
@@ -8761,7 +9144,7 @@
         }
       }
     ],
-    "rank": 51
+    "rank": 53
   },
   {
     "institute": "SAMADAR PARA MULTILATERAL HIGH SCHOOL, CHATTOGRAM",
@@ -8920,7 +9303,7 @@
         }
       }
     ],
-    "rank": 52
+    "rank": 54
   },
   {
     "institute": "ABDUS SOBHAN RAHAT ALI HIGH SCHOOL, CHATTOGRAM",
@@ -9108,7 +9491,7 @@
         }
       }
     ],
-    "rank": 53
+    "rank": 55
   },
   {
     "institute": "MORIOM ASHRAM HIGH SCHOOL, CHATTOGRAM",
@@ -9289,7 +9672,7 @@
         }
       }
     ],
-    "rank": 54
+    "rank": 56
   },
   {
     "institute": "PANTHICHILA HIGH SCHOOL, CHATTOGRAM",
@@ -9474,7 +9857,7 @@
         }
       }
     ],
-    "rank": 55
+    "rank": 57
   },
   {
     "institute": "EAST SAT BARIA HIGH SCHOOL, CHATTOGRAM",
@@ -9635,7 +10018,7 @@
         }
       }
     ],
-    "rank": 56
+    "rank": 58
   },
   {
     "institute": "CHITTAGONG JUTE MANUFACTURING HIGH SCHOOL, CHATTOGRAM",
@@ -9829,7 +10212,7 @@
         }
       }
     ],
-    "rank": 57
+    "rank": 59
   },
   {
     "institute": "EAST SWANDIP HIGH SCHOOL, CHATTOGRAM",
@@ -9998,7 +10381,7 @@
         }
       }
     ],
-    "rank": 58
+    "rank": 60
   },
   {
     "institute": "MOHORA S. K. Q. GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -10175,7 +10558,7 @@
         }
       }
     ],
-    "rank": 59
+    "rank": 61
   },
   {
     "institute": "S.M. PILOT HIGH SCHOOL, CHATTOGRAM",
@@ -10382,7 +10765,7 @@
         }
       }
     ],
-    "rank": 60
+    "rank": 62
   },
   {
     "institute": "A. J. CHOWDHURY BOHUMUKHI HIGH SCHOOL, CHATTOGRAM",
@@ -10546,7 +10929,7 @@
         }
       }
     ],
-    "rank": 61
+    "rank": 63
   },
   {
     "institute": "KHAN DIGHI HIGH SCHOOL, CHATTOGRAM",
@@ -10712,7 +11095,7 @@
         }
       }
     ],
-    "rank": 62
+    "rank": 64
   },
   {
     "institute": "CHAR CHAKTAI CITY CORP. HIGH SCHOOL, CHATTOGRAM",
@@ -10889,7 +11272,7 @@
         }
       }
     ],
-    "rank": 63
+    "rank": 65
   },
   {
     "institute": "AL-HAJ TAZUL ISLAM HIGH SCHOOL, CHATTOGRAM",
@@ -11048,7 +11431,7 @@
         }
       }
     ],
-    "rank": 64
+    "rank": 66
   },
   {
     "institute": "CHATARI UNION HIGH SCHOOL, CHATTOGRAM",
@@ -11218,7 +11601,7 @@
         }
       }
     ],
-    "rank": 65
+    "rank": 67
   },
   {
     "institute": "BOILTOLI HIGH SCHOOL, CHATTOGRAM",
@@ -11390,7 +11773,7 @@
         }
       }
     ],
-    "rank": 66
+    "rank": 68
   },
   {
     "institute": "ALHAJ ANWARA BEGUM HIGH SCHOOL, CHATTOGRAM",
@@ -11561,7 +11944,7 @@
         }
       }
     ],
-    "rank": 67
+    "rank": 69
   },
   {
     "institute": "GUMAN MARDAN PESHKAR HAT HIGH SCHOOL, CHATTOGRAM",
@@ -11734,7 +12117,7 @@
         }
       }
     ],
-    "rank": 68
+    "rank": 70
   },
   {
     "institute": "EIDGAH HIGH SCHOOL, CHATTOGRAM",
@@ -11917,7 +12300,7 @@
         }
       }
     ],
-    "rank": 69
+    "rank": 71
   },
   {
     "institute": "AZIM HAKIM SCHOOL & COLLEGE, PATIYA, CHATTOGRAM",
@@ -12104,7 +12487,7 @@
         }
       }
     ],
-    "rank": 70
+    "rank": 72
   },
   {
     "institute": "DEODIGHI KHASMAHAL HIGH SCHOOL, CHATTOGRAM",
@@ -12270,7 +12653,7 @@
         }
       }
     ],
-    "rank": 71
+    "rank": 73
   },
   {
     "institute": "PUICHHARI IZZATIA ADARSHA HIGH SCHOOL, CHATTOGRAM",
@@ -12437,7 +12820,7 @@
         }
       }
     ],
-    "rank": 72
+    "rank": 74
   },
   {
     "institute": "SAFA MOTALEB HIGH SCHOOL, CHATTOGRAM",
@@ -12650,7 +13033,7 @@
         }
       }
     ],
-    "rank": 73
+    "rank": 75
   },
   {
     "institute": "MOHAMMED NAGAR H.K.C. HIGH SCHOOL, CHATTOGRAM",
@@ -12847,7 +13230,7 @@
         }
       }
     ],
-    "rank": 74
+    "rank": 76
   },
   {
     "institute": "WIRELESS JHAUTALA COLONY HIGH SCHOOL, CHATTOGRAM",
@@ -13056,7 +13439,7 @@
         }
       }
     ],
-    "rank": 75
+    "rank": 77
   },
   {
     "institute": "MIRZAPUR GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -13220,7 +13603,7 @@
         }
       }
     ],
-    "rank": 76
+    "rank": 78
   },
   {
     "institute": "WEST GATIADENGA HIGH SCHOOL, CHATTOGRAM",
@@ -13392,7 +13775,7 @@
         }
       }
     ],
-    "rank": 77
+    "rank": 79
   },
   {
     "institute": "BARODONA S. M. M. ABDUL BARI GIRL'S HIGH SCHOOL, CHATTOGRAM",
@@ -13537,7 +13920,7 @@
         }
       }
     ],
-    "rank": 78
+    "rank": 80
   },
   {
     "institute": "MIRZAKHIL HIGH SCHOOL, CHATTOGRAM",
@@ -13727,7 +14110,7 @@
         }
       }
     ],
-    "rank": 79
+    "rank": 81
   },
   {
     "institute": "BARODONA HOQUE MEMORIAL HIGH SCHOOL, CHATTOGRAM",
@@ -13892,7 +14275,7 @@
         }
       }
     ],
-    "rank": 80
+    "rank": 82
   },
   {
     "institute": "BORMA TRAHI MENKA HIGH SCHOOL, CHATTOGRAM",
@@ -14051,7 +14434,7 @@
         }
       }
     ],
-    "rank": 81
+    "rank": 83
   },
   {
     "institute": "UNITED IDEAL HIGH SCHOOL, CHATTOGRAM",
@@ -14228,7 +14611,7 @@
         }
       }
     ],
-    "rank": 82
+    "rank": 84
   },
   {
     "institute": "FATEPUR HIGH SCHOOL, CHATTOGRAM",
@@ -14420,7 +14803,7 @@
         }
       }
     ],
-    "rank": 83
+    "rank": 85
   },
   {
     "institute": "SHEKHERHAT HIGH SCHOOL, CHATTOGRAM",
@@ -14600,7 +14983,7 @@
         }
       }
     ],
-    "rank": 84
+    "rank": 86
   },
   {
     "institute": "JAFARABAD HIGH SCHOOL, CHATTOGRAM",
@@ -14749,7 +15132,7 @@
         }
       }
     ],
-    "rank": 85
+    "rank": 87
   },
   {
     "institute": "KADAM MOBARAK M. Y. HIGH SCHOOL, CHATTOGRAM",
@@ -14909,7 +15292,7 @@
         }
       }
     ],
-    "rank": 86
+    "rank": 88
   },
   {
     "institute": "RAILWAY EMPLOYEES GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -15072,7 +15455,7 @@
         }
       }
     ],
-    "rank": 87
+    "rank": 89
   },
   {
     "institute": "EAST SWANDIP ENAM NAHAR GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -15221,7 +15604,7 @@
         }
       }
     ],
-    "rank": 88
+    "rank": 90
   },
   {
     "institute": "HAMID ULLAHAT HIGH SCHOOL, CHATTOGRAM",
@@ -15363,7 +15746,7 @@
         }
       }
     ],
-    "rank": 89
+    "rank": 91
   },
   {
     "institute": "CENTER VALLEY SCHOOL, CHATTOGRAM",
@@ -15540,7 +15923,7 @@
         }
       }
     ],
-    "rank": 90
+    "rank": 92
   },
   {
     "institute": "CHARTI DURDURI HIGH SCHOOL, CHATTOGRAM",
@@ -15684,6 +16067,6 @@
         }
       }
     ],
-    "rank": 91
+    "rank": 93
   }
 ]
