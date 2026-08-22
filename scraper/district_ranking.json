@@ -1,0 +1,30 @@
+[
+  {
+    "district": "Chattogram",
+    "institutions": 2,
+    "total_students": 950,
+    "passed_students": 940,
+    "failed_students": 10,
+    "pass_percentage": 98.95,
+    "gpa_5_count": 330,
+    "gpa_5_percentage": 34.74,
+    "average_gpa": 4.3168,
+    "grade_performance": 93.97,
+    "score": 73.65,
+    "rank": 1
+  },
+  {
+    "district": "Cox's Bazar",
+    "institutions": 1,
+    "total_students": 300,
+    "passed_students": 290,
+    "failed_students": 10,
+    "pass_percentage": 96.67,
+    "gpa_5_count": 90,
+    "gpa_5_percentage": 30.0,
+    "average_gpa": 4.1,
+    "grade_performance": 93.26,
+    "score": 70.12,
+    "rank": 2
+  }
+]
