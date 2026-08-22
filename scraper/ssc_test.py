@@ -1,151 +1,42 @@
 import requests
-from bs4 import BeautifulSoup
-import json
-import sys
-import time
 
+URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/individual/"
 
-# ==========================================
-# CONFIG
-# ==========================================
-
-BASE_URL = "https://sresult.bise-ctg.gov.bd/"
-
-
-# ==========================================
-# TEST ROLL
-# ==========================================
-
-ROLL = sys.argv[1] if len(sys.argv) > 1 else "100001"
-
-
-# ==========================================
-# SESSION
-# ==========================================
-
-session = requests.Session()
-
-session.headers.update({
+headers = {
     "User-Agent": (
-        "Mozilla/5.0 (Linux; Android 10) "
-        "AppleWebKit/537.36 "
-        "(KHTML, like Gecko) "
-        "Chrome/130.0 Mobile Safari/537.36"
-    )
-})
-
-
-# ==========================================
-# REQUEST
-# ==========================================
+        "Mozilla/5.0 (Linux; Android 10; Mobile) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/131.0.0.0 Mobile Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Referer": "https://sresult.bise-ctg.gov.bd/"
+}
 
 print("Connecting to Chattogram Board...")
+print("URL:", URL)
 
 try:
+    session = requests.Session()
 
     response = session.get(
-        BASE_URL,
+        URL,
+        headers=headers,
         timeout=30
     )
 
     print("HTTP Status:", response.status_code)
+    print("Page Size:", len(response.content))
+    print("Final URL:", response.url)
 
-    print("Page size:", len(response.text))
+    print("\nFirst 500 characters:\n")
+    print(response.text[:500])
 
-except Exception as e:
-
-    print("Connection error:")
-    print(e)
-
-    sys.exit(1)
-
-
-# ==========================================
-# BASIC CHECK
-# ==========================================
-
-if response.status_code != 200:
-
-    print("Website did not return HTTP 200.")
-
-    sys.exit(1)
-
-
-print()
-print("Connection successful.")
-print("Testing result page structure...")
-
-
-# ==========================================
-# PARSE HTML
-# ==========================================
-
-soup = BeautifulSoup(
-    response.text,
-    "html.parser"
-)
-
-
-title = soup.title.text.strip() if soup.title else ""
-
-print("Page title:", title)
-
-
-# ==========================================
-# FIND FORMS
-# ==========================================
-
-forms = soup.find_all("form")
-
-print("Forms found:", len(forms))
-
-
-for i, form in enumerate(forms, start=1):
-
-    print()
-    print("FORM", i)
-
-    print(
-        "Action:",
-        form.get("action")
-    )
-
-    print(
-        "Method:",
-        form.get("method")
-    )
-
-    inputs = form.find_all(
-        ["input", "select"]
-    )
-
-    for element in inputs:
-
-        print(
-            element.name,
-            element.get("name"),
-            element.get("id"),
-            element.get("value")
+    if response.status_code != 200:
+        raise SystemExit(
+            f"Board server returned HTTP {response.status_code}"
         )
 
-
-# ==========================================
-# SAVE RESPONSE FOR INSPECTION
-# ==========================================
-
-with open(
-    "scraper/result_page.html",
-    "w",
-    encoding="utf-8"
-) as f:
-
-    f.write(response.text)
-
-
-print()
-print(
-    "Saved page as scraper/result_page.html"
-)
-
-print()
-print("TEST COMPLETED.")
+except requests.RequestException as e:
+    print("Request Error:", e)
+    raise SystemExit(1)
