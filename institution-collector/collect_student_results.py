@@ -5,8 +5,10 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
+
 # ============================================================
-# SETTINGS
+# SSC 2026 STUDENT RESULT COLLECTOR
+# Chattogram Board
 # ============================================================
 
 INPUT_FILE = "institution-collector/institutions.json"
@@ -14,7 +16,13 @@ OUTPUT_FILE = "institution-collector/student_results.json"
 
 REQUEST_DELAY = 0.3
 
-# প্রথমে 1 দিয়ে TEST করো
+# ------------------------------------------------------------
+# TEST
+# 1 = প্রথম institution
+# 5 = প্রথম ৫টি institution
+# None = সব institution
+# ------------------------------------------------------------
+
 TEST_LIMIT = 1
 
 BASE_URL = (
@@ -52,25 +60,23 @@ with open(
     raw_data = json.load(f)
 
 
-# ============================================================
-# SUPPORT YOUR institutions.json FORMAT
-# ============================================================
+# ------------------------------------------------------------
+# institutions.json format:
+#
+# {
+#   "metadata": {...},
+#   "institutions": [...]
+# }
+#
+# অথবা সরাসরি [...]
+# ------------------------------------------------------------
 
 if isinstance(raw_data, dict):
 
-    if isinstance(
-        raw_data.get("institutions"),
-        list
-    ):
-
-        institutions = raw_data["institutions"]
-
-    else:
-
-        raise ValueError(
-            "institutions.json does not contain "
-            "'institutions' array"
-        )
+    institutions = raw_data.get(
+        "institutions",
+        []
+    )
 
 elif isinstance(raw_data, list):
 
@@ -80,6 +86,16 @@ else:
 
     raise ValueError(
         "Invalid institutions.json format"
+    )
+
+
+if not isinstance(
+    institutions,
+    list
+):
+
+    raise ValueError(
+        "'institutions' must be a JSON array"
     )
 
 
@@ -97,7 +113,10 @@ valid_institutions = []
 
 for item in institutions:
 
-    if not isinstance(item, dict):
+    if not isinstance(
+        item,
+        dict
+    ):
         continue
 
     eiin = str(
@@ -120,11 +139,13 @@ for item in institutions:
 
 institutions = valid_institutions
 
-total = len(institutions)
+total_institutions = len(
+    institutions
+)
 
 
 print(
-    f"Valid institutions: {total}",
+    f"Valid institutions: {total_institutions}",
     flush=True
 )
 
@@ -135,7 +156,7 @@ print(
 
 
 # ============================================================
-# LOAD PREVIOUS RESULTS
+# LOAD EXISTING RESULTS
 # ============================================================
 
 results = []
@@ -152,42 +173,31 @@ if os.path.exists(
             encoding="utf-8"
         ) as f:
 
-            old_results = json.load(f)
+            old_data = json.load(f)
 
 
         if isinstance(
-            old_results,
+            old_data,
             list
         ):
 
-            results = old_results
+            results = old_data
 
 
-        print(
-            "=" * 70,
-            flush=True
-        )
-
-        print(
-            "RESUME MODE",
-            flush=True
-        )
+        print("=" * 70, flush=True)
 
         print(
             f"Previously collected: {len(results)}",
             flush=True
         )
 
-        print(
-            "=" * 70,
-            flush=True
-        )
+        print("=" * 70, flush=True)
 
 
     except Exception as e:
 
         print(
-            "Could not load previous result file.",
+            "Could not read previous student_results.json",
             flush=True
         )
 
@@ -196,9 +206,11 @@ if os.path.exists(
             flush=True
         )
 
+        results = []
+
 
 # ============================================================
-# EXISTING KEYS
+# EXISTING EIIN + ROLL
 # ============================================================
 
 existing_keys = set()
@@ -209,7 +221,6 @@ for item in results:
         item,
         dict
     ):
-
         continue
 
     eiin = str(
@@ -250,13 +261,15 @@ session.headers.update({
 
     "User-Agent":
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "AppleWebKit/537.36 "
+        "(KHTML, like Gecko) "
         "Chrome/131.0.0.0 Safari/537.36",
 
     "Accept":
         "text/html,application/xhtml+xml,"
-        "application/xml;q=0.9,image/avif,"
-        "image/webp,*/*;q=0.8",
+        "application/xml;q=0.9,"
+        "image/avif,image/webp,"
+        "*/*;q=0.8",
 
     "Accept-Language":
         "en-US,en;q=0.9",
@@ -283,311 +296,68 @@ def clean_text(value):
     ).strip()
 
 
-def number(value):
-
-    value = clean_text(
-        value
-    )
-
-    value = value.replace(
-        ",",
-        ""
-    )
-
-    match = re.search(
-        r"\d+(?:\.\d+)?",
-        value
-    )
-
-    if not match:
-        return None
-
-    n = float(
-        match.group(0)
-    )
-
-    if n.is_integer():
-
-        return int(n)
-
-    return n
-
-
-def institution_name(item):
-
-    return clean_text(
-        item.get(
-            "institution_name",
-            ""
-        )
-    )
-
-
-def district_name(item):
-
-    return clean_text(
-        item.get(
-            "district",
-            "Chattogram"
-        )
-    )
-
-
-# ============================================================
-# FIND ROLL
-# ============================================================
-
-def find_rolls(soup):
-
-    rolls = set()
-
-    # --------------------------------------------------------
-    # Search table rows
-    # --------------------------------------------------------
-
-    for row in soup.find_all("tr"):
-
-        cells = row.find_all(
-            ["td", "th"]
-        )
-
-        if not cells:
-            continue
-
-        values = [
-            clean_text(
-                cell.get_text(
-                    " ",
-                    strip=True
-                )
-            )
-            for cell in cells
-        ]
-
-        for value in values:
-
-            matches = re.findall(
-                r"\b\d{6,8}\b",
-                value
-            )
-
-            for roll in matches:
-
-                rolls.add(
-                    roll
-                )
-
-
-    # --------------------------------------------------------
-    # Search complete text
-    # --------------------------------------------------------
-
-    text = clean_text(
-        soup.get_text(
-            " ",
-            strip=True
-        )
-    )
-
-    matches = re.findall(
-        r"\b\d{6,8}\b",
-        text
-    )
-
-    for roll in matches:
-
-        rolls.add(
-            roll
-        )
-
-
-    return sorted(
-        rolls
-    )
-
-
-# ============================================================
-# FIND STUDENT TABLE
-# ============================================================
-
-def inspect_tables(soup):
-
-    tables = soup.find_all(
-        "table"
-    )
-
-    print(
-        f"TABLES FOUND: {len(tables)}",
-        flush=True
-    )
-
-    for index, table in enumerate(
-        tables,
-        start=1
-    ):
-
-        rows = table.find_all(
-            "tr"
-        )
-
-        print(
-            f"  Table {index}: "
-            f"{len(rows)} rows",
-            flush=True
-        )
-
-        if rows:
-
-            first_row = rows[0]
-
-            values = [
-                clean_text(
-                    cell.get_text(
-                        " ",
-                        strip=True
-                    )
-                )
-                for cell in first_row.find_all(
-                    ["td", "th"]
-                )
-            ]
-
-            if values:
-
-                print(
-                    "    Columns:",
-                    " | ".join(values[:15]),
-                    flush=True
-                )
-
-
-# ============================================================
-# PARSE STUDENT ROWS
-# ============================================================
-
-def parse_student_rows(
-    soup,
+def get_institution_name(
     institution
 ):
 
-    students = []
+    for key in [
+        "institution_name",
+        "institutionName",
+        "name",
+        "college_name",
+        "collegeName",
+        "school_name",
+        "schoolName"
+    ]:
 
-    tables = soup.find_all(
-        "table"
-    )
-
-    for table in tables:
-
-        rows = table.find_all(
-            "tr"
+        value = institution.get(
+            key,
+            ""
         )
 
-        for row in rows:
+        value = clean_text(
+            value
+        )
 
-            cells = row.find_all(
-                ["td", "th"]
+        if value:
+            return value
+
+    return ""
+
+
+def get_district(
+    institution
+):
+
+    for key in [
+        "district",
+        "District",
+        "district_name",
+        "districtName"
+    ]:
+
+        value = clean_text(
+            institution.get(
+                key,
+                ""
             )
+        )
 
-            if len(cells) < 2:
-                continue
+        if value:
+            return value
 
-            values = [
-                clean_text(
-                    cell.get_text(
-                        " ",
-                        strip=True
-                    )
-                )
-                for cell in cells
-            ]
+    return "Chattogram"
 
-            joined = " ".join(
-                values
-            )
-
-            # ------------------------------------------------
-            # Find roll in row
-            # ------------------------------------------------
-
-            roll_match = re.search(
-                r"\b\d{6,8}\b",
-                joined
-            )
-
-            if not roll_match:
-                continue
-
-            roll = roll_match.group(
-                0
-            )
-
-            # ------------------------------------------------
-            # Try GPA
-            # ------------------------------------------------
-
-            gpa = None
-
-            for value in values:
-
-                match = re.search(
-                    r"\b([0-5]\.\d{1,2})\b",
-                    value
-                )
-
-                if match:
-
-                    gpa = float(
-                        match.group(1)
-                    )
-
-                    break
-
-            # ------------------------------------------------
-            # Save raw row
-            # ------------------------------------------------
-
-            students.append({
-
-                "eiin":
-                    str(
-                        institution.get(
-                            "eiin",
-                            ""
-                        )
-                    ),
-
-                "institution_name":
-                    institution_name(
-                        institution
-                    ),
-
-                "district":
-                    district_name(
-                        institution
-                    ),
-
-                "roll":
-                    roll,
-
-                "gpa":
-                    gpa,
-
-                "raw_row":
-                    values
-
-            })
-
-    return students
-
-
-# ============================================================
-# SAVE
-# ============================================================
 
 def save_results():
 
+    temp_file = (
+        OUTPUT_FILE +
+        ".tmp"
+    )
+
     with open(
-        OUTPUT_FILE,
+        temp_file,
         "w",
         encoding="utf-8"
     ) as f:
@@ -599,15 +369,666 @@ def save_results():
             indent=2
         )
 
+    os.replace(
+        temp_file,
+        OUTPUT_FILE
+    )
+
+
+# ============================================================
+# SUBJECT CODE
+# ============================================================
+
+def normalize_subject_code(
+    code
+):
+
+    return str(
+        code
+    ).strip()
+
+
+# ============================================================
+# PARSE SUBJECT RESULT
+#
+# Example:
+#
+# 101:T:172(A+)
+#
+# 107:T:170(A+)
+#
+# ============================================================
+
+def parse_subject_string(
+    subject_text
+):
+
+    subjects = {}
+
+    if not subject_text:
+        return subjects
+
+
+    # --------------------------------------------------------
+    # Example:
+    #
+    # 101:T:172(A+)
+    # --------------------------------------------------------
+
+    pattern = re.compile(
+        r"(\d{3})"
+        r"\s*:\s*"
+        r"([A-Za-z]+)"
+        r"\s*:\s*"
+        r"(\d+(?:\.\d+)?)"
+        r"\s*"
+        r"\(\s*"
+        r"([A-Za-z+\\-]+)"
+        r"\s*\)"
+    )
+
+
+    matches = pattern.findall(
+        subject_text
+    )
+
+
+    for match in matches:
+
+        code = match[0]
+
+        result_type = match[1]
+
+        marks_text = match[2]
+
+        grade = match[3].upper()
+
+
+        try:
+
+            marks = float(
+                marks_text
+            )
+
+            if marks.is_integer():
+
+                marks = int(
+                    marks
+                )
+
+        except Exception:
+
+            marks = None
+
+
+        subjects[
+            normalize_subject_code(
+                code
+            )
+        ] = {
+
+            "marks": marks,
+
+            "grade": grade,
+
+            "type": result_type
+
+        }
+
+
+    return subjects
+
+
+# ============================================================
+# STUDENT LINE PARSER
+#
+# Example:
+#
+# 120629[5.00]:101:T:172(A+),107:T:170(A+),...
+#
+# ============================================================
+
+def parse_student_line(
+    line,
+    institution,
+    group
+):
+
+    line = clean_text(
+        line
+    )
+
+    if not line:
+        return None
+
+
+    # --------------------------------------------------------
+    # Student result format
+    #
+    # ROLL[GPA]:subject...
+    #
+    # --------------------------------------------------------
+
+    pattern = re.compile(
+        r"^"
+        r"(\d{4,8})"
+        r"\s*"
+        r"\["
+        r"([0-5](?:\.\d+)?)"
+        r"\]"
+        r"\s*:"
+        r"(.*)"
+        r"$"
+    )
+
+
+    match = pattern.match(
+        line
+    )
+
+
+    if not match:
+
+        return None
+
+
+    roll = match.group(
+        1
+    ).strip()
+
+
+    gpa_text = match.group(
+        2
+    ).strip()
+
+
+    subject_text = match.group(
+        3
+    ).strip()
+
+
+    # --------------------------------------------------------
+    # Prevent EIIN being interpreted as roll
+    #
+    # EIIN 103086 etc.
+    # --------------------------------------------------------
+
+    institution_eiin = str(
+        institution.get(
+            "eiin",
+            ""
+        )
+    ).strip()
+
+
+    if roll == institution_eiin:
+
+        return None
+
+
+    try:
+
+        gpa = float(
+            gpa_text
+        )
+
+    except Exception:
+
+        gpa = None
+
+
+    subjects = parse_subject_string(
+        subject_text
+    )
+
+
+    return {
+
+        "eiin":
+            institution_eiin,
+
+        "institution_name":
+            get_institution_name(
+                institution
+            ),
+
+        "district":
+            get_district(
+                institution
+            ),
+
+        "group":
+            group,
+
+        "roll":
+            roll,
+
+        "gpa":
+            gpa,
+
+        "result":
+            "PASS",
+
+        "subjects":
+            subjects
+
+    }
+
+
+# ============================================================
+# FIND RESULT TEXT
+# ============================================================
+
+def get_page_text(
+    html
+):
+
+    soup = BeautifulSoup(
+        html,
+        "html.parser"
+    )
+
+
+    # --------------------------------------------------------
+    # get_text() gives us the actual visible result text
+    # --------------------------------------------------------
+
+    text = soup.get_text(
+        "\n",
+        strip=True
+    )
+
+
+    return text
+
+
+# ============================================================
+# NORMALIZE RESULT TEXT
+# ============================================================
+
+def normalize_result_text(
+    text
+):
+
+    lines = []
+
+    for line in text.splitlines():
+
+        line = clean_text(
+            line
+        )
+
+        if line:
+
+            lines.append(
+                line
+            )
+
+
+    return lines
+
+
+# ============================================================
+# DETECT GROUP
+# ============================================================
+
+def detect_group(
+    line,
+    current_group
+):
+
+    upper = line.upper()
+
+
+    if "SCIENCE" in upper:
+
+        return "Science"
+
+
+    if (
+        "BUSINESS STUDIES" in upper
+        or "BUSINESS" in upper
+        or "COMMERCE" in upper
+    ):
+
+        return "Business Studies"
+
+
+    if (
+        "HUMANITIES" in upper
+        or "ARTS" in upper
+    ):
+
+        return "Humanities"
+
+
+    return current_group
+
+
+# ============================================================
+# FAILED STUDENT
+#
+# Examples:
+#
+# 319962[F1]
+# 319965[FAIL]
+# 319971[F2]
+#
+# ============================================================
+
+def parse_failed_line(
+    line,
+    institution,
+    group
+):
+
+    line = clean_text(
+        line
+    )
+
+
+    pattern = re.compile(
+        r"^"
+        r"(\d{4,8})"
+        r"\s*"
+        r"\["
+        r"([^\]]+)"
+        r"\]"
+        r"$"
+    )
+
+
+    match = pattern.match(
+        line
+    )
+
+
+    if not match:
+
+        return None
+
+
+    roll = match.group(
+        1
+    ).strip()
+
+
+    status = match.group(
+        2
+    ).strip().upper()
+
+
+    institution_eiin = str(
+        institution.get(
+            "eiin",
+            ""
+        )
+    ).strip()
+
+
+    if roll == institution_eiin:
+
+        return None
+
+
+    return {
+
+        "eiin":
+            institution_eiin,
+
+        "institution_name":
+            get_institution_name(
+                institution
+            ),
+
+        "district":
+            get_district(
+                institution
+            ),
+
+        "group":
+            group,
+
+        "roll":
+            roll,
+
+        "gpa":
+            None,
+
+        "result":
+            status,
+
+        "subjects":
+            {}
+
+    }
+
+
+# ============================================================
+# PARSE COMPLETE INSTITUTION PAGE
+# ============================================================
+
+def parse_institution_results(
+    html,
+    institution
+):
+
+    text = get_page_text(
+        html
+    )
+
+
+    lines = normalize_result_text(
+        text
+    )
+
+
+    students = []
+
+    current_group = ""
+
+
+    # --------------------------------------------------------
+    # State
+    # --------------------------------------------------------
+
+    in_success_section = False
+
+    in_failed_section = False
+
+
+    for line in lines:
+
+        upper = line.upper()
+
+
+        # ====================================================
+        # GROUP DETECTION
+        # ====================================================
+
+        detected_group = detect_group(
+            line,
+            current_group
+        )
+
+
+        if detected_group != current_group:
+
+            current_group = detected_group
+
+
+        # ====================================================
+        # SUCCESS SECTION
+        # ====================================================
+
+        if (
+            "EXAMINEES SECURING" in upper
+            or "ALL RESULTS" in upper
+        ):
+
+            in_success_section = True
+
+            in_failed_section = False
+
+            continue
+
+
+        # ====================================================
+        # FAILED SECTION
+        # ====================================================
+
+        if (
+            "UNSUCCESSFUL" in upper
+            or "OTHERS" in upper
+        ):
+
+            in_failed_section = True
+
+            in_success_section = False
+
+            continue
+
+
+        # ====================================================
+        # END
+        # ====================================================
+
+        if "END" in upper:
+
+            break
+
+
+        # ====================================================
+        # SUCCESS STUDENT
+        # ====================================================
+
+        if in_success_section:
+
+            student = parse_student_line(
+                line,
+                institution,
+                current_group
+            )
+
+
+            if student:
+
+                students.append(
+                    student
+                )
+
+                continue
+
+
+        # ====================================================
+        # FAILED STUDENT
+        # ====================================================
+
+        if in_failed_section:
+
+            student = parse_failed_line(
+                line,
+                institution,
+                current_group
+            )
+
+
+            if student:
+
+                students.append(
+                    student
+                )
+
+
+    return students
+
+
+# ============================================================
+# DEBUG PRINT
+# ============================================================
+
+def print_student_sample(
+    students,
+    limit=5
+):
+
+    print(
+        "-" * 70,
+        flush=True
+    )
+
+    print(
+        "SAMPLE STUDENTS",
+        flush=True
+    )
+
+
+    for student in students[:limit]:
+
+        print(
+            f"ROLL: {student.get('roll')}",
+            flush=True
+        )
+
+        print(
+            f"GROUP: {student.get('group')}",
+            flush=True
+        )
+
+        print(
+            f"GPA: {student.get('gpa')}",
+            flush=True
+        )
+
+        print(
+            f"RESULT: {student.get('result')}",
+            flush=True
+        )
+
+        print(
+            f"SUBJECTS: "
+            f"{len(student.get('subjects', {}))}",
+            flush=True
+        )
+
+
+        subjects = student.get(
+            "subjects",
+            {}
+        )
+
+
+        for code, data in list(
+            subjects.items()
+        )[:5]:
+
+            print(
+                f"  {code}: "
+                f"{data.get('marks')} "
+                f"({data.get('grade')})",
+                flush=True
+            )
+
+
+        print(
+            "-" * 30,
+            flush=True
+        )
+
 
 # ============================================================
 # COLLECTION
 # ============================================================
 
-limit = min(
-    TEST_LIMIT,
-    total
-)
+if TEST_LIMIT is None:
+
+    target_institutions = institutions
+
+else:
+
+    target_institutions = institutions[
+        :TEST_LIMIT
+    ]
 
 
 print("=" * 70, flush=True)
@@ -618,16 +1039,22 @@ print(
 )
 
 print(
-    f"Target institutions: {limit}",
+    f"Target institutions: "
+    f"{len(target_institutions)}",
     flush=True
 )
 
 print("=" * 70, flush=True)
 
 
-for index in range(limit):
+# ============================================================
+# MAIN LOOP
+# ============================================================
 
-    institution = institutions[index]
+for index, institution in enumerate(
+    target_institutions,
+    start=1
+):
 
     eiin = str(
         institution.get(
@@ -636,27 +1063,32 @@ for index in range(limit):
         )
     ).strip()
 
-    name = institution_name(
+
+    institution_name = get_institution_name(
         institution
     )
+
 
     print(
         "-" * 70,
         flush=True
     )
 
+
     print(
-        f"[{index + 1}/{limit}]",
+        f"[{index}/{len(target_institutions)}]",
         flush=True
     )
+
 
     print(
         f"EIIN: {eiin}",
         flush=True
     )
 
+
     print(
-        f"Institution: {name}",
+        f"Institution: {institution_name}",
         flush=True
     )
 
@@ -668,15 +1100,11 @@ for index in range(limit):
     try:
 
         response = session.post(
-
             BASE_URL,
-
             data={
                 "eiin": eiin
             },
-
             timeout=TIMEOUT
-
         )
 
 
@@ -693,97 +1121,39 @@ for index in range(limit):
                 flush=True
             )
 
-            continue
-
-
-        # ====================================================
-        # PARSE HTML
-        # ====================================================
-
-        soup = BeautifulSoup(
-            response.text,
-            "html.parser"
-        )
-
-
-        # ====================================================
-        # DEBUG TABLE STRUCTURE
-        # ====================================================
-
-        inspect_tables(
-            soup
-        )
-
-
-        # ====================================================
-        # FIND ROLLS
-        # ====================================================
-
-        rolls = find_rolls(
-            soup
-        )
-
-
-        print(
-            f"ROLLS DETECTED: {len(rolls)}",
-            flush=True
-        )
-
-
-        if rolls:
-
-            print(
-                "Detected rolls:",
-                ", ".join(
-                    rolls[:20]
-                ),
-                flush=True
-            )
-
-
-        # ====================================================
-        # PARSE STUDENT ROWS
-        # ====================================================
-
-        students = parse_student_rows(
-            soup,
-            institution
-        )
-
-
-        # ====================================================
-        # IF NO STUDENTS
-        # ====================================================
-
-        if not students:
-
-            print(
-                "",
-                flush=True
-            )
-
-            print(
-                "NO STUDENT ROW FOUND",
-                flush=True
-            )
-
-            print(
-                "The current result page appears "
-                "to be institution summary data.",
-                flush=True
-            )
-
-            print(
-                "Student-level endpoint/parameter "
-                "needs to be identified.",
-                flush=True
-            )
-
             time.sleep(
                 REQUEST_DELAY
             )
 
             continue
+
+
+        html = response.text
+
+
+        # ====================================================
+        # PARSE
+        # ====================================================
+
+        students = parse_institution_results(
+            html,
+            institution
+        )
+
+
+        print(
+            f"STUDENTS DETECTED: "
+            f"{len(students)}",
+            flush=True
+        )
+
+
+        if students:
+
+            print_student_sample(
+                students,
+                limit=5
+            )
 
 
         # ====================================================
@@ -801,6 +1171,11 @@ for index in range(limit):
                     ""
                 )
             ).strip()
+
+
+            if not roll:
+
+                continue
 
 
             key = (
@@ -830,7 +1205,8 @@ for index in range(limit):
 
 
         print(
-            f"NEW STUDENTS SAVED: {new_count}",
+            f"NEW STUDENTS SAVED: "
+            f"{new_count}",
             flush=True
         )
 
@@ -853,7 +1229,7 @@ for index in range(limit):
     except requests.exceptions.RequestException as e:
 
         print(
-            f"ERROR: Request failed: {e}",
+            f"ERROR: Request failed - {e}",
             flush=True
         )
 
@@ -884,14 +1260,46 @@ print(
 
 print("=" * 70, flush=True)
 
+
 print(
     f"Student records: {len(results)}",
     flush=True
 )
+
 
 print(
     f"Output: {OUTPUT_FILE}",
     flush=True
 )
 
-print("=" * 70, flush=True)
+
+# ============================================================
+# FINAL SAMPLE
+# ============================================================
+
+if results:
+
+    print(
+        "=" * 70,
+        flush=True
+    )
+
+    print(
+        "FIRST SAVED RECORD",
+        flush=True
+    )
+
+    print(
+        json.dumps(
+            results[0],
+            ensure_ascii=False,
+            indent=2
+        ),
+        flush=True
+    )
+
+
+print(
+    "=" * 70,
+    flush=True
+)
