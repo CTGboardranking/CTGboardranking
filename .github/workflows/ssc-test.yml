@@ -28,6 +28,10 @@ jobs:
         run: |
           python scraper/institution_stats.py
 
+      - name: Calculate institution ranking
+        run: |
+          python scraper/ranking_engine.py
+
       - name: Upload SSC debug files
         uses: actions/upload-artifact@v4
         if: always()
