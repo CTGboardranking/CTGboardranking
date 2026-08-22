@@ -5,6 +5,10 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
 
+# ============================================================
+# CONFIG
+# ============================================================
+
 BASE_URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/"
 INDIVIDUAL_URL = BASE_URL + "individual/"
 
@@ -13,6 +17,10 @@ ROLL = "100001"
 OUTPUT_DIR = "scraper"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
+
+# ============================================================
+# HEADERS
+# ============================================================
 
 headers = {
     "User-Agent": (
@@ -29,12 +37,16 @@ headers = {
 }
 
 
+# ============================================================
+# SESSION
+# ============================================================
+
 session = requests.Session()
 session.headers.update(headers)
 
 
 # ============================================================
-# 1. OPEN SSC INDIVIDUAL RESULT PAGE
+# 1. OPEN INDIVIDUAL RESULT PAGE
 # ============================================================
 
 print("Opening SSC Individual Result page...")
@@ -48,6 +60,7 @@ try:
         timeout=30,
         allow_redirects=True
     )
+
 except requests.RequestException as e:
     print("GET Error:", repr(e))
     raise SystemExit(1)
@@ -58,7 +71,6 @@ print("GET Final URL:", page.url)
 print("GET Page Size:", len(page.content))
 
 
-# Save original page
 with open(
     os.path.join(OUTPUT_DIR, "individual_page.html"),
     "w",
@@ -69,60 +81,57 @@ with open(
 
 if page.status_code != 200:
     raise SystemExit(
-        f"Could not open individual result page. "
+        f"Could not open individual result page: "
         f"HTTP {page.status_code}"
     )
 
 
 # ============================================================
-# 2. PARSE FORM
+# 2. FIND FORM
 # ============================================================
 
-soup = BeautifulSoup(page.text, "html.parser")
+soup = BeautifulSoup(
+    page.text,
+    "html.parser"
+)
 
 form = soup.find("form")
 
 if not form:
-    print("\nERROR: No <form> found on Individual Result page.")
-
-    with open(
-        os.path.join(OUTPUT_DIR, "form_error.html"),
-        "w",
-        encoding="utf-8"
-    ) as f:
-        f.write(page.text)
-
+    print("ERROR: No form found.")
     raise SystemExit(1)
 
 
-print("\n===== FORM FOUND =====")
+form_action = form.get(
+    "action",
+    ""
+).strip()
 
-form_action = form.get("action", "").strip()
-form_method = form.get("method", "get").strip().lower()
+form_method = form.get(
+    "method",
+    "get"
+).strip().lower()
 
-print("Form method:", form_method)
-print("Form action:", form_action)
+FORM_ACTION_URL = urljoin(
+    page.url,
+    form_action
+)
 
-
-# Exact absolute action URL
-FORM_ACTION_URL = urljoin(page.url, form_action)
-
-print("Resolved action:", FORM_ACTION_URL)
+print("\n===== FORM =====")
+print("Method:", form_method)
+print("Action:", form_action)
+print("Resolved URL:", FORM_ACTION_URL)
 
 
 # ============================================================
-# 3. COLLECT ALL FORM FIELDS
+# 3. COLLECT FORM FIELDS
 # ============================================================
 
 form_data = {}
 
 
-# ---------- INPUTS ----------
-inputs = form.find_all("input")
-
-print("\n===== INPUT FIELDS =====")
-
-for inp in inputs:
+# ---------- INPUT ----------
+for inp in form.find_all("input"):
 
     name = inp.get("name")
 
@@ -139,30 +148,26 @@ for inp in inputs:
         ""
     )
 
-    # Ignore submit/reset buttons for now.
-    # We will add the clicked submit button below.
-    if input_type in ["submit", "button", "reset", "image"]:
+    if input_type in [
+        "submit",
+        "button",
+        "reset",
+        "image"
+    ]:
         continue
 
-    # Checkbox/radio only if checked
-    if input_type in ["checkbox", "radio"]:
+    if input_type in [
+        "checkbox",
+        "radio"
+    ]:
         if not inp.has_attr("checked"):
             continue
 
     form_data[name] = value
 
-    print(
-        f"{name!r} = {value!r} "
-        f"(type={input_type})"
-    )
 
-
-# ---------- SELECTS ----------
-selects = form.find_all("select")
-
-print("\n===== SELECT FIELDS =====")
-
-for select in selects:
+# ---------- SELECT ----------
+for select in form.find_all("select"):
 
     name = select.get("name")
 
@@ -180,63 +185,46 @@ for select in selects:
             selected.get_text(strip=True)
         )
     else:
-        first_option = select.find("option")
+        first = select.find("option")
 
-        if first_option:
-            value = first_option.get(
+        if first:
+            value = first.get(
                 "value",
-                first_option.get_text(strip=True)
+                first.get_text(strip=True)
             )
         else:
             value = ""
 
     form_data[name] = value
 
-    print(
-        f"{name!r} = {value!r}"
-    )
 
-
-# ---------- TEXTAREAS ----------
-textareas = form.find_all("textarea")
-
-print("\n===== TEXTAREA FIELDS =====")
-
-for textarea in textareas:
+# ---------- TEXTAREA ----------
+for textarea in form.find_all("textarea"):
 
     name = textarea.get("name")
 
     if not name:
         continue
 
-    value = textarea.get_text()
-
-    form_data[name] = value
-
-    print(
-        f"{name!r} = {value!r}"
-    )
+    form_data[name] = textarea.get_text()
 
 
 # ============================================================
 # 4. ADD ROLL
 # ============================================================
 
-# The actual roll supplied by the scraper.
 form_data["roll"] = ROLL
 
 
 # ============================================================
-# 5. HANDLE SUBMIT BUTTON
+# 5. SUBMIT BUTTON
 # ============================================================
-
-submit_buttons = form.find_all(
-    ["input", "button"]
-)
 
 submit_found = False
 
-for button in submit_buttons:
+for button in form.find_all(
+    ["input", "button"]
+):
 
     button_type = button.get(
         "type",
@@ -257,34 +245,31 @@ for button in submit_buttons:
 
         form_data[name] = value
 
+        submit_found = True
+
         print(
-            "\nSubmit button detected:",
+            "Submit field:",
             name,
             "=",
             value
         )
 
-        submit_found = True
         break
 
 
-# Fallback for the existing website form
+# Existing SSC form fallback
 if not submit_found:
 
     form_data["button2"] = "Submit"
 
     print(
-        "\nNo named submit button detected."
-    )
-
-    print(
-        "Using fallback:",
-        "button2 = Submit"
+        "Using submit fallback: "
+        "button2=Submit"
     )
 
 
 # ============================================================
-# 6. SAVE COLLECTED FORM DATA
+# 6. SAVE FORM DATA
 # ============================================================
 
 with open(
@@ -304,27 +289,20 @@ with open(
     )
 
 
-print("\n===== FINAL POST DATA =====")
+print("\nPOST DATA:")
 
 for key, value in form_data.items():
-
-    # Avoid printing extremely large values
-    display_value = str(value)
-
-    if len(display_value) > 500:
-        display_value = (
-            display_value[:500]
-            + "... [TRUNCATED]"
-        )
-
     print(
-        f"{key!r}: {display_value!r}"
+        f"{key}: {value}"
     )
 
 
 # ============================================================
-# 7. PREPARE POST HEADERS
+# 7. POST
 # ============================================================
+
+print("\nSubmitting Roll:", ROLL)
+print("POST URL:", FORM_ACTION_URL)
 
 post_headers = {
     "Referer": page.url,
@@ -339,49 +317,6 @@ post_headers = {
 }
 
 
-# ============================================================
-# 8. SHOW SESSION COOKIES
-# ============================================================
-
-print("\n===== SESSION COOKIES =====")
-
-cookies_for_log = {}
-
-for cookie in session.cookies:
-
-    cookies_for_log[cookie.name] = cookie.value
-
-    print(
-        cookie.name,
-        "=",
-        cookie.value
-    )
-
-
-with open(
-    os.path.join(
-        OUTPUT_DIR,
-        "cookies.json"
-    ),
-    "w",
-    encoding="utf-8"
-) as f:
-
-    json.dump(
-        cookies_for_log,
-        f,
-        ensure_ascii=False,
-        indent=2
-    )
-
-
-# ============================================================
-# 9. POST RESULT REQUEST
-# ============================================================
-
-print("\nSubmitting Roll:", ROLL)
-print("POST URL:", FORM_ACTION_URL)
-
 try:
 
     result = session.post(
@@ -394,8 +329,7 @@ try:
 
 except requests.RequestException as e:
 
-    print("\nPOST ERROR:")
-    print(repr(e))
+    print("POST Error:", repr(e))
 
     with open(
         os.path.join(
@@ -405,20 +339,19 @@ except requests.RequestException as e:
         "w",
         encoding="utf-8"
     ) as f:
-
         f.write(repr(e))
 
     raise SystemExit(1)
 
 
 # ============================================================
-# 10. POST RESPONSE INFORMATION
+# 8. SAVE RESPONSE
 # ============================================================
 
 print("\n===== POST RESPONSE =====")
 
 print(
-    "POST Status:",
+    "Status:",
     result.status_code
 )
 
@@ -428,32 +361,20 @@ print(
 )
 
 print(
-    "History:",
-    [
-        r.status_code
-        for r in result.history
-    ]
-)
-
-print(
-    "Result Page Size:",
+    "Response Size:",
     len(result.content)
 )
 
 
-# ============================================================
-# 11. SAVE RESPONSE HEADERS
-# ============================================================
-
-response_headers = {}
-
-for key, value in result.headers.items():
-
-    response_headers[key] = value
-
-    print(
-        f"{key}: {value}"
-    )
+with open(
+    os.path.join(
+        OUTPUT_DIR,
+        "result_page.html"
+    ),
+    "w",
+    encoding="utf-8"
+) as f:
+    f.write(result.text)
 
 
 with open(
@@ -466,25 +387,21 @@ with open(
 ) as f:
 
     json.dump(
-        response_headers,
+        dict(result.headers),
         f,
         ensure_ascii=False,
         indent=2
     )
 
 
-# ============================================================
-# 12. SAVE REDIRECT HISTORY
-# ============================================================
-
-history_data = []
+history = []
 
 for response in result.history:
 
-    history_data.append({
+    history.append({
         "status_code": response.status_code,
         "url": response.url,
-        "headers": dict(response.headers),
+        "headers": dict(response.headers)
     })
 
 
@@ -498,7 +415,7 @@ with open(
 ) as f:
 
     json.dump(
-        history_data,
+        history,
         f,
         ensure_ascii=False,
         indent=2
@@ -506,34 +423,13 @@ with open(
 
 
 # ============================================================
-# 13. SAVE RESULT HTML
-# ============================================================
-
-with open(
-    os.path.join(
-        OUTPUT_DIR,
-        "result_page.html"
-    ),
-    "w",
-    encoding="utf-8"
-) as f:
-
-    f.write(result.text)
-
-
-# ============================================================
-# 14. SAVE ERROR BODY
+# 9. CHECK RESPONSE
 # ============================================================
 
 if result.status_code >= 400:
 
-    print(
-        "\n===== ERROR BODY ====="
-    )
-
-    print(
-        result.text[:10000]
-    )
+    print("\n===== ERROR BODY =====")
+    print(result.text[:10000])
 
     with open(
         os.path.join(
@@ -543,122 +439,284 @@ if result.status_code >= 400:
         "w",
         encoding="utf-8"
     ) as f:
-
         f.write(result.text)
 
-else:
-
-    print(
-        "\nPOST did not return an HTTP error."
+    raise SystemExit(
+        f"POST failed: HTTP {result.status_code}"
     )
 
 
 # ============================================================
-# 15. RESULT PAGE TEXT
+# 10. PARSE RESULT
 # ============================================================
-
-print(
-    "\n===== RESULT PAGE TEXT =====\n"
-)
 
 result_soup = BeautifulSoup(
     result.text,
     "html.parser"
 )
 
-text = result_soup.get_text(
-    "\n",
-    strip=True
-)
+print("\n===== PARSING RESULT =====")
 
-print(
-    text[:5000]
-)
+
+# ------------------------------------------------------------
+# Helper function
+# ------------------------------------------------------------
+
+def clean_text(value):
+    if value is None:
+        return ""
+    return " ".join(
+        value.split()
+    ).strip()
 
 
 # ============================================================
-# 16. TABLES
+# 11. EXTRACT BASIC RESULT DATA
 # ============================================================
 
-print(
-    "\n===== TABLES ====="
-)
+result_data = {
+    "roll": ROLL,
+    "board": "",
+    "group": "",
+    "session": "",
+    "type": "",
+    "institute": "",
+    "gpa": None,
+    "subjects": []
+}
 
-tables = result_soup.find_all(
-    "table"
-)
 
-print(
-    "Tables found:",
-    len(tables)
-)
+# Search all table rows
+rows = result_soup.find_all("tr")
 
-for i, table in enumerate(
-    tables,
-    1
-):
 
-    print(
-        f"\n--- TABLE {i} ---"
+for row in rows:
+
+    cells = row.find_all(
+        ["th", "td"]
     )
 
-    rows = table.find_all("tr")
+    values = [
+        clean_text(
+            cell.get_text(" ", strip=True)
+        )
+        for cell in cells
+    ]
 
-    for row in rows:
+    if not values:
+        continue
+
+    row_text = " | ".join(values)
+
+    # Board
+    if "Board" in values:
+        idx = values.index("Board")
+
+        if idx + 1 < len(values):
+            result_data["board"] = values[idx + 1]
+
+
+    # Group
+    if "Group" in values:
+        idx = values.index("Group")
+
+        if idx + 1 < len(values):
+            result_data["group"] = values[idx + 1]
+
+
+    # Session
+    if "Session" in values:
+        idx = values.index("Session")
+
+        if idx + 1 < len(values):
+            result_data["session"] = values[idx + 1]
+
+
+    # Type
+    if "Type" in values:
+        idx = values.index("Type")
+
+        if idx + 1 < len(values):
+            result_data["type"] = values[idx + 1]
+
+
+    # Institute
+    if "Institute" in values:
+        idx = values.index("Institute")
+
+        if idx + 1 < len(values):
+            result_data["institute"] = values[idx + 1]
+
+
+    # Result / GPA
+    if "Result" in values:
+        idx = values.index("Result")
+
+        if idx + 1 < len(values):
+
+            result_value = values[idx + 1]
+
+            if "GPA=" in result_value:
+
+                try:
+                    result_data["gpa"] = float(
+                        result_value
+                        .split("GPA=", 1)[1]
+                        .strip()
+                    )
+                except ValueError:
+                    pass
+
+
+# ============================================================
+# 12. EXTRACT SUBJECT TABLE
+# ============================================================
+
+for table in result_soup.find_all("table"):
+
+    table_rows = table.find_all("tr")
+
+    for row in table_rows:
 
         cells = row.find_all(
             ["th", "td"]
         )
 
         values = [
-            cell.get_text(
-                " ",
-                strip=True
+            clean_text(
+                cell.get_text(
+                    " ",
+                    strip=True
+                )
             )
             for cell in cells
         ]
 
-        if values:
-            print(values)
+        if len(values) < 3:
+            continue
+
+        code = values[0]
+
+        # Subject codes are numeric
+        if not code.isdigit():
+            continue
+
+        subject = values[1]
+        grade_mark = values[2]
+
+        mark = None
+        grade = ""
+
+        # Example:
+        # 127(A-)
+        # 158(A )
+        # 096(A+)
+
+        if "(" in grade_mark:
+
+            mark_text = (
+                grade_mark
+                .split("(", 1)[0]
+                .strip()
+            )
+
+            grade_text = (
+                grade_mark
+                .split("(", 1)[1]
+                .replace(")", "")
+                .strip()
+            )
+
+            try:
+                mark = int(mark_text)
+            except ValueError:
+                mark = None
+
+            grade = grade_text
+
+        else:
+
+            try:
+                mark = int(grade_mark)
+            except ValueError:
+                mark = None
+
+
+        result_data["subjects"].append({
+            "code": code,
+            "subject": subject,
+            "mark": mark,
+            "grade": grade
+        })
 
 
 # ============================================================
-# 17. FINAL STATUS
+# 13. SAVE STRUCTURED RESULT
 # ============================================================
 
-print(
-    "\n===== DEBUG FILES SAVED ====="
+output_file = os.path.join(
+    OUTPUT_DIR,
+    "parsed_result.json"
 )
 
-print(
-    "scraper/individual_page.html"
-)
+with open(
+    output_file,
+    "w",
+    encoding="utf-8"
+) as f:
 
-print(
-    "scraper/form_data.json"
-)
-
-print(
-    "scraper/cookies.json"
-)
-
-print(
-    "scraper/result_page.html"
-)
-
-print(
-    "scraper/response_headers.json"
-)
-
-print(
-    "scraper/response_history.json"
-)
-
-if result.status_code >= 400:
-
-    print(
-        "scraper/error_body.html"
+    json.dump(
+        result_data,
+        f,
+        ensure_ascii=False,
+        indent=2
     )
+
+
+# ============================================================
+# 14. DISPLAY RESULT
+# ============================================================
+
+print("\n===== PARSED RESULT =====")
+
+print(
+    json.dumps(
+        result_data,
+        ensure_ascii=False,
+        indent=2
+    )
+)
+
+
+# ============================================================
+# 15. FINAL
+# ============================================================
+
+print("\n===== FILES =====")
+
+print(
+    "individual_page.html"
+)
+
+print(
+    "form_data.json"
+)
+
+print(
+    "result_page.html"
+)
+
+print(
+    "response_headers.json"
+)
+
+print(
+    "response_history.json"
+)
+
+print(
+    "parsed_result.json"
+)
 
 print(
     "\n===== DONE ====="
