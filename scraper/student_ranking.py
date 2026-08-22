@@ -68,6 +68,10 @@ def calculate_grade_score(subjects):
 
 def main():
 
+    # ========================================================
+    # CHECK INPUT FILE
+    # ========================================================
+
     if not os.path.exists(INPUT_FILE):
 
         print(
@@ -76,6 +80,11 @@ def main():
 
         sys.exit(1)
 
+
+    # ========================================================
+    # LOAD STUDENTS
+    # ========================================================
+
     with open(
         INPUT_FILE,
         "r",
@@ -83,6 +92,7 @@ def main():
     ) as file:
 
         try:
+
             students = json.load(file)
 
         except json.JSONDecodeError as e:
@@ -91,6 +101,11 @@ def main():
             print(e)
 
             sys.exit(1)
+
+
+    # ========================================================
+    # VALIDATE DATA
+    # ========================================================
 
     if not isinstance(
         students,
@@ -103,7 +118,13 @@ def main():
 
         sys.exit(1)
 
+
     rankings = []
+
+
+    # ========================================================
+    # CALCULATE STUDENT RANKING
+    # ========================================================
 
     for student in students:
 
@@ -112,13 +133,28 @@ def main():
             []
         )
 
+
+        # ----------------------------------------------------
+        # TOTAL MARKS
+        # ----------------------------------------------------
+
         total_marks = calculate_total_marks(
             subjects
         )
 
+
+        # ----------------------------------------------------
+        # GRADE SCORE
+        # ----------------------------------------------------
+
         grade_score = calculate_grade_score(
             subjects
         )
+
+
+        # ----------------------------------------------------
+        # GPA
+        # ----------------------------------------------------
 
         gpa = safe_number(
             student.get(
@@ -127,12 +163,22 @@ def main():
             )
         )
 
-        # GPA converted to 100
+
+        # ----------------------------------------------------
+        # GPA CONVERTED TO 100
+        # ----------------------------------------------------
+
         gpa_score = (
             gpa / 5
         ) * 100
 
-        # Final student score
+
+        # ----------------------------------------------------
+        # FINAL STUDENT SCORE
+        #
+        # KEEPING ORIGINAL CALCULATION UNCHANGED
+        # ----------------------------------------------------
+
         score = (
             gpa_score * 0.50
             +
@@ -142,52 +188,72 @@ def main():
             * 0.30
         )
 
+
+        # ====================================================
+        # ADD STUDENT
+        # ====================================================
+
         rankings.append({
 
+            # 1
             "roll":
                 student.get(
                     "roll",
                     ""
                 ),
 
+            # 2
             "name":
                 student.get(
                     "name",
                     "Unknown"
                 ),
 
+            # 3
+            "total_marks":
+                total_marks,
+
+            # 4
             "institute":
                 student.get(
                     "institute",
                     "Unknown"
                 ),
 
+            # 5
             "district":
                 student.get(
                     "district",
                     "Unknown"
                 ),
 
+            # 6
             "gpa":
                 gpa,
 
-            "total_marks":
-                total_marks,
-
+            # 7
             "grade_score":
                 grade_score,
 
+            # 8
             "score":
                 round(
                     score,
                     2
                 ),
 
+            # 9
             "subjects":
                 subjects
         })
 
-    # Highest score first
+
+    # ========================================================
+    # SORTING
+    #
+    # KEEPING ORIGINAL RANKING LOGIC UNCHANGED
+    # ========================================================
+
     rankings.sort(
         key=lambda x: (
             -x["score"],
@@ -197,13 +263,67 @@ def main():
         )
     )
 
-    # Assign ranks
+
+    # ========================================================
+    # ASSIGN RANKS
+    # ========================================================
+
     for rank, student in enumerate(
         rankings,
         start=1
     ):
 
         student["rank"] = rank
+
+
+    # ========================================================
+    # REBUILD JSON ORDER
+    #
+    # Rank first, then:
+    # Roll → Name → Total Marks → Institute
+    # ========================================================
+
+    ordered_rankings = []
+
+    for student in rankings:
+
+        ordered_rankings.append({
+
+            "rank":
+                student["rank"],
+
+            "roll":
+                student["roll"],
+
+            "name":
+                student["name"],
+
+            "total_marks":
+                student["total_marks"],
+
+            "institute":
+                student["institute"],
+
+            "district":
+                student["district"],
+
+            "gpa":
+                student["gpa"],
+
+            "grade_score":
+                student["grade_score"],
+
+            "score":
+                student["score"],
+
+            "subjects":
+                student["subjects"]
+        })
+
+
+    # ========================================================
+    # SAVE JSON
+    # ========================================================
 
     with open(
         OUTPUT_FILE,
@@ -212,17 +332,23 @@ def main():
     ) as file:
 
         json.dump(
-            rankings,
+            ordered_rankings,
             file,
             ensure_ascii=False,
             indent=2
         )
 
+
+    # ========================================================
+    # TERMINAL OUTPUT
+    # ========================================================
+
     print(
         "\n===== STUDENT RANKING =====\n"
     )
 
-    for student in rankings:
+
+    for student in ordered_rankings:
 
         print(
             f"Rank #{student['rank']} | "
@@ -230,13 +356,20 @@ def main():
             f"{student['name']} | "
             f"Total Marks: {student['total_marks']} | "
             f"Institute: {student['institute']} | "
+            f"District: {student['district']} | "
             f"GPA: {student['gpa']} | "
+            f"Grade Score: {student['grade_score']} | "
             f"Score: {student['score']}"
         )
 
+
+    # ========================================================
+    # SUMMARY
+    # ========================================================
+
     print(
         f"\nTotal students: "
-        f"{len(rankings)}"
+        f"{len(ordered_rankings)}"
     )
 
     print(
@@ -247,6 +380,10 @@ def main():
         "\n===== DONE ====="
     )
 
+
+# ============================================================
+# RUN
+# ============================================================
 
 if __name__ == "__main__":
     main()
