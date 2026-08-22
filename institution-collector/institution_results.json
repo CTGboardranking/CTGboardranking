@@ -1,0 +1,102 @@
+[
+  {
+    "eiin": "103086",
+    "institution_name": "ALI KADAM GOVT. HIGH SCHOOL",
+    "district": "BANDARBAN",
+    "thana": "ALI KADAM",
+    "appeared": 83,
+    "passed": 54,
+    "passing_rate": 65.06,
+    "gpa5": 2
+  },
+  {
+    "eiin": "103087",
+    "institution_name": "ALIKADAM RESIDENTIAL SCHOOL",
+    "district": "BANDARBAN",
+    "thana": "ALI KADAM",
+    "appeared": 45,
+    "passed": 14,
+    "passing_rate": 31.11,
+    "gpa5": 0
+  },
+  {
+    "eiin": "103088",
+    "institution_name": "ALI KADAM GIRLS' HIGH SCHOOL",
+    "district": "BANDARBAN",
+    "thana": "ALI KADAM",
+    "appeared": 57,
+    "passed": 26,
+    "passing_rate": 45.61,
+    "gpa5": 0
+  },
+  {
+    "eiin": "103089",
+    "institution_name": "CHAYKONG MODEL HIGH SCHOOL",
+    "district": "BANDARBAN",
+    "thana": "ALI KADAM",
+    "appeared": 58,
+    "passed": 9,
+    "passing_rate": 15.52,
+    "gpa5": 0
+  },
+  {
+    "eiin": "103091",
+    "institution_name": "DON BASKO HIGH SCHOOL",
+    "district": "BANDARBAN",
+    "thana": "BANDARBAN SADAR",
+    "appeared": 84,
+    "passed": 57,
+    "passing_rate": 67.86,
+    "gpa5": 1
+  },
+  {
+    "eiin": "103092",
+    "institution_name": "BANDARBAN GOVT. HIGH SCHOOL",
+    "district": "BANDARBAN",
+    "thana": "BANDARBAN SADAR",
+    "appeared": 204,
+    "passed": 168,
+    "passing_rate": 82.35,
+    "gpa5": 16
+  },
+  {
+    "eiin": "103093",
+    "institution_name": "BANDARBAN GOVT. GIRLS' HIGH SCHOOL",
+    "district": "BANDARBAN",
+    "thana": "BANDARBAN SADAR",
+    "appeared": 168,
+    "passed": 95,
+    "passing_rate": 56.55,
+    "gpa5": 5
+  },
+  {
+    "eiin": "103094",
+    "institution_name": "RAJBILA HIGH SCHOOL",
+    "district": "BANDARBAN",
+    "thana": "BANDARBAN SADAR",
+    "appeared": 82,
+    "passed": 26,
+    "passing_rate": 31.71,
+    "gpa5": 0
+  },
+  {
+    "eiin": "103095",
+    "institution_name": "BAGMARA HIGH SCHOOL",
+    "district": "BANDARBAN",
+    "thana": "BANDARBAN SADAR",
+    "appeared": 50,
+    "passed": 10,
+    "passing_rate": 20.0,
+    "gpa5": 0
+  },
+  {
+    "eiin": "103096",
+    "institution_name": "MRO ABASIK HIGH SCHOOL",
+    "district": "BANDARBAN",
+    "thana": "BANDARBAN SADAR",
+    "appeared": 20,
+    "passed": 9,
+    "passing_rate": 45.0,
+    "gpa5": 0
+  }
+]
