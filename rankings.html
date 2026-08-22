@@ -480,11 +480,6 @@ rel="stylesheet">
     }
 
 
-    /*
-       Mobile table scroll
-       সব column দেখা যাবে
-    */
-
     .ranking-table{
 
         overflow-x:auto;
@@ -549,10 +544,6 @@ rel="stylesheet">
         font-size:8px;
     }
 
-
-    /*
-       Pagination mobile
-    */
 
     .pagination{
 
@@ -717,8 +708,8 @@ Institution
 
 <p>
 
-All institutions ranked using Passing Rate,
-Total GPA-5 and Total Students.
+All institutions ranked by Total GPA-5,
+with Passing Rate and Total Students used as tie-breakers.
 
 </p>
 
@@ -868,7 +859,7 @@ Institution Rankings
 </span>
 
 <small>
-PASSING RATE
+TOTAL GPA-5
 </small>
 
 </div>
@@ -905,7 +896,7 @@ PASSING RATE
 </span>
 
 <small>
-PASSING RATE
+TOTAL GPA-5
 </small>
 
 </div>
@@ -942,7 +933,7 @@ PASSING RATE
 </span>
 
 <small>
-PASSING RATE
+TOTAL GPA-5
 </small>
 
 </div>
@@ -988,11 +979,11 @@ INSTITUTION NAME
 </div>
 
 <div>
-PASSING RATE
+TOTAL GPA-5
 </div>
 
 <div>
-TOTAL GPA-5
+PASSING RATE
 </div>
 
 </div>
@@ -1181,8 +1172,8 @@ let currentPage = 1;
 
 
 /*
-   প্রতি পেজে ১০০টি institution
-*/
+ * প্রতি পেজে ১০০টি institution
+ */
 
 const PAGE_SIZE = 100;
 
@@ -1378,7 +1369,7 @@ function normalizeInstitution(item){
 
     /*
      * যদি passing_rate না থাকে,
-     * appeared/pass থেকে calculate হবে।
+     * তাহলে appeared/pass থেকে calculate হবে।
      */
 
     if (
@@ -1399,7 +1390,8 @@ function normalizeInstitution(item){
 
         eiin:
             String(
-                item.eiin || ""
+                item.eiin ||
+                ""
             ).trim(),
 
         institution:
@@ -1451,7 +1443,9 @@ function buildRanking(){
 
 
     /*
-     * Invalid record বাদ
+     * Invalid records বাদ
+     *
+     * metadata record-ও বাদ যাবে।
      */
 
     data =
@@ -1460,7 +1454,8 @@ function buildRanking(){
                 item.eiin &&
                 item.eiin !== "metadata" &&
                 item.institution &&
-                item.institution !== "Unknown Institution"
+                item.institution !==
+                    "Unknown Institution"
         );
 
 
@@ -1469,7 +1464,8 @@ function buildRanking(){
      */
 
     if (
-        currentDistrict !== "all"
+        currentDistrict !==
+        "all"
     ){
 
         data =
@@ -1530,28 +1526,19 @@ function buildRanking(){
      * =====================================================
      * RANKING ORDER
      *
-     * 1. Passing Rate
-     * 2. Total GPA-5
-     * 3. Passed Students
-     * 4. Appeared Students
+     * 1. TOTAL GPA-5
+     * 2. PASSING RATE
+     * 3. PASSED STUDENTS
+     * 4. APPEARED STUDENTS
      * =====================================================
      */
 
     data.sort(
         (a,b) => {
 
-            if (
-                b.passRate !==
-                a.passRate
-            ){
-
-                return (
-                    b.passRate -
-                    a.passRate
-                );
-
-            }
-
+            /*
+             * 1. Total GPA-5
+             */
 
             if (
                 b.gpa5 !==
@@ -1566,6 +1553,27 @@ function buildRanking(){
             }
 
 
+            /*
+             * 2. Passing Rate
+             */
+
+            if (
+                b.passRate !==
+                a.passRate
+            ){
+
+                return (
+                    b.passRate -
+                    a.passRate
+                );
+
+            }
+
+
+            /*
+             * 3. Passed Students
+             */
+
             if (
                 b.passed !==
                 a.passed
@@ -1578,6 +1586,10 @@ function buildRanking(){
 
             }
 
+
+            /*
+             * 4. Appeared Students
+             */
 
             return (
                 b.appeared -
@@ -1624,7 +1636,8 @@ function populateDistricts(){
         );
 
 
-    groupFilter.innerHTML = "";
+    groupFilter.innerHTML =
+        "";
 
 
     const allOption =
@@ -1736,7 +1749,7 @@ function updatePodium(){
         "podium1Pass"
     ).textContent =
         first
-            ? first.passRate.toFixed(2) + "%"
+            ? first.gpa5
             : "—";
 
 
@@ -1764,7 +1777,7 @@ function updatePodium(){
         "podium2Pass"
     ).textContent =
         second
-            ? second.passRate.toFixed(2) + "%"
+            ? second.gpa5
             : "—";
 
 
@@ -1792,7 +1805,7 @@ function updatePodium(){
         "podium3Pass"
     ).textContent =
         third
-            ? third.passRate.toFixed(2) + "%"
+            ? third.gpa5
             : "—";
 
 }
@@ -1804,7 +1817,8 @@ function updatePodium(){
 
 function renderTable(){
 
-    rankingRows.innerHTML = "";
+    rankingRows.innerHTML =
+        "";
 
 
     emptyState.style.display =
@@ -1844,7 +1858,8 @@ function renderTable(){
      */
 
     if (
-        currentPage > totalPages
+        currentPage >
+        totalPages
     ){
 
         currentPage =
@@ -1945,15 +1960,13 @@ function renderTable(){
 
                     <span class="data-value">
 
-                        ${item.passRate.toFixed(
-                            2
-                        )}%
+                        ${item.gpa5}
 
                     </span>
 
                     <span class="data-label">
 
-                        PASSING RATE
+                        TOTAL GPA-5
 
                     </span>
 
@@ -1964,13 +1977,15 @@ function renderTable(){
 
                     <span class="data-value">
 
-                        ${item.gpa5}
+                        ${item.passRate.toFixed(
+                            2
+                        )}%
 
                     </span>
 
                     <span class="data-label">
 
-                        TOTAL GPA-5
+                        PASSING RATE
 
                     </span>
 
@@ -2019,7 +2034,8 @@ function renderTable(){
 
 
     nextPage.disabled =
-        currentPage >= totalPages;
+        currentPage >=
+        totalPages;
 
 }
 
