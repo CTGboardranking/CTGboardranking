@@ -1,0 +1,27 @@
+name: Institution Result Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-result:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4
+
+      - name: Run Result Test
+        run: |
+          python institution-collector/test_result.py
