@@ -772,19 +772,110 @@ body.dark .humanities {
 
 }
 
-.unofficial-notice { width: 100%; padding: 28px 20px; margin-top: 40px; background: #f8f9fb; border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; }
-
-.unofficial-notice-inner { max-width: 1100px; margin: 0 auto; text-align: center; }
-
-.unofficial-notice h3 { margin: 0 0 12px; font-size: 18px; font-weight: 700; color: #1f2937; }
-
-.unofficial-notice p { margin: 7px 0; font-size: 13px; line-height: 1.7; color: #6b7280; }
-
-.unofficial-notice strong { color: #374151; }
-
-@media (max-width: 600px) { .unofficial-notice { padding: 24px 16px; }
-
-.unofficial-notice h3 { font-size: 16px; } .unofficial-notice p { font-size: 12px; } 
-
+.unofficial-notice {
+width: 100%;
+margin-top: 50px;
+padding: 30px 20px;
+background: linear-gradient(
+135deg,
+#f8fafc,
+#f1f5f9
+);
+border-top: 1px solid rgba(15, 23, 42, 0.08);
+border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 }
 
+.unofficial-notice-inner {
+max-width: 1000px;
+margin: 0 auto;
+padding: 22px 26px;
+display: flex;
+align-items: flex-start;
+gap: 18px;
+background: rgba(255, 255, 255, 0.75);
+border: 1px solid rgba(15, 23, 42, 0.08);
+border-radius: 16px;
+box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+backdrop-filter: blur(10px);
+}
+
+.notice-icon {
+flex: 0 0 38px;
+width: 38px;
+height: 38px;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 50%;
+background: #fff7ed;
+color: #ea580c;
+font-size: 18px;
+font-weight: 700;
+border: 1px solid #fed7aa;
+}
+
+.notice-content {
+flex: 1;
+}
+
+.unofficial-notice h3 {
+margin: 0 0 8px;
+font-size: 17px;
+font-weight: 700;
+letter-spacing: -0.2px;
+color: #111827;
+}
+
+.unofficial-notice p {
+margin: 6px 0;
+font-size: 13px;
+line-height: 1.7;
+color: #64748b;
+}
+
+.unofficial-notice strong {
+color: #374151;
+font-weight: 600;
+}
+
+.unofficial-notice .notice-source {
+margin-top: 10px;
+font-size: 12px;
+color: #94a3b8;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+
+.unofficial-notice {
+    margin-top: 35px;
+    padding: 22px 14px;
+}
+
+.unofficial-notice-inner {
+    padding: 20px 17px;
+    gap: 13px;
+    border-radius: 14px;
+}
+
+.notice-icon {
+    flex-basis: 32px;
+    width: 32px;
+    height: 32px;
+    font-size: 15px;
+}
+
+.unofficial-notice h3 {
+    font-size: 15px;
+}
+
+.unofficial-notice p {
+    font-size: 12px;
+    line-height: 1.65;
+}
+
+.unofficial-notice .notice-source {
+    font-size: 11px;
+}
+
+}
