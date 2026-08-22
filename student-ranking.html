@@ -3,680 +3,277 @@
 
 <head>
 
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Student Ranking — CTGBoardRanking
-    </title>
-
-    <meta
-        name="description"
-        content="Chattogram Board Student Ranking"
-    >
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
-
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
-    <style>
-
-        /* =====================================================
-           STUDENT HERO
-        ===================================================== */
-
-        .student-hero {
-
-            max-width: 1100px;
-
-            margin: auto;
-
-            padding: 90px 20px 50px;
-
-        }
-
-
-        .back-link {
-
-            display: inline-flex;
-
-            align-items: center;
-
-            gap: 7px;
-
-            color: var(--muted);
-
-            font-size: 14px;
-
-            margin-bottom: 30px;
-
-            text-decoration: none;
-
-        }
-
-
-        .back-link:hover {
-
-            color: var(--blue);
-
-        }
-
-
-        .student-hero h1 {
-
-            font-size: clamp(
-                45px,
-                7vw,
-                76px
-            );
-
-            line-height: .98;
-
-            letter-spacing: -4px;
-
-            margin-top: 10px;
-
-        }
-
-
-        .student-hero h1 span {
-
-            color: var(--blue);
-
-        }
-
-
-        .student-hero p {
-
-            color: var(--muted);
-
-            max-width: 650px;
-
-            margin-top: 20px;
-
-            font-size: 17px;
-
-        }
-
-
-        /* =====================================================
-           CONTENT
-        ===================================================== */
-
-        .student-content {
-
-            max-width: 1100px;
-
-            margin: auto;
-
-            padding: 20px;
-
-        }
-
-
-        /* =====================================================
-           CONTROLS
-        ===================================================== */
-
-        .ranking-controls {
-
-            display: grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
-            gap: 14px;
-
-            margin-bottom: 35px;
-
-        }
-
-
-        .control-card {
-
-            background:
-                rgba(
-                    255,
-                    255,
-                    255,
-                    .82
-                );
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius: 20px;
-
-            padding: 16px;
-
-            box-shadow:
-                var(--shadow);
-
-        }
-
-
-        .control-card label {
-
-            display: block;
-
-            color: var(--muted);
-
-            font-size: 10px;
-
-            font-weight: 700;
-
-            letter-spacing: 1px;
-
-            margin-bottom: 8px;
-
-        }
-
-
-        .control-card select {
-
-            width: 100%;
-
-            padding: 13px;
-
-            border-radius: 13px;
-
-            border:
-                1px solid
-                var(--border);
-
-            background:
-                rgba(
-                    245,
-                    245,
-                    247,
-                    .8
-                );
-
-            color: var(--text);
-
-            font-family: inherit;
-
-            outline: none;
-
-        }
-
-
-        /* =====================================================
-           GROUP TABS
-        ===================================================== */
-
-        .group-tabs {
-
-            display: flex;
-
-            gap: 8px;
-
-            margin-bottom: 30px;
-
-            overflow-x: auto;
-
-            scrollbar-width: none;
-
-        }
-
-
-        .group-tabs::-webkit-scrollbar {
-
-            display: none;
-
-        }
-
-
-        .group-tab {
-
-            border:
-                1px solid
-                var(--border);
-
-            background:
-                var(--white);
-
-            color:
-                var(--muted);
-
-            padding:
-                11px 18px;
-
-            border-radius: 50px;
-
-            font-family: inherit;
-
-            font-weight: 600;
-
-            cursor: pointer;
-
-            white-space: nowrap;
-
-            transition: .2s;
-
-        }
-
-
-        .group-tab:hover {
-
-            transform:
-                translateY(-1px);
-
-        }
-
-
-        .group-tab.active {
-
-            background:
-                var(--text);
-
-            color:
-                var(--bg);
-
-        }
-
-
-        /* =====================================================
-           TITLE
-        ===================================================== */
-
-        .ranking-title {
-
-            display: flex;
-
-            justify-content:
-                space-between;
-
-            align-items:
-                end;
-
-            margin-bottom: 20px;
-
-        }
-
-
-        .ranking-title h2 {
-
-            font-size: 32px;
-
-            letter-spacing: -1.5px;
-
-        }
-
-
-        .ranking-title p {
-
-            color:
-                var(--muted);
-
-            font-size: 13px;
-
-        }
-
-
-        /* =====================================================
-           SEARCH
-        ===================================================== */
-
-        .student-search {
-
-            width: 100%;
-
-            margin-bottom: 18px;
-
-            padding: 14px 16px;
-
-            border-radius: 14px;
-
-            border:
-                1px solid
-                var(--border);
-
-            background:
-                var(--white);
-
-            color:
-                var(--text);
-
-            font-family: inherit;
-
-            outline: none;
-
-            box-sizing: border-box;
-
-        }
-
-
-        .student-search:focus {
-
-            border-color:
-                var(--blue);
-
-        }
-
-
-        /* =====================================================
-           LIST
-        ===================================================== */
-
-        .student-list {
-
-            background:
-                rgba(
-                    255,
-                    255,
-                    255,
-                    .88
-                );
-
-            border:
-                1px solid
-                var(--border);
-
-            border-radius: 24px;
-
-            overflow: hidden;
-
-            box-shadow:
-                var(--shadow);
-
-        }
-
-
-        .student-row {
-
-            display: grid;
-
-            grid-template-columns:
-                70px
-                1fr
-                180px
-                120px;
-
-            align-items: center;
-
-            gap: 15px;
-
-            padding:
-                20px 25px;
-
-            border-bottom:
-                1px solid
-                var(--border);
-
-            transition: .2s;
-
-        }
-
-
-        .student-row:last-child {
-
-            border-bottom: none;
-
-        }
-
-
-        .student-row:hover {
-
-            background:
-                rgba(
-                    0,
-                    113,
-                    227,
-                    .035
-                );
-
-        }
-
-
-        /* =====================================================
-           RANK
-        ===================================================== */
-
-        .student-rank {
-
-            font-size: 18px;
-
-            font-weight: 800;
-
-            color:
-                var(--muted);
-
-        }
-
-
-        .student-rank.gold {
-
-            color:
-                #c68a00;
-
-        }
-
-
-        /* =====================================================
-           NAME
-        ===================================================== */
-
-        .student-name strong,
-        .student-name span {
-
-            display: block;
-
-        }
-
-
-        .student-name strong {
-
-            font-size: 15px;
-
-        }
-
-
-        .student-name span {
-
-            color:
-                var(--muted);
-
-            font-size: 11px;
-
-            margin-top: 3px;
-
-        }
-
-
-        /* =====================================================
-           INSTITUTION
-        ===================================================== */
-
-        .student-institution strong,
-        .student-institution span {
-
-            display: block;
-
-        }
-
-
-        .student-institution strong {
-
-            font-size: 13px;
-
-        }
-
-
-        .student-institution span {
-
-            color:
-                var(--muted);
-
-            font-size: 11px;
-
-            margin-top: 3px;
-
-        }
-
-
-        /* =====================================================
-           SCORE
-        ===================================================== */
-
-        .student-score strong {
-
-            font-size: 17px;
-
-        }
-
-
-        .student-score span {
-
-            display: block;
-
-            color:
-                var(--muted);
-
-            font-size: 10px;
-
-            margin-top: 3px;
-
-        }
-
-
-        /* =====================================================
-           EMPTY / LOADING
-        ===================================================== */
-
-        .empty-message {
-
-            display: none;
-
-            text-align: center;
-
-            padding: 60px 20px;
-
-            color:
-                var(--muted);
-
-        }
-
-
-        .loading-message {
-
-            text-align: center;
-
-            padding: 60px 20px;
-
-            color:
-                var(--muted);
-
-        }
-
-
-        /* =====================================================
-           MOBILE
-        ===================================================== */
-
-        @media (max-width: 800px) {
-
-            .student-hero {
-
-                padding-top: 65px;
-
-            }
-
-
-            .ranking-controls {
-
-                grid-template-columns: 1fr;
-
-            }
-
-
-            .ranking-title {
-
-                display: block;
-
-            }
-
-
-            .ranking-title p {
-
-                margin-top: 6px;
-
-            }
-
-
-            .student-row {
-
-                grid-template-columns:
-                    45px
-                    1fr
-                    80px;
-
-                padding: 18px;
-
-                gap: 10px;
-
-            }
-
-
-            .student-institution {
-
-                display: none;
-
-            }
-
-        }
-
-
-        @media (max-width: 500px) {
-
-            .student-hero h1 {
-
-                letter-spacing: -3px;
-
-            }
-
-
-            .student-row {
-
-                grid-template-columns:
-                    42px
-                    1fr
-                    65px;
-
-            }
-
-
-            .student-score strong {
-
-                font-size: 14px;
-
-            }
-
-        }
-
-    </style>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Student Ranking — CTGBoardRanking</title>
+
+<meta name="description"
+      content="Chattogram Board SSC 2026 Student Ranking">
+
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet">
+
+<link rel="stylesheet"
+      href="style.css">
+
+
+<style>
+
+.student-hero {
+    max-width:1100px;
+    margin:auto;
+    padding:90px 20px 50px;
+}
+
+.back-link {
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    color:var(--muted);
+    font-size:14px;
+    margin-bottom:30px;
+    text-decoration:none;
+}
+
+.student-hero h1 {
+    font-size:clamp(45px,7vw,76px);
+    line-height:.98;
+    letter-spacing:-4px;
+    margin-top:10px;
+}
+
+.student-hero h1 span {
+    color:var(--blue);
+}
+
+.student-hero p {
+    color:var(--muted);
+    max-width:650px;
+    margin-top:20px;
+    font-size:17px;
+}
+
+.student-content {
+    max-width:1100px;
+    margin:auto;
+    padding:20px;
+}
+
+.ranking-controls {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-bottom:35px;
+}
+
+.control-card {
+    background:rgba(255,255,255,.82);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:16px;
+    box-shadow:var(--shadow);
+}
+
+.control-card label {
+    display:block;
+    color:var(--muted);
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:1px;
+    margin-bottom:8px;
+}
+
+.control-card select,
+.student-search {
+    width:100%;
+    padding:13px;
+    border-radius:13px;
+    border:1px solid var(--border);
+    background:rgba(245,245,247,.8);
+    color:var(--text);
+    font-family:inherit;
+    outline:none;
+}
+
+.group-tabs {
+    display:flex;
+    gap:8px;
+    margin-bottom:30px;
+    overflow-x:auto;
+}
+
+.group-tab {
+    border:1px solid var(--border);
+    background:var(--white);
+    color:var(--muted);
+    padding:11px 18px;
+    border-radius:50px;
+    font-family:inherit;
+    font-weight:600;
+    cursor:pointer;
+    white-space:nowrap;
+}
+
+.group-tab.active {
+    background:var(--text);
+    color:var(--bg);
+}
+
+.ranking-title {
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    margin-bottom:20px;
+}
+
+.ranking-title h2 {
+    font-size:32px;
+    letter-spacing:-1.5px;
+}
+
+.ranking-title p {
+    color:var(--muted);
+    font-size:13px;
+}
+
+.student-search {
+    margin-bottom:18px;
+    background:white;
+}
+
+.student-list {
+    background:rgba(255,255,255,.88);
+    border:1px solid var(--border);
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+}
+
+.student-row {
+    display:grid;
+    grid-template-columns:70px 1fr 220px 120px;
+    align-items:center;
+    gap:15px;
+    padding:20px 25px;
+    border-bottom:1px solid var(--border);
+    transition:.2s;
+}
+
+.student-row:hover {
+    background:rgba(0,113,227,.035);
+}
+
+.student-rank {
+    font-size:18px;
+    font-weight:800;
+    color:var(--muted);
+}
+
+.student-rank.gold {
+    color:#c68a00;
+}
+
+.student-name strong,
+.student-name span,
+.student-institution strong,
+.student-institution span {
+    display:block;
+}
+
+.student-name strong {
+    font-size:15px;
+}
+
+.student-name span,
+.student-institution span {
+    color:var(--muted);
+    font-size:11px;
+    margin-top:3px;
+}
+
+.student-institution strong {
+    font-size:13px;
+}
+
+.student-score strong {
+    font-size:17px;
+}
+
+.student-score span {
+    display:block;
+    color:var(--muted);
+    font-size:10px;
+}
+
+.loading-message,
+.empty-message,
+.error-message {
+    text-align:center;
+    padding:60px 20px;
+    color:var(--muted);
+}
+
+.error-message {
+    color:#d93025;
+}
+
+@media(max-width:800px) {
+
+    .student-hero {
+        padding-top:65px;
+    }
+
+    .ranking-controls {
+        grid-template-columns:1fr;
+    }
+
+    .ranking-title {
+        display:block;
+    }
+
+    .ranking-title p {
+        margin-top:6px;
+    }
+
+    .student-row {
+        grid-template-columns:45px 1fr 80px;
+        padding:18px;
+        gap:10px;
+    }
+
+    .student-institution {
+        display:none;
+    }
+
+}
+
+@media(max-width:500px) {
+
+    .student-hero h1 {
+        letter-spacing:-3px;
+    }
+
+    .student-row {
+        grid-template-columns:42px 1fr 65px;
+    }
+
+    .student-score strong {
+        font-size:14px;
+    }
+
+}
+
+</style>
 
 </head>
 
@@ -684,492 +281,455 @@
 <body>
 
 
-<!-- =========================================================
-     NAVBAR
-========================================================= -->
-
 <header class="navbar">
 
-    <a
-        href="index.html"
-        class="logo"
-    >
+<a href="index.html" class="logo">
 
-        <span class="logo-mark">
-            C
-        </span>
+<span class="logo-mark">C</span>
 
-        <span>
-            CTGBoardRanking
-        </span>
+<span>CTGBoardRanking</span>
 
-    </a>
+</a>
 
 
-    <nav class="nav-links">
+<nav class="nav-links">
 
-        <a href="index.html">
-            Home
-        </a>
+<a href="index.html">
+Home
+</a>
 
-        <a
-            href="student-ranking.html"
-            class="active"
-        >
-            Student Ranking
-        </a>
+<a href="student-ranking.html"
+   class="active">
+Student Ranking
+</a>
 
-        <a href="rankings.html">
-            Institution Ranking
-        </a>
+<a href="rankings.html">
+Institution Ranking
+</a>
 
-        <a href="district.html">
-            Districts
-        </a>
+<a href="district.html">
+Districts
+</a>
 
-        <a href="statistics.html">
-            Statistics
-        </a>
+<a href="statistics.html">
+Statistics
+</a>
 
-    </nav>
+</nav>
 
 
-    <button
-        class="theme-btn"
-        id="themeBtn"
-        aria-label="Toggle dark mode"
-    >
-        ◐
-    </button>
+<button
+    class="theme-btn"
+    id="themeBtn"
+    aria-label="Toggle dark mode">
+
+    ◐
+
+</button>
 
 </header>
 
 
 
-<!-- =========================================================
-     MAIN
-========================================================= -->
-
 <main>
 
 
-    <!-- HERO -->
+<section class="student-hero">
 
-    <section class="student-hero">
+<a href="index.html"
+   class="back-link">
 
-        <a
-            href="index.html"
-            class="back-link"
-        >
+← Back to Home
 
-            ← Back to Home
+</a>
 
-        </a>
 
+<span class="eyebrow">
+CHITTAGONG BOARD
+</span>
 
-        <span class="eyebrow">
-            CHITTAGONG BOARD
-        </span>
 
+<h1>
 
-        <h1>
+Student<br>
 
-            Student<br>
+<span>Ranking.</span>
 
-            <span>
-                Ranking.
-            </span>
+</h1>
 
-        </h1>
 
+<p>
 
-        <p>
+Explore the top 100 performing SSC 2026 students
+by group.
 
-            Explore top-performing students
-            by group and academic year.
+</p>
 
-        </p>
+</section>
 
-    </section>
 
 
+<section class="student-content">
 
-    <!-- CONTENT -->
 
-    <section class="student-content">
+<div class="ranking-controls">
 
 
-        <!-- CONTROLS -->
+<div class="control-card">
 
-        <div class="ranking-controls">
+<label>
+ACADEMIC YEAR
+</label>
 
+<select id="yearSelect">
 
-            <div class="control-card">
+<option value="2026">
+2026
+</option>
 
-                <label>
-                    ACADEMIC YEAR
-                </label>
+</select>
 
+</div>
 
-                <select id="yearSelect">
 
-                    <option value="2026">
-                        2026
-                    </option>
+<div class="control-card">
 
-                    <option value="2025">
-                        2025
-                    </option>
+<label>
+RANKING
+</label>
 
-                    <option value="2024">
-                        2024
-                    </option>
+<select>
 
-                </select>
+<option>
+Student Ranking
+</option>
 
-            </div>
+</select>
 
+</div>
 
 
-            <div class="control-card">
+</div>
 
-                <label>
-                    RANKING
-                </label>
 
 
-                <select id="rankingType">
+<div class="group-tabs">
 
-                    <option value="student">
-                        Student Ranking
-                    </option>
 
-                </select>
+<button
+    class="group-tab active"
+    data-group="Science">
 
-            </div>
+🔬 Science
 
-        </div>
+</button>
 
 
+<button
+    class="group-tab"
+    data-group="Business Studies">
 
-        <!-- GROUP -->
+💼 Business Studies
 
-        <div class="group-tabs">
+</button>
 
 
-            <button
-                class="group-tab active"
-                data-group="science"
-            >
+<button
+    class="group-tab"
+    data-group="Humanities">
 
-                🔬 Science
+🎓 Humanities
 
-            </button>
+</button>
 
 
-            <button
-                class="group-tab"
-                data-group="business"
-            >
+<button
+    class="group-tab"
+    data-group="Science Irregular">
 
-                💼 Business Studies
+📚 Science Irregular
 
-            </button>
+</button>
 
 
-            <button
-                class="group-tab"
-                data-group="humanities"
-            >
+</div>
 
-                🎓 Humanities
 
-            </button>
 
+<div class="ranking-title">
 
-        </div>
+<div>
 
+<span class="eyebrow">
+TOP 100 PERFORMERS
+</span>
 
+<h2 id="groupTitle">
+Science Students
+</h2>
 
-        <!-- TITLE -->
+</div>
 
-        <div class="ranking-title">
 
+<p id="yearText">
+2026 · Chattogram Board
+</p>
 
-            <div>
+</div>
 
-                <span class="eyebrow">
-                    TOP 100 PERFORMERS
-                </span>
 
 
-                <h2 id="groupTitle">
-                    Science Students
-                </h2>
+<input
+    type="search"
+    id="studentSearch"
+    class="student-search"
+    placeholder="Search student, roll or institution..."
+    autocomplete="off">
 
-            </div>
 
 
-            <p id="yearText">
-                2026 · Chattogram Board
-            </p>
+<div class="student-list">
 
-        </div>
 
+<div id="studentRows">
 
+<div class="loading-message">
 
-        <!-- SEARCH -->
+Loading student ranking...
 
-        <input
-            type="search"
-            id="studentSearch"
-            class="student-search"
-            placeholder="Search student, roll or institution..."
-            autocomplete="off"
-        >
+</div>
 
+</div>
 
 
-        <!-- STUDENT LIST -->
+<div
+    id="emptyMessage"
+    class="empty-message"
+    style="display:none;">
 
-        <div class="student-list">
+No student found.
 
+</div>
 
-            <div
-                id="studentRows"
-            >
 
-                <div
-                    class="loading-message"
-                >
+<div
+    id="errorMessage"
+    class="error-message"
+    style="display:none;">
 
-                    Loading student ranking...
+Student ranking data could not be loaded.
 
-                </div>
+</div>
 
-            </div>
 
+</div>
 
-            <div
-                id="emptyMessage"
-                class="empty-message"
-            >
 
-                No student found.
-
-            </div>
-
-
-        </div>
-
-
-    </section>
+</section>
 
 </main>
 
 
 
-<!-- =========================================================
-     FOOTER
-========================================================= -->
-
 <footer>
 
+<div class="footer-main">
 
-    <div class="footer-main">
+<div>
 
+<div class="footer-logo">
 
-        <div>
+<span class="logo-mark">
+C
+</span>
 
+CTGBoardRanking
 
-            <div class="footer-logo">
+</div>
 
-                <span class="logo-mark">
-                    C
-                </span>
+<p>
+Chattogram Board Education Rankings.
+</p>
 
-                CTGBoardRanking
-
-            </div>
-
-
-            <p>
-                Chattogram Board Education Rankings.
-            </p>
-
-        </div>
+</div>
 
 
+<div class="footer-links">
 
-        <div class="footer-links">
+<a href="student-ranking.html">
+Student Ranking
+</a>
 
+<a href="rankings.html">
+Institution Ranking
+</a>
 
-            <a
-                href="student-ranking.html"
-            >
-                Student Ranking
-            </a>
+<a href="district.html">
+Districts
+</a>
 
+<a href="statistics.html">
+Statistics
+</a>
 
-            <a
-                href="rankings.html"
-            >
-                Institution Ranking
-            </a>
+</div>
 
-
-            <a
-                href="district.html"
-            >
-                Districts
-            </a>
+</div>
 
 
-            <a
-                href="statistics.html"
-            >
-                Statistics
-            </a>
+<div class="footer-bottom">
 
+<span>
+© 2026 CTGBoardRanking
+</span>
 
-        </div>
+<span>
+Education Data & Statistics
+</span>
 
-
-    </div>
-
-
-
-    <div class="footer-bottom">
-
-
-        <span>
-            © 2026 CTGBoardRanking
-        </span>
-
-
-        <span>
-            Education Data & Statistics
-        </span>
-
-
-    </div>
-
+</div>
 
 </footer>
 
 
 
-<!-- =========================================================
-     MAIN SCRIPT
-========================================================= -->
-
 <script src="script.js"></script>
 
 
 
-<!-- =========================================================
-     STUDENT RANKING SCRIPT
-========================================================= -->
-
 <script>
 
+const DATA_URL =
+    "scraper/students.json?v=" + Date.now();
 
-/* =========================================================
-   CONFIG
-========================================================= */
-
-const STUDENT_DATA_URL =
-    "scraper/student_ranking.json?v=" +
-    Date.now();
-
-
-/* =========================================================
-   ELEMENTS
-========================================================= */
-
-const groupTitle =
-    document.getElementById(
-        "groupTitle"
-    );
-
-
-const yearSelect =
-    document.getElementById(
-        "yearSelect"
-    );
-
-
-const yearText =
-    document.getElementById(
-        "yearText"
-    );
-
-
-const tabs =
-    document.querySelectorAll(
-        ".group-tab"
-    );
-
-
-const search =
-    document.getElementById(
-        "studentSearch"
-    );
-
-
-const studentRows =
-    document.getElementById(
-        "studentRows"
-    );
-
-
-const emptyMessage =
-    document.getElementById(
-        "emptyMessage"
-    );
-
-
-/* =========================================================
-   CURRENT GROUP
-========================================================= */
-
-const urlParams =
-    new URLSearchParams(
-        window.location.search
-    );
-
-
-let currentGroup =
-    urlParams.get("group") ||
-    "science";
-
-
-/* =========================================================
-   DATA
-========================================================= */
 
 let allStudents = [];
+
+let currentGroup = "Science";
+
+let currentSearch = "";
+
+
+const rowsContainer =
+    document.getElementById("studentRows");
+
+const emptyMessage =
+    document.getElementById("emptyMessage");
+
+const errorMessage =
+    document.getElementById("errorMessage");
+
+const searchInput =
+    document.getElementById("studentSearch");
+
+const groupTitle =
+    document.getElementById("groupTitle");
+
+const yearText =
+    document.getElementById("yearText");
+
+
+
+/* =========================================================
+   LOAD STUDENTS
+========================================================= */
+
+async function loadStudents() {
+
+    try {
+
+        const response =
+            await fetch(DATA_URL);
+
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP " + response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (Array.isArray(data)) {
+
+            allStudents = data;
+
+        }
+
+        else if (
+            data &&
+            Array.isArray(data.students)
+        ) {
+
+            allStudents =
+                data.students;
+
+        }
+
+        else {
+
+            throw new Error(
+                "Invalid students.json format"
+            );
+
+        }
+
+
+        console.log(
+            "Students loaded:",
+            allStudents.length
+        );
+
+
+        renderStudents();
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "Student ranking error:",
+            error
+        );
+
+
+        rowsContainer.innerHTML = "";
+
+
+        errorMessage.style.display =
+            "block";
+
+    }
+
+}
+
 
 
 /* =========================================================
    NORMALIZE GROUP
 ========================================================= */
 
-function normalizeGroup(value) {
+function normalizeGroup(group) {
 
-    return String(
-        value || ""
-    )
-    .toLowerCase()
-    .trim()
-    .replace(/_/g, " ")
-    .replace(/-/g, " ");
+    if (!group) {
+        return "";
+    }
+
+
+    return String(group)
+        .trim()
+        .toLowerCase();
 
 }
 
 
+
 /* =========================================================
-   GROUP MATCH
+   FILTER GROUP
 ========================================================= */
 
 function matchesGroup(student) {
@@ -1180,94 +740,99 @@ function matchesGroup(student) {
         );
 
 
-    if (currentGroup === "science") {
-
-        return (
-            group === "science" ||
-            group.includes("science")
+    const selected =
+        normalizeGroup(
+            currentGroup
         );
 
-    }
 
-
-    if (currentGroup === "business") {
-
-        return (
-            group.includes("business") ||
-            group.includes("commerce")
-        );
-
-    }
-
-
-    if (currentGroup === "humanities") {
-
-        return (
-            group.includes("humanities") ||
-            group.includes("arts")
-        );
-
-    }
-
-
-    return true;
+    return group === selected;
 
 }
 
 
+
 /* =========================================================
-   UPDATE GROUP
+   SEARCH
 ========================================================= */
 
-function updateGroup() {
+function matchesSearch(student) {
 
-    let title =
-        "Science";
+    if (!currentSearch) {
 
-
-    if (
-        currentGroup ===
-        "business"
-    ) {
-
-        title =
-            "Business Studies";
+        return true;
 
     }
 
 
-    if (
-        currentGroup ===
-        "humanities"
-    ) {
+    const text = [
 
-        title =
-            "Humanities";
+        student.name,
 
-    }
+        student.roll,
+
+        student.institute,
+
+        student.district,
+
+        student.group,
+
+        student.gpa
+
+    ]
+    .filter(
+        value =>
+            value !== undefined &&
+            value !== null
+    )
+    .join(" ")
+    .toLowerCase();
 
 
-    groupTitle.textContent =
-        title +
-        " Students";
+    return text.includes(
+        currentSearch
+    );
+
+}
 
 
-    yearText.textContent =
-        yearSelect.value +
-        " · Chattogram Board";
+
+/* =========================================================
+   SORT
+========================================================= */
+
+function sortStudents(list) {
+
+    return [...list].sort(
+        (a,b) => {
+
+            const gpaA =
+                Number(a.gpa) || 0;
+
+            const gpaB =
+                Number(b.gpa) || 0;
 
 
-    tabs.forEach(
-        tab => {
+            if (gpaB !== gpaA) {
 
-            tab.classList.toggle(
+                return gpaB - gpaA;
 
-                "active",
+            }
 
-                tab.dataset.group ===
-                currentGroup
 
-            );
+            const subjectsA =
+                Array.isArray(a.subjects)
+                ? a.subjects.length
+                : 0;
+
+            const subjectsB =
+                Array.isArray(b.subjects)
+                ? b.subjects.length
+                : 0;
+
+
+            return subjectsB -
+                   subjectsA;
 
         }
     );
@@ -1275,220 +840,36 @@ function updateGroup() {
 }
 
 
-/* =========================================================
-   LOAD STUDENT DATA
-========================================================= */
-
-async function loadStudentRanking() {
-
-    try {
-
-
-        studentRows.innerHTML = `
-
-            <div class="loading-message">
-
-                Loading student ranking...
-
-            </div>
-
-        `;
-
-
-        const response =
-            await fetch(
-                STUDENT_DATA_URL,
-                {
-                    cache: "no-store"
-                }
-            );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "HTTP " +
-                response.status
-            );
-
-        }
-
-
-        const data =
-            await response.json();
-
-
-        /* ---------------------------------------------
-           SUPPORT MULTIPLE JSON STRUCTURES
-        --------------------------------------------- */
-
-        if (
-            Array.isArray(data)
-        ) {
-
-            allStudents =
-                data;
-
-        }
-
-        else if (
-            data &&
-            Array.isArray(
-                data.ranking
-            )
-        ) {
-
-            allStudents =
-                data.ranking;
-
-        }
-
-        else if (
-            data &&
-            Array.isArray(
-                data.students
-            )
-        ) {
-
-            allStudents =
-                data.students;
-
-        }
-
-        else {
-
-            allStudents = [];
-
-        }
-
-
-        console.log(
-            "Student data loaded:",
-            allStudents.length
-        );
-
-
-        renderStudents();
-
-
-    }
-
-    catch (error) {
-
-
-        console.error(
-            "Student ranking error:",
-            error
-        );
-
-
-        studentRows.innerHTML = "";
-
-
-        emptyMessage.textContent =
-            "Student ranking data could not be loaded.";
-
-
-        emptyMessage.style.display =
-            "block";
-
-    }
-
-}
-
 
 /* =========================================================
-   RENDER STUDENTS
+   RENDER TOP 100
 ========================================================= */
 
 function renderStudents() {
 
+    rowsContainer.innerHTML = "";
 
-    let students =
+
+    let filtered =
         allStudents.filter(
-            matchesGroup
+            student =>
+                matchesGroup(student) &&
+                matchesSearch(student)
         );
 
 
-    /* ---------------------------------------------
-       SEARCH
-    --------------------------------------------- */
-
-    const searchValue =
-        search.value
-        .toLowerCase()
-        .trim();
+    filtered =
+        sortStudents(filtered);
 
 
-    if (searchValue) {
-
-        students =
-            students.filter(
-                student => {
+    const top100 =
+        filtered.slice(0,100);
 
 
-                    const searchableText = [
-
-                        student.name,
-
-                        student.roll,
-
-                        student.institute,
-
-                        student.district,
-
-                        student.group
-
-                    ]
-                    .filter(Boolean)
-                    .join(" ")
-                    .toLowerCase();
-
-
-                    return searchableText
-                        .includes(
-                            searchValue
-                        );
-
-                }
-            );
-
-    }
-
-
-    /* ---------------------------------------------
-       TOP 100
-    --------------------------------------------- */
-
-    students =
-        students.slice(
-            0,
-            100
-        );
-
-
-    /* ---------------------------------------------
-       CLEAR
-    --------------------------------------------- */
-
-    studentRows.innerHTML = "";
-
-
-    /* ---------------------------------------------
-       EMPTY
-    --------------------------------------------- */
-
-    if (
-        students.length === 0
-    ) {
-
-        emptyMessage.textContent =
-            "No student found.";
-
+    if (!top100.length) {
 
         emptyMessage.style.display =
             "block";
-
 
         return;
 
@@ -1499,12 +880,8 @@ function renderStudents() {
         "none";
 
 
-    /* ---------------------------------------------
-       CREATE ROWS
-    --------------------------------------------- */
-
-    students.forEach(
-        (student, index) => {
+    top100.forEach(
+        (student,index) => {
 
 
             const row =
@@ -1517,224 +894,92 @@ function renderStudents() {
                 "student-row";
 
 
-            /* RANK */
-
             const rank =
-                document.createElement(
-                    "div"
-                );
-
-
-            rank.className =
-                "student-rank";
-
-
-            if (
-                index === 0
-            ) {
-
-                rank.classList.add(
-                    "gold"
-                );
-
-            }
-
-
-            const rankNumber =
-                student.rank ||
                 index + 1;
 
 
-            rank.textContent =
-                String(
-                    rankNumber
-                ).padStart(
-                    2,
-                    "0"
-                );
+            const rankClass =
+                rank === 1
+                ? "student-rank gold"
+                : "student-rank";
 
-
-            /* NAME */
 
             const name =
-                document.createElement(
-                    "div"
-                );
-
-
-            name.className =
-                "student-name";
-
-
-            const nameStrong =
-                document.createElement(
-                    "strong"
-                );
-
-
-            nameStrong.textContent =
                 student.name ||
                 "Unknown Student";
 
 
-            const rollSpan =
-                document.createElement(
-                    "span"
-                );
+            const roll =
+                student.roll ||
+                "—";
 
 
-            rollSpan.textContent =
-                "Roll: " +
-                (
-                    student.roll ||
-                    "—"
-                );
-
-
-            name.appendChild(
-                nameStrong
-            );
-
-
-            name.appendChild(
-                rollSpan
-            );
-
-
-            /* INSTITUTION */
-
-            const institution =
-                document.createElement(
-                    "div"
-                );
-
-
-            institution.className =
-                "student-institution";
-
-
-            const institutionStrong =
-                document.createElement(
-                    "strong"
-                );
-
-
-            institutionStrong.textContent =
+            const institute =
                 student.institute ||
-                "Institution —";
+                "Unknown Institution";
 
 
-            const districtSpan =
-                document.createElement(
-                    "span"
-                );
-
-
-            districtSpan.textContent =
+            const district =
                 student.district ||
                 "Chattogram";
 
 
-            institution.appendChild(
-                institutionStrong
-            );
-
-
-            institution.appendChild(
-                districtSpan
-            );
-
-
-            /* GPA */
-
-            const score =
-                document.createElement(
-                    "div"
-                );
-
-
-            score.className =
-                "student-score";
-
-
-            const scoreStrong =
-                document.createElement(
-                    "strong"
-                );
-
-
             const gpa =
-                student.gpa;
+                student.gpa !== null &&
+                student.gpa !== undefined
+                ? student.gpa
+                : "—";
 
 
-            if (
-                gpa !== null &&
-                gpa !== undefined &&
-                gpa !== ""
-            ) {
+            row.innerHTML = `
 
-                scoreStrong.textContent =
-                    Number(
-                        gpa
-                    ).toFixed(
-                        2
-                    );
-
-            }
-
-            else {
-
-                scoreStrong.textContent =
-                    "—";
-
-            }
+                <div class="${rankClass}">
+                    ${String(rank).padStart(2,"0")}
+                </div>
 
 
-            const scoreSpan =
-                document.createElement(
-                    "span"
-                );
+                <div class="student-name">
+
+                    <strong>
+                        ${escapeHTML(name)}
+                    </strong>
+
+                    <span>
+                        Roll: ${escapeHTML(roll)}
+                    </span>
+
+                </div>
 
 
-            scoreSpan.textContent =
-                "GPA";
+                <div class="student-institution">
+
+                    <strong>
+                        ${escapeHTML(institute)}
+                    </strong>
+
+                    <span>
+                        ${escapeHTML(district)}
+                    </span>
+
+                </div>
 
 
-            score.appendChild(
-                scoreStrong
-            );
+                <div class="student-score">
+
+                    <strong>
+                        ${escapeHTML(String(gpa))}
+                    </strong>
+
+                    <span>
+                        GPA
+                    </span>
+
+                </div>
+
+            `;
 
 
-            score.appendChild(
-                scoreSpan
-            );
-
-
-            /* -----------------------------------------
-               ADD TO ROW
-            ----------------------------------------- */
-
-            row.appendChild(
-                rank
-            );
-
-
-            row.appendChild(
-                name
-            );
-
-
-            row.appendChild(
-                institution
-            );
-
-
-            row.appendChild(
-                score
-            );
-
-
-            studentRows.appendChild(
+            rowsContainer.appendChild(
                 row
             );
 
@@ -1744,31 +989,71 @@ function renderStudents() {
 }
 
 
+
 /* =========================================================
-   GROUP TAB CLICK
+   SAFE HTML
 ========================================================= */
 
-tabs.forEach(
-    tab => {
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+
+/* =========================================================
+   GROUP BUTTONS
+========================================================= */
+
+document
+    .querySelectorAll(".group-tab")
+    .forEach(tab => {
 
         tab.addEventListener(
             "click",
             () => {
 
-
                 currentGroup =
                     tab.dataset.group;
 
 
-                updateGroup();
+                document
+                    .querySelectorAll(
+                        ".group-tab"
+                    )
+                    .forEach(
+                        button =>
+                            button.classList.toggle(
+                                "active",
+                                button === tab
+                            )
+                    );
 
 
-                history.replaceState(
-                    null,
-                    "",
-                    "student-ranking.html?group=" +
-                    currentGroup
-                );
+                groupTitle.textContent =
+                    currentGroup +
+                    " Students";
 
 
                 renderStudents();
@@ -1776,29 +1061,23 @@ tabs.forEach(
             }
         );
 
-    }
-);
+    });
+
 
 
 /* =========================================================
-   SEARCH
+   SEARCH INPUT
 ========================================================= */
 
-search.addEventListener(
+searchInput.addEventListener(
     "input",
-    renderStudents
-);
-
-
-/* =========================================================
-   YEAR
-========================================================= */
-
-yearSelect.addEventListener(
-    "change",
     () => {
 
-        updateGroup();
+        currentSearch =
+            searchInput.value
+                .toLowerCase()
+                .trim();
+
 
         renderStudents();
 
@@ -1806,14 +1085,12 @@ yearSelect.addEventListener(
 );
 
 
+
 /* =========================================================
    START
 ========================================================= */
 
-updateGroup();
-
-loadStudentRanking();
-
+loadStudents();
 
 </script>
 
