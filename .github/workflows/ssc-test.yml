@@ -1,35 +1,33 @@
-name: SSC Result Test
+name: SSC Test
 
 on:
   workflow_dispatch:
 
 jobs:
-
   test:
-
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
 
       - name: Install dependencies
         run: |
           pip install requests beautifulsoup4
 
-      - name: Test Chattogram Board
+      - name: Run SSC test
         run: |
-          python scraper/ssc_test.py 100001
+          python scraper/ssc_test.py
 
       - name: Upload SSC debug files
-  uses: actions/upload-artifact@v4
-  with:
-    name: ssc-test-page
-    path: scraper/
-    if-no-files-found: error
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ssc-test-page
+          path: scraper/
+          if-no-files-found: error
