@@ -17,7 +17,6 @@
 
     <link rel="stylesheet" href="style.css">
 
-    <!-- SUPABASE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -53,8 +52,6 @@
             padding: 20px;
         }
 
-        /* SEARCH CARD */
-
         .search-card {
             background: rgba(255,255,255,.85);
             border: 1px solid var(--border);
@@ -76,7 +73,7 @@
 
         .form-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 13px;
         }
 
@@ -89,7 +86,8 @@
             margin: 0 0 7px 4px;
         }
 
-        .form-group input {
+        .form-group input,
+        .form-group select {
             width: 100%;
             padding: 14px;
             border: 1px solid var(--border);
@@ -100,7 +98,8 @@
             outline: none;
         }
 
-        .form-group input:focus {
+        .form-group input:focus,
+        .form-group select:focus {
             border-color: var(--blue);
         }
 
@@ -125,12 +124,10 @@
         }
 
         .search-button:disabled {
-            opacity: .65;
+            opacity: .7;
             cursor: wait;
             transform: none;
         }
-
-        /* RESULT */
 
         #resultArea {
             display: none;
@@ -197,9 +194,8 @@
 
         .info-box strong {
             font-size: 13px;
+            word-break: break-word;
         }
-
-        /* SUBJECT TABLE */
 
         .subject-table {
             margin: 0 30px 25px;
@@ -231,8 +227,6 @@
         .grade {
             font-weight: 700;
         }
-
-        /* SUMMARY */
 
         .result-summary {
             display: grid;
@@ -281,6 +275,10 @@
 
             .result-hero h1 {
                 letter-spacing: -3px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
             }
 
             .student-info {
@@ -364,8 +362,6 @@
 
 <main>
 
-<!-- HERO -->
-
 <section class="result-hero">
 
     <span class="eyebrow">
@@ -378,17 +374,13 @@
     </h1>
 
     <p>
-        Enter your roll number
-        to view your individual result.
+        Enter your roll number to view your individual result.
     </p>
 
 </section>
 
 
 <section class="result-container">
-
-
-    <!-- SEARCH -->
 
     <div class="search-card">
 
@@ -397,11 +389,57 @@
         </h2>
 
         <p>
-            Enter your roll number.
+            Enter your roll number only.
         </p>
 
 
         <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    YEAR
+                </label>
+
+                <select id="year">
+
+                    <option value="2026">
+                        2026
+                    </option>
+
+                    <option value="2025">
+                        2025
+                    </option>
+
+                    <option value="2024">
+                        2024
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    EXAM
+                </label>
+
+                <select id="exam">
+
+                    <option value="ssc">
+                        SSC
+                    </option>
+
+                    <option value="hsc">
+                        HSC
+                    </option>
+
+                </select>
+
+            </div>
+
 
             <div class="form-group">
 
@@ -415,6 +453,21 @@
                     inputmode="numeric"
                     autocomplete="off"
                     placeholder="Enter roll number">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    REGISTRATION NUMBER
+                </label>
+
+                <input
+                    type="text"
+                    id="registration"
+                    placeholder="Not required"
+                    disabled>
 
             </div>
 
@@ -434,19 +487,16 @@
             class="error-message"
             id="errorMessage">
 
+            Please enter a valid roll number.
+
         </div>
 
     </div>
 
 
-    <!-- RESULT -->
-
     <div id="resultArea">
 
         <div class="result-card">
-
-
-            <!-- HEADER -->
 
             <div class="result-header">
 
@@ -476,8 +526,6 @@
 
             </div>
 
-
-            <!-- INFO -->
 
             <div class="student-info">
 
@@ -561,8 +609,6 @@
             </div>
 
 
-            <!-- SUBJECTS -->
-
             <div class="subject-table">
 
                 <div class="subject-header">
@@ -583,8 +629,6 @@
 
             </div>
 
-
-            <!-- SUMMARY -->
 
             <div class="result-summary">
 
@@ -722,22 +766,6 @@ const supabaseClient =
 
 
 /* ==========================================
-   FIXED RESULT SETTINGS
-========================================== */
-
-/*
-   User শুধু Roll Number দিবে।
-
-   Year = 2026
-   Exam = SSC
-   Registration = null
-*/
-
-const RESULT_YEAR = 2026;
-const RESULT_EXAM = "ssc";
-
-
-/* ==========================================
    ELEMENTS
 ========================================== */
 
@@ -755,7 +783,7 @@ const rollInput =
 
 
 /* ==========================================
-   SEARCH BUTTON
+   SEARCH
 ========================================== */
 
 searchButton.addEventListener(
@@ -764,17 +792,11 @@ searchButton.addEventListener(
 );
 
 
-/* ==========================================
-   SEARCH RESULT
-========================================== */
-
 async function searchResult() {
 
     const roll =
         rollInput.value.trim();
 
-
-    /* Hide previous result/error */
 
     errorMessage.style.display =
         "none";
@@ -782,8 +804,6 @@ async function searchResult() {
     resultArea.style.display =
         "none";
 
-
-    /* Validate Roll */
 
     if (!roll) {
 
@@ -797,12 +817,10 @@ async function searchResult() {
     }
 
 
-    /* Only numbers allowed */
-
     if (!/^\d+$/.test(roll)) {
 
         showError(
-            "Please enter a valid roll number."
+            "Roll number must contain numbers only."
         );
 
         rollInput.focus();
@@ -820,36 +838,30 @@ async function searchResult() {
     try {
 
         /*
-         * Supabase RPC
-         *
-         * Only user input:
-         * p_roll
-         *
-         * Automatically:
-         * p_year = 2026
-         * p_exam = ssc
-         * p_registration = null
+         * IMPORTANT:
+         * Roll দিয়েই সরাসরি student_results
+         * থেকে search করা হচ্ছে।
          */
 
-        const { data, error } =
-            await supabaseClient.rpc(
-                "get_student_result",
-                {
-                    p_year: RESULT_YEAR,
-                    p_exam: RESULT_EXAM,
-                    p_roll: roll,
-                    p_registration: null
-                }
-            );
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("student_results")
+            .select("*")
+            .eq("roll", roll)
+            .order("year", {
+                ascending: false
+            })
+            .limit(1);
 
 
         console.log(
-            "Supabase response:",
-            data
+            "Student query:",
+            data,
+            error
         );
 
-
-        /* Supabase error */
 
         if (error) {
 
@@ -859,30 +871,75 @@ async function searchResult() {
             );
 
             showError(
-                "Unable to load result. Please try again."
+                "Database error: " +
+                error.message
             );
 
             return;
         }
 
 
-        /* No result */
-
-        if (!data) {
+        if (
+            !data ||
+            data.length === 0
+        ) {
 
             showError(
-                "No result found for Roll " +
-                roll +
-                "."
+                "No result found for roll number " +
+                roll
             );
 
             return;
         }
 
 
-        /* Display */
+        const student =
+            data[0];
 
-        displayResult(data);
+
+        /*
+         * Subject data
+         */
+
+        let subjects = [];
+
+
+        if (student.id) {
+
+            const subjectResponse =
+                await supabaseClient
+                    .from("student_subject_results")
+                    .select("*")
+                    .eq(
+                        "student_result_id",
+                        student.id
+                    )
+                    .order("id", {
+                        ascending: true
+                    });
+
+
+            console.log(
+                "Subjects:",
+                subjectResponse.data,
+                subjectResponse.error
+            );
+
+
+            if (!subjectResponse.error) {
+
+                subjects =
+                    subjectResponse.data || [];
+
+            }
+
+        }
+
+
+        displayResult(
+            student,
+            subjects
+        );
 
 
     } catch (error) {
@@ -893,7 +950,8 @@ async function searchResult() {
         );
 
         showError(
-            "Something went wrong. Please try again."
+            "Something went wrong: " +
+            error.message
         );
 
     } finally {
@@ -913,98 +971,88 @@ async function searchResult() {
    DISPLAY RESULT
 ========================================== */
 
-function displayResult(data) {
-
-    const student =
-        data.student || data;
-
-    const subjects =
-        Array.isArray(data.subjects)
-            ? data.subjects
-            : [];
-
-
-    /* Student Name */
+function displayResult(
+    student,
+    subjects
+) {
 
     document.getElementById(
         "studentName"
     ).textContent =
-        student.student_name || "—";
+        student.student_name ||
+        student.name ||
+        "—";
 
-
-    /* Result Status */
 
     document.getElementById(
         "resultStatus"
     ).textContent =
-        student.result_status || "—";
+        student.result_status ||
+        student.result ||
+        "—";
 
-
-    /* Roll */
 
     document.getElementById(
         "showRoll"
     ).textContent =
-        student.roll || "—";
+        student.roll ||
+        "—";
 
-
-    /* Registration */
 
     document.getElementById(
         "showRegistration"
     ).textContent =
-        student.registration || "—";
+        student.registration ||
+        student.registration_number ||
+        "—";
 
-
-    /* Year */
 
     document.getElementById(
         "showYear"
     ).textContent =
-        student.year || RESULT_YEAR;
+        student.year ||
+        "—";
 
-
-    /* Group */
 
     document.getElementById(
         "showGroup"
     ).textContent =
-        student.group_name || "—";
+        student.group_name ||
+        student.group ||
+        "—";
 
-
-    /* Institution */
 
     document.getElementById(
         "showInstitution"
     ).textContent =
-        student.institution || "—";
+        student.institution ||
+        student.institution_name ||
+        student.college_name ||
+        "—";
 
-
-    /* District */
 
     document.getElementById(
         "showDistrict"
     ).textContent =
-        student.district || "—";
+        student.district ||
+        "—";
 
-
-    /* Total Marks */
 
     document.getElementById(
         "totalMarks"
     ).textContent =
-        student.total_marks ?? "—";
+        student.total_marks ??
+        student.total ??
+        "—";
 
-
-    /* GPA */
 
     document.getElementById(
         "gpa"
     ).textContent =
-        student.gpa ?? "—";
+        student.gpa ??
+        student.GPA ??
+        "—";
 
-
-    /* Rank */
 
     document.getElementById(
         "rank"
@@ -1012,9 +1060,7 @@ function displayResult(data) {
         "—";
 
 
-    /* ======================================
-       SUBJECT TABLE
-    ====================================== */
+    /* SUBJECT TABLE */
 
     const table =
         document.querySelector(
@@ -1043,9 +1089,10 @@ function displayResult(data) {
     `;
 
 
-    /* No subject */
-
-    if (subjects.length === 0) {
+    if (
+        !subjects ||
+        subjects.length === 0
+    ) {
 
         table.innerHTML += `
 
@@ -1067,14 +1114,28 @@ function displayResult(data) {
 
         `;
 
-    }
-
-    /* Subjects */
-
-    else {
+    } else {
 
         subjects.forEach(
             function(subject) {
+
+                const subjectName =
+                    subject.subject_name ||
+                    subject.subject ||
+                    subject.subject_code ||
+                    "—";
+
+
+                const marks =
+                    subject.marks ??
+                    subject.mark ??
+                    "—";
+
+
+                const grade =
+                    subject.grade ||
+                    "—";
+
 
                 const row =
                     document.createElement(
@@ -1090,17 +1151,19 @@ function displayResult(data) {
 
                     <div>
                         ${escapeHTML(
-                            subject.subject_name
+                            subjectName
                         )}
                     </div>
 
                     <div>
-                        ${subject.marks ?? "—"}
+                        ${escapeHTML(
+                            marks
+                        )}
                     </div>
 
                     <div class="grade">
                         ${escapeHTML(
-                            subject.grade || "—"
+                            grade
                         )}
                     </div>
 
@@ -1116,8 +1179,6 @@ function displayResult(data) {
 
     }
 
-
-    /* Show Result */
 
     resultArea.style.display =
         "block";
