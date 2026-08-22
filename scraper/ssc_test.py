@@ -42,13 +42,12 @@ ROLL_RANGES = {
     "Business Studies": (500001, 541800),
 }
 
-
 # ============================================================
 # BATCH SETTINGS
 # ============================================================
 
 # প্রতি GitHub Actions run-এ সর্বোচ্চ কতটি নতুন roll চেষ্টা করবে
-BATCH_SIZE = 500
+BATCH_SIZE = 5000
 
 # Request-এর মাঝে বিরতি
 MIN_DELAY = 1.0
@@ -58,16 +57,6 @@ MAX_DELAY = 2.0
 MAX_RETRIES = 3
 
 REQUEST_TIMEOUT = 30
-
-YEAR = 2026
-BOARD = "Chattogram Board"
-
-
-os.makedirs(
-    OUTPUT_DIR,
-    exist_ok=True
-)
-
 
 # ============================================================
 # HEADERS
