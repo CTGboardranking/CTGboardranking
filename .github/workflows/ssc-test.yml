@@ -32,6 +32,10 @@ jobs:
         run: |
           python scraper/csv_to_institutions.py
 
+      - name: Validate institution data
+        run: |
+          python scraper/ranking_validator.py
+
       - name: Calculate institution ranking
         run: |
           python scraper/ranking_engine.py
