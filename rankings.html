@@ -188,7 +188,7 @@
 .table-header,
 .table-row{
     display:grid;
-    grid-template-columns:70px 1fr 180px 150px;
+    grid-template-columns:70px minmax(0,1fr) 180px 150px;
     align-items:center;
     gap:10px;
 }
@@ -220,10 +220,15 @@
     color:#c68a00;
 }
 
+.institution-name{
+    min-width:0;
+}
+
 .institution-name strong{
     display:block;
     font-size:14px;
     line-height:1.4;
+    word-break:break-word;
 }
 
 .institution-name span{
@@ -381,7 +386,6 @@ aria-label="Toggle dark mode">
 
 </header>
 
-
 <main>
 
 <section class="ranking-hero">
@@ -401,11 +405,10 @@ Institution<br>
 
 <p>
 Top 100 institutions based on collected SSC result data.
-Compare Passing Rate and Total GPA.
+Compare Passing Rate and Total GPA-5.
 </p>
 
 </section>
-
 
 <section class="filters">
 
@@ -424,7 +427,6 @@ Compare Passing Rate and Total GPA.
 </select>
 
 </div>
-
 
 <div class="filter-item">
 
@@ -452,7 +454,6 @@ Science Irregular
 
 </div>
 
-
 <div class="filter-item">
 
 <label>RANKING TYPE</label>
@@ -470,7 +471,6 @@ Institution Ranking
 </div>
 
 </section>
-
 
 <section class="ranking-content">
 
@@ -493,7 +493,6 @@ Science Rankings
 </p>
 
 </div>
-
 
 <div class="podium">
 
@@ -529,7 +528,6 @@ PASSING RATE
 
 </div>
 
-
 <div class="podium-card first">
 
 <div class="medal">
@@ -561,7 +559,6 @@ PASSING RATE
 </div>
 
 </div>
-
 
 <div class="podium-card">
 
@@ -597,17 +594,15 @@ PASSING RATE
 
 </div>
 
-
 <div class="search-box">
 
 <input
 type="search"
 id="searchInput"
-placeholder="Search college name..."
+placeholder="Search institution name..."
 autocomplete="off">
 
 </div>
-
 
 <div class="ranking-table">
 
@@ -626,11 +621,10 @@ PASSING RATE
 </div>
 
 <div>
-TOTAL GPA
+TOTAL GPA-5
 </div>
 
 </div>
-
 
 <div id="rankingRows">
 
@@ -640,7 +634,6 @@ Loading Top 100 institution ranking...
 
 </div>
 
-
 <div id="emptyState"
 class="empty-state">
 
@@ -648,14 +641,12 @@ No institution found.
 
 </div>
 
-
 <div id="errorState"
 class="error-state">
 
 Institution ranking data could not be loaded.
 
 </div>
-
 
 <div id="pagination"
 class="pagination">
@@ -687,7 +678,6 @@ Next →
 
 </main>
 
-
 <footer>
 
 <div class="footer-main">
@@ -709,7 +699,6 @@ Chattogram Board Education Rankings.
 </p>
 
 </div>
-
 
 <div class="footer-links">
 
@@ -733,7 +722,6 @@ Statistics
 
 </div>
 
-
 <div class="footer-bottom">
 
 <span>
@@ -748,16 +736,13 @@ Education Data & Statistics
 
 </footer>
 
-
 <script src="script.js"></script>
-
 
 <script>
 
 const DATA_URL =
     "scraper/students.json?v=" +
     Date.now();
-
 
 let allStudents = [];
 
@@ -773,6 +758,10 @@ let currentPage = 1;
 
 const PAGE_SIZE = 100;
 
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
 
 const yearFilter =
     document.getElementById("yearFilter");
@@ -811,6 +800,10 @@ const paginationInfo =
     document.getElementById("paginationInfo");
 
 
+/* =========================================================
+   SAFE VALUE
+========================================================= */
+
 function getValue(
     obj,
     keys,
@@ -821,13 +814,13 @@ function getValue(
         return fallback;
     }
 
-    for (const key of keys) {
+    for (const key of keys){
 
         if (
             obj[key] !== undefined &&
             obj[key] !== null &&
             String(obj[key]).trim() !== ""
-        ) {
+        ){
 
             return obj[key];
 
@@ -839,6 +832,10 @@ function getValue(
 
 }
 
+
+/* =========================================================
+   NUMBER
+========================================================= */
 
 function toNumber(value){
 
@@ -867,6 +864,10 @@ function toNumber(value){
 }
 
 
+/* =========================================================
+   NORMALIZE TEXT
+========================================================= */
+
 function normalizeText(value){
 
     return String(value || "")
@@ -877,6 +878,10 @@ function normalizeText(value){
 
 }
 
+
+/* =========================================================
+   NORMALIZE GROUP
+========================================================= */
 
 function normalizeGroup(value){
 
@@ -913,6 +918,10 @@ function normalizeGroup(value){
 }
 
 
+/* =========================================================
+   GROUP MATCH
+========================================================= */
+
 function matchesGroup(student){
 
     const actual =
@@ -938,6 +947,10 @@ function matchesGroup(student){
 
 }
 
+
+/* =========================================================
+   INSTITUTION NAME
+========================================================= */
 
 function getInstitutionName(student){
 
@@ -997,6 +1010,8 @@ function getInstitutionName(student){
                 lower === "college d" ||
                 lower === "institution a" ||
                 lower === "institution b" ||
+                lower === "institution c" ||
+                lower === "institution d" ||
                 lower === "institution name"
             ){
 
@@ -1015,6 +1030,10 @@ function getInstitutionName(student){
 }
 
 
+/* =========================================================
+   DISTRICT
+========================================================= */
+
 function getDistrict(student){
 
     return getValue(
@@ -1030,6 +1049,10 @@ function getDistrict(student){
 
 }
 
+
+/* =========================================================
+   GPA
+========================================================= */
 
 function getGPA(student){
 
@@ -1050,6 +1073,10 @@ function getGPA(student){
 }
 
 
+/* =========================================================
+   PASS CHECK
+========================================================= */
+
 function isPassed(student){
 
     const direct =
@@ -1063,6 +1090,7 @@ function isPassed(student){
             ],
             null
         );
+
 
     if (direct !== null){
 
@@ -1136,7 +1164,7 @@ function isPassed(student){
 
 
 /* =========================================================
-   BUILD INSTITUTION DATA
+   BUILD INSTITUTION RANKING
 ========================================================= */
 
 function buildInstitutionRanking(){
@@ -1156,6 +1184,7 @@ function buildInstitutionRanking(){
 
         const institution =
             getInstitutionName(student);
+
 
         if (!institution){
             return;
@@ -1181,7 +1210,7 @@ function buildInstitutionRanking(){
 
                     passed:0,
 
-                    totalGPA:0
+                    gpa5:0
                 }
             );
 
@@ -1205,12 +1234,16 @@ function buildInstitutionRanking(){
 
 
         /*
-         * প্রত্যেক ছাত্রের GPA যোগ হবে।
-         * এটিই Institution-এর TOTAL GPA.
+         * GPA 5.00 পাওয়া শিক্ষার্থীর সংখ্যা
          */
 
-        item.totalGPA +=
-            getGPA(student);
+        if (
+            getGPA(student) >= 5
+        ){
+
+            item.gpa5++;
+
+        }
 
     });
 
@@ -1231,20 +1264,15 @@ function buildInstitutionRanking(){
                 ) * 100
                 : 0;
 
-
-        item.totalGPA =
-            Math.round(
-                item.totalGPA * 100
-            ) / 100;
-
     });
 
 
     /*
      * Ranking:
+     *
      * 1. Passing Rate
-     * 2. Total GPA
-     * 3. Number of Students
+     * 2. Total GPA-5
+     * 3. Total Students
      */
 
     result.sort((a,b) => {
@@ -1263,13 +1291,13 @@ function buildInstitutionRanking(){
 
 
         if (
-            b.totalGPA !==
-            a.totalGPA
+            b.gpa5 !==
+            a.gpa5
         ){
 
             return (
-                b.totalGPA -
-                a.totalGPA
+                b.gpa5 -
+                a.gpa5
             );
 
         }
@@ -1331,9 +1359,14 @@ function updateTitle(){
 
 function updatePodium(data){
 
-    const second = data[1];
-    const first = data[0];
-    const third = data[2];
+    const second =
+        data[1];
+
+    const first =
+        data[0];
+
+    const third =
+        data[2];
 
 
     document.getElementById(
@@ -1439,9 +1472,7 @@ function applySearch(){
                         item.district
                     );
 
-                return text.includes(
-                    search
-                );
+                return text.includes(search);
 
             });
 
@@ -1577,12 +1608,12 @@ function renderTable(){
 
                     <span class="data-value">
 
-                        ${item.totalGPA.toFixed(2)}
+                        ${item.gpa5}
 
                     </span>
 
                     <span class="data-label">
-                        TOTAL GPA
+                        TOTAL GPA-5
                     </span>
 
                 </div>
