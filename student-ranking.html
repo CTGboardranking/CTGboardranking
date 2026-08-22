@@ -161,7 +161,7 @@
 
 .student-row {
     display:grid;
-    grid-template-columns:70px 1fr 220px 120px;
+    grid-template-columns:70px 1fr 220px 150px;
     align-items:center;
     gap:15px;
     padding:20px 25px;
@@ -206,13 +206,22 @@
 }
 
 .student-score strong {
+    display:block;
     font-size:17px;
 }
 
-.student-score span {
+.student-score .gpa-label {
     display:block;
     color:var(--muted);
     font-size:10px;
+}
+
+.student-score .total-score {
+    display:block;
+    color:var(--blue);
+    font-size:11px;
+    font-weight:700;
+    margin-top:5px;
 }
 
 .loading-message,
@@ -292,7 +301,7 @@
     }
 
     .student-row {
-        grid-template-columns:45px 1fr 80px;
+        grid-template-columns:45px 1fr 100px;
         padding:18px;
         gap:10px;
     }
@@ -311,11 +320,15 @@
     }
 
     .student-row {
-        grid-template-columns:42px 1fr 65px;
+        grid-template-columns:42px 1fr 85px;
     }
 
     .student-score strong {
         font-size:14px;
+    }
+
+    .student-score .total-score {
+        font-size:10px;
     }
 
     .pagination {
@@ -470,7 +483,6 @@ Student Ranking
 
 </div>
 
-
 </div>
 
 
@@ -583,8 +595,6 @@ Student ranking data could not be loaded.
 
 </div>
 
-
-<!-- PAGINATION -->
 
 <div
     id="pagination"
@@ -744,7 +754,6 @@ const paginationInfo =
     document.getElementById("paginationInfo");
 
 
-
 /* =========================================================
    LOAD STUDENTS
 ========================================================= */
@@ -827,7 +836,6 @@ async function loadStudents() {
 }
 
 
-
 /* =========================================================
    NORMALIZE GROUP
 ========================================================= */
@@ -835,7 +843,9 @@ async function loadStudents() {
 function normalizeGroup(group) {
 
     if (!group) {
+
         return "";
+
     }
 
 
@@ -844,7 +854,6 @@ function normalizeGroup(group) {
         .toLowerCase();
 
 }
-
 
 
 /* =========================================================
@@ -868,7 +877,6 @@ function matchesGroup(student) {
     return group === selected;
 
 }
-
 
 
 /* =========================================================
@@ -896,7 +904,19 @@ function matchesSearch(student) {
 
         student.group,
 
-        student.gpa
+        student.gpa,
+
+        student.total_score,
+
+        student.totalScore,
+
+        student.total,
+
+        student.total_marks,
+
+        student.totalMarks,
+
+        student.score
 
     ]
     .filter(
@@ -915,6 +935,107 @@ function matchesSearch(student) {
 }
 
 
+/* =========================================================
+   GET TOTAL SCORE
+========================================================= */
+
+function getTotalScore(student) {
+
+    const possibleValues = [
+
+        student.total_score,
+
+        student.totalScore,
+
+        student.total,
+
+        student.total_marks,
+
+        student.totalMarks,
+
+        student.score,
+
+        student.total_mark,
+
+        student.totalMark,
+
+        student.marks,
+
+        student.totalMarksObtained
+
+    ];
+
+
+    for (
+        const value of possibleValues
+    ) {
+
+        if (
+            value !== undefined &&
+            value !== null &&
+            String(value).trim() !== ""
+        ) {
+
+            return value;
+
+        }
+
+    }
+
+
+    /* -------------------------------------------------------
+       FALLBACK:
+       If total score was stored inside subjects,
+       calculate it from subject marks.
+    ------------------------------------------------------- */
+
+    if (
+        Array.isArray(
+            student.subjects
+        )
+    ) {
+
+        let total = 0;
+
+        let found = false;
+
+
+        student.subjects.forEach(
+            subject => {
+
+                const mark =
+                    Number(
+                        subject.mark
+                    );
+
+
+                if (
+                    Number.isFinite(mark)
+                ) {
+
+                    total += mark;
+
+                    found = true;
+
+                }
+
+            }
+        );
+
+
+        if (found) {
+
+            return total;
+
+        }
+
+    }
+
+
+    return "—";
+
+}
+
 
 /* =========================================================
    SORT
@@ -932,12 +1053,40 @@ function sortStudents(list) {
                 Number(b.gpa) || 0;
 
 
-            if (gpaB !== gpaA) {
+            /* GPA DESCENDING */
+
+            if (
+                gpaB !== gpaA
+            ) {
 
                 return gpaB - gpaA;
 
             }
 
+
+            /* TOTAL SCORE DESCENDING */
+
+            const scoreA =
+                Number(
+                    getTotalScore(a)
+                ) || 0;
+
+            const scoreB =
+                Number(
+                    getTotalScore(b)
+                ) || 0;
+
+
+            if (
+                scoreB !== scoreA
+            ) {
+
+                return scoreB - scoreA;
+
+            }
+
+
+            /* SUBJECT COUNT DESCENDING */
 
             const subjectsA =
                 Array.isArray(a.subjects)
@@ -957,7 +1106,6 @@ function sortStudents(list) {
     );
 
 }
-
 
 
 /* =========================================================
@@ -1090,6 +1238,12 @@ function renderStudents() {
                 : "—";
 
 
+            const totalScore =
+                getTotalScore(
+                    student
+                );
+
+
             row.innerHTML = `
 
                 <div class="${rankClass}">
@@ -1126,11 +1280,20 @@ function renderStudents() {
                 <div class="student-score">
 
                     <strong>
-                        ${escapeHTML(String(gpa))}
+                        ${escapeHTML(
+                            String(gpa)
+                        )}
                     </strong>
 
-                    <span>
+                    <span class="gpa-label">
                         GPA
+                    </span>
+
+                    <span class="total-score">
+                        Total Score:
+                        ${escapeHTML(
+                            String(totalScore)
+                        )}
                     </span>
 
                 </div>
@@ -1150,7 +1313,9 @@ function renderStudents() {
        UPDATE PAGINATION
     ===================================================== */
 
-    if (totalPages <= 1) {
+    if (
+        totalPages <= 1
+    ) {
 
         pagination.style.display =
             "none";
@@ -1177,7 +1342,6 @@ function renderStudents() {
     }
 
 }
-
 
 
 /* =========================================================
@@ -1209,7 +1373,6 @@ function escapeHTML(value) {
         );
 
 }
-
 
 
 /* =========================================================
@@ -1257,7 +1420,6 @@ document
     });
 
 
-
 /* =========================================================
    SEARCH INPUT
 ========================================================= */
@@ -1281,7 +1443,6 @@ searchInput.addEventListener(
 );
 
 
-
 /* =========================================================
    PREVIOUS PAGE
 ========================================================= */
@@ -1290,8 +1451,12 @@ prevPage.addEventListener(
     "click",
     () => {
 
-        if (currentPage <= 1) {
+        if (
+            currentPage <= 1
+        ) {
+
             return;
+
         }
 
 
@@ -1302,13 +1467,12 @@ prevPage.addEventListener(
 
 
         window.scrollTo({
-            top: 450,
-            behavior: "smooth"
+            top:450,
+            behavior:"smooth"
         });
 
     }
 );
-
 
 
 /* =========================================================
@@ -1319,6 +1483,23 @@ nextPage.addEventListener(
     "click",
     () => {
 
+        if (
+            currentPage >=
+            Math.ceil(
+                allStudents.filter(
+                    student =>
+                        matchesGroup(student) &&
+                        matchesSearch(student)
+                ).length /
+                PAGE_SIZE
+            )
+        ) {
+
+            return;
+
+        }
+
+
         currentPage++;
 
 
@@ -1326,13 +1507,12 @@ nextPage.addEventListener(
 
 
         window.scrollTo({
-            top: 450,
-            behavior: "smooth"
+            top:450,
+            behavior:"smooth"
         });
 
     }
 );
-
 
 
 /* =========================================================
@@ -1351,15 +1531,16 @@ yearSelect.addEventListener(
 
         currentPage = 1;
 
+
         yearText.textContent =
             yearSelect.value +
             " · Chattogram Board";
+
 
         renderStudents();
 
     }
 );
-
 
 
 /* =========================================================
