@@ -1131,13 +1131,8 @@ print(
 
 
 # At least one result is required
-if not students:
 
+if not students:
     raise SystemExit(
         "No student results were collected."
     )
-
-if not students:
-
-    raise SystemExit(
-        "No student results were collected."
