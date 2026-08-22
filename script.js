@@ -606,3 +606,64 @@ document.addEventListener(
     "DOMContentLoaded",
     initializeRanking
 );
+
+/* =========================================================
+   TOTAL VISITS
+========================================================= */
+
+async function loadTotalVisits() {
+
+    const visitElement =
+        document.getElementById("totalVisits");
+
+    if (!visitElement) {
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            "https://ymwhodckmbybccufzjot.supabase.co/rest/v1/site_stats?id=eq.1&select=total_visits",
+            {
+                headers: {
+                    "apikey": "তোমার_SUPABASE_PUBLISHABLE_KEY",
+                    "Authorization": "Bearer তোমার_SUPABASE_PUBLISHABLE_KEY"
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "Visit API Error: " + response.status
+            );
+        }
+
+        const data = await response.json();
+
+        if (
+            Array.isArray(data) &&
+            data.length > 0
+        ) {
+            visitElement.textContent =
+                Number(data[0].total_visits).toLocaleString("en-US");
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Total visits load error:",
+            error
+        );
+
+    }
+}
+
+
+/* =========================================================
+   START TOTAL VISITS
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    loadTotalVisits
+);
