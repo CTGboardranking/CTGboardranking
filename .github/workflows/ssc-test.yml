@@ -82,20 +82,7 @@ jobs:
           echo "========================================"
 
           if [ -f scraper/students.json ]; then
-            python - <<'PY'
-import json
-
-path = "scraper/students.json"
-
-with open(path, "r", encoding="utf-8") as f:
-    data = json.load(f)
-
-print("Total students:", len(data))
-
-if data:
-    print("First roll:", data[0].get("roll"))
-    print("Last roll:", data[-1].get("roll"))
-PY
+            python -c "import json; d=json.load(open('scraper/students.json', encoding='utf-8')); print('Total students:', len(d)); print('First roll:', d[0].get('roll') if d else 'N/A'); print('Last roll:', d[-1].get('roll') if d else 'N/A')"
           else
             echo "students.json not found"
           fi
