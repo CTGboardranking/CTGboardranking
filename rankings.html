@@ -401,7 +401,7 @@ Institution<br>
 
 <p>
 Top 100 institutions based on collected SSC result data.
-Compare Passing Rate and Total GPA-5.
+Compare Passing Rate and Total GPA.
 </p>
 
 </section>
@@ -618,7 +618,7 @@ RANK
 </div>
 
 <div>
-COLLEGE NAME
+INSTITUTION NAME
 </div>
 
 <div>
@@ -626,7 +626,7 @@ PASSING RATE
 </div>
 
 <div>
-TOTAL GPA-5
+TOTAL GPA
 </div>
 
 </div>
@@ -754,10 +754,6 @@ Education Data & Statistics
 
 <script>
 
-/* =========================================================
-   DATA
-========================================================= */
-
 const DATA_URL =
     "scraper/students.json?v=" +
     Date.now();
@@ -777,10 +773,6 @@ let currentPage = 1;
 
 const PAGE_SIZE = 100;
 
-
-/* =========================================================
-   ELEMENTS
-========================================================= */
 
 const yearFilter =
     document.getElementById("yearFilter");
@@ -819,11 +811,11 @@ const paginationInfo =
     document.getElementById("paginationInfo");
 
 
-/* =========================================================
-   SAFE VALUE
-========================================================= */
-
-function getValue(obj, keys, fallback = "") {
+function getValue(
+    obj,
+    keys,
+    fallback = ""
+){
 
     if (!obj) {
         return fallback;
@@ -848,17 +840,13 @@ function getValue(obj, keys, fallback = "") {
 }
 
 
-/* =========================================================
-   NUMBER
-========================================================= */
-
-function toNumber(value) {
+function toNumber(value){
 
     if (
         value === null ||
         value === undefined ||
         value === ""
-    ) {
+    ){
 
         return 0;
 
@@ -867,63 +855,57 @@ function toNumber(value) {
     const n =
         Number(
             String(value)
-            .replace(/,/g, "")
-            .replace(/%/g, "")
+            .replace(/,/g,"")
+            .replace(/%/g,"")
             .trim()
         );
 
-    return Number.isFinite(n) ? n : 0;
+    return Number.isFinite(n)
+        ? n
+        : 0;
 
 }
 
 
-/* =========================================================
-   NORMALIZE TEXT
-========================================================= */
-
-function normalizeText(value) {
+function normalizeText(value){
 
     return String(value || "")
         .trim()
         .toLowerCase()
-        .replace(/[_-]+/g, " ")
-        .replace(/\s+/g, " ");
+        .replace(/[_-]+/g," ")
+        .replace(/\s+/g," ");
 
 }
 
 
-/* =========================================================
-   NORMALIZE GROUP
-========================================================= */
-
-function normalizeGroup(value) {
+function normalizeGroup(value){
 
     const group =
         normalizeText(value);
 
-    if (
-        group === "sci"
-    ) {
+    if (group === "sci"){
         return "science";
     }
 
     if (
         group === "business" ||
         group === "commerce"
-    ) {
+    ){
+
         return "business studies";
+
     }
 
-    if (
-        group === "arts"
-    ) {
+    if (group === "arts"){
         return "humanities";
     }
 
     if (
         group === "irregular science"
-    ) {
+    ){
+
         return "science irregular";
+
     }
 
     return group;
@@ -931,11 +913,7 @@ function normalizeGroup(value) {
 }
 
 
-/* =========================================================
-   GROUP MATCH
-========================================================= */
-
-function matchesGroup(student) {
+function matchesGroup(student){
 
     const actual =
         normalizeGroup(
@@ -961,11 +939,7 @@ function matchesGroup(student) {
 }
 
 
-/* =========================================================
-   COLLEGE NAME
-========================================================= */
-
-function getInstitutionName(student) {
+function getInstitutionName(student){
 
     const keys = [
 
@@ -997,31 +971,24 @@ function getInstitutionName(student) {
     ];
 
 
-    for (const key of keys) {
+    for (const key of keys){
 
         if (
             student[key] !== undefined &&
             student[key] !== null
-        ) {
+        ){
 
             const name =
                 String(
                     student[key]
                 ).trim();
 
-
-            if (!name) {
+            if (!name){
                 continue;
             }
 
-
             const lower =
                 name.toLowerCase();
-
-
-            /*
-             * Placeholder নাম বাদ
-             */
 
             if (
                 lower === "college a" ||
@@ -1031,12 +998,11 @@ function getInstitutionName(student) {
                 lower === "institution a" ||
                 lower === "institution b" ||
                 lower === "institution name"
-            ) {
+            ){
 
                 continue;
 
             }
-
 
             return name;
 
@@ -1044,17 +1010,12 @@ function getInstitutionName(student) {
 
     }
 
-
     return "";
 
 }
 
 
-/* =========================================================
-   DISTRICT
-========================================================= */
-
-function getDistrict(student) {
+function getDistrict(student){
 
     return getValue(
         student,
@@ -1070,11 +1031,7 @@ function getDistrict(student) {
 }
 
 
-/* =========================================================
-   GPA
-========================================================= */
-
-function getGPA(student) {
+function getGPA(student){
 
     return toNumber(
         getValue(
@@ -1093,11 +1050,7 @@ function getGPA(student) {
 }
 
 
-/* =========================================================
-   PASS CHECK
-========================================================= */
-
-function isPassed(student) {
+function isPassed(student){
 
     const direct =
         getValue(
@@ -1111,12 +1064,10 @@ function isPassed(student) {
             null
         );
 
-
-    if (direct !== null) {
+    if (direct !== null){
 
         const value =
             normalizeText(direct);
-
 
         if (
             direct === true ||
@@ -1124,12 +1075,11 @@ function isPassed(student) {
             value === "yes" ||
             value === "pass" ||
             value === "passed"
-        ) {
+        ){
 
             return true;
 
         }
-
 
         if (
             direct === false ||
@@ -1137,7 +1087,7 @@ function isPassed(student) {
             value === "no" ||
             value === "fail" ||
             value === "failed"
-        ) {
+        ){
 
             return false;
 
@@ -1163,7 +1113,7 @@ function isPassed(student) {
     if (
         result === "pass" ||
         result === "passed"
-    ) {
+    ){
 
         return true;
 
@@ -1173,7 +1123,7 @@ function isPassed(student) {
     if (
         result === "fail" ||
         result === "failed"
-    ) {
+    ){
 
         return false;
 
@@ -1189,7 +1139,7 @@ function isPassed(student) {
    BUILD INSTITUTION DATA
 ========================================================= */
 
-function buildInstitutionRanking() {
+function buildInstitutionRanking(){
 
     const map =
         new Map();
@@ -1207,13 +1157,7 @@ function buildInstitutionRanking() {
         const institution =
             getInstitutionName(student);
 
-
-        /*
-         * কলেজের নাম না পাওয়া গেলে
-         * সেই record ranking-এ যাবে না।
-         */
-
-        if (!institution) {
+        if (!institution){
             return;
         }
 
@@ -1222,7 +1166,7 @@ function buildInstitutionRanking() {
             normalizeText(institution);
 
 
-        if (!map.has(key)) {
+        if (!map.has(key)){
 
             map.set(
                 key,
@@ -1237,7 +1181,7 @@ function buildInstitutionRanking() {
 
                     passed:0,
 
-                    gpa5:0
+                    totalGPA:0
                 }
             );
 
@@ -1253,20 +1197,20 @@ function buildInstitutionRanking() {
 
         if (
             isPassed(student)
-        ) {
+        ){
 
             item.passed++;
 
         }
 
 
-        if (
-            getGPA(student) >= 5
-        ) {
+        /*
+         * প্রত্যেক ছাত্রের GPA যোগ হবে।
+         * এটিই Institution-এর TOTAL GPA.
+         */
 
-            item.gpa5++;
-
-        }
+        item.totalGPA +=
+            getGPA(student);
 
     });
 
@@ -1287,15 +1231,20 @@ function buildInstitutionRanking() {
                 ) * 100
                 : 0;
 
+
+        item.totalGPA =
+            Math.round(
+                item.totalGPA * 100
+            ) / 100;
+
     });
 
 
     /*
      * Ranking:
-     *
      * 1. Passing Rate
-     * 2. Total GPA-5
-     * 3. Number of students
+     * 2. Total GPA
+     * 3. Number of Students
      */
 
     result.sort((a,b) => {
@@ -1303,7 +1252,7 @@ function buildInstitutionRanking() {
         if (
             b.passRate !==
             a.passRate
-        ) {
+        ){
 
             return (
                 b.passRate -
@@ -1314,13 +1263,13 @@ function buildInstitutionRanking() {
 
 
         if (
-            b.gpa5 !==
-            a.gpa5
-        ) {
+            b.totalGPA !==
+            a.totalGPA
+        ){
 
             return (
-                b.gpa5 -
-                a.gpa5
+                b.totalGPA -
+                a.totalGPA
             );
 
         }
@@ -1334,10 +1283,6 @@ function buildInstitutionRanking() {
     });
 
 
-    /*
-     * শুধুমাত্র Top 100
-     */
-
     institutionData =
         result.slice(0,100);
 
@@ -1348,7 +1293,7 @@ function buildInstitutionRanking() {
    ESCAPE HTML
 ========================================================= */
 
-function escapeHTML(value) {
+function escapeHTML(value){
 
     return String(value || "")
         .replace(/&/g,"&amp;")
@@ -1364,16 +1309,14 @@ function escapeHTML(value) {
    UPDATE TITLE
 ========================================================= */
 
-function updateTitle() {
+function updateTitle(){
 
     currentGroup =
         groupFilter.value;
 
-
     rankingTitle.textContent =
         currentGroup +
         " Rankings";
-
 
     resultInfo.textContent =
         yearFilter.value +
@@ -1386,16 +1329,11 @@ function updateTitle() {
    PODIUM
 ========================================================= */
 
-function updatePodium(data) {
+function updatePodium(data){
 
-    const second =
-        data[1];
-
-    const first =
-        data[0];
-
-    const third =
-        data[2];
+    const second = data[1];
+    const first = data[0];
+    const third = data[2];
 
 
     document.getElementById(
@@ -1476,7 +1414,7 @@ function updatePodium(data) {
    SEARCH
 ========================================================= */
 
-function applySearch() {
+function applySearch(){
 
     const search =
         normalizeText(
@@ -1484,12 +1422,12 @@ function applySearch() {
         );
 
 
-    if (!search) {
+    if (!search){
 
         filteredData =
             institutionData.slice();
 
-    } else {
+    }else{
 
         filteredData =
             institutionData.filter(item => {
@@ -1501,7 +1439,9 @@ function applySearch() {
                         item.district
                     );
 
-                return text.includes(search);
+                return text.includes(
+                    search
+                );
 
             });
 
@@ -1519,7 +1459,7 @@ function applySearch() {
    RENDER TABLE
 ========================================================= */
 
-function renderTable() {
+function renderTable(){
 
     rankingRows.innerHTML = "";
 
@@ -1529,7 +1469,7 @@ function renderTable() {
 
     if (
         filteredData.length === 0
-    ) {
+    ){
 
         emptyState.style.display =
             "block";
@@ -1594,7 +1534,9 @@ function renderTable() {
                     : ""
                 }">
 
-                    ${String(actualRank).padStart(2,"0")}
+                    ${String(
+                        actualRank
+                    ).padStart(2,"0")}
 
                 </div>
 
@@ -1635,12 +1577,12 @@ function renderTable() {
 
                     <span class="data-value">
 
-                        ${item.gpa5}
+                        ${item.totalGPA.toFixed(2)}
 
                     </span>
 
                     <span class="data-label">
-                        TOTAL GPA-5
+                        TOTAL GPA
                     </span>
 
                 </div>
@@ -1658,12 +1600,12 @@ function renderTable() {
 
     if (
         totalPages > 1
-    ) {
+    ){
 
         pagination.style.display =
             "flex";
 
-    } else {
+    }else{
 
         pagination.style.display =
             "none";
@@ -1692,7 +1634,7 @@ function renderTable() {
    MAIN RENDER
 ========================================================= */
 
-function renderRanking() {
+function renderRanking(){
 
     updateTitle();
 
@@ -1711,9 +1653,9 @@ function renderRanking() {
    LOAD JSON
 ========================================================= */
 
-async function loadStudents() {
+async function loadStudents(){
 
-    try {
+    try{
 
         const response =
             await fetch(
@@ -1724,7 +1666,7 @@ async function loadStudents() {
             );
 
 
-        if (!response.ok) {
+        if (!response.ok){
 
             throw new Error(
                 "HTTP " +
@@ -1740,7 +1682,7 @@ async function loadStudents() {
 
         if (
             Array.isArray(data)
-        ) {
+        ){
 
             allStudents =
                 data;
@@ -1752,7 +1694,7 @@ async function loadStudents() {
             Array.isArray(
                 data.students
             )
-        ) {
+        ){
 
             allStudents =
                 data.students;
@@ -1764,7 +1706,7 @@ async function loadStudents() {
             Array.isArray(
                 data.data
             )
-        ) {
+        ){
 
             allStudents =
                 data.data;
@@ -1776,14 +1718,14 @@ async function loadStudents() {
             Array.isArray(
                 data.results
             )
-        ) {
+        ){
 
             allStudents =
                 data.results;
 
         }
 
-        else {
+        else{
 
             throw new Error(
                 "Invalid students.json format"
@@ -1812,7 +1754,7 @@ async function loadStudents() {
 
     }
 
-    catch(error) {
+    catch(error){
 
         console.error(
             "Ranking loading error:",
@@ -1882,7 +1824,7 @@ prevPage.addEventListener(
 
         if (
             currentPage > 1
-        ) {
+        ){
 
             currentPage--;
 
@@ -1916,7 +1858,7 @@ nextPage.addEventListener(
         if (
             currentPage <
             totalPages
-        ) {
+        ){
 
             currentPage++;
 
