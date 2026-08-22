@@ -44,6 +44,10 @@ jobs:
         run: |
           python scraper/district_ranking.py
 
+      - name: Calculate student ranking
+        run: |
+          python scraper/student_ranking.py
+
       - name: Upload SSC debug files
         uses: actions/upload-artifact@v4
         if: always()
