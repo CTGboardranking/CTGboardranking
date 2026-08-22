@@ -17,6 +17,9 @@
 
     <link rel="stylesheet" href="style.css">
 
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
 
         .result-hero {
@@ -521,8 +524,12 @@
 
                     </div>
 
-                    <span class="result-status">
+                    <span
+                        class="result-status"
+                        id="resultStatus">
+
                         PASSED
+
                     </span>
 
                 </div>
@@ -579,8 +586,8 @@
                         GROUP
                     </span>
 
-                    <strong>
-                        Science
+                    <strong id="showGroup">
+                        —
                     </strong>
 
                 </div>
@@ -592,8 +599,8 @@
                         INSTITUTION
                     </span>
 
-                    <strong>
-                        Institution Name
+                    <strong id="showInstitution">
+                        —
                     </strong>
 
                 </div>
@@ -605,8 +612,8 @@
                         DISTRICT
                     </span>
 
-                    <strong>
-                        Chattogram
+                    <strong id="showDistrict">
+                        —
                     </strong>
 
                 </div>
@@ -630,108 +637,6 @@
 
                     <div>
                         GRADE
-                    </div>
-
-                </div>
-
-
-                <div class="subject-row">
-
-                    <div>
-                        Bangla
-                    </div>
-
-                    <div>
-                        —
-                    </div>
-
-                    <div class="grade">
-                        —
-                    </div>
-
-                </div>
-
-
-                <div class="subject-row">
-
-                    <div>
-                        English
-                    </div>
-
-                    <div>
-                        —
-                    </div>
-
-                    <div class="grade">
-                        —
-                    </div>
-
-                </div>
-
-
-                <div class="subject-row">
-
-                    <div>
-                        Mathematics
-                    </div>
-
-                    <div>
-                        —
-                    </div>
-
-                    <div class="grade">
-                        —
-                    </div>
-
-                </div>
-
-
-                <div class="subject-row">
-
-                    <div>
-                        Physics
-                    </div>
-
-                    <div>
-                        —
-                    </div>
-
-                    <div class="grade">
-                        —
-                    </div>
-
-                </div>
-
-
-                <div class="subject-row">
-
-                    <div>
-                        Chemistry
-                    </div>
-
-                    <div>
-                        —
-                    </div>
-
-                    <div class="grade">
-                        —
-                    </div>
-
-                </div>
-
-
-                <div class="subject-row">
-
-                    <div>
-                        Biology
-                    </div>
-
-                    <div>
-                        —
-                    </div>
-
-                    <div class="grade">
-                        —
                     </div>
 
                 </div>
@@ -858,6 +763,28 @@
 
 <script>
 
+/* ==========================================
+   SUPABASE CONFIGURATION
+========================================== */
+
+const SUPABASE_URL =
+    "https://mpnjnyejpqeqguxikvnl.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_6Pm2-m3BeYB8VDw4kwCccg_WnYe5-IT";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* ==========================================
+   ELEMENTS
+========================================== */
+
 const searchButton =
     document.getElementById("searchButton");
 
@@ -876,81 +803,356 @@ const registrationInput =
 const yearInput =
     document.getElementById("year");
 
+const examInput =
+    document.getElementById("exam");
+
+
+/* ==========================================
+   SEARCH RESULT
+========================================== */
 
 searchButton.addEventListener(
     "click",
-    function () {
-
-        const roll =
-            rollInput.value.trim();
-
-        const registration =
-            registrationInput.value.trim();
-
-        const year =
-            yearInput.value;
+    searchResult
+);
 
 
-        if (!roll) {
+async function searchResult() {
 
-            errorMessage.style.display =
-                "block";
+    const roll =
+        rollInput.value.trim();
 
-            resultArea.style.display =
-                "none";
+    const registration =
+        registrationInput.value.trim();
+
+    const year =
+        Number(yearInput.value);
+
+    const exam =
+        examInput.value;
+
+
+    errorMessage.style.display =
+        "none";
+
+    resultArea.style.display =
+        "none";
+
+
+    if (!roll) {
+
+        showError(
+            "Please enter your roll number."
+        );
+
+        return;
+    }
+
+
+    searchButton.disabled = true;
+
+    searchButton.textContent =
+        "Searching...";
+
+
+    try {
+
+        const { data, error } =
+            await supabaseClient.rpc(
+                "get_student_result",
+                {
+                    p_year: year,
+                    p_exam: exam,
+                    p_roll: roll,
+                    p_registration:
+                        registration || null
+                }
+            );
+
+
+        console.log(
+            "Supabase response:",
+            data
+        );
+
+
+        if (error) {
+
+            console.error(
+                "Supabase error:",
+                error
+            );
+
+            showError(
+                "Unable to load result. Please try again."
+            );
 
             return;
         }
 
 
-        errorMessage.style.display =
-            "none";
+        if (!data) {
+
+            showError(
+                "No result found for this roll number."
+            );
+
+            return;
+        }
 
 
-        /*
-         * DEMO RESULT
-         *
-         * Later this section will be
-         * replaced with Supabase query.
-         */
-
-        document.getElementById(
-            "showRoll"
-        ).textContent = roll;
+        displayResult(data);
 
 
-        document.getElementById(
-            "showRegistration"
-        ).textContent =
-            registration || "Not provided";
+    } catch (error) {
 
+        console.error(error);
 
-        document.getElementById(
-            "showYear"
-        ).textContent = year;
+        showError(
+            "Something went wrong. Please try again."
+        );
 
+    } finally {
 
-        resultArea.style.display =
-            "block";
+        searchButton.disabled =
+            false;
 
-
-        resultArea.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
+        searchButton.textContent =
+            "View Result →";
 
     }
-);
+
+}
 
 
-/* ENTER KEY */
+/* ==========================================
+   DISPLAY RESULT
+========================================== */
+
+function displayResult(data) {
+
+    const student =
+        data.student;
+
+    const subjects =
+        data.subjects || [];
+
+
+    document.getElementById(
+        "studentName"
+    ).textContent =
+        student.student_name || "—";
+
+
+    document.getElementById(
+        "resultStatus"
+    ).textContent =
+        student.result_status || "—";
+
+
+    document.getElementById(
+        "showRoll"
+    ).textContent =
+        student.roll || "—";
+
+
+    document.getElementById(
+        "showRegistration"
+    ).textContent =
+        student.registration || "—";
+
+
+    document.getElementById(
+        "showYear"
+    ).textContent =
+        student.year || "—";
+
+
+    document.getElementById(
+        "showGroup"
+    ).textContent =
+        student.group_name || "—";
+
+
+    document.getElementById(
+        "showInstitution"
+    ).textContent =
+        student.institution || "—";
+
+
+    document.getElementById(
+        "showDistrict"
+    ).textContent =
+        student.district || "—";
+
+
+    document.getElementById(
+        "totalMarks"
+    ).textContent =
+        student.total_marks ?? "—";
+
+
+    document.getElementById(
+        "gpa"
+    ).textContent =
+        student.gpa ?? "—";
+
+
+    document.getElementById(
+        "rank"
+    ).textContent =
+        "—";
+
+
+    /* SUBJECT TABLE */
+
+    const table =
+        document.querySelector(
+            ".subject-table"
+        );
+
+
+    table.innerHTML = `
+
+        <div class="subject-header">
+
+            <div>
+                SUBJECT
+            </div>
+
+            <div>
+                MARKS
+            </div>
+
+            <div>
+                GRADE
+            </div>
+
+        </div>
+
+    `;
+
+
+    if (subjects.length === 0) {
+
+        table.innerHTML += `
+
+            <div class="subject-row">
+
+                <div>
+                    No subject data
+                </div>
+
+                <div>
+                    —
+                </div>
+
+                <div class="grade">
+                    —
+                </div>
+
+            </div>
+
+        `;
+
+    } else {
+
+        subjects.forEach(
+            function(subject) {
+
+                const row =
+                    document.createElement(
+                        "div"
+                    );
+
+                row.className =
+                    "subject-row";
+
+
+                row.innerHTML = `
+
+                    <div>
+                        ${escapeHTML(
+                            subject.subject_name
+                        )}
+                    </div>
+
+                    <div>
+                        ${subject.marks ?? "—"}
+                    </div>
+
+                    <div class="grade">
+                        ${escapeHTML(
+                            subject.grade || "—"
+                        )}
+                    </div>
+
+                `;
+
+
+                table.appendChild(row);
+
+            }
+        );
+
+    }
+
+
+    resultArea.style.display =
+        "block";
+
+
+    resultArea.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+}
+
+
+/* ==========================================
+   ERROR
+========================================== */
+
+function showError(message) {
+
+    errorMessage.textContent =
+        message;
+
+    errorMessage.style.display =
+        "block";
+
+}
+
+
+/* ==========================================
+   HTML SECURITY
+========================================== */
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* ==========================================
+   ENTER KEY
+========================================== */
 
 rollInput.addEventListener(
     "keydown",
     function(event) {
 
         if (event.key === "Enter") {
-            searchButton.click();
+
+            searchResult();
+
         }
 
     }
