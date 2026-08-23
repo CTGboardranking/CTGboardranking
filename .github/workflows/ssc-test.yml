@@ -92,12 +92,288 @@ jobs:
             echo "students.json not found"
           fi
 
+      # =====================================================
+      # ONLY NEW STEP
+      # PREPARE LARGE JSON FILES
+      # =====================================================
+
+      - name: Prepare large JSON files for GitHub
+        run: |
+          python <<'PY'
+          import json
+          import os
+
+          MAX_BYTES = 45 * 1024 * 1024
+
+          files = [
+              (
+                  "scraper/students.json",
+                  "scraper/students_parts",
+                  "students_manifest.json"
+              ),
+              (
+                  "scraper/student_ranking.json",
+                  "scraper/student_ranking_parts",
+                  "student_ranking_manifest.json"
+              )
+          ]
+
+          for source, output_dir, manifest_name in files:
+
+              if not os.path.exists(source):
+                  print(f"Not found: {source}")
+                  continue
+
+              print("")
+              print("=" * 60)
+              print(f"Processing: {source}")
+              print("=" * 60)
+
+              with open(
+                  source,
+                  "r",
+                  encoding="utf-8"
+              ) as f:
+                  data = json.load(f)
+
+              if isinstance(data, list):
+
+                  records = data
+                  wrapper = None
+
+              elif isinstance(data, dict):
+
+                  wrapper = next(
+                      (
+                          key
+                          for key, value in data.items()
+                          if isinstance(value, list)
+                      ),
+                      None
+                  )
+
+                  if wrapper is None:
+                      raise ValueError(
+                          f"No data array found in {source}"
+                      )
+
+                  records = data[wrapper]
+
+              else:
+
+                  raise ValueError(
+                      f"Unsupported JSON format: {source}"
+                  )
+
+              os.makedirs(
+                  output_dir,
+                  exist_ok=True
+              )
+
+              for old_file in os.listdir(output_dir):
+
+                  old_path = os.path.join(
+                      output_dir,
+                      old_file
+                  )
+
+                  if os.path.isfile(old_path):
+                      os.remove(old_path)
+
+              parts = []
+              current = []
+              part_number = 1
+
+              for record in records:
+
+                  test_records = (
+                      current +
+                      [record]
+                  )
+
+                  if wrapper is None:
+                      test_data = test_records
+                  else:
+                      test_data = {
+                          wrapper: test_records
+                      }
+
+                  test_size = len(
+                      json.dumps(
+                          test_data,
+                          ensure_ascii=False,
+                          separators=(",", ":")
+                      ).encode("utf-8")
+                  )
+
+                  if (
+                      test_size > MAX_BYTES
+                      and current
+                  ):
+
+                      filename = (
+                          f"part_{part_number:04d}.json"
+                      )
+
+                      output_path = os.path.join(
+                          output_dir,
+                          filename
+                      )
+
+                      if wrapper is None:
+                          output_data = current
+                      else:
+                          output_data = {
+                              wrapper: current
+                          }
+
+                      with open(
+                          output_path,
+                          "w",
+                          encoding="utf-8"
+                      ) as f:
+                          json.dump(
+                              output_data,
+                              f,
+                              ensure_ascii=False,
+                              separators=(",", ":")
+                          )
+
+                      size_mb = (
+                          os.path.getsize(
+                              output_path
+                          )
+                          / 1024
+                          / 1024
+                      )
+
+                      parts.append(
+                          {
+                              "file":
+                                  f"{output_dir}/{filename}",
+                              "records":
+                                  len(current),
+                              "size_mb":
+                                  round(size_mb, 2)
+                          }
+                      )
+
+                      print(
+                          f"Created {filename}: "
+                          f"{len(current):,} records "
+                          f"({size_mb:.2f} MB)"
+                      )
+
+                      part_number += 1
+                      current = [record]
+
+                  else:
+
+                      current.append(record)
+
+              if current:
+
+                  filename = (
+                      f"part_{part_number:04d}.json"
+                  )
+
+                  output_path = os.path.join(
+                      output_dir,
+                      filename
+                  )
+
+                  if wrapper is None:
+                      output_data = current
+                  else:
+                      output_data = {
+                          wrapper: current
+                      }
+
+                  with open(
+                      output_path,
+                      "w",
+                      encoding="utf-8"
+                  ) as f:
+                      json.dump(
+                          output_data,
+                          f,
+                          ensure_ascii=False,
+                          separators=(",", ":")
+                      )
+
+                  size_mb = (
+                      os.path.getsize(
+                          output_path
+                      )
+                      / 1024
+                      / 1024
+                  )
+
+                  parts.append(
+                      {
+                          "file":
+                              f"{output_dir}/{filename}",
+                          "records":
+                              len(current),
+                          "size_mb":
+                              round(size_mb, 2)
+                      }
+                  )
+
+                  print(
+                      f"Created {filename}: "
+                      f"{len(current):,} records "
+                      f"({size_mb:.2f} MB)"
+                  )
+
+              manifest_path = os.path.join(
+                  "scraper",
+                  manifest_name
+              )
+
+              with open(
+                  manifest_path,
+                  "w",
+                  encoding="utf-8"
+              ) as f:
+
+                  json.dump(
+                      {
+                          "source": source,
+                          "total_records":
+                              len(records),
+                          "parts": parts
+                      },
+                      f,
+                      ensure_ascii=False,
+                      indent=2
+                  )
+
+              print(
+                  f"Finished {source}: "
+                  f"{len(records):,} records → "
+                  f"{len(parts)} parts"
+              )
+
+          PY
+
+      # =====================================================
+      # COMMIT UPDATED RANKING DATA
+      # =====================================================
+
       - name: Commit updated ranking data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add scraper/
+
+          # IMPORTANT:
+          # Do NOT commit the two original files because
+          # they exceed GitHub's 100 MB single-file limit.
+
+          git reset -- scraper/students.json
+          git reset -- scraper/student_ranking.json
 
           if git diff --cached --quiet; then
             echo "No changes detected."
@@ -114,6 +390,10 @@ jobs:
 
           echo "Pushing updated ranking data..."
           git push origin HEAD:main
+
+      # =====================================================
+      # UPLOAD SSC DATA BACKUP
+      # =====================================================
 
       - name: Upload SSC data backup
         uses: actions/upload-artifact@v4
