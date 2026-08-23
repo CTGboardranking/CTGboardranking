@@ -210,35 +210,61 @@ async function loadStudentRanking() {
 
 /* =========================================================
    INSTITUTION RANKING
-   SOURCE:
-   institution_results.json
-
-   RANKING:
-   1. GPA-5
-   2. Passing Rate
-   3. Passed
-   4. Appeared
+   Automatically finds institution_results.json
 ========================================================= */
 
 async function loadInstitutionRanking() {
 
+    const rows = [
+        document.getElementById("homeRank1"),
+        document.getElementById("homeRank2"),
+        document.getElementById("homeRank3")
+    ];
+
     try {
 
-        const response =
-            await fetch(
-                "institution_results.json?v=" +
+        let response = null;
+
+        /*
+         * First try root folder
+         */
+        try {
+
+            response = await fetch(
+                "institution_results.json?v=" + Date.now(),
+                {
+                    cache: "no-store"
+                }
+            );
+
+        } catch (e) {
+
+            response = null;
+
+        }
+
+
+        /*
+         * If root folder does not work,
+         * try scraper folder
+         */
+        if (!response || !response.ok) {
+
+            response = await fetch(
+                "scraper/institution_results.json?v=" +
                 Date.now(),
                 {
                     cache: "no-store"
                 }
             );
 
+        }
+
 
         if (!response.ok) {
 
             throw new Error(
-                "institution_results.json: HTTP " +
-                response.status
+                "institution_results.json could not be loaded"
             );
 
         }
@@ -248,28 +274,12 @@ async function loadInstitutionRanking() {
             await response.json();
 
 
+        /*
+         * Support different JSON structures
+         */
+
         let data = json;
 
-
-        /*
-         * Supports:
-         *
-         * [
-         *   {...}
-         * ]
-         *
-         * or
-         *
-         * {
-         *   "results": [...]
-         * }
-         *
-         * or
-         *
-         * {
-         *   "institutions": [...]
-         * }
-         */
 
         if (
             !Array.isArray(data) &&
@@ -313,11 +323,444 @@ async function loadInstitutionRanking() {
         }
 
 
+        /*
+         * Convert data
+         */
+
+        let ranking = data.map(item => {
+
+            const appeared =
+                Number(
+                    item.appeared || 0
+                );
+
+
+            const passed =
+                Number(
+                    item.passed || 0
+                );
+
+
+            let passingRate =
+                Number(
+                    item.passing_rate ||
+                    item.pass_rate ||
+                    item.passingRate ||
+                    0
+                );
+
+
+            const gpa5 =
+                Number(
+                    item.gpa5 ||
+                    item.gpa_5 ||
+                    item.gpa5_count ||
+                    0
+                );
+
+
+            /*
+             * Calculate pass rate
+             * if missing
+             */
+
+            if (
+                passingRate === 0 &&
+                appeared > 0
+            ) {
+
+                passingRate =
+                    (
+                        passed /
+                        appeared
+                    ) * 100;
+
+            }
+
+
+            return {
+
+                eiin:
+                    String(
+                        item.eiin || ""
+                    ).trim(),
+
+                institution:
+                    String(
+                        item.institution_name ||
+                        item.institution ||
+                        item.name ||
+                        ""
+                    ).trim(),
+
+                district:
+                    String(
+                        item.district ||
+                        ""
+                    ).trim(),
+
+                appeared:
+                    appeared,
+
+                passed:
+                    passed,
+
+                passingRate:
+                    passingRate,
+
+                gpa5:
+                    gpa5
+
+            };
+
+        });
+
+
+        /*
+         * Remove empty records
+         */
+
+        ranking =
+            ranking.filter(
+                item =>
+                    item.institution
+            );
+
+
+        /*
+         * Remove duplicate EIIN
+         */
+
+        const unique =
+            new Map();
+
+
+        ranking.forEach(item => {
+
+            const key =
+                item.eiin ||
+                item.institution
+                    .toLowerCase()
+                    .trim();
+
+
+            if (
+                !unique.has(key)
+            ) {
+
+                unique.set(
+                    key,
+                    item
+                );
+
+            }
+
+        });
+
+
+        ranking =
+            Array.from(
+                unique.values()
+            );
+
+
+        /*
+         * FINAL RANKING
+         *
+         * 1. GPA-5
+         * 2. Passing Rate
+         * 3. Passed
+         * 4. Appeared
+         */
+
+        ranking.sort((a, b) => {
+
+            if (
+                b.gpa5 !==
+                a.gpa5
+            ) {
+
+                return (
+                    b.gpa5 -
+                    a.gpa5
+                );
+
+            }
+
+
+            if (
+                b.passingRate !==
+                a.passingRate
+            ) {
+
+                return (
+                    b.passingRate -
+                    a.passingRate
+                );
+
+            }
+
+
+            if (
+                b.passed !==
+                a.passed
+            ) {
+
+                return (
+                    b.passed -
+                    a.passed
+                );
+
+            }
+
+
+            if (
+                b.appeared !==
+                a.appeared
+            ) {
+
+                return (
+                    b.appeared -
+                    a.appeared
+                );
+
+            }
+
+
+            return a.institution.localeCompare(
+                b.institution
+            );
+
+        });
+
+
         console.log(
-            "Institution result records:",
-            data.length
+            "CTGBoardRanking TOP 3:",
+            ranking.slice(0, 3)
         );
 
+
+        /*
+         * SHOW TOP 3
+         */
+
+        ranking
+            .slice(0, 3)
+            .forEach((item, index) => {
+
+                const row =
+                    rows[index];
+
+
+                if (!row) {
+                    return;
+                }
+
+
+                const name =
+                    row.querySelector(
+                        ".rank-info strong"
+                    );
+
+
+                const district =
+                    row.querySelector(
+                        ".rank-info span"
+                    );
+
+
+                const pass =
+                    row.querySelector(
+                        ".rank-result strong"
+                    );
+
+
+                const score =
+                    row.querySelector(
+                        ".rank-score strong"
+                    );
+
+
+                const passLabel =
+                    row.querySelector(
+                        ".rank-result span"
+                    );
+
+
+                const scoreLabel =
+                    row.querySelector(
+                        ".rank-score span"
+                    );
+
+
+                if (name) {
+
+                    name.textContent =
+                        item.institution;
+
+                }
+
+
+                if (district) {
+
+                    district.textContent =
+                        item.district ||
+                        "Chattogram";
+
+                }
+
+
+                if (pass) {
+
+                    pass.textContent =
+                        item.passingRate
+                            .toFixed(2) +
+                        "%";
+
+                }
+
+
+                if (passLabel) {
+
+                    passLabel.textContent =
+                        "Pass Rate";
+
+                }
+
+
+                if (score) {
+
+                    score.textContent =
+                        item.gpa5
+                            .toLocaleString(
+                                "en-US"
+                            );
+
+                }
+
+
+                if (scoreLabel) {
+
+                    scoreLabel.textContent =
+                        "GPA-5";
+
+                }
+
+            });
+
+
+        /*
+         * Clear unused rows
+         */
+
+        for (
+            let i = ranking.length;
+            i < 3;
+            i++
+        ) {
+
+            const row =
+                rows[i];
+
+
+            if (!row) {
+                continue;
+            }
+
+
+            const name =
+                row.querySelector(
+                    ".rank-info strong"
+                );
+
+
+            const district =
+                row.querySelector(
+                    ".rank-info span"
+                );
+
+
+            const pass =
+                row.querySelector(
+                    ".rank-result strong"
+                );
+
+
+            const score =
+                row.querySelector(
+                    ".rank-score strong"
+                );
+
+
+            if (name) {
+                name.textContent = "—";
+            }
+
+
+            if (district) {
+                district.textContent = "—";
+            }
+
+
+            if (pass) {
+                pass.textContent = "—";
+            }
+
+
+            if (score) {
+                score.textContent = "—";
+            }
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Institution ranking error:",
+            error
+        );
+
+
+        rows.forEach(row => {
+
+            if (!row) {
+                return;
+            }
+
+
+            const name =
+                row.querySelector(
+                    ".rank-info strong"
+                );
+
+
+            const district =
+                row.querySelector(
+                    ".rank-info span"
+                );
+
+
+            if (name) {
+
+                name.textContent =
+                    "Data unavailable";
+
+            }
+
+
+            if (district) {
+
+                district.textContent =
+                    "Institution data unavailable";
+
+            }
+
+        });
+
+    }
+
+}
 
         /* =================================================
            NORMALIZE
