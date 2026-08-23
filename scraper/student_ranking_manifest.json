@@ -1,21 +1,21 @@
 {
   "source": "student_ranking.json",
-  "total_records": 50924,
+  "total_records": 60388,
   "parts": [
     {
       "file": "scraper/student_ranking_parts/part_0001.json",
-      "records": 16975,
-      "size_mb": 16.82
+      "records": 20130,
+      "size_mb": 19.95
     },
     {
       "file": "scraper/student_ranking_parts/part_0002.json",
-      "records": 16975,
-      "size_mb": 16.83
+      "records": 20130,
+      "size_mb": 20.07
     },
     {
       "file": "scraper/student_ranking_parts/part_0003.json",
-      "records": 16974,
-      "size_mb": 16.92
+      "records": 20128,
+      "size_mb": 20.14
     }
   ]
 }

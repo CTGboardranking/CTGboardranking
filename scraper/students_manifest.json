@@ -1,21 +1,21 @@
 {
   "source": "students.json",
-  "total_records": 50924,
+  "total_records": 60388,
   "parts": [
     {
       "file": "scraper/students_parts/part_0001.json",
-      "records": 16975,
-      "size_mb": 16.93
+      "records": 20130,
+      "size_mb": 20.07
     },
     {
       "file": "scraper/students_parts/part_0002.json",
-      "records": 16975,
-      "size_mb": 16.91
+      "records": 20130,
+      "size_mb": 20.21
     },
     {
       "file": "scraper/students_parts/part_0003.json",
-      "records": 16974,
-      "size_mb": 17.36
+      "records": 20128,
+      "size_mb": 20.65
     }
   ]
 }
