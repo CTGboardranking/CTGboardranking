@@ -26,6 +26,7 @@
 <link rel="stylesheet"
       href="style.css">
 
+
 <!-- =====================================================
      PDF LIBRARIES
 ===================================================== -->
@@ -1215,7 +1216,7 @@ Science Students
 
 <!-- =====================================================
      STUDENT LIST
-===================================================== -->
+========================================================= -->
 
 <div class="student-list">
 
@@ -1278,7 +1279,7 @@ Student ranking data could not be loaded.
 
 <!-- =====================================================
      PAGINATION
-===================================================== -->
+========================================================= -->
 
 <div
     id="pagination"
@@ -1414,6 +1415,15 @@ let currentSearch = "";
 let currentPage = 1;
 
 const PAGE_SIZE = 100;
+
+
+/* =========================================================
+   PDF SETTINGS
+========================================================= */
+
+const PDF_PAGE_SIZE = "a4";
+
+const PDF_ORIENTATION = "portrait";
 
 
 /* =========================================================
@@ -2102,6 +2112,10 @@ function renderStudents() {
     );
 
 
+    /* =====================================================
+       PAGINATION
+    ===================================================== */
+
     if (
         totalPages <= 1
     ) {
@@ -2170,7 +2184,7 @@ function escapeHTML(value) {
 
 
 /* =========================================================
-   PDF HELPERS
+   PDF DATE
 ========================================================= */
 
 function getPDFDate() {
@@ -2269,11 +2283,23 @@ async function downloadCurrentPagePDF() {
         } = window.jspdf;
 
 
+        /* =================================================
+           PDF PAGE SETTINGS
+           A4 + PORTRAIT
+        ================================================= */
+
         const doc =
             new jsPDF({
-                orientation:"landscape",
-                unit:"mm",
-                format:"a4"
+
+                orientation:
+                    PDF_ORIENTATION,
+
+                unit:
+                    "mm",
+
+                format:
+                    PDF_PAGE_SIZE
+
             });
 
 
@@ -2443,7 +2469,9 @@ async function downloadCurrentPagePDF() {
            SEARCH INFORMATION
         ================================================= */
 
-        if (currentSearch) {
+        if (
+            currentSearch
+        ) {
 
             doc.setFontSize(
                 8
@@ -2558,10 +2586,10 @@ async function downloadCurrentPagePDF() {
 
         doc.autoTable({
 
-            startY:57,
+            startY:
+                57,
 
             head:[
-
                 [
                     "RANK",
                     "STUDENT",
@@ -2569,25 +2597,29 @@ async function downloadCurrentPagePDF() {
                     "TOTAL MARKS",
                     "INSTITUTE"
                 ]
-
             ],
 
-            body:tableData,
+            body:
+                tableData,
 
-            theme:"grid",
+            theme:
+                "grid",
 
             margin:{
-                left:15,
-                right:15
+                left:12,
+                right:12
             },
 
             styles:{
 
-                font:"helvetica",
+                font:
+                    "helvetica",
 
-                fontSize:8,
+                fontSize:
+                    7,
 
-                cellPadding:4,
+                cellPadding:
+                    2.8,
 
                 textColor:[
                     35,
@@ -2601,9 +2633,11 @@ async function downloadCurrentPagePDF() {
                     228
                 ],
 
-                lineWidth:.2,
+                lineWidth:
+                    .2,
 
-                valign:"middle"
+                valign:
+                    "middle"
 
             },
 
@@ -2621,11 +2655,14 @@ async function downloadCurrentPagePDF() {
                     80
                 ],
 
-                fontStyle:"bold",
+                fontStyle:
+                    "bold",
 
-                fontSize:7,
+                fontSize:
+                    7,
 
-                halign:"left",
+                halign:
+                    "left",
 
                 lineColor:[
                     220,
@@ -2638,25 +2675,42 @@ async function downloadCurrentPagePDF() {
             columnStyles:{
 
                 0:{
-                    cellWidth:18,
-                    halign:"center",
-                    fontStyle:"bold"
+                    cellWidth:
+                        15,
+
+                    halign:
+                        "center",
+
+                    fontStyle:
+                        "bold"
                 },
 
                 1:{
-                    cellWidth:78
+                    cellWidth:
+                        57
                 },
 
                 2:{
-                    cellWidth:25,
-                    halign:"center",
-                    fontStyle:"bold"
+                    cellWidth:
+                        18,
+
+                    halign:
+                        "center",
+
+                    fontStyle:
+                        "bold"
                 },
 
                 3:{
-                    cellWidth:32,
-                    halign:"center",
-                    fontStyle:"bold",
+                    cellWidth:
+                        25,
+
+                    halign:
+                        "center",
+
+                    fontStyle:
+                        "bold",
+
                     textColor:[
                         0,
                         113,
@@ -2665,7 +2719,8 @@ async function downloadCurrentPagePDF() {
                 },
 
                 4:{
-                    cellWidth:"auto"
+                    cellWidth:
+                        "auto"
                 }
 
             },
@@ -2680,93 +2735,109 @@ async function downloadCurrentPagePDF() {
 
             },
 
-            didParseCell:function(data) {
 
-                if (
-                    data.section === "body" &&
-                    data.column.index === 0
-                ) {
+            /* =================================================
+               CELL CUSTOMIZATION
+            ================================================= */
+
+            didParseCell:
+                function(data) {
 
                     if (
-                        Number(
-                            data.cell.raw
-                        ) === 1
+                        data.section ===
+                        "body" &&
+                        data.column.index === 0
                     ) {
 
-                        data.cell.styles.textColor =
-                            [
-                                198,
-                                138,
-                                0
-                            ];
+                        if (
+                            Number(
+                                data.cell.raw
+                            ) === 1
+                        ) {
+
+                            data.cell.styles.textColor =
+                                [
+                                    198,
+                                    138,
+                                    0
+                                ];
+
+                        }
 
                     }
+
+                },
+
+
+            /* =================================================
+               PDF FOOTER
+            ================================================= */
+
+            didDrawPage:
+                function(data) {
+
+                    const currentPDFPage =
+                        doc
+                            .internal
+                            .getNumberOfPages();
+
+
+                    /* FOOTER LINE */
+
+                    doc.setDrawColor(
+                        225,
+                        225,
+                        228
+                    );
+
+
+                    doc.line(
+                        12,
+                        pageHeight - 13,
+                        pageWidth - 12,
+                        pageHeight - 13
+                    );
+
+
+                    /* FOOTER LEFT */
+
+                    doc.setFont(
+                        "helvetica",
+                        "normal"
+                    );
+
+                    doc.setFontSize(
+                        7.5
+                    );
+
+
+                    doc.setTextColor(
+                        120,
+                        120,
+                        125
+                    );
+
+
+                    doc.text(
+                        "CTGBoardRanking • Unofficial Education Data",
+                        12,
+                        pageHeight - 7
+                    );
+
+
+                    /* FOOTER RIGHT */
+
+                    doc.text(
+                        `PDF Page ${currentPDFPage}`,
+                        pageWidth - 12,
+                        pageHeight - 7,
+                        {
+                            align:
+                                "right"
+                        }
+                    );
 
                 }
-
-            },
-
-            didDrawPage:function(data) {
-
-                const currentPDFPage =
-                    doc.internal.getNumberOfPages();
-
-
-                /* FOOTER LINE */
-
-                doc.setDrawColor(
-                    225,
-                    225,
-                    228
-                );
-
-
-                doc.line(
-                    15,
-                    pageHeight - 13,
-                    pageWidth - 15,
-                    pageHeight - 13
-                );
-
-
-                /* FOOTER LEFT */
-
-                doc.setFont(
-                    "helvetica",
-                    "normal"
-                );
-
-                doc.setFontSize(
-                    7.5
-                );
-
-
-                doc.setTextColor(
-                    120,
-                    120,
-                    125
-                );
-
-
-                doc.text(
-                    "CTGBoardRanking • Unofficial Education Data",
-                    15,
-                    pageHeight - 7
-                );
-
-
-                /* FOOTER RIGHT */
-
-                doc.text(
-                    `PDF Page ${currentPDFPage}`,
-                    pageWidth - 15,
-                    pageHeight - 7,
-                    {
-                        align:"right"
-                    }
-                );
-
-            }
 
         });
 
@@ -2777,14 +2848,17 @@ async function downloadCurrentPagePDF() {
 
         const safeGroup =
             currentGroup
+
                 .replace(
                     /[^a-z0-9]+/gi,
                     "-"
                 )
+
                 .replace(
                     /^-|-$/g,
                     ""
                 )
+
                 .toLowerCase();
 
 
@@ -2793,7 +2867,7 @@ async function downloadCurrentPagePDF() {
 
 
         /* =================================================
-           SAVE
+           SAVE PDF
         ================================================= */
 
         doc.save(
@@ -2942,9 +3016,11 @@ prevPage.addEventListener(
 
         window.scrollTo({
 
-            top:450,
+            top:
+                450,
 
-            behavior:"smooth"
+            behavior:
+                "smooth"
 
         });
 
@@ -2990,9 +3066,11 @@ nextPage.addEventListener(
 
         window.scrollTo({
 
-            top:450,
+            top:
+                450,
 
-            behavior:"smooth"
+            behavior:
+                "smooth"
 
         });
 
