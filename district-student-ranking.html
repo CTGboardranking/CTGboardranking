@@ -1,410 +1,804 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>District Student Ranking — CTGBoardRanking</title>
 
 <meta name="description"
-content="Chattogram Board District Student Ranking">
+      content="Chattogram Board District Student Ranking">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
+      rel="stylesheet">
 
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet"
+      href="style.css">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
 
+
 <style>
 
+/* =========================================================
+   PAGE
+========================================================= */
+
 .page-wrap{
-max-width:1100px;
-margin:auto;
-padding:90px 20px 60px;
+
+    max-width:1100px;
+
+    margin:auto;
+
+    padding:90px 20px 60px;
+
 }
+
 
 .back{
-display:inline-block;
-color:var(--muted);
-text-decoration:none;
-margin-bottom:28px;
-font-size:14px;
+
+    display:inline-block;
+
+    color:var(--muted);
+
+    text-decoration:none;
+
+    margin-bottom:28px;
+
+    font-size:14px;
+
 }
+
 
 .hero-title{
-font-size:clamp(42px,7vw,72px);
-line-height:.98;
-letter-spacing:-4px;
+
+    font-size:clamp(42px,7vw,72px);
+
+    line-height:.98;
+
+    letter-spacing:-4px;
+
 }
+
 
 .hero-title span{
-color:var(--blue);
+
+    color:var(--blue);
+
 }
+
 
 .hero-text{
-color:var(--muted);
-max-width:650px;
-margin-top:18px;
-font-size:16px;
+
+    color:var(--muted);
+
+    max-width:650px;
+
+    margin-top:18px;
+
+    font-size:16px;
+
 }
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
 
 .controls{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:14px;
-margin-top:35px;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:14px;
+
+    margin-top:35px;
+
 }
+
 
 .card{
-background:rgba(255,255,255,.85);
-border:1px solid var(--border);
-border-radius:20px;
-padding:16px;
-box-shadow:var(--shadow);
+
+    background:rgba(255,255,255,.85);
+
+    border:1px solid var(--border);
+
+    border-radius:20px;
+
+    padding:16px;
+
+    box-shadow:var(--shadow);
+
 }
 
+
 .card label{
-display:block;
-font-size:10px;
-font-weight:800;
-letter-spacing:1px;
-color:var(--muted);
-margin-bottom:8px;
+
+    display:block;
+
+    font-size:10px;
+
+    font-weight:800;
+
+    letter-spacing:1px;
+
+    color:var(--muted);
+
+    margin-bottom:8px;
+
 }
+
 
 select,
 .search{
-width:100%;
-box-sizing:border-box;
-padding:13px;
-border:1px solid var(--border);
-border-radius:13px;
-background:white;
-font-family:inherit;
-outline:none;
+
+    width:100%;
+
+    box-sizing:border-box;
+
+    padding:13px;
+
+    border:1px solid var(--border);
+
+    border-radius:13px;
+
+    background:white;
+
+    font-family:inherit;
+
+    outline:none;
+
 }
+
+
+/* =========================================================
+   GROUPS
+========================================================= */
 
 .groups{
-display:flex;
-gap:8px;
-overflow-x:auto;
-margin:25px 0;
-padding-bottom:4px;
+
+    display:flex;
+
+    gap:8px;
+
+    overflow-x:auto;
+
+    margin:25px 0;
+
+    padding-bottom:4px;
+
 }
+
 
 .group{
-border:1px solid var(--border);
-background:white;
-padding:10px 17px;
-border-radius:50px;
-font-family:inherit;
-font-weight:700;
-cursor:pointer;
-white-space:nowrap;
+
+    border:1px solid var(--border);
+
+    background:white;
+
+    padding:10px 17px;
+
+    border-radius:50px;
+
+    font-family:inherit;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    white-space:nowrap;
+
 }
+
 
 .group.active{
-background:var(--text);
-color:var(--bg);
+
+    background:var(--text);
+
+    color:var(--bg);
+
 }
+
+
+/* =========================================================
+   TITLE
+========================================================= */
 
 .title-row{
-display:flex;
-justify-content:space-between;
-align-items:end;
-gap:15px;
-margin:25px 0 18px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:end;
+
+    gap:15px;
+
+    margin:25px 0 18px;
+
 }
+
 
 .title-row h2{
-margin:5px 0 0;
-font-size:30px;
-letter-spacing:-1.5px;
+
+    margin:5px 0 0;
+
+    font-size:30px;
+
+    letter-spacing:-1.5px;
+
 }
+
 
 .title-row p{
-color:var(--muted);
-font-size:12px;
+
+    color:var(--muted);
+
+    font-size:12px;
+
 }
+
+
+/* =========================================================
+   PDF BUTTON
+========================================================= */
 
 .pdf-btn{
-border:0;
-background:#111;
-color:white;
-padding:12px 17px;
-border-radius:13px;
-font-family:inherit;
-font-weight:800;
-cursor:pointer;
-white-space:nowrap;
+
+    border:0;
+
+    background:#111;
+
+    color:white;
+
+    padding:12px 17px;
+
+    border-radius:13px;
+
+    font-family:inherit;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    white-space:nowrap;
+
 }
+
 
 .pdf-btn:disabled{
-opacity:.5;
+
+    opacity:.5;
+
 }
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
 
 .search{
-margin-bottom:18px;
+
+    margin-bottom:18px;
+
 }
 
+
+/* =========================================================
+   TABLE
+========================================================= */
+
 .table{
-background:rgba(255,255,255,.9);
-border:1px solid var(--border);
-border-radius:22px;
-overflow:hidden;
-box-shadow:var(--shadow);
+
+    background:rgba(255,255,255,.9);
+
+    border:1px solid var(--border);
+
+    border-radius:22px;
+
+    overflow:hidden;
+
+    box-shadow:var(--shadow);
+
 }
+
 
 .header,
 .row{
-display:grid;
-grid-template-columns:55px minmax(180px,1fr) 70px 100px minmax(210px,1fr);
-gap:12px;
-align-items:center;
+
+    display:grid;
+
+    grid-template-columns:
+        55px
+        minmax(180px,1fr)
+        70px
+        100px
+        minmax(210px,1fr);
+
+    gap:12px;
+
+    align-items:center;
+
 }
+
 
 .header{
-padding:14px 18px;
-background:#f5f5f7;
-font-size:9px;
-font-weight:800;
-color:var(--muted);
+
+    padding:14px 18px;
+
+    background:#f5f5f7;
+
+    font-size:9px;
+
+    font-weight:800;
+
+    color:var(--muted);
+
 }
+
 
 .row{
-padding:16px 18px;
-border-top:1px solid var(--border);
+
+    padding:16px 18px;
+
+    border-top:1px solid var(--border);
+
 }
 
+
 .rank{
-font-weight:800;
-color:var(--muted);
+
+    font-weight:800;
+
+    color:var(--muted);
+
 }
+
 
 .name strong,
 .institute strong{
-display:block;
-font-size:12px;
-overflow-wrap:anywhere;
+
+    display:block;
+
+    font-size:12px;
+
+    overflow-wrap:anywhere;
+
 }
+
 
 .name span,
 .institute span{
-display:block;
-font-size:9px;
-color:var(--muted);
-margin-top:4px;
+
+    display:block;
+
+    font-size:9px;
+
+    color:var(--muted);
+
+    margin-top:4px;
+
 }
+
 
 .gpa strong,
 .marks strong{
-font-size:14px;
-font-weight:800;
+
+    font-size:14px;
+
+    font-weight:800;
+
 }
+
 
 .marks strong{
-color:var(--blue);
+
+    color:var(--blue);
+
 }
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
 
 .message{
-padding:55px 20px;
-text-align:center;
-color:var(--muted);
+
+    padding:55px 20px;
+
+    text-align:center;
+
+    color:var(--muted);
+
 }
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
 
 .pagination{
-display:flex;
-justify-content:center;
-align-items:center;
-gap:12px;
-padding:20px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:20px;
+
 }
+
 
 .pagination button{
-border:1px solid var(--border);
-background:white;
-padding:9px 15px;
-border-radius:11px;
-font-weight:700;
-cursor:pointer;
+
+    border:1px solid var(--border);
+
+    background:white;
+
+    padding:9px 15px;
+
+    border-radius:11px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
 }
 
+
 .pagination button:disabled{
-opacity:.4;
+
+    opacity:.4;
+
 }
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media(max-width:700px){
 
-.page-wrap{
-padding:65px 12px 40px;
-}
+    .page-wrap{
 
-.controls{
-grid-template-columns:1fr;
-}
+        padding:65px 12px 40px;
 
-.title-row{
-display:block;
-}
+    }
 
-.pdf-btn{
-width:100%;
-margin-top:12px;
-}
 
-.header,
-.row{
-grid-template-columns:
-35px
-minmax(120px,1fr)
-55px
-70px;
-gap:7px;
-padding:12px 10px;
-}
+    .controls{
 
-.header div:nth-child(5){
-display:none;
-}
+        grid-template-columns:1fr;
 
-.institute{
-grid-column:2 / 5;
-border-top:1px solid var(--border);
-padding-top:8px;
-margin-top:2px;
-}
+    }
 
-.name strong{
-font-size:11px;
-}
 
-.name span{
-font-size:8px;
-}
+    .title-row{
 
-.gpa strong,
-.marks strong{
-font-size:11px;
-}
+        display:block;
 
-.institute strong{
-font-size:10px;
-}
+    }
+
+
+    .pdf-btn{
+
+        width:100%;
+
+        margin-top:12px;
+
+    }
+
+
+    .header,
+    .row{
+
+        grid-template-columns:
+            35px
+            minmax(120px,1fr)
+            55px
+            70px;
+
+        gap:7px;
+
+        padding:12px 10px;
+
+    }
+
+
+    .header div:nth-child(5){
+
+        display:none;
+
+    }
+
+
+    .institute{
+
+        grid-column:2 / 5;
+
+        border-top:1px solid var(--border);
+
+        padding-top:8px;
+
+        margin-top:2px;
+
+    }
+
+
+    .name strong{
+
+        font-size:11px;
+
+    }
+
+
+    .name span{
+
+        font-size:8px;
+
+    }
+
+
+    .gpa strong,
+    .marks strong{
+
+        font-size:11px;
+
+    }
+
+
+    .institute strong{
+
+        font-size:10px;
+
+    }
 
 }
 
 </style>
+
 </head>
+
 
 <body>
 
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
 <header class="navbar">
 
-<a href="index.html" class="logo">
-<span class="logo-mark">C</span>
-<span>CTGBoardRanking</span>
+<a href="index.html"
+   class="logo">
+
+<span class="logo-mark">
+C
+</span>
+
+<span>
+CTGBoardRanking
+</span>
+
 </a>
+
 
 <nav class="nav-links">
 
-<a href="index.html">Home</a>
-<a href="student-ranking.html">Student Ranking</a>
-<a href="rankings.html">Institution Ranking</a>
-<a href="district-student-ranking.html" class="active">District</a>
-<a href="thana-student-ranking.html">Thana</a>
+<a href="index.html">
+Home
+</a>
+
+<a href="student-ranking.html">
+Student Ranking
+</a>
+
+<a href="rankings.html">
+Institution Ranking
+</a>
+
+<a href="district-student-ranking.html"
+   class="active">
+
+District
+
+</a>
+
+<a href="thana-student-ranking.html">
+Thana
+</a>
 
 </nav>
 
-<button class="theme-btn" id="themeBtn">◐</button>
+
+<button
+    class="theme-btn"
+    id="themeBtn">
+
+◐
+
+</button>
 
 </header>
 
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
 
 <main>
 
 <section class="page-wrap">
 
-<a href="index.html" class="back">← Back to Home</a>
 
-<div class="eyebrow">CHITTAGONG BOARD</div>
+<a href="index.html"
+   class="back">
+
+← Back to Home
+
+</a>
+
+
+<div class="eyebrow">
+CHITTAGONG BOARD
+</div>
+
 
 <h1 class="hero-title">
+
 District<br>
-<span>Student Ranking.</span>
+
+<span>
+Student Ranking.
+</span>
+
 </h1>
 
+
 <p class="hero-text">
+
 Explore student performance by district and group.
+
 </p>
 
 
+<!-- =====================================================
+     CONTROLS
+===================================================== -->
+
 <div class="controls">
 
+
 <div class="card">
 
-<label>DISTRICT</label>
+<label>
+DISTRICT
+</label>
+
 
 <select id="districtSelect">
-<option value="">All Districts</option>
+
+<option value="">
+All Districts
+</option>
+
 </select>
 
 </div>
+
 
 
 <div class="card">
 
-<label>ACADEMIC YEAR</label>
+<label>
+ACADEMIC YEAR
+</label>
+
 
 <select id="yearSelect">
-<option value="2026">2026</option>
+
+<option value="2026">
+2026
+</option>
+
 </select>
 
 </div>
 
+
 </div>
 
+
+<!-- =====================================================
+     GROUPS
+===================================================== -->
 
 <div class="groups">
 
-<button class="group active" data-group="All">
+
+<button
+    class="group active"
+    data-group="All">
+
 All
+
 </button>
 
-<button class="group" data-group="Science">
+
+<button
+    class="group"
+    data-group="Science">
+
 🔬 Science
+
 </button>
 
-<button class="group" data-group="Business Studies">
+
+<button
+    class="group"
+    data-group="Business Studies">
+
 💼 Business Studies
+
 </button>
 
-<button class="group" data-group="Humanities">
+
+<button
+    class="group"
+    data-group="Humanities">
+
 🎓 Humanities
+
 </button>
 
-<button class="group" data-group="Science Irregular">
+
+<button
+    class="group"
+    data-group="Science Irregular">
+
 📚 Science Irregular
+
 </button>
+
 
 </div>
 
 
+<!-- =====================================================
+     TITLE
+===================================================== -->
+
 <div class="title-row">
+
 
 <div>
 
-<div class="eyebrow">TOP PERFORMERS</div>
+<div class="eyebrow">
+TOP PERFORMERS
+</div>
+
 
 <h2 id="title">
 All District Students
 </h2>
+
 
 <p id="info">
 2026 · Chattogram Board
@@ -412,86 +806,167 @@ All District Students
 
 </div>
 
-<button class="pdf-btn" id="pdfBtn">
+
+<button
+    class="pdf-btn"
+    id="pdfBtn">
+
 ↓ Download PDF
+
 </button>
+
 
 </div>
 
 
-<input
-id="search"
-class="search"
-type="search"
-placeholder="Search student, roll or institution..."
-autocomplete="off">
+<!-- =====================================================
+     SEARCH
+===================================================== -->
 
+<input
+    id="search"
+    class="search"
+    type="search"
+    placeholder="Search student, roll or institution..."
+    autocomplete="off">
+
+
+<!-- =====================================================
+     TABLE
+===================================================== -->
 
 <div class="table">
 
+
 <div class="header">
 
-<div>Rank</div>
-<div>Student</div>
-<div>GPA</div>
-<div>Total</div>
-<div>Institution</div>
+<div>
+Rank
+</div>
+
+<div>
+Student
+</div>
+
+<div>
+GPA
+</div>
+
+<div>
+Total
+</div>
+
+<div>
+Institution
+</div>
 
 </div>
+
 
 <div id="rows">
 
 <div class="message">
+
 Loading students...
-</div>
 
 </div>
 
+</div>
 
-<div id="empty" class="message" style="display:none">
+
+<div
+    id="empty"
+    class="message"
+    style="display:none">
+
 No student found.
-</div>
-
-
-<div class="pagination" id="pagination" style="display:none">
-
-<button id="prev">← Previous</button>
-
-<span id="pageInfo">Page 1</span>
-
-<button id="next">Next →</button>
 
 </div>
 
+
+<!-- =====================================================
+     PAGINATION
+===================================================== -->
+
+<div
+    class="pagination"
+    id="pagination"
+    style="display:none">
+
+
+<button id="prev">
+
+← Previous
+
+</button>
+
+
+<span id="pageInfo">
+
+Page 1
+
+</span>
+
+
+<button id="next">
+
+Next →
+
+</button>
+
+
 </div>
+
+
+</div>
+
 
 </section>
 
 </main>
 
 
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
 <footer>
 
 <div class="footer-main">
 
+
 <div>
 
 <div class="footer-logo">
-<span class="logo-mark">C</span>
+
+<span class="logo-mark">
+C
+</span>
+
 CTGBoardRanking
-</div>
-
-<p>Chattogram Board Education Rankings.</p>
 
 </div>
 
+
+<p>
+Chattogram Board Education Rankings.
+</p>
+
 </div>
+
+
+</div>
+
 
 <div class="footer-bottom">
 
-<span>© 2026 CTGBoardRanking</span>
+<span>
+© 2026 CTGBoardRanking
+</span>
 
-<span>Education Data & Statistics</span>
+<span>
+Education Data & Statistics
+</span>
 
 </div>
 
@@ -500,479 +975,1609 @@ CTGBoardRanking
 
 <script src="script.js"></script>
 
+
 <script>
 
+"use strict";
+
+
+/* =====================================================
+   DATA
+===================================================== */
+
 const DATA_URL =
-"scraper/students.json?v="+Date.now();
+    "scraper/students.json?v=" +
+    Date.now();
 
-const PAGE_SIZE=100;
 
-let data=[];
-let group="All";
-let district="";
-let search="";
-let page=1;
+const PAGE_SIZE = 100;
 
-const rows=document.getElementById("rows");
-const empty=document.getElementById("empty");
-const districtSelect=document.getElementById("districtSelect");
-const searchBox=document.getElementById("search");
-const pageInfo=document.getElementById("pageInfo");
-const pagination=document.getElementById("pagination");
-const title=document.getElementById("title");
 
-function norm(v){
-return String(v||"").trim().toLowerCase();
+let data = [];
+
+let group = "All";
+
+let district = "";
+
+let search = "";
+
+let page = 1;
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const rows =
+    document.getElementById(
+        "rows"
+    );
+
+
+const empty =
+    document.getElementById(
+        "empty"
+    );
+
+
+const districtSelect =
+    document.getElementById(
+        "districtSelect"
+    );
+
+
+const searchBox =
+    document.getElementById(
+        "search"
+    );
+
+
+const pageInfo =
+    document.getElementById(
+        "pageInfo"
+    );
+
+
+const pagination =
+    document.getElementById(
+        "pagination"
+    );
+
+
+const title =
+    document.getElementById(
+        "title"
+    );
+
+
+/* =====================================================
+   NORMALIZE TEXT
+===================================================== */
+
+function norm(value){
+
+    return String(
+        value ?? ""
+    )
+    .trim()
+    .toLowerCase();
+
 }
 
-function marks(s){
 
-let v=[
-s.total_marks,
-s.totalMarks,
-s.total_mark,
-s.totalMark,
-s.totalMarksObtained
-];
+/* =====================================================
+   NUMBER
+===================================================== */
 
-for(const x of v){
+function numberValue(value){
 
-if(x!==undefined && x!==null && String(x).trim()!==""){
+    if(
+        value === undefined ||
+        value === null ||
+        String(value).trim() === ""
+    ){
 
-let n=Number(x);
+        return null;
 
-if(Number.isFinite(n)) return n;
+    }
+
+
+    const n =
+        Number(
+            String(value)
+                .replace(/,/g,"")
+                .replace(/%/g,"")
+                .trim()
+        );
+
+
+    return Number.isFinite(n)
+        ? n
+        : null;
 
 }
 
+
+/* =====================================================
+   TOTAL SCORE
+=====================================================
+
+   Priority:
+
+   1. score
+   2. total_score
+   3. totalScore
+   4. total_marks
+   5. totalMarks
+   6. total_mark
+   7. totalMark
+   8. totalMarksObtained
+
+===================================================== */
+
+function totalScore(student){
+
+    const values = [
+
+        student.score,
+
+        student.total_score,
+
+        student.totalScore,
+
+        student.total_marks,
+
+        student.totalMarks,
+
+        student.total_mark,
+
+        student.totalMark,
+
+        student.totalMarksObtained
+
+    ];
+
+
+    for(
+        const value of values
+    ){
+
+        const number =
+            numberValue(value);
+
+
+        if(
+            number !== null
+        ){
+
+            return number;
+
+        }
+
+    }
+
+
+    return 0;
+
 }
 
-return null;
+
+/* =====================================================
+   GPA
+===================================================== */
+
+function gpaValue(student){
+
+    const values = [
+
+        student.gpa,
+
+        student.GPA,
+
+        student.gpa_point,
+
+        student.gpaPoint,
+
+        student.grade_point
+
+    ];
+
+
+    for(
+        const value of values
+    ){
+
+        const number =
+            numberValue(value);
+
+
+        if(
+            number !== null
+        ){
+
+            return number;
+
+        }
+
+    }
+
+
+    return null;
 
 }
+
+
+/* =====================================================
+   STUDENT NAME
+===================================================== */
+
+function studentName(student){
+
+    return String(
+
+        student.name ??
+        student.student_name ??
+        student.studentName ??
+        student.student ??
+        "Unknown Student"
+
+    ).trim();
+
+}
+
+
+/* =====================================================
+   ROLL
+===================================================== */
+
+function studentRoll(student){
+
+    return String(
+
+        student.roll ??
+        student.roll_no ??
+        student.rollNo ??
+        student.student_roll ??
+        "—"
+
+    ).trim();
+
+}
+
+
+/* =====================================================
+   INSTITUTION
+===================================================== */
+
+function institutionName(student){
+
+    return String(
+
+        student.institute ??
+        student.institution ??
+        student.institution_name ??
+        student.institute_name ??
+        "Unknown Institution"
+
+    ).trim();
+
+}
+
+
+/* =====================================================
+   DISTRICT
+===================================================== */
+
+function districtName(student){
+
+    return String(
+
+        student.district ??
+        student.district_name ??
+        ""
+
+    ).trim();
+
+}
+
+
+/* =====================================================
+   GROUP
+===================================================== */
+
+function groupName(student){
+
+    return String(
+
+        student.group ??
+        student.group_name ??
+        ""
+
+    ).trim();
+
+}
+
+
+/* =====================================================
+   FILTER + RANK
+===================================================== */
 
 function filtered(){
 
-return [...data]
+    return [...data]
 
-.filter(s=>{
+    .filter(
+        function(student){
 
-if(group!=="All" &&
-norm(s.group)!==norm(group))
-return false;
+            /* GROUP */
 
-if(district &&
-norm(s.district)!==norm(district))
-return false;
+            if(
+                group !== "All" &&
+                norm(
+                    groupName(student)
+                ) !== norm(group)
+            ){
 
-if(search){
+                return false;
 
-let text=[
-s.name,
-s.roll,
-s.institute,
-s.district,
-s.group,
-s.gpa,
-marks(s)
-].join(" ").toLowerCase();
+            }
 
-if(!text.includes(search))
-return false;
+
+            /* DISTRICT */
+
+            if(
+                district &&
+                norm(
+                    districtName(student)
+                ) !== norm(district)
+            ){
+
+                return false;
+
+            }
+
+
+            /* SEARCH */
+
+            if(search){
+
+                const text = [
+
+                    studentName(student),
+
+                    studentRoll(student),
+
+                    institutionName(student),
+
+                    districtName(student),
+
+                    groupName(student),
+
+                    gpaValue(student),
+
+                    totalScore(student)
+
+                ]
+                .join(" ")
+                .toLowerCase();
+
+
+                if(
+                    !text.includes(search)
+                ){
+
+                    return false;
+
+                }
+
+            }
+
+
+            return true;
+
+        }
+    )
+
+
+    /* =================================================
+       RANKING
+
+       PRIMARY:
+       TOTAL SCORE DESC
+
+       SECONDARY:
+       GPA DESC
+
+       TERTIARY:
+       ROLL ASC
+    ================================================= */
+
+    .sort(
+        function(a,b){
+
+            const scoreA =
+                totalScore(a);
+
+
+            const scoreB =
+                totalScore(b);
+
+
+            if(
+                scoreB !== scoreA
+            ){
+
+                return scoreB - scoreA;
+
+            }
+
+
+            const gpaA =
+                gpaValue(a) ?? 0;
+
+
+            const gpaB =
+                gpaValue(b) ?? 0;
+
+
+            if(
+                gpaB !== gpaA
+            ){
+
+                return gpaB - gpaA;
+
+            }
+
+
+            const rollA =
+                studentRoll(a);
+
+
+            const rollB =
+                studentRoll(b);
+
+
+            return rollA.localeCompare(
+                rollB,
+                undefined,
+                {
+                    numeric:true
+                }
+            );
+
+        }
+    );
 
 }
 
-return true;
 
-})
-
-.sort((a,b)=>{
-
-let sa=Number(a.score)||0;
-let sb=Number(b.score)||0;
-
-if(sb!==sa) return sb-sa;
-
-let ga=Number(a.gpa)||0;
-let gb=Number(b.gpa)||0;
-
-if(gb!==ga) return gb-ga;
-
-let ma=Number(marks(a))||0;
-let mb=Number(marks(b))||0;
-
-return mb-ma;
-
-});
-
-}
+/* =====================================================
+   RENDER
+===================================================== */
 
 function render(){
 
-let list=filtered();
+    const list =
+        filtered();
 
-let totalPages=Math.ceil(list.length/PAGE_SIZE);
 
-if(page>totalPages && totalPages>0)
-page=totalPages;
+    const totalPages =
+        Math.ceil(
+            list.length /
+            PAGE_SIZE
+        );
 
-let start=(page-1)*PAGE_SIZE;
 
-let current=list.slice(start,start+PAGE_SIZE);
+    if(
+        page > totalPages &&
+        totalPages > 0
+    ){
 
-rows.innerHTML="";
+        page =
+            totalPages;
 
-empty.style.display=current.length?"none":"block";
+    }
 
-pagination.style.display=
-totalPages>1?"flex":"none";
 
-pageInfo.textContent=
-`Page ${page} of ${totalPages||1}`;
+    const start =
+        (page - 1) *
+        PAGE_SIZE;
 
-current.forEach((s,i)=>{
 
-let r=document.createElement("div");
+    const current =
+        list.slice(
+            start,
+            start + PAGE_SIZE
+        );
 
-r.className="row";
 
-let m=marks(s);
+    rows.innerHTML = "";
 
-r.innerHTML=`
 
-<div class="rank">
-${String(start+i+1).padStart(2,"0")}
-</div>
+    empty.style.display =
+        current.length
+        ? "none"
+        : "block";
 
-<div class="name">
-<strong>${esc(s.name||"Unknown Student")}</strong>
-<span>Roll: ${esc(s.roll||"—")}</span>
-</div>
 
-<div class="gpa">
-<strong>${esc(s.gpa??"—")}</strong>
-</div>
+    pagination.style.display =
+        totalPages > 1
+        ? "flex"
+        : "none";
 
-<div class="marks">
-<strong>${m!==null?m:"—"}</strong>
-</div>
 
-<div class="institute">
-<strong>${esc(s.institute||"Unknown Institution")}</strong>
-<span>${esc(s.district||"")}</span>
-</div>
+    pageInfo.textContent =
+        `Page ${page} of ${totalPages || 1}`;
 
-`;
 
-rows.appendChild(r);
+    current.forEach(
+        function(student,index){
 
-});
+            const row =
+                document.createElement(
+                    "div"
+                );
 
-title.textContent=
-district
-? `${district} Student Ranking`
-: "All District Students";
+
+            row.className =
+                "row";
+
+
+            const score =
+                totalScore(student);
+
+
+            const gpa =
+                gpaValue(student);
+
+
+            row.innerHTML = `
+
+                <div class="rank">
+
+                    ${String(
+                        start + index + 1
+                    ).padStart(2,"0")}
+
+                </div>
+
+
+                <div class="name">
+
+                    <strong>
+
+                        ${esc(
+                            studentName(student)
+                        )}
+
+                    </strong>
+
+                    <span>
+
+                        Roll:
+                        ${esc(
+                            studentRoll(student)
+                        )}
+
+                    </span>
+
+                </div>
+
+
+                <div class="gpa">
+
+                    <strong>
+
+                        ${
+                            gpa !== null
+                            ? esc(gpa)
+                            : "—"
+                        }
+
+                    </strong>
+
+                </div>
+
+
+                <div class="marks">
+
+                    <strong>
+
+                        ${
+                            score !== null
+                            ? score.toLocaleString(
+                                "en-US"
+                              )
+                            : "—"
+                        }
+
+                    </strong>
+
+                </div>
+
+
+                <div class="institute">
+
+                    <strong>
+
+                        ${esc(
+                            institutionName(student)
+                        )}
+
+                    </strong>
+
+
+                    <span>
+
+                        ${esc(
+                            districtName(student)
+                        )}
+
+                    </span>
+
+                </div>
+
+            `;
+
+
+            rows.appendChild(row);
+
+        }
+    );
+
+
+    /* =================================================
+       TITLE
+    ================================================= */
+
+    title.textContent =
+        district
+        ? `${district} Student Ranking`
+        : "All District Students";
+
+
+    /* =================================================
+       INFO
+    ================================================= */
+
+    const info =
+        document.getElementById(
+            "info"
+        );
+
+
+    if(info){
+
+        info.textContent =
+            `2026 · Chattogram Board · ${
+                district || "All Districts"
+            } · ${
+                group
+            }`;
+
+    }
 
 }
 
-function esc(v){
 
-return String(v)
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function esc(value){
+
+    return String(
+        value ?? ""
+    )
+
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+
+    .replace(
+        /</g,
+        "&lt;"
+    )
+
+    .replace(
+        />/g,
+        "&gt;"
+    )
+
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+
+    .replace(
+        /'/g,
+        "&#039;"
+    );
 
 }
+
+
+/* =====================================================
+   LOAD JSON
+===================================================== */
 
 async function load(){
 
-try{
+    try{
 
-let res=await fetch(DATA_URL);
+        const response =
+            await fetch(
+                DATA_URL,
+                {
+                    cache:"no-store"
+                }
+            );
 
-let json=await res.json();
 
-data=Array.isArray(json)
-?json
-:json.students||[];
+        if(
+            !response.ok
+        ){
 
-let districts=[
-...new Set(
-data.map(x=>x.district).filter(Boolean)
-)
-].sort();
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
 
-districts.forEach(d=>{
+        }
 
-let o=document.createElement("option");
 
-o.value=d;
-o.textContent=d;
+        const json =
+            await response.json();
 
-districtSelect.appendChild(o);
 
-});
+        if(
+            Array.isArray(json)
+        ){
 
-render();
+            data =
+                json;
 
-}catch(e){
+        }
 
-rows.innerHTML=
-`<div class="message">
-Unable to load student data.
-</div>`;
+        else if(
+            json &&
+            Array.isArray(
+                json.students
+            )
+        ){
+
+            data =
+                json.students;
+
+        }
+
+        else if(
+            json &&
+            Array.isArray(
+                json.data
+            )
+        ){
+
+            data =
+                json.data;
+
+        }
+
+        else if(
+            json &&
+            Array.isArray(
+                json.results
+            )
+        ){
+
+            data =
+                json.results;
+
+        }
+
+        else{
+
+            data = [];
+
+        }
+
+
+        /* =================================================
+           DISTRICTS
+        ================================================= */
+
+        const districts =
+            [
+                ...new Set(
+
+                    data
+                        .map(
+                            function(student){
+
+                                return districtName(
+                                    student
+                                );
+
+                            }
+                        )
+
+                        .filter(Boolean)
+
+                )
+            ]
+            .sort(
+                function(a,b){
+
+                    return a.localeCompare(b);
+
+                }
+            );
+
+
+        districts.forEach(
+            function(d){
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    d;
+
+
+                option.textContent =
+                    d;
+
+
+                districtSelect.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+        render();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "STUDENT DATA ERROR:",
+            error
+        );
+
+
+        rows.innerHTML = `
+
+            <div class="message">
+
+                Unable to load student data.
+
+                <br>
+
+                <small>
+                    ${esc(
+                        error.message
+                    )}
+                </small>
+
+            </div>
+
+        `;
+
+    }
 
 }
 
-}
 
-districtSelect.onchange=()=>{
+/* =====================================================
+   DISTRICT
+===================================================== */
 
-district=districtSelect.value;
-page=1;
-render();
+districtSelect.onchange =
+    function(){
 
-};
+        district =
+            districtSelect.value;
 
-searchBox.oninput=()=>{
 
-search=searchBox.value.toLowerCase().trim();
-page=1;
-render();
+        page =
+            1;
 
-};
 
-document.querySelectorAll(".group").forEach(btn=>{
+        render();
 
-btn.onclick=()=>{
+    };
 
-group=btn.dataset.group;
-page=1;
 
-document.querySelectorAll(".group")
-.forEach(x=>x.classList.remove("active"));
+/* =====================================================
+   SEARCH
+===================================================== */
 
-btn.classList.add("active");
+searchBox.oninput =
+    function(){
 
-render();
+        search =
+            searchBox.value
+                .toLowerCase()
+                .trim();
 
-};
 
-});
+        page =
+            1;
 
-document.getElementById("prev").onclick=()=>{
 
-if(page>1){
-page--;
-render();
-window.scrollTo({top:450,behavior:"smooth"});
-}
+        render();
 
-};
+    };
 
-document.getElementById("next").onclick=()=>{
 
-let pages=Math.ceil(filtered().length/PAGE_SIZE);
+/* =====================================================
+   GROUP
+===================================================== */
 
-if(page<pages){
-page++;
-render();
-window.scrollTo({top:450,behavior:"smooth"});
-}
+document
+    .querySelectorAll(".group")
+    .forEach(
+        function(button){
 
-};
+            button.onclick =
+                function(){
 
+                    group =
+                        button.dataset.group;
+
+
+                    page =
+                        1;
+
+
+                    document
+                        .querySelectorAll(".group")
+                        .forEach(
+                            function(item){
+
+                                item.classList.remove(
+                                    "active"
+                                );
+
+                            }
+                        );
+
+
+                    button.classList.add(
+                        "active"
+                    );
+
+
+                    render();
+
+                };
+
+        }
+    );
+
+
+/* =====================================================
+   PREVIOUS
+===================================================== */
+
+document
+    .getElementById("prev")
+    .onclick =
+    function(){
+
+        if(page > 1){
+
+            page--;
+
+            render();
+
+
+            window.scrollTo({
+
+                top:450,
+
+                behavior:"smooth"
+
+            });
+
+        }
+
+    };
+
+
+/* =====================================================
+   NEXT
+===================================================== */
+
+document
+    .getElementById("next")
+    .onclick =
+    function(){
+
+        const pages =
+            Math.ceil(
+                filtered().length /
+                PAGE_SIZE
+            );
+
+
+        if(
+            page < pages
+        ){
+
+            page++;
+
+            render();
+
+
+            window.scrollTo({
+
+                top:450,
+
+                behavior:"smooth"
+
+            });
+
+        }
+
+    };
+
+
+/* =====================================================
+   PDF DATE
+===================================================== */
 
 function pdfDate(){
 
-return new Date().toLocaleString("en-GB",{
-day:"2-digit",
-month:"short",
-year:"numeric",
-hour:"2-digit",
-minute:"2-digit"
-});
+    return new Date()
+        .toLocaleString(
+            "en-GB",
+            {
+
+                day:"2-digit",
+
+                month:"short",
+
+                year:"numeric",
+
+                hour:"2-digit",
+
+                minute:"2-digit"
+
+            }
+        );
 
 }
 
 
-document.getElementById("pdfBtn").onclick=()=>{
+/* =====================================================
+   PDF
+===================================================== */
 
-let list=filtered();
+document
+    .getElementById("pdfBtn")
+    .onclick =
+    function(){
 
-let start=(page-1)*PAGE_SIZE;
+        const list =
+            filtered();
 
-let current=list.slice(start,start+PAGE_SIZE);
 
-if(!current.length){
-alert("No students available.");
-return;
-}
+        if(
+            !list.length
+        ){
 
-const {jsPDF}=window.jspdf;
+            alert(
+                "No students available."
+            );
 
-const doc=new jsPDF({
-orientation:"portrait",
-unit:"mm",
-format:"a4"
-});
+            return;
 
-let w=doc.internal.pageSize.getWidth();
-let h=doc.internal.pageSize.getHeight();
+        }
 
-let pages=Math.ceil(list.length/PAGE_SIZE);
 
-doc.setFillColor(248,248,250);
-doc.rect(0,0,w,34,"F");
+        const start =
+            (page - 1) *
+            PAGE_SIZE;
 
-doc.setTextColor(17,17,17);
-doc.setFont("helvetica","bold");
-doc.setFontSize(18);
-doc.text("CTGBoardRanking",15,14);
 
-doc.setFont("helvetica","normal");
-doc.setFontSize(8);
-doc.setTextColor(100,100,105);
+        const current =
+            list.slice(
+                start,
+                start + PAGE_SIZE
+            );
 
-doc.text(
-"Unofficial • Education Data & Statistics",
-15,21
-);
 
-doc.text(
-"Generated by Shadat Fatih",
-w-15,14,{align:"right"}
-);
+        if(
+            !current.length
+        ){
 
-doc.text(
-pdfDate(),
-w-15,21,{align:"right"}
-);
+            alert(
+                "No students available on this page."
+            );
 
-doc.setTextColor(17,17,17);
-doc.setFont("helvetica","bold");
-doc.setFontSize(15);
+            return;
 
-doc.text(
-"District Student Ranking",
-15,44
-);
+        }
 
-doc.setFont("helvetica","normal");
-doc.setFontSize(8.5);
-doc.setTextColor(90,90,95);
 
-doc.text(
-`${document.getElementById("yearSelect").value} · Chattogram Board · ${district||"All Districts"} · ${group} · Page ${page} of ${pages}`,
-15,51
-);
+        const {
+            jsPDF
+        } =
+            window.jspdf;
 
-let body=current.map((s,i)=>{
 
-let m=marks(s);
+        const doc =
+            new jsPDF({
 
-return[
-String(start+i+1),
-`${s.name||"Unknown"}\nRoll: ${s.roll||"—"}`,
-String(s.gpa??"—"),
-m!==null?String(m):"—",
-`${s.institute||"Unknown"}\n${s.district||""}`
-];
+                orientation:"portrait",
 
-});
+                unit:"mm",
 
-doc.autoTable({
+                format:"a4"
 
-startY:57,
+            });
 
-head:[[
-"RANK",
-"STUDENT",
-"GPA",
-"TOTAL",
-"INSTITUTION"
-]],
 
-body,
+        const w =
+            doc.internal
+                .pageSize
+                .getWidth();
 
-theme:"grid",
 
-margin:{
-left:12,
-right:12
-},
+        const h =
+            doc.internal
+                .pageSize
+                .getHeight();
 
-styles:{
-font:"helvetica",
-fontSize:7.5,
-cellPadding:3,
-valign:"middle",
-textColor:[35,35,38],
-lineColor:[225,225,228],
-lineWidth:.2
-},
 
-headStyles:{
-fillColor:[245,245,247],
-textColor:[70,70,75],
-fontStyle:"bold",
-fontSize:7
-},
+        const totalPages =
+            Math.ceil(
+                list.length /
+                PAGE_SIZE
+            );
 
-columnStyles:{
-0:{cellWidth:15,halign:"center"},
-1:{cellWidth:57},
-2:{cellWidth:20,halign:"center"},
-3:{cellWidth:25,halign:"center"},
-4:{cellWidth:"auto"}
-},
 
-alternateRowStyles:{
-fillColor:[252,252,253]
-},
+        /* =================================================
+           PDF HEADER
+        ================================================= */
 
-didDrawPage:()=>{
+        doc.setFillColor(
+            248,
+            248,
+            250
+        );
 
-let p=doc.internal.getNumberOfPages();
 
-doc.setDrawColor(225,225,228);
+        doc.rect(
+            0,
+            0,
+            w,
+            34,
+            "F"
+        );
 
-doc.line(
-12,h-13,w-12,h-13
-);
 
-doc.setFontSize(7);
-doc.setTextColor(120,120,125);
+        doc.setTextColor(
+            17,
+            17,
+            17
+        );
 
-doc.text(
-"CTGBoardRanking • Unofficial Education Data",
-12,h-7
-);
 
-doc.text(
-`PDF Page ${p}`,
-w-12,h-7,{align:"right"}
-);
+        doc.setFont(
+            "helvetica",
+            "bold"
+        );
 
-}
 
-});
+        doc.setFontSize(
+            18
+        );
 
-let safe=(district||"All-Districts")
-.replace(/[^a-z0-9]+/gi,"-")
-.toLowerCase();
 
-doc.save(
-`CTGBoardRanking-District-Student-${safe}-Page-${page}.pdf`
-);
+        doc.text(
+            "CTGBoardRanking",
+            15,
+            14
+        );
 
-};
+
+        doc.setFont(
+            "helvetica",
+            "normal"
+        );
+
+
+        doc.setFontSize(
+            8
+        );
+
+
+        doc.setTextColor(
+            100,
+            100,
+            105
+        );
+
+
+        doc.text(
+            "Unofficial • Education Data & Statistics",
+            15,
+            21
+        );
+
+
+        doc.text(
+            "Generated by Shadat Fatih",
+            w - 15,
+            14,
+            {
+                align:"right"
+            }
+        );
+
+
+        doc.text(
+            pdfDate(),
+            w - 15,
+            21,
+            {
+                align:"right"
+            }
+        );
+
+
+        /* =================================================
+           PDF TITLE
+        ================================================= */
+
+        doc.setTextColor(
+            17,
+            17,
+            17
+        );
+
+
+        doc.setFont(
+            "helvetica",
+            "bold"
+        );
+
+
+        doc.setFontSize(
+            15
+        );
+
+
+        doc.text(
+            "District Student Ranking",
+            15,
+            44
+        );
+
+
+        doc.setFont(
+            "helvetica",
+            "normal"
+        );
+
+
+        doc.setFontSize(
+            8.5
+        );
+
+
+        doc.setTextColor(
+            90,
+            90,
+            95
+        );
+
+
+        doc.text(
+
+            `${document.getElementById("yearSelect").value} · Chattogram Board · ${district || "All Districts"} · ${group} · Page ${page} of ${totalPages}`,
+
+            15,
+
+            51
+
+        );
+
+
+        /* =================================================
+           PDF BODY
+        ================================================= */
+
+        const body =
+            current.map(
+                function(student,index){
+
+                    const score =
+                        totalScore(
+                            student
+                        );
+
+
+                    const gpa =
+                        gpaValue(
+                            student
+                        );
+
+
+                    return [
+
+                        String(
+                            start + index + 1
+                        ),
+
+                        `${studentName(student)}
+Roll: ${studentRoll(student)}`,
+
+                        gpa !== null
+                            ? String(gpa)
+                            : "—",
+
+                        score !== null
+                            ? score.toLocaleString(
+                                "en-US"
+                              )
+                            : "—",
+
+                        `${institutionName(student)}
+${districtName(student)}`
+
+                    ];
+
+                }
+            );
+
+
+        /* =================================================
+           AUTO TABLE
+           SAME PREVIOUS PDF STYLE
+        ================================================= */
+
+        doc.autoTable({
+
+            startY:57,
+
+            head:[[
+
+                "RANK",
+
+                "STUDENT",
+
+                "GPA",
+
+                "TOTAL",
+
+                "INSTITUTION"
+
+            ]],
+
+            body:body,
+
+            theme:"grid",
+
+            margin:{
+
+                left:12,
+
+                right:12
+
+            },
+
+            styles:{
+
+                font:"helvetica",
+
+                fontSize:7.5,
+
+                cellPadding:3,
+
+                valign:"middle",
+
+                textColor:[
+                    35,
+                    35,
+                    38
+                ],
+
+                lineColor:[
+                    225,
+                    225,
+                    228
+                ],
+
+                lineWidth:.2
+
+            },
+
+            headStyles:{
+
+                fillColor:[
+                    245,
+                    245,
+                    247
+                ],
+
+                textColor:[
+                    70,
+                    70,
+                    75
+                ],
+
+                fontStyle:"bold",
+
+                fontSize:7
+
+            },
+
+            columnStyles:{
+
+                0:{
+
+                    cellWidth:15,
+
+                    halign:"center"
+
+                },
+
+                1:{
+
+                    cellWidth:57
+
+                },
+
+                2:{
+
+                    cellWidth:20,
+
+                    halign:"center"
+
+                },
+
+                3:{
+
+                    cellWidth:25,
+
+                    halign:"center"
+
+                },
+
+                4:{
+
+                    cellWidth:"auto"
+
+                }
+
+            },
+
+            alternateRowStyles:{
+
+                fillColor:[
+                    252,
+                    252,
+                    253
+                ]
+
+            },
+
+
+            /* =================================================
+               PDF FOOTER
+            ================================================= */
+
+            didDrawPage:
+                function(){
+
+                    const p =
+                        doc.internal
+                            .getNumberOfPages();
+
+
+                    doc.setDrawColor(
+                        225,
+                        225,
+                        228
+                    );
+
+
+                    doc.line(
+                        12,
+                        h - 13,
+                        w - 12,
+                        h - 13
+                    );
+
+
+                    doc.setFontSize(
+                        7
+                    );
+
+
+                    doc.setTextColor(
+                        120,
+                        120,
+                        125
+                    );
+
+
+                    doc.text(
+
+                        "CTGBoardRanking • Unofficial Education Data",
+
+                        12,
+
+                        h - 7
+
+                    );
+
+
+                    doc.text(
+
+                        `PDF Page ${p}`,
+
+                        w - 12,
+
+                        h - 7,
+
+                        {
+                            align:"right"
+                        }
+
+                    );
+
+                }
+
+        });
+
+
+        /* =================================================
+           FILE NAME
+        ================================================= */
+
+        const safe =
+            (
+                district ||
+                "All-Districts"
+            )
+
+            .replace(
+                /[^a-z0-9]+/gi,
+                "-"
+            )
+
+            .toLowerCase();
+
+
+        doc.save(
+
+            `CTGBoardRanking-District-Student-${safe}-Page-${page}.pdf`
+
+        );
+
+    };
+
+
+/* =====================================================
+   START
+===================================================== */
 
 load();
 
 </script>
 
+
 </body>
+
 </html>
