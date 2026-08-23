@@ -1,108 +1,143 @@
 /* =========================================================
    CTGBoardRanking — Main Script
+   Homepage Data Loader
 ========================================================= */
+
+"use strict";
 
 
 /* =========================================================
    DARK MODE
 ========================================================= */
 
-const themeBtn = document.getElementById("themeBtn");
+document.addEventListener("DOMContentLoaded", function () {
 
-const savedTheme = localStorage.getItem("ctg-theme");
+    const themeBtn =
+        document.getElementById("themeBtn");
 
-if (savedTheme === "dark") {
-    document.body.classList.add("dark");
-}
+    const savedTheme =
+        localStorage.getItem("ctg-theme");
 
-if (themeBtn) {
+    if (savedTheme === "dark") {
+        document.body.classList.add("dark");
+    }
 
-    themeBtn.addEventListener("click", () => {
+    if (themeBtn) {
 
-        document.body.classList.toggle("dark");
+        themeBtn.addEventListener("click", function () {
 
-        const dark =
-            document.body.classList.contains("dark");
+            document.body.classList.toggle("dark");
 
-        localStorage.setItem(
-            "ctg-theme",
-            dark ? "dark" : "light"
-        );
+            const dark =
+                document.body.classList.contains("dark");
 
-    });
+            localStorage.setItem(
+                "ctg-theme",
+                dark ? "dark" : "light"
+            );
 
-}
+        });
+
+    }
+
+});
 
 
 /* =========================================================
-   DATA FILE
-   institution_results.json MUST be used
+   INSTITUTION JSON
 ========================================================= */
 
-const INSTITUTION_RESULTS_FILE =
-    "institution_results.json";
+const INSTITUTION_JSON_PATHS = [
+
+    "institution_results.json",
+
+    "scraper/institution_results.json"
+
+];
 
 
 /* =========================================================
-   LOAD JSON
+   LOAD INSTITUTION RESULTS
 ========================================================= */
 
 async function loadInstitutionResults() {
 
-    const paths = [
-
-        "institution_results.json",
-
-        "scraper/institution_results.json"
-
-    ];
-
-    for (const path of paths) {
+    for (
+        const path
+        of INSTITUTION_JSON_PATHS
+    ) {
 
         try {
 
-            const response = await fetch(
-                path + "?v=" + Date.now(),
-                {
-                    cache: "no-store"
-                }
-            );
+            const response =
+                await fetch(
+                    path + "?v=" + Date.now(),
+                    {
+                        cache: "no-store"
+                    }
+                );
 
             if (!response.ok) {
                 continue;
             }
 
-            const data = await response.json();
+            const json =
+                await response.json();
 
-            if (Array.isArray(data)) {
-                return data;
-            }
 
-            if (
-                data &&
-                Array.isArray(data.institutions)
-            ) {
-                return data.institutions;
-            }
+            /* JSON is directly an array */
 
             if (
-                data &&
-                Array.isArray(data.results)
+                Array.isArray(json)
             ) {
-                return data.results;
+
+                return json;
+
             }
+
+
+            /* JSON object */
 
             if (
-                data &&
-                Array.isArray(data.data)
+                json &&
+                Array.isArray(
+                    json.institutions
+                )
             ) {
-                return data.data;
+
+                return json.institutions;
+
             }
 
-        } catch (error) {
+
+            if (
+                json &&
+                Array.isArray(
+                    json.results
+                )
+            ) {
+
+                return json.results;
+
+            }
+
+
+            if (
+                json &&
+                Array.isArray(
+                    json.data
+                )
+            ) {
+
+                return json.data;
+
+            }
+
+        }
+        catch (error) {
 
             console.warn(
-                "Could not load:",
+                "JSON load failed:",
                 path,
                 error
             );
@@ -111,8 +146,9 @@ async function loadInstitutionResults() {
 
     }
 
+
     throw new Error(
-        "institution_results.json could not be loaded"
+        "institution_results.json not found"
     );
 
 }
@@ -122,22 +158,27 @@ async function loadInstitutionResults() {
    NUMBER
 ========================================================= */
 
-function number(value) {
+function toNumber(value) {
 
     if (
         value === null ||
         value === undefined ||
         value === ""
     ) {
+
         return 0;
+
     }
 
-    const n = Number(
-        String(value)
-            .replace(/,/g, "")
-            .replace(/%/g, "")
-            .trim()
-    );
+
+    const n =
+        Number(
+            String(value)
+                .replace(/,/g, "")
+                .replace(/%/g, "")
+                .trim()
+        );
+
 
     return Number.isFinite(n)
         ? n
@@ -147,36 +188,29 @@ function number(value) {
 
 
 /* =========================================================
-   NORMALIZE INSTITUTION
+   NORMALIZE
 ========================================================= */
 
 function normalizeInstitution(item) {
 
     const appeared =
-        number(
+        toNumber(
             item.appeared ??
             item.total_students ??
-            item.total_appeared
+            item.total_appeared ??
+            item.students
         );
 
 
     const passed =
-        number(
+        toNumber(
             item.passed ??
             item.total_passed
         );
 
 
-    let passingRate =
-        number(
-            item.passing_rate ??
-            item.pass_rate ??
-            item.passingRate
-        );
-
-
     const gpa5 =
-        number(
+        toNumber(
             item.gpa5 ??
             item.gpa_5 ??
             item.total_gpa5 ??
@@ -185,9 +219,18 @@ function normalizeInstitution(item) {
         );
 
 
+    let passingRate =
+        toNumber(
+            item.passing_rate ??
+            item.pass_rate ??
+            item.passingRate
+        );
+
+
     if (
         passingRate === 0 &&
-        appeared > 0
+        appeared > 0 &&
+        passed >= 0
     ) {
 
         passingRate =
@@ -214,7 +257,8 @@ function normalizeInstitution(item) {
 
         district:
             String(
-                item.district ?? ""
+                item.district ??
+                ""
             ).trim(),
 
         thana:
@@ -238,21 +282,25 @@ function normalizeInstitution(item) {
 
 
 /* =========================================================
-   CREATE UNIQUE INSTITUTION LIST
+   UNIQUE INSTITUTIONS
 ========================================================= */
 
-function uniqueInstitutions(data) {
+function createUniqueInstitutions(data) {
 
-    const map = new Map();
+    const map =
+        new Map();
 
-    for (const raw of data) {
+
+    data.forEach(function (raw) {
 
         const item =
             normalizeInstitution(raw);
 
+
         if (!item.institution) {
-            continue;
+            return;
         }
+
 
         const key =
             item.eiin ||
@@ -260,10 +308,6 @@ function uniqueInstitutions(data) {
                 .toLowerCase()
                 .trim();
 
-        /*
-         * If duplicate EIIN exists,
-         * keep the record with the larger appeared value.
-         */
 
         if (!map.has(key)) {
 
@@ -272,26 +316,35 @@ function uniqueInstitutions(data) {
                 item
             );
 
-        } else {
-
-            const old =
-                map.get(key);
-
-            if (
-                item.appeared >
-                old.appeared
-            ) {
-
-                map.set(
-                    key,
-                    item
-                );
-
-            }
+            return;
 
         }
 
-    }
+
+        /*
+         * Duplicate EIIN:
+         * keep the record with larger
+         * student count.
+         */
+
+        const old =
+            map.get(key);
+
+
+        if (
+            item.appeared >
+            old.appeared
+        ) {
+
+            map.set(
+                key,
+                item
+            );
+
+        }
+
+    });
+
 
     return Array.from(
         map.values()
@@ -301,25 +354,107 @@ function uniqueInstitutions(data) {
 
 
 /* =========================================================
-   INSTITUTION RANKING
+   RANKING
 ========================================================= */
 
-async function loadInstitutionRanking() {
+function sortInstitutions(institutions) {
+
+    return institutions.sort(
+        function (a, b) {
+
+
+            /* 1. GPA-5 */
+
+            if (
+                b.gpa5 !==
+                a.gpa5
+            ) {
+
+                return (
+                    b.gpa5 -
+                    a.gpa5
+                );
+
+            }
+
+
+            /* 2. Passing rate */
+
+            if (
+                b.passingRate !==
+                a.passingRate
+            ) {
+
+                return (
+                    b.passingRate -
+                    a.passingRate
+                );
+
+            }
+
+
+            /* 3. Passed */
+
+            if (
+                b.passed !==
+                a.passed
+            ) {
+
+                return (
+                    b.passed -
+                    a.passed
+                );
+
+            }
+
+
+            /* 4. Appeared */
+
+            if (
+                b.appeared !==
+                a.appeared
+            ) {
+
+                return (
+                    b.appeared -
+                    a.appeared
+                );
+
+            }
+
+
+            return a.institution
+                .localeCompare(
+                    b.institution
+                );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   HOMEPAGE TOP 3
+========================================================= */
+
+async function loadHomepageTop3() {
 
     const rows = [
 
-        document.getElementById("homeRank1"),
+        document.getElementById(
+            "homeRank1"
+        ),
 
-        document.getElementById("homeRank2"),
+        document.getElementById(
+            "homeRank2"
+        ),
 
-        document.getElementById("homeRank3")
+        document.getElementById(
+            "homeRank3"
+        )
 
     ];
-
-
-    if (!rows.some(Boolean)) {
-        return;
-    }
 
 
     try {
@@ -329,106 +464,42 @@ async function loadInstitutionRanking() {
 
 
         const institutions =
-            uniqueInstitutions(data);
+            createUniqueInstitutions(
+                data
+            );
 
 
-        /*
-         * TOP INSTITUTION RANKING
-         *
-         * 1. GPA-5
-         * 2. Passing Rate
-         * 3. Passed
-         * 4. Appeared
-         */
-
-        institutions.sort(
-            (a, b) => {
-
-                if (
-                    b.gpa5 !==
-                    a.gpa5
-                ) {
-
-                    return (
-                        b.gpa5 -
-                        a.gpa5
-                    );
-
-                }
-
-
-                if (
-                    b.passingRate !==
-                    a.passingRate
-                ) {
-
-                    return (
-                        b.passingRate -
-                        a.passingRate
-                    );
-
-                }
-
-
-                if (
-                    b.passed !==
-                    a.passed
-                ) {
-
-                    return (
-                        b.passed -
-                        a.passed
-                    );
-
-                }
-
-
-                if (
-                    b.appeared !==
-                    a.appeared
-                ) {
-
-                    return (
-                        b.appeared -
-                        a.appeared
-                    );
-
-                }
-
-
-                return a.institution.localeCompare(
-                    b.institution
-                );
-
-            }
-        );
+        const ranking =
+            sortInstitutions(
+                institutions
+            );
 
 
         const top3 =
-            institutions.slice(0, 3);
+            ranking.slice(
+                0,
+                3
+            );
 
 
         console.log(
             "Institution total:",
-            institutions.length
+            ranking.length
         );
 
 
         console.log(
-            "TOP 3:",
+            "Homepage TOP 3:",
             top3
         );
 
 
-        /*
-         * Display TOP 3
-         */
-
         top3.forEach(
-            (item, index) => {
+            function (item, index) {
 
                 const row =
                     rows[index];
+
 
                 if (!row) {
                     return;
@@ -453,21 +524,9 @@ async function loadInstitutionRanking() {
                     );
 
 
-                const passLabel =
-                    row.querySelector(
-                        ".rank-result span"
-                    );
-
-
                 const score =
                     row.querySelector(
                         ".rank-score strong"
-                    );
-
-
-                const scoreLabel =
-                    row.querySelector(
-                        ".rank-score span"
                     );
 
 
@@ -491,16 +550,9 @@ async function loadInstitutionRanking() {
                 if (pass) {
 
                     pass.textContent =
-                        item.passingRate.toFixed(2) +
+                        item.passingRate
+                            .toFixed(2) +
                         "%";
-
-                }
-
-
-                if (passLabel) {
-
-                    passLabel.textContent =
-                        "Pass Rate";
 
                 }
 
@@ -508,17 +560,10 @@ async function loadInstitutionRanking() {
                 if (score) {
 
                     score.textContent =
-                        item.gpa5.toLocaleString(
-                            "en-US"
-                        );
-
-                }
-
-
-                if (scoreLabel) {
-
-                    scoreLabel.textContent =
-                        "GPA-5";
+                        item.gpa5
+                            .toLocaleString(
+                                "en-US"
+                            );
 
                 }
 
@@ -539,70 +584,60 @@ async function loadInstitutionRanking() {
             const row =
                 rows[i];
 
+
             if (!row) {
                 continue;
             }
 
 
-            const elements =
-                row.querySelectorAll(
-                    ".rank-info strong, .rank-info span, .rank-result strong, .rank-score strong"
+            const name =
+                row.querySelector(
+                    ".rank-info strong"
                 );
 
 
-            elements.forEach(
-                element => {
-                    element.textContent = "—";
-                }
-            );
+            const district =
+                row.querySelector(
+                    ".rank-info span"
+                );
+
+
+            const pass =
+                row.querySelector(
+                    ".rank-result strong"
+                );
+
+
+            const score =
+                row.querySelector(
+                    ".rank-score strong"
+                );
+
+
+            if (name) {
+                name.textContent = "—";
+            }
+
+            if (district) {
+                district.textContent = "—";
+            }
+
+            if (pass) {
+                pass.textContent = "—";
+            }
+
+            if (score) {
+                score.textContent = "—";
+            }
 
         }
 
-
-    } catch (error) {
+    }
+    catch (error) {
 
         console.error(
-            "Institution ranking error:",
+            "Homepage institution error:",
             error
-        );
-
-
-        rows.forEach(
-            row => {
-
-                if (!row) {
-                    return;
-                }
-
-
-                const name =
-                    row.querySelector(
-                        ".rank-info strong"
-                    );
-
-
-                const district =
-                    row.querySelector(
-                        ".rank-info span"
-                    );
-
-
-                if (name) {
-
-                    name.textContent =
-                        "Data unavailable";
-
-                }
-
-
-                if (district) {
-
-                    district.textContent =
-                        "institution_results.json";
-
-                }
-
-            }
         );
 
     }
@@ -611,10 +646,10 @@ async function loadInstitutionRanking() {
 
 
 /* =========================================================
-   QUICK STATS
+   HOMEPAGE QUICK STATS
 ========================================================= */
 
-async function loadQuickStats() {
+async function loadHomepageStats() {
 
     try {
 
@@ -623,22 +658,21 @@ async function loadQuickStats() {
 
 
         const institutions =
-            uniqueInstitutions(data);
+            createUniqueInstitutions(
+                data
+            );
 
 
         const districts =
             new Set();
 
 
-        let totalStudents = 0;
+        let totalStudents =
+            0;
 
-
-        /*
-         * Calculate from institution_results.json
-         */
 
         institutions.forEach(
-            item => {
+            function (item) {
 
                 if (
                     item.district
@@ -646,8 +680,8 @@ async function loadQuickStats() {
 
                     districts.add(
                         item.district
-                            .toLowerCase()
                             .trim()
+                            .toUpperCase()
                     );
 
                 }
@@ -664,18 +698,21 @@ async function loadQuickStats() {
          * Institution total
          */
 
-        const statInstitutions =
+        const institutionElement =
             document.getElementById(
                 "statInstitutions"
             );
 
 
-        if (statInstitutions) {
+        if (
+            institutionElement
+        ) {
 
-            statInstitutions.textContent =
-                institutions.length.toLocaleString(
-                    "en-US"
-                );
+            institutionElement.textContent =
+                institutions.length
+                    .toLocaleString(
+                        "en-US"
+                    );
 
         }
 
@@ -684,18 +721,21 @@ async function loadQuickStats() {
          * District total
          */
 
-        const statDistricts =
+        const districtElement =
             document.getElementById(
                 "statDistricts"
             );
 
 
-        if (statDistricts) {
+        if (
+            districtElement
+        ) {
 
-            statDistricts.textContent =
-                districts.size.toLocaleString(
-                    "en-US"
-                );
+            districtElement.textContent =
+                districts.size
+                    .toLocaleString(
+                        "en-US"
+                    );
 
         }
 
@@ -704,102 +744,44 @@ async function loadQuickStats() {
          * Student total
          */
 
-        const statStudents =
+        const studentElement =
             document.getElementById(
                 "statStudents"
             );
 
 
-        if (statStudents) {
+        if (
+            studentElement
+        ) {
 
-            statStudents.textContent =
-                totalStudents.toLocaleString(
-                    "en-US"
-                );
+            studentElement.textContent =
+                totalStudents
+                    .toLocaleString(
+                        "en-US"
+                    );
 
         }
 
 
         console.log(
-            "Institution Total:",
-            institutions.length
-        );
+            "Homepage statistics:",
+            {
+                institutions:
+                    institutions.length,
 
+                districts:
+                    districts.size,
 
-        console.log(
-            "Student Total:",
-            totalStudents
-        );
-
-
-        console.log(
-            "District Total:",
-            districts.size
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Quick stats error:",
-            error
+                students:
+                    totalStudents
+            }
         );
 
     }
+    catch (error) {
 
-}
-
-
-/* =========================================================
-   STUDENT RANKING
-========================================================= */
-
-async function loadStudentRanking() {
-
-    try {
-
-        const response =
-            await fetch(
-                "student_results.json?v=" +
-                Date.now(),
-                {
-                    cache: "no-store"
-                }
-            );
-
-
-        if (!response.ok) {
-            return;
-        }
-
-
-        const data =
-            await response.json();
-
-
-        const students =
-            Array.isArray(data)
-                ? data
-                : (
-                    data &&
-                    Array.isArray(
-                        data.results
-                    )
-                        ? data.results
-                        : []
-                );
-
-
-        console.log(
-            "Student results:",
-            students.length
-        );
-
-
-    } catch (error) {
-
-        console.warn(
-            "Student ranking not loaded:",
+        console.error(
+            "Homepage statistics error:",
             error
         );
 
@@ -814,125 +796,21 @@ async function loadStudentRanking() {
 
 async function loadTotalVisits() {
 
-    const visitElement =
+    const element =
         document.getElementById(
             "totalVisits"
         );
 
 
-    if (!visitElement) {
+    if (!element) {
         return;
     }
 
 
-    try {
-
-        /*
-         * IMPORTANT:
-         * Replace the key below with your
-         * actual Supabase publishable key.
-         */
-
-        const SUPABASE_URL =
-            "https://ymwhodckmbybccufzjot.supabase.co";
-
-
-        const SUPABASE_KEY =
-            "তোমার_SUPABASE_PUBLISHABLE_KEY";
-
-
-        if (
-            !SUPABASE_KEY ||
-            SUPABASE_KEY ===
-            "তোমার_SUPABASE_PUBLISHABLE_KEY"
-        ) {
-
-            return;
-
-        }
-
-
-        const response =
-            await fetch(
-                SUPABASE_URL +
-                "/rest/v1/site_stats?id=eq.1&select=total_visits",
-                {
-
-                    headers: {
-
-                        "apikey":
-                            SUPABASE_KEY,
-
-                        "Authorization":
-                            "Bearer " +
-                            SUPABASE_KEY
-
-                    }
-
-                }
-            );
-
-
-        if (!response.ok) {
-            throw new Error(
-                "HTTP " +
-                response.status
-            );
-        }
-
-
-        const data =
-            await response.json();
-
-
-        if (
-            Array.isArray(data) &&
-            data.length > 0
-        ) {
-
-            visitElement.textContent =
-                Number(
-                    data[0].total_visits
-                ).toLocaleString(
-                    "en-US"
-                );
-
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Total visits error:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   INITIALIZE
-========================================================= */
-
-async function initializeRanking() {
-
-    await Promise.all([
-
-        loadInstitutionRanking(),
-
-        loadQuickStats(),
-
-        loadStudentRanking(),
-
-        loadTotalVisits()
-
-    ]);
-
-
-    console.log(
-        "✓ CTGBoardRanking loaded successfully"
-    );
+    /*
+     * Keep your existing Supabase
+     * visit system unchanged.
+     */
 
 }
 
@@ -943,5 +821,22 @@ async function initializeRanking() {
 
 document.addEventListener(
     "DOMContentLoaded",
-    initializeRanking
+    async function () {
+
+        await Promise.all([
+
+            loadHomepageTop3(),
+
+            loadHomepageStats(),
+
+            loadTotalVisits()
+
+        ]);
+
+
+        console.log(
+            "✓ CTGBoardRanking homepage loaded"
+        );
+
+    }
 );
