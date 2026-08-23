@@ -178,8 +178,65 @@
 ========================================================= */
 
 .student-search {
-    margin-bottom:18px;
+    margin-bottom:12px;
     background:white;
+}
+
+
+/* =========================================================
+   PDF BUTTON
+========================================================= */
+
+.pdf-download-area {
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:18px;
+}
+
+.pdf-download-btn {
+
+    border:1px solid var(--border);
+
+    background:var(--text);
+
+    color:var(--bg);
+
+    padding:12px 18px;
+
+    border-radius:13px;
+
+    font-family:inherit;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:7px;
+
+    transition:.2s;
+
+}
+
+.pdf-download-btn:hover {
+
+    transform:translateY(-1px);
+
+    opacity:.9;
+
+}
+
+.pdf-download-btn:active {
+
+    transform:scale(.98);
+
 }
 
 
@@ -188,12 +245,19 @@
 ========================================================= */
 
 .student-list {
+
     width:100%;
+
     background:rgba(255,255,255,.88);
+
     border:1px solid var(--border);
+
     border-radius:24px;
+
     overflow:hidden;
+
     box-shadow:var(--shadow);
+
 }
 
 
@@ -263,6 +327,7 @@
     min-width:0;
 
     box-sizing:border-box;
+
 }
 
 .student-row:last-child {
@@ -300,6 +365,8 @@
 .student-name {
 
     min-width:0;
+
+    width:100%;
 
     overflow:hidden;
 
@@ -415,6 +482,8 @@
     min-width:0;
 
     max-width:100%;
+
+    width:100%;
 
     overflow:hidden;
 
@@ -611,10 +680,22 @@
     }
 
 
-    /*
-       Mobile table becomes a compact
-       4-column layout.
-    */
+    .pdf-download-area {
+
+        justify-content:stretch;
+
+        margin-bottom:18px;
+
+    }
+
+    .pdf-download-btn {
+
+        width:100%;
+
+    }
+
+
+    /* MOBILE TABLE */
 
     .student-header {
 
@@ -656,9 +737,8 @@
 
 
     /*
-       Institution stays inside
-       the same row but occupies
-       full width underneath.
+       Institute full width,
+       but stays INSIDE the row.
     */
 
     .student-institution {
@@ -668,6 +748,8 @@
         width:100%;
 
         max-width:100%;
+
+        min-width:0;
 
         margin-top:3px;
 
@@ -769,6 +851,7 @@
 
     }
 
+
     .student-header {
 
         grid-template-columns:
@@ -865,6 +948,149 @@
         min-width:65px;
 
         font-size:11px;
+
+    }
+
+}
+
+
+/* =========================================================
+   PRINT / PDF
+========================================================= */
+
+@media print {
+
+    body {
+
+        background:white !important;
+
+        color:#111 !important;
+
+    }
+
+
+    .navbar,
+    footer,
+    .back-link,
+    .ranking-controls,
+    .group-tabs,
+    .student-search,
+    .pdf-download-area,
+    .pagination {
+
+        display:none !important;
+
+    }
+
+
+    .student-hero {
+
+        max-width:none !important;
+
+        padding:15px 0 20px !important;
+
+    }
+
+
+    .student-hero h1 {
+
+        font-size:36px !important;
+
+        letter-spacing:-2px !important;
+
+    }
+
+
+    .student-hero h1 span {
+
+        color:#006fe6 !important;
+
+    }
+
+
+    .student-hero p {
+
+        font-size:12px !important;
+
+    }
+
+
+    .student-content {
+
+        max-width:none !important;
+
+        padding:0 !important;
+
+    }
+
+
+    .student-list {
+
+        border:1px solid #ddd !important;
+
+        box-shadow:none !important;
+
+        border-radius:0 !important;
+
+        overflow:visible !important;
+
+    }
+
+
+    .student-header {
+
+        background:#f5f5f5 !important;
+
+        color:#555 !important;
+
+    }
+
+
+    .student-row {
+
+        color:#111 !important;
+
+        break-inside:avoid;
+
+        page-break-inside:avoid;
+
+    }
+
+
+    .student-name strong,
+    .student-institution strong {
+
+        color:#111 !important;
+
+    }
+
+
+    .student-gpa strong {
+
+        color:#111 !important;
+
+    }
+
+
+    .student-total strong {
+
+        color:#006fe6 !important;
+
+    }
+
+
+    .student-row:hover {
+
+        background:transparent !important;
+
+    }
+
+
+    @page {
+
+        size:A4 portrait;
+
+        margin:12mm;
 
     }
 
@@ -1100,6 +1326,24 @@ Science Students
     class="student-search"
     placeholder="Search student, roll or institution..."
     autocomplete="off">
+
+
+<!-- =====================================================
+     PDF DOWNLOAD
+===================================================== -->
+
+<div class="pdf-download-area">
+
+<button
+    type="button"
+    id="downloadPdfBtn"
+    class="pdf-download-btn">
+
+    ⬇ Download PDF
+
+</button>
+
+</div>
 
 
 <!-- =====================================================
@@ -1359,6 +1603,11 @@ const paginationInfo =
         "paginationInfo"
     );
 
+const downloadPdfBtn =
+    document.getElementById(
+        "downloadPdfBtn"
+    );
+
 
 /* =========================================================
    LOAD STUDENTS
@@ -1459,7 +1708,9 @@ async function loadStudents() {
 function normalizeGroup(group) {
 
     if (!group) {
+
         return "";
+
     }
 
     return String(group)
@@ -2226,6 +2477,20 @@ yearSelect.addEventListener(
 
 
         renderStudents();
+
+    }
+);
+
+
+/* =========================================================
+   PDF DOWNLOAD
+========================================================= */
+
+downloadPdfBtn.addEventListener(
+    "click",
+    () => {
+
+        window.print();
 
     }
 );
