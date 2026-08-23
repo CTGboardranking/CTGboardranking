@@ -2,8 +2,8 @@
   "year": 2026,
   "board": "Chattogram Board",
   "institutions": 1286,
-  "students": 40464,
-  "rankable_students": 31929,
+  "students": 50444,
+  "rankable_students": 36720,
   "districts": 2,
   "files": {
     "merged_students": "data/merged_students.json",
