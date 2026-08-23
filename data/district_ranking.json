@@ -1,0 +1,20 @@
+[
+  {
+    "district": "Unknown",
+    "institutions": 1276,
+    "appeared": 128511,
+    "passed": 76306,
+    "passing_rate": 59.38,
+    "gpa5": 9241,
+    "rank": 1
+  },
+  {
+    "district": "BANDARBAN",
+    "institutions": 10,
+    "appeared": 851,
+    "passed": 468,
+    "passing_rate": 54.99,
+    "gpa5": 24,
+    "rank": 2
+  }
+]
