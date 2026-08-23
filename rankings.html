@@ -152,70 +152,42 @@
 }
 
 .pdf-download-btn{
-
     display:inline-flex;
-
     align-items:center;
-
     justify-content:center;
-
     gap:9px;
-
     border:0;
-
     background:#111827;
-
     color:#fff;
-
     padding:12px 18px;
-
     border-radius:14px;
-
     font-family:inherit;
-
     font-size:13px;
-
     font-weight:700;
-
     cursor:pointer;
-
-    box-shadow:
-        0 8px 22px rgba(0,0,0,.12);
-
+    box-shadow:0 8px 22px rgba(0,0,0,.12);
     transition:
         transform .2s ease,
         opacity .2s ease,
         box-shadow .2s ease;
-
 }
 
 .pdf-download-btn:hover{
-
     transform:translateY(-1px);
-
-    box-shadow:
-        0 12px 28px rgba(0,0,0,.16);
-
+    box-shadow:0 12px 28px rgba(0,0,0,.16);
 }
 
 .pdf-download-btn:active{
-
     transform:translateY(0);
-
 }
 
 .pdf-download-btn:disabled{
-
     opacity:.55;
-
     cursor:not-allowed;
-
 }
 
 .pdf-icon{
-
     font-size:16px;
-
 }
 
 
@@ -347,10 +319,16 @@
     color:#c68a00;
 }
 
+.institution-name{
+    min-width:0;
+}
+
 .institution-name strong{
     display:block;
     font-size:14px;
     line-height:1.4;
+    overflow-wrap:anywhere;
+    word-break:break-word;
 }
 
 .institution-name span{
@@ -358,6 +336,9 @@
     color:var(--muted);
     font-size:11px;
     margin-top:3px;
+    line-height:1.45;
+    overflow-wrap:anywhere;
+    word-break:break-word;
 }
 
 .data-value{
@@ -624,8 +605,6 @@
 <main>
 
 
-<!-- HERO -->
-
 <section class="ranking-hero">
 
 <a href="index.html"
@@ -637,19 +616,14 @@
 
 
 <span class="eyebrow">
-
     CHITTAGONG BOARD
-
 </span>
 
 
 <h1>
-
     Institution
     <br>
-
     <span>Rankings.</span>
-
 </h1>
 
 
@@ -664,7 +638,9 @@
 </section>
 
 
-<!-- FILTER -->
+<!-- =====================================================
+     FILTER
+===================================================== -->
 
 <section class="filters">
 
@@ -727,7 +703,9 @@ Institution Ranking
 </section>
 
 
-<!-- CONTENT -->
+<!-- =====================================================
+     CONTENT
+===================================================== -->
 
 <section class="ranking-content">
 
@@ -737,32 +715,24 @@ Institution Ranking
 <div>
 
 <span class="eyebrow">
-
     INSTITUTION PERFORMANCE
-
 </span>
 
 <h2 id="rankingTitle">
-
     Institution Rankings
-
 </h2>
 
 </div>
 
 
 <p id="resultInfo">
-
     Loading...
-
 </p>
 
 </div>
 
 
-<!-- =====================================================
-     PDF DOWNLOAD
-===================================================== -->
+<!-- PDF -->
 
 <div class="pdf-actions">
 
@@ -782,12 +752,12 @@ Institution Ranking
 </div>
 
 
-<!-- PODIUM -->
+<!-- =====================================================
+     PODIUM
+===================================================== -->
 
 <div class="podium">
 
-
-<!-- SECOND -->
 
 <div class="podium-card">
 
@@ -822,8 +792,6 @@ TOTAL GPA-5
 </div>
 
 
-<!-- FIRST -->
-
 <div class="podium-card first">
 
 <div class="medal">
@@ -856,8 +824,6 @@ TOTAL GPA-5
 
 </div>
 
-
-<!-- THIRD -->
 
 <div class="podium-card">
 
@@ -895,7 +861,9 @@ TOTAL GPA-5
 </div>
 
 
-<!-- SEARCH -->
+<!-- =====================================================
+     SEARCH
+===================================================== -->
 
 <div class="search-box">
 
@@ -908,7 +876,9 @@ TOTAL GPA-5
 </div>
 
 
-<!-- TABLE -->
+<!-- =====================================================
+     TABLE
+===================================================== -->
 
 <div class="ranking-table">
 
@@ -937,9 +907,7 @@ PASSING RATE
 <div id="rankingRows">
 
 <div class="loading-state">
-
     Loading institution ranking...
-
 </div>
 
 </div>
@@ -960,8 +928,6 @@ PASSING RATE
 
 </div>
 
-
-<!-- PAGINATION -->
 
 <div id="pagination"
      class="pagination">
@@ -1022,9 +988,7 @@ CTGBoardRanking
 </div>
 
 <p>
-
 Chattogram Board Education Rankings.
-
 </p>
 
 </div>
@@ -1111,74 +1075,46 @@ let currentPage = 1;
 ========================================================= */
 
 const yearFilter =
-    document.getElementById(
-        "yearFilter"
-    );
+    document.getElementById("yearFilter");
 
 const groupFilter =
-    document.getElementById(
-        "groupFilter"
-    );
+    document.getElementById("groupFilter");
 
 const typeFilter =
-    document.getElementById(
-        "typeFilter"
-    );
+    document.getElementById("typeFilter");
 
 const rankingTitle =
-    document.getElementById(
-        "rankingTitle"
-    );
+    document.getElementById("rankingTitle");
 
 const resultInfo =
-    document.getElementById(
-        "resultInfo"
-    );
+    document.getElementById("resultInfo");
 
 const searchInput =
-    document.getElementById(
-        "searchInput"
-    );
+    document.getElementById("searchInput");
 
 const rankingRows =
-    document.getElementById(
-        "rankingRows"
-    );
+    document.getElementById("rankingRows");
 
 const emptyState =
-    document.getElementById(
-        "emptyState"
-    );
+    document.getElementById("emptyState");
 
 const errorState =
-    document.getElementById(
-        "errorState"
-    );
+    document.getElementById("errorState");
 
 const pagination =
-    document.getElementById(
-        "pagination"
-    );
+    document.getElementById("pagination");
 
 const prevPage =
-    document.getElementById(
-        "prevPage"
-    );
+    document.getElementById("prevPage");
 
 const nextPage =
-    document.getElementById(
-        "nextPage"
-    );
+    document.getElementById("nextPage");
 
 const paginationInfo =
-    document.getElementById(
-        "paginationInfo"
-    );
+    document.getElementById("paginationInfo");
 
 const downloadPdfBtn =
-    document.getElementById(
-        "downloadPdfBtn"
-    );
+    document.getElementById("downloadPdfBtn");
 
 
 /* =========================================================
@@ -1192,9 +1128,7 @@ function toNumber(value){
         value === undefined ||
         value === ""
     ){
-
         return 0;
-
     }
 
     const number =
@@ -1218,19 +1152,11 @@ function toNumber(value){
 
 function normalizeText(value){
 
-    return String(
-        value || ""
-    )
-    .trim()
-    .toLowerCase()
-    .replace(
-        /[_-]+/g,
-        " "
-    )
-    .replace(
-        /\s+/g,
-        " "
-    );
+    return String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[_-]+/g," ")
+        .replace(/\s+/g," ");
 
 }
 
@@ -1241,29 +1167,12 @@ function normalizeText(value){
 
 function escapeHTML(value){
 
-    return String(
-        value || ""
-    )
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-    .replace(
-        /</g,
-        "&lt;"
-    )
-    .replace(
-        />/g,
-        "&gt;"
-    )
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-    .replace(
-        /'/g,
-        "&#039;"
-    );
+    return String(value || "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
 }
 
@@ -1307,10 +1216,7 @@ function normalizeInstitution(item){
     ){
 
         passingRate =
-            (
-                passed /
-                appeared
-            ) * 100;
+            (passed / appeared) * 100;
 
     }
 
@@ -1318,8 +1224,7 @@ function normalizeInstitution(item){
 
         eiin:
             String(
-                item.eiin ||
-                ""
+                item.eiin || ""
             ).trim(),
 
         institution:
@@ -1343,17 +1248,10 @@ function normalizeInstitution(item){
                 ""
             ).trim(),
 
-        appeared:
-            appeared,
-
-        passed:
-            passed,
-
-        passRate:
-            passingRate,
-
-        gpa5:
-            gpa5
+        appeared,
+        passed,
+        passRate: passingRate,
+        gpa5
 
     };
 
@@ -1381,18 +1279,15 @@ function buildRanking(){
         );
 
     if(
-        currentDistrict !==
-        "all"
+        currentDistrict !== "all"
     ){
 
         data =
             data.filter(
                 item =>
-
                     normalizeText(
                         item.district
                     ) ===
-
                     normalizeText(
                         currentDistrict
                     )
@@ -1413,21 +1308,13 @@ function buildRanking(){
 
                     const text =
                         normalizeText(
-
                             item.institution +
-
                             " " +
-
                             item.eiin +
-
                             " " +
-
                             item.district +
-
                             " " +
-
                             item.thana
-
                         );
 
                     return text.includes(
@@ -1443,45 +1330,24 @@ function buildRanking(){
         (a,b) => {
 
             if(
-                b.gpa5 !==
-                a.gpa5
+                b.gpa5 !== a.gpa5
             ){
-
-                return (
-                    b.gpa5 -
-                    a.gpa5
-                );
-
+                return b.gpa5 - a.gpa5;
             }
 
             if(
-                b.passRate !==
-                a.passRate
+                b.passRate !== a.passRate
             ){
-
-                return (
-                    b.passRate -
-                    a.passRate
-                );
-
+                return b.passRate - a.passRate;
             }
 
             if(
-                b.passed !==
-                a.passed
+                b.passed !== a.passed
             ){
-
-                return (
-                    b.passed -
-                    a.passed
-                );
-
+                return b.passed - a.passed;
             }
 
-            return (
-                b.appeared -
-                a.appeared
-            );
+            return b.appeared - a.appeared;
 
         }
     );
@@ -1491,19 +1357,14 @@ function buildRanking(){
             (item,index) => {
 
                 return {
-
                     ...item,
-
-                    rank:
-                        index + 1
-
+                    rank: index + 1
                 };
 
             }
         );
 
-    filteredData =
-        data;
+    filteredData = data;
 
 }
 
@@ -1517,42 +1378,27 @@ function populateDistricts(){
     const districts =
         [
             ...new Set(
-
                 allInstitutions
-
                     .map(
                         item =>
                             String(
-                                item.district ||
-                                ""
+                                item.district || ""
                             ).trim()
                     )
-
-                    .filter(
-                        Boolean
-                    )
-
+                    .filter(Boolean)
             )
         ]
-
         .sort(
             (a,b) =>
-                a.localeCompare(
-                    b
-                )
+                a.localeCompare(b)
         );
 
-    groupFilter.innerHTML =
-        "";
+    groupFilter.innerHTML = "";
 
     const allOption =
-        document.createElement(
-            "option"
-        );
+        document.createElement("option");
 
-    allOption.value =
-        "all";
-
+    allOption.value = "all";
     allOption.textContent =
         "All Districts";
 
@@ -1568,11 +1414,8 @@ function populateDistricts(){
                     "option"
                 );
 
-            option.value =
-                district;
-
-            option.textContent =
-                district;
+            option.value = district;
+            option.textContent = district;
 
             groupFilter.appendChild(
                 option
@@ -1597,13 +1440,9 @@ function updateTitle(){
         "Institution Rankings";
 
     resultInfo.textContent =
-
         yearFilter.value +
-
         " · Chattogram Board · " +
-
         filteredData.length +
-
         " Institutions";
 
 }
@@ -1615,86 +1454,56 @@ function updateTitle(){
 
 function updatePodium(){
 
-    const first =
-        filteredData[0];
-
-    const second =
-        filteredData[1];
-
-    const third =
-        filteredData[2];
+    const first = filteredData[0];
+    const second = filteredData[1];
+    const third = filteredData[2];
 
     document.getElementById(
         "podium1Name"
     ).textContent =
-
-        first
-            ? first.institution
-            : "—";
+        first ? first.institution : "—";
 
     document.getElementById(
         "podium1District"
     ).textContent =
-
-        first
-            ? first.district
-            : "—";
+        first ? first.district : "—";
 
     document.getElementById(
         "podium1Pass"
     ).textContent =
+        first ? first.gpa5 : "—";
 
-        first
-            ? first.gpa5
-            : "—";
 
     document.getElementById(
         "podium2Name"
     ).textContent =
-
-        second
-            ? second.institution
-            : "—";
+        second ? second.institution : "—";
 
     document.getElementById(
         "podium2District"
     ).textContent =
-
-        second
-            ? second.district
-            : "—";
+        second ? second.district : "—";
 
     document.getElementById(
         "podium2Pass"
     ).textContent =
+        second ? second.gpa5 : "—";
 
-        second
-            ? second.gpa5
-            : "—";
 
     document.getElementById(
         "podium3Name"
     ).textContent =
-
-        third
-            ? third.institution
-            : "—";
+        third ? third.institution : "—";
 
     document.getElementById(
         "podium3District"
     ).textContent =
-
-        third
-            ? third.district
-            : "—";
+        third ? third.district : "—";
 
     document.getElementById(
         "podium3Pass"
     ).textContent =
-
-        third
-            ? third.gpa5
-            : "—";
+        third ? third.gpa5 : "—";
 
 }
 
@@ -1705,11 +1514,9 @@ function updatePodium(){
 
 function renderTable(){
 
-    rankingRows.innerHTML =
-        "";
+    rankingRows.innerHTML = "";
 
-    emptyState.style.display =
-        "none";
+    emptyState.style.display = "none";
 
     if(
         filteredData.length === 0
@@ -1732,26 +1539,18 @@ function renderTable(){
         );
 
     if(
-        currentPage >
-        totalPages
+        currentPage > totalPages
     ){
-
-        currentPage =
-            totalPages;
-
+        currentPage = totalPages;
     }
 
     const start =
-        (
-            currentPage -
-            1
-        ) *
+        (currentPage - 1) *
         PAGE_SIZE;
 
     const end =
         Math.min(
-            start +
-            PAGE_SIZE,
+            start + PAGE_SIZE,
             filteredData.length
         );
 
@@ -1765,9 +1564,7 @@ function renderTable(){
         (item,index) => {
 
             const actualRank =
-                start +
-                index +
-                1;
+                start + index + 1;
 
             const row =
                 document.createElement(
@@ -1787,10 +1584,7 @@ function renderTable(){
 
                     ${String(
                         actualRank
-                    ).padStart(
-                        2,
-                        "0"
-                    )}
+                    ).padStart(2,"0")}
 
                 </div>
 
@@ -1803,7 +1597,6 @@ function renderTable(){
                     </strong>
 
                     <span>
-
                         EIIN:
                         ${escapeHTML(
                             item.eiin
@@ -1823,7 +1616,6 @@ function renderTable(){
                                   )
                                 : ""
                         }
-
                     </span>
 
                 </div>
@@ -1843,9 +1635,7 @@ function renderTable(){
                 <div class="data-column">
 
                     <span class="data-value">
-                        ${item.passRate.toFixed(
-                            2
-                        )}%
+                        ${item.passRate.toFixed(2)}%
                     </span>
 
                     <span class="data-label">
@@ -1866,34 +1656,25 @@ function renderTable(){
     if(
         totalPages > 1
     ){
-
         pagination.style.display =
             "flex";
-
     }
     else{
-
         pagination.style.display =
             "none";
-
     }
 
     paginationInfo.textContent =
-
         "Page " +
-
         currentPage +
-
         " / " +
-
         totalPages;
 
     prevPage.disabled =
         currentPage <= 1;
 
     nextPage.disabled =
-        currentPage >=
-        totalPages;
+        currentPage >= totalPages;
 
 }
 
@@ -1926,9 +1707,7 @@ async function loadInstitutions(){
         rankingRows.innerHTML = `
 
             <div class="loading-state">
-
                 Loading institution ranking...
-
             </div>
 
         `;
@@ -1937,20 +1716,17 @@ async function loadInstitutions(){
             await fetch(
                 DATA_URL,
                 {
-                    cache:
-                        "no-store"
+                    cache:"no-store"
                 }
             );
 
         if(
             !response.ok
         ){
-
             throw new Error(
                 "HTTP " +
                 response.status
             );
-
         }
 
         const data =
@@ -1959,54 +1735,37 @@ async function loadInstitutions(){
         if(
             Array.isArray(data)
         ){
-
-            allInstitutions =
-                data;
-
+            allInstitutions = data;
         }
 
         else if(
             data &&
-            Array.isArray(
-                data.results
-            )
+            Array.isArray(data.results)
         ){
-
             allInstitutions =
                 data.results;
-
         }
 
         else if(
             data &&
-            Array.isArray(
-                data.institutions
-            )
+            Array.isArray(data.institutions)
         ){
-
             allInstitutions =
                 data.institutions;
-
         }
 
         else if(
             data &&
-            Array.isArray(
-                data.data
-            )
+            Array.isArray(data.data)
         ){
-
             allInstitutions =
                 data.data;
-
         }
 
         else{
-
             throw new Error(
                 "Invalid JSON format"
             );
-
         }
 
         console.log(
@@ -2017,12 +1776,10 @@ async function loadInstitutions(){
         if(
             allInstitutions.length > 0
         ){
-
             console.log(
                 "First record:",
                 allInstitutions[0]
             );
-
         }
 
         errorState.style.display =
@@ -2041,8 +1798,7 @@ async function loadInstitutions(){
             error
         );
 
-        rankingRows.innerHTML =
-            "";
+        rankingRows.innerHTML = "";
 
         errorState.textContent =
             "Institution ranking data could not be loaded.";
@@ -2069,8 +1825,7 @@ groupFilter.addEventListener(
         currentDistrict =
             this.value;
 
-        currentPage =
-            1;
+        currentPage = 1;
 
         renderRanking();
 
@@ -2086,8 +1841,7 @@ yearFilter.addEventListener(
     "change",
     function(){
 
-        currentPage =
-            1;
+        currentPage = 1;
 
         renderRanking();
 
@@ -2106,8 +1860,7 @@ searchInput.addEventListener(
         currentSearch =
             this.value;
 
-        currentPage =
-            1;
+        currentPage = 1;
 
         renderRanking();
 
@@ -2138,11 +1891,9 @@ prevPage.addEventListener(
                         .querySelector(
                             ".ranking-table"
                         )
-                        .offsetTop -
-                    100,
+                        .offsetTop - 100,
 
-                behavior:
-                    "smooth"
+                behavior:"smooth"
 
             });
 
@@ -2167,8 +1918,7 @@ nextPage.addEventListener(
             );
 
         if(
-            currentPage <
-            totalPages
+            currentPage < totalPages
         ){
 
             currentPage++;
@@ -2182,11 +1932,9 @@ nextPage.addEventListener(
                         .querySelector(
                             ".ranking-table"
                         )
-                        .offsetTop -
-                    100,
+                        .offsetTop - 100,
 
-                behavior:
-                    "smooth"
+                behavior:"smooth"
 
             });
 
@@ -2197,17 +1945,138 @@ nextPage.addEventListener(
 
 
 /* =========================================================
-   PDF — HELPERS
+   PDF HELPERS
 ========================================================= */
 
-function pdfText(doc, text, x, y, options = {}){
+function pdfText(
+    doc,
+    text,
+    x,
+    y,
+    options = {}
+){
 
     doc.text(
-        String(text),
+        String(text ?? ""),
         x,
         y,
         options
     );
+
+}
+
+
+/* =========================================================
+   PDF TEXT WRAP HELPER
+========================================================= */
+
+function pdfWrappedText(
+    doc,
+    text,
+    x,
+    y,
+    maxWidth,
+    lineHeight
+){
+
+    const lines =
+        doc.splitTextToSize(
+            String(text || ""),
+            maxWidth
+        );
+
+    doc.text(
+        lines,
+        x,
+        y
+    );
+
+    return {
+        lines,
+        height:
+            lines.length *
+            lineHeight
+    };
+
+}
+
+
+/* =========================================================
+   PDF TABLE HEADER
+========================================================= */
+
+function drawPDFTableHeader(
+    doc,
+    y,
+    pageWidth,
+    margin,
+    columns
+){
+
+    const tableWidth =
+        pageWidth -
+        margin * 2;
+
+    doc.setFillColor(
+        245,
+        245,
+        247
+    );
+
+    doc.roundedRect(
+        margin,
+        y,
+        tableWidth,
+        10,
+        2,
+        2,
+        "F"
+    );
+
+    doc.setTextColor(
+        110,
+        110,
+        115
+    );
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+    doc.setFontSize(
+        6.5
+    );
+
+    pdfText(
+        doc,
+        "RANK",
+        columns.rankX,
+        y + 6
+    );
+
+    pdfText(
+        doc,
+        "INSTITUTION",
+        columns.institutionX,
+        y + 6
+    );
+
+    pdfText(
+        doc,
+        "GPA-5",
+        columns.gpaX,
+        y + 6
+    );
+
+    pdfText(
+        doc,
+        "PASS RATE",
+        columns.passX,
+        y + 6
+    );
+
+    return y + 12;
 
 }
 
@@ -2245,37 +2114,27 @@ async function downloadCurrentPagePDF(){
         const jsPDF =
             window.jspdf.jsPDF;
 
-
         const doc =
             new jsPDF({
 
-                orientation:
-                    "portrait",
-
-                unit:
-                    "mm",
-
-                format:
-                    "a4"
+                orientation:"portrait",
+                unit:"mm",
+                format:"a4"
 
             });
 
 
-        /*
-         * Current page data
-         */
+        /* =================================================
+           CURRENT PAGE DATA
+        ================================================= */
 
         const start =
-            (
-                currentPage -
-                1
-            ) *
+            (currentPage - 1) *
             PAGE_SIZE;
 
         const end =
             Math.min(
-                start +
-                PAGE_SIZE,
+                start + PAGE_SIZE,
                 filteredData.length
             );
 
@@ -2286,9 +2145,9 @@ async function downloadCurrentPagePDF(){
             );
 
 
-        /*
-         * PDF dimensions
-         */
+        /* =================================================
+           PDF DIMENSIONS
+        ================================================= */
 
         const pageWidth =
             doc.internal.pageSize.getWidth();
@@ -2297,33 +2156,21 @@ async function downloadCurrentPagePDF(){
             doc.internal.pageSize.getHeight();
 
 
-        /*
-         * Apple-inspired
-         * monochrome palette
-         */
+        /* =================================================
+           COLORS
+        ================================================= */
 
-        const BLACK =
-            [17,17,17];
-
-        const DARK =
-            [35,35,38];
-
-        const GRAY =
-            [110,110,115];
-
-        const LIGHT =
-            [245,245,247];
-
-        const BORDER =
-            [225,225,230];
-
-        const BLUE =
-            [0,113,227];
+        const BLACK = [17,17,17];
+        const DARK = [35,35,38];
+        const GRAY = [110,110,115];
+        const LIGHT = [245,245,247];
+        const BORDER = [225,225,230];
+        const BLUE = [0,113,227];
 
 
-        /*
-         * Header
-         */
+        /* =================================================
+           HEADER
+        ================================================= */
 
         doc.setFillColor(
             250,
@@ -2340,9 +2187,7 @@ async function downloadCurrentPagePDF(){
         );
 
 
-        /*
-         * Logo circle
-         */
+        /* Logo */
 
         doc.setFillColor(
             ...BLACK
@@ -2355,7 +2200,6 @@ async function downloadCurrentPagePDF(){
             "F"
         );
 
-
         doc.setTextColor(
             255,
             255,
@@ -2367,9 +2211,7 @@ async function downloadCurrentPagePDF(){
             "bold"
         );
 
-        doc.setFontSize(
-            9
-        );
+        doc.setFontSize(9);
 
         pdfText(
             doc,
@@ -2377,15 +2219,12 @@ async function downloadCurrentPagePDF(){
             17,
             20,
             {
-                align:
-                    "center"
+                align:"center"
             }
         );
 
 
-        /*
-         * Website name
-         */
+        /* Website */
 
         doc.setTextColor(
             ...BLACK
@@ -2396,9 +2235,7 @@ async function downloadCurrentPagePDF(){
             "bold"
         );
 
-        doc.setFontSize(
-            15
-        );
+        doc.setFontSize(15);
 
         pdfText(
             doc,
@@ -2413,9 +2250,7 @@ async function downloadCurrentPagePDF(){
             "normal"
         );
 
-        doc.setFontSize(
-            7.5
-        );
+        doc.setFontSize(7.5);
 
         doc.setTextColor(
             ...GRAY
@@ -2429,9 +2264,7 @@ async function downloadCurrentPagePDF(){
         );
 
 
-        /*
-         * Unofficial badge
-         */
+        /* Badge */
 
         doc.setFillColor(
             238,
@@ -2458,9 +2291,7 @@ async function downloadCurrentPagePDF(){
             "bold"
         );
 
-        doc.setFontSize(
-            6.5
-        );
+        doc.setFontSize(6.5);
 
         pdfText(
             doc,
@@ -2468,18 +2299,16 @@ async function downloadCurrentPagePDF(){
             pageWidth - 31,
             17.5,
             {
-                align:
-                    "center"
+                align:"center"
             }
         );
 
 
-        /*
-         * Title
-         */
+        /* =================================================
+           TITLE
+        ================================================= */
 
-        let y =
-            49;
+        let y = 49;
 
         doc.setTextColor(
             ...BLACK
@@ -2490,9 +2319,7 @@ async function downloadCurrentPagePDF(){
             "bold"
         );
 
-        doc.setFontSize(
-            22
-        );
+        doc.setFontSize(22);
 
         pdfText(
             doc,
@@ -2501,18 +2328,14 @@ async function downloadCurrentPagePDF(){
             y
         );
 
-
         y += 8;
-
 
         doc.setFont(
             "helvetica",
             "normal"
         );
 
-        doc.setFontSize(
-            8.5
-        );
+        doc.setFontSize(8.5);
 
         doc.setTextColor(
             ...GRAY
@@ -2528,9 +2351,7 @@ async function downloadCurrentPagePDF(){
         );
 
 
-        /*
-         * Filter information
-         */
+        /* Filter */
 
         y += 6;
 
@@ -2542,7 +2363,6 @@ async function downloadCurrentPagePDF(){
                     : currentDistrict
             );
 
-
         if(
             currentSearch
         ){
@@ -2553,10 +2373,7 @@ async function downloadCurrentPagePDF(){
 
         }
 
-
-        doc.setFontSize(
-            7.5
-        );
+        doc.setFontSize(7.5);
 
         pdfText(
             doc,
@@ -2565,10 +2382,6 @@ async function downloadCurrentPagePDF(){
             y
         );
 
-
-        /*
-         * Page information
-         */
 
         doc.setTextColor(
             ...BLUE
@@ -2581,467 +2394,425 @@ async function downloadCurrentPagePDF(){
 
         pdfText(
             doc,
-            "PAGE " +
-            currentPage,
+            "PAGE " + currentPage,
             pageWidth - 15,
             y,
             {
-                align:
-                    "right"
+                align:"right"
             }
         );
 
 
-        /*
-         * Table
-         */
+        /* =================================================
+           TABLE COLUMNS
+           
+           IMPORTANT:
+           These widths are intentionally separated
+           so metadata never enters GPA/Pass columns.
+        ================================================= */
 
         y += 10;
 
+        const margin = 15;
 
-        const margin =
-            15;
-
-        const colRank =
-            18;
-
-        const colInstitution =
-            92;
-
-        const colGpa =
-            35;
-
-        const colPass =
-            35;
-
-
-        const rowHeight =
-            7.3;
-
-
-        /*
-         * Table header
-         */
-
-        doc.setFillColor(
-            ...LIGHT
-        );
-
-        doc.roundedRect(
-            margin,
-            y,
+        const tableWidth =
             pageWidth -
-                margin * 2,
-            10,
-            2,
-            2,
-            "F"
-        );
+            margin * 2;
+
+        const rankWidth = 14;
+
+        const institutionWidth = 78;
+
+        const gpaWidth = 30;
+
+        const passWidth =
+            tableWidth -
+            rankWidth -
+            institutionWidth -
+            gpaWidth;
 
 
-        doc.setTextColor(
-            ...GRAY
-        );
+        const columns = {
 
-        doc.setFont(
-            "helvetica",
-            "bold"
-        );
+            rankX:
+                margin + 3,
 
-        doc.setFontSize(
-            6.5
-        );
+            institutionX:
+                margin +
+                rankWidth,
 
+            gpaX:
+                margin +
+                rankWidth +
+                institutionWidth,
 
-        pdfText(
-            doc,
-            "RANK",
-            margin + 3,
-            y + 6
-        );
+            passX:
+                margin +
+                rankWidth +
+                institutionWidth +
+                gpaWidth
 
-
-        pdfText(
-            doc,
-            "INSTITUTION",
-            margin + colRank,
-            y + 6
-        );
+        };
 
 
-        pdfText(
-            doc,
-            "GPA-5",
-            margin +
-                colRank +
-                colInstitution,
-            y + 6
-        );
+        y =
+            drawPDFTableHeader(
+                doc,
+                y,
+                pageWidth,
+                margin,
+                columns
+            );
 
 
-        pdfText(
-            doc,
-            "PASS RATE",
-            margin +
-                colRank +
-                colInstitution +
-                colGpa,
-            y + 6
-        );
+        /* =================================================
+           ROW SETTINGS
+        ================================================= */
+
+        const minRowHeight = 11;
+
+        const topPadding = 3.5;
+
+        const lineHeight = 3.5;
+
+        const institutionFontSize = 7;
+
+        const metaFontSize = 5.5;
 
 
-        y += 12;
+        /* =================================================
+           TABLE ROWS
+        ================================================= */
+
+        for(
+            let index = 0;
+            index < pageData.length;
+            index++
+        ){
+
+            const item =
+                pageData[index];
 
 
-        /*
-         * Table rows
-         */
+            /* ---------------------------------------------
+               Prepare text
+            --------------------------------------------- */
 
-        pageData.forEach(
-            (item,index) => {
-
-                /*
-                 * If page is full,
-                 * create another PDF page.
-                 *
-                 * This means one downloaded
-                 * ranking page can naturally
-                 * continue onto multiple PDF
-                 * sheets when necessary.
-                 */
-
-                if(
-                    y >
-                    pageHeight - 22
-                ){
-
-                    addPDFFooter(
-                        doc,
-                        pageWidth,
-                        pageHeight
-                    );
-
-                    doc.addPage();
-
-                    y =
-                        18;
+            const institution =
+                String(
+                    item.institution ||
+                    "Unknown Institution"
+                ).trim();
 
 
-                    /*
-                     * Continued header
-                     */
+            /*
+             * Full metadata.
+             *
+             * Do NOT truncate this string.
+             * splitTextToSize() will wrap it safely.
+             */
 
-                    doc.setFillColor(
-                        ...LIGHT
-                    );
-
-                    doc.roundedRect(
-                        margin,
-                        y,
-                        pageWidth -
-                            margin * 2,
-                        10,
-                        2,
-                        2,
-                        "F"
-                    );
+            let meta =
+                "EIIN: " +
+                String(
+                    item.eiin ||
+                    "Unknown"
+                ).trim();
 
 
-                    doc.setTextColor(
-                        ...GRAY
-                    );
+            if(
+                item.district
+            ){
 
-                    doc.setFont(
-                        "helvetica",
-                        "bold"
-                    );
-
-                    doc.setFontSize(
-                        6.5
-                    );
-
-
-                    pdfText(
-                        doc,
-                        "RANK",
-                        margin + 3,
-                        y + 6
-                    );
-
-
-                    pdfText(
-                        doc,
-                        "INSTITUTION",
-                        margin + colRank,
-                        y + 6
-                    );
-
-
-                    pdfText(
-                        doc,
-                        "GPA-5",
-                        margin +
-                            colRank +
-                            colInstitution,
-                        y + 6
-                    );
-
-
-                    pdfText(
-                        doc,
-                        "PASS RATE",
-                        margin +
-                            colRank +
-                            colInstitution +
-                            colGpa,
-                        y + 6
-                    );
-
-
-                    y += 12;
-
-                }
-
-
-                /*
-                 * Alternating background
-                 */
-
-                if(
-                    index % 2 === 1
-                ){
-
-                    doc.setFillColor(
-                        251,
-                        251,
-                        252
-                    );
-
-                    doc.rect(
-                        margin,
-                        y - 4.8,
-                        pageWidth -
-                            margin * 2,
-                        rowHeight,
-                        "F"
-                    );
-
-                }
-
-
-                /*
-                 * Border
-                 */
-
-                doc.setDrawColor(
-                    ...BORDER
-                );
-
-                doc.setLineWidth(
-                    0.15
-                );
-
-                doc.line(
-                    margin,
-                    y + 2,
-                    pageWidth -
-                        margin,
-                    y + 2
-                );
-
-
-                /*
-                 * Rank
-                 */
-
-                doc.setTextColor(
-                    ...DARK
-                );
-
-                doc.setFont(
-                    "helvetica",
-                    "bold"
-                );
-
-                doc.setFontSize(
-                    7
-                );
-
-                pdfText(
-                    doc,
+                meta +=
+                    " • District: " +
                     String(
-                        item.rank
-                    ),
-                    margin + 3,
-                    y
-                );
-
-
-                /*
-                 * Institution
-                 */
-
-                doc.setFont(
-                    "helvetica",
-                    "bold"
-                );
-
-                doc.setFontSize(
-                    7
-                );
-
-                const institution =
-                    String(
-                        item.institution ||
-                        ""
-                    );
-
-
-                let institutionText =
-                    institution;
-
-
-                if(
-                    institutionText.length >
-                    38
-                ){
-
-                    institutionText =
-                        institutionText.slice(
-                            0,
-                            35
-                        ) +
-                        "...";
-
-                }
-
-
-                pdfText(
-                    doc,
-                    institutionText,
-                    margin +
-                        colRank,
-                    y
-                );
-
-
-                /*
-                 * EIIN + district
-                 */
-
-                doc.setFont(
-                    "helvetica",
-                    "normal"
-                );
-
-                doc.setFontSize(
-                    5.5
-                );
-
-                doc.setTextColor(
-                    ...GRAY
-                );
-
-
-                let meta =
-                    "EIIN " +
-                    item.eiin +
-                    " • " +
-                    item.district;
-
-
-                if(
-                    item.thana
-                ){
-
-                    meta +=
-                        " • " +
-                        item.thana;
-
-                }
-
-
-                if(
-                    meta.length >
-                    58
-                ){
-
-                    meta =
-                        meta.slice(
-                            0,
-                            55
-                        ) +
-                        "...";
-
-                }
-
-
-                pdfText(
-                    doc,
-                    meta,
-                    margin +
-                        colRank,
-                    y + 3.3
-                );
-
-
-                /*
-                 * GPA-5
-                 */
-
-                doc.setTextColor(
-                    ...DARK
-                );
-
-                doc.setFont(
-                    "helvetica",
-                    "bold"
-                );
-
-                doc.setFontSize(
-                    7
-                );
-
-
-                pdfText(
-                    doc,
-                    String(
-                        item.gpa5
-                    ),
-                    margin +
-                        colRank +
-                        colInstitution,
-                    y
-                );
-
-
-                /*
-                 * Passing rate
-                 */
-
-                pdfText(
-                    doc,
-                    item.passRate.toFixed(
-                        2
-                    ) + "%",
-                    margin +
-                        colRank +
-                        colInstitution +
-                        colGpa,
-                    y
-                );
-
-
-                y +=
-                    rowHeight;
+                        item.district
+                    ).trim();
 
             }
-        );
 
 
-        /*
-         * Footer on final PDF sheet
-         */
+            if(
+                item.thana
+            ){
+
+                meta +=
+                    " • " +
+                    String(
+                        item.thana
+                    ).trim();
+
+            }
+
+
+            /* ---------------------------------------------
+               Calculate wrapped lines BEFORE drawing
+            --------------------------------------------- */
+
+            doc.setFont(
+                "helvetica",
+                "bold"
+            );
+
+            doc.setFontSize(
+                institutionFontSize
+            );
+
+            const institutionLines =
+                doc.splitTextToSize(
+                    institution,
+                    institutionWidth - 3
+                );
+
+
+            doc.setFont(
+                "helvetica",
+                "normal"
+            );
+
+            doc.setFontSize(
+                metaFontSize
+            );
+
+            const metaLines =
+                doc.splitTextToSize(
+                    meta,
+                    institutionWidth - 3
+                );
+
+
+            /*
+             * Dynamic row height.
+             *
+             * This is the main fix.
+             */
+
+            const contentHeight =
+                (
+                    institutionLines.length *
+                    lineHeight
+                ) +
+                1.5 +
+                (
+                    metaLines.length *
+                    lineHeight
+                );
+
+
+            const rowHeight =
+                Math.max(
+                    minRowHeight,
+                    contentHeight +
+                    topPadding +
+                    2
+                );
+
+
+            /* ---------------------------------------------
+               Page break check
+            --------------------------------------------- */
+
+            if(
+                y + rowHeight >
+                pageHeight - 20
+            ){
+
+                addPDFFooter(
+                    doc,
+                    pageWidth,
+                    pageHeight
+                );
+
+                doc.addPage();
+
+                y = 18;
+
+                y =
+                    drawPDFTableHeader(
+                        doc,
+                        y,
+                        pageWidth,
+                        margin,
+                        columns
+                    );
+
+            }
+
+
+            /* ---------------------------------------------
+               Alternating background
+            --------------------------------------------- */
+
+            if(
+                index % 2 === 1
+            ){
+
+                doc.setFillColor(
+                    251,
+                    251,
+                    252
+                );
+
+                doc.rect(
+                    margin,
+                    y,
+                    tableWidth,
+                    rowHeight,
+                    "F"
+                );
+
+            }
+
+
+            /* ---------------------------------------------
+               Bottom border
+            --------------------------------------------- */
+
+            doc.setDrawColor(
+                ...BORDER
+            );
+
+            doc.setLineWidth(
+                0.15
+            );
+
+            doc.line(
+                margin,
+                y + rowHeight,
+                pageWidth - margin,
+                y + rowHeight
+            );
+
+
+            /* ---------------------------------------------
+               Rank
+            --------------------------------------------- */
+
+            doc.setTextColor(
+                ...DARK
+            );
+
+            doc.setFont(
+                "helvetica",
+                "bold"
+            );
+
+            doc.setFontSize(7);
+
+            pdfText(
+                doc,
+                String(item.rank),
+                columns.rankX,
+                y + topPadding + 2
+            );
+
+
+            /* ---------------------------------------------
+               Institution name
+            --------------------------------------------- */
+
+            doc.setTextColor(
+                ...DARK
+            );
+
+            doc.setFont(
+                "helvetica",
+                "bold"
+            );
+
+            doc.setFontSize(
+                institutionFontSize
+            );
+
+            doc.text(
+                institutionLines,
+                columns.institutionX,
+                y + topPadding + 1
+            );
+
+
+            /* ---------------------------------------------
+               EIIN / District / Thana
+            --------------------------------------------- */
+
+            const metaY =
+                y +
+                topPadding +
+                (
+                    institutionLines.length *
+                    lineHeight
+                ) +
+                1.2;
+
+
+            doc.setTextColor(
+                ...GRAY
+            );
+
+            doc.setFont(
+                "helvetica",
+                "normal"
+            );
+
+            doc.setFontSize(
+                metaFontSize
+            );
+
+            doc.text(
+                metaLines,
+                columns.institutionX,
+                metaY
+            );
+
+
+            /* ---------------------------------------------
+               GPA-5
+            --------------------------------------------- */
+
+            doc.setTextColor(
+                ...DARK
+            );
+
+            doc.setFont(
+                "helvetica",
+                "bold"
+            );
+
+            doc.setFontSize(7);
+
+            pdfText(
+                doc,
+                String(item.gpa5),
+                columns.gpaX,
+                y + topPadding + 2
+            );
+
+
+            /* ---------------------------------------------
+               Passing Rate
+            --------------------------------------------- */
+
+            pdfText(
+                doc,
+                item.passRate.toFixed(2) + "%",
+                columns.passX,
+                y + topPadding + 2
+            );
+
+
+            /* ---------------------------------------------
+               Next row
+            --------------------------------------------- */
+
+            y += rowHeight;
+
+        }
+
+
+        /* =================================================
+           FINAL FOOTER
+        ================================================= */
 
         addPDFFooter(
             doc,
@@ -3050,13 +2821,15 @@ async function downloadCurrentPagePDF(){
         );
 
 
-        /*
-         * Filename
-         */
+        /* =================================================
+           FILENAME
+        ================================================= */
 
         const districtPart =
             currentDistrict === "all"
+
                 ? "all-districts"
+
                 : normalizeText(
                     currentDistrict
                   )
@@ -3076,14 +2849,13 @@ async function downloadCurrentPagePDF(){
             ".pdf";
 
 
-        /*
-         * Save
-         */
+        /* =================================================
+           SAVE
+        ================================================= */
 
         doc.save(
             filename
         );
-
 
     }
 
@@ -3123,10 +2895,6 @@ function addPDFFooter(
     pageHeight
 ){
 
-    /*
-     * Separator
-     */
-
     doc.setDrawColor(
         225,
         225,
@@ -3144,10 +2912,6 @@ function addPDFFooter(
         pageHeight - 15
     );
 
-
-    /*
-     * Left footer
-     */
 
     doc.setTextColor(
         110,
@@ -3172,10 +2936,6 @@ function addPDFFooter(
     );
 
 
-    /*
-     * Center footer
-     */
-
     doc.setFont(
         "helvetica",
         "bold"
@@ -3187,15 +2947,10 @@ function addPDFFooter(
         pageWidth / 2,
         pageHeight - 9,
         {
-            align:
-                "center"
+            align:"center"
         }
     );
 
-
-    /*
-     * Right footer
-     */
 
     doc.setFont(
         "helvetica",
@@ -3208,8 +2963,7 @@ function addPDFFooter(
         pageWidth - 15,
         pageHeight - 9,
         {
-            align:
-                "right"
+            align:"right"
         }
     );
 
