@@ -852,6 +852,152 @@ footer,
 
 }
 
+/* =========================================================
+   PREMIUM SCROLL REVEAL ANIMATION
+   Existing elements / layout untouched
+========================================================= */
+
+@media (prefers-reduced-motion: no-preference) {
+
+    .section,
+    .quick-stats,
+    .premium-social-section,
+    footer,
+    .unofficial-notice,
+    .discover-card,
+    .ranking-card,
+    .feature-card,
+    .group-card,
+    .stat-card,
+    .premium-social-card {
+
+        opacity: 0;
+
+        transform:
+            translateY(35px)
+            scale(.985);
+
+        transition:
+            opacity .75s cubic-bezier(.2,.8,.2,1),
+            transform .75s cubic-bezier(.2,.8,.2,1);
+
+        will-change:
+            opacity,
+            transform;
+
+    }
+
+
+    /* Visible state */
+
+    .scroll-visible {
+
+        opacity: 1 !important;
+
+        transform:
+            translateY(0)
+            scale(1) !important;
+
+    }
+
+
+    /* Cards have slightly smoother motion */
+
+    .group-card,
+    .feature-card,
+    .stat-card,
+    .premium-social-card {
+
+        transition:
+            opacity .65s cubic-bezier(.2,.8,.2,1),
+            transform .65s cubic-bezier(.2,.8,.2,1),
+            box-shadow .35s ease,
+            border-color .35s ease;
+
+    }
+
+
+    /* Stagger effect */
+
+    .section .group-card:nth-child(1),
+    .feature-card:nth-child(1),
+    .premium-social-card:nth-child(1) {
+        transition-delay: .05s;
+    }
+
+    .section .group-card:nth-child(2),
+    .feature-card:nth-child(2),
+    .premium-social-card:nth-child(2) {
+        transition-delay: .12s;
+    }
+
+    .section .group-card:nth-child(3),
+    .feature-card:nth-child(3),
+    .premium-social-card:nth-child(3) {
+        transition-delay: .19s;
+    }
+
+    .section .group-card:nth-child(4),
+    .feature-card:nth-child(4),
+    .premium-social-card:nth-child(4) {
+        transition-delay: .26s;
+    }
+
+
+    /* Quick stats stagger */
+
+    .quick-stats .stat-card:nth-child(1) {
+        transition-delay: .05s;
+    }
+
+    .quick-stats .stat-card:nth-child(2) {
+        transition-delay: .12s;
+    }
+
+    .quick-stats .stat-card:nth-child(3) {
+        transition-delay: .19s;
+    }
+
+    .quick-stats .stat-card:nth-child(4) {
+        transition-delay: .26s;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE — slightly softer animation
+========================================================= */
+
+@media (max-width: 600px) {
+
+    @media (prefers-reduced-motion: no-preference) {
+
+        .section,
+        .quick-stats,
+        .premium-social-section,
+        footer,
+        .unofficial-notice,
+        .discover-card,
+        .ranking-card,
+        .feature-card,
+        .group-card,
+        .stat-card,
+        .premium-social-card {
+
+            transform:
+                translateY(24px)
+                scale(.99);
+
+            transition-duration:
+                .6s;
+
+        }
+
+    }
+
+}
+
 </style>
 
 </head>
@@ -3407,7 +3553,79 @@ document.addEventListener(
 
     }
 );
+      
+/* =====================================================
+   PREMIUM SCROLL REVEAL
+   Does not modify existing functionality
+===================================================== */
 
+document.addEventListener("DOMContentLoaded", function () {
+
+    if (
+        window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        ).matches
+    ) {
+        return;
+    }
+
+
+    const scrollElements =
+        document.querySelectorAll(
+            ".section, .quick-stats, " +
+            ".premium-social-section, footer, " +
+            ".unofficial-notice, .discover-card, " +
+            ".ranking-card, .feature-card, " +
+            ".group-card, .stat-card, " +
+            ".premium-social-card"
+        );
+
+
+    if (!scrollElements.length) {
+        return;
+    }
+
+
+    const observer =
+        new IntersectionObserver(
+            function (entries, observer) {
+
+                entries.forEach(function (entry) {
+
+                    if (
+                        entry.isIntersecting
+                    ) {
+
+                        entry.target.classList.add(
+                            "scroll-visible"
+                        );
+
+                        observer.unobserve(
+                            entry.target
+                        );
+
+                    }
+
+                });
+
+            },
+            {
+                threshold: 0.12,
+
+                rootMargin:
+                    "0px 0px -50px 0px"
+            }
+        );
+
+
+    scrollElements.forEach(function (element) {
+
+        observer.observe(element);
+
+    });
+
+});
+      
 </script>
 
 
