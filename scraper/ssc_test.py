@@ -46,11 +46,11 @@ ROLL_RANGES = {
 # BATCH SETTINGS
 # ============================================================
 
-BATCH_SIZE = 5000
+BATCH_SIZE = 10000
 
 # Faster but still keeps a small delay between requests
-MIN_DELAY = 0.2
-MAX_DELAY = 0.5
+MIN_DELAY = 0.1
+MAX_DELAY = 0.2
 
 MAX_RETRIES = 3
 
