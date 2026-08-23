@@ -5,8 +5,10 @@
     --text: #1d1d1f;
     --muted: #6e6e73;
     --border: rgba(0,0,0,.08);
+
     --blue: #0071e3;
     --blue-dark: #0062c4;
+
     --shadow: 0 15px 45px rgba(0,0,0,.06);
     --radius: 24px;
 
@@ -37,11 +39,16 @@ body {
     background: var(--bg);
     color: var(--text);
     line-height: 1.5;
+    min-height: 100vh;
 }
 
 a {
     color: inherit;
     text-decoration: none;
+}
+
+button {
+    font-family: inherit;
 }
 
 
@@ -61,7 +68,7 @@ a {
 
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
 
     background: rgba(245,245,247,.78);
 
@@ -92,22 +99,21 @@ a {
     border-radius: 10px;
 
     background: #1d1d1f;
-    color: white;
+    color: #fff;
 
     font-weight: 800;
 }
 
 .nav-links {
     display: flex;
+    align-items: center;
     gap: 28px;
 }
 
 .nav-links a {
     color: #515154;
-
     font-size: 14px;
-
-    transition: .25s;
+    transition: .25s ease;
 }
 
 .nav-links a:hover,
@@ -117,11 +123,16 @@ a {
 
 .theme-btn {
     border: 0;
+    outline: 0;
 
     background: var(--white);
 
     width: 38px;
     height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     border-radius: 50%;
 
@@ -131,7 +142,7 @@ a {
 
     box-shadow: 0 5px 20px rgba(0,0,0,.07);
 
-    transition: .25s;
+    transition: .25s ease;
 }
 
 .theme-btn:hover {
@@ -141,7 +152,6 @@ a {
 
 /* =========================================================
    SHADAT FATIH CREDIT
-   TOP OF WEBSITE
 ========================================================= */
 
 .shadat-credit {
@@ -163,6 +173,8 @@ a {
     font-size: 12px;
 
     color: var(--muted);
+
+    text-align: center;
 }
 
 .shadat-credit a {
@@ -174,7 +186,7 @@ a {
 
     color: var(--text);
 
-    transition: .25s;
+    transition: .25s ease;
 }
 
 .shadat-credit a:hover {
@@ -284,23 +296,21 @@ a {
 
     font-size: 14px;
 
-    transition: .25s;
+    transition: .25s ease;
 }
 
 .primary-btn {
     background: var(--blue);
-
-    color: white;
+    color: #fff;
 }
 
 .primary-btn:hover {
     background: var(--blue-dark);
-
     transform: translateY(-2px);
 }
 
 .secondary-btn {
-    background: white;
+    background: #fff;
 
     border: 1px solid var(--border);
 }
@@ -323,7 +333,7 @@ a {
 
     display: grid;
 
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: repeat(4, 1fr);
 
     gap: 14px;
 }
@@ -339,7 +349,7 @@ a {
 
     box-shadow: var(--shadow);
 
-    transition: .25s;
+    transition: .25s ease;
 }
 
 .stat-card:hover {
@@ -400,7 +410,7 @@ a {
 .section h2 {
     margin-top: 8px;
 
-    font-size: clamp(32px,5vw,52px);
+    font-size: clamp(32px, 5vw, 52px);
 
     line-height: 1.05;
 
@@ -425,7 +435,7 @@ a {
 .group-grid {
     display: grid;
 
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(3, 1fr);
 
     gap: 16px;
 }
@@ -445,7 +455,7 @@ a {
 
     border: 1px solid var(--border);
 
-    transition: .3s;
+    transition: .3s ease;
 
     box-shadow: var(--shadow);
 }
@@ -647,7 +657,7 @@ a {
 
     background: #1d1d1f;
 
-    color: white;
+    color: #fff;
 
     display: flex;
 
@@ -684,13 +694,13 @@ a {
 .feature-grid {
     display: grid;
 
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: repeat(4, 1fr);
 
     gap: 14px;
 }
 
 .feature-card {
-    background: white;
+    background: #fff;
 
     padding: 27px;
 
@@ -698,7 +708,7 @@ a {
 
     border: 1px solid var(--border);
 
-    transition: .25s;
+    transition: .25s ease;
 }
 
 .feature-card:hover {
@@ -808,6 +818,8 @@ a {
 
     font-weight: 800;
 
+    flex-shrink: 0;
+
     box-shadow:
         0 5px 15px rgba(0,0,0,.12);
 }
@@ -815,44 +827,57 @@ a {
 .premium-social-icon svg {
     width: 18px;
     height: 18px;
+
+    display: block;
 }
 
 
-/* FACEBOOK */
+/* =========================================================
+   SOCIAL ICON COLORS
+   FIXED SELECTORS
+========================================================= */
 
-.premium-facebook
-.premium-social-icon {
+.premium-facebook .premium-social-icon {
     background: var(--facebook);
 }
 
-
-/* WHATSAPP */
-
-.premium-whatsapp
-.premium-social-icon {
+.premium-whatsapp .premium-social-icon {
     background: var(--whatsapp);
 }
 
-
-/* INSTAGRAM */
-
-.premium-instagram
-.premium-social-icon {
+.premium-instagram .premium-social-icon {
     background:
         linear-gradient(
             135deg,
-            #833ab4,
-            #fd1d1d,
-            #fcb045
+            #833ab4 0%,
+            #fd1d1d 50%,
+            #fcb045 100%
         );
 }
 
-
-/* EMAIL */
-
-.premium-email
-.premium-social-icon {
+.premium-email .premium-social-icon {
     background: var(--email);
+}
+
+
+/* =========================================================
+   SOCIAL HOVER EFFECTS
+========================================================= */
+
+.premium-facebook:hover {
+    border-color: rgba(24,119,242,.25);
+}
+
+.premium-whatsapp:hover {
+    border-color: rgba(37,211,102,.25);
+}
+
+.premium-instagram:hover {
+    border-color: rgba(225,48,108,.25);
+}
+
+.premium-email:hover {
+    border-color: rgba(234,67,53,.25);
 }
 
 
@@ -934,11 +959,15 @@ a {
     box-shadow:
         inset 0 1px 1px rgba(255,255,255,.9),
         0 5px 15px rgba(0,113,227,.08);
+
+    flex-shrink: 0;
 }
 
 .premium-visit-icon svg {
     width: 21px;
     height: 21px;
+
+    display: block;
 }
 
 
@@ -1028,7 +1057,7 @@ footer p {
 }
 
 .footer-links a {
-    transition: .2s;
+    transition: .2s ease;
 }
 
 .footer-links a:hover {
@@ -1209,6 +1238,15 @@ body.dark .shadat-credit a {
     color: #f5f5f7;
 }
 
+body.dark .nav-links a {
+    color: #a1a1a6;
+}
+
+body.dark .nav-links a:hover,
+body.dark .nav-links .active {
+    color: #f5f5f7;
+}
+
 body.dark .secondary-btn,
 body.dark .theme-btn,
 body.dark .ranking-card,
@@ -1299,7 +1337,7 @@ body.dark .unofficial-notice .notice-source {
 
 
 /* =========================================================
-   MOBILE
+   MOBILE — 800px
 ========================================================= */
 
 @media (max-width: 800px) {
@@ -1328,9 +1366,13 @@ body.dark .unofficial-notice .notice-source {
         flex-direction: column;
     }
 
+    .primary-btn,
+    .secondary-btn {
+        width: 100%;
+    }
+
     .quick-stats {
-        grid-template-columns:
-            repeat(2,1fr);
+        grid-template-columns: repeat(2, 1fr);
 
         margin-bottom: 40px;
     }
@@ -1412,7 +1454,74 @@ body.dark .unofficial-notice .notice-source {
 
 
 /* =========================================================
-   SMALL MOBILE
+   MOBILE — 600px
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .premium-total-visits {
+        margin-top: 30px;
+
+        margin-bottom: 22px;
+
+        min-width: 180px;
+
+        padding:
+            11px 17px;
+    }
+
+    .premium-visit-icon {
+        width: 39px;
+        height: 39px;
+    }
+
+    .premium-visit-content strong {
+        font-size: 19px;
+    }
+
+    .unofficial-notice {
+        margin-top: 35px;
+
+        padding:
+            22px 14px;
+    }
+
+    .unofficial-notice-inner {
+        padding:
+            20px 17px;
+
+        gap: 13px;
+
+        border-radius: 14px;
+    }
+
+    .notice-icon {
+        flex-basis: 32px;
+
+        width: 32px;
+        height: 32px;
+
+        font-size: 15px;
+    }
+
+    .unofficial-notice h3 {
+        font-size: 15px;
+    }
+
+    .unofficial-notice p {
+        font-size: 12px;
+
+        line-height: 1.65;
+    }
+
+    .unofficial-notice .notice-source {
+        font-size: 11px;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE — 480px
 ========================================================= */
 
 @media (max-width: 480px) {
@@ -1429,6 +1538,11 @@ body.dark .unofficial-notice .notice-source {
 
     .hero h1 {
         font-size: 48px;
+    }
+
+    .hero {
+        padding-left: 15px;
+        padding-right: 15px;
     }
 
     .shadat-credit {
@@ -1471,79 +1585,37 @@ body.dark .unofficial-notice .notice-source {
         width: 16px;
         height: 16px;
     }
-}
 
-
-/* =========================================================
-   VISITS MOBILE
-========================================================= */
-
-@media (max-width: 600px) {
-
-    .premium-total-visits {
-        margin-top: 30px;
-
-        margin-bottom: 22px;
-
-        min-width: 180px;
-
-        padding:
-            11px 17px;
+    .stat-card {
+        padding: 18px;
     }
 
-    .premium-visit-icon {
-        width: 39px;
-        height: 39px;
+    .stat-card strong {
+        font-size: 23px;
     }
 
-    .premium-visit-content strong {
-        font-size: 19px;
-    }
-}
-
-
-/* =========================================================
-   NOTICE MOBILE
-========================================================= */
-
-@media (max-width: 600px) {
-
-    .unofficial-notice {
-        margin-top: 35px;
-
-        padding:
-            22px 14px;
+    .group-card {
+        min-height: 240px;
     }
 
-    .unofficial-notice-inner {
-        padding:
-            20px 17px;
-
-        gap: 13px;
-
-        border-radius: 14px;
+    .ranking-header {
+        padding: 20px;
     }
 
-    .notice-icon {
-        flex-basis: 32px;
-
-        width: 32px;
-        height: 32px;
-
-        font-size: 15px;
+    .ranking-header h3 {
+        font-size: 20px;
     }
 
-    .unofficial-notice h3 {
-        font-size: 15px;
+    .ranking-row {
+        padding: 17px 20px;
     }
 
-    .unofficial-notice p {
-        font-size: 12px;
-
-        line-height: 1.65;
+    .discover-card {
+        min-height: 280px;
+        padding: 28px;
     }
 
-    .unofficial-notice .notice-source {
-        font-size: 11px;
+    .footer-links {
+        gap: 15px;
     }
 }
