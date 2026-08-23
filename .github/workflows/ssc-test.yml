@@ -93,7 +93,6 @@ jobs:
           fi
 
       # =====================================================
-      # ONLY NEW STEP
       # PREPARE LARGE JSON FILES
       # =====================================================
 
@@ -102,32 +101,53 @@ jobs:
           python <<'PY'
           import json
           import os
+          import math
 
+          BASE = "scraper"
+
+          # Keep a safe margin below GitHub's 100 MB limit.
           MAX_BYTES = 45 * 1024 * 1024
 
-          files = [
-              (
-                  "scraper/students.json",
-                  "scraper/students_parts",
-                  "students_manifest.json"
-              ),
-              (
-                  "scraper/student_ranking.json",
-                  "scraper/student_ranking_parts",
-                  "student_ranking_manifest.json"
-              )
+          FILES = [
+              ("students.json", "students_parts", "students_manifest.json"),
+              ("student_ranking.json", "student_ranking_parts", "student_ranking_manifest.json")
           ]
 
-          for source, output_dir, manifest_name in files:
+          def write_json(path, data):
+              with open(path, "w", encoding="utf-8") as f:
+                  json.dump(
+                      data,
+                      f,
+                      ensure_ascii=False,
+                      separators=(",", ":")
+                  )
+
+          for filename, parts_dir, manifest_name in FILES:
+
+              source = os.path.join(BASE, filename)
+              output_dir = os.path.join(BASE, parts_dir)
 
               if not os.path.exists(source):
-                  print(f"Not found: {source}")
+                  print(f"Skipping {source}: file not found")
                   continue
 
+              source_size = os.path.getsize(source)
+
               print("")
-              print("=" * 60)
+              print("=" * 70)
               print(f"Processing: {source}")
-              print("=" * 60)
+              print(f"Original size: {source_size / 1024 / 1024:.2f} MB")
+              print("=" * 70)
+
+              # If already small enough, nothing needs to be split.
+              if source_size <= MAX_BYTES:
+                  print(
+                      f"{filename} is already below "
+                      f"{MAX_BYTES / 1024 / 1024:.0f} MB."
+                  )
+                  continue
+
+              print("Loading JSON...")
 
               with open(
                   source,
@@ -139,195 +159,200 @@ jobs:
               if isinstance(data, list):
 
                   records = data
-                  wrapper = None
+                  wrapper_key = None
 
               elif isinstance(data, dict):
 
-                  wrapper = next(
-                      (
-                          key
-                          for key, value in data.items()
-                          if isinstance(value, list)
-                      ),
-                      None
-                  )
+                  wrapper_key = None
 
-                  if wrapper is None:
+                  for key, value in data.items():
+
+                      if isinstance(value, list):
+                          wrapper_key = key
+                          break
+
+                  if wrapper_key is None:
                       raise ValueError(
-                          f"No data array found in {source}"
+                          f"No JSON array found in {source}"
                       )
 
-                  records = data[wrapper]
+                  records = data[wrapper_key]
 
               else:
 
                   raise ValueError(
-                      f"Unsupported JSON format: {source}"
+                      f"Unsupported JSON structure in {source}"
                   )
+
+              total = len(records)
+
+              print(
+                  f"Total records: {total:,}"
+              )
 
               os.makedirs(
                   output_dir,
                   exist_ok=True
               )
 
-              for old_file in os.listdir(output_dir):
+              # Remove only previously generated PART files.
+              for old in os.listdir(output_dir):
 
                   old_path = os.path.join(
                       output_dir,
-                      old_file
+                      old
                   )
 
                   if os.path.isfile(old_path):
                       os.remove(old_path)
 
-              parts = []
-              current = []
-              part_number = 1
+              # -------------------------------------------------
+              # Start with an estimated number of parts.
+              # This avoids serializing every single record.
+              # -------------------------------------------------
 
-              for record in records:
-
-                  test_records = (
-                      current +
-                      [record]
+              estimated_parts = max(
+                  2,
+                  math.ceil(
+                      source_size /
+                      (40 * 1024 * 1024)
                   )
+              )
 
-                  if wrapper is None:
-                      test_data = test_records
-                  else:
-                      test_data = {
-                          wrapper: test_records
-                      }
+              print(
+                  f"Initial estimated parts: "
+                  f"{estimated_parts}"
+              )
 
-                  test_size = len(
-                      json.dumps(
-                          test_data,
-                          ensure_ascii=False,
-                          separators=(",", ":")
-                      ).encode("utf-8")
-                  )
+              while True:
 
-                  if (
-                      test_size > MAX_BYTES
-                      and current
-                  ):
-
-                      filename = (
-                          f"part_{part_number:04d}.json"
-                      )
-
-                      output_path = os.path.join(
-                          output_dir,
-                          filename
-                      )
-
-                      if wrapper is None:
-                          output_data = current
-                      else:
-                          output_data = {
-                              wrapper: current
-                          }
-
-                      with open(
-                          output_path,
-                          "w",
-                          encoding="utf-8"
-                      ) as f:
-                          json.dump(
-                              output_data,
-                              f,
-                              ensure_ascii=False,
-                              separators=(",", ":")
-                          )
-
-                      size_mb = (
-                          os.path.getsize(
-                              output_path
-                          )
-                          / 1024
-                          / 1024
-                      )
-
-                      parts.append(
-                          {
-                              "file":
-                                  f"{output_dir}/{filename}",
-                              "records":
-                                  len(current),
-                              "size_mb":
-                                  round(size_mb, 2)
-                          }
-                      )
-
-                      print(
-                          f"Created {filename}: "
-                          f"{len(current):,} records "
-                          f"({size_mb:.2f} MB)"
-                      )
-
-                      part_number += 1
-                      current = [record]
-
-                  else:
-
-                      current.append(record)
-
-              if current:
-
-                  filename = (
-                      f"part_{part_number:04d}.json"
-                  )
-
-                  output_path = os.path.join(
-                      output_dir,
-                      filename
-                  )
-
-                  if wrapper is None:
-                      output_data = current
-                  else:
-                      output_data = {
-                          wrapper: current
-                      }
-
-                  with open(
-                      output_path,
-                      "w",
-                      encoding="utf-8"
-                  ) as f:
-                      json.dump(
-                          output_data,
-                          f,
-                          ensure_ascii=False,
-                          separators=(",", ":")
-                      )
-
-                  size_mb = (
-                      os.path.getsize(
-                          output_path
-                      )
-                      / 1024
-                      / 1024
-                  )
-
-                  parts.append(
-                      {
-                          "file":
-                              f"{output_dir}/{filename}",
-                          "records":
-                              len(current),
-                          "size_mb":
-                              round(size_mb, 2)
-                      }
+                  chunk_size = math.ceil(
+                      total /
+                      estimated_parts
                   )
 
                   print(
-                      f"Created {filename}: "
-                      f"{len(current):,} records "
-                      f"({size_mb:.2f} MB)"
+                      f"Trying {estimated_parts} parts "
+                      f"({chunk_size:,} records/part)..."
+                  )
+
+                  created = []
+
+                  for part_number, start in enumerate(
+                      range(
+                          0,
+                          total,
+                          chunk_size
+                      ),
+                      start=1
+                  ):
+
+                      end = min(
+                          start + chunk_size,
+                          total
+                      )
+
+                      part_records = records[
+                          start:end
+                      ]
+
+                      if wrapper_key is None:
+
+                          output_data = part_records
+
+                      else:
+
+                          output_data = {
+                              wrapper_key:
+                                  part_records
+                          }
+
+                      part_filename = (
+                          f"part_{part_number:04d}.json"
+                      )
+
+                      part_path = os.path.join(
+                          output_dir,
+                          part_filename
+                      )
+
+                      write_json(
+                          part_path,
+                          output_data
+                      )
+
+                      size = os.path.getsize(
+                          part_path
+                      )
+
+                      size_mb = (
+                          size /
+                          1024 /
+                          1024
+                      )
+
+                      created.append(
+                          (
+                              part_path,
+                              len(part_records),
+                              size
+                          )
+                      )
+
+                      print(
+                          f"  {part_filename}: "
+                          f"{len(part_records):,} records, "
+                          f"{size_mb:.2f} MB"
+                      )
+
+                  oversized = [
+                      item
+                      for item in created
+                      if item[2] > MAX_BYTES
+                  ]
+
+                  if not oversized:
+                      break
+
+                  print(
+                      "Some parts are still too large."
+                  )
+
+                  for path, _, _ in created:
+
+                      if os.path.exists(path):
+                          os.remove(path)
+
+                  estimated_parts *= 2
+
+              manifest = {
+                  "source": filename,
+                  "total_records": total,
+                  "parts": []
+              }
+
+              for path, count, size in created:
+
+                  relative_path = os.path.relpath(
+                      path,
+                      "."
+                  )
+
+                  manifest["parts"].append(
+                      {
+                          "file": relative_path,
+                          "records": count,
+                          "size_mb": round(
+                              size /
+                              1024 /
+                              1024,
+                              2
+                          )
+                      }
                   )
 
               manifest_path = os.path.join(
-                  "scraper",
+                  BASE,
                   manifest_name
               )
 
@@ -338,23 +363,72 @@ jobs:
               ) as f:
 
                   json.dump(
-                      {
-                          "source": source,
-                          "total_records":
-                              len(records),
-                          "parts": parts
-                      },
+                      manifest,
                       f,
                       ensure_ascii=False,
                       indent=2
                   )
 
+              print("")
               print(
-                  f"Finished {source}: "
-                  f"{len(records):,} records → "
-                  f"{len(parts)} parts"
+                  f"✓ Finished {filename}"
               )
 
+              print(
+                  f"✓ Total records: {total:,}"
+              )
+
+              print(
+                  f"✓ Parts created: {len(created)}"
+              )
+
+              # IMPORTANT:
+              # Do NOT delete the original JSON.
+              # It remains available for the workflow artifact.
+              print(
+                  f"✓ Original {filename} kept safely."
+              )
+
+          print("")
+          print("=" * 70)
+          print("FINAL PART FILE CHECK")
+          print("=" * 70)
+
+          failed = False
+
+          for root, dirs, files in os.walk(BASE):
+
+              for name in files:
+
+                  if not name.endswith(".json"):
+                      continue
+
+                  path = os.path.join(
+                      root,
+                      name
+                  )
+
+                  size = os.path.getsize(path)
+
+                  if size >= 100 * 1024 * 1024:
+
+                      print(
+                          f"ERROR: {path} = "
+                          f"{size / 1024 / 1024:.2f} MB"
+                      )
+
+                      failed = True
+
+          if failed:
+              raise RuntimeError(
+                  "One or more JSON files exceed "
+                  "GitHub's 100 MB limit."
+              )
+
+          print(
+              "✓ All generated JSON files are below "
+              "GitHub's 100 MB limit."
+          )
           PY
 
       # =====================================================
@@ -366,14 +440,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+          # Add all generated ranking data
           git add scraper/
 
           # IMPORTANT:
-          # Do NOT commit the two original files because
-          # they exceed GitHub's 100 MB single-file limit.
-
-          git reset -- scraper/students.json
-          git reset -- scraper/student_ranking.json
+          # The two original files are intentionally NOT committed.
+          # They remain available in the workflow/artifact.
+          git reset -- scraper/students.json 2>/dev/null || true
+          git reset -- scraper/student_ranking.json 2>/dev/null || true
 
           if git diff --cached --quiet; then
             echo "No changes detected."
@@ -392,7 +466,7 @@ jobs:
           git push origin HEAD:main
 
       # =====================================================
-      # UPLOAD SSC DATA BACKUP
+      # UPLOAD COMPLETE SSC DATA BACKUP
       # =====================================================
 
       - name: Upload SSC data backup
