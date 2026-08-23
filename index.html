@@ -657,7 +657,9 @@ Top Institutions
 
 
 
-<!-- RANK 1 -->
+<!-- =================================================
+     RANK 1
+================================================= -->
 
 <div
 class="ranking-row first"
@@ -710,7 +712,9 @@ GPA-5
 
 
 
-<!-- RANK 2 -->
+<!-- =================================================
+     RANK 2
+================================================= -->
 
 <div
 class="ranking-row"
@@ -763,7 +767,9 @@ GPA-5
 
 
 
-<!-- RANK 3 -->
+<!-- =================================================
+     RANK 3
+================================================= -->
 
 <div
 class="ranking-row"
@@ -1196,7 +1202,7 @@ function toNumber(value){
     }
 
 
-    const number =
+    const n =
         Number(
             String(value)
                 .replace(/,/g,"")
@@ -1205,55 +1211,44 @@ function toNumber(value){
         );
 
 
-    return Number.isFinite(number)
-        ? number
+    return Number.isFinite(n)
+        ? n
         : 0;
 
 }
 
 
 /* =========================================================
-   NORMALIZE RECORD
+   NORMALIZE INSTITUTION
 ========================================================= */
 
 function normalizeInstitution(item){
 
     const appeared =
         toNumber(
-            item.appeared ??
-            item.total_students ??
-            item.total_appeared
+            item.appeared
         );
 
 
     const passed =
         toNumber(
-            item.passed ??
-            item.total_passed
-        );
-
-
-    let passingRate =
-        toNumber(
-            item.passing_rate ??
-            item.pass_rate ??
-            item.passingRate
+            item.passed
         );
 
 
     const gpa5 =
         toNumber(
-            item.gpa5 ??
-            item.gpa_5 ??
-            item.total_gpa5 ??
-            item.gpa5_count
+            item.gpa5
         );
 
 
-    /*
-     * If passing rate is not available,
-     * calculate it.
-     */
+    let passingRate =
+        toNumber(
+            item.passing_rate
+        );
+
+
+    /* Calculate passing rate if missing */
 
     if(
         passingRate === 0 &&
@@ -1277,35 +1272,39 @@ function normalizeInstitution(item){
                 ""
             ).trim(),
 
+
         institution:
             String(
                 item.institution_name ||
-                item.institution ||
-                item.name ||
                 "Unknown Institution"
             ).trim(),
+
 
         district:
             String(
                 item.district ||
-                "Unknown"
+                "Chattogram"
             ).trim(),
+
 
         thana:
             String(
                 item.thana ||
-                item.upazila ||
                 ""
             ).trim(),
+
 
         appeared:
             appeared,
 
+
         passed:
             passed,
 
+
         passingRate:
             passingRate,
+
 
         gpa5:
             gpa5
@@ -1372,7 +1371,7 @@ function getInstitutionArray(json){
 
 
 /* =========================================================
-   LOAD INSTITUTION RANKING
+   LOAD TOP 3 INSTITUTIONS
 ========================================================= */
 
 async function loadInstitutionRanking(){
@@ -1434,9 +1433,9 @@ async function loadInstitutionRanking(){
         );
 
 
-        /*
-         * Normalize records
-         */
+        /* =================================================
+           NORMALIZE
+        ================================================= */
 
         let ranking =
             institutions
@@ -1445,15 +1444,16 @@ async function loadInstitutionRanking(){
                 )
                 .filter(
                     item =>
+                        item.eiin &&
                         item.institution &&
                         item.institution !==
                         "Unknown Institution"
                 );
 
 
-        /*
-         * Remove duplicate EIIN
-         */
+        /* =================================================
+           REMOVE DUPLICATE EIIN
+        ================================================= */
 
         const unique =
             new Map();
@@ -1462,21 +1462,14 @@ async function loadInstitutionRanking(){
         ranking.forEach(
             item => {
 
-                const key =
-                    (
-                        item.eiin ||
-                        item.institution
-                    )
-                    .toLowerCase()
-                    .trim();
-
-
                 if(
-                    !unique.has(key)
+                    !unique.has(
+                        item.eiin
+                    )
                 ){
 
                     unique.set(
-                        key,
+                        item.eiin,
                         item
                     );
 
@@ -1492,17 +1485,17 @@ async function loadInstitutionRanking(){
             );
 
 
-        /*
-         * RANKING ORDER
-         *
-         * 1. Total GPA-5
-         * 2. Passing Rate
-         * 3. Passed
-         * 4. Appeared
-         */
+        /* =================================================
+           RANKING ORDER
+
+           1. GPA-5
+           2. Passing Rate
+           3. Passed
+           4. Appeared
+        ================================================= */
 
         ranking.sort(
-            (a,b) => {
+            function(a,b){
 
                 if(
                     b.gpa5 !==
@@ -1566,17 +1559,17 @@ async function loadInstitutionRanking(){
 
 
         console.log(
-            "TOP 10:",
+            "TOP 3 INSTITUTIONS:",
             ranking.slice(
                 0,
-                10
+                3
             )
         );
 
 
-        /*
-         * Display top 3
-         */
+        /* =================================================
+           DISPLAY TOP 3
+        ================================================= */
 
         ranking
             .slice(
@@ -1584,7 +1577,7 @@ async function loadInstitutionRanking(){
                 3
             )
             .forEach(
-                (item,index) => {
+                function(item,index){
 
                     const row =
                         rows[index];
@@ -1623,6 +1616,8 @@ async function loadInstitutionRanking(){
                         );
 
 
+                    /* Institution */
+
                     if(
                         name
                     ){
@@ -1632,6 +1627,8 @@ async function loadInstitutionRanking(){
 
                     }
 
+
+                    /* District */
 
                     if(
                         district
@@ -1643,6 +1640,8 @@ async function loadInstitutionRanking(){
 
                     }
 
+
+                    /* Passing Rate */
 
                     if(
                         pass
@@ -1656,12 +1655,15 @@ async function loadInstitutionRanking(){
                     }
 
 
+                    /* GPA-5 */
+
                     if(
                         score
                     ){
 
                         score.textContent =
-                            item.gpa5;
+                            item.gpa5
+                                .toLocaleString();
 
                     }
 
@@ -1669,10 +1671,9 @@ async function loadInstitutionRanking(){
             );
 
 
-        /*
-         * If fewer than 3 records exist,
-         * clear remaining rows.
-         */
+        /* =================================================
+           CLEAR EMPTY ROWS
+        ================================================= */
 
         for(
             let i =
@@ -1781,7 +1782,7 @@ async function loadInstitutionRanking(){
 
 
         rows.forEach(
-            row => {
+            function(row){
 
                 if(
                     !row
@@ -1804,6 +1805,18 @@ async function loadInstitutionRanking(){
                     );
 
 
+                const pass =
+                    row.querySelector(
+                        ".rank-result strong"
+                    );
+
+
+                const score =
+                    row.querySelector(
+                        ".rank-score strong"
+                    );
+
+
                 if(
                     name
                 ){
@@ -1820,6 +1833,26 @@ async function loadInstitutionRanking(){
 
                     district.textContent =
                         "Check institution_results.json";
+
+                }
+
+
+                if(
+                    pass
+                ){
+
+                    pass.textContent =
+                        "—";
+
+                }
+
+
+                if(
+                    score
+                ){
+
+                    score.textContent =
+                        "—";
 
                 }
 
@@ -1881,7 +1914,7 @@ async function loadQuickStats(){
 
 
         institutions.forEach(
-            item => {
+            function(item){
 
                 const eiin =
                     String(
@@ -1890,24 +1923,18 @@ async function loadQuickStats(){
                     ).trim();
 
 
-                const name =
+                const institutionName =
                     String(
                         item.institution_name ||
-                        item.institution ||
-                        item.name ||
                         ""
-                    )
-                    .trim()
-                    .toLowerCase();
+                    ).trim();
 
 
                 const district =
                     String(
                         item.district ||
                         ""
-                    )
-                    .trim()
-                    .toLowerCase();
+                    ).trim();
 
 
                 if(
@@ -1920,11 +1947,11 @@ async function loadQuickStats(){
 
                 }
                 else if(
-                    name
+                    institutionName
                 ){
 
                     uniqueInstitutions.add(
-                        name
+                        institutionName
                     );
 
                 }
@@ -1935,7 +1962,7 @@ async function loadQuickStats(){
                 ){
 
                     uniqueDistricts.add(
-                        district
+                        district.toUpperCase()
                     );
 
                 }
