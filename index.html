@@ -30,7 +30,7 @@
 <style>
 
 /* =========================================================
-   PREMIUM NAVBAR
+   APPLE LIQUID GLASS NAVBAR
 ========================================================= */
 
 .navbar {
@@ -43,7 +43,7 @@
 
     justify-content:space-between;
 
-    gap:20px;
+    gap:14px;
 
     z-index:1000;
 
@@ -51,26 +51,25 @@
 
 
 /* =========================================================
-   NAVIGATION
+   NAVBAR CONTROL AREA
 ========================================================= */
 
-.nav-links {
+.navbar-control {
 
     display:flex;
 
     align-items:center;
 
-    justify-content:center;
-
-    gap:4px;
-
-    flex:1;
+    gap:8px;
 
 }
 
 
-.nav-links > a,
-.nav-dropdown-btn {
+/* =========================================================
+   NAVBAR BUTTON
+========================================================= */
+
+.nav-toggle-btn {
 
     display:inline-flex;
 
@@ -78,34 +77,360 @@
 
     justify-content:center;
 
-    gap:5px;
+    gap:8px;
 
-    padding:9px 12px;
+    height:42px;
+
+    padding:0 16px;
+
+    border:1px solid rgba(127,127,127,.18);
+
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.78),
+            rgba(255,255,255,.40)
+        );
+
+    color:var(--text);
+
+    font-family:inherit;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.07),
+        inset 0 1px 0 rgba(255,255,255,.8);
+
+    backdrop-filter:blur(20px) saturate(180%);
+
+    -webkit-backdrop-filter:blur(20px) saturate(180%);
+
+    transition:
+        transform .25s cubic-bezier(.2,.8,.2,1),
+        box-shadow .25s ease,
+        background .25s ease;
+
+}
+
+
+.nav-toggle-btn:hover {
+
+    transform:translateY(-2px) scale(1.015);
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.11),
+        inset 0 1px 0 rgba(255,255,255,.9);
+
+}
+
+
+.nav-toggle-btn:active {
+
+    transform:scale(.96);
+
+}
+
+
+.nav-toggle-icon {
+
+    width:18px;
+
+    height:18px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    gap:4px;
+
+}
+
+
+.nav-toggle-icon span {
+
+    display:block;
+
+    width:17px;
+
+    height:1.6px;
 
     border-radius:10px;
+
+    background:currentColor;
+
+    transition:
+        transform .35s cubic-bezier(.2,.8,.2,1),
+        opacity .25s ease;
+
+}
+
+
+.nav-toggle-btn.open
+.nav-toggle-icon span:nth-child(1) {
+
+    transform:
+        translateY(5.5px)
+        rotate(45deg);
+
+}
+
+
+.nav-toggle-btn.open
+.nav-toggle-icon span:nth-child(2) {
+
+    opacity:0;
+
+}
+
+
+.nav-toggle-btn.open
+.nav-toggle-icon span:nth-child(3) {
+
+    transform:
+        translateY(-5.5px)
+        rotate(-45deg);
+
+}
+
+
+/* =========================================================
+   FLOATING DARK MODE BUTTON
+========================================================= */
+
+.theme-btn {
+
+    position:relative;
+
+    width:40px;
+
+    height:40px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border:1px solid rgba(127,127,127,.18);
+
+    border-radius:50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.82),
+            rgba(255,255,255,.42)
+        );
+
+    color:var(--text);
+
+    font-size:18px;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.08),
+        inset 0 1px 0 rgba(255,255,255,.85);
+
+    backdrop-filter:
+        blur(20px)
+        saturate(180%);
+
+    -webkit-backdrop-filter:
+        blur(20px)
+        saturate(180%);
+
+    transition:
+        transform .3s cubic-bezier(.2,.8,.2,1),
+        box-shadow .3s ease;
+
+}
+
+
+.theme-btn:hover {
+
+    transform:
+        translateY(-3px)
+        rotate(8deg);
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.13);
+
+}
+
+
+.theme-btn:active {
+
+    transform:scale(.9);
+
+}
+
+
+/* =========================================================
+   LIQUID GLASS NAVIGATION PANEL
+========================================================= */
+
+.nav-links {
+
+    position:absolute;
+
+    top:calc(100% + 14px);
+
+    right:0;
+
+    width:min(430px, calc(100vw - 28px));
+
+    padding:10px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+
+    border:1px solid rgba(255,255,255,.38);
+
+    border-radius:24px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.72),
+            rgba(255,255,255,.42)
+        );
+
+    box-shadow:
+        0 28px 70px rgba(0,0,0,.16),
+        0 8px 25px rgba(0,0,0,.08),
+        inset 0 1px 0 rgba(255,255,255,.85);
+
+    backdrop-filter:
+        blur(35px)
+        saturate(180%);
+
+    -webkit-backdrop-filter:
+        blur(35px)
+        saturate(180%);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    pointer-events:none;
+
+    transform:
+        translateY(-12px)
+        scale(.96);
+
+    transform-origin:top right;
+
+    transition:
+        opacity .32s cubic-bezier(.2,.8,.2,1),
+        transform .38s cubic-bezier(.2,.8,.2,1),
+        visibility .32s ease;
+
+}
+
+
+.nav-links::before {
+
+    content:"";
+
+    position:absolute;
+
+    width:90px;
+
+    height:90px;
+
+    top:-35px;
+
+    right:35px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,113,227,.14),
+            transparent 70%
+        );
+
+    filter:blur(8px);
+
+    pointer-events:none;
+
+}
+
+
+.nav-links.mobile-open {
+
+    opacity:1;
+
+    visibility:visible;
+
+    pointer-events:auto;
+
+    transform:
+        translateY(0)
+        scale(1);
+
+}
+
+
+/* =========================================================
+   NAVIGATION LINKS
+========================================================= */
+
+.nav-links > a,
+.nav-dropdown-btn {
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-start;
+
+    gap:9px;
+
+    width:100%;
+
+    box-sizing:border-box;
+
+    padding:12px 13px;
+
+    border:0;
+
+    border-radius:14px;
+
+    background:transparent;
 
     color:var(--muted);
 
     text-decoration:none;
 
+    font-family:inherit;
+
     font-size:13px;
 
-    font-weight:600;
-
-    white-space:nowrap;
-
-    border:0;
-
-    background:transparent;
-
-    font-family:inherit;
+    font-weight:650;
 
     cursor:pointer;
 
     transition:
-        background .2s ease,
-        color .2s ease,
-        transform .2s ease;
+        color .22s ease,
+        background .22s ease,
+        transform .22s ease;
 
 }
 
@@ -115,26 +440,44 @@
 
     color:var(--text);
 
-    background:rgba(127,127,127,.08);
+    background:
+        rgba(127,127,127,.09);
+
+    transform:translateX(2px);
 
 }
 
-
-/* =========================================================
-   ACTIVE
-========================================================= */
 
 .nav-links > a.active {
 
     color:var(--text);
 
-    background:rgba(127,127,127,.10);
+    background:
+        rgba(127,127,127,.11);
+
+}
+
+
+.nav-links > a.active::before {
+
+    content:"";
+
+    width:4px;
+
+    height:18px;
+
+    border-radius:20px;
+
+    background:#0071e3;
+
+    box-shadow:
+        0 0 12px rgba(0,113,227,.45);
 
 }
 
 
 /* =========================================================
-   DISTRICT DROPDOWN
+   DISTRICT
 ========================================================= */
 
 .nav-dropdown {
@@ -146,7 +489,7 @@
 
 .nav-dropdown-btn {
 
-    appearance:none;
+    justify-content:space-between;
 
 }
 
@@ -155,12 +498,10 @@
 
     display:inline-block;
 
-    font-size:10px;
-
-    line-height:1;
+    font-size:11px;
 
     transition:
-        transform .25s ease;
+        transform .3s cubic-bezier(.2,.8,.2,1);
 
 }
 
@@ -174,107 +515,49 @@
 
 
 /* =========================================================
-   DROPDOWN MENU
+   DISTRICT MENU
 ========================================================= */
 
 .nav-dropdown-menu {
 
-    position:absolute;
+    width:100%;
 
-    top:calc(100% + 10px);
+    box-sizing:border-box;
 
-    left:50%;
+    max-height:0;
 
-    transform:
-        translateX(-50%)
-        translateY(-6px);
-
-    width:245px;
-
-    padding:8px;
-
-    background:rgba(255,255,255,.96);
-
-    border:1px solid rgba(0,0,0,.08);
-
-    border-radius:17px;
-
-    box-shadow:
-        0 20px 50px rgba(0,0,0,.14),
-        0 4px 12px rgba(0,0,0,.06);
-
-    backdrop-filter:
-        blur(22px);
-
-    -webkit-backdrop-filter:
-        blur(22px);
+    overflow:hidden;
 
     opacity:0;
 
     visibility:hidden;
 
-    pointer-events:none;
+    padding:0 5px;
+
+    border-radius:16px;
 
     transition:
-        opacity .2s ease,
-        transform .2s ease,
-        visibility .2s ease;
+        max-height .38s cubic-bezier(.2,.8,.2,1),
+        opacity .25s ease,
+        padding .3s ease,
+        visibility .25s ease;
 
 }
 
-
-/* =========================================================
-   DROPDOWN ARROW TOP
-========================================================= */
-
-.nav-dropdown-menu::before {
-
-    content:"";
-
-    position:absolute;
-
-    top:-6px;
-
-    left:50%;
-
-    width:12px;
-
-    height:12px;
-
-    background:rgba(255,255,255,.96);
-
-    border-left:1px solid rgba(0,0,0,.08);
-
-    border-top:1px solid rgba(0,0,0,.08);
-
-    transform:translateX(-50%) rotate(45deg);
-
-}
-
-
-/* =========================================================
-   OPEN
-========================================================= */
 
 .nav-dropdown.open
 .nav-dropdown-menu {
+
+    max-height:420px;
 
     opacity:1;
 
     visibility:visible;
 
-    pointer-events:auto;
-
-    transform:
-        translateX(-50%)
-        translateY(0);
+    padding:5px;
 
 }
 
-
-/* =========================================================
-   DROPDOWN LINKS
-========================================================= */
 
 .nav-dropdown-menu a {
 
@@ -282,45 +565,44 @@
 
     align-items:center;
 
-    gap:11px;
+    gap:10px;
 
     width:100%;
 
     box-sizing:border-box;
 
-    padding:11px 12px;
+    padding:9px;
 
-    border-radius:11px;
+    margin:2px 0;
+
+    border-radius:12px;
 
     color:var(--text);
 
     text-decoration:none;
 
-    font-size:12px;
-
-    font-weight:600;
-
     transition:
-        background .18s ease,
-        transform .18s ease;
+        background .2s ease,
+        transform .2s ease;
 
 }
 
 
 .nav-dropdown-menu a:hover {
 
-    background:rgba(0,113,227,.07);
+    background:
+        rgba(0,113,227,.08);
 
-    transform:translateX(2px);
+    transform:translateX(3px);
 
 }
 
 
 .dropdown-icon {
 
-    width:28px;
+    width:30px;
 
-    height:28px;
+    height:30px;
 
     display:flex;
 
@@ -328,13 +610,14 @@
 
     justify-content:center;
 
+    flex-shrink:0;
+
     border-radius:9px;
 
-    background:rgba(0,113,227,.08);
+    background:
+        rgba(0,113,227,.08);
 
     font-size:14px;
-
-    flex-shrink:0;
 
 }
 
@@ -352,7 +635,7 @@
 
 .dropdown-text strong {
 
-    font-size:12px;
+    font-size:11.5px;
 
     font-weight:700;
 
@@ -365,113 +648,75 @@
 
     color:var(--muted);
 
-    font-weight:500;
-
 }
 
 
 /* =========================================================
-   MOBILE MENU BUTTON
-========================================================= */
-
-.mobile-menu-btn {
-
-    display:none;
-
-    width:42px;
-
-    height:42px;
-
-    border:1px solid var(--border);
-
-    border-radius:12px;
-
-    background:var(--white);
-
-    color:var(--text);
-
-    cursor:pointer;
-
-    align-items:center;
-
-    justify-content:center;
-
-    flex-direction:column;
-
-    gap:4px;
-
-    box-shadow:var(--shadow);
-
-}
-
-
-.mobile-menu-btn span {
-
-    display:block;
-
-    width:17px;
-
-    height:1.5px;
-
-    background:currentColor;
-
-    border-radius:10px;
-
-    transition:
-        transform .2s ease,
-        opacity .2s ease;
-
-}
-
-
-.mobile-menu-btn.open span:nth-child(1) {
-
-    transform:
-        translateY(5.5px)
-        rotate(45deg);
-
-}
-
-
-.mobile-menu-btn.open span:nth-child(2) {
-
-    opacity:0;
-
-}
-
-
-.mobile-menu-btn.open span:nth-child(3) {
-
-    transform:
-        translateY(-5.5px)
-        rotate(-45deg);
-
-}
-
-
-/* =========================================================
-   DARK MODE
+   DARK MODE GLASS
 ========================================================= */
 
 body.dark
-.nav-dropdown-menu {
+.nav-toggle-btn,
+body.dark
+.theme-btn {
 
-    background:rgba(25,25,27,.96);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(45,45,48,.78),
+            rgba(28,28,30,.55)
+        );
 
-    border-color:rgba(255,255,255,.09);
+    border-color:
+        rgba(255,255,255,.10);
 
     box-shadow:
-        0 20px 50px rgba(0,0,0,.4);
+        0 10px 30px rgba(0,0,0,.30),
+        inset 0 1px 0 rgba(255,255,255,.08);
 
 }
 
 
 body.dark
-.nav-dropdown-menu::before {
+.nav-links {
 
-    background:rgba(25,25,27,.96);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(35,35,38,.80),
+            rgba(20,20,22,.64)
+        );
 
-    border-color:rgba(255,255,255,.09);
+    border-color:
+        rgba(255,255,255,.11);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.48),
+        inset 0 1px 0 rgba(255,255,255,.08);
+
+}
+
+
+body.dark
+.nav-links::before {
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(50,150,255,.14),
+            transparent 70%
+        );
+
+}
+
+
+body.dark
+.nav-links > a:hover,
+body.dark
+.nav-dropdown-btn:hover {
+
+    background:
+        rgba(255,255,255,.07);
 
 }
 
@@ -479,7 +724,8 @@ body.dark
 body.dark
 .nav-dropdown-menu a:hover {
 
-    background:rgba(255,255,255,.07);
+    background:
+        rgba(255,255,255,.07);
 
 }
 
@@ -487,32 +733,91 @@ body.dark
 body.dark
 .dropdown-icon {
 
-    background:rgba(255,255,255,.07);
+    background:
+        rgba(255,255,255,.07);
 
 }
 
 
 /* =========================================================
-   TABLET
+   HOMEPAGE APPLE SMOOTH ANIMATION
 ========================================================= */
 
-@media(max-width:1050px) {
+@keyframes appleReveal {
 
-    .nav-links {
+    from {
 
-        gap:2px;
+        opacity:0;
+
+        transform:
+            translateY(22px)
+            scale(.985);
+
+    }
+
+    to {
+
+        opacity:1;
+
+        transform:
+            translateY(0)
+            scale(1);
 
     }
 
+}
 
-    .nav-links > a,
-    .nav-dropdown-btn {
 
-        padding:8px 8px;
+.hero {
 
-        font-size:12px;
+    animation:
+        appleReveal
+        .8s
+        cubic-bezier(.2,.8,.2,1)
+        both;
 
-    }
+}
+
+
+.section,
+.quick-stats,
+.premium-social-section,
+footer,
+.unofficial-notice {
+
+    animation:
+        appleReveal
+        .75s
+        cubic-bezier(.2,.8,.2,1)
+        both;
+
+}
+
+
+.group-card,
+.feature-card,
+.stat-card,
+.ranking-card,
+.discover-card,
+.premium-social-card {
+
+    transition:
+        transform .35s cubic-bezier(.2,.8,.2,1),
+        box-shadow .35s ease,
+        border-color .35s ease;
+
+}
+
+
+.group-card:hover,
+.feature-card:hover,
+.stat-card:hover,
+.ranking-card:hover,
+.discover-card:hover,
+.premium-social-card:hover {
+
+    transform:
+        translateY(-5px);
 
 }
 
@@ -525,150 +830,42 @@ body.dark
 
     .navbar {
 
-        flex-wrap:wrap;
+        gap:8px;
 
     }
 
 
-    .mobile-menu-btn {
+    .navbar-control {
 
-        display:flex;
+        gap:6px;
+
+    }
+
+
+    .nav-toggle-btn {
+
+        height:40px;
+
+        padding:0 13px;
+
+        border-radius:13px;
 
     }
 
 
     .nav-links {
 
-        display:none;
+        top:calc(100% + 10px);
 
-        width:100%;
+        right:0;
 
-        flex:none;
+        width:
+            min(
+                380px,
+                calc(100vw - 20px)
+            );
 
-        flex-direction:column;
-
-        align-items:stretch;
-
-        gap:4px;
-
-        padding:10px;
-
-        margin-top:8px;
-
-        background:var(--white);
-
-        border:1px solid var(--border);
-
-        border-radius:18px;
-
-        box-shadow:var(--shadow);
-
-        box-sizing:border-box;
-
-    }
-
-
-    .nav-links.mobile-open {
-
-        display:flex;
-
-    }
-
-
-    .nav-links > a,
-    .nav-dropdown-btn {
-
-        width:100%;
-
-        box-sizing:border-box;
-
-        justify-content:flex-start;
-
-        padding:12px 13px;
-
-        border-radius:11px;
-
-        font-size:13px;
-
-    }
-
-
-    .nav-dropdown {
-
-        width:100%;
-
-    }
-
-
-    .nav-dropdown-btn {
-
-        justify-content:space-between;
-
-    }
-
-
-    .nav-dropdown-menu {
-
-        position:static;
-
-        width:100%;
-
-        box-sizing:border-box;
-
-        margin-top:4px;
-
-        padding:5px;
-
-        transform:none;
-
-        opacity:0;
-
-        visibility:hidden;
-
-        pointer-events:none;
-
-        max-height:0;
-
-        overflow:hidden;
-
-        border-radius:13px;
-
-        box-shadow:none;
-
-        transition:
-            max-height .25s ease,
-            opacity .2s ease,
-            visibility .2s ease;
-
-    }
-
-
-    .nav-dropdown-menu::before {
-
-        display:none;
-
-    }
-
-
-    .nav-dropdown.open
-    .nav-dropdown-menu {
-
-        transform:none;
-
-        opacity:1;
-
-        visibility:visible;
-
-        pointer-events:auto;
-
-        max-height:400px;
-
-    }
-
-
-    .nav-dropdown-menu a {
-
-        padding:10px;
+        border-radius:21px;
 
     }
 
@@ -681,20 +878,30 @@ body.dark
 
 @media(max-width:430px) {
 
-    .nav-dropdown-menu a {
+    .nav-toggle-btn {
 
-        padding:9px;
+        font-size:12px;
+
+        padding:0 11px;
 
     }
 
 
-    .dropdown-icon {
+    .theme-btn {
 
-        width:27px;
+        width:38px;
 
-        height:27px;
+        height:38px;
 
-        font-size:13px;
+    }
+
+
+    .nav-links {
+
+        right:-2px;
+
+        width:
+            calc(100vw - 20px);
 
     }
 
@@ -728,21 +935,54 @@ CTGBoardRanking
 </a>
 
 
-<!-- MOBILE MENU -->
+<!-- =====================================================
+     NAVBAR CONTROL
+===================================================== -->
+
+<div class="navbar-control">
+
+<!-- FLOATING DARK MODE -->
 
 <button
-    class="mobile-menu-btn"
-    id="mobileMenuBtn"
+    class="theme-btn"
+    id="themeBtn"
+    aria-label="Toggle dark mode"
+    type="button">
+
+◐
+
+</button>
+
+
+<!-- NAVBAR BUTTON -->
+
+<button
+    class="nav-toggle-btn"
+    id="navToggleBtn"
     type="button"
     aria-label="Open navigation"
     aria-expanded="false">
 
+<span class="nav-toggle-icon">
+
 <span></span>
 <span></span>
 <span></span>
+
+</span>
+
+<span>
+Navbar
+</span>
 
 </button>
 
+</div>
+
+
+<!-- =====================================================
+     LIQUID GLASS NAVIGATION
+===================================================== -->
 
 <nav class="nav-links"
      id="navLinks">
@@ -770,9 +1010,7 @@ Institution Ranking
 </a>
 
 
-<!-- =================================================
-     DISTRICT DROPDOWN
-================================================= -->
+<!-- DISTRICT -->
 
 <div class="nav-dropdown"
      id="districtDropdown">
@@ -895,16 +1133,6 @@ Statistics
 
 
 </nav>
-
-
-<button
-    class="theme-btn"
-    id="themeBtn"
-    aria-label="Toggle dark mode">
-
-◐
-
-</button>
 
 </header>
 
@@ -2230,7 +2458,7 @@ please refer to the official Chattogram Education Board.
 
 
 <!-- =====================================================
-     NAVBAR + HOMEPAGE JAVASCRIPT
+     JAVASCRIPT
 ===================================================== -->
 
 <script>
@@ -2239,14 +2467,13 @@ please refer to the official Chattogram Education Board.
 
 
 /* =====================================================
-   MOBILE MENU
+   NAVBAR
 ===================================================== */
 
-const mobileMenuBtn =
+const navToggleBtn =
     document.getElementById(
-        "mobileMenuBtn"
+        "navToggleBtn"
     );
-
 
 const navLinks =
     document.getElementById(
@@ -2254,16 +2481,42 @@ const navLinks =
     );
 
 
+function closeNavbar() {
+
+    if (!navLinks || !navToggleBtn) {
+        return;
+    }
+
+
+    navLinks.classList.remove(
+        "mobile-open"
+    );
+
+
+    navToggleBtn.classList.remove(
+        "open"
+    );
+
+
+    navToggleBtn.setAttribute(
+        "aria-expanded",
+        "false"
+    );
+
+}
+
+
 if (
-    mobileMenuBtn &&
+    navToggleBtn &&
     navLinks
 ) {
 
-    mobileMenuBtn.addEventListener(
+    navToggleBtn.addEventListener(
         "click",
         function(event) {
 
             event.stopPropagation();
+
 
             const isOpen =
                 navLinks.classList.toggle(
@@ -2271,13 +2524,13 @@ if (
                 );
 
 
-            mobileMenuBtn.classList.toggle(
+            navToggleBtn.classList.toggle(
                 "open",
                 isOpen
             );
 
 
-            mobileMenuBtn.setAttribute(
+            navToggleBtn.setAttribute(
                 "aria-expanded",
                 String(isOpen)
             );
@@ -2315,6 +2568,7 @@ if (
 
             event.stopPropagation();
 
+
             const isOpen =
                 districtDropdown.classList.toggle(
                     "open"
@@ -2333,12 +2587,24 @@ if (
 
 
 /* =====================================================
-   CLOSE DROPDOWN OUTSIDE
+   CLOSE OUTSIDE
 ===================================================== */
 
 document.addEventListener(
     "click",
     function(event) {
+
+        if (
+            navLinks &&
+            navToggleBtn &&
+            !navLinks.contains(event.target) &&
+            !navToggleBtn.contains(event.target)
+        ) {
+
+            closeNavbar();
+
+        }
+
 
         if (
             districtDropdown &&
@@ -2363,46 +2629,18 @@ document.addEventListener(
 
         }
 
-
-        if (
-            window.innerWidth <= 800 &&
-            navLinks &&
-            mobileMenuBtn &&
-            !navLinks.contains(event.target) &&
-            !mobileMenuBtn.contains(event.target)
-        ) {
-
-            navLinks.classList.remove(
-                "mobile-open"
-            );
-
-
-            mobileMenuBtn.classList.remove(
-                "open"
-            );
-
-
-            mobileMenuBtn.setAttribute(
-                "aria-expanded",
-                "false"
-            );
-
-        }
-
     }
 );
 
 
 /* =====================================================
-   CLOSE MOBILE MENU AFTER LINK CLICK
+   CLOSE AFTER NAV LINK
 ===================================================== */
 
 if (navLinks) {
 
     navLinks
-        .querySelectorAll(
-            "a"
-        )
+        .querySelectorAll("a")
         .forEach(
             function(link) {
 
@@ -2410,26 +2648,7 @@ if (navLinks) {
                     "click",
                     function() {
 
-                        if (
-                            window.innerWidth <= 800
-                        ) {
-
-                            navLinks.classList.remove(
-                                "mobile-open"
-                            );
-
-
-                            mobileMenuBtn.classList.remove(
-                                "open"
-                            );
-
-
-                            mobileMenuBtn.setAttribute(
-                                "aria-expanded",
-                                "false"
-                            );
-
-                        }
+                        closeNavbar();
 
                     }
                 );
@@ -2703,7 +2922,7 @@ function normalizeInstitution(item) {
 
 
 /* =====================================================
-   UNIQUE INSTITUTIONS
+   UNIQUE
 ===================================================== */
 
 function uniqueInstitutions(data) {
@@ -2778,7 +2997,7 @@ function uniqueInstitutions(data) {
 
 
 /* =====================================================
-   RANK INSTITUTIONS
+   RANK
 ===================================================== */
 
 function rankInstitutions(
@@ -2842,7 +3061,7 @@ function rankInstitutions(
 
 
 /* =====================================================
-   DISPLAY TOP 3
+   TOP 3
 ===================================================== */
 
 function displayTop3(
@@ -3045,7 +3264,7 @@ function displayQuickStats(
 
 
 /* =====================================================
-   LOAD HOMEPAGE DATA
+   HOMEPAGE DATA
 ===================================================== */
 
 async function loadHomepageData() {
