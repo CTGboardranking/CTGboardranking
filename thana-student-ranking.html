@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Thana Student Ranking — CTGBoardRanking</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
+
+<style>
+
+.wrap{
+max-width:1100px;
+margin:auto;
+padding:90px 20px 60px;
+}
+
+.back{
+color:var(--muted);
+text-decoration:none;
+display:inline-block;
+margin-bottom:28px;
+}
+
+h1{
+font-size:clamp(42px,7vw,72px);
+line-height:1;
+letter-spacing:-4px;
+}
+
+h1 span{
+color:var(--blue);
+}
+
+.desc{
+color:var(--muted);
+margin-top:18px;
+}
+
+.controls{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+margin:35px 0 25px;
+}
+
+.card{
+padding:16px;
+border:1px solid var(--border);
+border-radius:20px;
+background:white;
+box-shadow:var(--shadow);
+}
+
+.card label{
+display:block;
+font-size:10px;
+font-weight:800;
+color:var(--muted);
+margin-bottom:8px;
+}
+
+select,input{
+width:100%;
+box-sizing:border-box;
+padding:13px;
+border:1px solid var(--border);
+border-radius:13px;
+font-family:inherit;
+}
+
+.groups{
+display:flex;
+gap:8px;
+overflow-x:auto;
+margin-bottom:25px;
+}
+
+.group{
+border:1px solid var(--border);
+background:white;
+padding:10px 16px;
+border-radius:50px;
+font-weight:700;
+white-space:nowrap;
+}
+
+.group.active{
+background:#111;
+color:white;
+}
+
+.title{
+display:flex;
+justify-content:space-between;
+align-items:end;
+margin-bottom:18px;
+}
+
+.title h2{
+margin:5px 0;
+}
+
+.title p{
+font-size:12px;
+color:var(--muted);
+}
+
+.pdf{
+background:#111;
+color:white;
+border:0;
+border-radius:13px;
+padding:12px 18px;
+font-weight:800;
+}
+
+.table{
+border:1px solid var(--border);
+border-radius:22px;
+overflow:hidden;
+background:white;
+box-shadow:var(--shadow);
+}
+
+.head,.row{
+display:grid;
+grid-template-columns:55px minmax(180px,1fr) 70px 100px minmax(210px,1fr);
+gap:12px;
+align-items:center;
+}
+
+.head{
+padding:14px 18px;
+background:#f5f5f7;
+font-size:9px;
+font-weight:800;
+color:var(--muted);
+}
+
+.row{
+padding:16px 18px;
+border-top:1px solid var(--border);
+}
+
+.row strong{
+font-size:12px;
+}
+
+.row span{
+font-size:9px;
+color:var(--muted);
+display:block;
+margin-top:3px;
+}
+
+.rank{
+font-weight:800;
+color:var(--muted);
+}
+
+.score{
+color:var(--blue);
+font-weight:800;
+}
+
+.message{
+padding:60px 20px;
+text-align:center;
+color:var(--muted);
+}
+
+.pagination{
+display:flex;
+justify-content:center;
+gap:12px;
+padding:20px;
+}
+
+.pagination button{
+padding:9px 15px;
+border:1px solid var(--border);
+border-radius:10px;
+background:white;
+font-weight:700;
+}
+
+@media(max-width:700px){
+
+.wrap{
+padding:65px 12px 40px;
+}
+
+.controls{
+grid-template-columns:1fr;
+}
+
+.title{
+display:block;
+}
+
+.pdf{
+width:100%;
+margin-top:12px;
+}
+
+.head,.row{
+grid-template-columns:
+35px
+minmax(120px,1fr)
+55px
+70px;
+}
+
+.head div:nth-child(5){
+display:none;
+}
+
+.institute{
+grid-column:2 / 5;
+border-top:1px solid var(--border);
+padding-top:8px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+
+<a href="index.html" class="logo">
+<span class="logo-mark">C</span>
+<span>CTGBoardRanking</span>
+</a>
+
+<nav class="nav-links">
+<a href="index.html">Home</a>
+<a href="student-ranking.html">Student Ranking</a>
+<a href="rankings.html">Institution Ranking</a>
+<a href="district-student-ranking.html">District</a>
+<a href="thana-student-ranking.html" class="active">Thana</a>
+</nav>
+
+<button class="theme-btn" id="themeBtn">◐</button>
+
+</header>
+
+
+<main>
+
+<section class="wrap">
+
+<a class="back" href="index.html">
+← Back to Home
+</a>
+
+<div class="eyebrow">
+CHITTAGONG BOARD
+</div>
+
+<h1>
+Thana<br>
+<span>Student Ranking.</span>
+</h1>
+
+<p class="desc">
+Explore student performance by thana and group.
+</p>
+
+
+<div class="controls">
+
+<div class="card">
+
+<label>THANA</label>
+
+<select id="thana">
+<option value="">All Thanas</option>
+</select>
+
+</div>
+
+<div class="card">
+
+<label>ACADEMIC YEAR</label>
+
+<select>
+<option>2026</option>
+</select>
+
+</div>
+
+</div>
+
+
+<div class="groups">
+
+<button class="group active" data-group="All">
+All
+</button>
+
+<button class="group" data-group="Science">
+🔬 Science
+</button>
+
+<button class="group" data-group="Business Studies">
+💼 Business Studies
+</button>
+
+<button class="group" data-group="Humanities">
+🎓 Humanities
+</button>
+
+<button class="group" data-group="Science Irregular">
+📚 Science Irregular
+</button>
+
+</div>
+
+
+<div class="title">
+
+<div>
+
+<div class="eyebrow">
+TOP PERFORMERS
+</div>
+
+<h2 id="heading">
+All Thana Students
+</h2>
+
+<p>2026 · Chattogram Board</p>
+
+</div>
+
+<button class="pdf" id="pdf">
+↓ Download PDF
+</button>
+
+</div>
+
+
+<input
+id="search"
+placeholder="Search student, roll or institution...">
+
+
+<div class="table">
+
+<div class="head">
+<div>Rank</div>
+<div>Student</div>
+<div>GPA</div>
+<div>Total</div>
+<div>Institution</div>
+</div>
+
+<div id="rows">
+<div class="message">Loading...</div>
+</div>
+
+<div class="pagination">
+
+<button id="prev">← Previous</button>
+
+<span id="page">Page 1</span>
+
+<button id="next">Next →</button>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<script src="script.js"></script>
+
+<script>
+
+const URL="scraper/students.json?v="+Date.now();
+
+const SIZE=100;
+
+let students=[];
+let page=1;
+let selectedThana="";
+let selectedGroup="All";
+let search="";
+
+function norm(v){
+return String(v||"").trim().toLowerCase();
+}
+
+function marks(s){
+
+for(const x of[
+s.total_marks,
+s.totalMarks,
+s.total_mark,
+s.totalMark,
+s.totalMarksObtained
+]){
+
+if(x!==undefined &&
+x!==null &&
+String(x).trim()!==""){
+
+let n=Number(x);
+
+if(Number.isFinite(n))
+return n;
+
+}
+
+}
+
+return null;
+
+}
+
+function filtered(){
+
+return [...students]
+.filter(s=>{
+
+if(selectedThana &&
+norm(s.thana)!==norm(selectedThana))
+return false;
+
+if(selectedGroup!=="All" &&
+norm(s.group)!==norm(selectedGroup))
+return false;
+
+if(search){
+
+let t=[
+s.name,
+s.roll,
+s.institute,
+s.thana,
+s.district,
+s.group,
+s.gpa,
+marks(s)
+].join(" ").toLowerCase();
+
+if(!t.includes(search))
+return false;
+
+}
+
+return true;
+
+})
+.sort((a,b)=>{
+
+let sa=Number(a.score)||0;
+let sb=Number(b.score)||0;
+
+if(sb!==sa)return sb-sa;
+
+let ga=Number(a.gpa)||0;
+let gb=Number(b.gpa)||0;
+
+if(gb!==ga)return gb-ga;
+
+return (Number(marks(b))||0)-
+(Number(marks(a))||0);
+
+});
+
+}
+
+function esc(v){
+
+return String(v)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;");
+
+}
+
+function render(){
+
+let list=filtered();
+
+let pages=Math.ceil(list.length/SIZE)||1;
+
+if(page>pages)page=pages;
+
+let start=(page-1)*SIZE;
+
+let current=list.slice(start,start+SIZE);
+
+document.getElementById("rows").innerHTML="";
+
+current.forEach((s,i)=>{
+
+let r=document.createElement("div");
+
+r.className="row";
+
+let m=marks(s);
+
+r.innerHTML=`
+
+<div class="rank">
+${String(start+i+1).padStart(2,"0")}
+</div>
+
+<div>
+<strong>${esc(s.name||"Unknown Student")}</strong>
+<span>Roll: ${esc(s.roll||"—")}</span>
+</div>
+
+<div>
+<strong>${esc(s.gpa??"—")}</strong>
+</div>
+
+<div class="score">
+${m!==null?m:"—"}
+</div>
+
+<div class="institute">
+<strong>${esc(s.institute||"Unknown Institution")}</strong>
+<span>${esc(s.thana||"")}</span>
+</div>
+
+`;
+
+document.getElementById("rows")
+.appendChild(r);
+
+});
+
+document.getElementById("page").textContent=
+`Page ${page} of ${pages}`;
+
+document.getElementById("heading").textContent=
+selectedThana
+?`${selectedThana} Student Ranking`
+:"All Thana Students";
+
+}
+
+async function load(){
+
+let res=await fetch(URL);
+let json=await res.json();
+
+students=Array.isArray(json)
+?json
+:json.students||[];
+
+let thanas=[
+...new Set(
+students.map(x=>x.thana).filter(Boolean)
+)
+].sort();
+
+thanas.forEach(t=>{
+
+let o=document.createElement("option");
+
+o.value=t;
+o.textContent=t;
+
+document.getElementById("thana")
+.appendChild(o);
+
+});
+
+render();
+
+}
+
+document.getElementById("thana")
+.onchange=e=>{
+
+selectedThana=e.target.value;
+page=1;
+render();
+
+};
+
+document.getElementById("search")
+.oninput=e=>{
+
+search=e.target.value.toLowerCase().trim();
+page=1;
+render();
+
+};
+
+document.querySelectorAll(".group")
+.forEach(b=>{
+
+b.onclick=()=>{
+
+selectedGroup=b.dataset.group;
+page=1;
+
+document.querySelectorAll(".group")
+.forEach(x=>x.classList.remove("active"));
+
+b.classList.add("active");
+
+render();
+
+};
+
+});
+
+document.getElementById("prev")
+.onclick=()=>{
+
+if(page>1){
+page--;
+render();
+}
+
+};
+
+document.getElementById("next")
+.onclick=()=>{
+
+let pages=Math.ceil(filtered().length/SIZE);
+
+if(page<pages){
+page++;
+render();
+}
+
+};
+
+
+document.getElementById("pdf")
+.onclick=()=>{
+
+let list=filtered();
+
+let start=(page-1)*SIZE;
+
+let current=list.slice(start,start+SIZE);
+
+if(!current.length)return;
+
+const {jsPDF}=window.jspdf;
+
+const doc=new jsPDF({
+orientation:"portrait",
+unit:"mm",
+format:"a4"
+});
+
+let w=doc.internal.pageSize.getWidth();
+let h=doc.internal.pageSize.getHeight();
+
+let pages=Math.ceil(list.length/SIZE);
+
+doc.setFillColor(248,248,250);
+doc.rect(0,0,w,34,"F");
+
+doc.setFont("helvetica","bold");
+doc.setFontSize(18);
+doc.setTextColor(17,17,17);
+
+doc.text("CTGBoardRanking",15,14);
+
+doc.setFont("helvetica","normal");
+doc.setFontSize(8);
+doc.setTextColor(100,100,105);
+
+doc.text(
+"Unofficial • Education Data & Statistics",
+15,21
+);
+
+doc.text(
+"Generated by Shadat Fatih",
+w-15,14,{align:"right"}
+);
+
+doc.text(
+new Date().toLocaleString("en-GB"),
+w-15,21,{align:"right"}
+);
+
+doc.setFont("helvetica","bold");
+doc.setFontSize(15);
+doc.setTextColor(17,17,17);
+
+doc.text(
+"Thana Student Ranking",
+15,44
+);
+
+doc.setFont("helvetica","normal");
+doc.setFontSize(8.5);
+doc.setTextColor(90,90,95);
+
+doc.text(
+`2026 · Chattogram Board · ${selectedThana||"All Thanas"} · ${selectedGroup} · Page ${page} of ${pages}`,
+15,51
+);
+
+doc.autoTable({
+
+startY:57,
+
+head:[[
+"RANK",
+"STUDENT",
+"GPA",
+"TOTAL",
+"INSTITUTION"
+]],
+
+body:current.map((s,i)=>{
+
+let m=marks(s);
+
+return[
+String(start+i+1),
+`${s.name||"Unknown"}\nRoll: ${s.roll||"—"}`,
+String(s.gpa??"—"),
+m!==null?String(m):"—",
+`${s.institute||"Unknown"}\n${s.thana||""}`
+];
+
+}),
+
+theme:"grid",
+
+margin:{
+left:12,
+right:12
+},
+
+styles:{
+fontSize:7.5,
+cellPadding:3,
+valign:"middle",
+lineColor:[225,225,228],
+textColor:[35,35,38]
+},
+
+headStyles:{
+fillColor:[245,245,247],
+textColor:[70,70,75],
+fontStyle:"bold",
+fontSize:7
+},
+
+columnStyles:{
+0:{cellWidth:15,halign:"center"},
+1:{cellWidth:57},
+2:{cellWidth:20,halign:"center"},
+3:{cellWidth:25,halign:"center"},
+4:{cellWidth:"auto"}
+},
+
+didDrawPage:()=>{
+
+let p=doc.internal.getNumberOfPages();
+
+doc.setDrawColor(225,225,228);
+
+doc.line(12,h-13,w-12,h-13);
+
+doc.setFontSize(7);
+doc.setTextColor(120,120,125);
+
+doc.text(
+"CTGBoardRanking • Unofficial Education Data",
+12,h-7
+);
+
+doc.text(
+`PDF Page ${p}`,
+w-12,h-7,{align:"right"}
+);
+
+}
+
+});
+
+let safe=(selectedThana||"All-Thanas")
+.replace(/[^a-z0-9]+/gi,"-")
+.toLowerCase();
+
+doc.save(
+`CTGBoardRanking-Thana-Student-${safe}-Page-${page}.pdf`
+);
+
+};
+
+load();
+
+</script>
+
+</body>
+</html>
