@@ -26,6 +26,15 @@
 <link rel="stylesheet"
       href="style.css">
 
+<!-- =====================================================
+     PDF LIBRARIES
+===================================================== -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
+
+
 <style>
 
 /* =========================================================
@@ -158,6 +167,7 @@
     display:flex;
     justify-content:space-between;
     align-items:end;
+    gap:20px;
     margin-bottom:20px;
 }
 
@@ -174,32 +184,24 @@
 
 
 /* =========================================================
-   SEARCH
-========================================================= */
-
-.student-search {
-    margin-bottom:12px;
-    background:white;
-}
-
-
-/* =========================================================
    PDF BUTTON
 ========================================================= */
 
-.pdf-download-area {
-    display:flex;
-    justify-content:flex-end;
-    margin-bottom:18px;
-}
-
 .pdf-download-btn {
 
-    border:1px solid var(--border);
+    display:inline-flex;
 
-    background:var(--text);
+    align-items:center;
 
-    color:var(--bg);
+    justify-content:center;
+
+    gap:9px;
+
+    border:0;
+
+    background:#111;
+
+    color:#fff;
 
     padding:12px 18px;
 
@@ -213,15 +215,15 @@
 
     cursor:pointer;
 
-    display:inline-flex;
+    white-space:nowrap;
 
-    align-items:center;
+    box-shadow:
+        0 8px 22px rgba(0,0,0,.12);
 
-    justify-content:center;
-
-    gap:7px;
-
-    transition:.2s;
+    transition:
+        transform .2s,
+        box-shadow .2s,
+        opacity .2s;
 
 }
 
@@ -229,7 +231,8 @@
 
     transform:translateY(-1px);
 
-    opacity:.9;
+    box-shadow:
+        0 12px 28px rgba(0,0,0,.17);
 
 }
 
@@ -237,6 +240,34 @@
 
     transform:scale(.98);
 
+}
+
+.pdf-download-btn:disabled {
+
+    opacity:.55;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+}
+
+.pdf-icon {
+
+    font-size:16px;
+
+    line-height:1;
+
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.student-search {
+    margin-bottom:18px;
+    background:white;
 }
 
 
@@ -366,8 +397,6 @@
 
     min-width:0;
 
-    width:100%;
-
     overflow:hidden;
 
 }
@@ -482,8 +511,6 @@
     min-width:0;
 
     max-width:100%;
-
-    width:100%;
 
     overflow:hidden;
 
@@ -679,23 +706,14 @@
         margin-top:6px;
     }
 
-
-    .pdf-download-area {
-
-        justify-content:stretch;
-
-        margin-bottom:18px;
-
-    }
-
     .pdf-download-btn {
 
         width:100%;
 
+        margin-top:15px;
+
     }
 
-
-    /* MOBILE TABLE */
 
     .student-header {
 
@@ -736,11 +754,6 @@
     }
 
 
-    /*
-       Institute full width,
-       but stays INSIDE the row.
-    */
-
     .student-institution {
 
         grid-column:2 / 5;
@@ -748,8 +761,6 @@
         width:100%;
 
         max-width:100%;
-
-        min-width:0;
 
         margin-top:3px;
 
@@ -851,7 +862,6 @@
 
     }
 
-
     .student-header {
 
         grid-template-columns:
@@ -948,149 +958,6 @@
         min-width:65px;
 
         font-size:11px;
-
-    }
-
-}
-
-
-/* =========================================================
-   PRINT / PDF
-========================================================= */
-
-@media print {
-
-    body {
-
-        background:white !important;
-
-        color:#111 !important;
-
-    }
-
-
-    .navbar,
-    footer,
-    .back-link,
-    .ranking-controls,
-    .group-tabs,
-    .student-search,
-    .pdf-download-area,
-    .pagination {
-
-        display:none !important;
-
-    }
-
-
-    .student-hero {
-
-        max-width:none !important;
-
-        padding:15px 0 20px !important;
-
-    }
-
-
-    .student-hero h1 {
-
-        font-size:36px !important;
-
-        letter-spacing:-2px !important;
-
-    }
-
-
-    .student-hero h1 span {
-
-        color:#006fe6 !important;
-
-    }
-
-
-    .student-hero p {
-
-        font-size:12px !important;
-
-    }
-
-
-    .student-content {
-
-        max-width:none !important;
-
-        padding:0 !important;
-
-    }
-
-
-    .student-list {
-
-        border:1px solid #ddd !important;
-
-        box-shadow:none !important;
-
-        border-radius:0 !important;
-
-        overflow:visible !important;
-
-    }
-
-
-    .student-header {
-
-        background:#f5f5f5 !important;
-
-        color:#555 !important;
-
-    }
-
-
-    .student-row {
-
-        color:#111 !important;
-
-        break-inside:avoid;
-
-        page-break-inside:avoid;
-
-    }
-
-
-    .student-name strong,
-    .student-institution strong {
-
-        color:#111 !important;
-
-    }
-
-
-    .student-gpa strong {
-
-        color:#111 !important;
-
-    }
-
-
-    .student-total strong {
-
-        color:#006fe6 !important;
-
-    }
-
-
-    .student-row:hover {
-
-        background:transparent !important;
-
-    }
-
-
-    @page {
-
-        size:A4 portrait;
-
-        margin:12mm;
 
     }
 
@@ -1291,7 +1158,7 @@ Student Ranking
 
 
 <!-- =====================================================
-     TITLE
+     TITLE + PDF
 ===================================================== -->
 
 <div class="ranking-title">
@@ -1309,9 +1176,27 @@ Science Students
 </div>
 
 
+<div>
+
 <p id="yearText">
 2026 · Chattogram Board
 </p>
+
+
+<button
+    id="downloadPdfBtn"
+    class="pdf-download-btn"
+    type="button">
+
+    <span class="pdf-icon">
+        ↓
+    </span>
+
+    Download PDF
+
+</button>
+
+</div>
 
 </div>
 
@@ -1326,24 +1211,6 @@ Science Students
     class="student-search"
     placeholder="Search student, roll or institution..."
     autocomplete="off">
-
-
-<!-- =====================================================
-     PDF DOWNLOAD
-===================================================== -->
-
-<div class="pdf-download-area">
-
-<button
-    type="button"
-    id="downloadPdfBtn"
-    class="pdf-download-btn">
-
-    ⬇ Download PDF
-
-</button>
-
-</div>
 
 
 <!-- =====================================================
@@ -1606,6 +1473,11 @@ const paginationInfo =
 const downloadPdfBtn =
     document.getElementById(
         "downloadPdfBtn"
+    );
+
+const yearSelect =
+    document.getElementById(
+        "yearSelect"
     );
 
 
@@ -1980,14 +1852,10 @@ function sortStudents(list) {
 
 
 /* =========================================================
-   RENDER
+   GET CURRENT FILTERED STUDENTS
 ========================================================= */
 
-function renderStudents() {
-
-    rowsContainer.innerHTML =
-        "";
-
+function getFilteredStudents() {
 
     let filtered =
         allStudents.filter(
@@ -1997,10 +1865,25 @@ function renderStudents() {
         );
 
 
-    filtered =
-        sortStudents(
-            filtered
-        );
+    return sortStudents(
+        filtered
+    );
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function renderStudents() {
+
+    rowsContainer.innerHTML =
+        "";
+
+
+    const filtered =
+        getFilteredStudents();
 
 
     const totalStudents =
@@ -2219,10 +2102,6 @@ function renderStudents() {
     );
 
 
-    /* =====================================================
-       PAGINATION
-    ===================================================== */
-
     if (
         totalPages <= 1
     ) {
@@ -2288,6 +2167,677 @@ function escapeHTML(value) {
         );
 
 }
+
+
+/* =========================================================
+   PDF HELPERS
+========================================================= */
+
+function getPDFDate() {
+
+    const now =
+        new Date();
+
+
+    return now.toLocaleString(
+        "en-GB",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric",
+            hour:"2-digit",
+            minute:"2-digit"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DOWNLOAD CURRENT PAGE PDF
+========================================================= */
+
+async function downloadCurrentPagePDF() {
+
+    if (
+        !allStudents.length
+    ) {
+
+        alert(
+            "Student data is still loading."
+        );
+
+        return;
+
+    }
+
+
+    const filtered =
+        getFilteredStudents();
+
+
+    const startIndex =
+        (
+            currentPage -
+            1
+        ) *
+        PAGE_SIZE;
+
+
+    const pageStudents =
+        filtered.slice(
+            startIndex,
+            startIndex +
+            PAGE_SIZE
+        );
+
+
+    if (
+        !pageStudents.length
+    ) {
+
+        alert(
+            "No students available on this page."
+        );
+
+        return;
+
+    }
+
+
+    const originalText =
+        downloadPdfBtn.innerHTML;
+
+
+    downloadPdfBtn.disabled =
+        true;
+
+
+    downloadPdfBtn.innerHTML =
+        `
+        <span class="pdf-icon">
+            ...
+        </span>
+        Generating PDF
+        `;
+
+
+    try {
+
+        const {
+            jsPDF
+        } = window.jspdf;
+
+
+        const doc =
+            new jsPDF({
+                orientation:"landscape",
+                unit:"mm",
+                format:"a4"
+            });
+
+
+        const pageWidth =
+            doc.internal.pageSize.getWidth();
+
+
+        const pageHeight =
+            doc.internal.pageSize.getHeight();
+
+
+        const generationDate =
+            getPDFDate();
+
+
+        const totalPages =
+            Math.ceil(
+                filtered.length /
+                PAGE_SIZE
+            );
+
+
+        /* =================================================
+           HEADER
+        ================================================= */
+
+        doc.setFillColor(
+            248,
+            248,
+            250
+        );
+
+        doc.rect(
+            0,
+            0,
+            pageWidth,
+            32,
+            "F"
+        );
+
+
+        doc.setTextColor(
+            17,
+            17,
+            17
+        );
+
+
+        doc.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        doc.setFontSize(
+            19
+        );
+
+
+        doc.text(
+            "CTGBoardRanking",
+            15,
+            13
+        );
+
+
+        doc.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        doc.setFontSize(
+            8.5
+        );
+
+
+        doc.setTextColor(
+            100,
+            100,
+            105
+        );
+
+
+        doc.text(
+            "Unofficial • Education Data & Statistics",
+            15,
+            20
+        );
+
+
+        doc.text(
+            "Generated by Shadat Fatih",
+            pageWidth - 15,
+            13,
+            {
+                align:"right"
+            }
+        );
+
+
+        doc.text(
+            generationDate,
+            pageWidth - 15,
+            20,
+            {
+                align:"right"
+            }
+        );
+
+
+        /* =================================================
+           TITLE
+        ================================================= */
+
+        doc.setTextColor(
+            17,
+            17,
+            17
+        );
+
+
+        doc.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        doc.setFontSize(
+            16
+        );
+
+
+        doc.text(
+            "Student Ranking",
+            15,
+            43
+        );
+
+
+        doc.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        doc.setFontSize(
+            9
+        );
+
+
+        doc.setTextColor(
+            90,
+            90,
+            95
+        );
+
+
+        const rankingInfo =
+            `${yearSelect.value} · Chattogram Board · ${currentGroup} · Page ${currentPage} of ${totalPages}`;
+
+
+        doc.text(
+            rankingInfo,
+            15,
+            50
+        );
+
+
+        /* =================================================
+           SEARCH INFORMATION
+        ================================================= */
+
+        if (currentSearch) {
+
+            doc.setFontSize(
+                8
+            );
+
+
+            doc.setTextColor(
+                100,
+                100,
+                105
+            );
+
+
+            doc.text(
+                `Filtered by search: "${currentSearch}"`,
+                pageWidth - 15,
+                50,
+                {
+                    align:"right"
+                }
+            );
+
+        }
+
+
+        /* =================================================
+           TABLE DATA
+        ================================================= */
+
+        const tableData =
+            pageStudents.map(
+                (student,index) => {
+
+                    const rank =
+                        startIndex +
+                        index +
+                        1;
+
+
+                    const name =
+                        student.name ||
+                        "Unknown Student";
+
+
+                    const roll =
+                        student.roll ||
+                        "—";
+
+
+                    const gpa =
+                        student.gpa !== undefined &&
+                        student.gpa !== null &&
+                        String(
+                            student.gpa
+                        ).trim() !== ""
+                        ? String(
+                            student.gpa
+                          )
+                        : "—";
+
+
+                    const totalMarks =
+                        getTotalMarks(
+                            student
+                        );
+
+
+                    const formattedMarks =
+                        totalMarks !== null
+                        ? Number(
+                            totalMarks
+                          )
+                          .toFixed(2)
+                          .replace(
+                              /\.00$/,
+                              ""
+                          )
+                        : "—";
+
+
+                    const institute =
+                        student.institute ||
+                        "Unknown Institution";
+
+
+                    const district =
+                        student.district ||
+                        "Chattogram";
+
+
+                    return [
+
+                        String(rank),
+
+                        `${name}\nRoll: ${roll}`,
+
+                        gpa,
+
+                        formattedMarks,
+
+                        `${institute}\n${district}`
+
+                    ];
+
+                }
+            );
+
+
+        /* =================================================
+           AUTO TABLE
+        ================================================= */
+
+        doc.autoTable({
+
+            startY:57,
+
+            head:[
+
+                [
+                    "RANK",
+                    "STUDENT",
+                    "GPA",
+                    "TOTAL MARKS",
+                    "INSTITUTE"
+                ]
+
+            ],
+
+            body:tableData,
+
+            theme:"grid",
+
+            margin:{
+                left:15,
+                right:15
+            },
+
+            styles:{
+
+                font:"helvetica",
+
+                fontSize:8,
+
+                cellPadding:4,
+
+                textColor:[
+                    35,
+                    35,
+                    38
+                ],
+
+                lineColor:[
+                    225,
+                    225,
+                    228
+                ],
+
+                lineWidth:.2,
+
+                valign:"middle"
+
+            },
+
+            headStyles:{
+
+                fillColor:[
+                    245,
+                    245,
+                    247
+                ],
+
+                textColor:[
+                    75,
+                    75,
+                    80
+                ],
+
+                fontStyle:"bold",
+
+                fontSize:7,
+
+                halign:"left",
+
+                lineColor:[
+                    220,
+                    220,
+                    223
+                ]
+
+            },
+
+            columnStyles:{
+
+                0:{
+                    cellWidth:18,
+                    halign:"center",
+                    fontStyle:"bold"
+                },
+
+                1:{
+                    cellWidth:78
+                },
+
+                2:{
+                    cellWidth:25,
+                    halign:"center",
+                    fontStyle:"bold"
+                },
+
+                3:{
+                    cellWidth:32,
+                    halign:"center",
+                    fontStyle:"bold",
+                    textColor:[
+                        0,
+                        113,
+                        227
+                    ]
+                },
+
+                4:{
+                    cellWidth:"auto"
+                }
+
+            },
+
+            alternateRowStyles:{
+
+                fillColor:[
+                    252,
+                    252,
+                    253
+                ]
+
+            },
+
+            didParseCell:function(data) {
+
+                if (
+                    data.section === "body" &&
+                    data.column.index === 0
+                ) {
+
+                    if (
+                        Number(
+                            data.cell.raw
+                        ) === 1
+                    ) {
+
+                        data.cell.styles.textColor =
+                            [
+                                198,
+                                138,
+                                0
+                            ];
+
+                    }
+
+                }
+
+            },
+
+            didDrawPage:function(data) {
+
+                const currentPDFPage =
+                    doc.internal.getNumberOfPages();
+
+
+                /* FOOTER LINE */
+
+                doc.setDrawColor(
+                    225,
+                    225,
+                    228
+                );
+
+
+                doc.line(
+                    15,
+                    pageHeight - 13,
+                    pageWidth - 15,
+                    pageHeight - 13
+                );
+
+
+                /* FOOTER LEFT */
+
+                doc.setFont(
+                    "helvetica",
+                    "normal"
+                );
+
+                doc.setFontSize(
+                    7.5
+                );
+
+
+                doc.setTextColor(
+                    120,
+                    120,
+                    125
+                );
+
+
+                doc.text(
+                    "CTGBoardRanking • Unofficial Education Data",
+                    15,
+                    pageHeight - 7
+                );
+
+
+                /* FOOTER RIGHT */
+
+                doc.text(
+                    `PDF Page ${currentPDFPage}`,
+                    pageWidth - 15,
+                    pageHeight - 7,
+                    {
+                        align:"right"
+                    }
+                );
+
+            }
+
+        });
+
+
+        /* =================================================
+           FILE NAME
+        ================================================= */
+
+        const safeGroup =
+            currentGroup
+                .replace(
+                    /[^a-z0-9]+/gi,
+                    "-"
+                )
+                .replace(
+                    /^-|-$/g,
+                    ""
+                )
+                .toLowerCase();
+
+
+        const fileName =
+            `CTGBoardRanking-Student-${yearSelect.value}-${safeGroup}-Page-${currentPage}.pdf`;
+
+
+        /* =================================================
+           SAVE
+        ================================================= */
+
+        doc.save(
+            fileName
+        );
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "PDF generation error:",
+            error
+        );
+
+
+        alert(
+            "PDF তৈরি করা যায়নি। আবার চেষ্টা করুন।"
+        );
+
+    }
+
+    finally {
+
+        downloadPdfBtn.disabled =
+            false;
+
+
+        downloadPdfBtn.innerHTML =
+            originalText;
+
+    }
+
+}
+
+
+/* =========================================================
+   PDF BUTTON
+========================================================= */
+
+downloadPdfBtn.addEventListener(
+    "click",
+    downloadCurrentPagePDF
+);
 
 
 /* =========================================================
@@ -2411,11 +2961,8 @@ nextPage.addEventListener(
     () => {
 
         const filteredCount =
-            allStudents.filter(
-                student =>
-                    matchesGroup(student) &&
-                    matchesSearch(student)
-            ).length;
+            getFilteredStudents()
+                .length;
 
 
         const totalPages =
@@ -2457,12 +3004,6 @@ nextPage.addEventListener(
    YEAR
 ========================================================= */
 
-const yearSelect =
-    document.getElementById(
-        "yearSelect"
-    );
-
-
 yearSelect.addEventListener(
     "change",
     () => {
@@ -2477,20 +3018,6 @@ yearSelect.addEventListener(
 
 
         renderStudents();
-
-    }
-);
-
-
-/* =========================================================
-   PDF DOWNLOAD
-========================================================= */
-
-downloadPdfBtn.addEventListener(
-    "click",
-    () => {
-
-        window.print();
 
     }
 );
