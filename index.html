@@ -26,6 +26,682 @@
 <link rel="stylesheet"
       href="style.css">
 
+
+<style>
+
+/* =========================================================
+   PREMIUM NAVBAR
+========================================================= */
+
+.navbar {
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    z-index:1000;
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.nav-links {
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:4px;
+
+    flex:1;
+
+}
+
+
+.nav-links > a,
+.nav-dropdown-btn {
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:5px;
+
+    padding:9px 12px;
+
+    border-radius:10px;
+
+    color:var(--muted);
+
+    text-decoration:none;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    white-space:nowrap;
+
+    border:0;
+
+    background:transparent;
+
+    font-family:inherit;
+
+    cursor:pointer;
+
+    transition:
+        background .2s ease,
+        color .2s ease,
+        transform .2s ease;
+
+}
+
+
+.nav-links > a:hover,
+.nav-dropdown-btn:hover {
+
+    color:var(--text);
+
+    background:rgba(127,127,127,.08);
+
+}
+
+
+/* =========================================================
+   ACTIVE
+========================================================= */
+
+.nav-links > a.active {
+
+    color:var(--text);
+
+    background:rgba(127,127,127,.10);
+
+}
+
+
+/* =========================================================
+   DISTRICT DROPDOWN
+========================================================= */
+
+.nav-dropdown {
+
+    position:relative;
+
+}
+
+
+.nav-dropdown-btn {
+
+    appearance:none;
+
+}
+
+
+.dropdown-arrow {
+
+    display:inline-block;
+
+    font-size:10px;
+
+    line-height:1;
+
+    transition:
+        transform .25s ease;
+
+}
+
+
+.nav-dropdown.open
+.dropdown-arrow {
+
+    transform:rotate(180deg);
+
+}
+
+
+/* =========================================================
+   DROPDOWN MENU
+========================================================= */
+
+.nav-dropdown-menu {
+
+    position:absolute;
+
+    top:calc(100% + 10px);
+
+    left:50%;
+
+    transform:
+        translateX(-50%)
+        translateY(-6px);
+
+    width:245px;
+
+    padding:8px;
+
+    background:rgba(255,255,255,.96);
+
+    border:1px solid rgba(0,0,0,.08);
+
+    border-radius:17px;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.14),
+        0 4px 12px rgba(0,0,0,.06);
+
+    backdrop-filter:
+        blur(22px);
+
+    -webkit-backdrop-filter:
+        blur(22px);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    pointer-events:none;
+
+    transition:
+        opacity .2s ease,
+        transform .2s ease,
+        visibility .2s ease;
+
+}
+
+
+/* =========================================================
+   DROPDOWN ARROW TOP
+========================================================= */
+
+.nav-dropdown-menu::before {
+
+    content:"";
+
+    position:absolute;
+
+    top:-6px;
+
+    left:50%;
+
+    width:12px;
+
+    height:12px;
+
+    background:rgba(255,255,255,.96);
+
+    border-left:1px solid rgba(0,0,0,.08);
+
+    border-top:1px solid rgba(0,0,0,.08);
+
+    transform:translateX(-50%) rotate(45deg);
+
+}
+
+
+/* =========================================================
+   OPEN
+========================================================= */
+
+.nav-dropdown.open
+.nav-dropdown-menu {
+
+    opacity:1;
+
+    visibility:visible;
+
+    pointer-events:auto;
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+
+}
+
+
+/* =========================================================
+   DROPDOWN LINKS
+========================================================= */
+
+.nav-dropdown-menu a {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+
+    width:100%;
+
+    box-sizing:border-box;
+
+    padding:11px 12px;
+
+    border-radius:11px;
+
+    color:var(--text);
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    transition:
+        background .18s ease,
+        transform .18s ease;
+
+}
+
+
+.nav-dropdown-menu a:hover {
+
+    background:rgba(0,113,227,.07);
+
+    transform:translateX(2px);
+
+}
+
+
+.dropdown-icon {
+
+    width:28px;
+
+    height:28px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:9px;
+
+    background:rgba(0,113,227,.08);
+
+    font-size:14px;
+
+    flex-shrink:0;
+
+}
+
+
+.dropdown-text {
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:2px;
+
+}
+
+
+.dropdown-text strong {
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+
+.dropdown-text span {
+
+    font-size:9px;
+
+    color:var(--muted);
+
+    font-weight:500;
+
+}
+
+
+/* =========================================================
+   MOBILE MENU BUTTON
+========================================================= */
+
+.mobile-menu-btn {
+
+    display:none;
+
+    width:42px;
+
+    height:42px;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    background:var(--white);
+
+    color:var(--text);
+
+    cursor:pointer;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-direction:column;
+
+    gap:4px;
+
+    box-shadow:var(--shadow);
+
+}
+
+
+.mobile-menu-btn span {
+
+    display:block;
+
+    width:17px;
+
+    height:1.5px;
+
+    background:currentColor;
+
+    border-radius:10px;
+
+    transition:
+        transform .2s ease,
+        opacity .2s ease;
+
+}
+
+
+.mobile-menu-btn.open span:nth-child(1) {
+
+    transform:
+        translateY(5.5px)
+        rotate(45deg);
+
+}
+
+
+.mobile-menu-btn.open span:nth-child(2) {
+
+    opacity:0;
+
+}
+
+
+.mobile-menu-btn.open span:nth-child(3) {
+
+    transform:
+        translateY(-5.5px)
+        rotate(-45deg);
+
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+body.dark
+.nav-dropdown-menu {
+
+    background:rgba(25,25,27,.96);
+
+    border-color:rgba(255,255,255,.09);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.4);
+
+}
+
+
+body.dark
+.nav-dropdown-menu::before {
+
+    background:rgba(25,25,27,.96);
+
+    border-color:rgba(255,255,255,.09);
+
+}
+
+
+body.dark
+.nav-dropdown-menu a:hover {
+
+    background:rgba(255,255,255,.07);
+
+}
+
+
+body.dark
+.dropdown-icon {
+
+    background:rgba(255,255,255,.07);
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media(max-width:1050px) {
+
+    .nav-links {
+
+        gap:2px;
+
+    }
+
+
+    .nav-links > a,
+    .nav-dropdown-btn {
+
+        padding:8px 8px;
+
+        font-size:12px;
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:800px) {
+
+    .navbar {
+
+        flex-wrap:wrap;
+
+    }
+
+
+    .mobile-menu-btn {
+
+        display:flex;
+
+    }
+
+
+    .nav-links {
+
+        display:none;
+
+        width:100%;
+
+        flex:none;
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+        gap:4px;
+
+        padding:10px;
+
+        margin-top:8px;
+
+        background:var(--white);
+
+        border:1px solid var(--border);
+
+        border-radius:18px;
+
+        box-shadow:var(--shadow);
+
+        box-sizing:border-box;
+
+    }
+
+
+    .nav-links.mobile-open {
+
+        display:flex;
+
+    }
+
+
+    .nav-links > a,
+    .nav-dropdown-btn {
+
+        width:100%;
+
+        box-sizing:border-box;
+
+        justify-content:flex-start;
+
+        padding:12px 13px;
+
+        border-radius:11px;
+
+        font-size:13px;
+
+    }
+
+
+    .nav-dropdown {
+
+        width:100%;
+
+    }
+
+
+    .nav-dropdown-btn {
+
+        justify-content:space-between;
+
+    }
+
+
+    .nav-dropdown-menu {
+
+        position:static;
+
+        width:100%;
+
+        box-sizing:border-box;
+
+        margin-top:4px;
+
+        padding:5px;
+
+        transform:none;
+
+        opacity:0;
+
+        visibility:hidden;
+
+        pointer-events:none;
+
+        max-height:0;
+
+        overflow:hidden;
+
+        border-radius:13px;
+
+        box-shadow:none;
+
+        transition:
+            max-height .25s ease,
+            opacity .2s ease,
+            visibility .2s ease;
+
+    }
+
+
+    .nav-dropdown-menu::before {
+
+        display:none;
+
+    }
+
+
+    .nav-dropdown.open
+    .nav-dropdown-menu {
+
+        transform:none;
+
+        opacity:1;
+
+        visibility:visible;
+
+        pointer-events:auto;
+
+        max-height:400px;
+
+    }
+
+
+    .nav-dropdown-menu a {
+
+        padding:10px;
+
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media(max-width:430px) {
+
+    .nav-dropdown-menu a {
+
+        padding:9px;
+
+    }
+
+
+    .dropdown-icon {
+
+        width:27px;
+
+        height:27px;
+
+        font-size:13px;
+
+    }
+
+}
+
+</style>
+
 </head>
 
 
@@ -52,40 +728,171 @@ CTGBoardRanking
 </a>
 
 
-<nav class="nav-links">
+<!-- MOBILE MENU -->
+
+<button
+    class="mobile-menu-btn"
+    id="mobileMenuBtn"
+    type="button"
+    aria-label="Open navigation"
+    aria-expanded="false">
+
+<span></span>
+<span></span>
+<span></span>
+
+</button>
+
+
+<nav class="nav-links"
+     id="navLinks">
+
 
 <a href="index.html"
    class="active">
+
 Home
+
 </a>
+
+
+<a href="student-ranking.html">
+
+Student Ranking
+
+</a>
+
 
 <a href="rankings.html">
-Rankings
+
+Institution Ranking
+
 </a>
 
-<a href="institution.html">
-Institutions
-</a>
+
+<!-- =================================================
+     DISTRICT DROPDOWN
+================================================= -->
+
+<div class="nav-dropdown"
+     id="districtDropdown">
+
+
+<button
+    type="button"
+    class="nav-dropdown-btn"
+    id="districtDropdownBtn"
+    aria-expanded="false">
+
+<span>
+District
+</span>
+
+<span class="dropdown-arrow">
+⌄
+</span>
+
+</button>
+
+
+<div class="nav-dropdown-menu">
+
 
 <a href="district-student-ranking.html">
+
+<span class="dropdown-icon">
+🎓
+</span>
+
+<span class="dropdown-text">
+
+<strong>
 District Student Ranking
+</strong>
+
+<span>
+Top students by district
+</span>
+
+</span>
+
 </a>
+
 
 <a href="district-college-ranking.html">
+
+<span class="dropdown-icon">
+🏫
+</span>
+
+<span class="dropdown-text">
+
+<strong>
 District College Ranking
+</strong>
+
+<span>
+Top colleges by district
+</span>
+
+</span>
+
 </a>
+
 
 <a href="thana-student-ranking.html">
+
+<span class="dropdown-icon">
+👨‍🎓
+</span>
+
+<span class="dropdown-text">
+
+<strong>
 Thana Student Ranking
+</strong>
+
+<span>
+Top students by thana
+</span>
+
+</span>
+
 </a>
+
 
 <a href="thana-college-ranking.html">
+
+<span class="dropdown-icon">
+🏛️
+</span>
+
+<span class="dropdown-text">
+
+<strong>
 Thana College Ranking
+</strong>
+
+<span>
+Top colleges by thana
+</span>
+
+</span>
+
 </a>
 
+
+</div>
+
+</div>
+
+
 <a href="statistics.html">
+
 Statistics
+
 </a>
+
 
 </nav>
 
@@ -710,8 +1517,6 @@ Top Institutions
 
 
 
-<!-- RANK 1 -->
-
 <div
 class="ranking-row first"
 id="homeRank1">
@@ -763,8 +1568,6 @@ GPA-5
 
 
 
-<!-- RANK 2 -->
-
 <div
 class="ranking-row"
 id="homeRank2">
@@ -815,8 +1618,6 @@ GPA-5
 </div>
 
 
-
-<!-- RANK 3 -->
 
 <div
 class="ranking-row"
@@ -1060,8 +1861,6 @@ CTGBoardRanking.
 <div class="premium-social-grid">
 
 
-<!-- FACEBOOK -->
-
 <a
 href="https://www.facebook.com/ShadatFatih.Page"
 target="_blank"
@@ -1108,8 +1907,6 @@ Shadat Fatih Page
 
 
 
-<!-- WHATSAPP -->
-
 <a
 href="https://wa.me/8801601800222"
 target="_blank"
@@ -1153,8 +1950,6 @@ Chat with us
 </a>
 
 
-
-<!-- INSTAGRAM -->
 
 <a
 href="https://www.instagram.com/shadatfatih"
@@ -1213,8 +2008,6 @@ Instagram
 
 
 
-<!-- EMAIL -->
-
 <a
 href="mailto:helloshadat@hotmail.com"
 class="premium-social-card email-card">
@@ -1263,8 +2056,6 @@ helloshadat@hotmail.com
 </a>
 
 
-
-<!-- PREMIUM TOTAL VISITS -->
 
 <div class="premium-social-card visits-card">
 
@@ -1403,7 +2194,6 @@ Unofficial Data Notice
 <p>
 
 This website is an independent, unofficial platform and is
-
 <strong>
 not affiliated with, endorsed by, or officially connected
 to the Chattogram Education Board.
@@ -1416,7 +2206,6 @@ to the Chattogram Education Board.
 
 Result data is collected programmatically from publicly
 accessible result pages and is used for
-
 <strong>
 research, educational, statistical analysis,
 and ranking purposes.
@@ -1441,7 +2230,7 @@ please refer to the official Chattogram Education Board.
 
 
 <!-- =====================================================
-     HOMEPAGE DATA ENGINE
+     NAVBAR + HOMEPAGE JAVASCRIPT
 ===================================================== -->
 
 <script>
@@ -1450,33 +2239,248 @@ please refer to the official Chattogram Education Board.
 
 
 /* =====================================================
+   MOBILE MENU
+===================================================== */
+
+const mobileMenuBtn =
+    document.getElementById(
+        "mobileMenuBtn"
+    );
+
+
+const navLinks =
+    document.getElementById(
+        "navLinks"
+    );
+
+
+if (
+    mobileMenuBtn &&
+    navLinks
+) {
+
+    mobileMenuBtn.addEventListener(
+        "click",
+        function(event) {
+
+            event.stopPropagation();
+
+            const isOpen =
+                navLinks.classList.toggle(
+                    "mobile-open"
+                );
+
+
+            mobileMenuBtn.classList.toggle(
+                "open",
+                isOpen
+            );
+
+
+            mobileMenuBtn.setAttribute(
+                "aria-expanded",
+                String(isOpen)
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   DISTRICT DROPDOWN
+===================================================== */
+
+const districtDropdown =
+    document.getElementById(
+        "districtDropdown"
+    );
+
+
+const districtDropdownBtn =
+    document.getElementById(
+        "districtDropdownBtn"
+    );
+
+
+if (
+    districtDropdown &&
+    districtDropdownBtn
+) {
+
+    districtDropdownBtn.addEventListener(
+        "click",
+        function(event) {
+
+            event.stopPropagation();
+
+            const isOpen =
+                districtDropdown.classList.toggle(
+                    "open"
+                );
+
+
+            districtDropdownBtn.setAttribute(
+                "aria-expanded",
+                String(isOpen)
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CLOSE DROPDOWN OUTSIDE
+===================================================== */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            districtDropdown &&
+            !districtDropdown.contains(
+                event.target
+            )
+        ) {
+
+            districtDropdown.classList.remove(
+                "open"
+            );
+
+
+            if (districtDropdownBtn) {
+
+                districtDropdownBtn.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+            }
+
+        }
+
+
+        if (
+            window.innerWidth <= 800 &&
+            navLinks &&
+            mobileMenuBtn &&
+            !navLinks.contains(event.target) &&
+            !mobileMenuBtn.contains(event.target)
+        ) {
+
+            navLinks.classList.remove(
+                "mobile-open"
+            );
+
+
+            mobileMenuBtn.classList.remove(
+                "open"
+            );
+
+
+            mobileMenuBtn.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   CLOSE MOBILE MENU AFTER LINK CLICK
+===================================================== */
+
+if (navLinks) {
+
+    navLinks
+        .querySelectorAll(
+            "a"
+        )
+        .forEach(
+            function(link) {
+
+                link.addEventListener(
+                    "click",
+                    function() {
+
+                        if (
+                            window.innerWidth <= 800
+                        ) {
+
+                            navLinks.classList.remove(
+                                "mobile-open"
+                            );
+
+
+                            mobileMenuBtn.classList.remove(
+                                "open"
+                            );
+
+
+                            mobileMenuBtn.setAttribute(
+                                "aria-expanded",
+                                "false"
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
    DARK MODE
 ===================================================== */
 
 const themeBtn =
-    document.getElementById("themeBtn");
+    document.getElementById(
+        "themeBtn"
+    );
+
 
 if (
-    localStorage.getItem("ctg-theme") === "dark"
+    localStorage.getItem(
+        "ctg-theme"
+    ) === "dark"
 ) {
 
-    document.body.classList.add("dark");
+    document.body.classList.add(
+        "dark"
+    );
 
 }
+
 
 if (themeBtn) {
 
     themeBtn.addEventListener(
         "click",
-        function () {
+        function() {
 
-            document.body.classList.toggle("dark");
+            document.body.classList.toggle(
+                "dark"
+            );
+
 
             localStorage.setItem(
                 "ctg-theme",
-                document.body.classList.contains("dark")
-                    ? "dark"
-                    : "light"
+                document.body.classList.contains(
+                    "dark"
+                )
+                ? "dark"
+                : "light"
             );
 
         }
@@ -1505,7 +2509,7 @@ async function loadInstitutionData() {
             "?v=" +
             Date.now(),
             {
-                cache: "no-store"
+                cache:"no-store"
             }
         );
 
@@ -1533,7 +2537,9 @@ async function loadInstitutionData() {
 
     if (
         data &&
-        Array.isArray(data.institutions)
+        Array.isArray(
+            data.institutions
+        )
     ) {
 
         return data.institutions;
@@ -1543,7 +2549,9 @@ async function loadInstitutionData() {
 
     if (
         data &&
-        Array.isArray(data.results)
+        Array.isArray(
+            data.results
+        )
     ) {
 
         return data.results;
@@ -1553,7 +2561,9 @@ async function loadInstitutionData() {
 
     if (
         data &&
-        Array.isArray(data.data)
+        Array.isArray(
+            data.data
+        )
     ) {
 
         return data.data;
@@ -1588,8 +2598,8 @@ function toNumber(value) {
     const n =
         Number(
             String(value)
-                .replace(/,/g, "")
-                .replace(/%/g, "")
+                .replace(/,/g,"")
+                .replace(/%/g,"")
                 .trim()
         );
 
@@ -1655,10 +2665,8 @@ function normalizeInstitution(item) {
 
         eiin:
             String(
-                item.eiin ??
-                ""
+                item.eiin ?? ""
             ).trim(),
-
 
         institution:
             String(
@@ -1669,13 +2677,10 @@ function normalizeInstitution(item) {
                 ""
             ).trim(),
 
-
         district:
             String(
-                item.district ??
-                ""
+                item.district ?? ""
             ).trim(),
-
 
         thana:
             String(
@@ -1683,7 +2688,6 @@ function normalizeInstitution(item) {
                 item.upazila ??
                 ""
             ).trim(),
-
 
         appeared,
 
@@ -1741,7 +2745,9 @@ function uniqueInstitutions(data) {
                 item
             );
 
-        } else {
+        }
+
+        else {
 
             const old =
                 map.get(key);
@@ -1772,12 +2778,7 @@ function uniqueInstitutions(data) {
 
 
 /* =====================================================
-   RANKING
-
-   1. GPA-5
-   2. Pass Rate
-   3. Passed
-   4. Appeared
+   RANK INSTITUTIONS
 ===================================================== */
 
 function rankInstitutions(
@@ -1785,17 +2786,13 @@ function rankInstitutions(
 ) {
 
     return institutions.sort(
-        function(a, b) {
+        function(a,b) {
 
             if (
-                b.gpa5 !==
-                a.gpa5
+                b.gpa5 !== a.gpa5
             ) {
 
-                return (
-                    b.gpa5 -
-                    a.gpa5
-                );
+                return b.gpa5 - a.gpa5;
 
             }
 
@@ -1814,21 +2811,16 @@ function rankInstitutions(
 
 
             if (
-                b.passed !==
-                a.passed
+                b.passed !== a.passed
             ) {
 
-                return (
-                    b.passed -
-                    a.passed
-                );
+                return b.passed - a.passed;
 
             }
 
 
             if (
-                b.appeared !==
-                a.appeared
+                b.appeared !== a.appeared
             ) {
 
                 return (
@@ -1875,7 +2867,7 @@ function displayTop3(
 
 
     rows.forEach(
-        function(row, index) {
+        function(row,index) {
 
             if (!row) {
                 return;
@@ -1913,60 +2905,44 @@ function displayTop3(
             if (!item) {
 
                 if (name)
-                    name.textContent =
-                        "—";
+                    name.textContent = "—";
 
                 if (district)
-                    district.textContent =
-                        "—";
+                    district.textContent = "—";
 
                 if (pass)
-                    pass.textContent =
-                        "—";
+                    pass.textContent = "—";
 
                 if (score)
-                    score.textContent =
-                        "—";
+                    score.textContent = "—";
 
                 return;
 
             }
 
 
-            if (name) {
-
+            if (name)
                 name.textContent =
                     item.institution;
 
-            }
 
-
-            if (district) {
-
+            if (district)
                 district.textContent =
                     item.district ||
                     "Chattogram";
 
-            }
 
-
-            if (pass) {
-
+            if (pass)
                 pass.textContent =
                     item.passingRate.toFixed(2) +
                     "%";
 
-            }
 
-
-            if (score) {
-
+            if (score)
                 score.textContent =
                     item.gpa5.toLocaleString(
                         "en-US"
                     );
-
-            }
 
         }
     );
@@ -2037,8 +3013,7 @@ function displayQuickStats(
     }
 
 
-    let totalStudents =
-        0;
+    let totalStudents = 0;
 
 
     institutions.forEach(
@@ -2066,24 +3041,6 @@ function displayQuickStats(
 
     }
 
-
-    console.log(
-        "Institution Total:",
-        institutions.length
-    );
-
-
-    console.log(
-        "District Total:",
-        districtSet.size
-    );
-
-
-    console.log(
-        "Student Total:",
-        totalStudents
-    );
-
 }
 
 
@@ -2095,32 +3052,14 @@ async function loadHomepageData() {
 
     try {
 
-        console.log(
-            "Loading:",
-            INSTITUTION_JSON
-        );
-
-
         const data =
             await loadInstitutionData();
-
-
-        console.log(
-            "Raw records:",
-            data.length
-        );
 
 
         const institutions =
             uniqueInstitutions(
                 data
             );
-
-
-        console.log(
-            "Unique institutions:",
-            institutions.length
-        );
 
 
         if (
@@ -2152,20 +3091,9 @@ async function loadHomepageData() {
         );
 
 
-        console.log(
-            "TOP 3:",
-            institutions.slice(
-                0,
-                3
-            )
-        );
+    }
 
-
-        console.log(
-            "✓ Homepage data loaded successfully"
-        );
-
-    } catch (error) {
+    catch(error) {
 
         console.error(
             "HOMEPAGE DATA ERROR:",
@@ -2173,25 +3101,18 @@ async function loadHomepageData() {
         );
 
 
-        const rows = [
+        [
+            "homeRank1",
+            "homeRank2",
+            "homeRank3"
+        ].forEach(
+            function(id) {
 
-            document.getElementById(
-                "homeRank1"
-            ),
+                const row =
+                    document.getElementById(
+                        id
+                    );
 
-            document.getElementById(
-                "homeRank2"
-            ),
-
-            document.getElementById(
-                "homeRank3"
-            )
-
-        ];
-
-
-        rows.forEach(
-            function(row) {
 
                 if (!row) {
                     return;
@@ -2210,20 +3131,14 @@ async function loadHomepageData() {
                     );
 
 
-                if (name) {
-
+                if (name)
                     name.textContent =
                         "Data unavailable";
 
-                }
 
-
-                if (district) {
-
+                if (district)
                     district.textContent =
                         "JSON load failed";
-
-                }
 
             }
         );
@@ -2304,7 +3219,9 @@ async function loadTotalVisits() {
 
         }
 
-    } catch (error) {
+    }
+
+    catch(error) {
 
         console.warn(
             "Total visits error:",
