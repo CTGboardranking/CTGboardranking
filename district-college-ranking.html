@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>District College Ranking — CTGBoardRanking</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
+
+<style>
+
+.wrap{
+max-width:1100px;
+margin:auto;
+padding:90px 20px 60px;
+}
+
+.back{
+color:var(--muted);
+text-decoration:none;
+display:inline-block;
+margin-bottom:28px;
+}
+
+h1{
+font-size:clamp(42px,7vw,72px);
+line-height:1;
+letter-spacing:-4px;
+}
+
+h1 span{
+color:var(--blue);
+}
+
+.desc{
+color:var(--muted);
+margin-top:18px;
+}
+
+.controls{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+margin:35px 0 25px;
+}
+
+.card{
+padding:16px;
+border:1px solid var(--border);
+border-radius:20px;
+background:white;
+box-shadow:var(--shadow);
+}
+
+.card label{
+display:block;
+font-size:10px;
+font-weight:800;
+color:var(--muted);
+margin-bottom:8px;
+}
+
+select,input{
+width:100%;
+box-sizing:border-box;
+padding:13px;
+border:1px solid var(--border);
+border-radius:13px;
+font-family:inherit;
+}
+
+.title{
+display:flex;
+justify-content:space-between;
+align-items:end;
+margin:25px 0 18px;
+}
+
+.title h2{
+margin:5px 0;
+}
+
+.title p{
+color:var(--muted);
+font-size:12px;
+}
+
+.pdf{
+background:#111;
+color:white;
+border:0;
+border-radius:13px;
+padding:12px 18px;
+font-weight:800;
+cursor:pointer;
+}
+
+.table{
+border:1px solid var(--border);
+border-radius:22px;
+overflow:hidden;
+background:white;
+box-shadow:var(--shadow);
+}
+
+.head,.row{
+display:grid;
+grid-template-columns:60px minmax(250px,1fr) 120px 120px 140px;
+gap:12px;
+align-items:center;
+}
+
+.head{
+padding:15px;
+background:#f5f5f7;
+font-size:9px;
+font-weight:800;
+color:var(--muted);
+}
+
+.row{
+padding:17px 15px;
+border-top:1px solid var(--border);
+}
+
+.row strong{
+font-size:12px;
+}
+
+.row span{
+font-size:9px;
+color:var(--muted);
+display:block;
+margin-top:3px;
+}
+
+.rank{
+font-weight:800;
+color:var(--muted);
+}
+
+.score{
+color:var(--blue);
+font-weight:800;
+}
+
+.pagination{
+display:flex;
+justify-content:center;
+gap:12px;
+padding:20px;
+}
+
+.pagination button{
+padding:9px 15px;
+border:1px solid var(--border);
+border-radius:10px;
+background:white;
+font-weight:700;
+}
+
+.message{
+text-align:center;
+padding:60px 20px;
+color:var(--muted);
+}
+
+@media(max-width:700px){
+
+.wrap{
+padding:65px 12px 40px;
+}
+
+.controls{
+grid-template-columns:1fr;
+}
+
+.title{
+display:block;
+}
+
+.pdf{
+width:100%;
+margin-top:12px;
+}
+
+.head,.row{
+grid-template-columns:
+35px
+minmax(150px,1fr)
+70px
+70px;
+}
+
+.head div:nth-child(5),
+.head div:nth-child(4),
+.row div:nth-child(5),
+.row div:nth-child(4){
+display:none;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+
+<a href="index.html" class="logo">
+<span class="logo-mark">C</span>
+<span>CTGBoardRanking</span>
+</a>
+
+<nav class="nav-links">
+<a href="index.html">Home</a>
+<a href="student-ranking.html">Student Ranking</a>
+<a href="rankings.html">Institution Ranking</a>
+<a href="district-student-ranking.html" class="active">District</a>
+<a href="thana-student-ranking.html">Thana</a>
+</nav>
+
+<button class="theme-btn" id="themeBtn">◐</button>
+
+</header>
+
+
+<main>
+
+<section class="wrap">
+
+<a class="back" href="index.html">← Back to Home</a>
+
+<div class="eyebrow">CHITTAGONG BOARD</div>
+
+<h1>
+District<br>
+<span>College Ranking.</span>
+</h1>
+
+<p class="desc">
+Institution performance ranking by district.
+</p>
+
+
+<div class="controls">
+
+<div class="card">
+
+<label>DISTRICT</label>
+
+<select id="district">
+<option value="">All Districts</option>
+</select>
+
+</div>
+
+<div class="card">
+
+<label>ACADEMIC YEAR</label>
+
+<select>
+<option>2026</option>
+</select>
+
+</div>
+
+</div>
+
+
+<div class="title">
+
+<div>
+
+<div class="eyebrow">INSTITUTION PERFORMANCE</div>
+
+<h2 id="heading">
+All District Colleges
+</h2>
+
+<p>2026 · Chattogram Board</p>
+
+</div>
+
+<button class="pdf" id="pdf">
+↓ Download PDF
+</button>
+
+</div>
+
+
+<input
+id="search"
+placeholder="Search college/institution...">
+
+
+<div class="table">
+
+<div class="head">
+<div>Rank</div>
+<div>College</div>
+<div>Students</div>
+<div>Avg GPA</div>
+<div>District</div>
+</div>
+
+<div id="rows">
+<div class="message">Loading...</div>
+</div>
+
+<div class="pagination">
+
+<button id="prev">← Previous</button>
+
+<span id="page">Page 1</span>
+
+<button id="next">Next →</button>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<script src="script.js"></script>
+
+<script>
+
+const URL="scraper/students.json?v="+Date.now();
+
+const SIZE=100;
+
+let students=[];
+let currentPage=1;
+let selectedDistrict="";
+let search="";
+
+const rows=document.getElementById("rows");
+
+function groupInstitutions(){
+
+let map=new Map();
+
+students.forEach(s=>{
+
+let name=(s.institute||"Unknown Institution").trim();
+
+if(!map.has(name)){
+
+map.set(name,{
+name,
+district:s.district||"Chattogram",
+students:[],
+total:0,
+gpa:0
+});
+
+}
+
+let c=map.get(name);
+
+c.students.push(s);
+
+c.total++;
+
+let g=Number(s.gpa);
+
+if(Number.isFinite(g))
+c.gpa+=g;
+
+});
+
+return [...map.values()]
+
+.filter(c=>
+!selectedDistrict ||
+c.district.toLowerCase()===
+selectedDistrict.toLowerCase()
+)
+
+.filter(c=>
+!search ||
+c.name.toLowerCase().includes(search)
+)
+
+.map(c=>{
+
+c.avg=c.total
+?c.gpa/c.total
+:0;
+
+return c;
+
+})
+
+.sort((a,b)=>b.avg-a.avg);
+
+}
+
+function render(){
+
+let list=groupInstitutions();
+
+let pages=Math.ceil(list.length/SIZE)||1;
+
+if(currentPage>pages)
+currentPage=pages;
+
+let start=(currentPage-1)*SIZE;
+
+rows.innerHTML="";
+
+list.slice(start,start+SIZE)
+.forEach((c,i)=>{
+
+let r=document.createElement("div");
+
+r.className="row";
+
+r.innerHTML=`
+
+<div class="rank">
+${String(start+i+1).padStart(2,"0")}
+</div>
+
+<div>
+<strong>${esc(c.name)}</strong>
+</div>
+
+<div>
+<strong>${c.total}</strong>
+<span>Students</span>
+</div>
+
+<div class="score">
+${c.avg.toFixed(2)}
+</div>
+
+<div>
+<span>${esc(c.district)}</span>
+</div>
+
+`;
+
+rows.appendChild(r);
+
+});
+
+document.getElementById("page").textContent=
+`Page ${currentPage} of ${pages}`;
+
+}
+
+function esc(v){
+
+return String(v)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;");
+
+}
+
+async function load(){
+
+let res=await fetch(URL);
+let json=await res.json();
+
+students=Array.isArray(json)
+?json
+:json.students||[];
+
+let districts=[
+...new Set(
+students.map(x=>x.district).filter(Boolean)
+)
+].sort();
+
+districts.forEach(d=>{
+
+let o=document.createElement("option");
+o.value=d;
+o.textContent=d;
+
+document.getElementById("district")
+.appendChild(o);
+
+});
+
+render();
+
+}
+
+document.getElementById("district")
+.onchange=e=>{
+
+selectedDistrict=e.target.value;
+currentPage=1;
+render();
+
+};
+
+document.getElementById("search")
+.oninput=e=>{
+
+search=e.target.value.toLowerCase().trim();
+currentPage=1;
+render();
+
+};
+
+document.getElementById("prev").onclick=()=>{
+
+if(currentPage>1){
+currentPage--;
+render();
+}
+
+};
+
+document.getElementById("next").onclick=()=>{
+
+let pages=Math.ceil(groupInstitutions().length/SIZE);
+
+if(currentPage<pages){
+currentPage++;
+render();
+}
+
+};
+
+
+document.getElementById("pdf").onclick=()=>{
+
+let list=groupInstitutions();
+
+let start=(currentPage-1)*SIZE;
+
+let current=list.slice(start,start+SIZE);
+
+if(!current.length){
+alert("No data.");
+return;
+}
+
+const {jsPDF}=window.jspdf;
+
+const doc=new jsPDF({
+orientation:"portrait",
+unit:"mm",
+format:"a4"
+});
+
+let w=doc.internal.pageSize.getWidth();
+let h=doc.internal.pageSize.getHeight();
+
+let pages=Math.ceil(list.length/SIZE);
+
+doc.setFillColor(248,248,250);
+doc.rect(0,0,w,34,"F");
+
+doc.setFont("helvetica","bold");
+doc.setFontSize(18);
+doc.setTextColor(17,17,17);
+
+doc.text("CTGBoardRanking",15,14);
+
+doc.setFont("helvetica","normal");
+doc.setFontSize(8);
+doc.setTextColor(100,100,105);
+
+doc.text(
+"Unofficial • Education Data & Statistics",
+15,21
+);
+
+doc.text(
+"Generated by Shadat Fatih",
+w-15,14,{align:"right"}
+);
+
+doc.text(
+new Date().toLocaleDateString("en-GB"),
+w-15,21,{align:"right"}
+);
+
+doc.setFont("helvetica","bold");
+doc.setFontSize(15);
+doc.setTextColor(17,17,17);
+
+doc.text(
+"District College Ranking",
+15,44
+);
+
+doc.setFont("helvetica","normal");
+doc.setFontSize(8.5);
+doc.setTextColor(90,90,95);
+
+doc.text(
+`2026 · ${selectedDistrict||"All Districts"} · Page ${currentPage} of ${pages}`,
+15,51
+);
+
+doc.autoTable({
+
+startY:57,
+
+head:[[
+"RANK",
+"COLLEGE / INSTITUTION",
+"STUDENTS",
+"AVG GPA",
+"DISTRICT"
+]],
+
+body:current.map((c,i)=>[
+String(start+i+1),
+c.name,
+String(c.total),
+c.avg.toFixed(2),
+c.district
+]),
+
+theme:"grid",
+
+margin:{
+left:12,
+right:12
+},
+
+styles:{
+fontSize:8,
+cellPadding:3,
+valign:"middle",
+lineColor:[225,225,228],
+textColor:[35,35,38]
+},
+
+headStyles:{
+fillColor:[245,245,247],
+textColor:[70,70,75],
+fontStyle:"bold"
+},
+
+columnStyles:{
+0:{cellWidth:15,halign:"center"},
+1:{cellWidth:75},
+2:{cellWidth:25,halign:"center"},
+3:{cellWidth:25,halign:"center"},
+4:{cellWidth:"auto"}
+},
+
+didDrawPage:()=>{
+
+let p=doc.internal.getNumberOfPages();
+
+doc.setDrawColor(225,225,228);
+
+doc.line(12,h-13,w-12,h-13);
+
+doc.setFontSize(7);
+doc.setTextColor(120,120,125);
+
+doc.text(
+"CTGBoardRanking • Unofficial Education Data",
+12,h-7
+);
+
+doc.text(
+`PDF Page ${p}`,
+w-12,h-7,{align:"right"}
+);
+
+}
+
+});
+
+let safe=(selectedDistrict||"All-Districts")
+.replace(/[^a-z0-9]+/gi,"-")
+.toLowerCase();
+
+doc.save(
+`CTGBoardRanking-District-College-${safe}-Page-${currentPage}.pdf`
+);
+
+};
+
+load();
+
+</script>
+
+</body>
+</html>
