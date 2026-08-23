@@ -48,10 +48,10 @@ ROLL_RANGES = {
 # COLLECTION SETTINGS
 # ============================================================
 
-BATCH_SIZE = 500
+BATCH_SIZE = 10000
 
-# Save every 500 successful students
-SAVE_EVERY = 500
+# Save every 600 successful students
+SAVE_EVERY = 600
 
 MIN_DELAY = 0.1
 MAX_DELAY = 0.2
