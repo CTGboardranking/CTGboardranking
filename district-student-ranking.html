@@ -165,6 +165,14 @@ select,
 }
 
 
+select:focus,
+.search:focus{
+
+    border-color:var(--blue);
+
+}
+
+
 /* =========================================================
    GROUPS
 ========================================================= */
@@ -180,6 +188,13 @@ select,
     margin:25px 0;
 
     padding-bottom:4px;
+
+}
+
+
+.groups::-webkit-scrollbar{
+
+    height:4px;
 
 }
 
@@ -253,10 +268,6 @@ select,
 }
 
 
-/* =========================================================
-   PDF BUTTON
-========================================================= */
-
 .pdf-btn{
 
     border:0;
@@ -280,9 +291,18 @@ select,
 }
 
 
+.pdf-btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+
 .pdf-btn:disabled{
 
     opacity:.5;
+
+    cursor:not-allowed;
 
 }
 
@@ -357,8 +377,23 @@ select,
 
     border-top:1px solid var(--border);
 
+    transition:
+        background .2s ease,
+        transform .2s ease;
+
 }
 
+
+.row:hover{
+
+    background:rgba(0,113,227,.025);
+
+}
+
+
+/* =========================================================
+   RANK
+========================================================= */
 
 .rank{
 
@@ -369,7 +404,66 @@ select,
 }
 
 
-.name strong,
+/* =========================================================
+   STUDENT
+========================================================= */
+
+.name strong{
+
+    display:block;
+
+    font-size:12px;
+
+    overflow-wrap:anywhere;
+
+}
+
+
+.name span{
+
+    display:block;
+
+    font-size:9px;
+
+    color:var(--muted);
+
+    margin-top:4px;
+
+}
+
+
+/* =========================================================
+   GPA
+========================================================= */
+
+.gpa strong{
+
+    font-size:14px;
+
+    font-weight:800;
+
+}
+
+
+/* =========================================================
+   TOTAL SCORE
+========================================================= */
+
+.marks strong{
+
+    font-size:14px;
+
+    font-weight:800;
+
+    color:var(--blue);
+
+}
+
+
+/* =========================================================
+   INSTITUTION
+========================================================= */
+
 .institute strong{
 
     display:block;
@@ -381,7 +475,6 @@ select,
 }
 
 
-.name span,
 .institute span{
 
     display:block;
@@ -395,19 +488,13 @@ select,
 }
 
 
-.gpa strong,
-.marks strong{
+/* =========================================================
+   MOBILE INSTITUTION
+========================================================= */
 
-    font-size:14px;
+.mobile-institute{
 
-    font-weight:800;
-
-}
-
-
-.marks strong{
-
-    color:var(--blue);
+    display:none;
 
 }
 
@@ -467,6 +554,79 @@ select,
 
     opacity:.4;
 
+    cursor:not-allowed;
+
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+body.dark .card{
+
+    background:rgba(30,30,32,.85);
+
+}
+
+
+body.dark select,
+body.dark .search{
+
+    background:#1c1c1e;
+
+    color:var(--text);
+
+}
+
+
+body.dark .group{
+
+    background:#1c1c1e;
+
+    color:var(--text);
+
+}
+
+
+body.dark .group.active{
+
+    background:white;
+
+    color:#111;
+
+}
+
+
+body.dark .table{
+
+    background:rgba(28,28,30,.9);
+
+}
+
+
+body.dark .header{
+
+    background:#242426;
+
+}
+
+
+body.dark .pdf-btn{
+
+    background:white;
+
+    color:#111;
+
+}
+
+
+body.dark .pagination button{
+
+    background:#1c1c1e;
+
+    color:var(--text);
+
 }
 
 
@@ -506,11 +666,14 @@ select,
     }
 
 
-    .header,
-    .row{
+    /* ---------------------------------------------
+       MOBILE TABLE
+    --------------------------------------------- */
+
+    .header{
 
         grid-template-columns:
-            35px
+            38px
             minmax(120px,1fr)
             55px
             70px;
@@ -522,6 +685,25 @@ select,
     }
 
 
+    .row{
+
+        grid-template-columns:
+            38px
+            minmax(120px,1fr)
+            55px
+            70px;
+
+        gap:7px;
+
+        padding:13px 10px 0;
+
+        align-items:start;
+
+    }
+
+
+    /* Hide desktop institution column */
+
     .header div:nth-child(5){
 
         display:none;
@@ -529,15 +711,20 @@ select,
     }
 
 
-    .institute{
+    .row > .institute{
 
-        grid-column:2 / 5;
+        display:none;
 
-        border-top:1px solid var(--border);
+    }
 
-        padding-top:8px;
 
-        margin-top:2px;
+    /* ---------------------------------------------
+       STUDENT NAME
+    --------------------------------------------- */
+
+    .name{
+
+        min-width:0;
 
     }
 
@@ -545,6 +732,8 @@ select,
     .name strong{
 
         font-size:11px;
+
+        line-height:1.35;
 
     }
 
@@ -556,7 +745,21 @@ select,
     }
 
 
-    .gpa strong,
+    /* ---------------------------------------------
+       GPA
+    --------------------------------------------- */
+
+    .gpa strong{
+
+        font-size:11px;
+
+    }
+
+
+    /* ---------------------------------------------
+       TOTAL SCORE
+    --------------------------------------------- */
+
     .marks strong{
 
         font-size:11px;
@@ -564,9 +767,144 @@ select,
     }
 
 
-    .institute strong{
+    /* ---------------------------------------------
+       MOBILE INSTITUTION ROW
+    --------------------------------------------- */
+
+    .mobile-institute{
+
+        display:block;
+
+        grid-column:2 / 5;
+
+        width:100%;
+
+        box-sizing:border-box;
+
+        border-top:1px solid var(--border);
+
+        padding:10px 0 13px;
+
+        margin-top:11px;
+
+    }
+
+
+    .mobile-institute strong{
+
+        display:block;
 
         font-size:10px;
+
+        line-height:1.35;
+
+        overflow-wrap:anywhere;
+
+    }
+
+
+    .mobile-institute span{
+
+        display:block;
+
+        font-size:8px;
+
+        color:var(--muted);
+
+        margin-top:4px;
+
+    }
+
+
+    .rank{
+
+        font-size:11px;
+
+        padding-top:2px;
+
+    }
+
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media(max-width:390px){
+
+    .header{
+
+        grid-template-columns:
+            32px
+            minmax(105px,1fr)
+            48px
+            60px;
+
+    }
+
+
+    .row{
+
+        grid-template-columns:
+            32px
+            minmax(105px,1fr)
+            48px
+            60px;
+
+    }
+
+
+    .name strong{
+
+        font-size:10px;
+
+    }
+
+
+    .marks strong,
+    .gpa strong{
+
+        font-size:10px;
+
+    }
+
+}
+
+
+/* =========================================================
+   SCROLL ANIMATION
+========================================================= */
+
+.row{
+
+    animation:
+        studentRowReveal
+        .45s
+        cubic-bezier(.2,.8,.2,1)
+        both;
+
+}
+
+
+@keyframes studentRowReveal{
+
+    from{
+
+        opacity:0;
+
+        transform:
+            translateY(8px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+            translateY(0);
 
     }
 
@@ -586,8 +924,7 @@ select,
 
 <header class="navbar">
 
-<a href="index.html"
-   class="logo">
+<a href="index.html" class="logo">
 
 <span class="logo-mark">
 C
@@ -629,14 +966,16 @@ Thana
 
 
 <button
-    class="theme-btn"
-    id="themeBtn">
+class="theme-btn"
+id="themeBtn"
+type="button">
 
 ◐
 
 </button>
 
 </header>
+
 
 
 <!-- =====================================================
@@ -674,9 +1013,11 @@ Student Ranking.
 
 <p class="hero-text">
 
-Explore student performance by district and group.
+Explore student performance by district and
+academic group.
 
 </p>
+
 
 
 <!-- =====================================================
@@ -726,6 +1067,7 @@ ACADEMIC YEAR
 </div>
 
 
+
 <!-- =====================================================
      GROUPS
 ===================================================== -->
@@ -734,8 +1076,8 @@ ACADEMIC YEAR
 
 
 <button
-    class="group active"
-    data-group="All">
+class="group active"
+data-group="All">
 
 All
 
@@ -743,8 +1085,8 @@ All
 
 
 <button
-    class="group"
-    data-group="Science">
+class="group"
+data-group="Science">
 
 🔬 Science
 
@@ -752,8 +1094,8 @@ All
 
 
 <button
-    class="group"
-    data-group="Business Studies">
+class="group"
+data-group="Business Studies">
 
 💼 Business Studies
 
@@ -761,8 +1103,8 @@ All
 
 
 <button
-    class="group"
-    data-group="Humanities">
+class="group"
+data-group="Humanities">
 
 🎓 Humanities
 
@@ -770,8 +1112,8 @@ All
 
 
 <button
-    class="group"
-    data-group="Science Irregular">
+class="group"
+data-group="Science Irregular">
 
 📚 Science Irregular
 
@@ -781,12 +1123,12 @@ All
 </div>
 
 
+
 <!-- =====================================================
      TITLE
 ===================================================== -->
 
 <div class="title-row">
-
 
 <div>
 
@@ -808,15 +1150,15 @@ All District Students
 
 
 <button
-    class="pdf-btn"
-    id="pdfBtn">
+class="pdf-btn"
+id="pdfBtn">
 
 ↓ Download PDF
 
 </button>
 
-
 </div>
+
 
 
 <!-- =====================================================
@@ -824,11 +1166,12 @@ All District Students
 ===================================================== -->
 
 <input
-    id="search"
-    class="search"
-    type="search"
-    placeholder="Search student, roll or institution..."
-    autocomplete="off">
+id="search"
+class="search"
+type="search"
+placeholder="Search student, roll or institution..."
+autocomplete="off">
+
 
 
 <!-- =====================================================
@@ -866,64 +1209,53 @@ Institution
 <div id="rows">
 
 <div class="message">
-
 Loading students...
-
 </div>
 
 </div>
 
 
 <div
-    id="empty"
-    class="message"
-    style="display:none">
+id="empty"
+class="message"
+style="display:none">
 
 No student found.
 
 </div>
 
 
-<!-- =====================================================
-     PAGINATION
-===================================================== -->
+
+<!-- PAGINATION -->
 
 <div
-    class="pagination"
-    id="pagination"
-    style="display:none">
-
+class="pagination"
+id="pagination"
+style="display:none">
 
 <button id="prev">
-
 ← Previous
-
 </button>
 
 
 <span id="pageInfo">
-
 Page 1
-
 </span>
 
 
 <button id="next">
-
 Next →
-
 </button>
 
-
 </div>
 
 
 </div>
-
 
 </section>
 
 </main>
+
 
 
 <!-- =====================================================
@@ -933,7 +1265,6 @@ Next →
 <footer>
 
 <div class="footer-main">
-
 
 <div>
 
@@ -954,7 +1285,6 @@ Chattogram Board Education Rankings.
 
 </div>
 
-
 </div>
 
 
@@ -973,6 +1303,11 @@ Education Data & Statistics
 </footer>
 
 
+
+<!-- =====================================================
+     SCRIPT
+===================================================== -->
+
 <script src="script.js"></script>
 
 
@@ -981,14 +1316,26 @@ Education Data & Statistics
 "use strict";
 
 
-/* =====================================================
-   DATA
-===================================================== */
+/* =========================================================
+   DATA SOURCE
+========================================================= */
 
 const DATA_URL =
-    "scraper/students.json?v=" +
-    Date.now();
+    "scraper/students.json";
 
+
+/*
+   Collector নতুন JSON আপডেট করলে
+   এই page আবার fetch করবে।
+*/
+
+const AUTO_REFRESH_TIME =
+    60000;
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
 
 const PAGE_SIZE = 100;
 
@@ -1004,20 +1351,16 @@ let search = "";
 let page = 1;
 
 
-/* =====================================================
+/* =========================================================
    ELEMENTS
-===================================================== */
+========================================================= */
 
 const rows =
-    document.getElementById(
-        "rows"
-    );
+    document.getElementById("rows");
 
 
 const empty =
-    document.getElementById(
-        "empty"
-    );
+    document.getElementById("empty");
 
 
 const districtSelect =
@@ -1050,9 +1393,15 @@ const title =
     );
 
 
-/* =====================================================
+const info =
+    document.getElementById(
+        "info"
+    );
+
+
+/* =========================================================
    NORMALIZE TEXT
-===================================================== */
+========================================================= */
 
 function norm(value){
 
@@ -1065,16 +1414,16 @@ function norm(value){
 }
 
 
-/* =====================================================
+/* =========================================================
    NUMBER
-===================================================== */
+========================================================= */
 
 function numberValue(value){
 
     if(
-        value === undefined ||
         value === null ||
-        String(value).trim() === ""
+        value === undefined ||
+        value === ""
     ){
 
         return null;
@@ -1085,9 +1434,9 @@ function numberValue(value){
     const n =
         Number(
             String(value)
-                .replace(/,/g,"")
-                .replace(/%/g,"")
-                .trim()
+            .replace(/,/g,"")
+            .replace(/%/g,"")
+            .trim()
         );
 
 
@@ -1098,104 +1447,101 @@ function numberValue(value){
 }
 
 
-/* =====================================================
-   TOTAL SCORE
-=====================================================
+/* =========================================================
+   GET STUDENT NAME
+========================================================= */
 
-   Priority:
+function studentName(s){
 
-   1. score
-   2. total_score
-   3. totalScore
-   4. total_marks
-   5. totalMarks
-   6. total_mark
-   7. totalMark
-   8. totalMarksObtained
-
-===================================================== */
-
-function totalScore(student){
-
-    const values = [
-
-        student.score,
-
-        student.total_score,
-
-        student.totalScore,
-
-        student.total_marks,
-
-        student.totalMarks,
-
-        student.total_mark,
-
-        student.totalMark,
-
-        student.totalMarksObtained
-
-    ];
-
-
-    for(
-        const value of values
-    ){
-
-        const number =
-            numberValue(value);
-
-
-        if(
-            number !== null
-        ){
-
-            return number;
-
-        }
-
-    }
-
-
-    return 0;
+    return (
+        s.name ??
+        s.student_name ??
+        s.studentName ??
+        s.student ??
+        "Unknown Student"
+    );
 
 }
 
 
-/* =====================================================
-   GPA
-===================================================== */
+/* =========================================================
+   GET ROLL
+========================================================= */
 
-function gpaValue(student){
+function studentRoll(s){
 
-    const values = [
+    return (
+        s.roll ??
+        s.roll_no ??
+        s.rollNo ??
+        s.student_roll ??
+        "—"
+    );
 
-        student.gpa,
+}
 
-        student.GPA,
 
-        student.gpa_point,
+/* =========================================================
+   GET GPA
+========================================================= */
 
-        student.gpaPoint,
+function studentGPA(s){
 
-        student.grade_point
+    return (
+        s.gpa ??
+        s.GPA ??
+        s.grade_point ??
+        s.gradePoint ??
+        "—"
+    );
+
+}
+
+
+/* =========================================================
+   GET TOTAL SCORE
+========================================================= */
+
+function totalScore(s){
+
+    const possible = [
+
+        s.total_score,
+
+        s.totalScore,
+
+        s.score,
+
+        s.total_marks,
+
+        s.totalMarks,
+
+        s.total_mark,
+
+        s.totalMark,
+
+        s.total_marks_obtained,
+
+        s.totalMarksObtained,
+
+        s.marks,
+
+        s.total
 
     ];
 
 
     for(
-        const value of values
+        const value of possible
     ){
 
-        const number =
+        const n =
             numberValue(value);
 
 
-        if(
-            number !== null
-        ){
+        if(n !== null){
 
-            return number;
+            return n;
 
         }
 
@@ -1207,104 +1553,281 @@ function gpaValue(student){
 }
 
 
-/* =====================================================
-   STUDENT NAME
-===================================================== */
+/* =========================================================
+   GET INSTITUTION
+========================================================= */
 
-function studentName(student){
+function institutionName(s){
 
-    return String(
+    return (
 
-        student.name ??
-        student.student_name ??
-        student.studentName ??
-        student.student ??
-        "Unknown Student"
+        s.institute ??
 
-    ).trim();
+        s.institution ??
 
-}
+        s.institution_name ??
 
+        s.institutionName ??
 
-/* =====================================================
-   ROLL
-===================================================== */
+        s.institute_name ??
 
-function studentRoll(student){
-
-    return String(
-
-        student.roll ??
-        student.roll_no ??
-        student.rollNo ??
-        student.student_roll ??
-        "—"
-
-    ).trim();
-
-}
-
-
-/* =====================================================
-   INSTITUTION
-===================================================== */
-
-function institutionName(student){
-
-    return String(
-
-        student.institute ??
-        student.institution ??
-        student.institution_name ??
-        student.institute_name ??
         "Unknown Institution"
 
-    ).trim();
+    );
 
 }
 
 
-/* =====================================================
-   DISTRICT
-===================================================== */
+/* =========================================================
+   GET EIIN
+========================================================= */
 
-function districtName(student){
+function institutionEIIN(s){
 
-    return String(
+    return (
 
-        student.district ??
-        student.district_name ??
+        s.eiin ??
+
+        s.EIIN ??
+
+        s.institution_eiin ??
+
+        s.institute_eiin ??
+
         ""
 
-    ).trim();
+    );
 
 }
 
 
-/* =====================================================
-   GROUP
-===================================================== */
+/* =========================================================
+   GET DISTRICT
+========================================================= */
 
-function groupName(student){
+function districtName(s){
 
-    return String(
+    return (
 
-        student.group ??
-        student.group_name ??
+        s.district ??
+
+        s.district_name ??
+
+        s.districtName ??
+
+        s.zila ??
+
         ""
 
-    ).trim();
+    );
 
 }
 
 
-/* =====================================================
+/* =========================================================
+   GET GROUP
+========================================================= */
+
+function groupName(s){
+
+    return (
+
+        s.group ??
+
+        s.academic_group ??
+
+        s.academicGroup ??
+
+        s.group_name ??
+
+        ""
+
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function esc(value){
+
+    return String(
+        value ?? ""
+    )
+
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+
+    .replace(
+        /</g,
+        "&lt;"
+    )
+
+    .replace(
+        />/g,
+        "&gt;"
+    )
+
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =========================================================
+   BUILD DISTRICT LIST
+========================================================= */
+
+function buildDistrictList(){
+
+    const current =
+        districtSelect.value;
+
+
+    const districtMap =
+        new Map();
+
+
+    data.forEach(
+        function(student){
+
+            const d =
+                String(
+                    districtName(student)
+                ).trim();
+
+
+            if(!d){
+                return;
+            }
+
+
+            const key =
+                norm(d);
+
+
+            if(
+                !districtMap.has(key)
+            ){
+
+                districtMap.set(
+                    key,
+                    d
+                );
+
+            }
+
+        }
+    );
+
+
+    const districts =
+        Array.from(
+            districtMap.values()
+        )
+        .sort(
+            function(a,b){
+
+                return a.localeCompare(
+                    b,
+                    "en",
+                    {
+                        sensitivity:"base"
+                    }
+                );
+
+            }
+        );
+
+
+    districtSelect.innerHTML = "";
+
+
+    const allOption =
+        document.createElement(
+            "option"
+        );
+
+
+    allOption.value = "";
+
+    allOption.textContent =
+        `All Districts (${districts.length})`;
+
+
+    districtSelect.appendChild(
+        allOption
+    );
+
+
+    districts.forEach(
+        function(d){
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value = d;
+
+            option.textContent = d;
+
+
+            districtSelect.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    /*
+       আগের selected district
+       থাকলে আবার সেট করা হবে।
+    */
+
+    if(
+        districts.some(
+            d =>
+                norm(d) ===
+                norm(current)
+        )
+    ){
+
+        districtSelect.value =
+            current;
+
+    }
+
+    else{
+
+        districtSelect.value =
+            "";
+
+    }
+
+}
+
+
+/* =========================================================
    FILTER + RANK
-===================================================== */
+========================================================= */
 
 function filtered(){
 
-    return [...data]
+    return data
 
     .filter(
         function(student){
@@ -1349,11 +1872,13 @@ function filtered(){
 
                     institutionName(student),
 
+                    institutionEIIN(student),
+
                     districtName(student),
 
                     groupName(student),
 
-                    gpaValue(student),
+                    studentGPA(student),
 
                     totalScore(student)
 
@@ -1378,72 +1903,77 @@ function filtered(){
         }
     )
 
-
-    /* =================================================
-       RANKING
-
+    /*
        PRIMARY:
-       TOTAL SCORE DESC
+       TOTAL SCORE
 
        SECONDARY:
-       GPA DESC
+       GPA
 
        TERTIARY:
-       ROLL ASC
-    ================================================= */
+       Roll
+    */
 
     .sort(
         function(a,b){
 
             const scoreA =
-                totalScore(a);
+                totalScore(a) ?? -1;
 
 
             const scoreB =
-                totalScore(b);
+                totalScore(b) ?? -1;
 
 
             if(
                 scoreB !== scoreA
             ){
 
-                return scoreB - scoreA;
+                return (
+                    scoreB -
+                    scoreA
+                );
 
             }
 
 
             const gpaA =
-                gpaValue(a) ?? 0;
+                numberValue(
+                    studentGPA(a)
+                ) ?? -1;
 
 
             const gpaB =
-                gpaValue(b) ?? 0;
+                numberValue(
+                    studentGPA(b)
+                ) ?? -1;
 
 
             if(
                 gpaB !== gpaA
             ){
 
-                return gpaB - gpaA;
+                return (
+                    gpaB -
+                    gpaA
+                );
 
             }
 
 
             const rollA =
-                studentRoll(a);
+                numberValue(
+                    studentRoll(a)
+                ) ?? 999999999;
 
 
             const rollB =
-                studentRoll(b);
+                numberValue(
+                    studentRoll(b)
+                ) ?? 999999999;
 
 
-            return rollA.localeCompare(
-                rollB,
-                undefined,
-                {
-                    numeric:true
-                }
-            );
+            return rollA - rollB;
 
         }
     );
@@ -1451,9 +1981,9 @@ function filtered(){
 }
 
 
-/* =====================================================
+/* =========================================================
    RENDER
-===================================================== */
+========================================================= */
 
 function render(){
 
@@ -1475,6 +2005,13 @@ function render(){
 
         page =
             totalPages;
+
+    }
+
+
+    if(page < 1){
+
+        page = 1;
 
     }
 
@@ -1528,37 +2065,46 @@ function render(){
 
 
             const gpa =
-                gpaValue(student);
+                studentGPA(student);
+
+
+            const name =
+                studentName(student);
+
+
+            const roll =
+                studentRoll(student);
+
+
+            const institution =
+                institutionName(student);
+
+
+            const eiin =
+                institutionEIIN(student);
+
+
+            const districtValue =
+                districtName(student);
 
 
             row.innerHTML = `
 
                 <div class="rank">
-
                     ${String(
                         start + index + 1
                     ).padStart(2,"0")}
-
                 </div>
 
 
                 <div class="name">
 
                     <strong>
-
-                        ${esc(
-                            studentName(student)
-                        )}
-
+                        ${esc(name)}
                     </strong>
 
                     <span>
-
-                        Roll:
-                        ${esc(
-                            studentRoll(student)
-                        )}
-
+                        Roll: ${esc(roll)}
                     </span>
 
                 </div>
@@ -1567,13 +2113,7 @@ function render(){
                 <div class="gpa">
 
                     <strong>
-
-                        ${
-                            gpa !== null
-                            ? esc(gpa)
-                            : "—"
-                        }
-
+                        ${esc(gpa)}
                     </strong>
 
                 </div>
@@ -1582,7 +2122,6 @@ function render(){
                 <div class="marks">
 
                     <strong>
-
                         ${
                             score !== null
                             ? score.toLocaleString(
@@ -1590,7 +2129,6 @@ function render(){
                               )
                             : "—"
                         }
-
                     </strong>
 
                 </div>
@@ -1599,20 +2137,41 @@ function render(){
                 <div class="institute">
 
                     <strong>
-
-                        ${esc(
-                            institutionName(student)
-                        )}
-
+                        ${esc(institution)}
                     </strong>
 
+                    <span>
+                        ${
+                            eiin
+                            ? "EIIN: " +
+                              esc(eiin)
+                            : esc(
+                                districtValue
+                              )
+                        }
+                    </span>
+
+                </div>
+
+
+                <!-- MOBILE INSTITUTION -->
+
+                <div class="mobile-institute">
+
+                    <strong>
+                        🏫 ${esc(institution)}
+                    </strong>
 
                     <span>
-
-                        ${esc(
-                            districtName(student)
-                        )}
-
+                        ${
+                            eiin
+                            ? "EIIN: " +
+                              esc(eiin)
+                            : (
+                                districtValue ||
+                                "Institution"
+                              )
+                        }
                     </span>
 
                 </div>
@@ -1620,15 +2179,17 @@ function render(){
             `;
 
 
-            rows.appendChild(row);
+            rows.appendChild(
+                row
+            );
 
         }
     );
 
 
-    /* =================================================
+    /* =====================================================
        TITLE
-    ================================================= */
+    ===================================================== */
 
     title.textContent =
         district
@@ -1636,81 +2197,40 @@ function render(){
         : "All District Students";
 
 
-    /* =================================================
-       INFO
-    ================================================= */
-
-    const info =
-        document.getElementById(
-            "info"
-        );
-
-
-    if(info){
-
-        info.textContent =
-            `2026 · Chattogram Board · ${
-                district || "All Districts"
-            } · ${
-                group
-            }`;
-
-    }
+    info.textContent =
+        `2026 · Chattogram Board · ${
+            district || "All Districts"
+        } · ${
+            group === "All"
+            ? "All Groups"
+            : group
+        } · ${
+            list.length.toLocaleString(
+                "en-US"
+            )
+        } Students`;
 
 }
 
 
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
+/* =========================================================
+   LOAD DATA
+========================================================= */
 
-function esc(value){
-
-    return String(
-        value ?? ""
-    )
-
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-
-    .replace(
-        /</g,
-        "&lt;"
-    )
-
-    .replace(
-        />/g,
-        "&gt;"
-    )
-
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-
-    .replace(
-        /'/g,
-        "&#039;"
-    );
-
-}
-
-
-/* =====================================================
-   LOAD JSON
-===================================================== */
-
-async function load(){
+async function loadData(
+    silent = false
+){
 
     try{
 
         const response =
             await fetch(
-                DATA_URL,
+                DATA_URL +
+                "?v=" +
+                Date.now(),
                 {
-                    cache:"no-store"
+                    cache:
+                        "no-store"
                 }
             );
 
@@ -1731,11 +2251,14 @@ async function load(){
             await response.json();
 
 
+        let newData;
+
+
         if(
             Array.isArray(json)
         ){
 
-            data =
+            newData =
                 json;
 
         }
@@ -1747,7 +2270,7 @@ async function load(){
             )
         ){
 
-            data =
+            newData =
                 json.students;
 
         }
@@ -1759,7 +2282,7 @@ async function load(){
             )
         ){
 
-            data =
+            newData =
                 json.data;
 
         }
@@ -1771,76 +2294,40 @@ async function load(){
             )
         ){
 
-            data =
+            newData =
                 json.results;
 
         }
 
         else{
 
-            data = [];
+            throw new Error(
+                "Student array not found"
+            );
 
         }
 
 
-        /* =================================================
-           DISTRICTS
-        ================================================= */
+        /*
+           Collector-এর JSON বদলালে
+           automatically data update হবে।
+        */
 
-        const districts =
-            [
-                ...new Set(
-
-                    data
-                        .map(
-                            function(student){
-
-                                return districtName(
-                                    student
-                                );
-
-                            }
-                        )
-
-                        .filter(Boolean)
-
-                )
-            ]
-            .sort(
-                function(a,b){
-
-                    return a.localeCompare(b);
-
-                }
-            );
+        data =
+            newData;
 
 
-        districts.forEach(
-            function(d){
-
-                const option =
-                    document.createElement(
-                        "option"
-                    );
-
-
-                option.value =
-                    d;
-
-
-                option.textContent =
-                    d;
-
-
-                districtSelect.appendChild(
-                    option
-                );
-
-            }
-        );
+        buildDistrictList();
 
 
         render();
+
+
+        console.log(
+            "Student data loaded:",
+            data.length
+        );
+
 
     }
 
@@ -1852,124 +2339,130 @@ async function load(){
         );
 
 
-        rows.innerHTML = `
+        if(!silent){
 
-            <div class="message">
+            rows.innerHTML = `
 
-                Unable to load student data.
+                <div class="message">
 
-                <br>
+                    Unable to load student data.
 
-                <small>
-                    ${esc(
-                        error.message
-                    )}
-                </small>
+                    <br><br>
 
-            </div>
+                    <small>
+                        Please check:
+                        scraper/students.json
+                    </small>
 
-        `;
+                </div>
+
+            `;
+
+        }
 
     }
 
 }
 
 
-/* =====================================================
-   DISTRICT
-===================================================== */
+/* =========================================================
+   DISTRICT CHANGE
+========================================================= */
 
-districtSelect.onchange =
+districtSelect.addEventListener(
+    "change",
     function(){
 
         district =
             districtSelect.value;
 
-
-        page =
-            1;
-
+        page = 1;
 
         render();
 
-    };
+    }
+);
 
 
-/* =====================================================
+/* =========================================================
    SEARCH
-===================================================== */
+========================================================= */
 
-searchBox.oninput =
+searchBox.addEventListener(
+    "input",
     function(){
 
         search =
             searchBox.value
-                .toLowerCase()
-                .trim();
+            .toLowerCase()
+            .trim();
 
 
-        page =
-            1;
-
+        page = 1;
 
         render();
 
-    };
+    }
+);
 
 
-/* =====================================================
-   GROUP
-===================================================== */
+/* =========================================================
+   GROUP BUTTONS
+========================================================= */
 
 document
-    .querySelectorAll(".group")
-    .forEach(
-        function(button){
+.querySelectorAll(".group")
+.forEach(
+    function(button){
 
-            button.onclick =
-                function(){
+        button.addEventListener(
+            "click",
+            function(){
 
-                    group =
-                        button.dataset.group;
-
-
-                    page =
-                        1;
+                group =
+                    button.dataset.group;
 
 
-                    document
-                        .querySelectorAll(".group")
-                        .forEach(
-                            function(item){
+                page = 1;
 
-                                item.classList.remove(
-                                    "active"
-                                );
 
-                            }
+                document
+                .querySelectorAll(
+                    ".group"
+                )
+                .forEach(
+                    function(item){
+
+                        item.classList.remove(
+                            "active"
                         );
 
-
-                    button.classList.add(
-                        "active"
-                    );
+                    }
+                );
 
 
-                    render();
-
-                };
-
-        }
-    );
+                button.classList.add(
+                    "active"
+                );
 
 
-/* =====================================================
+                render();
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
    PREVIOUS
-===================================================== */
+========================================================= */
 
 document
-    .getElementById("prev")
-    .onclick =
+.getElementById("prev")
+.addEventListener(
+    "click",
     function(){
 
         if(page > 1){
@@ -1980,25 +2473,24 @@ document
 
 
             window.scrollTo({
-
                 top:450,
-
                 behavior:"smooth"
-
             });
 
         }
 
-    };
+    }
+);
 
 
-/* =====================================================
+/* =========================================================
    NEXT
-===================================================== */
+========================================================= */
 
 document
-    .getElementById("next")
-    .onclick =
+.getElementById("next")
+.addEventListener(
+    "click",
     function(){
 
         const pages =
@@ -2018,52 +2510,45 @@ document
 
 
             window.scrollTo({
-
                 top:450,
-
                 behavior:"smooth"
-
             });
 
         }
 
-    };
+    }
+);
 
 
-/* =====================================================
+/* =========================================================
    PDF DATE
-===================================================== */
+========================================================= */
 
 function pdfDate(){
 
     return new Date()
-        .toLocaleString(
-            "en-GB",
-            {
-
-                day:"2-digit",
-
-                month:"short",
-
-                year:"numeric",
-
-                hour:"2-digit",
-
-                minute:"2-digit"
-
-            }
-        );
+    .toLocaleString(
+        "en-GB",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric",
+            hour:"2-digit",
+            minute:"2-digit"
+        }
+    );
 
 }
 
 
-/* =====================================================
+/* =========================================================
    PDF
-===================================================== */
+========================================================= */
 
 document
-    .getElementById("pdfBtn")
-    .onclick =
+.getElementById("pdfBtn")
+.addEventListener(
+    "click",
     function(){
 
         const list =
@@ -2083,70 +2568,38 @@ document
         }
 
 
-        const start =
-            (page - 1) *
-            PAGE_SIZE;
-
-
-        const current =
-            list.slice(
-                start,
-                start + PAGE_SIZE
-            );
-
-
-        if(
-            !current.length
-        ){
-
-            alert(
-                "No students available on this page."
-            );
-
-            return;
-
-        }
-
-
         const {
             jsPDF
         } =
             window.jspdf;
 
 
+        /*
+           পুরো filtered list PDF-এ যাবে।
+           শুধু বর্তমান page নয়।
+        */
+
         const doc =
             new jsPDF({
-
-                orientation:"portrait",
-
+                orientation:
+                    "portrait",
                 unit:"mm",
-
                 format:"a4"
-
             });
 
 
         const w =
-            doc.internal
-                .pageSize
-                .getWidth();
+            doc.internal.pageSize
+            .getWidth();
 
 
         const h =
-            doc.internal
-                .pageSize
-                .getHeight();
-
-
-        const totalPages =
-            Math.ceil(
-                list.length /
-                PAGE_SIZE
-            );
+            doc.internal.pageSize
+            .getHeight();
 
 
         /* =================================================
-           PDF HEADER
+           HEADER
         ================================================= */
 
         doc.setFillColor(
@@ -2215,6 +2668,13 @@ document
         );
 
 
+        doc.setTextColor(
+            100,
+            100,
+            105
+        );
+
+
         doc.text(
             "Generated by Shadat Fatih",
             w - 15,
@@ -2236,7 +2696,7 @@ document
 
 
         /* =================================================
-           PDF TITLE
+           TITLE
         ================================================= */
 
         doc.setTextColor(
@@ -2283,13 +2743,18 @@ document
 
 
         doc.text(
-
-            `${document.getElementById("yearSelect").value} · Chattogram Board · ${district || "All Districts"} · ${group} · Page ${page} of ${totalPages}`,
-
+            `2026 · Chattogram Board · ${
+                district ||
+                "All Districts"
+            } · ${
+                group === "All"
+                ? "All Groups"
+                : group
+            } · ${
+                list.length
+            } Students`,
             15,
-
             51
-
         );
 
 
@@ -2298,7 +2763,7 @@ document
         ================================================= */
 
         const body =
-            current.map(
+            list.map(
                 function(student,index){
 
                     const score =
@@ -2307,8 +2772,14 @@ document
                         );
 
 
-                    const gpa =
-                        gpaValue(
+                    const eiin =
+                        institutionEIIN(
+                            student
+                        );
+
+
+                    const institution =
+                        institutionName(
                             student
                         );
 
@@ -2316,24 +2787,34 @@ document
                     return [
 
                         String(
-                            start + index + 1
+                            index + 1
                         ),
 
-                        `${studentName(student)}
-Roll: ${studentRoll(student)}`,
+                        `${studentName(
+                            student
+                        )}\nRoll: ${studentRoll(
+                            student
+                        )}`,
 
-                        gpa !== null
-                            ? String(gpa)
-                            : "—",
+                        String(
+                            studentGPA(
+                                student
+                            )
+                        ),
 
                         score !== null
-                            ? score.toLocaleString(
-                                "en-US"
-                              )
-                            : "—",
+                        ? score.toLocaleString(
+                            "en-US"
+                          )
+                        : "—",
 
-                        `${institutionName(student)}
-${districtName(student)}`
+                        `${institution}\n${
+                            eiin
+                            ? "EIIN: " + eiin
+                            : districtName(
+                                student
+                              )
+                        }`
 
                     ];
 
@@ -2342,8 +2823,7 @@ ${districtName(student)}`
 
 
         /* =================================================
-           AUTO TABLE
-           SAME PREVIOUS PDF STYLE
+           AUTOTABLE
         ================================================= */
 
         doc.autoTable({
@@ -2376,6 +2856,7 @@ ${districtName(student)}`
 
             },
 
+
             styles:{
 
                 font:"helvetica",
@@ -2402,6 +2883,7 @@ ${districtName(student)}`
 
             },
 
+
             headStyles:{
 
                 fillColor:[
@@ -2416,51 +2898,41 @@ ${districtName(student)}`
                     75
                 ],
 
-                fontStyle:"bold",
+                fontStyle:
+                    "bold",
 
                 fontSize:7
 
             },
 
+
             columnStyles:{
 
                 0:{
-
                     cellWidth:15,
-
                     halign:"center"
-
                 },
 
                 1:{
-
                     cellWidth:57
-
                 },
 
                 2:{
-
                     cellWidth:20,
-
                     halign:"center"
-
                 },
 
                 3:{
-
                     cellWidth:25,
-
                     halign:"center"
-
                 },
 
                 4:{
-
                     cellWidth:"auto"
-
                 }
 
             },
+
 
             alternateRowStyles:{
 
@@ -2473,16 +2945,12 @@ ${districtName(student)}`
             },
 
 
-            /* =================================================
-               PDF FOOTER
-            ================================================= */
-
             didDrawPage:
                 function(){
 
-                    const p =
+                    const currentPage =
                         doc.internal
-                            .getNumberOfPages();
+                        .getNumberOfPages();
 
 
                     doc.setDrawColor(
@@ -2513,28 +2981,19 @@ ${districtName(student)}`
 
 
                     doc.text(
-
                         "CTGBoardRanking • Unofficial Education Data",
-
                         12,
-
                         h - 7
-
                     );
 
 
                     doc.text(
-
-                        `PDF Page ${p}`,
-
+                        `PDF Page ${currentPage}`,
                         w - 12,
-
                         h - 7,
-
                         {
                             align:"right"
                         }
-
                     );
 
                 }
@@ -2546,34 +3005,65 @@ ${districtName(student)}`
            FILE NAME
         ================================================= */
 
-        const safe =
+        const safeDistrict =
             (
                 district ||
                 "All-Districts"
             )
-
             .replace(
                 /[^a-z0-9]+/gi,
                 "-"
             )
+            .toLowerCase();
 
+
+        const safeGroup =
+            (
+                group ||
+                "All"
+            )
+            .replace(
+                /[^a-z0-9]+/gi,
+                "-"
+            )
             .toLowerCase();
 
 
         doc.save(
-
-            `CTGBoardRanking-District-Student-${safe}-Page-${page}.pdf`
-
+            `CTGBoardRanking-District-Student-${safeDistrict}-${safeGroup}.pdf`
         );
 
-    };
+    }
+);
 
 
-/* =====================================================
+/* =========================================================
+   AUTO DATA UPDATE
+========================================================= */
+
+/*
+   Collector যদি students.json update করে,
+   page প্রতি 60 সেকেন্ডে নতুন JSON check করবে।
+
+   এতে HTML file edit করার প্রয়োজন নেই।
+*/
+
+setInterval(
+    function(){
+
+        loadData(true);
+
+    },
+    AUTO_REFRESH_TIME
+);
+
+
+/* =========================================================
    START
-===================================================== */
+========================================================= */
 
-load();
+loadData();
+
 
 </script>
 
