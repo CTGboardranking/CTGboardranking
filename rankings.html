@@ -23,6 +23,8 @@
 <link rel="stylesheet"
       href="style.css">
 
+<!-- PDF GENERATOR -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 
@@ -31,63 +33,38 @@
 ========================================================= */
 
 .ranking-hero{
-
     max-width:1100px;
-
     margin:auto;
-
     padding:80px 20px 45px;
-
 }
 
 .back-link{
-
     display:inline-flex;
-
     align-items:center;
-
     gap:7px;
-
     color:var(--muted);
-
     font-size:14px;
-
     margin-bottom:28px;
-
     text-decoration:none;
-
 }
 
 .ranking-hero h1{
-
     font-size:clamp(44px,7vw,72px);
-
     line-height:1;
-
     letter-spacing:-4px;
-
     margin:0;
-
 }
 
 .ranking-hero h1 span{
-
     color:var(--blue);
-
 }
 
 .ranking-hero p{
-
     color:var(--muted);
-
     max-width:700px;
-
     margin-top:20px;
-
     font-size:17px;
-
     line-height:1.7;
-
 }
 
 
@@ -96,77 +73,43 @@
 ========================================================= */
 
 .filters{
-
     max-width:1100px;
-
     margin:auto;
-
     padding:0 20px 35px;
-
 }
 
 .filter-box{
-
     display:grid;
-
-    grid-template-columns:
-        1fr
-        1fr
-        1fr;
-
+    grid-template-columns:1fr 1fr 1fr;
     gap:12px;
-
     padding:15px;
-
     background:rgba(255,255,255,.78);
-
     border:1px solid var(--border);
-
     border-radius:22px;
-
     box-shadow:var(--shadow);
-
 }
 
 .filter-item label{
-
     display:block;
-
     color:var(--muted);
-
     font-size:11px;
-
     font-weight:700;
-
     letter-spacing:1px;
-
     margin-bottom:7px;
-
 }
 
 .filter-item select,
 .search-box input{
-
     width:100%;
-
     box-sizing:border-box;
-
     border:1px solid var(--border);
-
     background:rgba(245,245,247,.8);
-
     color:var(--text);
-
     border-radius:13px;
-
     padding:13px 14px;
-
     font-family:inherit;
-
     font-size:14px;
-
     outline:none;
-
 }
 
 
@@ -175,40 +118,103 @@
 ========================================================= */
 
 .ranking-content{
-
     max-width:1100px;
-
     margin:auto;
-
     padding:20px;
-
 }
 
 .content-heading{
-
     display:flex;
-
     justify-content:space-between;
-
     align-items:end;
-
     margin-bottom:25px;
-
 }
 
 .content-heading h2{
-
     font-size:32px;
-
     margin:5px 0 0;
-
 }
 
 .content-heading p{
-
     color:var(--muted);
+    font-size:13px;
+}
+
+
+/* =========================================================
+   PDF BUTTON
+========================================================= */
+
+.pdf-actions{
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:18px;
+}
+
+.pdf-download-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:9px;
+
+    border:0;
+
+    background:#111827;
+
+    color:#fff;
+
+    padding:12px 18px;
+
+    border-radius:14px;
+
+    font-family:inherit;
 
     font-size:13px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 8px 22px rgba(0,0,0,.12);
+
+    transition:
+        transform .2s ease,
+        opacity .2s ease,
+        box-shadow .2s ease;
+
+}
+
+.pdf-download-btn:hover{
+
+    transform:translateY(-1px);
+
+    box-shadow:
+        0 12px 28px rgba(0,0,0,.16);
+
+}
+
+.pdf-download-btn:active{
+
+    transform:translateY(0);
+
+}
+
+.pdf-download-btn:disabled{
+
+    opacity:.55;
+
+    cursor:not-allowed;
+
+}
+
+.pdf-icon{
+
+    font-size:16px;
 
 }
 
@@ -218,104 +224,61 @@
 ========================================================= */
 
 .podium{
-
     display:grid;
-
-    grid-template-columns:
-        1fr
-        1.15fr
-        1fr;
-
+    grid-template-columns:1fr 1.15fr 1fr;
     gap:14px;
-
     align-items:end;
-
     margin-bottom:30px;
-
 }
 
 .podium-card{
-
     background:rgba(255,255,255,.88);
-
     border:1px solid var(--border);
-
     border-radius:24px;
-
     padding:28px 20px;
-
     text-align:center;
-
     box-shadow:var(--shadow);
-
 }
 
 .podium-card.first{
-
     padding-top:40px;
-
     padding-bottom:40px;
-
     transform:translateY(-12px);
-
 }
 
 .medal{
-
     font-size:40px;
-
 }
 
 .podium-rank{
-
     color:var(--muted);
-
     font-size:11px;
-
     font-weight:700;
-
 }
 
 .podium-card h3{
-
     font-size:16px;
-
     margin:8px 0 4px;
-
     word-break:break-word;
-
 }
 
 .podium-card p{
-
     color:var(--muted);
-
     font-size:12px;
-
 }
 
 .podium-value{
-
     margin-top:18px;
-
     font-size:22px;
-
     font-weight:800;
-
 }
 
 .podium-value small{
-
     display:block;
-
     color:var(--muted);
-
     font-size:10px;
-
     font-weight:500;
-
     margin-top:3px;
-
 }
 
 
@@ -324,17 +287,12 @@
 ========================================================= */
 
 .search-box{
-
     margin-bottom:18px;
-
 }
 
 .search-box input{
-
     background:white;
-
     padding:15px 17px;
-
 }
 
 
@@ -343,120 +301,75 @@
 ========================================================= */
 
 .ranking-table{
-
     background:rgba(255,255,255,.9);
-
     border:1px solid var(--border);
-
     border-radius:24px;
-
     overflow:hidden;
-
     box-shadow:var(--shadow);
-
 }
 
 .table-header,
 .table-row{
-
     display:grid;
-
     grid-template-columns:
         70px
         minmax(250px,1fr)
         180px
         150px;
-
     align-items:center;
-
     gap:10px;
-
 }
 
 .table-header{
-
     padding:17px 24px;
-
     background:rgba(245,245,247,.8);
-
     color:var(--muted);
-
     font-size:10px;
-
     font-weight:700;
-
     letter-spacing:.8px;
-
 }
 
 .table-row{
-
     padding:19px 24px;
-
     border-top:1px solid var(--border);
-
 }
 
 .table-row:hover{
-
     background:rgba(0,113,227,.035);
-
 }
 
 .rank{
-
     font-weight:800;
-
     color:var(--muted);
-
 }
 
 .rank.top{
-
     color:#c68a00;
-
 }
 
 .institution-name strong{
-
     display:block;
-
     font-size:14px;
-
     line-height:1.4;
-
 }
 
 .institution-name span{
-
     display:block;
-
     color:var(--muted);
-
     font-size:11px;
-
     margin-top:3px;
-
 }
 
 .data-value{
-
     font-size:14px;
-
     font-weight:700;
-
 }
 
 .data-label{
-
     display:block;
-
     color:var(--muted);
-
     font-size:10px;
-
     margin-top:3px;
-
 }
 
 
@@ -467,26 +380,18 @@
 .loading-state,
 .empty-state,
 .error-state{
-
     padding:55px 20px;
-
     text-align:center;
-
     color:var(--muted);
-
 }
 
 .empty-state,
 .error-state{
-
     display:none;
-
 }
 
 .error-state{
-
     color:#d93025;
-
 }
 
 
@@ -495,63 +400,37 @@
 ========================================================= */
 
 .pagination{
-
     display:none;
-
     justify-content:center;
-
     align-items:center;
-
     gap:12px;
-
     padding:25px 15px;
-
     border-top:1px solid var(--border);
-
 }
 
 .pagination button{
-
     border:1px solid var(--border);
-
     background:var(--white);
-
     color:var(--text);
-
     padding:10px 18px;
-
     border-radius:12px;
-
     font-family:inherit;
-
     font-size:13px;
-
     font-weight:700;
-
     cursor:pointer;
-
 }
 
 .pagination button:disabled{
-
     opacity:.4;
-
     cursor:not-allowed;
-
 }
 
 .pagination-info{
-
     min-width:110px;
-
     text-align:center;
-
     color:var(--muted);
-
     font-size:13px;
-
     font-weight:700;
-
 }
 
 
@@ -562,128 +441,93 @@
 @media(max-width:800px){
 
     .ranking-hero{
-
         padding-top:60px;
-
     }
 
     .filter-box{
-
         grid-template-columns:1fr;
-
     }
 
     .podium{
-
         grid-template-columns:1fr;
-
     }
 
     .podium-card.first{
-
         order:-1;
-
         transform:none;
-
     }
 
     .content-heading{
-
         display:block;
-
     }
 
     .content-heading p{
-
         margin-top:7px;
+    }
 
+    .pdf-actions{
+        justify-content:stretch;
+    }
+
+    .pdf-download-btn{
+        width:100%;
     }
 
     .ranking-table{
-
         overflow-x:auto;
-
         -webkit-overflow-scrolling:touch;
-
     }
 
     .table-header,
     .table-row{
-
         min-width:520px;
-
         grid-template-columns:
             55px
             minmax(190px,1fr)
             125px
             120px;
-
         gap:8px;
-
     }
 
     .table-header{
-
         padding:15px 14px;
-
         font-size:9px;
-
     }
 
     .table-row{
-
         padding:17px 14px;
-
     }
 
     .institution-name strong{
-
         font-size:12px;
-
     }
 
     .institution-name span{
-
         font-size:10px;
-
     }
 
     .data-value{
-
         font-size:12px;
-
     }
 
     .data-label{
-
         font-size:8px;
-
     }
 
     .pagination{
-
         display:flex;
-
         gap:8px;
-
         padding:20px 10px;
-
     }
 
     .pagination button{
-
         padding:9px 12px;
-
         font-size:12px;
-
     }
 
     .pagination-info{
-
         min-width:80px;
-
         font-size:11px;
-
     }
 
 }
@@ -691,32 +535,22 @@
 @media(max-width:480px){
 
     .ranking-content{
-
         padding:15px;
-
     }
 
     .ranking-hero{
-
         padding-left:15px;
-
         padding-right:15px;
-
     }
 
     .filters{
-
         padding-left:15px;
-
         padding-right:15px;
-
     }
 
     .table-header,
     .table-row{
-
         min-width:500px;
-
     }
 
 }
@@ -922,6 +756,28 @@ Institution Ranking
     Loading...
 
 </p>
+
+</div>
+
+
+<!-- =====================================================
+     PDF DOWNLOAD
+===================================================== -->
+
+<div class="pdf-actions">
+
+<button
+    id="downloadPdfBtn"
+    class="pdf-download-btn"
+    type="button">
+
+    <span class="pdf-icon">↓</span>
+
+    <span>
+        Download This Page as PDF
+    </span>
+
+</button>
 
 </div>
 
@@ -1223,17 +1079,6 @@ Education Data & Statistics
    INSTITUTION RANKING DATA
 ========================================================= */
 
-
-/*
- * IMPORTANT:
- *
- * merge_and_rank.py তৈরি করে:
- *
- * data/institution_ranking.json
- *
- * তাই website সরাসরি ওই file ব্যবহার করছে।
- */
-
 const DATA_URL =
     "data/institution_ranking.json?v=" +
     Date.now();
@@ -1330,6 +1175,11 @@ const paginationInfo =
         "paginationInfo"
     );
 
+const downloadPdfBtn =
+    document.getElementById(
+        "downloadPdfBtn"
+    );
+
 
 /* =========================================================
    NUMBER
@@ -1347,7 +1197,6 @@ function toNumber(value){
 
     }
 
-
     const number =
         Number(
             String(value)
@@ -1355,7 +1204,6 @@ function toNumber(value){
                 .replace(/%/g,"")
                 .trim()
         );
-
 
     return Number.isFinite(number)
         ? number
@@ -1433,20 +1281,17 @@ function normalizeInstitution(item){
             item.total_appeared
         );
 
-
     const passed =
         toNumber(
             item.passed ??
             item.total_passed
         );
 
-
     let passingRate =
         toNumber(
             item.passing_rate ??
             item.pass_rate
         );
-
 
     const gpa5 =
         toNumber(
@@ -1455,12 +1300,6 @@ function normalizeInstitution(item){
             item.total_gpa5 ??
             item.gpa5_count
         );
-
-
-    /*
-     * Calculate passing rate
-     * if it is missing.
-     */
 
     if(
         passingRate === 0 &&
@@ -1474,7 +1313,6 @@ function normalizeInstitution(item){
             ) * 100;
 
     }
-
 
     return {
 
@@ -1533,28 +1371,14 @@ function buildRanking(){
             normalizeInstitution
         );
 
-
-    /*
-     * Remove invalid records
-     */
-
     data =
         data.filter(
             item =>
-
                 item.eiin &&
-
                 item.institution &&
-
                 item.institution !==
                     "Unknown Institution"
-
         );
-
-
-    /*
-     * District filter
-     */
 
     if(
         currentDistrict !==
@@ -1576,16 +1400,10 @@ function buildRanking(){
 
     }
 
-
-    /*
-     * Search
-     */
-
     const search =
         normalizeText(
             currentSearch
         );
-
 
     if(search){
 
@@ -1612,7 +1430,6 @@ function buildRanking(){
 
                         );
 
-
                     return text.includes(
                         search
                     );
@@ -1621,16 +1438,6 @@ function buildRanking(){
             );
 
     }
-
-
-    /*
-     * Ranking:
-     *
-     * 1. GPA-5
-     * 2. Passing Rate
-     * 3. Passed
-     * 4. Appeared
-     */
 
     data.sort(
         (a,b) => {
@@ -1647,7 +1454,6 @@ function buildRanking(){
 
             }
 
-
             if(
                 b.passRate !==
                 a.passRate
@@ -1659,7 +1465,6 @@ function buildRanking(){
                 );
 
             }
-
 
             if(
                 b.passed !==
@@ -1673,7 +1478,6 @@ function buildRanking(){
 
             }
 
-
             return (
                 b.appeared -
                 a.appeared
@@ -1681,11 +1485,6 @@ function buildRanking(){
 
         }
     );
-
-
-    /*
-     * Create ranking number
-     */
 
     data =
         data.map(
@@ -1702,7 +1501,6 @@ function buildRanking(){
 
             }
         );
-
 
     filteredData =
         data;
@@ -1744,29 +1542,23 @@ function populateDistricts(){
                 )
         );
 
-
     groupFilter.innerHTML =
         "";
-
 
     const allOption =
         document.createElement(
             "option"
         );
 
-
     allOption.value =
         "all";
-
 
     allOption.textContent =
         "All Districts";
 
-
     groupFilter.appendChild(
         allOption
     );
-
 
     districts.forEach(
         district => {
@@ -1776,14 +1568,11 @@ function populateDistricts(){
                     "option"
                 );
 
-
             option.value =
                 district;
 
-
             option.textContent =
                 district;
-
 
             groupFilter.appendChild(
                 option
@@ -1791,7 +1580,6 @@ function populateDistricts(){
 
         }
     );
-
 
     groupFilter.value =
         currentDistrict;
@@ -1807,7 +1595,6 @@ function updateTitle(){
 
     rankingTitle.textContent =
         "Institution Rankings";
-
 
     resultInfo.textContent =
 
@@ -1837,9 +1624,6 @@ function updatePodium(){
     const third =
         filteredData[2];
 
-
-    /* FIRST */
-
     document.getElementById(
         "podium1Name"
     ).textContent =
@@ -1847,7 +1631,6 @@ function updatePodium(){
         first
             ? first.institution
             : "—";
-
 
     document.getElementById(
         "podium1District"
@@ -1857,7 +1640,6 @@ function updatePodium(){
             ? first.district
             : "—";
 
-
     document.getElementById(
         "podium1Pass"
     ).textContent =
@@ -1865,9 +1647,6 @@ function updatePodium(){
         first
             ? first.gpa5
             : "—";
-
-
-    /* SECOND */
 
     document.getElementById(
         "podium2Name"
@@ -1877,7 +1656,6 @@ function updatePodium(){
             ? second.institution
             : "—";
 
-
     document.getElementById(
         "podium2District"
     ).textContent =
@@ -1885,7 +1663,6 @@ function updatePodium(){
         second
             ? second.district
             : "—";
-
 
     document.getElementById(
         "podium2Pass"
@@ -1895,9 +1672,6 @@ function updatePodium(){
             ? second.gpa5
             : "—";
 
-
-    /* THIRD */
-
     document.getElementById(
         "podium3Name"
     ).textContent =
@@ -1906,7 +1680,6 @@ function updatePodium(){
             ? third.institution
             : "—";
 
-
     document.getElementById(
         "podium3District"
     ).textContent =
@@ -1914,7 +1687,6 @@ function updatePodium(){
         third
             ? third.district
             : "—";
-
 
     document.getElementById(
         "podium3Pass"
@@ -1936,10 +1708,8 @@ function renderTable(){
     rankingRows.innerHTML =
         "";
 
-
     emptyState.style.display =
         "none";
-
 
     if(
         filteredData.length === 0
@@ -1948,24 +1718,18 @@ function renderTable(){
         emptyState.style.display =
             "block";
 
-
         pagination.style.display =
             "none";
-
 
         return;
 
     }
 
-
     const totalPages =
         Math.ceil(
-
             filteredData.length /
             PAGE_SIZE
-
         );
-
 
     if(
         currentPage >
@@ -1977,7 +1741,6 @@ function renderTable(){
 
     }
 
-
     const start =
         (
             currentPage -
@@ -1985,24 +1748,18 @@ function renderTable(){
         ) *
         PAGE_SIZE;
 
-
     const end =
         Math.min(
-
             start +
             PAGE_SIZE,
-
             filteredData.length
-
         );
-
 
     const pageData =
         filteredData.slice(
             start,
             end
         );
-
 
     pageData.forEach(
         (item,index) => {
@@ -2012,16 +1769,13 @@ function renderTable(){
                 index +
                 1;
 
-
             const row =
                 document.createElement(
                     "div"
                 );
 
-
             row.className =
                 "table-row";
-
 
             row.innerHTML = `
 
@@ -2040,15 +1794,12 @@ function renderTable(){
 
                 </div>
 
-
                 <div class="institution-name">
 
                     <strong>
-
                         ${escapeHTML(
                             item.institution
                         )}
-
                     </strong>
 
                     <span>
@@ -2077,44 +1828,33 @@ function renderTable(){
 
                 </div>
 
-
                 <div class="data-column">
 
                     <span class="data-value">
-
                         ${item.gpa5}
-
                     </span>
 
                     <span class="data-label">
-
                         TOTAL GPA-5
-
                     </span>
 
                 </div>
 
-
                 <div class="data-column">
 
                     <span class="data-value">
-
                         ${item.passRate.toFixed(
                             2
                         )}%
-
                     </span>
 
                     <span class="data-label">
-
                         PASSING RATE
-
                     </span>
 
                 </div>
 
             `;
-
 
             rankingRows.appendChild(
                 row
@@ -2122,11 +1862,6 @@ function renderTable(){
 
         }
     );
-
-
-    /*
-     * Pagination
-     */
 
     if(
         totalPages > 1
@@ -2143,7 +1878,6 @@ function renderTable(){
 
     }
 
-
     paginationInfo.textContent =
 
         "Page " +
@@ -2154,10 +1888,8 @@ function renderTable(){
 
         totalPages;
 
-
     prevPage.disabled =
         currentPage <= 1;
-
 
     nextPage.disabled =
         currentPage >=
@@ -2201,7 +1933,6 @@ async function loadInstitutions(){
 
         `;
 
-
         const response =
             await fetch(
                 DATA_URL,
@@ -2210,7 +1941,6 @@ async function loadInstitutions(){
                         "no-store"
                 }
             );
-
 
         if(
             !response.ok
@@ -2223,22 +1953,8 @@ async function loadInstitutions(){
 
         }
 
-
         const data =
             await response.json();
-
-
-        /*
-         * Support:
-         *
-         * []
-         *
-         * {results: []}
-         *
-         * {institutions: []}
-         *
-         * {data: []}
-         */
 
         if(
             Array.isArray(data)
@@ -2293,12 +2009,10 @@ async function loadInstitutions(){
 
         }
 
-
         console.log(
             "Institution records loaded:",
             allInstitutions.length
         );
-
 
         if(
             allInstitutions.length > 0
@@ -2311,10 +2025,8 @@ async function loadInstitutions(){
 
         }
 
-
         errorState.style.display =
             "none";
-
 
         populateDistricts();
 
@@ -2329,18 +2041,14 @@ async function loadInstitutions(){
             error
         );
 
-
         rankingRows.innerHTML =
             "";
 
-
         errorState.textContent =
-
             "Institution ranking data could not be loaded.";
 
         errorState.style.display =
             "block";
-
 
         pagination.style.display =
             "none";
@@ -2361,10 +2069,8 @@ groupFilter.addEventListener(
         currentDistrict =
             this.value;
 
-
         currentPage =
             1;
-
 
         renderRanking();
 
@@ -2383,7 +2089,6 @@ yearFilter.addEventListener(
         currentPage =
             1;
 
-
         renderRanking();
 
     }
@@ -2401,10 +2106,8 @@ searchInput.addEventListener(
         currentSearch =
             this.value;
 
-
         currentPage =
             1;
-
 
         renderRanking();
 
@@ -2427,7 +2130,6 @@ prevPage.addEventListener(
             currentPage--;
 
             renderTable();
-
 
             window.scrollTo({
 
@@ -2460,12 +2162,9 @@ nextPage.addEventListener(
 
         const totalPages =
             Math.ceil(
-
                 filteredData.length /
                 PAGE_SIZE
-
             );
-
 
         if(
             currentPage <
@@ -2474,9 +2173,7 @@ nextPage.addEventListener(
 
             currentPage++;
 
-
             renderTable();
-
 
             window.scrollTo({
 
@@ -2496,6 +2193,1036 @@ nextPage.addEventListener(
         }
 
     }
+);
+
+
+/* =========================================================
+   PDF — HELPERS
+========================================================= */
+
+function pdfText(doc, text, x, y, options = {}){
+
+    doc.text(
+        String(text),
+        x,
+        y,
+        options
+    );
+
+}
+
+
+/* =========================================================
+   PDF — DOWNLOAD CURRENT PAGE
+========================================================= */
+
+async function downloadCurrentPagePDF(){
+
+    if(
+        !filteredData.length
+    ){
+
+        alert(
+            "No ranking data available for this page."
+        );
+
+        return;
+
+    }
+
+    const originalText =
+        downloadPdfBtn.innerHTML;
+
+    downloadPdfBtn.disabled =
+        true;
+
+    downloadPdfBtn.innerHTML =
+        "Preparing PDF...";
+
+
+    try{
+
+        const jsPDF =
+            window.jspdf.jsPDF;
+
+
+        const doc =
+            new jsPDF({
+
+                orientation:
+                    "portrait",
+
+                unit:
+                    "mm",
+
+                format:
+                    "a4"
+
+            });
+
+
+        /*
+         * Current page data
+         */
+
+        const start =
+            (
+                currentPage -
+                1
+            ) *
+            PAGE_SIZE;
+
+        const end =
+            Math.min(
+                start +
+                PAGE_SIZE,
+                filteredData.length
+            );
+
+        const pageData =
+            filteredData.slice(
+                start,
+                end
+            );
+
+
+        /*
+         * PDF dimensions
+         */
+
+        const pageWidth =
+            doc.internal.pageSize.getWidth();
+
+        const pageHeight =
+            doc.internal.pageSize.getHeight();
+
+
+        /*
+         * Apple-inspired
+         * monochrome palette
+         */
+
+        const BLACK =
+            [17,17,17];
+
+        const DARK =
+            [35,35,38];
+
+        const GRAY =
+            [110,110,115];
+
+        const LIGHT =
+            [245,245,247];
+
+        const BORDER =
+            [225,225,230];
+
+        const BLUE =
+            [0,113,227];
+
+
+        /*
+         * Header
+         */
+
+        doc.setFillColor(
+            250,
+            250,
+            252
+        );
+
+        doc.rect(
+            0,
+            0,
+            pageWidth,
+            36,
+            "F"
+        );
+
+
+        /*
+         * Logo circle
+         */
+
+        doc.setFillColor(
+            ...BLACK
+        );
+
+        doc.circle(
+            17,
+            17,
+            7,
+            "F"
+        );
+
+
+        doc.setTextColor(
+            255,
+            255,
+            255
+        );
+
+        doc.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        doc.setFontSize(
+            9
+        );
+
+        pdfText(
+            doc,
+            "C",
+            17,
+            20,
+            {
+                align:
+                    "center"
+            }
+        );
+
+
+        /*
+         * Website name
+         */
+
+        doc.setTextColor(
+            ...BLACK
+        );
+
+        doc.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        doc.setFontSize(
+            15
+        );
+
+        pdfText(
+            doc,
+            "CTGBoardRanking",
+            29,
+            15
+        );
+
+
+        doc.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        doc.setFontSize(
+            7.5
+        );
+
+        doc.setTextColor(
+            ...GRAY
+        );
+
+        pdfText(
+            doc,
+            "CHITTAGONG BOARD • EDUCATION DATA",
+            29,
+            21
+        );
+
+
+        /*
+         * Unofficial badge
+         */
+
+        doc.setFillColor(
+            238,
+            238,
+            240
+        );
+
+        doc.roundedRect(
+            pageWidth - 47,
+            11,
+            32,
+            10,
+            5,
+            5,
+            "F"
+        );
+
+        doc.setTextColor(
+            ...DARK
+        );
+
+        doc.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        doc.setFontSize(
+            6.5
+        );
+
+        pdfText(
+            doc,
+            "UNOFFICIAL",
+            pageWidth - 31,
+            17.5,
+            {
+                align:
+                    "center"
+            }
+        );
+
+
+        /*
+         * Title
+         */
+
+        let y =
+            49;
+
+        doc.setTextColor(
+            ...BLACK
+        );
+
+        doc.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        doc.setFontSize(
+            22
+        );
+
+        pdfText(
+            doc,
+            "Institution Rankings",
+            15,
+            y
+        );
+
+
+        y += 8;
+
+
+        doc.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        doc.setFontSize(
+            8.5
+        );
+
+        doc.setTextColor(
+            ...GRAY
+        );
+
+        pdfText(
+            doc,
+            "SSC " +
+            yearFilter.value +
+            " • Chattogram Board",
+            15,
+            y
+        );
+
+
+        /*
+         * Filter information
+         */
+
+        y += 6;
+
+        let filterText =
+            "District: " +
+            (
+                currentDistrict === "all"
+                    ? "All Districts"
+                    : currentDistrict
+            );
+
+
+        if(
+            currentSearch
+        ){
+
+            filterText +=
+                " • Search: " +
+                currentSearch;
+
+        }
+
+
+        doc.setFontSize(
+            7.5
+        );
+
+        pdfText(
+            doc,
+            filterText,
+            15,
+            y
+        );
+
+
+        /*
+         * Page information
+         */
+
+        doc.setTextColor(
+            ...BLUE
+        );
+
+        doc.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdfText(
+            doc,
+            "PAGE " +
+            currentPage,
+            pageWidth - 15,
+            y,
+            {
+                align:
+                    "right"
+            }
+        );
+
+
+        /*
+         * Table
+         */
+
+        y += 10;
+
+
+        const margin =
+            15;
+
+        const colRank =
+            18;
+
+        const colInstitution =
+            92;
+
+        const colGpa =
+            35;
+
+        const colPass =
+            35;
+
+
+        const rowHeight =
+            7.3;
+
+
+        /*
+         * Table header
+         */
+
+        doc.setFillColor(
+            ...LIGHT
+        );
+
+        doc.roundedRect(
+            margin,
+            y,
+            pageWidth -
+                margin * 2,
+            10,
+            2,
+            2,
+            "F"
+        );
+
+
+        doc.setTextColor(
+            ...GRAY
+        );
+
+        doc.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        doc.setFontSize(
+            6.5
+        );
+
+
+        pdfText(
+            doc,
+            "RANK",
+            margin + 3,
+            y + 6
+        );
+
+
+        pdfText(
+            doc,
+            "INSTITUTION",
+            margin + colRank,
+            y + 6
+        );
+
+
+        pdfText(
+            doc,
+            "GPA-5",
+            margin +
+                colRank +
+                colInstitution,
+            y + 6
+        );
+
+
+        pdfText(
+            doc,
+            "PASS RATE",
+            margin +
+                colRank +
+                colInstitution +
+                colGpa,
+            y + 6
+        );
+
+
+        y += 12;
+
+
+        /*
+         * Table rows
+         */
+
+        pageData.forEach(
+            (item,index) => {
+
+                /*
+                 * If page is full,
+                 * create another PDF page.
+                 *
+                 * This means one downloaded
+                 * ranking page can naturally
+                 * continue onto multiple PDF
+                 * sheets when necessary.
+                 */
+
+                if(
+                    y >
+                    pageHeight - 22
+                ){
+
+                    addPDFFooter(
+                        doc,
+                        pageWidth,
+                        pageHeight
+                    );
+
+                    doc.addPage();
+
+                    y =
+                        18;
+
+
+                    /*
+                     * Continued header
+                     */
+
+                    doc.setFillColor(
+                        ...LIGHT
+                    );
+
+                    doc.roundedRect(
+                        margin,
+                        y,
+                        pageWidth -
+                            margin * 2,
+                        10,
+                        2,
+                        2,
+                        "F"
+                    );
+
+
+                    doc.setTextColor(
+                        ...GRAY
+                    );
+
+                    doc.setFont(
+                        "helvetica",
+                        "bold"
+                    );
+
+                    doc.setFontSize(
+                        6.5
+                    );
+
+
+                    pdfText(
+                        doc,
+                        "RANK",
+                        margin + 3,
+                        y + 6
+                    );
+
+
+                    pdfText(
+                        doc,
+                        "INSTITUTION",
+                        margin + colRank,
+                        y + 6
+                    );
+
+
+                    pdfText(
+                        doc,
+                        "GPA-5",
+                        margin +
+                            colRank +
+                            colInstitution,
+                        y + 6
+                    );
+
+
+                    pdfText(
+                        doc,
+                        "PASS RATE",
+                        margin +
+                            colRank +
+                            colInstitution +
+                            colGpa,
+                        y + 6
+                    );
+
+
+                    y += 12;
+
+                }
+
+
+                /*
+                 * Alternating background
+                 */
+
+                if(
+                    index % 2 === 1
+                ){
+
+                    doc.setFillColor(
+                        251,
+                        251,
+                        252
+                    );
+
+                    doc.rect(
+                        margin,
+                        y - 4.8,
+                        pageWidth -
+                            margin * 2,
+                        rowHeight,
+                        "F"
+                    );
+
+                }
+
+
+                /*
+                 * Border
+                 */
+
+                doc.setDrawColor(
+                    ...BORDER
+                );
+
+                doc.setLineWidth(
+                    0.15
+                );
+
+                doc.line(
+                    margin,
+                    y + 2,
+                    pageWidth -
+                        margin,
+                    y + 2
+                );
+
+
+                /*
+                 * Rank
+                 */
+
+                doc.setTextColor(
+                    ...DARK
+                );
+
+                doc.setFont(
+                    "helvetica",
+                    "bold"
+                );
+
+                doc.setFontSize(
+                    7
+                );
+
+                pdfText(
+                    doc,
+                    String(
+                        item.rank
+                    ),
+                    margin + 3,
+                    y
+                );
+
+
+                /*
+                 * Institution
+                 */
+
+                doc.setFont(
+                    "helvetica",
+                    "bold"
+                );
+
+                doc.setFontSize(
+                    7
+                );
+
+                const institution =
+                    String(
+                        item.institution ||
+                        ""
+                    );
+
+
+                let institutionText =
+                    institution;
+
+
+                if(
+                    institutionText.length >
+                    38
+                ){
+
+                    institutionText =
+                        institutionText.slice(
+                            0,
+                            35
+                        ) +
+                        "...";
+
+                }
+
+
+                pdfText(
+                    doc,
+                    institutionText,
+                    margin +
+                        colRank,
+                    y
+                );
+
+
+                /*
+                 * EIIN + district
+                 */
+
+                doc.setFont(
+                    "helvetica",
+                    "normal"
+                );
+
+                doc.setFontSize(
+                    5.5
+                );
+
+                doc.setTextColor(
+                    ...GRAY
+                );
+
+
+                let meta =
+                    "EIIN " +
+                    item.eiin +
+                    " • " +
+                    item.district;
+
+
+                if(
+                    item.thana
+                ){
+
+                    meta +=
+                        " • " +
+                        item.thana;
+
+                }
+
+
+                if(
+                    meta.length >
+                    58
+                ){
+
+                    meta =
+                        meta.slice(
+                            0,
+                            55
+                        ) +
+                        "...";
+
+                }
+
+
+                pdfText(
+                    doc,
+                    meta,
+                    margin +
+                        colRank,
+                    y + 3.3
+                );
+
+
+                /*
+                 * GPA-5
+                 */
+
+                doc.setTextColor(
+                    ...DARK
+                );
+
+                doc.setFont(
+                    "helvetica",
+                    "bold"
+                );
+
+                doc.setFontSize(
+                    7
+                );
+
+
+                pdfText(
+                    doc,
+                    String(
+                        item.gpa5
+                    ),
+                    margin +
+                        colRank +
+                        colInstitution,
+                    y
+                );
+
+
+                /*
+                 * Passing rate
+                 */
+
+                pdfText(
+                    doc,
+                    item.passRate.toFixed(
+                        2
+                    ) + "%",
+                    margin +
+                        colRank +
+                        colInstitution +
+                        colGpa,
+                    y
+                );
+
+
+                y +=
+                    rowHeight;
+
+            }
+        );
+
+
+        /*
+         * Footer on final PDF sheet
+         */
+
+        addPDFFooter(
+            doc,
+            pageWidth,
+            pageHeight
+        );
+
+
+        /*
+         * Filename
+         */
+
+        const districtPart =
+            currentDistrict === "all"
+                ? "all-districts"
+                : normalizeText(
+                    currentDistrict
+                  )
+                  .replace(
+                      /\s+/g,
+                      "-"
+                  );
+
+
+        const filename =
+            "CTGBoardRanking_SSC_" +
+            yearFilter.value +
+            "_Institution_Page_" +
+            currentPage +
+            "_" +
+            districtPart +
+            ".pdf";
+
+
+        /*
+         * Save
+         */
+
+        doc.save(
+            filename
+        );
+
+
+    }
+
+    catch(error){
+
+        console.error(
+            "PDF generation error:",
+            error
+        );
+
+        alert(
+            "PDF তৈরি করা যায়নি। আবার চেষ্টা করুন।"
+        );
+
+    }
+
+    finally{
+
+        downloadPdfBtn.disabled =
+            false;
+
+        downloadPdfBtn.innerHTML =
+            originalText;
+
+    }
+
+}
+
+
+/* =========================================================
+   PDF FOOTER
+========================================================= */
+
+function addPDFFooter(
+    doc,
+    pageWidth,
+    pageHeight
+){
+
+    /*
+     * Separator
+     */
+
+    doc.setDrawColor(
+        225,
+        225,
+        230
+    );
+
+    doc.setLineWidth(
+        0.2
+    );
+
+    doc.line(
+        15,
+        pageHeight - 15,
+        pageWidth - 15,
+        pageHeight - 15
+    );
+
+
+    /*
+     * Left footer
+     */
+
+    doc.setTextColor(
+        110,
+        110,
+        115
+    );
+
+    doc.setFont(
+        "helvetica",
+        "normal"
+    );
+
+    doc.setFontSize(
+        6.5
+    );
+
+    pdfText(
+        doc,
+        "Generated by Shadat Fatih",
+        15,
+        pageHeight - 9
+    );
+
+
+    /*
+     * Center footer
+     */
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+    pdfText(
+        doc,
+        "CTGBoardRanking",
+        pageWidth / 2,
+        pageHeight - 9,
+        {
+            align:
+                "center"
+        }
+    );
+
+
+    /*
+     * Right footer
+     */
+
+    doc.setFont(
+        "helvetica",
+        "normal"
+    );
+
+    pdfText(
+        doc,
+        "Unofficial • Education Data & Statistics",
+        pageWidth - 15,
+        pageHeight - 9,
+        {
+            align:
+                "right"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   PDF BUTTON
+========================================================= */
+
+downloadPdfBtn.addEventListener(
+    "click",
+    downloadCurrentPagePDF
 );
 
 
