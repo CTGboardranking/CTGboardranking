@@ -48,7 +48,7 @@ ROLL_RANGES = {
 # COLLECTION SETTINGS
 # ============================================================
 
-BATCH_SIZE = 20000
+BATCH_SIZE = 10000
 
 # Save every 500 successful students
 SAVE_EVERY = 500
