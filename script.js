@@ -1,9 +1,16 @@
 /* =========================================================
    CTGBoardRanking — MAIN SCRIPT
-   Homepage Data Loader
 ========================================================= */
 
 "use strict";
+
+
+/* =========================================================
+   DATA PATH — CORRECT PATH
+========================================================= */
+
+const INSTITUTION_JSON =
+    "institution-collector/institution_results.json";
 
 
 /* =========================================================
@@ -28,12 +35,11 @@ function initDarkMode() {
 
             document.body.classList.toggle("dark");
 
-            const isDark =
-                document.body.classList.contains("dark");
-
             localStorage.setItem(
                 "ctg-theme",
-                isDark ? "dark" : "light"
+                document.body.classList.contains("dark")
+                    ? "dark"
+                    : "light"
             );
 
         });
@@ -44,10 +50,10 @@ function initDarkMode() {
 
 
 /* =========================================================
-   NUMBER HELPER
+   NUMBER
 ========================================================= */
 
-function toNumber(value) {
+function num(value) {
 
     if (
         value === null ||
@@ -57,17 +63,14 @@ function toNumber(value) {
         return 0;
     }
 
-    const cleaned =
+    const n = Number(
         String(value)
             .replace(/,/g, "")
             .replace(/%/g, "")
-            .trim();
+            .trim()
+    );
 
-    const n = Number(cleaned);
-
-    return Number.isFinite(n)
-        ? n
-        : 0;
+    return Number.isFinite(n) ? n : 0;
 
 }
 
@@ -76,210 +79,133 @@ function toNumber(value) {
    LOAD INSTITUTION JSON
 ========================================================= */
 
-async function loadInstitutionResults() {
+async function getInstitutions() {
 
-    const paths = [
-
-        "./institution_results.json",
-
-        "./scraper/institution_results.json",
-
-        "institution_results.json",
-
-        "scraper/institution_results.json"
-
-    ];
+    const url =
+        INSTITUTION_JSON +
+        "?v=" +
+        Date.now();
 
 
-    let lastError = null;
+    console.log(
+        "Loading:",
+        url
+    );
 
 
-    for (const path of paths) {
-
-        try {
-
-            console.log(
-                "Trying JSON:",
-                path
-            );
-
-
-            const response =
-                await fetch(
-                    path + "?v=" + Date.now(),
-                    {
-                        cache: "no-store"
-                    }
-                );
-
-
-            if (!response.ok) {
-
-                lastError =
-                    new Error(
-                        path +
-                        " HTTP " +
-                        response.status
-                    );
-
-                continue;
-
+    const response =
+        await fetch(
+            url,
+            {
+                cache: "no-store"
             }
+        );
 
 
-            const json =
-                await response.json();
+    if (!response.ok) {
 
-
-            let data = null;
-
-
-            /* Direct array */
-
-            if (
-                Array.isArray(json)
-            ) {
-
-                data = json;
-
-            }
-
-
-            /* { institutions: [] } */
-
-            else if (
-                json &&
-                Array.isArray(
-                    json.institutions
-                )
-            ) {
-
-                data =
-                    json.institutions;
-
-            }
-
-
-            /* { results: [] } */
-
-            else if (
-                json &&
-                Array.isArray(
-                    json.results
-                )
-            ) {
-
-                data =
-                    json.results;
-
-            }
-
-
-            /* { data: [] } */
-
-            else if (
-                json &&
-                Array.isArray(
-                    json.data
-                )
-            ) {
-
-                data =
-                    json.data;
-
-            }
-
-
-            if (
-                Array.isArray(data) &&
-                data.length > 0
-            ) {
-
-                console.log(
-                    "✓ Institution JSON loaded:",
-                    path,
-                    data.length
-                );
-
-                return data;
-
-            }
-
-        }
-
-        catch (error) {
-
-            lastError = error;
-
-            console.warn(
-                "JSON load failed:",
-                path,
-                error
-            );
-
-        }
+        throw new Error(
+            "JSON HTTP " +
+            response.status +
+            " — " +
+            url
+        );
 
     }
 
 
-    throw (
-        lastError ||
-        new Error(
-            "institution_results.json not found"
-        )
+    const data =
+        await response.json();
+
+
+    /*
+     * Your JSON is a direct array:
+     *
+     * [
+     *   {
+     *     eiin: "...",
+     *     institution_name: "...",
+     *     district: "...",
+     *     appeared: 83,
+     *     passed: 54,
+     *     passing_rate: 65.06,
+     *     gpa5: 2
+     *   }
+     * ]
+     */
+
+    if (Array.isArray(data)) {
+
+        return data;
+
+    }
+
+
+    if (
+        data &&
+        Array.isArray(data.institutions)
+    ) {
+
+        return data.institutions;
+
+    }
+
+
+    if (
+        data &&
+        Array.isArray(data.results)
+    ) {
+
+        return data.results;
+
+    }
+
+
+    if (
+        data &&
+        Array.isArray(data.data)
+    ) {
+
+        return data.data;
+
+    }
+
+
+    throw new Error(
+        "Invalid institution_results.json format"
     );
 
 }
 
 
 /* =========================================================
-   NORMALIZE DATA
+   NORMALIZE
 ========================================================= */
 
-function normalizeInstitution(item) {
+function normalize(item) {
 
     const appeared =
-        toNumber(
-            item.appeared ??
-            item.total_students ??
-            item.total_appeared ??
-            item.students
-        );
+        num(item.appeared);
 
 
     const passed =
-        toNumber(
-            item.passed ??
-            item.total_passed
-        );
+        num(item.passed);
 
 
-    let passingRate =
-        toNumber(
-            item.passing_rate ??
-            item.passingRate ??
-            item.pass_rate
-        );
+    let passRate =
+        num(item.passing_rate);
 
 
     const gpa5 =
-        toNumber(
-            item.gpa5 ??
-            item.gpa_5 ??
-            item.gpa5_count ??
-            item.gpa_5_count ??
-            item.total_gpa5
-        );
+        num(item.gpa5);
 
-
-    /* Calculate pass rate if JSON doesn't have it */
 
     if (
-        passingRate === 0 &&
+        passRate === 0 &&
         appeared > 0
     ) {
 
-        passingRate =
+        passRate =
             (passed / appeared) * 100;
 
     }
@@ -289,35 +215,33 @@ function normalizeInstitution(item) {
 
         eiin:
             String(
-                item.eiin ?? ""
+                item.eiin || ""
             ).trim(),
 
-        institution:
+        name:
             String(
-                item.institution_name ??
-                item.institution ??
-                item.institute ??
-                item.name ??
+                item.institution_name ||
+                item.institution ||
+                item.institute ||
+                item.name ||
                 ""
             ).trim(),
 
         district:
             String(
-                item.district ?? ""
+                item.district || ""
             ).trim(),
 
         thana:
             String(
-                item.thana ??
-                item.upazila ??
-                ""
+                item.thana || ""
             ).trim(),
 
         appeared,
 
         passed,
 
-        passingRate,
+        passRate,
 
         gpa5
 
@@ -327,10 +251,10 @@ function normalizeInstitution(item) {
 
 
 /* =========================================================
-   UNIQUE INSTITUTIONS
+   REMOVE DUPLICATES
 ========================================================= */
 
-function makeUniqueInstitutions(data) {
+function uniqueInstitutions(data) {
 
     const map = new Map();
 
@@ -338,27 +262,18 @@ function makeUniqueInstitutions(data) {
     data.forEach(raw => {
 
         const item =
-            normalizeInstitution(raw);
+            normalize(raw);
 
 
-        if (
-            !item.institution
-        ) {
+        if (!item.name) {
             return;
         }
 
 
         const key =
             item.eiin ||
-            item.institution
-                .toLowerCase()
-                .trim();
+            item.name.toLowerCase();
 
-
-        /*
-         * If same EIIN appears more than once,
-         * keep the record with the larger appeared count.
-         */
 
         if (!map.has(key)) {
 
@@ -366,26 +281,6 @@ function makeUniqueInstitutions(data) {
                 key,
                 item
             );
-
-        }
-
-        else {
-
-            const old =
-                map.get(key);
-
-
-            if (
-                item.appeared >
-                old.appeared
-            ) {
-
-                map.set(
-                    key,
-                    item
-                );
-
-            }
 
         }
 
@@ -400,10 +295,10 @@ function makeUniqueInstitutions(data) {
 
 
 /* =========================================================
-   INSTITUTION RANKING
+   TOP 3 INSTITUTIONS
 ========================================================= */
 
-async function loadHomepageInstitutionRanking(
+function showTopInstitutions(
     institutions
 ) {
 
@@ -424,111 +319,59 @@ async function loadHomepageInstitutionRanking(
     ];
 
 
-    if (
-        !rows.some(Boolean)
-    ) {
-
-        console.warn(
-            "Homepage ranking rows not found."
-        );
-
-        return;
-
-    }
-
-
     /*
-     * Ranking order:
-     *
-     * 1. GPA-5
-     * 2. Passing Rate
-     * 3. Passed
-     * 4. Appeared
+     * Ranking:
+     * GPA-5
+     * Pass Rate
+     * Passed
+     * Appeared
      */
 
-    const ranking =
-        [...institutions].sort(
-            (a, b) => {
+    institutions.sort(
+        (a, b) => {
 
-                if (
-                    b.gpa5 !==
-                    a.gpa5
-                ) {
+            if (b.gpa5 !== a.gpa5) {
 
-                    return (
-                        b.gpa5 -
-                        a.gpa5
-                    );
-
-                }
-
-
-                if (
-                    b.passingRate !==
-                    a.passingRate
-                ) {
-
-                    return (
-                        b.passingRate -
-                        a.passingRate
-                    );
-
-                }
-
-
-                if (
-                    b.passed !==
-                    a.passed
-                ) {
-
-                    return (
-                        b.passed -
-                        a.passed
-                    );
-
-                }
-
-
-                if (
-                    b.appeared !==
-                    a.appeared
-                ) {
-
-                    return (
-                        b.appeared -
-                        a.appeared
-                    );
-
-                }
-
-
-                return a.institution
-                    .localeCompare(
-                        b.institution
-                    );
+                return b.gpa5 - a.gpa5;
 
             }
-        );
+
+
+            if (
+                b.passRate !==
+                a.passRate
+            ) {
+
+                return (
+                    b.passRate -
+                    a.passRate
+                );
+
+            }
+
+
+            if (b.passed !== a.passed) {
+
+                return b.passed - a.passed;
+
+            }
+
+
+            return b.appeared - a.appeared;
+
+        }
+    );
 
 
     const top3 =
-        ranking.slice(0, 3);
+        institutions.slice(0, 3);
 
 
     console.log(
-        "Institution Total:",
-        institutions.length
-    );
-
-    console.log(
-        "TOP 3:",
+        "TOP 3 INSTITUTIONS:",
         top3
     );
 
-
-    /*
-     * Put TOP 3 into homepage
-     */
 
     top3.forEach(
         (item, index) => {
@@ -578,17 +421,13 @@ async function loadHomepageInstitutionRanking(
                 );
 
 
-            /* Institution name */
-
             if (name) {
 
                 name.textContent =
-                    item.institution;
+                    item.name;
 
             }
 
-
-            /* District */
 
             if (district) {
 
@@ -599,13 +438,10 @@ async function loadHomepageInstitutionRanking(
             }
 
 
-            /* Pass rate */
-
             if (pass) {
 
                 pass.textContent =
-                    item.passingRate
-                        .toFixed(2) +
+                    item.passRate.toFixed(2) +
                     "%";
 
             }
@@ -619,15 +455,12 @@ async function loadHomepageInstitutionRanking(
             }
 
 
-            /* GPA-5 */
-
             if (score) {
 
                 score.textContent =
-                    item.gpa5
-                        .toLocaleString(
-                            "en-US"
-                        );
+                    item.gpa5.toLocaleString(
+                        "en-US"
+                    );
 
             }
 
@@ -642,87 +475,58 @@ async function loadHomepageInstitutionRanking(
         }
     );
 
-
-    /*
-     * If less than 3 records,
-     * clear remaining rows.
-     */
-
-    for (
-        let i = top3.length;
-        i < rows.length;
-        i++
-    ) {
-
-        const row =
-            rows[i];
-
-
-        if (!row) {
-            continue;
-        }
-
-
-        const name =
-            row.querySelector(
-                ".rank-info strong"
-            );
-
-
-        const district =
-            row.querySelector(
-                ".rank-info span"
-            );
-
-
-        const pass =
-            row.querySelector(
-                ".rank-result strong"
-            );
-
-
-        const score =
-            row.querySelector(
-                ".rank-score strong"
-            );
-
-
-        if (name) {
-            name.textContent = "—";
-        }
-
-
-        if (district) {
-            district.textContent = "—";
-        }
-
-
-        if (pass) {
-            pass.textContent = "—";
-        }
-
-
-        if (score) {
-            score.textContent = "—";
-        }
-
-    }
-
 }
 
 
 /* =========================================================
-   QUICK STATISTICS
+   QUICK STATS
 ========================================================= */
 
-function loadHomepageStatistics(
+function showStatistics(
     institutions
 ) {
+
+    /*
+     * INSTITUTION TOTAL
+     */
 
     const institutionElement =
         document.getElementById(
             "statInstitutions"
         );
+
+
+    if (institutionElement) {
+
+        institutionElement.textContent =
+            institutions.length.toLocaleString(
+                "en-US"
+            );
+
+    }
+
+
+    /*
+     * DISTRICT TOTAL
+     */
+
+    const districtSet =
+        new Set();
+
+
+    institutions.forEach(item => {
+
+        if (item.district) {
+
+            districtSet.add(
+                item.district
+                    .trim()
+                    .toUpperCase()
+            );
+
+        }
+
+    });
 
 
     const districtElement =
@@ -731,114 +535,62 @@ function loadHomepageStatistics(
         );
 
 
+    if (districtElement) {
+
+        districtElement.textContent =
+            districtSet.size.toLocaleString(
+                "en-US"
+            );
+
+    }
+
+
+    /*
+     * STUDENT TOTAL
+     */
+
+    let totalStudents = 0;
+
+
+    institutions.forEach(item => {
+
+        totalStudents +=
+            num(item.appeared);
+
+    });
+
+
     const studentElement =
         document.getElementById(
             "statStudents"
         );
 
 
-    /*
-     * Institution total
-     */
-
-    if (institutionElement) {
-
-        institutionElement.textContent =
-            institutions.length
-                .toLocaleString(
-                    "en-US"
-                );
-
-    }
-
-
-    /*
-     * District total
-     */
-
-    const districtSet =
-        new Set();
-
-
-    institutions.forEach(
-        item => {
-
-            const district =
-                String(
-                    item.district || ""
-                )
-                .trim()
-                .toUpperCase();
-
-
-            if (district) {
-
-                districtSet.add(
-                    district
-                );
-
-            }
-
-        }
-    );
-
-
-    if (districtElement) {
-
-        districtElement.textContent =
-            districtSet.size
-                .toLocaleString(
-                    "en-US"
-                );
-
-    }
-
-
-    /*
-     * Student total
-     *
-     * Sum of appeared students
-     */
-
-    const totalStudents =
-        institutions.reduce(
-            (total, item) => {
-
-                return (
-                    total +
-                    toNumber(
-                        item.appeared
-                    )
-                );
-
-            },
-            0
-        );
-
-
     if (studentElement) {
 
         studentElement.textContent =
-            totalStudents
-                .toLocaleString(
-                    "en-US"
-                );
+            totalStudents.toLocaleString(
+                "en-US"
+            );
 
     }
 
 
     console.log(
-        "Homepage Statistics:",
-        {
-            institutions:
-                institutions.length,
+        "Institution total:",
+        institutions.length
+    );
 
-            districts:
-                districtSet.size,
 
-            students:
-                totalStudents
-        }
+    console.log(
+        "District total:",
+        districtSet.size
+    );
+
+
+    console.log(
+        "Student total:",
+        totalStudents
     );
 
 }
@@ -862,8 +614,8 @@ async function loadTotalVisits() {
 
 
     /*
-     * Do not break the rest of the homepage
-     * if Supabase key is not configured.
+     * Put your actual Supabase publishable
+     * key here if you want Total Visits.
      */
 
     const SUPABASE_URL =
@@ -880,10 +632,6 @@ async function loadTotalVisits() {
         "তোমার_SUPABASE_PUBLISHABLE_KEY"
     ) {
 
-        console.warn(
-            "Supabase publishable key is not configured."
-        );
-
         return;
 
     }
@@ -896,31 +644,20 @@ async function loadTotalVisits() {
                 SUPABASE_URL +
                 "/rest/v1/site_stats?id=eq.1&select=total_visits",
                 {
-
-                    method: "GET",
-
                     headers: {
-
                         "apikey":
                             SUPABASE_KEY,
 
                         "Authorization":
                             "Bearer " +
                             SUPABASE_KEY
-
                     }
-
                 }
             );
 
 
         if (!response.ok) {
-
-            throw new Error(
-                "Supabase HTTP " +
-                response.status
-            );
-
+            return;
         }
 
 
@@ -930,11 +667,11 @@ async function loadTotalVisits() {
 
         if (
             Array.isArray(data) &&
-            data.length > 0
+            data.length
         ) {
 
             element.textContent =
-                toNumber(
+                num(
                     data[0].total_visits
                 ).toLocaleString(
                     "en-US"
@@ -947,7 +684,7 @@ async function loadTotalVisits() {
     catch (error) {
 
         console.error(
-            "Total visits error:",
+            "Total visits:",
             error
         );
 
@@ -957,46 +694,27 @@ async function loadTotalVisits() {
 
 
 /* =========================================================
-   MAIN INITIALIZATION
+   MAIN
 ========================================================= */
 
-async function initializeHomepage() {
-
-    console.log(
-        "===================================="
-    );
-
-    console.log(
-        "CTGBoardRanking initializing..."
-    );
-
+async function initialize() {
 
     initDarkMode();
 
 
     try {
 
-        /*
-         * Load JSON ONCE
-         */
+        const raw =
+            await getInstitutions();
 
-        const rawData =
-            await loadInstitutionResults();
-
-
-        /*
-         * Normalize + remove duplicates
-         */
 
         const institutions =
-            makeUniqueInstitutions(
-                rawData
-            );
+            uniqueInstitutions(raw);
 
 
         console.log(
-            "✓ Raw records:",
-            rawData.length
+            "✓ JSON records:",
+            raw.length
         );
 
 
@@ -1007,25 +725,25 @@ async function initializeHomepage() {
 
 
         /*
-         * Homepage statistics
+         * QUICK STATS
          */
 
-        loadHomepageStatistics(
+        showStatistics(
             institutions
         );
 
 
         /*
-         * Homepage TOP 3
+         * TOP 3
          */
 
-        await loadHomepageInstitutionRanking(
+        showTopInstitutions(
             institutions
         );
 
 
         console.log(
-            "✓ Institution data loaded successfully"
+            "✓ HOMEPAGE DATA LOADED"
         );
 
     }
@@ -1033,63 +751,34 @@ async function initializeHomepage() {
     catch (error) {
 
         console.error(
-            "❌ Homepage data loading error:",
+            "❌ DATA LOADING ERROR:",
             error
         );
 
 
         /*
-         * Show error only if JSON really
-         * cannot be loaded.
+         * Only show error if the JSON
+         * genuinely cannot be loaded.
          */
 
-        const institutionElement =
+        const rows = [
+
             document.getElementById(
-                "statInstitutions"
-            );
+                "homeRank1"
+            ),
 
-
-        const districtElement =
             document.getElementById(
-                "statDistricts"
-            );
+                "homeRank2"
+            ),
 
-
-        const studentElement =
             document.getElementById(
-                "statStudents"
-            );
+                "homeRank3"
+            )
+
+        ];
 
 
-        if (institutionElement) {
-            institutionElement.textContent = "—";
-        }
-
-
-        if (districtElement) {
-            districtElement.textContent = "—";
-        }
-
-
-        if (studentElement) {
-            studentElement.textContent = "—";
-        }
-
-
-        /*
-         * Top 3 error display
-         */
-
-        [
-            "homeRank1",
-            "homeRank2",
-            "homeRank3"
-        ]
-        .forEach(id => {
-
-            const row =
-                document.getElementById(id);
-
+        rows.forEach(row => {
 
             if (!row) {
                 return;
@@ -1119,7 +808,7 @@ async function initializeHomepage() {
             if (district) {
 
                 district.textContent =
-                    "JSON loading failed";
+                    "Check JSON path";
 
             }
 
@@ -1129,16 +818,10 @@ async function initializeHomepage() {
 
 
     /*
-     * Total visits is independent.
-     * Even if it fails, ranking still works.
+     * Independent of ranking.
      */
 
     loadTotalVisits();
-
-
-    console.log(
-        "CTGBoardRanking initialization complete."
-    );
 
 }
 
@@ -1154,13 +837,11 @@ if (
 
     document.addEventListener(
         "DOMContentLoaded",
-        initializeHomepage
+        initialize
     );
 
-}
+} else {
 
-else {
-
-    initializeHomepage();
+    initialize();
 
 }
