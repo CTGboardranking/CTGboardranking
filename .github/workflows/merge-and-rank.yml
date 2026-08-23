@@ -1,0 +1,191 @@
+name: Merge and Rank Data
+
+on:
+  workflow_dispatch:
+
+jobs:
+  merge-and-rank:
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+
+      # =====================================================
+      # CHECKOUT
+      # =====================================================
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # =====================================================
+      # PYTHON
+      # =====================================================
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      # =====================================================
+      # CHECK FILES
+      # =====================================================
+
+      - name: Check Data Files
+        run: |
+          echo "=============================================="
+          echo "CHECKING DATA FILES"
+          echo "=============================================="
+
+          echo ""
+          echo "Institution result file:"
+          if [ -f institution-collector/institution_results.json ]; then
+            ls -lh institution-collector/institution_results.json
+          else
+            echo "NOT FOUND"
+          fi
+
+          echo ""
+          echo "Student result file:"
+          if [ -f scraper/students.json ]; then
+            ls -lh scraper/students.json
+          else
+            echo "NOT FOUND"
+          fi
+
+          echo ""
+          echo "Merge script:"
+          if [ -f merge_and_rank.py ]; then
+            ls -lh merge_and_rank.py
+          else
+            echo "NOT FOUND"
+            exit 1
+          fi
+
+      # =====================================================
+      # MERGE + RANK
+      # =====================================================
+
+      - name: Merge and Rank
+        env:
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python -u merge_and_rank.py
+
+      # =====================================================
+      # SHOW OUTPUT
+      # =====================================================
+
+      - name: Show Ranking Summary
+        run: |
+          echo "=============================================="
+          echo "RANKING SUMMARY"
+          echo "=============================================="
+
+          if [ -f data/ranking_summary.json ]; then
+            cat data/ranking_summary.json
+          else
+            echo "ranking_summary.json NOT FOUND"
+            exit 1
+          fi
+
+          echo ""
+          echo "=============================================="
+          echo "OUTPUT FILES"
+          echo "=============================================="
+
+          ls -lh data/
+
+      # =====================================================
+      # SHOW TOP STUDENTS
+      # =====================================================
+
+      - name: Show Top 20 Students
+        run: |
+          echo "=============================================="
+          echo "TOP 20 STUDENTS"
+          echo "=============================================="
+
+          python - <<'PY'
+          import json
+
+          file = "data/student_ranking.json"
+
+          with open(file, "r", encoding="utf-8") as f:
+              data = json.load(f)
+
+          for student in data[:20]:
+
+              print(
+                  f"Rank: {student.get('rank')} | "
+                  f"Roll: {student.get('roll')} | "
+                  f"Name: {student.get('name')} | "
+                  f"GPA: {student.get('gpa')} | "
+                  f"Institute: {student.get('institution_name', student.get('institute', ''))}"
+              )
+          PY
+
+      # =====================================================
+      # SHOW TOP INSTITUTIONS
+      # =====================================================
+
+      - name: Show Top 20 Institutions
+        run: |
+          echo "=============================================="
+          echo "TOP 20 INSTITUTIONS"
+          echo "=============================================="
+
+          python - <<'PY'
+          import json
+
+          file = "data/institution_ranking.json"
+
+          with open(file, "r", encoding="utf-8") as f:
+              data = json.load(f)
+
+          for institution in data[:20]:
+
+              print(
+                  f"Rank: {institution.get('rank')} | "
+                  f"EIIN: {institution.get('eiin')} | "
+                  f"Institute: {institution.get('institution_name')} | "
+                  f"Pass Rate: {institution.get('passing_rate')}% | "
+                  f"GPA-5: {institution.get('gpa5')}"
+              )
+          PY
+
+      # =====================================================
+      # GIT STATUS
+      # =====================================================
+
+      - name: Check Git Changes
+        run: |
+          echo "=============================================="
+          echo "GIT STATUS"
+          echo "=============================================="
+
+          git status
+
+      # =====================================================
+      # COMMIT + PUSH
+      # =====================================================
+
+      - name: Save Ranking Data
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git commit -m "Update SSC 2026 rankings"
+
+          git pull --rebase origin main
+
+          git push origin main
