@@ -93,7 +93,7 @@ jobs:
           fi
 
       # =====================================================
-      # PREPARE LARGE JSON FILES
+      # PREPARE LARGE JSON FILES FOR GITHUB
       # =====================================================
 
       - name: Prepare large JSON files for GitHub
@@ -105,16 +105,31 @@ jobs:
 
           BASE = "scraper"
 
-          # Keep a safe margin below GitHub's 100 MB limit.
+          # Keep generated files safely below GitHub's
+          # 100 MB single-file limit.
           MAX_BYTES = 45 * 1024 * 1024
 
           FILES = [
-              ("students.json", "students_parts", "students_manifest.json"),
-              ("student_ranking.json", "student_ranking_parts", "student_ranking_manifest.json")
+              (
+                  "students.json",
+                  "students_parts",
+                  "students_manifest.json"
+              ),
+              (
+                  "student_ranking.json",
+                  "student_ranking_parts",
+                  "student_ranking_manifest.json"
+              )
           ]
 
           def write_json(path, data):
-              with open(path, "w", encoding="utf-8") as f:
+
+              with open(
+                  path,
+                  "w",
+                  encoding="utf-8"
+              ) as f:
+
                   json.dump(
                       data,
                       f,
@@ -124,43 +139,69 @@ jobs:
 
           for filename, parts_dir, manifest_name in FILES:
 
-              source = os.path.join(BASE, filename)
-              output_dir = os.path.join(BASE, parts_dir)
+              source = os.path.join(
+                  BASE,
+                  filename
+              )
+
+              output_dir = os.path.join(
+                  BASE,
+                  parts_dir
+              )
 
               if not os.path.exists(source):
-                  print(f"Skipping {source}: file not found")
+
+                  print(
+                      f"Skipping {source}: "
+                      f"file not found"
+                  )
+
                   continue
 
-              source_size = os.path.getsize(source)
+              source_size = os.path.getsize(
+                  source
+              )
 
               print("")
               print("=" * 70)
-              print(f"Processing: {source}")
-              print(f"Original size: {source_size / 1024 / 1024:.2f} MB")
+              print(
+                  f"Processing: {source}"
+              )
+              print(
+                  f"Original size: "
+                  f"{source_size / 1024 / 1024:.2f} MB"
+              )
               print("=" * 70)
 
-              # If already small enough, nothing needs to be split.
+              # Already small enough.
               if source_size <= MAX_BYTES:
+
                   print(
                       f"{filename} is already below "
                       f"{MAX_BYTES / 1024 / 1024:.0f} MB."
                   )
+
                   continue
 
-              print("Loading JSON...")
+              print(
+                  "Loading JSON..."
+              )
 
               with open(
                   source,
                   "r",
                   encoding="utf-8"
               ) as f:
+
                   data = json.load(f)
 
+              # JSON array
               if isinstance(data, list):
 
                   records = data
                   wrapper_key = None
 
+              # JSON object containing an array
               elif isinstance(data, dict):
 
                   wrapper_key = None
@@ -168,26 +209,33 @@ jobs:
                   for key, value in data.items():
 
                       if isinstance(value, list):
+
                           wrapper_key = key
                           break
 
                   if wrapper_key is None:
+
                       raise ValueError(
-                          f"No JSON array found in {source}"
+                          f"No JSON array found in "
+                          f"{source}"
                       )
 
-                  records = data[wrapper_key]
+                  records = data[
+                      wrapper_key
+                  ]
 
               else:
 
                   raise ValueError(
-                      f"Unsupported JSON structure in {source}"
+                      f"Unsupported JSON structure "
+                      f"in {source}"
                   )
 
               total = len(records)
 
               print(
-                  f"Total records: {total:,}"
+                  f"Total records: "
+                  f"{total:,}"
               )
 
               os.makedirs(
@@ -195,22 +243,26 @@ jobs:
                   exist_ok=True
               )
 
-              # Remove only previously generated PART files.
-              for old in os.listdir(output_dir):
+              # Remove only previously generated
+              # split files.
+              for old in os.listdir(
+                  output_dir
+              ):
 
                   old_path = os.path.join(
                       output_dir,
                       old
                   )
 
-                  if os.path.isfile(old_path):
-                      os.remove(old_path)
+                  if os.path.isfile(
+                      old_path
+                  ):
 
-              # -------------------------------------------------
-              # Start with an estimated number of parts.
-              # This avoids serializing every single record.
-              # -------------------------------------------------
+                      os.remove(
+                          old_path
+                      )
 
+              # Estimate number of parts.
               estimated_parts = max(
                   2,
                   math.ceil(
@@ -232,8 +284,11 @@ jobs:
                   )
 
                   print(
-                      f"Trying {estimated_parts} parts "
-                      f"({chunk_size:,} records/part)..."
+                      f"Trying "
+                      f"{estimated_parts} parts "
+                      f"("
+                      f"{chunk_size:,}"
+                      f" records/part)..."
                   )
 
                   created = []
@@ -258,7 +313,9 @@ jobs:
 
                       if wrapper_key is None:
 
-                          output_data = part_records
+                          output_data = (
+                              part_records
+                          )
 
                       else:
 
@@ -268,7 +325,9 @@ jobs:
                           }
 
                       part_filename = (
-                          f"part_{part_number:04d}.json"
+                          f"part_"
+                          f"{part_number:04d}"
+                          f".json"
                       )
 
                       part_path = os.path.join(
@@ -301,8 +360,9 @@ jobs:
 
                       print(
                           f"  {part_filename}: "
-                          f"{len(part_records):,} records, "
-                          f"{size_mb:.2f} MB"
+                          f"{len(part_records):,} "
+                          f"records "
+                          f"({size_mb:.2f} MB)"
                       )
 
                   oversized = [
@@ -312,6 +372,7 @@ jobs:
                   ]
 
                   if not oversized:
+
                       break
 
                   print(
@@ -320,11 +381,17 @@ jobs:
 
                   for path, _, _ in created:
 
-                      if os.path.exists(path):
-                          os.remove(path)
+                      if os.path.exists(
+                          path
+                      ):
+
+                          os.remove(
+                              path
+                          )
 
                   estimated_parts *= 2
 
+              # Create manifest.
               manifest = {
                   "source": filename,
                   "total_records": total,
@@ -338,16 +405,23 @@ jobs:
                       "."
                   )
 
-                  manifest["parts"].append(
+                  manifest[
+                      "parts"
+                  ].append(
                       {
-                          "file": relative_path,
-                          "records": count,
-                          "size_mb": round(
-                              size /
-                              1024 /
-                              1024,
-                              2
-                          )
+                          "file":
+                              relative_path,
+
+                          "records":
+                              count,
+
+                          "size_mb":
+                              round(
+                                  size /
+                                  1024 /
+                                  1024,
+                                  2
+                              )
                       }
                   )
 
@@ -375,32 +449,42 @@ jobs:
               )
 
               print(
-                  f"✓ Total records: {total:,}"
+                  f"✓ Total records: "
+                  f"{total:,}"
               )
 
               print(
-                  f"✓ Parts created: {len(created)}"
+                  f"✓ Parts created: "
+                  f"{len(created)}"
               )
 
-              # IMPORTANT:
-              # Do NOT delete the original JSON.
-              # It remains available for the workflow artifact.
+              # Original files are NOT deleted.
               print(
-                  f"✓ Original {filename} kept safely."
+                  f"✓ Original {filename} "
+                  f"kept for artifact backup."
               )
+
+          # =================================================
+          # FINAL SIZE CHECK
+          # =================================================
 
           print("")
           print("=" * 70)
-          print("FINAL PART FILE CHECK")
+          print("FINAL JSON FILE CHECK")
           print("=" * 70)
 
           failed = False
 
-          for root, dirs, files in os.walk(BASE):
+          for root, dirs, files in os.walk(
+              BASE
+          ):
 
               for name in files:
 
-                  if not name.endswith(".json"):
+                  if not name.endswith(
+                      ".json"
+                  ):
+
                       continue
 
                   path = os.path.join(
@@ -408,27 +492,64 @@ jobs:
                       name
                   )
 
-                  size = os.path.getsize(path)
+                  size = os.path.getsize(
+                      path
+                  )
 
-                  if size >= 100 * 1024 * 1024:
+                  size_mb = (
+                      size /
+                      1024 /
+                      1024
+                  )
+
+                  if size >= (
+                      100 *
+                      1024 *
+                      1024
+                  ):
+
+                      # Original large files are allowed
+                      # to remain for artifact backup.
+                      if name in (
+                          "students.json",
+                          "student_ranking.json"
+                      ):
+
+                          print(
+                              f"Artifact-only large file: "
+                              f"{path} = "
+                              f"{size_mb:.2f} MB"
+                          )
+
+                          continue
 
                       print(
                           f"ERROR: {path} = "
-                          f"{size / 1024 / 1024:.2f} MB"
+                          f"{size_mb:.2f} MB"
                       )
 
                       failed = True
 
+                  else:
+
+                      print(
+                          f"OK: {path} = "
+                          f"{size_mb:.2f} MB"
+                      )
+
           if failed:
+
               raise RuntimeError(
-                  "One or more JSON files exceed "
-                  "GitHub's 100 MB limit."
+                  "One or more GitHub-bound JSON "
+                  "files exceed 100 MB."
               )
 
+          print("")
           print(
-              "✓ All generated JSON files are below "
-              "GitHub's 100 MB limit."
+              "✓ All GitHub-bound JSON files "
+              "are below 100 MB."
           )
+
           PY
 
       # =====================================================
@@ -440,30 +561,66 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Add all generated ranking data
+          echo "========================================"
+          echo "PREPARING GIT CHANGES"
+          echo "========================================"
+
           git add scraper/
 
+          # Remove ONLY the two oversized original files
+          # from the staged commit.
+          git restore --staged scraper/students.json 2>/dev/null || true
+          git restore --staged scraper/student_ranking.json 2>/dev/null || true
+
           # IMPORTANT:
-          # The two original files are intentionally NOT committed.
-          # They remain available in the workflow/artifact.
-          git reset -- scraper/students.json 2>/dev/null || true
-          git reset -- scraper/student_ranking.json 2>/dev/null || true
+          # Restore the original large files in the working tree.
+          # This prevents the rebase from failing with
+          # "You have unstaged changes".
+          git restore scraper/students.json 2>/dev/null || true
+          git restore scraper/student_ranking.json 2>/dev/null || true
+
+          echo ""
+          echo "========================================"
+          echo "GIT STATUS"
+          echo "========================================"
+
+          git status --short
 
           if git diff --cached --quiet; then
+
+            echo ""
             echo "No changes detected."
+
             exit 0
+
           fi
+
+          echo ""
+          echo "========================================"
+          echo "COMMITTING UPDATED RANKING DATA"
+          echo "========================================"
 
           git commit -m "Update SSC ranking data"
 
+          echo ""
           echo "Fetching latest main branch..."
+
           git fetch origin main
 
+          echo ""
           echo "Rebasing on latest main..."
+
           git rebase origin/main
 
+          echo ""
           echo "Pushing updated ranking data..."
+
           git push origin HEAD:main
+
+          echo ""
+          echo "========================================"
+          echo "✓ SSC RANKING DATA PUSHED SUCCESSFULLY"
+          echo "========================================"
 
       # =====================================================
       # UPLOAD COMPLETE SSC DATA BACKUP
