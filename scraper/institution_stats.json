@@ -266041,41 +266041,43 @@
   },
   {
     "institute": "ALIKADAM RESIDENTIAL SCHOOL, BANDARBAN",
-    "total_students": 13,
+    "total_students": 18,
     "gpa_5_count": 0,
     "gpa_5_percentage": 0.0,
     "average_gpa": 2.87,
     "institution_score": 57.4,
     "grade_distribution": {
-      "B": 29,
-      "F": 14,
-      "D": 16,
-      "A-": 11,
-      "A": 17,
-      "A+": 33,
-      "C": 30
+      "B": 39,
+      "F": 18,
+      "D": 23,
+      "A-": 22,
+      "A": 27,
+      "A+": 43,
+      "C": 37
     },
     "subject_statistics": [
       {
         "code": "101",
         "subject": "BANGLA-I",
-        "students_with_marks": 12,
-        "average_mark": 105.92,
+        "students_with_marks": 14,
+        "average_mark": 104.79,
         "grade_distribution": {
-          "B": 5,
-          "C": 5,
-          "A": 2
+          "B": 6,
+          "C": 7,
+          "A": 2,
+          "A-": 2
         }
       },
       {
         "code": "107",
         "subject": "ENGLISH-I",
-        "students_with_marks": 10,
-        "average_mark": 81.2,
+        "students_with_marks": 14,
+        "average_mark": 77.64,
         "grade_distribution": {
           "F": 3,
           "C": 5,
-          "D": 5
+          "D": 9,
+          "B": 1
         }
       },
       {
@@ -266087,7 +266089,7 @@
           "D": 4,
           "C": 3,
           "B": 1,
-          "F": 3
+          "F": 7
         }
       },
       {
@@ -266105,10 +266107,10 @@
       {
         "code": "114",
         "subject": "CHRISTIAN RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 7,
-        "average_mark": 77.0,
+        "students_with_marks": 9,
+        "average_mark": 76.0,
         "grade_distribution": {
-          "A": 3,
+          "A": 5,
           "A+": 3,
           "B": 1
         }
@@ -266151,12 +266153,12 @@
       {
         "code": "154",
         "subject": "Information And Communication Technology",
-        "students_with_marks": 12,
-        "average_mark": 38.25,
+        "students_with_marks": 17,
+        "average_mark": 38.0,
         "grade_distribution": {
-          "A": 7,
-          "A+": 4,
-          "A-": 1
+          "A": 10,
+          "A+": 5,
+          "A-": 2
         }
       },
       {
@@ -266173,81 +266175,114 @@
       {
         "code": "147",
         "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
-        "students_with_marks": 13,
-        "average_mark": 72.77,
+        "students_with_marks": 18,
+        "average_mark": 75.39,
         "grade_distribution": {
-          "A+": 13
+          "A+": 17,
+          "B": 1
         }
       },
       {
         "code": "156",
         "subject": "Career Education",
-        "students_with_marks": 13,
-        "average_mark": 45.15,
+        "students_with_marks": 18,
+        "average_mark": 46.11,
         "grade_distribution": {
-          "A+": 13
+          "A+": 18
         }
       },
       {
         "code": "113",
         "subject": "BUDDHIST RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 5,
-        "average_mark": 66.8,
+        "students_with_marks": 8,
+        "average_mark": 69.12,
         "grade_distribution": {
-          "A": 3,
+          "A": 5,
           "B": 1,
-          "A-": 1
+          "A-": 2
         }
       },
       {
         "code": "127",
         "subject": "SCIENCE",
-        "students_with_marks": 5,
-        "average_mark": 44.0,
+        "students_with_marks": 10,
+        "average_mark": 46.0,
         "grade_distribution": {
-          "D": 3,
-          "B": 2
+          "D": 4,
+          "B": 5,
+          "C": 1
         }
       },
       {
         "code": "110",
         "subject": "GEOGRAPHY AND ENVIRONMENT",
-        "students_with_marks": 5,
-        "average_mark": 46.6,
+        "students_with_marks": 9,
+        "average_mark": 47.89,
         "grade_distribution": {
-          "B": 3,
-          "C": 1,
-          "D": 1
+          "B": 4,
+          "C": 2,
+          "D": 2,
+          "A-": 1
         }
       },
       {
         "code": "153",
         "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
-        "students_with_marks": 5,
-        "average_mark": 53.2,
+        "students_with_marks": 9,
+        "average_mark": 54.33,
         "grade_distribution": {
-          "A-": 1,
-          "C": 1,
-          "B": 3
+          "A-": 3,
+          "C": 2,
+          "B": 4
         }
       },
       {
         "code": "140",
         "subject": "CIVICS AND CITIZENSHIP",
-        "students_with_marks": 5,
-        "average_mark": 40.8,
+        "students_with_marks": 9,
+        "average_mark": 45.22,
         "grade_distribution": {
-          "C": 3,
-          "D": 2
+          "C": 4,
+          "D": 3,
+          "B": 1,
+          "A-": 1
         }
       },
       {
         "code": "134",
         "subject": "AGRICULTURE STUDIES",
-        "students_with_marks": 4,
-        "average_mark": 61.25,
+        "students_with_marks": 9,
+        "average_mark": 64.67,
         "grade_distribution": {
-          "A-": 3,
+          "A-": 6,
+          "B": 1,
+          "A": 2
+        }
+      },
+      {
+        "code": "146",
+        "subject": "ACCOUNTING",
+        "students_with_marks": 1,
+        "average_mark": 49.0,
+        "grade_distribution": {
+          "C": 1
+        }
+      },
+      {
+        "code": "152",
+        "subject": "FINANCE AND BANKING",
+        "students_with_marks": 1,
+        "average_mark": 73.0,
+        "grade_distribution": {
+          "A": 1
+        }
+      },
+      {
+        "code": "143",
+        "subject": "BUSINESS ENTREPRENEURSHIP",
+        "students_with_marks": 1,
+        "average_mark": 51.0,
+        "grade_distribution": {
           "B": 1
         }
       }

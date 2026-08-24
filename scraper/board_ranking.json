@@ -4,11 +4,11 @@
   "year": 2026,
   "score": 74.5,
   "statistics": {
-    "students_tested": 52407,
+    "students_tested": 52412,
     "average_gpa": 3.9923,
     "gpa_5_count": 8302,
     "gpa_5_percentage": 15.84,
-    "average_student_score": 63.97,
+    "average_student_score": 63.96,
     "institutions": 3,
     "institution_students": 1250,
     "institution_gpa5": 420,
