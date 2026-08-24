@@ -1,19 +1,21 @@
-name: Institution Test
+name: Institution Collection
 
 on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  test:
+  collect:
     runs-on: ubuntu-latest
 
     steps:
 
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -25,6 +27,53 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4
 
-      - name: Run Institution Test
+      - name: Run Institution Collection
         run: |
           python institution-collector/institution_test.py
+
+      - name: Verify Institution Data
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path(
+              "institution-collector/institution_results.json"
+          )
+
+          if not path.exists():
+              raise SystemExit(
+                  "ERROR: institution_results.json was not created."
+              )
+
+          data = json.loads(
+              path.read_text(
+                  encoding="utf-8"
+              )
+          )
+
+          print(
+              "Institution records:",
+              len(data)
+          )
+
+          if len(data) == 0:
+              raise SystemExit(
+                  "ERROR: institution_results.json is empty."
+              )
+          PY
+
+      - name: Commit Institution Data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add institution-collector/institution_results.json
+          git add institution-collector/failed_institutions.json
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update SSC 2026 institution results"
+            git push
+          fi
