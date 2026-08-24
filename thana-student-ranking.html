@@ -14,14 +14,15 @@ content="Chattogram Board Thana Wise Student Ranking">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link
-href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
 rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
+
 
 <style>
 
@@ -36,9 +37,9 @@ padding:90px 20px 60px;
 }
 
 .back{
+display:inline-block;
 color:var(--muted);
 text-decoration:none;
-display:inline-block;
 margin-bottom:28px;
 font-size:14px;
 }
@@ -47,7 +48,6 @@ h1{
 font-size:clamp(42px,7vw,72px);
 line-height:.98;
 letter-spacing:-4px;
-margin:0;
 }
 
 h1 span{
@@ -56,9 +56,9 @@ color:var(--blue);
 
 .desc{
 color:var(--muted);
+max-width:650px;
 margin-top:18px;
 font-size:16px;
-max-width:650px;
 }
 
 
@@ -70,14 +70,14 @@ max-width:650px;
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:14px;
-margin:35px 0 25px;
+margin-top:35px;
 }
 
 .card{
 padding:16px;
 border:1px solid var(--border);
 border-radius:20px;
-background:rgba(255,255,255,.9);
+background:rgba(255,255,255,.88);
 box-shadow:var(--shadow);
 }
 
@@ -97,9 +97,9 @@ box-sizing:border-box;
 padding:13px;
 border:1px solid var(--border);
 border-radius:13px;
-font-family:inherit;
 background:white;
 color:var(--text);
+font-family:inherit;
 outline:none;
 }
 
@@ -118,7 +118,7 @@ box-shadow:0 0 0 3px rgba(0,113,227,.10);
 display:flex;
 gap:8px;
 overflow-x:auto;
-margin-bottom:30px;
+margin:20px 0 28px;
 padding-bottom:3px;
 scrollbar-width:none;
 }
@@ -133,10 +133,10 @@ background:white;
 color:var(--text);
 padding:10px 16px;
 border-radius:50px;
+font-family:inherit;
 font-weight:700;
 white-space:nowrap;
 cursor:pointer;
-font-family:inherit;
 transition:.2s ease;
 }
 
@@ -160,7 +160,7 @@ display:flex;
 justify-content:space-between;
 align-items:end;
 gap:15px;
-margin-bottom:18px;
+margin:30px 0 18px;
 }
 
 .title h2{
@@ -172,8 +172,12 @@ letter-spacing:-1.5px;
 .title p{
 font-size:12px;
 color:var(--muted);
-margin:0;
 }
+
+
+/* =========================================================
+   PDF
+========================================================= */
 
 .pdf{
 background:#111;
@@ -181,11 +185,11 @@ color:white;
 border:0;
 border-radius:13px;
 padding:12px 18px;
-font-weight:800;
 font-family:inherit;
+font-weight:800;
 cursor:pointer;
-transition:.2s ease;
 white-space:nowrap;
+transition:.2s ease;
 }
 
 .pdf:hover{
@@ -203,7 +207,7 @@ cursor:not-allowed;
    SEARCH
 ========================================================= */
 
-#search{
+.search{
 margin-bottom:18px;
 }
 
@@ -216,7 +220,7 @@ margin-bottom:18px;
 border:1px solid var(--border);
 border-radius:22px;
 overflow:hidden;
-background:rgba(255,255,255,.92);
+background:rgba(255,255,255,.9);
 box-shadow:var(--shadow);
 }
 
@@ -227,9 +231,9 @@ display:grid;
 grid-template-columns:
 55px
 minmax(190px,1fr)
-70px
-90px
-minmax(230px,1fr);
+75px
+100px
+minmax(220px,1fr);
 
 gap:12px;
 
@@ -241,6 +245,7 @@ padding:14px 18px;
 background:#f5f5f7;
 font-size:9px;
 font-weight:800;
+letter-spacing:.5px;
 color:var(--muted);
 }
 
@@ -284,14 +289,15 @@ color:#777;
 color:#9b6b45;
 }
 
-.gpa{
-font-weight:800;
+.score{
 color:var(--blue);
+font-weight:800;
 }
 
-.score{
+.gpa strong{
+font-size:14px;
 font-weight:800;
-color:var(--text);
+color:var(--blue);
 }
 
 
@@ -314,8 +320,8 @@ gap:12px;
 }
 
 .spinner{
-width:25px;
-height:25px;
+width:24px;
+height:24px;
 border:2px solid rgba(127,127,127,.2);
 border-top-color:#0071e3;
 border-radius:50%;
@@ -323,9 +329,11 @@ animation:spin .8s linear infinite;
 }
 
 @keyframes spin{
+
 to{
 transform:rotate(360deg);
 }
+
 }
 
 
@@ -347,8 +355,8 @@ border:1px solid var(--border);
 border-radius:10px;
 background:white;
 color:var(--text);
-font-weight:700;
 font-family:inherit;
+font-weight:700;
 cursor:pointer;
 }
 
@@ -363,13 +371,21 @@ cursor:not-allowed;
 ========================================================= */
 
 body.dark .card{
-background:rgba(30,30,32,.88);
+background:rgba(30,30,32,.86);
 }
 
 body.dark select,
 body.dark input{
 background:#1c1c1e;
 color:var(--text);
+}
+
+body.dark .table{
+background:rgba(28,28,30,.88);
+}
+
+body.dark .head{
+background:#242426;
 }
 
 body.dark .group{
@@ -380,15 +396,6 @@ color:var(--text);
 body.dark .group.active{
 background:#f5f5f7;
 color:#111;
-border-color:#f5f5f7;
-}
-
-body.dark .table{
-background:rgba(28,28,30,.9);
-}
-
-body.dark .head{
-background:#242426;
 }
 
 body.dark .pdf{
@@ -428,10 +435,10 @@ margin-top:12px;
 .head,
 .row{
 grid-template-columns:
-35px
-minmax(120px,1fr)
-55px
-70px;
+38px
+minmax(125px,1fr)
+58px
+72px;
 gap:7px;
 }
 
@@ -450,8 +457,16 @@ display:none;
 .institute{
 grid-column:2 / 5;
 border-top:1px solid var(--border);
-padding-top:9px;
+padding-top:8px;
 margin-top:2px;
+}
+
+.institute strong{
+font-size:10.5px;
+}
+
+.institute span{
+font-size:8px;
 }
 
 .row strong{
@@ -462,50 +477,29 @@ font-size:10.5px;
 font-size:8px;
 }
 
-.gpa,
+.gpa strong,
 .score{
 font-size:11px;
-}
-
-.title h2{
-font-size:25px;
 }
 
 h1{
 letter-spacing:-2.5px;
 }
 
+.title h2{
+font-size:25px;
+}
+
 }
 
 
 /* =========================================================
-   SMALL MOBILE
+   SELECT LOADING
 ========================================================= */
 
-@media(max-width:420px){
-
-.head,
-.row{
-grid-template-columns:
-32px
-minmax(105px,1fr)
-48px
-62px;
-gap:6px;
-}
-
-.head{
-font-size:8px;
-}
-
-.row strong{
-font-size:10px;
-}
-
-.row span{
-font-size:7.5px;
-}
-
+select:disabled{
+opacity:.6;
+cursor:wait;
 }
 
 </style>
@@ -524,9 +518,7 @@ font-size:7.5px;
 
 <a href="index.html" class="logo">
 
-<span class="logo-mark">
-C
-</span>
+<span class="logo-mark">C</span>
 
 <span>
 CTGBoardRanking
@@ -610,9 +602,8 @@ Student Ranking.
 
 <p class="desc">
 
-Explore student performance by Thana, district
-and group. Ranking is based on student score,
-GPA and total marks.
+Explore student performance by Thana and group.
+Select a Thana to see its separate student ranking.
 
 </p>
 
@@ -632,7 +623,7 @@ THANA
 </label>
 
 
-<select id="thana">
+<select id="thanaSelect">
 
 <option value="">
 All Thanas
@@ -651,7 +642,7 @@ ACADEMIC YEAR
 </label>
 
 
-<select id="year">
+<select id="yearSelect">
 
 <option value="2026">
 2026
@@ -747,7 +738,7 @@ All Thana Students
 
 
 <p id="info">
-2026 · Chattogram Board
+2026 · Chattogram Board · All Thanas
 </p>
 
 </div>
@@ -773,8 +764,9 @@ type="button">
 
 <input
 id="search"
+class="search"
 type="search"
-placeholder="Search student, roll, institution, thana or district..."
+placeholder="Search student, roll, institution or thana..."
 autocomplete="off">
 
 
@@ -792,24 +784,20 @@ autocomplete="off">
 Rank
 </div>
 
-
 <div>
 Student
 </div>
-
 
 <div>
 GPA
 </div>
 
-
 <div>
 Total
 </div>
 
-
 <div>
-Institution / Location
+Institution / Thana
 </div>
 
 </div>
@@ -832,13 +820,25 @@ Loading students...
 
 
 
-<!-- =====================================================
+<div
+id="empty"
+class="message"
+style="display:none">
+
+No student found.
+
+</div>
+
+
+
+<!-- ===================================================
      PAGINATION
-===================================================== -->
+=================================================== -->
 
 <div
 class="pagination"
-id="pagination">
+id="pagination"
+style="display:none">
 
 <button
 id="prev"
@@ -874,52 +874,6 @@ Next →
 
 
 
-<!-- =======================================================
-     FOOTER
-======================================================= -->
-
-<footer>
-
-<div class="footer-main">
-
-<div>
-
-<div class="footer-logo">
-
-<span class="logo-mark">
-C
-</span>
-
-CTGBoardRanking
-
-</div>
-
-
-<p>
-Chattogram Board Education Rankings.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="footer-bottom">
-
-<span>
-© 2026 CTGBoardRanking
-</span>
-
-<span>
-Education Data & Statistics
-</span>
-
-</div>
-
-</footer>
-
-
-
 <script src="script.js"></script>
 
 
@@ -937,10 +891,6 @@ const DATA_URL =
 Date.now();
 
 
-/* =========================================================
-   SETTINGS
-========================================================= */
-
 const PAGE_SIZE = 100;
 
 
@@ -950,13 +900,13 @@ const PAGE_SIZE = 100;
 
 let students = [];
 
+let page = 1;
+
 let selectedThana = "";
 
 let selectedGroup = "All";
 
 let searchText = "";
-
-let currentPage = 1;
 
 
 /* =========================================================
@@ -966,11 +916,14 @@ let currentPage = 1;
 const rows =
 document.getElementById("rows");
 
-const thanaSelect =
-document.getElementById("thana");
+const empty =
+document.getElementById("empty");
 
-const searchBox =
-document.getElementById("search");
+const pagination =
+document.getElementById("pagination");
+
+const pageInfo =
+document.getElementById("page");
 
 const heading =
 document.getElementById("heading");
@@ -978,16 +931,13 @@ document.getElementById("heading");
 const info =
 document.getElementById("info");
 
-const pageText =
-document.getElementById("page");
+const thanaSelect =
+document.getElementById("thanaSelect");
 
-const prevBtn =
-document.getElementById("prev");
+const searchBox =
+document.getElementById("search");
 
-const nextBtn =
-document.getElementById("next");
-
-const pdfBtn =
+const pdfButton =
 document.getElementById("pdf");
 
 
@@ -1006,32 +956,432 @@ return String(value ?? "")
 
 
 /* =========================================================
-   NUMBER
+   GET FIRST VALID VALUE
 ========================================================= */
 
-function num(value){
+function firstValue(obj, keys){
+
+for(const key of keys){
+
+if(
+obj &&
+Object.prototype.hasOwnProperty.call(
+obj,
+key
+)
+){
+
+const value =
+obj[key];
+
+if(
+value !== undefined &&
+value !== null &&
+String(value).trim() !== ""
+){
+
+return value;
+
+}
+
+}
+
+}
+
+return "";
+
+}
+
+
+/* =========================================================
+   GET STUDENT NAME
+========================================================= */
+
+function getName(s){
+
+return firstValue(
+s,
+[
+"name",
+"student_name",
+"studentName",
+"student",
+"candidate_name",
+"candidateName"
+]
+);
+
+}
+
+
+/* =========================================================
+   GET ROLL
+========================================================= */
+
+function getRoll(s){
+
+return firstValue(
+s,
+[
+"roll",
+"student_roll",
+"studentRoll",
+"roll_no",
+"rollNo",
+"roll_number",
+"rollNumber"
+]
+);
+
+}
+
+
+/* =========================================================
+   GET INSTITUTION
+========================================================= */
+
+function getInstitution(s){
+
+return firstValue(
+s,
+[
+"institution",
+"institute",
+"institution_name",
+"institutionName",
+"institute_name",
+"instituteName",
+"school",
+"school_name",
+"schoolName"
+]
+);
+
+}
+
+
+/* =========================================================
+   GET THANA
+========================================================= */
+
+function getThana(s){
+
+return firstValue(
+s,
+[
+"thana",
+"thana_name",
+"thanaName",
+"upazila",
+"upazila_name",
+"upazilaName",
+"police_station",
+"policeStation",
+"ps"
+]
+);
+
+}
+
+
+/* =========================================================
+   GET DISTRICT
+========================================================= */
+
+function getDistrict(s){
+
+return firstValue(
+s,
+[
+"district",
+"district_name",
+"districtName"
+]
+);
+
+}
+
+
+/* =========================================================
+   GET GROUP
+========================================================= */
+
+function getGroup(s){
+
+return firstValue(
+s,
+[
+"group",
+"group_name",
+"groupName",
+"subject_group",
+"subjectGroup",
+"academic_group",
+"academicGroup"
+]
+);
+
+}
+
+
+/* =========================================================
+   NUMBER PARSER
+========================================================= */
+
+function toNumber(value){
 
 if(
 value === null ||
 value === undefined ||
-value === ""
+String(value).trim() === ""
 ){
 
-return 0;
+return null;
 
 }
 
-const n =
-Number(
+
+if(
+typeof value === "number"
+){
+
+return Number.isFinite(value)
+? value
+: null;
+
+}
+
+
+let text =
 String(value)
 .replace(/,/g,"")
 .replace(/%/g,"")
-.trim()
-);
+.trim();
+
+
+let n =
+Number(text);
+
 
 return Number.isFinite(n)
 ? n
-: 0;
+: null;
+
+}
+
+
+/* =========================================================
+   GET TOTAL SCORE
+========================================================= */
+
+function getTotalScore(s){
+
+/*
+   Try all common total-score field names.
+*/
+
+const keys = [
+
+"total_score",
+"totalScore",
+
+"total_marks",
+"totalMarks",
+
+"total_mark",
+"totalMark",
+
+"total",
+
+"marks",
+
+"score",
+
+"obtained_marks",
+"obtainedMarks",
+
+"marks_obtained",
+"marksObtained",
+
+"total_marks_obtained",
+"totalMarksObtained",
+
+"total_obtained",
+"totalObtained",
+
+"final_score",
+"finalScore"
+
+];
+
+
+for(const key of keys){
+
+if(
+s[key] !== undefined &&
+s[key] !== null &&
+String(s[key]).trim() !== ""
+){
+
+const n =
+toNumber(s[key]);
+
+if(n !== null){
+
+return n;
+
+}
+
+}
+
+}
+
+
+/*
+   Some datasets may store marks
+   inside a nested object.
+*/
+
+if(
+s.result &&
+typeof s.result === "object"
+){
+
+for(const key of keys){
+
+if(
+s.result[key] !== undefined
+){
+
+const n =
+toNumber(
+s.result[key]
+);
+
+if(n !== null)
+return n;
+
+}
+
+}
+
+}
+
+
+if(
+s.results &&
+typeof s.results === "object"
+){
+
+for(const key of keys){
+
+if(
+s.results[key] !== undefined
+){
+
+const n =
+toNumber(
+s.results[key]
+);
+
+if(n !== null)
+return n;
+
+}
+
+}
+
+}
+
+
+return null;
+
+}
+
+
+/* =========================================================
+   GET GPA
+========================================================= */
+
+function getGPA(s){
+
+const keys = [
+
+"gpa",
+"GPA",
+"grade_point",
+"gradePoint",
+"gpa_point",
+"gpaPoint",
+"final_gpa",
+"finalGpa"
+
+];
+
+
+for(const key of keys){
+
+if(
+s[key] !== undefined &&
+s[key] !== null &&
+String(s[key]).trim() !== ""
+){
+
+const n =
+toNumber(s[key]);
+
+if(n !== null)
+return n;
+
+}
+
+}
+
+
+return null;
+
+}
+
+
+/* =========================================================
+   NORMALIZE STUDENT
+========================================================= */
+
+function normalizeStudent(item){
+
+return {
+
+raw:item,
+
+name:String(
+getName(item)
+).trim(),
+
+roll:String(
+getRoll(item)
+).trim(),
+
+institution:String(
+getInstitution(item)
+).trim(),
+
+thana:String(
+getThana(item)
+).trim(),
+
+district:String(
+getDistrict(item)
+).trim(),
+
+group:String(
+getGroup(item)
+).trim(),
+
+gpa:getGPA(item),
+
+total:getTotalScore(item)
+
+};
 
 }
 
@@ -1053,332 +1403,17 @@ return String(value ?? "")
 
 
 /* =========================================================
-   GET TOTAL MARKS
+   FILTER + RANK
 ========================================================= */
 
-function getTotalMarks(student){
+function filtered(){
 
-const possible = [
+let result =
+students.filter(
+student => {
 
-student.total_marks,
-student.totalMarks,
-student.total_mark,
-student.totalMark,
-student.totalMarksObtained,
-student.total,
-student.score
 
-];
-
-
-for(const value of possible){
-
-if(
-value !== undefined &&
-value !== null &&
-String(value).trim() !== ""
-){
-
-const n =
-num(value);
-
-if(Number.isFinite(n))
-return n;
-
-}
-
-}
-
-
-return null;
-
-}
-
-
-/* =========================================================
-   NORMALIZE STUDENT DATA
-========================================================= */
-
-function normalizeStudent(item){
-
-return {
-
-name:
-String(
-item.name ??
-item.student_name ??
-item.studentName ??
-"Unknown Student"
-).trim(),
-
-
-roll:
-String(
-item.roll ??
-item.roll_no ??
-item.rollNo ??
-""
-).trim(),
-
-
-gpa:
-item.gpa ??
-item.GPA ??
-item.grade_point ??
-item.gradePoint ??
-"",
-
-
-score:
-num(
-item.score ??
-item.total_marks ??
-item.totalMarks ??
-item.total ??
-0
-),
-
-
-totalMarks:
-getTotalMarks(item),
-
-
-institute:
-String(
-item.institute ??
-item.institution ??
-item.institution_name ??
-item.institutionName ??
-"Unknown Institution"
-).trim(),
-
-
-thana:
-String(
-item.thana ??
-item.upazila ??
-item.upazilla ??
-item.thana_name ??
-item.thanaName ??
-""
-).trim(),
-
-
-district:
-String(
-item.district ??
-item.district_name ??
-item.districtName ??
-""
-).trim(),
-
-
-group:
-String(
-item.group ??
-item.group_name ??
-item.groupName ??
-""
-).trim()
-
-};
-
-}
-
-
-/* =========================================================
-   GROUP MATCH
-========================================================= */
-
-function groupMatch(studentGroup){
-
-if(selectedGroup === "All"){
-
-return true;
-
-}
-
-
-const group =
-norm(studentGroup);
-
-const selected =
-norm(selectedGroup);
-
-
-/* Science */
-
-if(selected === "SCIENCE"){
-
-return group === "SCIENCE";
-
-}
-
-
-/* Business */
-
-if(selected === "BUSINESS STUDIES"){
-
-return (
-
-group === "BUSINESS STUDIES" ||
-
-group === "BUSINESS" ||
-
-group === "COMMERCE"
-
-);
-
-}
-
-
-/* Humanities */
-
-if(selected === "HUMANITIES"){
-
-return (
-
-group === "HUMANITIES" ||
-
-group === "ARTS"
-
-);
-
-}
-
-
-/* Science Irregular */
-
-if(selected === "SCIENCE IRREGULAR"){
-
-return (
-
-group === "SCIENCE IRREGULAR" ||
-
-group === "SCIENCE-IRREGULAR"
-
-);
-
-}
-
-
-return group === selected;
-
-}
-
-
-/* =========================================================
-   POPULATE THANA DROPDOWN
-========================================================= */
-
-function populateThanas(){
-
-const unique =
-new Map();
-
-
-students.forEach(student=>{
-
-const raw =
-String(
-student.thana || ""
-).trim();
-
-
-if(!raw)
-return;
-
-
-const key =
-norm(raw);
-
-
-/*
-   Prevent duplicate names caused by
-   different capitalization / spaces.
-*/
-
-if(!unique.has(key)){
-
-unique.set(
-key,
-raw
-);
-
-}
-
-});
-
-
-const thanas =
-Array.from(
-unique.values()
-)
-.sort(
-(a,b)=>
-norm(a).localeCompare(
-norm(b)
-)
-);
-
-
-/* Reset */
-
-thanaSelect.innerHTML = "";
-
-
-/* All */
-
-const all =
-document.createElement(
-"option"
-);
-
-all.value = "";
-
-all.textContent =
-"All Thanas";
-
-thanaSelect.appendChild(
-all
-);
-
-
-/* Add all thanas */
-
-thanas.forEach(thana=>{
-
-const option =
-document.createElement(
-"option"
-);
-
-option.value =
-thana;
-
-option.textContent =
-thana;
-
-thanaSelect.appendChild(
-option
-);
-
-});
-
-}
-
-
-/* =========================================================
-   FILTER
-========================================================= */
-
-function getFiltered(){
-
-const result =
-students.filter(student=>{
-
-
-/* THANA */
+/* THANA FILTER */
 
 if(
 selectedThana &&
@@ -1391,15 +1426,37 @@ return false;
 }
 
 
-/* GROUP */
+/* GROUP FILTER */
 
 if(
-!groupMatch(
-student.group
+selectedGroup !== "All"
+){
+
+const wanted =
+norm(selectedGroup);
+
+const actual =
+norm(student.group);
+
+
+/*
+   Accept slight naming differences.
+*/
+
+if(
+actual !== wanted &&
+!(
+wanted === "BUSINESS STUDIES" &&
+(
+actual === "BUSINESS" ||
+actual === "COMMERCE"
+)
 )
 ){
 
 return false;
+
+}
 
 }
 
@@ -1412,12 +1469,12 @@ const text = [
 
 student.name,
 student.roll,
-student.institute,
+student.institution,
 student.thana,
 student.district,
 student.group,
 student.gpa,
-student.totalMarks
+student.total
 
 ]
 .join(" ")
@@ -1440,71 +1497,48 @@ return true;
 });
 
 
-/* =========================================================
-   RANKING
-========================================================= */
+/*
+   RANKING:
 
-result.sort((a,b)=>{
+   1. Total Score
+   2. GPA
+   3. Alphabetical
+*/
 
-
-/* 1. SCORE */
-
-const scoreA =
-num(a.score);
-
-const scoreB =
-num(b.score);
-
-
-if(
-scoreB !== scoreA
-){
-
-return scoreB -
-scoreA;
-
-}
-
-
-/* 2. GPA */
-
-const gpaA =
-num(a.gpa);
-
-const gpaB =
-num(b.gpa);
-
-
-if(
-gpaB !== gpaA
-){
-
-return gpaB -
-gpaA;
-
-}
-
-
-/* 3. TOTAL MARKS */
+result.sort(
+(a,b)=>{
 
 const totalA =
-num(a.totalMarks);
+a.total ?? -1;
 
 const totalB =
-num(b.totalMarks);
+b.total ?? -1;
 
 
 if(
 totalB !== totalA
 ){
 
-return totalB -
-totalA;
+return totalB - totalA;
 
 }
 
 
-/* 4. Name */
+const gpaA =
+a.gpa ?? -1;
+
+const gpaB =
+b.gpa ?? -1;
+
+
+if(
+gpaB !== gpaA
+){
+
+return gpaB - gpaA;
+
+}
+
 
 return norm(a.name)
 .localeCompare(
@@ -1520,13 +1554,116 @@ return result;
 
 
 /* =========================================================
+   POPULATE THANA
+========================================================= */
+
+function populateThanas(){
+
+const map =
+new Map();
+
+
+students.forEach(
+student => {
+
+const value =
+String(
+student.thana || ""
+).trim();
+
+
+if(!value)
+return;
+
+
+const key =
+norm(value);
+
+
+if(!map.has(key)){
+
+map.set(
+key,
+value
+);
+
+}
+
+});
+
+
+const thanas =
+Array.from(
+map.values()
+)
+.sort(
+(a,b)=>
+norm(a).localeCompare(
+norm(b)
+)
+);
+
+
+thanaSelect.innerHTML = "";
+
+
+/* ALL */
+
+const all =
+document.createElement(
+"option"
+);
+
+all.value = "";
+
+all.textContent =
+"All Thanas";
+
+thanaSelect.appendChild(
+all
+);
+
+
+/* THANAS */
+
+thanas.forEach(
+thana => {
+
+const option =
+document.createElement(
+"option"
+);
+
+option.value =
+thana;
+
+option.textContent =
+thana;
+
+thanaSelect.appendChild(
+option
+);
+
+});
+
+
+/*
+   Enable select after loading.
+*/
+
+thanaSelect.disabled = false;
+
+}
+
+
+/* =========================================================
    RENDER
 ========================================================= */
 
 function render(){
 
 const list =
-getFiltered();
+filtered();
 
 
 const totalPages =
@@ -1537,27 +1674,24 @@ PAGE_SIZE
 
 
 if(
-currentPage >
-totalPages
+page > totalPages
 ){
 
-currentPage =
+page =
 totalPages;
 
 }
 
 
-if(
-currentPage < 1
-){
+if(page < 1){
 
-currentPage = 1;
+page = 1;
 
 }
 
 
 const start =
-(currentPage - 1) *
+(page - 1) *
 PAGE_SIZE;
 
 
@@ -1568,29 +1702,32 @@ start + PAGE_SIZE
 );
 
 
-/* Clear */
+/* CLEAR */
 
 rows.innerHTML = "";
 
 
-/* Empty */
+/* EMPTY */
 
-if(!current.length){
-
-rows.innerHTML = `
-
-<div class="message">
-
-No student found.
-
-</div>
-
-`;
-
-}
+empty.style.display =
+current.length
+? "none"
+: "block";
 
 
-/* Rows */
+/* PAGINATION */
+
+pagination.style.display =
+totalPages > 1
+? "flex"
+: "none";
+
+
+pageInfo.textContent =
+`Page ${page} of ${totalPages}`;
+
+
+/* ROWS */
 
 current.forEach(
 (student,index)=>{
@@ -1609,83 +1746,54 @@ row.className =
 "row";
 
 
-/* Rank class */
-
 let rankClass = "";
 
+if(rank === 1)
+rankClass = "top-one";
 
-if(rank === 1){
+else if(rank === 2)
+rankClass = "top-two";
 
-rankClass =
-"top-one";
-
-}
-
-else if(rank === 2){
-
-rankClass =
-"top-two";
-
-}
-
-else if(rank === 3){
-
-rankClass =
-"top-three";
-
-}
+else if(rank === 3)
+rankClass = "top-three";
 
 
-/* Total */
+const gpa =
+student.gpa !== null
+? student.gpa
+: "—";
+
 
 const total =
-student.totalMarks;
+student.total !== null
+? student.total.toLocaleString(
+"en-US"
+)
+: "—";
 
-
-/* Location */
-
-const location = [
-
-student.thana,
-
-student.district
-
-]
-.filter(Boolean)
-.join(" · ");
-
-
-/* HTML */
 
 row.innerHTML = `
 
 <div class="rank ${rankClass}">
-
 ${String(rank).padStart(2,"0")}
-
 </div>
 
 
 <div>
 
 <strong>
-
 ${esc(
 student.name ||
 "Unknown Student"
 )}
-
 </strong>
 
-
 <span>
-
 Roll:
 ${esc(
 student.roll ||
 "—"
 )}
-
 </span>
 
 </div>
@@ -1694,15 +1802,7 @@ student.roll ||
 <div class="gpa">
 
 <strong>
-
-${esc(
-student.gpa === "" ||
-student.gpa === null ||
-student.gpa === undefined
-? "—"
-: student.gpa
-)}
-
+${esc(gpa)}
 </strong>
 
 </div>
@@ -1710,9 +1810,7 @@ student.gpa === undefined
 
 <div class="score">
 
-${total !== null
-? total.toLocaleString("en-US")
-: "—"}
+${esc(total)}
 
 </div>
 
@@ -1720,21 +1818,26 @@ ${total !== null
 <div class="institute">
 
 <strong>
-
 ${esc(
-student.institute ||
+student.institution ||
 "Unknown Institution"
 )}
-
 </strong>
-
 
 <span>
 
+Thana:
 ${esc(
-location ||
-"Location unavailable"
+student.thana ||
+"—"
 )}
+
+${
+student.district
+? " · District: " +
+esc(student.district)
+: ""
+}
 
 </span>
 
@@ -1743,36 +1846,30 @@ location ||
 `;
 
 
-rows.appendChild(row);
+rows.appendChild(
+row
+);
 
 });
 
 
-/* Page */
+/* TITLE */
 
-pageText.textContent =
-`Page ${currentPage} of ${totalPages}`;
-
-
-/* Buttons */
-
-prevBtn.disabled =
-currentPage <= 1;
-
-
-nextBtn.disabled =
-currentPage >= totalPages;
-
-
-/* Heading */
+if(selectedThana){
 
 heading.textContent =
-selectedThana
-? `${selectedThana} Student Ranking`
-: "All Thana Students";
+`${selectedThana} Student Ranking`;
+
+}
+else{
+
+heading.textContent =
+"All Thana Students";
+
+}
 
 
-/* Info */
+/* INFO */
 
 info.textContent =
 `2026 · Chattogram Board · ${
@@ -1790,12 +1887,14 @@ list.length.toLocaleString(
 
 
 /* =========================================================
-   LOAD
+   LOAD DATA
 ========================================================= */
 
 async function load(){
 
 try{
+
+thanaSelect.disabled = true;
 
 
 rows.innerHTML = `
@@ -1835,21 +1934,19 @@ const json =
 await response.json();
 
 
-let raw = [];
+/*
+   Support multiple JSON structures.
+*/
+
+let source = [];
 
 
-/* Array */
+if(Array.isArray(json)){
 
-if(
-Array.isArray(json)
-){
-
-raw = json;
+source =
+json;
 
 }
-
-
-/* students */
 
 else if(
 json &&
@@ -1858,28 +1955,10 @@ json.students
 )
 ){
 
-raw =
+source =
 json.students;
 
 }
-
-
-/* data */
-
-else if(
-json &&
-Array.isArray(
-json.data
-)
-){
-
-raw =
-json.data;
-
-}
-
-
-/* results */
 
 else if(
 json &&
@@ -1888,13 +1967,22 @@ json.results
 )
 ){
 
-raw =
+source =
 json.results;
 
 }
 
+else if(
+json &&
+Array.isArray(
+json.data
+)
+){
 
-/* records */
+source =
+json.data;
+
+}
 
 else if(
 json &&
@@ -1903,36 +1991,54 @@ json.records
 )
 ){
 
-raw =
+source =
 json.records;
 
 }
 
 
-/* Normalize */
-
 students =
-raw.map(
+source.map(
 normalizeStudent
 );
 
 
-/* Dropdown */
+/*
+   Populate Thana dropdown.
+*/
 
 populateThanas();
 
 
-/* Render */
+/*
+   Initial render.
+*/
 
 render();
+
+
+console.log(
+"Students loaded:",
+students.length
+);
+
+console.log(
+"Thanas:",
+[
+...new Set(
+students
+.map(x=>x.thana)
+.filter(Boolean)
+)
+]
+);
 
 
 }
 catch(error){
 
-
 console.error(
-"Thana Student Ranking:",
+"Thana Student Ranking Error:",
 error
 );
 
@@ -1948,9 +2054,7 @@ Unable to load student data.
 <br><br>
 
 <small>
-${esc(
-error.message
-)}
+${esc(error.message)}
 </small>
 
 </div>
@@ -1968,16 +2072,33 @@ error.message
 
 thanaSelect.addEventListener(
 "change",
-()=>{
+function(){
 
 selectedThana =
-thanaSelect.value;
+this.value.trim();
 
-
-currentPage = 1;
-
+page = 1;
 
 render();
+
+
+/*
+   Scroll to ranking.
+*/
+
+setTimeout(
+()=>{
+
+document
+.getElementById("heading")
+.scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+
+},
+50
+);
 
 });
 
@@ -1988,16 +2109,14 @@ render();
 
 searchBox.addEventListener(
 "input",
-()=>{
+function(){
 
 searchText =
-searchBox.value
+this.value
 .toLowerCase()
 .trim();
 
-
-currentPage = 1;
-
+page = 1;
 
 render();
 
@@ -2005,47 +2124,39 @@ render();
 
 
 /* =========================================================
-   GROUP
+   GROUP BUTTONS
 ========================================================= */
 
 document
 .querySelectorAll(".group")
-.forEach(button=>{
-
+.forEach(
+button => {
 
 button.addEventListener(
 "click",
-()=>{
-
+function(){
 
 selectedGroup =
-button.dataset.group ||
+this.dataset.group ||
 "All";
 
+page = 1;
 
-currentPage = 1;
-
-
-/* Remove active */
 
 document
 .querySelectorAll(".group")
 .forEach(
-item =>
-item.classList.remove(
+b =>
+b.classList.remove(
 "active"
 )
 );
 
 
-/* Active */
-
-button.classList.add(
+this.classList.add(
 "active"
 );
 
-
-/* Render */
 
 render();
 
@@ -2058,27 +2169,21 @@ render();
    PREVIOUS
 ========================================================= */
 
-prevBtn.addEventListener(
+document
+.getElementById("prev")
+.addEventListener(
 "click",
-()=>{
+function(){
 
+if(page > 1){
 
-if(
-currentPage > 1
-){
-
-currentPage--;
-
+page--;
 
 render();
 
-
 window.scrollTo({
-
 top:450,
-
 behavior:"smooth"
-
 });
 
 }
@@ -2090,35 +2195,30 @@ behavior:"smooth"
    NEXT
 ========================================================= */
 
-nextBtn.addEventListener(
+document
+.getElementById("next")
+.addEventListener(
 "click",
-()=>{
-
+function(){
 
 const totalPages =
 Math.ceil(
-getFiltered().length /
+filtered().length /
 PAGE_SIZE
-) || 1;
+);
 
 
 if(
-currentPage <
-totalPages
+page < totalPages
 ){
 
-currentPage++;
-
+page++;
 
 render();
 
-
 window.scrollTo({
-
 top:450,
-
 behavior:"smooth"
-
 });
 
 }
@@ -2130,19 +2230,18 @@ behavior:"smooth"
    PDF
 ========================================================= */
 
-pdfBtn.addEventListener(
+pdfButton.addEventListener(
 "click",
-()=>{
-
+function(){
 
 const list =
-getFiltered();
+filtered();
 
 
 if(!list.length){
 
 alert(
-"No students available."
+"No students available for this selection."
 );
 
 return;
@@ -2168,11 +2267,11 @@ const totalPages =
 Math.ceil(
 list.length /
 PAGE_SIZE
-) || 1;
+);
 
 
 const start =
-(currentPage - 1) *
+(page - 1) *
 PAGE_SIZE;
 
 
@@ -2192,24 +2291,25 @@ window.jspdf;
 const doc =
 new jsPDF({
 
-orientation:
-"portrait",
+orientation:"portrait",
 
-unit:
-"mm",
+unit:"mm",
 
-format:
-"a4"
+format:"a4"
 
 });
 
 
 const w =
-doc.internal.pageSize.getWidth();
+doc.internal
+.pageSize
+.getWidth();
 
 
 const h =
-doc.internal.pageSize.getHeight();
+doc.internal
+.pageSize
+.getHeight();
 
 
 /* HEADER */
@@ -2335,35 +2435,34 @@ doc.setTextColor(
 95
 );
 
-
 doc.text(
-
 `2026 · Chattogram Board · ${
 selectedThana ||
 "All Thanas"
 } · ${
 selectedGroup
-} · Page ${
-currentPage
-} of ${
-totalPages
-}`,
-
+} · Page ${page} of ${totalPages}`,
 15,
 51
-
 );
 
 
-/* TABLE BODY */
+/* BODY */
 
 const body =
 current.map(
 (student,index)=>{
 
-
 const total =
-student.totalMarks;
+student.total !== null
+? student.total
+: "—";
+
+
+const gpa =
+student.gpa !== null
+? student.gpa
+: "—";
 
 
 return [
@@ -2372,53 +2471,31 @@ String(
 start + index + 1
 ),
 
+`${student.name || "Unknown Student"}
+\nRoll: ${student.roll || "—"}`,
 
-`${student.name || "Unknown"}\nRoll: ${
-student.roll || "—"
-}`,
+String(gpa),
 
+String(total),
 
-String(
-student.gpa ?? "—"
-),
-
-
-total !== null
-? String(total)
-: "—",
-
-
-`${student.institute || "Unknown"}\n${
-student.thana || "—"
-}${
-student.district
-? " · " + student.district
-: ""
-}`
+`${student.institution || "Unknown Institution"}
+\nThana: ${student.thana || "—"}`
 
 ];
 
 });
 
 
-/* AUTO TABLE */
-
 doc.autoTable({
 
 startY:57,
 
 head:[[
-
 "RANK",
-
 "STUDENT",
-
 "GPA",
-
 "TOTAL",
-
-"INSTITUTION / LOCATION"
-
+"INSTITUTION / THANA"
 ]],
 
 body:body,
@@ -2426,11 +2503,8 @@ body:body,
 theme:"grid",
 
 margin:{
-
 left:12,
-
 right:12
-
 },
 
 styles:{
@@ -2443,19 +2517,19 @@ cellPadding:3,
 
 valign:"middle",
 
+textColor:[
+35,
+35,
+38
+],
+
 lineColor:[
 225,
 225,
 228
 ],
 
-lineWidth:.2,
-
-textColor:[
-35,
-35,
-38
-]
+lineWidth:.2
 
 },
 
@@ -2482,57 +2556,41 @@ fontSize:7
 columnStyles:{
 
 0:{
-
 cellWidth:15,
-
 halign:"center"
-
 },
 
 1:{
-
 cellWidth:55
-
 },
 
 2:{
-
 cellWidth:20,
-
 halign:"center"
-
 },
 
 3:{
-
-cellWidth:23,
-
+cellWidth:25,
 halign:"center"
-
 },
 
 4:{
-
 cellWidth:"auto"
-
 }
 
 },
 
 alternateRowStyles:{
-
 fillColor:[
 252,
 252,
 253
 ]
-
 },
 
 didDrawPage:()=>{
 
-
-const p =
+const pdfPage =
 doc.internal
 .getNumberOfPages();
 
@@ -2542,7 +2600,6 @@ doc.setDrawColor(
 225,
 228
 );
-
 
 doc.line(
 12,
@@ -2569,26 +2626,19 @@ doc.setTextColor(
 
 
 doc.text(
-
 "CTGBoardRanking • Unofficial Education Data",
-
 12,
 h - 7
-
 );
 
 
 doc.text(
-
-`PDF Page ${p}`,
-
+`PDF Page ${pdfPage}`,
 w - 12,
 h - 7,
-
 {
 align:"right"
 }
-
 );
 
 }
@@ -2623,9 +2673,7 @@ selectedGroup ||
 
 
 doc.save(
-
-`CTGBoardRanking-Thana-Student-${safeThana}-${safeGroup}-Page-${currentPage}.pdf`
-
+`CTGBoardRanking-Thana-Student-${safeThana}-${safeGroup}-Page-${page}.pdf`
 );
 
 });
@@ -2638,6 +2686,7 @@ doc.save(
 load();
 
 </script>
+
 
 </body>
 
