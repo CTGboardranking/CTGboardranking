@@ -30,6 +30,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
 
+
 <style>
 
 /* =========================================================
@@ -183,76 +184,45 @@
 ========================================================= */
 
 .pdf-download-btn {
-
     display:inline-flex;
-
     align-items:center;
-
     justify-content:center;
-
     gap:9px;
-
     border:0;
-
     background:#111;
-
     color:#fff;
-
     padding:12px 18px;
-
     border-radius:13px;
-
     font-family:inherit;
-
     font-size:13px;
-
     font-weight:700;
-
     cursor:pointer;
-
     white-space:nowrap;
-
-    box-shadow:
-        0 8px 22px rgba(0,0,0,.12);
-
+    box-shadow:0 8px 22px rgba(0,0,0,.12);
     transition:
         transform .2s,
         box-shadow .2s,
         opacity .2s;
-
 }
 
 .pdf-download-btn:hover {
-
     transform:translateY(-1px);
-
-    box-shadow:
-        0 12px 28px rgba(0,0,0,.17);
-
+    box-shadow:0 12px 28px rgba(0,0,0,.17);
 }
 
 .pdf-download-btn:active {
-
     transform:scale(.98);
-
 }
 
 .pdf-download-btn:disabled {
-
     opacity:.55;
-
     cursor:not-allowed;
-
     transform:none;
-
 }
 
 .pdf-icon {
-
     font-size:16px;
-
     line-height:1;
-
 }
 
 
@@ -271,19 +241,12 @@
 ========================================================= */
 
 .student-list {
-
     width:100%;
-
     background:rgba(255,255,255,.88);
-
     border:1px solid var(--border);
-
     border-radius:24px;
-
     overflow:hidden;
-
     box-shadow:var(--shadow);
-
 }
 
 
@@ -321,7 +284,6 @@
     letter-spacing:.7px;
 
     text-transform:uppercase;
-
 }
 
 
@@ -353,7 +315,6 @@
     min-width:0;
 
     box-sizing:border-box;
-
 }
 
 .student-row:last-child {
@@ -366,17 +327,13 @@
 
 
 /* =========================================================
-   SERIAL
+   RANK
 ========================================================= */
 
 .student-rank {
-
     font-size:17px;
-
     font-weight:800;
-
     color:var(--muted);
-
 }
 
 .student-rank.gold {
@@ -385,47 +342,30 @@
 
 
 /* =========================================================
-   NAME + ROLL
+   NAME
 ========================================================= */
 
 .student-name {
-
     min-width:0;
-
     overflow:hidden;
-
 }
 
 .student-name strong {
-
     display:block;
-
     font-size:14px;
-
     font-weight:700;
-
     line-height:1.35;
-
     white-space:normal;
-
     overflow-wrap:anywhere;
-
     word-break:break-word;
-
 }
 
 .student-name span {
-
     display:block;
-
     color:var(--muted);
-
     font-size:10px;
-
     margin-top:4px;
-
     line-height:1.3;
-
 }
 
 
@@ -434,66 +374,43 @@
 ========================================================= */
 
 .student-gpa {
-
     min-width:0;
-
 }
 
 .student-gpa strong {
-
     display:block;
-
     font-size:16px;
-
     font-weight:800;
-
 }
 
 .student-gpa span {
-
     display:block;
-
     color:var(--muted);
-
     font-size:9px;
-
     margin-top:3px;
-
 }
 
 
 /* =========================================================
-   TOTAL MARKS
+   TOTAL SCORE
 ========================================================= */
 
 .student-total {
-
     min-width:0;
-
 }
 
 .student-total strong {
-
     display:block;
-
     color:var(--blue);
-
     font-size:16px;
-
     font-weight:800;
-
 }
 
 .student-total span {
-
     display:block;
-
     color:var(--muted);
-
     font-size:9px;
-
     margin-top:3px;
-
 }
 
 
@@ -502,45 +419,27 @@
 ========================================================= */
 
 .student-institution {
-
     min-width:0;
-
     max-width:100%;
-
     overflow:hidden;
-
 }
 
 .student-institution strong {
-
     display:block;
-
     font-size:12px;
-
     line-height:1.4;
-
     font-weight:700;
-
     white-space:normal;
-
     overflow-wrap:anywhere;
-
     word-break:break-word;
-
 }
 
 .student-institution span {
-
     display:block;
-
     color:var(--muted);
-
     font-size:10px;
-
     margin-top:4px;
-
     line-height:1.3;
-
 }
 
 
@@ -551,13 +450,9 @@
 .loading-message,
 .empty-message,
 .error-message {
-
     text-align:center;
-
     padding:60px 20px;
-
     color:var(--muted);
-
 }
 
 .error-message {
@@ -570,73 +465,43 @@
 ========================================================= */
 
 .pagination {
-
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
     gap:12px;
-
     padding:25px 15px;
-
     border-top:1px solid var(--border);
-
 }
 
 .pagination button {
-
     border:1px solid var(--border);
-
     background:var(--white);
-
     color:var(--text);
-
     padding:10px 18px;
-
     border-radius:12px;
-
     font-family:inherit;
-
     font-size:13px;
-
     font-weight:700;
-
     cursor:pointer;
-
     transition:.2s;
-
 }
 
 .pagination button:hover:not(:disabled) {
-
     background:var(--text);
-
     color:var(--bg);
-
 }
 
 .pagination button:disabled {
-
     opacity:.4;
-
     cursor:not-allowed;
-
 }
 
 .pagination-info {
-
     min-width:90px;
-
     text-align:center;
-
     color:var(--muted);
-
     font-size:13px;
-
     font-weight:700;
-
 }
 
 
@@ -658,7 +523,6 @@
         gap:9px;
 
         padding:15px 16px;
-
     }
 
     .student-row {
@@ -673,9 +537,7 @@
         gap:9px;
 
         padding:17px 16px;
-
     }
-
 }
 
 
@@ -702,13 +564,9 @@
     }
 
     .pdf-download-btn {
-
         width:100%;
-
         margin-top:15px;
-
     }
-
 
     .student-header {
 
@@ -723,16 +581,11 @@
         padding:13px 12px;
 
         font-size:8px;
-
     }
-
 
     .student-header div:nth-child(5) {
-
         display:none;
-
     }
-
 
     .student-row {
 
@@ -745,9 +598,7 @@
         gap:7px;
 
         padding:15px 12px;
-
     }
-
 
     .student-institution {
 
@@ -764,77 +615,45 @@
         border-top:1px solid var(--border);
 
         box-sizing:border-box;
-
     }
-
 
     .student-name {
-
         width:100%;
-
         min-width:0;
-
     }
-
 
     .student-name strong {
-
         font-size:12px;
-
         line-height:1.35;
-
     }
-
 
     .student-name span {
-
         font-size:9px;
-
         margin-top:3px;
-
     }
-
 
     .student-gpa strong,
     .student-total strong {
-
         font-size:12px;
-
     }
-
 
     .student-gpa span,
     .student-total span {
-
         font-size:8px;
-
     }
-
 
     .student-institution strong {
-
         font-size:10.5px;
-
         line-height:1.4;
-
         white-space:normal;
-
         overflow-wrap:anywhere;
-
         word-break:break-word;
-
     }
-
 
     .student-institution span {
-
         font-size:9px;
-
         margin-top:3px;
-
     }
-
-
 }
 
 
@@ -845,17 +664,12 @@
 @media(max-width:430px) {
 
     .student-content {
-
         padding:15px 10px;
-
     }
 
     .student-hero {
-
         padding-left:15px;
-
         padding-right:15px;
-
     }
 
     .student-header {
@@ -869,9 +683,7 @@
         gap:6px;
 
         padding:12px 10px;
-
     }
-
 
     .student-row {
 
@@ -884,79 +696,47 @@
         gap:6px;
 
         padding:14px 10px;
-
     }
-
 
     .student-name strong {
-
         font-size:11.5px;
-
     }
-
 
     .student-name span {
-
         font-size:8.5px;
-
     }
-
 
     .student-gpa strong,
     .student-total strong {
-
         font-size:11px;
-
     }
-
 
     .student-institution {
-
         grid-column:2 / 5;
-
     }
-
 
     .student-institution strong {
-
         font-size:10px;
-
     }
-
 
     .student-institution span {
-
         font-size:8.5px;
-
     }
-
 
     .pagination {
-
         gap:7px;
-
         padding:20px 8px;
-
     }
-
 
     .pagination button {
-
         padding:9px 11px;
-
         font-size:11px;
-
     }
-
 
     .pagination-info {
-
         min-width:65px;
-
         font-size:11px;
-
     }
-
 }
 
 </style>
@@ -1053,8 +833,8 @@ Student<br>
 
 <p>
 
-Explore the top 100 performing SSC 2026 students
-by group.
+Explore the top performing SSC 2026 students
+by group, ranked by Total Score.
 
 </p>
 
@@ -1094,10 +874,10 @@ ACADEMIC YEAR
 RANKING
 </label>
 
-<select>
+<select id="rankingType">
 
-<option>
-Student Ranking
+<option value="score">
+Total Score Ranking
 </option>
 
 </select>
@@ -1231,7 +1011,7 @@ GPA
 </div>
 
 <div>
-Total Marks
+Total Score
 </div>
 
 <div>
@@ -1389,7 +1169,7 @@ Education Data & Statistics
 <script>
 
 /* =========================================================
-   DATA
+   DATA URL
 ========================================================= */
 
 const DATA_URL =
@@ -1410,15 +1190,6 @@ let currentSearch = "";
 let currentPage = 1;
 
 const PAGE_SIZE = 100;
-
-
-/* =========================================================
-   PDF SETTINGS
-========================================================= */
-
-const PDF_PAGE_SIZE = "a4";
-
-const PDF_ORIENTATION = "portrait";
 
 
 /* =========================================================
@@ -1495,7 +1266,9 @@ async function loadStudents() {
     try {
 
         const response =
-            await fetch(DATA_URL);
+            await fetch(DATA_URL, {
+                cache:"no-store"
+            });
 
 
         if (!response.ok) {
@@ -1546,6 +1319,12 @@ async function loadStudents() {
         );
 
 
+        console.log(
+            "First student:",
+            allStudents[0]
+        );
+
+
         errorMessage.style.display =
             "none";
 
@@ -1585,9 +1364,7 @@ async function loadStudents() {
 function normalizeGroup(group) {
 
     if (!group) {
-
         return "";
-
     }
 
     return String(group)
@@ -1613,6 +1390,7 @@ function matchesGroup(student) {
             currentGroup
         );
 
+
     return group === selected;
 
 }
@@ -1625,9 +1403,7 @@ function matchesGroup(student) {
 function matchesSearch(student) {
 
     if (!currentSearch) {
-
         return true;
-
     }
 
 
@@ -1639,25 +1415,21 @@ function matchesSearch(student) {
 
         student.institute,
 
+        student.institution,
+
         student.district,
 
         student.group,
 
         student.gpa,
 
-        student.total_marks,
-
-        student.totalMarks,
+        student.calculated_subject_mark_sum,
 
         student.total_score,
 
-        student.totalScore,
+        student.total_marks,
 
-        student.calculated_subject_mark_sum,
-
-        student.calculatedSubjectMarkSum,
-
-        student.score
+        student.totalMarks
 
     ]
 
@@ -1680,20 +1452,24 @@ function matchesSearch(student) {
 
 
 /* =========================================================
-   GET TOTAL MARKS FOR DISPLAY
+   GET TOTAL SCORE
+   IMPORTANT:
+   calculated_subject_mark_sum = MAIN SCORE
 ========================================================= */
 
-function getTotalMarks(student) {
+function getTotalScore(student) {
 
-    const possibleValues = [
+    const values = [
+
+        /* MAIN FIELD */
+
+        student.calculated_subject_mark_sum,
+
+        /* FALLBACK FIELDS */
 
         student.total_score,
 
         student.totalScore,
-
-        student.calculated_subject_mark_sum,
-
-        student.calculatedSubjectMarkSum,
 
         student.total_marks,
 
@@ -1703,20 +1479,20 @@ function getTotalMarks(student) {
 
         student.totalMark,
 
-        student.totalMarksObtained
+        student.score
 
     ];
 
 
     for (
-        const value
-        of possibleValues
+        const value of values
     ) {
 
         if (
             value !== undefined &&
             value !== null &&
-            String(value).trim() !== ""
+            String(value).trim() !== "" &&
+            String(value).toLowerCase() !== "null"
         ) {
 
             const number =
@@ -1735,6 +1511,8 @@ function getTotalMarks(student) {
 
     }
 
+
+    /* SUBJECT MARK FALLBACK */
 
     if (
         Array.isArray(
@@ -1771,69 +1549,60 @@ function getTotalMarks(student) {
 
 
         if (found) {
-
             return total;
+        }
+
+    }
+
+
+    return 0;
+
+}
+
+
+/* =========================================================
+   GET GPA
+========================================================= */
+
+function getGPA(student) {
+
+    if (
+        student.gpa !== undefined &&
+        student.gpa !== null &&
+        String(student.gpa).trim() !== "" &&
+        String(student.gpa).toLowerCase() !== "null"
+    ) {
+
+        const gpa =
+            Number(student.gpa);
+
+
+        if (
+            Number.isFinite(gpa)
+        ) {
+
+            return gpa;
 
         }
 
     }
 
 
-    return null;
-
-}
-
-
-/* =========================================================
-   GET TOTAL SCORE FOR RANKING
-========================================================= */
-
-function getRankingScore(student) {
-
-    /*
-     * IMPORTANT:
-     *
-     * Ranking ONLY uses total_score.
-     *
-     * calculated_subject_mark_sum
-     * is NOT used here.
-     */
-
-    const value =
-        student.total_score;
-
-
-    if (
-        value === undefined ||
-        value === null ||
-        String(value).trim() === ""
-    ) {
-
-        return null;
-
-    }
-
-
-    const score =
-        Number(value);
-
-
-    if (
-        Number.isFinite(score)
-    ) {
-
-        return score;
-
-    }
-
-
-    return null;
+    return 0;
 
 }
 
 
 /* =========================================================
    SORT STUDENTS
+=========================================================
+
+   FINAL RANKING RULE:
+
+   1. TOTAL SCORE DESCENDING
+   2. GPA DESCENDING
+   3. ROLL ASCENDING
+
 ========================================================= */
 
 function sortStudents(list) {
@@ -1841,117 +1610,68 @@ function sortStudents(list) {
     return [...list].sort(
         (a,b) => {
 
+            /* =========================================
+               1. TOTAL SCORE
+            ========================================= */
+
             const scoreA =
-                getRankingScore(a);
+                getTotalScore(a);
 
             const scoreB =
-                getRankingScore(b);
-
-
-            /*
-             * ============================================
-             * 1. TOTAL SCORE
-             * ============================================
-             */
-
-            if (
-                scoreA !== null &&
-                scoreB !== null
-            ) {
-
-                if (
-                    scoreB !== scoreA
-                ) {
-
-                    return (
-                        scoreB -
-                        scoreA
-                    );
-
-                }
-
-            }
-
-
-            /*
-             * Students with a real total_score
-             * always come before null total_score.
-             */
-
-            if (
-                scoreA !== null &&
-                scoreB === null
-            ) {
-
-                return -1;
-
-            }
+                getTotalScore(b);
 
 
             if (
-                scoreA === null &&
-                scoreB !== null
-            ) {
-
-                return 1;
-
-            }
-
-
-            /*
-             * ============================================
-             * 2. GPA TIE-BREAK
-             * ============================================
-             */
-
-            const gpaA =
-                Number(a.gpa);
-
-            const gpaB =
-                Number(b.gpa);
-
-
-            const validGpaA =
-                Number.isFinite(gpaA)
-                    ? gpaA
-                    : -Infinity;
-
-            const validGpaB =
-                Number.isFinite(gpaB)
-                    ? gpaB
-                    : -Infinity;
-
-
-            if (
-                validGpaB !==
-                validGpaA
+                scoreB !== scoreA
             ) {
 
                 return (
-                    validGpaB -
-                    validGpaA
+                    scoreB -
+                    scoreA
                 );
 
             }
 
 
-            /*
-             * ============================================
-             * 3. ROLL
-             * ============================================
-             */
+            /* =========================================
+               2. GPA
+            ========================================= */
 
-            return String(
-                a.roll || ""
-            ).localeCompare(
-                String(
-                    b.roll || ""
-                ),
-                undefined,
-                {
-                    numeric:true,
-                    sensitivity:"base"
-                }
+            const gpaA =
+                getGPA(a);
+
+            const gpaB =
+                getGPA(b);
+
+
+            if (
+                gpaB !== gpaA
+            ) {
+
+                return (
+                    gpaB -
+                    gpaA
+                );
+
+            }
+
+
+            /* =========================================
+               3. ROLL
+            ========================================= */
+
+            const rollA =
+                Number(a.roll) ||
+                999999999;
+
+            const rollB =
+                Number(b.roll) ||
+                999999999;
+
+
+            return (
+                rollA -
+                rollB
             );
 
         }
@@ -1961,15 +1681,17 @@ function sortStudents(list) {
 
 
 /* =========================================================
-   GET CURRENT FILTERED STUDENTS
+   FILTER
 ========================================================= */
 
 function getFilteredStudents() {
 
-    let filtered =
+    const filtered =
         allStudents.filter(
             student =>
+
                 matchesGroup(student) &&
+
                 matchesSearch(student)
         );
 
@@ -1982,7 +1704,7 @@ function getFilteredStudents() {
 
 
 /* =========================================================
-   RENDER
+   RENDER STUDENTS
 ========================================================= */
 
 function renderStudents() {
@@ -2025,15 +1747,11 @@ function renderStudents() {
         PAGE_SIZE;
 
 
-    const endIndex =
-        startIndex +
-        PAGE_SIZE;
-
-
     const pageStudents =
         filtered.slice(
             startIndex,
-            endIndex
+            startIndex +
+            PAGE_SIZE
         );
 
 
@@ -2098,23 +1816,25 @@ function renderStudents() {
                 student.gpa !== null &&
                 String(
                     student.gpa
-                ).trim() !== ""
+                ).trim() !== "" &&
+                String(
+                    student.gpa
+                ).toLowerCase() !== "null"
+
                 ? student.gpa
+
                 : "—";
 
 
-            /*
-             * DISPLAY TOTAL MARKS
-             */
-
-            const totalMarks =
-                getTotalMarks(
+            const totalScore =
+                getTotalScore(
                     student
                 );
 
 
             const institute =
                 student.institute ||
+                student.institution ||
                 "Unknown Institution";
 
 
@@ -2123,16 +1843,20 @@ function renderStudents() {
                 "Chattogram";
 
 
-            const formattedMarks =
-                totalMarks !== null
+            const formattedScore =
+                Number.isFinite(
+                    Number(totalScore)
+                )
+
                 ? Number(
-                    totalMarks
+                    totalScore
                   )
                   .toFixed(2)
                   .replace(
                       /\.00$/,
                       ""
                   )
+
                 : "—";
 
 
@@ -2176,13 +1900,13 @@ function renderStudents() {
                     <strong>
                         ${escapeHTML(
                             String(
-                                formattedMarks
+                                formattedScore
                             )
                         )}
                     </strong>
 
                     <span>
-                        Total Marks
+                        Total Score
                     </span>
 
                 </div>
@@ -2215,9 +1939,9 @@ function renderStudents() {
     );
 
 
-    /*
-     * PAGINATION
-     */
+    /* =====================================================
+       PAGINATION
+    ===================================================== */
 
     if (
         totalPages <= 1
@@ -2311,7 +2035,7 @@ function getPDFDate() {
 
 
 /* =========================================================
-   DOWNLOAD CURRENT PAGE PDF
+   DOWNLOAD PDF
 ========================================================= */
 
 async function downloadCurrentPagePDF() {
@@ -2390,13 +2114,13 @@ async function downloadCurrentPagePDF() {
             new jsPDF({
 
                 orientation:
-                    PDF_ORIENTATION,
+                    "portrait",
 
                 unit:
                     "mm",
 
                 format:
-                    PDF_PAGE_SIZE
+                    "a4"
 
             });
 
@@ -2420,11 +2144,14 @@ async function downloadCurrentPagePDF() {
             );
 
 
+        /* HEADER */
+
         doc.setFillColor(
             248,
             248,
             250
         );
+
 
         doc.rect(
             0,
@@ -2447,6 +2174,7 @@ async function downloadCurrentPagePDF() {
             "bold"
         );
 
+
         doc.setFontSize(
             19
         );
@@ -2463,6 +2191,7 @@ async function downloadCurrentPagePDF() {
             "helvetica",
             "normal"
         );
+
 
         doc.setFontSize(
             8.5
@@ -2503,6 +2232,8 @@ async function downloadCurrentPagePDF() {
         );
 
 
+        /* TITLE */
+
         doc.setTextColor(
             17,
             17,
@@ -2514,6 +2245,7 @@ async function downloadCurrentPagePDF() {
             "helvetica",
             "bold"
         );
+
 
         doc.setFontSize(
             16
@@ -2532,6 +2264,7 @@ async function downloadCurrentPagePDF() {
             "normal"
         );
 
+
         doc.setFontSize(
             9
         );
@@ -2544,44 +2277,14 @@ async function downloadCurrentPagePDF() {
         );
 
 
-        const rankingInfo =
-            `${yearSelect.value} · Chattogram Board · ${currentGroup} · Page ${currentPage} of ${totalPages}`;
-
-
         doc.text(
-            rankingInfo,
+            `${yearSelect.value} · Chattogram Board · ${currentGroup} · Page ${currentPage} of ${totalPages}`,
             15,
             50
         );
 
 
-        if (
-            currentSearch
-        ) {
-
-            doc.setFontSize(
-                8
-            );
-
-
-            doc.setTextColor(
-                100,
-                100,
-                105
-            );
-
-
-            doc.text(
-                `Filtered by search: "${currentSearch}"`,
-                pageWidth - 15,
-                50,
-                {
-                    align:"right"
-                }
-            );
-
-        }
-
+        /* TABLE */
 
         const tableData =
             pageStudents.map(
@@ -2609,33 +2312,34 @@ async function downloadCurrentPagePDF() {
                         String(
                             student.gpa
                         ).trim() !== ""
+
                         ? String(
                             student.gpa
                           )
+
                         : "—";
 
 
-                    const totalMarks =
-                        getTotalMarks(
+                    const totalScore =
+                        getTotalScore(
                             student
                         );
 
 
-                    const formattedMarks =
-                        totalMarks !== null
-                        ? Number(
-                            totalMarks
-                          )
-                          .toFixed(2)
-                          .replace(
-                              /\.00$/,
-                              ""
-                          )
-                        : "—";
+                    const formattedScore =
+                        Number(
+                            totalScore
+                        )
+                        .toFixed(2)
+                        .replace(
+                            /\.00$/,
+                            ""
+                        );
 
 
                     const institute =
                         student.institute ||
+                        student.institution ||
                         "Unknown Institution";
 
 
@@ -2652,7 +2356,7 @@ async function downloadCurrentPagePDF() {
 
                         gpa,
 
-                        formattedMarks,
+                        formattedScore,
 
                         `${institute}\n${district}`
 
@@ -2672,7 +2376,7 @@ async function downloadCurrentPagePDF() {
                     "RANK",
                     "STUDENT",
                     "GPA",
-                    "TOTAL MARKS",
+                    "TOTAL SCORE",
                     "INSTITUTE"
                 ]
             ],
@@ -2737,16 +2441,7 @@ async function downloadCurrentPagePDF() {
                     "bold",
 
                 fontSize:
-                    7,
-
-                halign:
-                    "left",
-
-                lineColor:[
-                    220,
-                    220,
-                    223
-                ]
+                    7
 
             },
 
@@ -2844,12 +2539,12 @@ async function downloadCurrentPagePDF() {
 
 
             didDrawPage:
-                function(data) {
+                function() {
 
-                    const currentPDFPage =
+                    const pdfPage =
                         doc
-                            .internal
-                            .getNumberOfPages();
+                        .internal
+                        .getNumberOfPages();
 
 
                     doc.setDrawColor(
@@ -2872,6 +2567,7 @@ async function downloadCurrentPagePDF() {
                         "normal"
                     );
 
+
                     doc.setFontSize(
                         7.5
                     );
@@ -2892,7 +2588,7 @@ async function downloadCurrentPagePDF() {
 
 
                     doc.text(
-                        `PDF Page ${currentPDFPage}`,
+                        `PDF Page ${pdfPage}`,
                         pageWidth - 12,
                         pageHeight - 7,
                         {
@@ -2908,17 +2604,14 @@ async function downloadCurrentPagePDF() {
 
         const safeGroup =
             currentGroup
-
                 .replace(
                     /[^a-z0-9]+/gi,
                     "-"
                 )
-
                 .replace(
                     /^-|-$/g,
                     ""
                 )
-
                 .toLowerCase();
 
 
