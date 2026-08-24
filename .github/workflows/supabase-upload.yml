@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: supabase-upload
+  group: supabase-student-upload
   cancel-in-progress: false
 
 jobs:
@@ -54,7 +54,7 @@ jobs:
         run: |
 
           echo "=============================================="
-          echo "SUPABASE UPLOAD"
+          echo "CHECKING SUPABASE UPLOAD FILES"
           echo "=============================================="
 
           if [ ! -f scraper/students.json ]; then
@@ -62,14 +62,23 @@ jobs:
             exit 1
           fi
 
+          if [ ! -f upload_to_supabase.py ]; then
+            echo "ERROR: upload_to_supabase.py not found."
+            exit 1
+          fi
+
           echo "students.json found."
 
+          echo "upload_to_supabase.py found."
+
           if [ -f scraper/supabase_upload_checkpoint.json ]; then
-            echo "Checkpoint found."
+            echo ""
+            echo "Existing checkpoint:"
             cat scraper/supabase_upload_checkpoint.json
           else
+            echo ""
             echo "No checkpoint found."
-            echo "Upload will start from index 0."
+            echo "Upload will start from the beginning."
           fi
 
       # =====================================================
@@ -83,10 +92,10 @@ jobs:
         run: |
 
           echo "=============================================="
-          echo "STARTING SUPABASE UPLOAD"
+          echo "STARTING SUPABASE STUDENT UPLOAD"
           echo "=============================================="
 
-          python scraper/upload_to_supabase.py
+          python upload_to_supabase.py
 
       # =====================================================
       # SHOW CHECKPOINT
@@ -97,7 +106,7 @@ jobs:
         run: |
 
           echo "=============================================="
-          echo "UPLOAD CHECKPOINT"
+          echo "CURRENT SUPABASE CHECKPOINT"
           echo "=============================================="
 
           if [ -f scraper/supabase_upload_checkpoint.json ]; then
@@ -106,22 +115,9 @@ jobs:
 
           else
 
-            echo "Checkpoint file not found."
+            echo "No checkpoint file found."
 
           fi
-
-      # =====================================================
-      # GIT CONFIGURATION
-      # =====================================================
-
-      - name: Configure Git
-        if: always()
-        run: |
-
-          git config user.name "github-actions[bot]"
-
-          git config user.email \
-            "41898282+github-actions[bot]@users.noreply.github.com"
 
       # =====================================================
       # COMMIT CHECKPOINT
@@ -135,58 +131,49 @@ jobs:
           echo "COMMITTING CHECKPOINT"
           echo "=============================================="
 
-          git add scraper/supabase_upload_checkpoint.json
+          git config user.name "github-actions[bot]"
+
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if [ -f scraper/supabase_upload_checkpoint.json ]; then
+
+            echo "Checkpoint file found."
+
+            git add scraper/supabase_upload_checkpoint.json
+
+          else
+
+            echo "Checkpoint file does not exist."
+
+            echo "Nothing to commit."
+
+            exit 0
+
+          fi
 
           if git diff --cached --quiet; then
 
             echo "No checkpoint changes."
 
-          else
-
-            git commit \
-              -m "Update Supabase upload checkpoint"
+            exit 0
 
           fi
 
-      # =====================================================
-      # SYNC MAIN
-      # =====================================================
+          git commit \
+            -m "Update Supabase upload checkpoint"
 
-      - name: Sync latest main
-        if: always()
-        run: |
+          git pull \
+            --rebase \
+            origin main
 
-          git fetch origin main
-
-          git rebase origin/main || {
-
-            echo "Rebase conflict detected."
-
-            git rebase --abort || true
-
-            echo "Retrying with latest main."
-
-            git pull \
-              --rebase \
-              origin main
-          }
-
-      # =====================================================
-      # PUSH CHECKPOINT
-      # =====================================================
-
-      - name: Push checkpoint
-        if: always()
-        run: |
-
-          echo "=============================================="
-          echo "PUSHING CHECKPOINT"
-          echo "=============================================="
-
-          git push origin HEAD:main
+          git push \
+            origin HEAD:main
 
           echo ""
-          echo "Checkpoint pushed successfully."
+          echo "=============================================="
+          echo "CHECKPOINT COMMITTED AND PUSHED"
+          echo "=============================================="
 
       # =====================================================
       # FINAL STATUS
@@ -203,60 +190,31 @@ jobs:
           if [ -f scraper/supabase_upload_checkpoint.json ]; then
 
             python - <<'PY'
-
           import json
 
           path = "scraper/supabase_upload_checkpoint.json"
 
-          with open(
-              path,
-              "r",
-              encoding="utf-8"
-          ) as f:
-
+          with open(path, "r", encoding="utf-8") as f:
               data = json.load(f)
 
-          print(
-              "Uploaded:",
-              data.get("uploaded", 0)
-          )
+          print("Uploaded:", data.get("uploaded", 0))
+          print("Last index:", data.get("last_index", 0))
+          print("Total:", data.get("total", 0))
+          print("Table:", data.get("table", "students"))
+          print("Updated:", data.get("updated_at", ""))
 
-          print(
-              "Last index:",
-              data.get("last_index", 0)
-          )
+          total = int(data.get("total", 0))
+          index = int(data.get("last_index", 0))
 
-          print(
-              "Total:",
-              data.get("total", 0)
-          )
-
-          total = data.get("total", 0)
-          index = data.get("last_index", 0)
-
-          print(
-              "Remaining:",
-              max(total - index, 0)
-          )
+          print("Remaining:", max(total - index, 0))
 
           if index >= total:
-
               print("")
-              print(
-                  "ALL RECORDS UPLOADED."
-              )
-
+              print("ALL RECORDS UPLOADED SUCCESSFULLY.")
           else:
-
               print("")
-              print(
-                  "UPLOAD INCOMPLETE."
-              )
-
-              print(
-                  "Run the workflow again to resume."
-              )
-
+              print("UPLOAD IS NOT COMPLETE.")
+              print("Run the workflow again to resume.")
           PY
 
           else
