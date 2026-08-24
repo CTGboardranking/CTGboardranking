@@ -1,371 +1,238 @@
-import os
-import json
-import time
-import requests
+name: Supabase Upload
 
-SUPABASE_URL = os.getenv(
-    "SUPABASE_URL",
-    ""
-).rstrip("/")
+on:
+  workflow_dispatch:
 
-SUPABASE_KEY = os.getenv(
-    "SUPABASE_KEY",
-    "")
+permissions:
+  contents: write
 
-TABLE_NAME = "students"
+concurrency:
+  group: supabase-student-upload
+  cancel-in-progress: false
 
-STUDENTS_FILE = "scraper/students.json"
-CHECKPOINT_FILE = "scraper/supabase_upload_checkpoint.json"
+jobs:
 
-BATCH_SIZE = 500
-MAX_RETRIES = 5
-RETRY_DELAY = 3
+  upload:
 
-if not SUPABASE_URL:
-    raise SystemExit("ERROR: SUPABASE_URL secret is missing.")
+    runs-on: ubuntu-latest
 
-if not SUPABASE_KEY:
-    raise SystemExit("ERROR: SUPABASE_KEY secret is missing.")
+    steps:
 
-REST_URL = f"{SUPABASE_URL}/rest/v1/{TABLE_NAME}"
+      # =====================================================
+      # CHECKOUT
+      # =====================================================
 
-HEADERS = {
-    "apikey": SUPABASE_KEY,
-    "Authorization": f"Bearer {SUPABASE_KEY}",
-    "Content-Type": "application/json",
-    "Prefer": "resolution=merge-duplicates,return=minimal",
-}
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
 
-if not os.path.exists(STUDENTS_FILE):
-    raise SystemExit(f"ERROR: {STUDENTS_FILE} not found.")
+      # =====================================================
+      # PYTHON
+      # =====================================================
 
-print("=" * 70)
-print("SUPABASE SSC DATA UPLOADER")
-print("=" * 70)
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
 
-with open(STUDENTS_FILE, "r", encoding="utf-8") as f:
-    students = json.load(f)
+      # =====================================================
+      # DEPENDENCIES
+      # =====================================================
 
-if not isinstance(students, list):
-    raise SystemExit("ERROR: students.json must contain a JSON list.")
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
 
-print("Local students:", len(students))
+      # =====================================================
+      # CHECK FILES
+      # =====================================================
 
-checkpoint = {
-    "uploaded": 0,
-    "last_index": 0,
-    "total": len(students),
-}
+      - name: Check upload files
+        run: |
 
-if os.path.exists(CHECKPOINT_FILE):
-    try:
-        with open(CHECKPOINT_FILE, "r", encoding="utf-8") as f:
-            saved = json.load(f)
+          echo "=============================================="
+          echo "CHECKING SUPABASE UPLOAD FILES"
+          echo "=============================================="
 
-        if isinstance(saved, dict):
-            checkpoint.update(saved)
+          if [ ! -f scraper/students.json ]; then
+            echo "ERROR: scraper/students.json not found."
+            exit 1
+          fi
 
-    except Exception as e:
-        print("WARNING: Could not load checkpoint:", e)
+          if [ ! -f scraper/upload_to_supabase.py ]; then
+            echo "ERROR: scraper/upload_to_supabase.py not found."
+            echo ""
+            echo "Files inside scraper:"
+            find scraper -maxdepth 1 -type f -printf "%f\n" | sort
+            exit 1
+          fi
 
-start_index = int(checkpoint.get("last_index", 0))
+          echo "students.json: FOUND"
 
-if start_index < 0:
-    start_index = 0
+          echo "upload_to_supabase.py: FOUND"
 
-if start_index > len(students):
-    start_index = len(students)
+          echo ""
 
-uploaded_total = int(
-    checkpoint.get("uploaded", 0)
-)
+          if [ -f scraper/supabase_upload_checkpoint.json ]; then
 
-print("Checkpoint index:", start_index)
-print("Already uploaded:", uploaded_total)
-print("Remaining:", len(students) - start_index)
-print("Batch size:", BATCH_SIZE)
+            echo "Existing checkpoint:"
+            cat scraper/supabase_upload_checkpoint.json
 
-print("=" * 70)
+          else
 
+            echo "No checkpoint found."
 
-def save_checkpoint(index, uploaded):
+            echo "First upload will start from index 0."
 
-    data = {
-        "uploaded": uploaded,
-        "last_index": index,
-        "total": len(students),
-        "table": TABLE_NAME,
-        "updated_at": time.strftime("%Y-%m-%d %H:%M:%S"),
-    }
+          fi
 
-    temp_file = CHECKPOINT_FILE + ".tmp"
-
-    with open(temp_file, "w", encoding="utf-8") as f:
-        json.dump(
-            data,
-            f,
-            ensure_ascii=False,
-            indent=2
-        )
-
-    os.replace(
-        temp_file,
-        CHECKPOINT_FILE
-    )
+      # =====================================================
+      # SUPABASE UPLOAD
+      # =====================================================
 
+      - name: Upload students to Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
 
-def clean_student(student):
+          echo "=============================================="
+          echo "STARTING SUPABASE STUDENT UPLOAD"
+          echo "=============================================="
 
-    if not isinstance(student, dict):
-        return None
+          python scraper/upload_to_supabase.py
 
-    roll = str(
-        student.get("roll", "")
-    ).strip()
+      # =====================================================
+      # SHOW CHECKPOINT
+      # =====================================================
 
-    if not roll:
-        return None
+      - name: Show upload checkpoint
+        if: always()
+        run: |
 
-    return {
-        "roll": roll,
-        "name": student.get("name", ""),
-        "board": student.get("board", ""),
-        "group": student.get("group", ""),
-        "session": student.get("session", ""),
-        "type": student.get("type", ""),
-        "institute": student.get("institute", ""),
-        "district": student.get("district", ""),
-        "result": student.get("result", ""),
-        "gpa": student.get("gpa"),
-        "total_score": student.get("total_score"),
-        "subjects": student.get("subjects", []),
-    }
+          echo "=============================================="
+          echo "CURRENT SUPABASE CHECKPOINT"
+          echo "=============================================="
 
+          if [ -f scraper/supabase_upload_checkpoint.json ]; then
 
-def upload_batch(batch):
+            cat scraper/supabase_upload_checkpoint.json
 
-    for attempt in range(1, MAX_RETRIES + 1):
+          else
 
-        try:
+            echo "No checkpoint file found."
 
-            response = requests.post(
-                REST_URL,
-                headers=HEADERS,
-                json=batch,
-                timeout=60,
-            )
+          fi
 
-            if response.status_code in (200, 201):
+      # =====================================================
+      # COMMIT CHECKPOINT
+      # =====================================================
 
-                return True
+      - name: Commit checkpoint
+        if: always()
+        run: |
 
-            if response.status_code in (
-                408,
-                409,
-                425,
-                429,
-                500,
-                502,
-                503,
-                504,
-            ):
+          echo "=============================================="
+          echo "COMMITTING CHECKPOINT"
+          echo "=============================================="
 
-                print(
-                    f"Retryable HTTP {response.status_code} "
-                    f"(attempt {attempt}/{MAX_RETRIES})"
-                )
+          git config user.name "github-actions[bot]"
 
-                time.sleep(
-                    RETRY_DELAY * attempt
-                )
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
 
-                continue
+          if [ -f scraper/supabase_upload_checkpoint.json ]; then
 
-            print(
-                "Supabase upload failed."
-            )
+            echo "Checkpoint file found."
 
-            print(
-                "HTTP:",
-                response.status_code
-            )
+            git add scraper/supabase_upload_checkpoint.json
 
-            print(
-                response.text[:2000]
-            )
+          else
 
-            return False
+            echo "Checkpoint file does not exist."
 
-        except requests.RequestException as e:
+            echo "Nothing to commit."
 
-            print(
-                f"Network error "
-                f"(attempt {attempt}/{MAX_RETRIES}):",
-                e
-            )
+            exit 0
 
-            time.sleep(
-                RETRY_DELAY * attempt
-            )
+          fi
 
-    return False
+          if git diff --cached --quiet; then
 
+            echo "No checkpoint changes."
 
-current_index = start_index
-run_uploaded = 0
-run_failed = 0
+            exit 0
 
-while current_index < len(students):
+          fi
 
-    end_index = min(
-        current_index + BATCH_SIZE,
-        len(students)
-    )
+          git commit \
+            -m "Update Supabase upload checkpoint"
 
-    raw_batch = students[
-        current_index:end_index
-    ]
+          git pull \
+            --rebase \
+            origin main
 
-    batch = []
+          git push \
+            origin HEAD:main
 
-    for student in raw_batch:
+          echo ""
+          echo "=============================================="
+          echo "CHECKPOINT COMMITTED AND PUSHED"
+          echo "=============================================="
 
-        record = clean_student(student)
+      # =====================================================
+      # FINAL STATUS
+      # =====================================================
 
-        if record is not None:
-            batch.append(record)
+      - name: Final upload status
+        if: always()
+        run: |
 
-    if not batch:
+          echo "=============================================="
+          echo "FINAL SUPABASE UPLOAD STATUS"
+          echo "=============================================="
 
-        current_index = end_index
+          if [ -f scraper/supabase_upload_checkpoint.json ]; then
 
-        save_checkpoint(
-            current_index,
-            uploaded_total
-        )
+            python - <<'PY'
+          import json
 
-        continue
+          path = "scraper/supabase_upload_checkpoint.json"
 
-    print()
-    print("-" * 70)
+          with open(path, "r", encoding="utf-8") as f:
+              data = json.load(f)
 
-    print(
-        f"Uploading records "
-        f"{current_index + 1}-{end_index}"
-        f"/{len(students)}"
-    )
+          uploaded = int(data.get("uploaded", 0))
+          last_index = int(data.get("last_index", 0))
+          total = int(data.get("total", 0))
 
-    print(
-        "Batch records:",
-        len(batch)
-    )
+          print("Uploaded:", uploaded)
+          print("Last index:", last_index)
+          print("Total:", total)
+          print("Table:", data.get("table", "students"))
+          print("Updated:", data.get("updated_at", ""))
 
-    success = upload_batch(batch)
+          remaining = max(total - last_index, 0)
 
-    if not success:
+          print("Remaining:", remaining)
 
-        run_failed += len(batch)
+          print("")
 
-        print()
-        print("UPLOAD STOPPED.")
-        print(
-            "Checkpoint was NOT advanced."
-        )
-        print(
-            "Run again to retry this batch."
-        )
+          if last_index >= total:
+              print("ALL RECORDS UPLOADED SUCCESSFULLY.")
+          else:
+              print("UPLOAD IS NOT COMPLETE.")
+              print("Run the workflow again to resume.")
 
-        break
+          PY
 
-    uploaded_total += len(batch)
-    run_uploaded += len(batch)
+          else
 
-    current_index = end_index
+            echo "No checkpoint available."
 
-    save_checkpoint(
-        current_index,
-        uploaded_total
-    )
+          fi
 
-    print(
-        "Batch uploaded successfully."
-    )
-
-    print(
-        "Uploaded this run:",
-        run_uploaded
-    )
-
-    print(
-        "Total uploaded:",
-        uploaded_total
-    )
-
-    print(
-        "Next index:",
-        current_index
-    )
-
-    time.sleep(0.5)
-
-
-print()
-print("=" * 70)
-print("SUPABASE UPLOAD STATUS")
-print("=" * 70)
-
-print(
-    "Local records:",
-    len(students)
-)
-
-print(
-    "Uploaded according to checkpoint:",
-    uploaded_total
-)
-
-print(
-    "Uploaded this run:",
-    run_uploaded
-)
-
-print(
-    "Failed this run:",
-    run_failed
-)
-
-print(
-    "Current index:",
-    current_index
-)
-
-print(
-    "Remaining:",
-    max(
-        len(students) - current_index,
-        0
-    )
-)
-
-print(
-    "Checkpoint:",
-    CHECKPOINT_FILE
-)
-
-print("=" * 70)
-
-if current_index >= len(students):
-
-    print(
-        "ALL LOCAL RECORDS HAVE BEEN UPLOADED."
-    )
-
-else:
-
-    print(
-        "UPLOAD IS INCOMPLETE."
-    )
-
-    print(
-        "Run again to resume from checkpoint."
-    )
+          echo "=============================================="
