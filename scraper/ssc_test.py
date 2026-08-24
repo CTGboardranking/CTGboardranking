@@ -8,9 +8,52 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
+# ============================================================
+# SUPABASE
+# ============================================================
+
+try:
+    from supabase import create_client, Client
+except ImportError:
+    raise SystemExit(
+        "Supabase package missing.\n"
+        "Run:\n"
+        "pip install supabase"
+    )
+
+
+SUPABASE_URL = os.getenv(
+    "SUPABASE_URL",
+    "YOUR_SUPABASE_URL"
+)
+
+SUPABASE_KEY = os.getenv(
+    "SUPABASE_KEY",
+    "YOUR_SUPABASE_KEY"
+)
+
+if (
+    not SUPABASE_URL
+    or SUPABASE_URL == "YOUR_SUPABASE_URL"
+    or not SUPABASE_KEY
+    or SUPABASE_KEY == "YOUR_SUPABASE_KEY"
+):
+    raise SystemExit(
+        "\nERROR: Supabase URL/KEY not configured.\n"
+        "Set SUPABASE_URL and SUPABASE_KEY first.\n"
+    )
+
+
+supabase: Client = create_client(
+    SUPABASE_URL,
+    SUPABASE_KEY
+)
+
+SUPABASE_TABLE = "students"
+
 
 # ============================================================
-# SSC 2026 STUDENT COLLECTOR - FINAL VERSION
+# SSC 2026 STUDENT COLLECTOR
 # ============================================================
 
 BASE_URL = (
@@ -37,6 +80,11 @@ SUMMARY_FILE = os.path.join(
 FAILED_FILE = os.path.join(
     OUTPUT_DIR,
     "failed_rolls.json"
+)
+
+ATTEMPTED_FILE = os.path.join(
+    OUTPUT_DIR,
+    "attempted_rolls.json"
 )
 
 
@@ -131,6 +179,26 @@ print(
 
 print(
     "SSC STUDENT COLLECTOR - FINAL VERSION",
+    flush=True
+)
+
+print(
+    "Duplicate Roll Protection : ON",
+    flush=True
+)
+
+print(
+    "Persistent Attempted Roll : ON",
+    flush=True
+)
+
+print(
+    "Supabase Upsert            : ON",
+    flush=True
+)
+
+print(
+    "Supabase Duplicate Guard  : ON",
     flush=True
 )
 
@@ -258,6 +326,140 @@ def load_json(filename, default):
 
 
 # ============================================================
+# SUPABASE ROLL CHECK
+# ============================================================
+
+def supabase_roll_exists(roll):
+
+    try:
+
+        response = (
+            supabase
+            .table(SUPABASE_TABLE)
+            .select("roll")
+            .eq("roll", str(roll))
+            .limit(1)
+            .execute()
+        )
+
+        data = response.data or []
+
+        return len(data) > 0
+
+    except Exception as e:
+
+        print(
+            f"Supabase roll check error "
+            f"{roll}: {e}",
+            flush=True
+        )
+
+        return False
+
+
+# ============================================================
+# SUPABASE UPSERT
+# ============================================================
+
+def supabase_upsert_student(student):
+
+    roll = str(
+        student.get(
+            "roll",
+            ""
+        )
+    ).strip()
+
+    if not roll:
+        return False
+
+
+    # --------------------------------------------------------
+    # Explicit duplicate check
+    # --------------------------------------------------------
+
+    try:
+
+        existing = (
+            supabase
+            .table(SUPABASE_TABLE)
+            .select("roll")
+            .eq("roll", roll)
+            .limit(1)
+            .execute()
+        )
+
+        if existing.data:
+
+            print(
+                f"SUPABASE DUPLICATE: "
+                f"{roll} -> skipped",
+                flush=True
+            )
+
+            return True
+
+    except Exception as e:
+
+        print(
+            f"Supabase duplicate check "
+            f"error {roll}: {e}",
+            flush=True
+        )
+
+        return False
+
+
+    # --------------------------------------------------------
+    # Prepare row
+    # --------------------------------------------------------
+
+    row = dict(student)
+
+    row["roll"] = roll
+
+
+    # --------------------------------------------------------
+    # Upsert
+    #
+    # Requires UNIQUE constraint on roll.
+    # --------------------------------------------------------
+
+    try:
+
+        response = (
+            supabase
+            .table(SUPABASE_TABLE)
+            .upsert(
+                row,
+                on_conflict="roll"
+            )
+            .execute()
+        )
+
+        if response.data is not None:
+
+            print(
+                f"SUPABASE SAVED: {roll}",
+                flush=True
+            )
+
+            return True
+
+
+    except Exception as e:
+
+        print(
+            f"SUPABASE UPSERT ERROR "
+            f"{roll}: {e}",
+            flush=True
+        )
+
+
+    return False
+
+
+# ============================================================
 # GPA
 # ============================================================
 
@@ -355,7 +557,6 @@ def find_page_gpa(soup):
                 pass
 
 
-    # Search table cells
     for row in soup.find_all("tr"):
 
         cells = row.find_all(
@@ -508,7 +709,6 @@ def normalize_grade(value):
     if not value:
         return ""
 
-    # Remove brackets
     value = value.replace(
         "(",
         ""
@@ -517,7 +717,6 @@ def normalize_grade(value):
         ""
     )
 
-    # Fix spaces
     value = value.replace(
         " ",
         ""
@@ -543,20 +742,6 @@ def parse_subject_values(values):
 
     grade = ""
 
-    # --------------------------------------------------------
-    # IMPORTANT:
-    #
-    # Actual result page can contain:
-    #
-    # 086(C)
-    # 083(C)
-    # (F)
-    # 068(A-)
-    # 033(A-)
-    #
-    # So parse each cell independently.
-    # --------------------------------------------------------
-
     for value in values:
 
         value = clean_text(value)
@@ -564,26 +749,12 @@ def parse_subject_values(values):
         if not value:
             continue
 
-        # ----------------------------------------------------
-        # Remove extra spaces
-        # ----------------------------------------------------
-
         normalized = value.upper()
 
         normalized = normalized.replace(
             " ",
             ""
         )
-
-        # ----------------------------------------------------
-        # Mark + grade
-        # Examples:
-        #
-        # 086(C)
-        # 83(C)
-        # 068(A-)
-        # 95(A+)
-        # ----------------------------------------------------
 
         match = re.fullmatch(
             r"(\d{1,3})"
@@ -615,10 +786,6 @@ def parse_subject_values(values):
                 )
 
 
-        # ----------------------------------------------------
-        # Mark + grade without brackets
-        # ----------------------------------------------------
-
         match = re.fullmatch(
             r"(\d{1,3})"
             r"(A\+|A-|A|B|C|D|F)",
@@ -647,13 +814,6 @@ def parse_subject_values(values):
                 )
 
 
-        # ----------------------------------------------------
-        # Grade only
-        #
-        # (F)
-        # (A-)
-        # ----------------------------------------------------
-
         grade_only = normalize_grade(
             normalized
         )
@@ -664,10 +824,6 @@ def parse_subject_values(values):
 
             continue
 
-
-        # ----------------------------------------------------
-        # Grade inside brackets
-        # ----------------------------------------------------
 
         match = re.fullmatch(
             r"\((A\+|A-|A|B|C|D|F)\)",
@@ -684,10 +840,6 @@ def parse_subject_values(values):
 
             continue
 
-
-        # ----------------------------------------------------
-        # Plain numeric mark
-        # ----------------------------------------------------
 
         if re.fullmatch(
             r"\d{1,3}",
@@ -746,12 +898,7 @@ def parse_subjects(soup):
             if len(values) < 2:
                 continue
 
-
             code = values[0]
-
-            # ------------------------------------------------
-            # Subject code must be numeric
-            # ------------------------------------------------
 
             if not re.fullmatch(
                 r"\d{3,5}",
@@ -759,12 +906,10 @@ def parse_subjects(soup):
             ):
                 continue
 
-
             subject_name = values[1]
 
             if not subject_name:
                 continue
-
 
             key = (
                 code,
@@ -776,21 +921,11 @@ def parse_subjects(soup):
 
             seen.add(key)
 
-
-            # ------------------------------------------------
-            # Parse mark + grade
-            # ------------------------------------------------
-
             mark, grade = (
                 parse_subject_values(
                     values[2:]
                 )
             )
-
-
-            # ------------------------------------------------
-            # Optional subject detection
-            # ------------------------------------------------
 
             combined = " ".join(
                 values
@@ -803,7 +938,6 @@ def parse_subjects(soup):
                 or
                 "FOURTH SUBJECT" in combined
             )
-
 
             subjects.append({
 
@@ -878,11 +1012,6 @@ def detect_result(
 
     upper = page_text.upper()
 
-
-    # --------------------------------------------------------
-    # Direct official result
-    # --------------------------------------------------------
-
     patterns = [
 
         r"\bRESULT\s*[:\-]\s*(PASS|FAIL)\b",
@@ -905,11 +1034,6 @@ def detect_result(
                 match.group(1)
                 .upper()
             )
-
-
-    # --------------------------------------------------------
-    # Search table rows
-    # --------------------------------------------------------
 
     for row in soup.find_all(
         "tr"
@@ -951,11 +1075,6 @@ def detect_result(
             ):
                 return "FAIL"
 
-
-    # --------------------------------------------------------
-    # If F grade exists => FAIL
-    # --------------------------------------------------------
-
     for subject in subjects:
 
         grade = str(
@@ -968,7 +1087,6 @@ def detect_result(
         if grade == "F":
 
             return "FAIL"
-
 
     return ""
 
@@ -987,7 +1105,6 @@ def parse_result(
         html,
         "html.parser"
     )
-
 
     result = {
 
@@ -1041,11 +1158,6 @@ def parse_result(
 
     }
 
-
-    # ========================================================
-    # BASIC INFORMATION
-    # ========================================================
-
     for row in soup.find_all(
         "tr"
     ):
@@ -1069,7 +1181,6 @@ def parse_result(
 
         if not values:
             continue
-
 
         fields = [
 
@@ -1107,7 +1218,6 @@ def parse_result(
 
         ]
 
-
         for label, key in fields:
 
             value = find_value_after_label(
@@ -1118,11 +1228,6 @@ def parse_result(
             if value:
 
                 result[key] = value
-
-
-        # ----------------------------------------------------
-        # Result
-        # ----------------------------------------------------
 
         result_value = (
             find_value_after_label(
@@ -1146,22 +1251,12 @@ def parse_result(
                     result_value
                 )
 
-
-    # ========================================================
-    # FALLBACK BASIC TEXT SEARCH
-    # ========================================================
-
     page_text = clean_text(
         soup.get_text(
             " ",
             strip=True
         )
     )
-
-
-    # --------------------------------------------------------
-    # Result fallback
-    # --------------------------------------------------------
 
     if not result["result"]:
 
@@ -1178,28 +1273,13 @@ def parse_result(
                 match.group(1).upper()
             )
 
-
-    # ========================================================
-    # GPA
-    # ========================================================
-
     result["gpa"] = find_page_gpa(
         soup
     )
 
-
-    # ========================================================
-    # SUBJECTS
-    # ========================================================
-
     result["subjects"] = parse_subjects(
         soup
     )
-
-
-    # ========================================================
-    # RESULT FALLBACK FROM SUBJECTS
-    # ========================================================
 
     if not result["result"]:
 
@@ -1208,21 +1288,11 @@ def parse_result(
             result["subjects"]
         )
 
-
-    # ========================================================
-    # TOTAL SCORE
-    # ========================================================
-
     result["total_score"] = (
         calculate_total_score(
             result["subjects"]
         )
     )
-
-
-    # ========================================================
-    # DISTRICT
-    # ========================================================
 
     if not result["district"]:
 
@@ -1232,14 +1302,6 @@ def parse_result(
             )
         )
 
-
-    # ========================================================
-    # VALID RESULT CHECK
-    # ========================================================
-
-    # A real result page should have at least:
-    # name OR institute OR subject data.
-
     has_data = (
         bool(result["name"])
         or
@@ -1248,15 +1310,9 @@ def parse_result(
         len(result["subjects"]) > 0
     )
 
-
     if not has_data:
 
         return None
-
-
-    # ========================================================
-    # CLEAN STRINGS
-    # ========================================================
 
     string_fields = [
 
@@ -1281,7 +1337,6 @@ def parse_result(
         result[key] = clean_text(
             result[key]
         )
-
 
     return result
 
@@ -1309,7 +1364,7 @@ def generate_rolls():
 
 
 # ============================================================
-# LOAD EXISTING STUDENTS
+# LOAD LOCAL DATA
 # ============================================================
 
 students = load_json(
@@ -1319,6 +1374,11 @@ students = load_json(
 
 failed_rolls = load_json(
     "failed_rolls.json",
+    []
+)
+
+attempted_rolls = load_json(
+    "attempted_rolls.json",
     []
 )
 
@@ -1339,8 +1399,16 @@ if not isinstance(
     failed_rolls = []
 
 
+if not isinstance(
+    attempted_rolls,
+    list
+):
+
+    attempted_rolls = []
+
+
 # ============================================================
-# EXISTING ROLLS
+# EXISTING STUDENT ROLLS
 # ============================================================
 
 existing_rolls = set()
@@ -1363,6 +1431,25 @@ for student in students:
     if roll:
 
         existing_rolls.add(
+            roll
+        )
+
+
+# ============================================================
+# ATTEMPTED ROLLS
+# ============================================================
+
+attempted_set = set()
+
+for item in attempted_rolls:
+
+    roll = str(
+        item
+    ).strip()
+
+    if roll:
+
+        attempted_set.add(
             roll
         )
 
@@ -1446,6 +1533,12 @@ print(
 )
 
 print(
+    "Already attempted:",
+    len(attempted_set),
+    flush=True
+)
+
+print(
     "Already failed:",
     len(failed_set),
     flush=True
@@ -1456,9 +1549,7 @@ print(
     max(
         total_target
         -
-        len(existing_rolls)
-        -
-        len(failed_set),
+        len(attempted_set),
         0
     ),
     flush=True
@@ -1504,7 +1595,6 @@ try:
     )
 
     page.raise_for_status()
-
 
 except Exception as e:
 
@@ -1597,12 +1687,10 @@ for inp in form.find_all(
     if not name:
         continue
 
-
     input_type = inp.get(
         "type",
         "text"
     ).lower()
-
 
     if input_type in [
 
@@ -1614,7 +1702,6 @@ for inp in form.find_all(
     ]:
 
         continue
-
 
     if input_type in [
 
@@ -1628,7 +1715,6 @@ for inp in form.find_all(
         ):
 
             continue
-
 
     base_form_data[name] = inp.get(
         "value",
@@ -1651,19 +1737,16 @@ for select in form.find_all(
     if not name:
         continue
 
-
     selected = select.find(
         "option",
         selected=True
     )
-
 
     if not selected:
 
         selected = select.find(
             "option"
         )
-
 
     if selected:
 
@@ -1735,13 +1818,19 @@ processed = 0
 
 successful = 0
 
+supabase_saved = 0
+
+supabase_failed = 0
+
 not_found = 0
 
 errors = 0
 
-skipped_failed = 0
+skipped_attempted = 0
 
 skipped_existing = 0
+
+skipped_supabase = 0
 
 
 # ============================================================
@@ -1756,23 +1845,28 @@ for group_name, roll_number in generate_rolls():
 
 
     # --------------------------------------------------------
-    # SKIP EXISTING
+    # LOCAL DUPLICATE PROTECTION
     # --------------------------------------------------------
 
     if roll in existing_rolls:
 
         skipped_existing += 1
 
+        print(
+            f"SKIP LOCAL EXISTING: {roll}",
+            flush=True
+        )
+
         continue
 
 
     # --------------------------------------------------------
-    # SKIP FAILED
+    # PERSISTENT ATTEMPTED PROTECTION
     # --------------------------------------------------------
 
-    if roll in failed_set:
+    if roll in attempted_set:
 
-        skipped_failed += 1
+        skipped_attempted += 1
 
         continue
 
@@ -1799,6 +1893,53 @@ for group_name, roll_number in generate_rolls():
         f"{group_name} | Roll: {roll}",
         flush=True
     )
+
+
+    # ========================================================
+    # LOCK ROLL BEFORE REQUEST
+    #
+    # This is the main protection against repeated requests.
+    # ========================================================
+
+    attempted_set.add(
+        roll
+    )
+
+    attempted_rolls.append(
+        roll
+    )
+
+    save_json(
+        "attempted_rolls.json",
+        attempted_rolls
+    )
+
+    print(
+        f"ROLL LOCKED: {roll}",
+        flush=True
+    )
+
+
+    # ========================================================
+    # SUPABASE PRE-CHECK
+    # ========================================================
+
+    if supabase_roll_exists(
+        roll
+    ):
+
+        print(
+            f"SUPABASE ALREADY HAS: {roll}",
+            flush=True
+        )
+
+        skipped_supabase += 1
+
+        existing_rolls.add(
+            roll
+        )
+
+        continue
 
 
     # ========================================================
@@ -1865,8 +2006,9 @@ for group_name, roll_number in generate_rolls():
 
         errors += 1
 
-        # Do NOT mark timeout as permanently failed.
-        # It can be retried on next run.
+        # Important:
+        # attempted_roll is kept.
+        # It will NOT be requested again automatically.
 
         continue
 
@@ -1928,7 +2070,6 @@ for group_name, roll_number in generate_rolls():
 
         )
 
-
     except Exception as e:
 
         print(
@@ -1981,7 +2122,6 @@ for group_name, roll_number in generate_rolls():
         )
 
 
-        # Save failed roll immediately
         save_json(
             "failed_rolls.json",
             failed_rolls
@@ -1999,7 +2139,14 @@ for group_name, roll_number in generate_rolls():
 
 
     # ========================================================
-    # SUCCESS
+    # FORCE REQUESTED ROLL
+    # ========================================================
+
+    parsed["roll"] = roll
+
+
+    # ========================================================
+    # OUTPUT
     # ========================================================
 
     print(
@@ -2101,7 +2248,47 @@ for group_name, roll_number in generate_rolls():
 
 
     # ========================================================
-    # SAVE STUDENT
+    # LOCAL DUPLICATE CHECK AGAIN
+    # ========================================================
+
+    if roll in existing_rolls:
+
+        print(
+            f"DUPLICATE LOCAL SKIPPED: {roll}",
+            flush=True
+        )
+
+        continue
+
+
+    # ========================================================
+    # SUPABASE UPSERT
+    # ========================================================
+
+    supabase_ok = (
+        supabase_upsert_student(
+            parsed
+        )
+    )
+
+
+    if supabase_ok:
+
+        supabase_saved += 1
+
+    else:
+
+        supabase_failed += 1
+
+        print(
+            f"WARNING: Supabase save failed "
+            f"for {roll}",
+            flush=True
+        )
+
+
+    # ========================================================
+    # SAVE LOCAL STUDENT
     # ========================================================
 
     students.append(
@@ -2140,6 +2327,12 @@ for group_name, roll_number in generate_rolls():
         save_json(
             "failed_rolls.json",
             failed_rolls
+        )
+
+
+        save_json(
+            "attempted_rolls.json",
+            attempted_rolls
         )
 
 
@@ -2183,6 +2376,12 @@ save_json(
 )
 
 
+save_json(
+    "attempted_rolls.json",
+    attempted_rolls
+)
+
+
 # ============================================================
 # REMAINING
 # ============================================================
@@ -2191,9 +2390,7 @@ remaining = max(
 
     total_target
     -
-    len(existing_rolls)
-    -
-    len(failed_set),
+    len(attempted_set),
 
     0
 
@@ -2218,6 +2415,9 @@ summary = {
     "collected_total":
         len(students),
 
+    "attempted_total":
+        len(attempted_set),
+
     "failed_total":
         len(failed_set),
 
@@ -2230,6 +2430,12 @@ summary = {
     "successful_this_run":
         successful,
 
+    "supabase_saved_this_run":
+        supabase_saved,
+
+    "supabase_failed_this_run":
+        supabase_failed,
+
     "not_found_this_run":
         not_found,
 
@@ -2239,8 +2445,11 @@ summary = {
     "skipped_existing":
         skipped_existing,
 
-    "skipped_failed":
-        skipped_failed,
+    "skipped_attempted":
+        skipped_attempted,
+
+    "skipped_supabase":
+        skipped_supabase,
 
     "batch_size":
         BATCH_SIZE,
@@ -2298,6 +2507,18 @@ print(
 )
 
 print(
+    "Supabase saved:",
+    supabase_saved,
+    flush=True
+)
+
+print(
+    "Supabase failed:",
+    supabase_failed,
+    flush=True
+)
+
+print(
     "Not found:",
     not_found,
     flush=True
@@ -2316,14 +2537,26 @@ print(
 )
 
 print(
-    "Skipped failed:",
-    skipped_failed,
+    "Skipped attempted:",
+    skipped_attempted,
+    flush=True
+)
+
+print(
+    "Skipped Supabase:",
+    skipped_supabase,
     flush=True
 )
 
 print(
     "Total students saved:",
     len(students),
+    flush=True
+)
+
+print(
+    "Total attempted:",
+    len(attempted_set),
     flush=True
 )
 
@@ -2342,6 +2575,12 @@ print(
 print(
     "Students file:",
     STUDENTS_FILE,
+    flush=True
+)
+
+print(
+    "Attempted file:",
+    ATTEMPTED_FILE,
     flush=True
 )
 
