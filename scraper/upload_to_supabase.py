@@ -3,8 +3,14 @@ import json
 import time
 import requests
 
-SUPABASE_URL = os.getenv("https://mpnjnyejpqeqguxikvnl.supabase.co", "").rstrip("/")
-SUPABASE_KEY = os.getenv("sb_publishable_6Pm2-m3BeYB8VDw4kwCccg_WnYe5-IT", "")
+SUPABASE_URL = os.getenv(
+    "SUPABASE_URL",
+    ""
+).rstrip("/")
+
+SUPABASE_KEY = os.getenv(
+    "SUPABASE_KEY",
+    "")
 
 TABLE_NAME = "students"
 
