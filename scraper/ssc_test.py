@@ -8,6 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
+
 # ============================================================
 # SUPABASE
 # ============================================================
@@ -15,46 +16,20 @@ from urllib.parse import urljoin
 try:
     from supabase import create_client, Client
 except ImportError:
-    raise SystemExit(
-        "Supabase package missing.\n"
-        "Run:\n"
-        "pip install supabase"
-    )
-
-
-SUPABASE_URL = os.getenv(
-    "SUPABASE_URL",
-    "YOUR_SUPABASE_URL"
-)
-
-SUPABASE_KEY = os.getenv(
-    "SUPABASE_KEY",
-    "YOUR_SUPABASE_KEY"
-)
-
-if (
-    not SUPABASE_URL
-    or SUPABASE_URL == "YOUR_SUPABASE_URL"
-    or not SUPABASE_KEY
-    or SUPABASE_KEY == "YOUR_SUPABASE_KEY"
-):
-    raise SystemExit(
-        "\nERROR: Supabase URL/KEY not configured.\n"
-        "Set SUPABASE_URL and SUPABASE_KEY first.\n"
-    )
-
-
-supabase: Client = create_client(
-    SUPABASE_URL,
-    SUPABASE_KEY
-)
-
-SUPABASE_TABLE = "students"
+    create_client = None
+    Client = None
 
 
 # ============================================================
 # SSC 2026 STUDENT COLLECTOR
+# FINAL VERSION
+#
+# Duplicate Roll Protection
+# Persistent Attempted Roll
+# Supabase Upsert
+# Supabase Duplicate Protection
 # ============================================================
+
 
 BASE_URL = (
     "https://sresult.bise-ctg.gov.bd/"
@@ -85,6 +60,16 @@ FAILED_FILE = os.path.join(
 ATTEMPTED_FILE = os.path.join(
     OUTPUT_DIR,
     "attempted_rolls.json"
+)
+
+
+# ============================================================
+# SUPABASE TABLE
+# ============================================================
+
+SUPABASE_TABLE = os.getenv(
+    "SUPABASE_TABLE",
+    "students"
 )
 
 
@@ -183,22 +168,22 @@ print(
 )
 
 print(
-    "Duplicate Roll Protection : ON",
+    "Duplicate Roll Protection: ENABLED",
     flush=True
 )
 
 print(
-    "Persistent Attempted Roll : ON",
+    "Persistent Attempted Roll: ENABLED",
     flush=True
 )
 
 print(
-    "Supabase Upsert            : ON",
+    "Supabase Upsert: ENABLED",
     flush=True
 )
 
 print(
-    "Supabase Duplicate Guard  : ON",
+    "Supabase Duplicate Protection: ENABLED",
     flush=True
 )
 
@@ -251,6 +236,77 @@ session = requests.Session()
 session.headers.update(
     HEADERS
 )
+
+
+# ============================================================
+# SUPABASE CONNECTION
+# ============================================================
+
+SUPABASE_URL = os.getenv(
+    "SUPABASE_URL"
+)
+
+SUPABASE_KEY = os.getenv(
+    "SUPABASE_KEY"
+)
+
+supabase = None
+
+SUPABASE_ENABLED = False
+
+
+if (
+    SUPABASE_URL
+    and
+    SUPABASE_KEY
+    and
+    create_client is not None
+):
+
+    try:
+
+        supabase = create_client(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        )
+
+        SUPABASE_ENABLED = True
+
+        print(
+            "Supabase: CONNECTED",
+            flush=True
+        )
+
+        print(
+            "Supabase table:",
+            SUPABASE_TABLE,
+            flush=True
+        )
+
+    except Exception as e:
+
+        print(
+            "Supabase connection error:",
+            e,
+            flush=True
+        )
+
+        print(
+            "Local collection will continue.",
+            flush=True
+        )
+
+else:
+
+    print(
+        "Supabase: NOT CONFIGURED",
+        flush=True
+    )
+
+    print(
+        "Local collection will continue.",
+        flush=True
+    )
 
 
 # ============================================================
@@ -323,140 +379,6 @@ def load_json(filename, default):
         )
 
         return default
-
-
-# ============================================================
-# SUPABASE ROLL CHECK
-# ============================================================
-
-def supabase_roll_exists(roll):
-
-    try:
-
-        response = (
-            supabase
-            .table(SUPABASE_TABLE)
-            .select("roll")
-            .eq("roll", str(roll))
-            .limit(1)
-            .execute()
-        )
-
-        data = response.data or []
-
-        return len(data) > 0
-
-    except Exception as e:
-
-        print(
-            f"Supabase roll check error "
-            f"{roll}: {e}",
-            flush=True
-        )
-
-        return False
-
-
-# ============================================================
-# SUPABASE UPSERT
-# ============================================================
-
-def supabase_upsert_student(student):
-
-    roll = str(
-        student.get(
-            "roll",
-            ""
-        )
-    ).strip()
-
-    if not roll:
-        return False
-
-
-    # --------------------------------------------------------
-    # Explicit duplicate check
-    # --------------------------------------------------------
-
-    try:
-
-        existing = (
-            supabase
-            .table(SUPABASE_TABLE)
-            .select("roll")
-            .eq("roll", roll)
-            .limit(1)
-            .execute()
-        )
-
-        if existing.data:
-
-            print(
-                f"SUPABASE DUPLICATE: "
-                f"{roll} -> skipped",
-                flush=True
-            )
-
-            return True
-
-    except Exception as e:
-
-        print(
-            f"Supabase duplicate check "
-            f"error {roll}: {e}",
-            flush=True
-        )
-
-        return False
-
-
-    # --------------------------------------------------------
-    # Prepare row
-    # --------------------------------------------------------
-
-    row = dict(student)
-
-    row["roll"] = roll
-
-
-    # --------------------------------------------------------
-    # Upsert
-    #
-    # Requires UNIQUE constraint on roll.
-    # --------------------------------------------------------
-
-    try:
-
-        response = (
-            supabase
-            .table(SUPABASE_TABLE)
-            .upsert(
-                row,
-                on_conflict="roll"
-            )
-            .execute()
-        )
-
-        if response.data is not None:
-
-            print(
-                f"SUPABASE SAVED: {roll}",
-                flush=True
-            )
-
-            return True
-
-
-    except Exception as e:
-
-        print(
-            f"SUPABASE UPSERT ERROR "
-            f"{roll}: {e}",
-            flush=True
-        )
-
-
-    return False
 
 
 # ============================================================
@@ -1035,6 +957,7 @@ def detect_result(
                 .upper()
             )
 
+
     for row in soup.find_all(
         "tr"
     ):
@@ -1075,6 +998,7 @@ def detect_result(
             ):
                 return "FAIL"
 
+
     for subject in subjects:
 
         grade = str(
@@ -1087,6 +1011,7 @@ def detect_result(
         if grade == "F":
 
             return "FAIL"
+
 
     return ""
 
@@ -1157,6 +1082,11 @@ def parse_result(
             [],
 
     }
+
+
+    # ========================================================
+    # BASIC INFORMATION
+    # ========================================================
 
     for row in soup.find_all(
         "tr"
@@ -1229,6 +1159,7 @@ def parse_result(
 
                 result[key] = value
 
+
         result_value = (
             find_value_after_label(
                 values,
@@ -1251,12 +1182,18 @@ def parse_result(
                     result_value
                 )
 
+
+    # ========================================================
+    # FALLBACK BASIC TEXT SEARCH
+    # ========================================================
+
     page_text = clean_text(
         soup.get_text(
             " ",
             strip=True
         )
     )
+
 
     if not result["result"]:
 
@@ -1273,13 +1210,28 @@ def parse_result(
                 match.group(1).upper()
             )
 
+
+    # ========================================================
+    # GPA
+    # ========================================================
+
     result["gpa"] = find_page_gpa(
         soup
     )
 
+
+    # ========================================================
+    # SUBJECTS
+    # ========================================================
+
     result["subjects"] = parse_subjects(
         soup
     )
+
+
+    # ========================================================
+    # RESULT FALLBACK
+    # ========================================================
 
     if not result["result"]:
 
@@ -1288,11 +1240,21 @@ def parse_result(
             result["subjects"]
         )
 
+
+    # ========================================================
+    # TOTAL SCORE
+    # ========================================================
+
     result["total_score"] = (
         calculate_total_score(
             result["subjects"]
         )
     )
+
+
+    # ========================================================
+    # DISTRICT
+    # ========================================================
 
     if not result["district"]:
 
@@ -1301,6 +1263,11 @@ def parse_result(
                 result["institute"]
             )
         )
+
+
+    # ========================================================
+    # VALID RESULT CHECK
+    # ========================================================
 
     has_data = (
         bool(result["name"])
@@ -1313,6 +1280,11 @@ def parse_result(
     if not has_data:
 
         return None
+
+
+    # ========================================================
+    # CLEAN STRINGS
+    # ========================================================
 
     string_fields = [
 
@@ -1337,6 +1309,7 @@ def parse_result(
         result[key] = clean_text(
             result[key]
         )
+
 
     return result
 
@@ -1364,7 +1337,7 @@ def generate_rolls():
 
 
 # ============================================================
-# LOAD LOCAL DATA
+# LOAD EXISTING STUDENTS
 # ============================================================
 
 students = load_json(
@@ -1408,7 +1381,40 @@ if not isinstance(
 
 
 # ============================================================
-# EXISTING STUDENT ROLLS
+# NORMALIZE ATTEMPTED ROLLS
+# ============================================================
+
+attempted_set = set()
+
+for item in attempted_rolls:
+
+    if isinstance(
+        item,
+        dict
+    ):
+
+        roll = str(
+            item.get(
+                "roll",
+                ""
+            )
+        ).strip()
+
+    else:
+
+        roll = str(
+            item
+        ).strip()
+
+    if roll:
+
+        attempted_set.add(
+            roll
+        )
+
+
+# ============================================================
+# EXISTING ROLLS
 # ============================================================
 
 existing_rolls = set()
@@ -1431,25 +1437,6 @@ for student in students:
     if roll:
 
         existing_rolls.add(
-            roll
-        )
-
-
-# ============================================================
-# ATTEMPTED ROLLS
-# ============================================================
-
-attempted_set = set()
-
-for item in attempted_rolls:
-
-    roll = str(
-        item
-    ).strip()
-
-    if roll:
-
-        attempted_set.add(
             roll
         )
 
@@ -1485,6 +1472,229 @@ for item in failed_rolls:
         failed_set.add(
             roll
         )
+
+
+# ============================================================
+# SUPABASE EXISTING ROLLS
+# ============================================================
+
+supabase_rolls = set()
+
+
+def load_supabase_rolls():
+
+    if not SUPABASE_ENABLED:
+        return set()
+
+    result_set = set()
+
+    try:
+
+        print(
+            "Loading existing Supabase rolls...",
+            flush=True
+        )
+
+        response = (
+            supabase
+            .table(SUPABASE_TABLE)
+            .select("roll")
+            .execute()
+        )
+
+        rows = response.data or []
+
+        for row in rows:
+
+            if not isinstance(
+                row,
+                dict
+            ):
+                continue
+
+            roll = str(
+                row.get(
+                    "roll",
+                    ""
+                )
+            ).strip()
+
+            if roll:
+                result_set.add(roll)
+
+        print(
+            "Supabase existing rolls:",
+            len(result_set),
+            flush=True
+        )
+
+    except Exception as e:
+
+        print(
+            "Could not load Supabase rolls:",
+            e,
+            flush=True
+        )
+
+        print(
+            "Supabase pre-check will be skipped.",
+            flush=True
+        )
+
+    return result_set
+
+
+supabase_rolls = load_supabase_rolls()
+
+
+# ============================================================
+# SUPABASE UPSERT
+# ============================================================
+
+def supabase_upsert_student(student):
+
+    if not SUPABASE_ENABLED:
+
+        return False, "Supabase disabled"
+
+
+    try:
+
+        roll = str(
+            student.get(
+                "roll",
+                ""
+            )
+        ).strip()
+
+        if not roll:
+
+            return False, "Missing roll"
+
+
+        # ----------------------------------------------------
+        # Exact data to store
+        # ----------------------------------------------------
+
+        payload = {
+
+            "roll":
+                roll,
+
+            "name":
+                student.get(
+                    "name",
+                    ""
+                ),
+
+            "board":
+                student.get(
+                    "board",
+                    ""
+                ),
+
+            "group":
+                student.get(
+                    "group",
+                    ""
+                ),
+
+            "father_name":
+                student.get(
+                    "father_name",
+                    ""
+                ),
+
+            "mother_name":
+                student.get(
+                    "mother_name",
+                    ""
+                ),
+
+            "session":
+                student.get(
+                    "session",
+                    ""
+                ),
+
+            "reg_no":
+                student.get(
+                    "reg_no",
+                    ""
+                ),
+
+            "type":
+                student.get(
+                    "type",
+                    ""
+                ),
+
+            "institute":
+                student.get(
+                    "institute",
+                    ""
+                ),
+
+            "district":
+                student.get(
+                    "district",
+                    ""
+                ),
+
+            "result":
+                student.get(
+                    "result",
+                    ""
+                ),
+
+            "date_of_birth":
+                student.get(
+                    "date_of_birth",
+                    ""
+                ),
+
+            "gpa":
+                student.get(
+                    "gpa"
+                ),
+
+            "total_score":
+                student.get(
+                    "total_score"
+                ),
+
+            "subjects":
+                student.get(
+                    "subjects",
+                    []
+                ),
+
+        }
+
+
+        # ----------------------------------------------------
+        # Supabase UPSERT
+        #
+        # roll MUST have UNIQUE constraint.
+        # ----------------------------------------------------
+
+        (
+            supabase
+            .table(SUPABASE_TABLE)
+            .upsert(
+                payload,
+                on_conflict="roll"
+            )
+            .execute()
+        )
+
+
+        return True, "Upsert successful"
+
+
+    except Exception as e:
+
+        return False, str(e)
 
 
 # ============================================================
@@ -1527,7 +1737,7 @@ print(
 )
 
 print(
-    "Already collected:",
+    "Already collected locally:",
     len(existing_rolls),
     flush=True
 )
@@ -1545,24 +1755,13 @@ print(
 )
 
 print(
-    "Remaining:",
-    max(
-        total_target
-        -
-        len(attempted_set),
-        0
-    ),
+    "Already in Supabase:",
+    len(supabase_rolls),
     flush=True
 )
 
 print(
-    "Batch size:",
-    BATCH_SIZE,
-    flush=True
-)
-
-print(
-    "=" * 70,
+    "========================================",
     flush=True
 )
 
@@ -1595,6 +1794,7 @@ try:
     )
 
     page.raise_for_status()
+
 
 except Exception as e:
 
@@ -1687,10 +1887,12 @@ for inp in form.find_all(
     if not name:
         continue
 
+
     input_type = inp.get(
         "type",
         "text"
     ).lower()
+
 
     if input_type in [
 
@@ -1702,6 +1904,7 @@ for inp in form.find_all(
     ]:
 
         continue
+
 
     if input_type in [
 
@@ -1715,6 +1918,7 @@ for inp in form.find_all(
         ):
 
             continue
+
 
     base_form_data[name] = inp.get(
         "value",
@@ -1737,16 +1941,19 @@ for select in form.find_all(
     if not name:
         continue
 
+
     selected = select.find(
         "option",
         selected=True
     )
+
 
     if not selected:
 
         selected = select.find(
             "option"
         )
+
 
     if selected:
 
@@ -1818,19 +2025,21 @@ processed = 0
 
 successful = 0
 
-supabase_saved = 0
-
-supabase_failed = 0
-
 not_found = 0
 
 errors = 0
 
-skipped_attempted = 0
+skipped_failed = 0
 
 skipped_existing = 0
 
+skipped_attempted = 0
+
 skipped_supabase = 0
+
+supabase_saved = 0
+
+supabase_errors = 0
 
 
 # ============================================================
@@ -1845,28 +2054,56 @@ for group_name, roll_number in generate_rolls():
 
 
     # --------------------------------------------------------
-    # LOCAL DUPLICATE PROTECTION
+    # DUPLICATE LOCAL STUDENT
     # --------------------------------------------------------
 
     if roll in existing_rolls:
 
         skipped_existing += 1
 
-        print(
-            f"SKIP LOCAL EXISTING: {roll}",
-            flush=True
-        )
+        continue
+
+
+    # --------------------------------------------------------
+    # DUPLICATE SUPABASE
+    # --------------------------------------------------------
+
+    if roll in supabase_rolls:
+
+        skipped_supabase += 1
+
+        # Keep local attempted state synchronized.
+        if roll not in attempted_set:
+
+            attempted_set.add(
+                roll
+            )
+
+            attempted_rolls.append(
+                roll
+            )
 
         continue
 
 
     # --------------------------------------------------------
-    # PERSISTENT ATTEMPTED PROTECTION
+    # PERSISTENT ATTEMPTED ROLL
     # --------------------------------------------------------
 
     if roll in attempted_set:
 
         skipped_attempted += 1
+
+        continue
+
+
+    # --------------------------------------------------------
+    # FAILED ROLL
+    # --------------------------------------------------------
+
+    if roll in failed_set:
+
+        skipped_failed += 1
 
         continue
 
@@ -1896,9 +2133,11 @@ for group_name, roll_number in generate_rolls():
 
 
     # ========================================================
-    # LOCK ROLL BEFORE REQUEST
+    # MARK ATTEMPTED BEFORE REQUEST
     #
-    # This is the main protection against repeated requests.
+    # This is persistent.
+    # If collector stops, this roll will not be requested
+    # again on the next run.
     # ========================================================
 
     attempted_set.add(
@@ -1913,33 +2152,6 @@ for group_name, roll_number in generate_rolls():
         "attempted_rolls.json",
         attempted_rolls
     )
-
-    print(
-        f"ROLL LOCKED: {roll}",
-        flush=True
-    )
-
-
-    # ========================================================
-    # SUPABASE PRE-CHECK
-    # ========================================================
-
-    if supabase_roll_exists(
-        roll
-    ):
-
-        print(
-            f"SUPABASE ALREADY HAS: {roll}",
-            flush=True
-        )
-
-        skipped_supabase += 1
-
-        existing_rolls.add(
-            roll
-        )
-
-        continue
 
 
     # ========================================================
@@ -2006,9 +2218,8 @@ for group_name, roll_number in generate_rolls():
 
         errors += 1
 
-        # Important:
-        # attempted_roll is kept.
-        # It will NOT be requested again automatically.
+        # Attempted state remains persistent.
+        # Do not add to failed_rolls.
 
         continue
 
@@ -2069,6 +2280,7 @@ for group_name, roll_number in generate_rolls():
             group_name
 
         )
+
 
     except Exception as e:
 
@@ -2139,14 +2351,7 @@ for group_name, roll_number in generate_rolls():
 
 
     # ========================================================
-    # FORCE REQUESTED ROLL
-    # ========================================================
-
-    parsed["roll"] = roll
-
-
-    # ========================================================
-    # OUTPUT
+    # SUCCESS
     # ========================================================
 
     print(
@@ -2248,58 +2453,74 @@ for group_name, roll_number in generate_rolls():
 
 
     # ========================================================
-    # LOCAL DUPLICATE CHECK AGAIN
+    # SUPABASE SAVE FIRST
     # ========================================================
 
-    if roll in existing_rolls:
-
-        print(
-            f"DUPLICATE LOCAL SKIPPED: {roll}",
-            flush=True
-        )
-
-        continue
+    print(
+        "SUPABASE UPSERT:",
+        roll,
+        flush=True
+    )
 
 
-    # ========================================================
-    # SUPABASE UPSERT
-    # ========================================================
-
-    supabase_ok = (
+    supabase_ok, supabase_message = (
         supabase_upsert_student(
             parsed
         )
     )
 
 
-    if supabase_ok:
+    if SUPABASE_ENABLED:
 
-        supabase_saved += 1
+        if supabase_ok:
 
-    else:
+            print(
+                "SUPABASE:",
+                supabase_message,
+                flush=True
+            )
 
-        supabase_failed += 1
+            supabase_saved += 1
 
-        print(
-            f"WARNING: Supabase save failed "
-            f"for {roll}",
-            flush=True
+            supabase_rolls.add(
+                roll
+            )
+
+        else:
+
+            print(
+                "SUPABASE ERROR:",
+                supabase_message,
+                flush=True
+            )
+
+            supabase_errors += 1
+
+            # ------------------------------------------------
+            # IMPORTANT:
+            #
+            # Do NOT discard the student.
+            # Local file will still preserve it.
+            # ------------------------------------------------
+
+
+    # ========================================================
+    # SAVE STUDENT LOCALLY
+    #
+    # Local duplicate protection
+    # ========================================================
+
+    if roll not in existing_rolls:
+
+        students.append(
+            parsed
         )
 
+        existing_rolls.add(
+            roll
+        )
 
-    # ========================================================
-    # SAVE LOCAL STUDENT
-    # ========================================================
-
-    students.append(
-        parsed
-    )
-
-    existing_rolls.add(
-        roll
-    )
-
-    successful += 1
+        successful += 1
 
 
     # ========================================================
@@ -2415,11 +2636,14 @@ summary = {
     "collected_total":
         len(students),
 
+    "failed_total":
+        len(failed_set),
+
     "attempted_total":
         len(attempted_set),
 
-    "failed_total":
-        len(failed_set),
+    "supabase_existing_total":
+        len(supabase_rolls),
 
     "remaining":
         remaining,
@@ -2430,23 +2654,26 @@ summary = {
     "successful_this_run":
         successful,
 
-    "supabase_saved_this_run":
-        supabase_saved,
-
-    "supabase_failed_this_run":
-        supabase_failed,
-
     "not_found_this_run":
         not_found,
 
     "errors_this_run":
         errors,
 
+    "supabase_saved_this_run":
+        supabase_saved,
+
+    "supabase_errors_this_run":
+        supabase_errors,
+
     "skipped_existing":
         skipped_existing,
 
     "skipped_attempted":
         skipped_attempted,
+
+    "skipped_failed":
+        skipped_failed,
 
     "skipped_supabase":
         skipped_supabase,
@@ -2507,18 +2734,6 @@ print(
 )
 
 print(
-    "Supabase saved:",
-    supabase_saved,
-    flush=True
-)
-
-print(
-    "Supabase failed:",
-    supabase_failed,
-    flush=True
-)
-
-print(
     "Not found:",
     not_found,
     flush=True
@@ -2531,6 +2746,18 @@ print(
 )
 
 print(
+    "Supabase saved:",
+    supabase_saved,
+    flush=True
+)
+
+print(
+    "Supabase errors:",
+    supabase_errors,
+    flush=True
+)
+
+print(
     "Skipped existing:",
     skipped_existing,
     flush=True
@@ -2539,6 +2766,12 @@ print(
 print(
     "Skipped attempted:",
     skipped_attempted,
+    flush=True
+)
+
+print(
+    "Skipped failed:",
+    skipped_failed,
     flush=True
 )
 
