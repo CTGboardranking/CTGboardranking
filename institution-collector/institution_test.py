@@ -636,7 +636,7 @@ def parse_result(
             None,
 
         "total_gpa":
-            gpa5,
+            None,
 
         "year":
             YEAR,
