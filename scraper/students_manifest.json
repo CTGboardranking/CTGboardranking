@@ -1,6 +1,6 @@
 {
   "source": "students.json",
-  "total_records": 60423,
+  "total_records": 60421,
   "parts": [
     {
       "file": "scraper/students_parts/part_0001.json",
@@ -14,7 +14,7 @@
     },
     {
       "file": "scraper/students_parts/part_0003.json",
-      "records": 20141,
+      "records": 20139,
       "size_mb": 20.66
     }
   ]
