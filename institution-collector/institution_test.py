@@ -5,21 +5,16 @@ import re
 import time
 import random
 from pathlib import Path
+from urllib.parse import urljoin
 
 
 # ============================================================
 # CONFIG
 # ============================================================
 
-MASTER_URL = (
-    "https://esifssc.bise-ctg.gov.bd/"
-    "esif_accounts.php"
-)
-
-SSC_URL = (
+SOURCE_URL = (
     "https://sresult.bise-ctg.gov.bd/"
-    "to_ssc_26_ctg/"
-    "individual/"
+    "to_ssc_26_ctg/index.php"
 )
 
 OUTPUT_FILE = Path(
@@ -35,6 +30,7 @@ TEST_MODE = True
 TEST_EIIN = "103086"
 
 MIN_DELAY = 0.1
+
 MAX_DELAY = 0.2
 
 TIMEOUT = (5, 20)
@@ -49,6 +45,7 @@ BOARD = "Chattogram Board"
 # ============================================================
 
 HEADERS = {
+
     "User-Agent": (
         "Mozilla/5.0 "
         "(Linux; Android 10; Mobile) "
@@ -66,17 +63,10 @@ HEADERS = {
 
     "Accept-Language":
         "en-US,en;q=0.9",
+
+    "Connection":
+        "keep-alive",
 }
-
-
-# ============================================================
-# DIRECTORY
-# ============================================================
-
-OUTPUT_FILE.parent.mkdir(
-    parents=True,
-    exist_ok=True
-)
 
 
 # ============================================================
@@ -91,7 +81,17 @@ session.headers.update(
 
 
 # ============================================================
-# CLEAN
+# DIRECTORY
+# ============================================================
+
+OUTPUT_FILE.parent.mkdir(
+    parents=True,
+    exist_ok=True
+)
+
+
+# ============================================================
+# HELPERS
 # ============================================================
 
 def clean_text(value):
@@ -115,10 +115,6 @@ def clean_text(value):
     return value.strip()
 
 
-# ============================================================
-# NUMBER
-# ============================================================
-
 def number(value):
 
     value = clean_text(value)
@@ -137,36 +133,39 @@ def number(value):
         return None
 
     try:
-        number_value = float(
+
+        value = float(
             match.group()
         )
 
-        if number_value.is_integer():
-            return int(number_value)
+        if value.is_integer():
 
-        return number_value
+            return int(value)
+
+        return value
 
     except Exception:
+
         return None
 
 
 # ============================================================
-# DOWNLOAD MASTER
+# OPEN INSTITUTE RESULT PAGE
 # ============================================================
 
-def get_master():
+def open_page():
 
     print(
         "=" * 70
     )
 
     print(
-        "STEP 1: DOWNLOADING INSTITUTION MASTER LIST"
+        "STEP 1: OPENING INSTITUTE RESULT PAGE"
     )
 
     print(
         "URL:",
-        MASTER_URL
+        SOURCE_URL
     )
 
     print(
@@ -174,13 +173,18 @@ def get_master():
     )
 
     response = session.get(
-        MASTER_URL,
+        SOURCE_URL,
         timeout=TIMEOUT
     )
 
     print(
         "HTTP Status:",
         response.status_code
+    )
+
+    print(
+        "Final URL:",
+        response.url
     )
 
     response.raise_for_status()
@@ -190,214 +194,145 @@ def get_master():
         or response.encoding
     )
 
-    soup = BeautifulSoup(
-        response.text,
-        "html.parser"
-    )
-
-    tables = soup.find_all(
-        "table"
-    )
-
-    print(
-        "Tables found:",
-        len(tables)
-    )
-
-    institution_table = None
-
-    for table in tables:
-
-        text = clean_text(
-            table.get_text(
-                " ",
-                strip=True
-            )
-        ).upper()
-
-        if (
-            "EIIN" in text
-            and
-            "INSTITUTE NAME" in text
-        ):
-
-            institution_table = table
-            break
-
-    if institution_table is None:
-
-        raise RuntimeError(
-            "Institution table not found."
-        )
-
-    institutions = []
-
-    for row in institution_table.find_all("tr"):
-
-        cells = row.find_all(
-            ["td", "th"]
-        )
-
-        values = [
-            clean_text(
-                cell.get_text(
-                    " ",
-                    strip=True
-                )
-            )
-            for cell in cells
-        ]
-
-        if len(values) < 3:
-            continue
-
-        eiin = ""
-
-        name = ""
-
-        total_students = 0
-
-        # Normal table:
-        # SL | EIIN | NAME | STUDENTS
-
-        if len(values) >= 4:
-
-            if values[1].isdigit():
-
-                eiin = values[1]
-
-                name = values[2]
-
-                total_students = (
-                    number(values[3])
-                    or 0
-                )
-
-        # Fallback:
-        # EIIN | NAME | STUDENTS
-
-        if not eiin:
-
-            if values[0].isdigit():
-
-                eiin = values[0]
-
-                name = values[1]
-
-                if len(values) >= 3:
-
-                    total_students = (
-                        number(values[2])
-                        or 0
-                    )
-
-        if not eiin:
-            continue
-
-        if not name:
-            continue
-
-        institutions.append({
-
-            "eiin":
-                eiin,
-
-            "institution_name":
-                name,
-
-            "total_students":
-                total_students,
-
-        })
-
-    # Remove duplicates
-
-    unique = {}
-
-    for item in institutions:
-
-        unique[
-            item["eiin"]
-        ] = item
-
-    institutions = list(
-        unique.values()
-    )
-
-    print(
-        "Institutions found:",
-        len(institutions)
-    )
-
-    return institutions
+    return response
 
 
 # ============================================================
-# OPEN SSC FORM
+# INSPECT FORM
 # ============================================================
 
-def open_ssc_form():
-
-    print()
-    print(
-        "=" * 70
-    )
-
-    print(
-        "STEP 2: OPENING SSC RESULT FORM"
-    )
-
-    print(
-        "=" * 70
-    )
-
-    response = session.get(
-        SSC_URL,
-        timeout=TIMEOUT
-    )
-
-    print(
-        "HTTP Status:",
-        response.status_code
-    )
-
-    response.raise_for_status()
+def inspect_form(response):
 
     soup = BeautifulSoup(
         response.text,
         "html.parser"
     )
 
-    form = soup.find(
+    forms = soup.find_all(
         "form"
     )
 
-    if not form:
+    print()
+    print(
+        "Forms found:",
+        len(forms)
+    )
+
+    if not forms:
 
         raise RuntimeError(
-            "SSC result form not found."
+            "No form found on index.php"
         )
 
-    action = form.get(
-        "action",
-        ""
-    )
+    for index, form in enumerate(
+        forms,
+        start=1
+    ):
 
-    method = form.get(
-        "method",
-        "post"
-    ).lower()
+        print()
+        print(
+            "-" * 70
+        )
 
-    from urllib.parse import urljoin
+        print(
+            f"FORM #{index}"
+        )
 
-    action_url = urljoin(
-        response.url,
-        action
-    )
+        print(
+            "Action:",
+            form.get(
+                "action",
+                ""
+            )
+        )
 
-    base_data = {}
+        print(
+            "Method:",
+            form.get(
+                "method",
+                "get"
+            )
+        )
 
-    for inp in form.find_all("input"):
+        print(
+            "INPUT FIELDS:"
+        )
+
+        for inp in form.find_all(
+            "input"
+        ):
+
+            print({
+
+                "name":
+                    inp.get("name"),
+
+                "type":
+                    inp.get(
+                        "type",
+                        "text"
+                    ),
+
+                "value":
+                    inp.get(
+                        "value",
+                        ""
+                    ),
+
+                "placeholder":
+                    inp.get(
+                        "placeholder",
+                        ""
+                    )
+
+            })
+
+        print(
+            "SELECT FIELDS:"
+        )
+
+        for select in form.find_all(
+            "select"
+        ):
+
+            print({
+
+                "name":
+                    select.get("name"),
+
+                "options":
+                    [
+                        clean_text(
+                            option.get(
+                                "value",
+                                ""
+                            )
+                        )
+                        for option
+                        in select.find_all(
+                            "option"
+                        )
+                    ]
+
+            })
+
+    return soup, forms[0]
+
+
+# ============================================================
+# BUILD FORM DATA
+# ============================================================
+
+def build_form_data(
+    form,
+    eiin
+):
+
+    data = {}
+
+    for inp in form.find_all(
+        "input"
+    ):
 
         name = inp.get(
             "name"
@@ -412,48 +347,155 @@ def open_ssc_form():
         ).lower()
 
         if input_type in (
-            "submit",
             "button",
             "reset",
             "image"
         ):
+
             continue
 
-        base_data[name] = inp.get(
+        if input_type in (
+            "checkbox",
+            "radio"
+        ):
+
+            if not inp.has_attr(
+                "checked"
+            ):
+
+                continue
+
+        data[name] = inp.get(
             "value",
             ""
         )
 
+    for select in form.find_all(
+        "select"
+    ):
+
+        name = select.get(
+            "name"
+        )
+
+        if not name:
+            continue
+
+        selected = select.find(
+            "option",
+            selected=True
+        )
+
+        if not selected:
+
+            selected = select.find(
+                "option"
+            )
+
+        if selected:
+
+            data[name] = selected.get(
+                "value",
+                clean_text(
+                    selected.get_text()
+                )
+            )
+
+    # ========================================================
+    # FIND EIIN FIELD
+    # ========================================================
+
+    eiin_field = None
+
+    possible_names = [
+
+        "eiin",
+        "EIIN",
+        "institute",
+        "institute_eiin",
+        "institute_eiin_no",
+        "institute_no",
+        "institute_id",
+
+    ]
+
+    for name in possible_names:
+
+        if name in data:
+
+            eiin_field = name
+
+            break
+
+    # If not found, inspect input names
+
+    if eiin_field is None:
+
+        for inp in form.find_all(
+            "input"
+        ):
+
+            name = inp.get(
+                "name"
+            )
+
+            placeholder = clean_text(
+                inp.get(
+                    "placeholder",
+                    ""
+                )
+            ).lower()
+
+            if not name:
+                continue
+
+            combined = (
+                name.lower()
+                + " "
+                + placeholder
+            )
+
+            if (
+                "eiin" in combined
+                or
+                "institute" in combined
+            ):
+
+                eiin_field = name
+
+                break
+
+    if eiin_field is None:
+
+        raise RuntimeError(
+            "Could not identify EIIN input field."
+        )
+
+    data[eiin_field] = str(
+        eiin
+    )
+
+    print()
     print(
-        "Result URL:",
-        action_url
+        "EIIN field detected:",
+        eiin_field
     )
 
     print(
-        "Form method:",
-        method
+        "POST data:",
+        data
     )
 
-    print(
-        "Base form fields:",
-        base_data
-    )
-
-    return (
-        action_url,
-        method,
-        base_data,
-        response.url
-    )
+    return data
 
 
 # ============================================================
 # PARSE INSTITUTION RESULT
 # ============================================================
 
-def parse_institution_result(
+def parse_result(
     html,
-    institution
+    eiin
 ):
 
     soup = BeautifulSoup(
@@ -461,93 +503,65 @@ def parse_institution_result(
         "html.parser"
     )
 
-    result = {
-
-        "eiin":
-            institution["eiin"],
-
-        "institution_name":
-            institution[
-                "institution_name"
-            ],
-
-        "district":
-            "",
-
-        "thana":
-            "",
-
-        "appeared":
-            institution[
-                "total_students"
-            ],
-
-        "passed":
-            0,
-
-        "passing_rate":
-            0,
-
-        "gpa5":
-            0,
-
-        "total_gpa":
-            0,
-
-        "year":
-            YEAR,
-
-        "board":
-            BOARD,
-
-    }
-
-    page_text = clean_text(
+    text = clean_text(
         soup.get_text(
             " ",
             strip=True
         )
     )
 
-    upper = page_text.upper()
-
-    # ========================================================
-    # SHOW TABLE STRUCTURE
-    # ========================================================
+    upper = text.upper()
 
     print()
     print(
-        "RESULT PAGE TABLES:",
+        "=" * 70
+    )
+
+    print(
+        "STEP 3: PARSING INSTITUTION RESULT"
+    )
+
+    print(
+        "=" * 70
+    )
+
+    print(
+        "Tables found:",
         len(
             soup.find_all("table")
         )
     )
 
-    for table_index, table in enumerate(
-        soup.find_all("table")
-    ):
+    # ========================================================
+    # PRINT TABLES
+    # ========================================================
 
-        rows = table.find_all("tr")
+    for table_index, table in enumerate(
+        soup.find_all("table"),
+        start=1
+    ):
 
         print()
         print(
-            f"TABLE #{table_index + 1}"
+            f"TABLE #{table_index}"
         )
 
-        for row in rows[:5]:
-
-            cells = row.find_all(
-                ["th", "td"]
-            )
+        for row in table.find_all("tr"):
 
             values = [
+
                 clean_text(
                     cell.get_text(
                         " ",
                         strip=True
                     )
                 )
-                for cell in cells
+
+                for cell
+                in row.find_all(
+                    ["th", "td"]
+                )
+
             ]
 
             if values:
@@ -557,54 +571,87 @@ def parse_institution_result(
                 )
 
     # ========================================================
-    # TEXT BASED EXTRACTION
+    # DEFAULT
     # ========================================================
 
-    patterns = {
+    result = {
 
-        "appeared": [
-            r"TOTAL\s*(?:CANDIDATE|STUDENT|EXAMINEE).*?(\d+)",
-            r"APPEARED.*?(\d+)",
-        ],
+        "eiin":
+            str(eiin),
 
-        "passed": [
-            r"TOTAL\s*PASSED.*?(\d+)",
-            r"PASSED.*?(\d+)",
-        ],
+        "institution_name":
+            "",
 
-        "gpa5": [
-            r"GPA\s*5.*?(\d+)",
-            r"GPA5.*?(\d+)",
-            r"5\.00.*?(\d+)",
-        ],
+        "district":
+            "",
 
-        "passing_rate": [
-            r"PASSING\s*RATE.*?([0-9]+(?:\.[0-9]+)?)",
-            r"PASS\s*RATE.*?([0-9]+(?:\.[0-9]+)?)",
-        ],
+        "thana":
+            "",
+
+        "appeared":
+            None,
+
+        "passed":
+            None,
+
+        "passing_rate":
+            None,
+
+        "gpa5":
+            None,
+
+        "total_gpa":
+            None,
+
+        "year":
+            YEAR,
+
+        "board":
+            BOARD,
 
     }
 
-    for field, field_patterns in patterns.items():
+    # ========================================================
+    # INSTITUTE NAME
+    # ========================================================
 
-        for pattern in field_patterns:
+    patterns = [
 
-            match = re.search(
-                pattern,
-                upper
+        r"INSTITUTE\s+NAME\s*:\s*(.+?)\s*\(\s*"
+        + re.escape(str(eiin))
+        + r"\s*\)",
+
+        r"INSTITUTE\s+NAME\s*:\s*(.+)",
+
+    ]
+
+    for pattern in patterns:
+
+        match = re.search(
+            pattern,
+            upper
+        )
+
+        if match:
+
+            name = clean_text(
+                match.group(1)
             )
 
-            if match:
+            name = re.sub(
+                r"\s*\(\s*"
+                + re.escape(str(eiin))
+                + r"\s*\)",
+                "",
+                name,
+                flags=re.I
+            )
 
-                value = number(
-                    match.group(1)
-                )
+            result[
+                "institution_name"
+            ] = name.title()
 
-                if value is not None:
-
-                    result[field] = value
-
-                    break
+            break
 
     # ========================================================
     # DISTRICT
@@ -612,9 +659,11 @@ def parse_institution_result(
 
     district_patterns = [
 
-        r"DISTRICT\s*[:\-]\s*([A-Z .']+)",
+        r"ZILLA\s*:\s*"
+        r"(.+?)\s*\(\s*\d+\s*\)",
 
-        r"DISTRICT\s+([A-Z .']+)",
+        r"DISTRICT\s*:\s*"
+        r"(.+?)\s*\(\s*\d+\s*\)",
 
     ]
 
@@ -627,17 +676,13 @@ def parse_institution_result(
 
         if match:
 
-            value = clean_text(
+            result[
+                "district"
+            ] = clean_text(
                 match.group(1)
-            )
+            ).title()
 
-            if value:
-
-                result["district"] = (
-                    value.title()
-                )
-
-                break
+            break
 
     # ========================================================
     # THANA
@@ -645,11 +690,11 @@ def parse_institution_result(
 
     thana_patterns = [
 
-        r"THANA\s*[:\-]\s*([A-Z .']+)",
+        r"THANA\s*:\s*"
+        r"(.+?)\s*\(\s*\d+\s*\)",
 
-        r"UPAZILA\s*[:\-]\s*([A-Z .']+)",
-
-        r"THANA\s+([A-Z .']+)",
+        r"UPAZILA\s*:\s*"
+        r"(.+?)\s*\(\s*\d+\s*\)",
 
     ]
 
@@ -662,44 +707,165 @@ def parse_institution_result(
 
         if match:
 
-            value = clean_text(
+            result[
+                "thana"
+            ] = clean_text(
+                match.group(1)
+            ).title()
+
+            break
+
+    # ========================================================
+    # APP
+    # ========================================================
+
+    app_patterns = [
+
+        r"\bAPP\s*:\s*(\d+)",
+
+        r"APPEARED\s*:\s*(\d+)",
+
+    ]
+
+    for pattern in app_patterns:
+
+        match = re.search(
+            pattern,
+            upper
+        )
+
+        if match:
+
+            result[
+                "appeared"
+            ] = int(
                 match.group(1)
             )
 
-            if value:
-
-                result["thana"] = (
-                    value.title()
-                )
-
-                break
+            break
 
     # ========================================================
-    # PASSING RATE CALCULATION
+    # PASS
     # ========================================================
 
-    appeared = number(
-        result["appeared"]
-    )
+    pass_patterns = [
 
-    passed = number(
-        result["passed"]
-    )
+        r"\bPASS\s*:\s*(\d+)",
+
+        r"PASSED\s*:\s*(\d+)",
+
+    ]
+
+    for pattern in pass_patterns:
+
+        match = re.search(
+            pattern,
+            upper
+        )
+
+        if match:
+
+            result[
+                "passed"
+            ] = int(
+                match.group(1)
+            )
+
+            break
+
+    # ========================================================
+    # PERCENT
+    # ========================================================
+
+    percent_patterns = [
+
+        r"PERCENT\s*:\s*"
+        r"([0-9]+(?:\.[0-9]+)?)\s*%",
+
+        r"PASS(?:ING)?\s*RATE\s*:\s*"
+        r"([0-9]+(?:\.[0-9]+)?)\s*%",
+
+    ]
+
+    for pattern in percent_patterns:
+
+        match = re.search(
+            pattern,
+            upper
+        )
+
+        if match:
+
+            result[
+                "passing_rate"
+            ] = float(
+                match.group(1)
+            )
+
+            break
+
+    # ========================================================
+    # GPA5
+    # ========================================================
+
+    gpa5_patterns = [
+
+        r"GPA\s*5\s*:\s*(\d+)",
+
+        r"GPA5\s*:\s*(\d+)",
+
+    ]
+
+    for pattern in gpa5_patterns:
+
+        match = re.search(
+            pattern,
+            upper
+        )
+
+        if match:
+
+            result[
+                "gpa5"
+            ] = int(
+                match.group(1)
+            )
+
+            break
+
+    # ========================================================
+    # PASSING RATE FALLBACK
+    # ========================================================
 
     if (
-        appeared
-        and
-        appeared > 0
-        and
-        passed is not None
+        result["passing_rate"]
+        is None
     ):
 
-        result["passing_rate"] = round(
-            passed /
-            appeared *
-            100,
-            2
-        )
+        appeared = result[
+            "appeared"
+        ]
+
+        passed = result[
+            "passed"
+        ]
+
+        if (
+            appeared
+            and
+            appeared > 0
+            and
+            passed is not None
+        ):
+
+            result[
+                "passing_rate"
+            ] = round(
+                passed /
+                appeared *
+                100,
+                2
+            )
 
     return result
 
@@ -712,13 +878,12 @@ def main():
 
     start = time.time()
 
-    print()
     print(
         "=" * 70
     )
 
     print(
-        "SSC 2026 INSTITUTION COLLECTION"
+        "SSC 2026 INSTITUTION TEST"
     )
 
     print(
@@ -745,258 +910,192 @@ def main():
         "=" * 70
     )
 
-    # --------------------------------------------------------
-    # MASTER
-    # --------------------------------------------------------
+    # ========================================================
+    # OPEN PAGE
+    # ========================================================
 
-    institutions = get_master()
+    response = open_page()
 
-    if TEST_MODE:
+    # ========================================================
+    # INSPECT FORM
+    # ========================================================
 
-        institutions = [
-
-            item
-            for item in institutions
-
-            if item["eiin"] ==
-            TEST_EIIN
-
-        ]
-
-    if not institutions:
-
-        raise RuntimeError(
-            "No institution selected."
-        )
-
-    # --------------------------------------------------------
-    # SSC FORM
-    # --------------------------------------------------------
-
-    (
-        action_url,
-        method,
-        base_data,
-        referer
-    ) = open_ssc_form()
-
-    results = []
-
-    failed = []
-
-    # --------------------------------------------------------
-    # COLLECTION
-    # --------------------------------------------------------
-
-    total = len(
-        institutions
+    soup, form = inspect_form(
+        response
     )
 
-    for index, institution in enumerate(
-        institutions,
-        start=1
-    ):
+    # ========================================================
+    # ACTION URL
+    # ========================================================
 
-        print()
-        print(
-            "-" * 70
-        )
+    action = form.get(
+        "action",
+        ""
+    )
 
-        print(
-            f"[{index}/{total}]"
-        )
+    action_url = urljoin(
+        response.url,
+        action
+    )
 
-        print(
-            "EIIN:",
-            institution["eiin"]
-        )
+    method = form.get(
+        "method",
+        "get"
+    ).lower()
 
-        print(
-            "Institution:",
-            institution[
-                "institution_name"
-            ]
-        )
+    print()
+    print(
+        "FORM ACTION:",
+        action_url
+    )
 
-        # ----------------------------------------------------
-        # REQUEST
-        # ----------------------------------------------------
+    print(
+        "FORM METHOD:",
+        method
+    )
 
-        data = dict(
-            base_data
-        )
+    # ========================================================
+    # FORM DATA
+    # ========================================================
 
-        # IMPORTANT:
-        # Institution-wise SSC page uses EIIN.
+    form_data = build_form_data(
+        form,
+        TEST_EIIN
+    )
 
-        data["eiin"] = (
-            institution["eiin"]
-        )
+    # ========================================================
+    # REQUEST
+    # ========================================================
 
-        # Keep roll empty if the form
-        # contains it.
+    print()
+    print(
+        "=" * 70
+    )
 
-        if "roll" in data:
+    print(
+        "STEP 2: SUBMITTING EIIN"
+    )
 
-            data["roll"] = ""
+    print(
+        "=" * 70
+    )
 
-        print(
-            "REQUEST START:",
-            institution["eiin"]
-        )
+    print(
+        "EIIN:",
+        TEST_EIIN
+    )
 
-        try:
+    print(
+        "Request URL:",
+        action_url
+    )
 
-            if method == "get":
+    try:
 
-                response = session.get(
+        if method == "get":
+
+            result_response = (
+                session.get(
                     action_url,
-                    params=data,
+                    params=form_data,
                     headers={
                         "Referer":
-                            referer
+                            response.url
                     },
                     timeout=TIMEOUT
                 )
+            )
 
-            else:
+        else:
 
-                response = session.post(
+            result_response = (
+                session.post(
                     action_url,
-                    data=data,
+                    data=form_data,
                     headers={
+
                         "Referer":
-                            referer,
+                            response.url,
+
                         "Origin":
                             "https://sresult.bise-ctg.gov.bd",
+
                     },
                     timeout=TIMEOUT
                 )
-
-        except Exception as error:
-
-            print(
-                "REQUEST ERROR:",
-                error
             )
 
-            failed.append({
-
-                "eiin":
-                    institution["eiin"],
-
-                "institution_name":
-                    institution[
-                        "institution_name"
-                    ],
-
-                "error":
-                    str(error)
-
-            })
-
-            continue
+    except Exception as error:
 
         print(
-            "REQUEST DONE:",
-            institution["eiin"],
-            "| HTTP",
-            response.status_code
+            "REQUEST ERROR:",
+            error
         )
 
-        # ----------------------------------------------------
-        # HTTP
-        # ----------------------------------------------------
+        raise SystemExit(1)
 
-        if response.status_code >= 400:
+    print(
+        "HTTP Status:",
+        result_response.status_code
+    )
 
-            failed.append({
+    print(
+        "Final URL:",
+        result_response.url
+    )
 
-                "eiin":
-                    institution["eiin"],
+    print(
+        "Response size:",
+        len(
+            result_response.text
+        ),
+        "bytes"
+    )
 
-                "institution_name":
-                    institution[
-                        "institution_name"
-                    ],
+    if result_response.status_code >= 400:
 
-                "error":
-                    f"HTTP {response.status_code}"
-
-            })
-
-            continue
-
-        # ----------------------------------------------------
-        # PARSE
-        # ----------------------------------------------------
-
-        print(
-            "PARSING RESULT..."
+        raise SystemExit(
+            f"HTTP ERROR: "
+            f"{result_response.status_code}"
         )
 
-        try:
+    # ========================================================
+    # PARSE
+    # ========================================================
 
-            result = parse_institution_result(
-                response.text,
-                institution
-            )
+    result = parse_result(
+        result_response.text,
+        TEST_EIIN
+    )
 
-        except Exception as error:
+    # ========================================================
+    # SHOW RESULT
+    # ========================================================
 
-            print(
-                "PARSING ERROR:",
-                error
-            )
+    print()
+    print(
+        "=" * 70
+    )
 
-            failed.append({
+    print(
+        "INSTITUTION TEST RESULT"
+    )
 
-                "eiin":
-                    institution["eiin"],
+    print(
+        "=" * 70
+    )
 
-                "institution_name":
-                    institution[
-                        "institution_name"
-                    ],
-
-                "error":
-                    str(error)
-
-            })
-
-            continue
-
-        # ----------------------------------------------------
-        # OUTPUT
-        # ----------------------------------------------------
-
-        print()
-        print(
-            "PARSED INSTITUTION DATA:"
+    print(
+        json.dumps(
+            result,
+            ensure_ascii=False,
+            indent=2
         )
+    )
 
-        print(
-            json.dumps(
-                result,
-                ensure_ascii=False,
-                indent=2
-            )
-        )
-
-        results.append(
-            result
-        )
-
-        time.sleep(
-            random.uniform(
-                MIN_DELAY,
-                MAX_DELAY
-            )
-        )
-
-    # --------------------------------------------------------
-    # SAVE
-    # --------------------------------------------------------
+    # ========================================================
+    # SAVE TEST RESULT
+    # ========================================================
 
     with open(
         OUTPUT_FILE,
@@ -1005,7 +1104,7 @@ def main():
     ) as file:
 
         json.dump(
-            results,
+            [result],
             file,
             ensure_ascii=False,
             indent=2
@@ -1018,15 +1117,11 @@ def main():
     ) as file:
 
         json.dump(
-            failed,
+            [],
             file,
             ensure_ascii=False,
             indent=2
         )
-
-    # --------------------------------------------------------
-    # FINAL
-    # --------------------------------------------------------
 
     elapsed = round(
         time.time() - start,
@@ -1039,26 +1134,7 @@ def main():
     )
 
     print(
-        "INSTITUTION TEST COMPLETE"
-    )
-
-    print(
-        "=" * 70
-    )
-
-    print(
-        "Institutions processed:",
-        len(institutions)
-    )
-
-    print(
-        "Successful:",
-        len(results)
-    )
-
-    print(
-        "Failed:",
-        len(failed)
+        "TEST COMPLETED"
     )
 
     print(
