@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -7,12 +8,26 @@
 
 <title>Thana Student Ranking — CTGBoardRanking</title>
 
+<meta name="description"
+content="Chattogram Board Thana Wise Student Ranking">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+
 <link rel="stylesheet" href="style.css">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
 
 <style>
+
+/* =========================================================
+   PAGE
+========================================================= */
 
 .wrap{
 max-width:1100px;
@@ -25,12 +40,14 @@ color:var(--muted);
 text-decoration:none;
 display:inline-block;
 margin-bottom:28px;
+font-size:14px;
 }
 
 h1{
 font-size:clamp(42px,7vw,72px);
-line-height:1;
+line-height:.98;
 letter-spacing:-4px;
+margin:0;
 }
 
 h1 span{
@@ -40,7 +57,14 @@ color:var(--blue);
 .desc{
 color:var(--muted);
 margin-top:18px;
+font-size:16px;
+max-width:650px;
 }
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
 
 .controls{
 display:grid;
@@ -53,7 +77,7 @@ margin:35px 0 25px;
 padding:16px;
 border:1px solid var(--border);
 border-radius:20px;
-background:white;
+background:rgba(255,255,255,.9);
 box-shadow:var(--shadow);
 }
 
@@ -61,54 +85,94 @@ box-shadow:var(--shadow);
 display:block;
 font-size:10px;
 font-weight:800;
+letter-spacing:1px;
 color:var(--muted);
 margin-bottom:8px;
 }
 
-select,input{
+select,
+input{
 width:100%;
 box-sizing:border-box;
 padding:13px;
 border:1px solid var(--border);
 border-radius:13px;
 font-family:inherit;
+background:white;
+color:var(--text);
+outline:none;
 }
+
+select:focus,
+input:focus{
+border-color:#0071e3;
+box-shadow:0 0 0 3px rgba(0,113,227,.10);
+}
+
+
+/* =========================================================
+   GROUPS
+========================================================= */
 
 .groups{
 display:flex;
 gap:8px;
 overflow-x:auto;
-margin-bottom:25px;
+margin-bottom:30px;
+padding-bottom:3px;
+scrollbar-width:none;
+}
+
+.groups::-webkit-scrollbar{
+display:none;
 }
 
 .group{
 border:1px solid var(--border);
 background:white;
+color:var(--text);
 padding:10px 16px;
 border-radius:50px;
 font-weight:700;
 white-space:nowrap;
+cursor:pointer;
+font-family:inherit;
+transition:.2s ease;
+}
+
+.group:hover{
+transform:translateY(-1px);
 }
 
 .group.active{
 background:#111;
 color:white;
+border-color:#111;
 }
+
+
+/* =========================================================
+   TITLE
+========================================================= */
 
 .title{
 display:flex;
 justify-content:space-between;
 align-items:end;
+gap:15px;
 margin-bottom:18px;
 }
 
 .title h2{
 margin:5px 0;
+font-size:30px;
+letter-spacing:-1.5px;
 }
 
 .title p{
 font-size:12px;
 color:var(--muted);
+margin:0;
 }
 
 .pdf{
@@ -118,20 +182,57 @@ border:0;
 border-radius:13px;
 padding:12px 18px;
 font-weight:800;
+font-family:inherit;
+cursor:pointer;
+transition:.2s ease;
+white-space:nowrap;
 }
+
+.pdf:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
+
+.pdf:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+#search{
+margin-bottom:18px;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
 
 .table{
 border:1px solid var(--border);
 border-radius:22px;
 overflow:hidden;
-background:white;
+background:rgba(255,255,255,.92);
 box-shadow:var(--shadow);
 }
 
-.head,.row{
+.head,
+.row{
 display:grid;
-grid-template-columns:55px minmax(180px,1fr) 70px 100px minmax(210px,1fr);
+
+grid-template-columns:
+55px
+minmax(190px,1fr)
+70px
+90px
+minmax(230px,1fr);
+
 gap:12px;
+
 align-items:center;
 }
 
@@ -146,17 +247,24 @@ color:var(--muted);
 .row{
 padding:16px 18px;
 border-top:1px solid var(--border);
+transition:.2s ease;
+}
+
+.row:hover{
+background:rgba(127,127,127,.035);
 }
 
 .row strong{
 font-size:12px;
+line-height:1.4;
 }
 
 .row span{
 font-size:9px;
 color:var(--muted);
 display:block;
-margin-top:3px;
+margin-top:4px;
+line-height:1.4;
 }
 
 .rank{
@@ -164,10 +272,32 @@ font-weight:800;
 color:var(--muted);
 }
 
-.score{
-color:var(--blue);
-font-weight:800;
+.rank.top-one{
+color:#b8860b;
 }
+
+.rank.top-two{
+color:#777;
+}
+
+.rank.top-three{
+color:#9b6b45;
+}
+
+.gpa{
+font-weight:800;
+color:var(--blue);
+}
+
+.score{
+font-weight:800;
+color:var(--text);
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
 
 .message{
 padding:60px 20px;
@@ -175,9 +305,38 @@ text-align:center;
 color:var(--muted);
 }
 
+.loading{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:12px;
+}
+
+.spinner{
+width:25px;
+height:25px;
+border:2px solid rgba(127,127,127,.2);
+border-top-color:#0071e3;
+border-radius:50%;
+animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+to{
+transform:rotate(360deg);
+}
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
 .pagination{
 display:flex;
 justify-content:center;
+align-items:center;
 gap:12px;
 padding:20px;
 }
@@ -187,8 +346,65 @@ padding:9px 15px;
 border:1px solid var(--border);
 border-radius:10px;
 background:white;
+color:var(--text);
 font-weight:700;
+font-family:inherit;
+cursor:pointer;
 }
+
+.pagination button:disabled{
+opacity:.4;
+cursor:not-allowed;
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+body.dark .card{
+background:rgba(30,30,32,.88);
+}
+
+body.dark select,
+body.dark input{
+background:#1c1c1e;
+color:var(--text);
+}
+
+body.dark .group{
+background:#1c1c1e;
+color:var(--text);
+}
+
+body.dark .group.active{
+background:#f5f5f7;
+color:#111;
+border-color:#f5f5f7;
+}
+
+body.dark .table{
+background:rgba(28,28,30,.9);
+}
+
+body.dark .head{
+background:#242426;
+}
+
+body.dark .pdf{
+background:#f5f5f7;
+color:#111;
+}
+
+body.dark .pagination button{
+background:#1c1c1e;
+color:var(--text);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media(max-width:700px){
 
@@ -209,12 +425,22 @@ width:100%;
 margin-top:12px;
 }
 
-.head,.row{
+.head,
+.row{
 grid-template-columns:
 35px
 minmax(120px,1fr)
 55px
 70px;
+gap:7px;
+}
+
+.head{
+padding:12px 10px;
+}
+
+.row{
+padding:14px 10px;
 }
 
 .head div:nth-child(5){
@@ -224,109 +450,289 @@ display:none;
 .institute{
 grid-column:2 / 5;
 border-top:1px solid var(--border);
-padding-top:8px;
+padding-top:9px;
+margin-top:2px;
+}
+
+.row strong{
+font-size:10.5px;
+}
+
+.row span{
+font-size:8px;
+}
+
+.gpa,
+.score{
+font-size:11px;
+}
+
+.title h2{
+font-size:25px;
+}
+
+h1{
+letter-spacing:-2.5px;
+}
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media(max-width:420px){
+
+.head,
+.row{
+grid-template-columns:
+32px
+minmax(105px,1fr)
+48px
+62px;
+gap:6px;
+}
+
+.head{
+font-size:8px;
+}
+
+.row strong{
+font-size:10px;
+}
+
+.row span{
+font-size:7.5px;
 }
 
 }
 
 </style>
+
 </head>
 
+
 <body>
+
+
+<!-- =======================================================
+     NAVBAR
+======================================================= -->
 
 <header class="navbar">
 
 <a href="index.html" class="logo">
-<span class="logo-mark">C</span>
-<span>CTGBoardRanking</span>
+
+<span class="logo-mark">
+C
+</span>
+
+<span>
+CTGBoardRanking
+</span>
+
 </a>
 
+
 <nav class="nav-links">
-<a href="index.html">Home</a>
-<a href="student-ranking.html">Student Ranking</a>
-<a href="rankings.html">Institution Ranking</a>
-<a href="district-student-ranking.html">District</a>
-<a href="thana-student-ranking.html" class="active">Thana</a>
+
+<a href="index.html">
+Home
+</a>
+
+<a href="student-ranking.html">
+Student Ranking
+</a>
+
+<a href="rankings.html">
+Institution Ranking
+</a>
+
+<a href="district-student-ranking.html">
+District
+</a>
+
+<a href="thana-student-ranking.html"
+class="active">
+Thana
+</a>
+
 </nav>
 
-<button class="theme-btn" id="themeBtn">◐</button>
+
+<button
+class="theme-btn"
+id="themeBtn"
+type="button">
+
+◐
+
+</button>
 
 </header>
 
+
+
+<!-- =======================================================
+     MAIN
+======================================================= -->
 
 <main>
 
 <section class="wrap">
 
-<a class="back" href="index.html">
+
+<a
+class="back"
+href="index.html">
+
 ← Back to Home
+
 </a>
+
 
 <div class="eyebrow">
 CHITTAGONG BOARD
 </div>
 
+
 <h1>
+
 Thana<br>
-<span>Student Ranking.</span>
+
+<span>
+Student Ranking.
+</span>
+
 </h1>
 
+
 <p class="desc">
-Explore student performance by thana and group.
+
+Explore student performance by Thana, district
+and group. Ranking is based on student score,
+GPA and total marks.
+
 </p>
 
 
+
+<!-- =====================================================
+     CONTROLS
+===================================================== -->
+
 <div class="controls">
 
+
 <div class="card">
 
-<label>THANA</label>
+<label>
+THANA
+</label>
+
 
 <select id="thana">
-<option value="">All Thanas</option>
+
+<option value="">
+All Thanas
+</option>
+
 </select>
 
 </div>
+
+
 
 <div class="card">
 
-<label>ACADEMIC YEAR</label>
+<label>
+ACADEMIC YEAR
+</label>
 
-<select>
-<option>2026</option>
+
+<select id="year">
+
+<option value="2026">
+2026
+</option>
+
 </select>
 
 </div>
 
+
 </div>
 
+
+
+<!-- =====================================================
+     GROUP FILTER
+===================================================== -->
 
 <div class="groups">
 
-<button class="group active" data-group="All">
+
+<button
+class="group active"
+data-group="All"
+type="button">
+
 All
+
 </button>
 
-<button class="group" data-group="Science">
+
+<button
+class="group"
+data-group="Science"
+type="button">
+
 🔬 Science
+
 </button>
 
-<button class="group" data-group="Business Studies">
+
+<button
+class="group"
+data-group="Business Studies"
+type="button">
+
 💼 Business Studies
+
 </button>
 
-<button class="group" data-group="Humanities">
+
+<button
+class="group"
+data-group="Humanities"
+type="button">
+
 🎓 Humanities
+
 </button>
 
-<button class="group" data-group="Science Irregular">
+
+<button
+class="group"
+data-group="Science Irregular"
+type="button">
+
 📚 Science Irregular
+
 </button>
+
 
 </div>
 
 
+
+<!-- =====================================================
+     TITLE
+===================================================== -->
+
 <div class="title">
+
 
 <div>
 
@@ -334,90 +740,347 @@ All
 TOP PERFORMERS
 </div>
 
+
 <h2 id="heading">
 All Thana Students
 </h2>
 
-<p>2026 · Chattogram Board</p>
+
+<p id="info">
+2026 · Chattogram Board
+</p>
 
 </div>
 
-<button class="pdf" id="pdf">
+
+<button
+class="pdf"
+id="pdf"
+type="button">
+
 ↓ Download PDF
+
+</button>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     SEARCH
+===================================================== -->
+
+<input
+id="search"
+type="search"
+placeholder="Search student, roll, institution, thana or district..."
+autocomplete="off">
+
+
+
+<!-- =====================================================
+     TABLE
+===================================================== -->
+
+<div class="table">
+
+
+<div class="head">
+
+<div>
+Rank
+</div>
+
+
+<div>
+Student
+</div>
+
+
+<div>
+GPA
+</div>
+
+
+<div>
+Total
+</div>
+
+
+<div>
+Institution / Location
+</div>
+
+</div>
+
+
+
+<div id="rows">
+
+<div class="message loading">
+
+<div class="spinner"></div>
+
+<span>
+Loading students...
+</span>
+
+</div>
+
+</div>
+
+
+
+<!-- =====================================================
+     PAGINATION
+===================================================== -->
+
+<div
+class="pagination"
+id="pagination">
+
+<button
+id="prev"
+type="button">
+
+← Previous
+
+</button>
+
+
+<span id="page">
+Page 1
+</span>
+
+
+<button
+id="next"
+type="button">
+
+Next →
+
 </button>
 
 </div>
 
 
-<input
-id="search"
-placeholder="Search student, roll or institution...">
-
-
-<div class="table">
-
-<div class="head">
-<div>Rank</div>
-<div>Student</div>
-<div>GPA</div>
-<div>Total</div>
-<div>Institution</div>
 </div>
 
-<div id="rows">
-<div class="message">Loading...</div>
-</div>
-
-<div class="pagination">
-
-<button id="prev">← Previous</button>
-
-<span id="page">Page 1</span>
-
-<button id="next">Next →</button>
-
-</div>
-
-</div>
 
 </section>
 
 </main>
 
 
+
+<!-- =======================================================
+     FOOTER
+======================================================= -->
+
+<footer>
+
+<div class="footer-main">
+
+<div>
+
+<div class="footer-logo">
+
+<span class="logo-mark">
+C
+</span>
+
+CTGBoardRanking
+
+</div>
+
+
+<p>
+Chattogram Board Education Rankings.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="footer-bottom">
+
+<span>
+© 2026 CTGBoardRanking
+</span>
+
+<span>
+Education Data & Statistics
+</span>
+
+</div>
+
+</footer>
+
+
+
 <script src="script.js"></script>
+
 
 <script>
 
-const URL="scraper/students.json?v="+Date.now();
+"use strict";
 
-const SIZE=100;
 
-let students=[];
-let page=1;
-let selectedThana="";
-let selectedGroup="All";
-let search="";
+/* =========================================================
+   DATA SOURCE
+========================================================= */
 
-function norm(v){
-return String(v||"").trim().toLowerCase();
+const DATA_URL =
+"scraper/students.json?v=" +
+Date.now();
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+const PAGE_SIZE = 100;
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let students = [];
+
+let selectedThana = "";
+
+let selectedGroup = "All";
+
+let searchText = "";
+
+let currentPage = 1;
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const rows =
+document.getElementById("rows");
+
+const thanaSelect =
+document.getElementById("thana");
+
+const searchBox =
+document.getElementById("search");
+
+const heading =
+document.getElementById("heading");
+
+const info =
+document.getElementById("info");
+
+const pageText =
+document.getElementById("page");
+
+const prevBtn =
+document.getElementById("prev");
+
+const nextBtn =
+document.getElementById("next");
+
+const pdfBtn =
+document.getElementById("pdf");
+
+
+/* =========================================================
+   NORMALIZE TEXT
+========================================================= */
+
+function norm(value){
+
+return String(value ?? "")
+.trim()
+.toUpperCase()
+.replace(/\s+/g," ");
+
 }
 
-function marks(s){
 
-for(const x of[
-s.total_marks,
-s.totalMarks,
-s.total_mark,
-s.totalMark,
-s.totalMarksObtained
-]){
+/* =========================================================
+   NUMBER
+========================================================= */
 
-if(x!==undefined &&
-x!==null &&
-String(x).trim()!==""){
+function num(value){
 
-let n=Number(x);
+if(
+value === null ||
+value === undefined ||
+value === ""
+){
+
+return 0;
+
+}
+
+const n =
+Number(
+String(value)
+.replace(/,/g,"")
+.replace(/%/g,"")
+.trim()
+);
+
+return Number.isFinite(n)
+? n
+: 0;
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function esc(value){
+
+return String(value ?? "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================================
+   GET TOTAL MARKS
+========================================================= */
+
+function getTotalMarks(student){
+
+const possible = [
+
+student.total_marks,
+student.totalMarks,
+student.total_mark,
+student.totalMark,
+student.totalMarksObtained,
+student.total,
+student.score
+
+];
+
+
+for(const value of possible){
+
+if(
+value !== undefined &&
+value !== null &&
+String(value).trim() !== ""
+){
+
+const n =
+num(value);
 
 if(Number.isFinite(n))
 return n;
@@ -426,391 +1089,1556 @@ return n;
 
 }
 
+
 return null;
 
 }
 
-function filtered(){
 
-return [...students]
-.filter(s=>{
+/* =========================================================
+   NORMALIZE STUDENT DATA
+========================================================= */
 
-if(selectedThana &&
-norm(s.thana)!==norm(selectedThana))
-return false;
+function normalizeStudent(item){
 
-if(selectedGroup!=="All" &&
-norm(s.group)!==norm(selectedGroup))
-return false;
+return {
 
-if(search){
+name:
+String(
+item.name ??
+item.student_name ??
+item.studentName ??
+"Unknown Student"
+).trim(),
 
-let t=[
-s.name,
-s.roll,
-s.institute,
-s.thana,
-s.district,
-s.group,
-s.gpa,
-marks(s)
-].join(" ").toLowerCase();
 
-if(!t.includes(search))
-return false;
+roll:
+String(
+item.roll ??
+item.roll_no ??
+item.rollNo ??
+""
+).trim(),
+
+
+gpa:
+item.gpa ??
+item.GPA ??
+item.grade_point ??
+item.gradePoint ??
+"",
+
+
+score:
+num(
+item.score ??
+item.total_marks ??
+item.totalMarks ??
+item.total ??
+0
+),
+
+
+totalMarks:
+getTotalMarks(item),
+
+
+institute:
+String(
+item.institute ??
+item.institution ??
+item.institution_name ??
+item.institutionName ??
+"Unknown Institution"
+).trim(),
+
+
+thana:
+String(
+item.thana ??
+item.upazila ??
+item.upazilla ??
+item.thana_name ??
+item.thanaName ??
+""
+).trim(),
+
+
+district:
+String(
+item.district ??
+item.district_name ??
+item.districtName ??
+""
+).trim(),
+
+
+group:
+String(
+item.group ??
+item.group_name ??
+item.groupName ??
+""
+).trim()
+
+};
 
 }
 
+
+/* =========================================================
+   GROUP MATCH
+========================================================= */
+
+function groupMatch(studentGroup){
+
+if(selectedGroup === "All"){
+
 return true;
 
-})
-.sort((a,b)=>{
+}
 
-let sa=Number(a.score)||0;
-let sb=Number(b.score)||0;
 
-if(sb!==sa)return sb-sa;
+const group =
+norm(studentGroup);
 
-let ga=Number(a.gpa)||0;
-let gb=Number(b.gpa)||0;
+const selected =
+norm(selectedGroup);
 
-if(gb!==ga)return gb-ga;
 
-return (Number(marks(b))||0)-
-(Number(marks(a))||0);
+/* Science */
+
+if(selected === "SCIENCE"){
+
+return group === "SCIENCE";
+
+}
+
+
+/* Business */
+
+if(selected === "BUSINESS STUDIES"){
+
+return (
+
+group === "BUSINESS STUDIES" ||
+
+group === "BUSINESS" ||
+
+group === "COMMERCE"
+
+);
+
+}
+
+
+/* Humanities */
+
+if(selected === "HUMANITIES"){
+
+return (
+
+group === "HUMANITIES" ||
+
+group === "ARTS"
+
+);
+
+}
+
+
+/* Science Irregular */
+
+if(selected === "SCIENCE IRREGULAR"){
+
+return (
+
+group === "SCIENCE IRREGULAR" ||
+
+group === "SCIENCE-IRREGULAR"
+
+);
+
+}
+
+
+return group === selected;
+
+}
+
+
+/* =========================================================
+   POPULATE THANA DROPDOWN
+========================================================= */
+
+function populateThanas(){
+
+const unique =
+new Map();
+
+
+students.forEach(student=>{
+
+const raw =
+String(
+student.thana || ""
+).trim();
+
+
+if(!raw)
+return;
+
+
+const key =
+norm(raw);
+
+
+/*
+   Prevent duplicate names caused by
+   different capitalization / spaces.
+*/
+
+if(!unique.has(key)){
+
+unique.set(
+key,
+raw
+);
+
+}
+
+});
+
+
+const thanas =
+Array.from(
+unique.values()
+)
+.sort(
+(a,b)=>
+norm(a).localeCompare(
+norm(b)
+)
+);
+
+
+/* Reset */
+
+thanaSelect.innerHTML = "";
+
+
+/* All */
+
+const all =
+document.createElement(
+"option"
+);
+
+all.value = "";
+
+all.textContent =
+"All Thanas";
+
+thanaSelect.appendChild(
+all
+);
+
+
+/* Add all thanas */
+
+thanas.forEach(thana=>{
+
+const option =
+document.createElement(
+"option"
+);
+
+option.value =
+thana;
+
+option.textContent =
+thana;
+
+thanaSelect.appendChild(
+option
+);
 
 });
 
 }
 
-function esc(v){
 
-return String(v)
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;");
+/* =========================================================
+   FILTER
+========================================================= */
+
+function getFiltered(){
+
+const result =
+students.filter(student=>{
+
+
+/* THANA */
+
+if(
+selectedThana &&
+norm(student.thana) !==
+norm(selectedThana)
+){
+
+return false;
 
 }
 
+
+/* GROUP */
+
+if(
+!groupMatch(
+student.group
+)
+){
+
+return false;
+
+}
+
+
+/* SEARCH */
+
+if(searchText){
+
+const text = [
+
+student.name,
+student.roll,
+student.institute,
+student.thana,
+student.district,
+student.group,
+student.gpa,
+student.totalMarks
+
+]
+.join(" ")
+.toLowerCase();
+
+
+if(
+!text.includes(searchText)
+){
+
+return false;
+
+}
+
+}
+
+
+return true;
+
+});
+
+
+/* =========================================================
+   RANKING
+========================================================= */
+
+result.sort((a,b)=>{
+
+
+/* 1. SCORE */
+
+const scoreA =
+num(a.score);
+
+const scoreB =
+num(b.score);
+
+
+if(
+scoreB !== scoreA
+){
+
+return scoreB -
+scoreA;
+
+}
+
+
+/* 2. GPA */
+
+const gpaA =
+num(a.gpa);
+
+const gpaB =
+num(b.gpa);
+
+
+if(
+gpaB !== gpaA
+){
+
+return gpaB -
+gpaA;
+
+}
+
+
+/* 3. TOTAL MARKS */
+
+const totalA =
+num(a.totalMarks);
+
+const totalB =
+num(b.totalMarks);
+
+
+if(
+totalB !== totalA
+){
+
+return totalB -
+totalA;
+
+}
+
+
+/* 4. Name */
+
+return norm(a.name)
+.localeCompare(
+norm(b.name)
+);
+
+});
+
+
+return result;
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
 function render(){
 
-let list=filtered();
+const list =
+getFiltered();
 
-let pages=Math.ceil(list.length/SIZE)||1;
 
-if(page>pages)page=pages;
+const totalPages =
+Math.ceil(
+list.length /
+PAGE_SIZE
+) || 1;
 
-let start=(page-1)*SIZE;
 
-let current=list.slice(start,start+SIZE);
+if(
+currentPage >
+totalPages
+){
 
-document.getElementById("rows").innerHTML="";
+currentPage =
+totalPages;
 
-current.forEach((s,i)=>{
+}
 
-let r=document.createElement("div");
 
-r.className="row";
+if(
+currentPage < 1
+){
 
-let m=marks(s);
+currentPage = 1;
 
-r.innerHTML=`
+}
 
-<div class="rank">
-${String(start+i+1).padStart(2,"0")}
-</div>
 
-<div>
-<strong>${esc(s.name||"Unknown Student")}</strong>
-<span>Roll: ${esc(s.roll||"—")}</span>
-</div>
+const start =
+(currentPage - 1) *
+PAGE_SIZE;
 
-<div>
-<strong>${esc(s.gpa??"—")}</strong>
-</div>
 
-<div class="score">
-${m!==null?m:"—"}
-</div>
+const current =
+list.slice(
+start,
+start + PAGE_SIZE
+);
 
-<div class="institute">
-<strong>${esc(s.institute||"Unknown Institution")}</strong>
-<span>${esc(s.thana||"")}</span>
+
+/* Clear */
+
+rows.innerHTML = "";
+
+
+/* Empty */
+
+if(!current.length){
+
+rows.innerHTML = `
+
+<div class="message">
+
+No student found.
+
 </div>
 
 `;
 
-document.getElementById("rows")
-.appendChild(r);
+}
+
+
+/* Rows */
+
+current.forEach(
+(student,index)=>{
+
+
+const rank =
+start + index + 1;
+
+
+const row =
+document.createElement(
+"div"
+);
+
+row.className =
+"row";
+
+
+/* Rank class */
+
+let rankClass = "";
+
+
+if(rank === 1){
+
+rankClass =
+"top-one";
+
+}
+
+else if(rank === 2){
+
+rankClass =
+"top-two";
+
+}
+
+else if(rank === 3){
+
+rankClass =
+"top-three";
+
+}
+
+
+/* Total */
+
+const total =
+student.totalMarks;
+
+
+/* Location */
+
+const location = [
+
+student.thana,
+
+student.district
+
+]
+.filter(Boolean)
+.join(" · ");
+
+
+/* HTML */
+
+row.innerHTML = `
+
+<div class="rank ${rankClass}">
+
+${String(rank).padStart(2,"0")}
+
+</div>
+
+
+<div>
+
+<strong>
+
+${esc(
+student.name ||
+"Unknown Student"
+)}
+
+</strong>
+
+
+<span>
+
+Roll:
+${esc(
+student.roll ||
+"—"
+)}
+
+</span>
+
+</div>
+
+
+<div class="gpa">
+
+<strong>
+
+${esc(
+student.gpa === "" ||
+student.gpa === null ||
+student.gpa === undefined
+? "—"
+: student.gpa
+)}
+
+</strong>
+
+</div>
+
+
+<div class="score">
+
+${total !== null
+? total.toLocaleString("en-US")
+: "—"}
+
+</div>
+
+
+<div class="institute">
+
+<strong>
+
+${esc(
+student.institute ||
+"Unknown Institution"
+)}
+
+</strong>
+
+
+<span>
+
+${esc(
+location ||
+"Location unavailable"
+)}
+
+</span>
+
+</div>
+
+`;
+
+
+rows.appendChild(row);
 
 });
 
-document.getElementById("page").textContent=
-`Page ${page} of ${pages}`;
 
-document.getElementById("heading").textContent=
+/* Page */
+
+pageText.textContent =
+`Page ${currentPage} of ${totalPages}`;
+
+
+/* Buttons */
+
+prevBtn.disabled =
+currentPage <= 1;
+
+
+nextBtn.disabled =
+currentPage >= totalPages;
+
+
+/* Heading */
+
+heading.textContent =
 selectedThana
-?`${selectedThana} Student Ranking`
-:"All Thana Students";
+? `${selectedThana} Student Ranking`
+: "All Thana Students";
+
+
+/* Info */
+
+info.textContent =
+`2026 · Chattogram Board · ${
+selectedThana ||
+"All Thanas"
+} · ${
+selectedGroup
+} · ${
+list.length.toLocaleString(
+"en-US"
+)
+} Students`;
 
 }
+
+
+/* =========================================================
+   LOAD
+========================================================= */
 
 async function load(){
 
-let res=await fetch(URL);
-let json=await res.json();
+try{
 
-students=Array.isArray(json)
-?json
-:json.students||[];
 
-let thanas=[
-...new Set(
-students.map(x=>x.thana).filter(Boolean)
+rows.innerHTML = `
+
+<div class="message loading">
+
+<div class="spinner"></div>
+
+<span>
+Loading students...
+</span>
+
+</div>
+
+`;
+
+
+const response =
+await fetch(
+DATA_URL,
+{
+cache:"no-store"
+}
+);
+
+
+if(!response.ok){
+
+throw new Error(
+`HTTP ${response.status}`
+);
+
+}
+
+
+const json =
+await response.json();
+
+
+let raw = [];
+
+
+/* Array */
+
+if(
+Array.isArray(json)
+){
+
+raw = json;
+
+}
+
+
+/* students */
+
+else if(
+json &&
+Array.isArray(
+json.students
 )
-].sort();
+){
 
-thanas.forEach(t=>{
-
-let o=document.createElement("option");
-
-o.value=t;
-o.textContent=t;
-
-document.getElementById("thana")
-.appendChild(o);
-
-});
-
-render();
+raw =
+json.students;
 
 }
 
-document.getElementById("thana")
-.onchange=e=>{
 
-selectedThana=e.target.value;
-page=1;
+/* data */
+
+else if(
+json &&
+Array.isArray(
+json.data
+)
+){
+
+raw =
+json.data;
+
+}
+
+
+/* results */
+
+else if(
+json &&
+Array.isArray(
+json.results
+)
+){
+
+raw =
+json.results;
+
+}
+
+
+/* records */
+
+else if(
+json &&
+Array.isArray(
+json.records
+)
+){
+
+raw =
+json.records;
+
+}
+
+
+/* Normalize */
+
+students =
+raw.map(
+normalizeStudent
+);
+
+
+/* Dropdown */
+
+populateThanas();
+
+
+/* Render */
+
 render();
 
-};
 
-document.getElementById("search")
-.oninput=e=>{
+}
+catch(error){
 
-search=e.target.value.toLowerCase().trim();
-page=1;
+
+console.error(
+"Thana Student Ranking:",
+error
+);
+
+
+rows.innerHTML = `
+
+<div class="message">
+
+<strong>
+Unable to load student data.
+</strong>
+
+<br><br>
+
+<small>
+${esc(
+error.message
+)}
+</small>
+
+</div>
+
+`;
+
+}
+
+}
+
+
+/* =========================================================
+   THANA CHANGE
+========================================================= */
+
+thanaSelect.addEventListener(
+"change",
+()=>{
+
+selectedThana =
+thanaSelect.value;
+
+
+currentPage = 1;
+
+
 render();
-
-};
-
-document.querySelectorAll(".group")
-.forEach(b=>{
-
-b.onclick=()=>{
-
-selectedGroup=b.dataset.group;
-page=1;
-
-document.querySelectorAll(".group")
-.forEach(x=>x.classList.remove("active"));
-
-b.classList.add("active");
-
-render();
-
-};
 
 });
 
-document.getElementById("prev")
-.onclick=()=>{
 
-if(page>1){
-page--;
+/* =========================================================
+   SEARCH
+========================================================= */
+
+searchBox.addEventListener(
+"input",
+()=>{
+
+searchText =
+searchBox.value
+.toLowerCase()
+.trim();
+
+
+currentPage = 1;
+
+
 render();
-}
 
-};
-
-document.getElementById("next")
-.onclick=()=>{
-
-let pages=Math.ceil(filtered().length/SIZE);
-
-if(page<pages){
-page++;
-render();
-}
-
-};
-
-
-document.getElementById("pdf")
-.onclick=()=>{
-
-let list=filtered();
-
-let start=(page-1)*SIZE;
-
-let current=list.slice(start,start+SIZE);
-
-if(!current.length)return;
-
-const {jsPDF}=window.jspdf;
-
-const doc=new jsPDF({
-orientation:"portrait",
-unit:"mm",
-format:"a4"
 });
 
-let w=doc.internal.pageSize.getWidth();
-let h=doc.internal.pageSize.getHeight();
 
-let pages=Math.ceil(list.length/SIZE);
+/* =========================================================
+   GROUP
+========================================================= */
 
-doc.setFillColor(248,248,250);
-doc.rect(0,0,w,34,"F");
+document
+.querySelectorAll(".group")
+.forEach(button=>{
 
-doc.setFont("helvetica","bold");
-doc.setFontSize(18);
-doc.setTextColor(17,17,17);
 
-doc.text("CTGBoardRanking",15,14);
+button.addEventListener(
+"click",
+()=>{
 
-doc.setFont("helvetica","normal");
-doc.setFontSize(8);
-doc.setTextColor(100,100,105);
+
+selectedGroup =
+button.dataset.group ||
+"All";
+
+
+currentPage = 1;
+
+
+/* Remove active */
+
+document
+.querySelectorAll(".group")
+.forEach(
+item =>
+item.classList.remove(
+"active"
+)
+);
+
+
+/* Active */
+
+button.classList.add(
+"active"
+);
+
+
+/* Render */
+
+render();
+
+});
+
+});
+
+
+/* =========================================================
+   PREVIOUS
+========================================================= */
+
+prevBtn.addEventListener(
+"click",
+()=>{
+
+
+if(
+currentPage > 1
+){
+
+currentPage--;
+
+
+render();
+
+
+window.scrollTo({
+
+top:450,
+
+behavior:"smooth"
+
+});
+
+}
+
+});
+
+
+/* =========================================================
+   NEXT
+========================================================= */
+
+nextBtn.addEventListener(
+"click",
+()=>{
+
+
+const totalPages =
+Math.ceil(
+getFiltered().length /
+PAGE_SIZE
+) || 1;
+
+
+if(
+currentPage <
+totalPages
+){
+
+currentPage++;
+
+
+render();
+
+
+window.scrollTo({
+
+top:450,
+
+behavior:"smooth"
+
+});
+
+}
+
+});
+
+
+/* =========================================================
+   PDF
+========================================================= */
+
+pdfBtn.addEventListener(
+"click",
+()=>{
+
+
+const list =
+getFiltered();
+
+
+if(!list.length){
+
+alert(
+"No students available."
+);
+
+return;
+
+}
+
+
+if(
+!window.jspdf ||
+!window.jspdf.jsPDF
+){
+
+alert(
+"PDF library is still loading. Please try again."
+);
+
+return;
+
+}
+
+
+const totalPages =
+Math.ceil(
+list.length /
+PAGE_SIZE
+) || 1;
+
+
+const start =
+(currentPage - 1) *
+PAGE_SIZE;
+
+
+const current =
+list.slice(
+start,
+start + PAGE_SIZE
+);
+
+
+const {
+jsPDF
+} =
+window.jspdf;
+
+
+const doc =
+new jsPDF({
+
+orientation:
+"portrait",
+
+unit:
+"mm",
+
+format:
+"a4"
+
+});
+
+
+const w =
+doc.internal.pageSize.getWidth();
+
+
+const h =
+doc.internal.pageSize.getHeight();
+
+
+/* HEADER */
+
+doc.setFillColor(
+248,
+248,
+250
+);
+
+doc.rect(
+0,
+0,
+w,
+34,
+"F"
+);
+
+
+doc.setTextColor(
+17,
+17,
+17
+);
+
+doc.setFont(
+"helvetica",
+"bold"
+);
+
+doc.setFontSize(
+18
+);
+
+doc.text(
+"CTGBoardRanking",
+15,
+14
+);
+
+
+doc.setFont(
+"helvetica",
+"normal"
+);
+
+doc.setFontSize(
+8
+);
+
+doc.setTextColor(
+100,
+100,
+105
+);
 
 doc.text(
 "Unofficial • Education Data & Statistics",
-15,21
+15,
+21
 );
+
 
 doc.text(
 "Generated by Shadat Fatih",
-w-15,14,{align:"right"}
+w - 15,
+14,
+{
+align:"right"
+}
 );
+
 
 doc.text(
-new Date().toLocaleString("en-GB"),
-w-15,21,{align:"right"}
+new Date()
+.toLocaleString(
+"en-GB"
+),
+w - 15,
+21,
+{
+align:"right"
+}
 );
 
-doc.setFont("helvetica","bold");
-doc.setFontSize(15);
-doc.setTextColor(17,17,17);
+
+/* TITLE */
+
+doc.setTextColor(
+17,
+17,
+17
+);
+
+doc.setFont(
+"helvetica",
+"bold"
+);
+
+doc.setFontSize(
+15
+);
 
 doc.text(
 "Thana Student Ranking",
-15,44
+15,
+44
 );
 
-doc.setFont("helvetica","normal");
-doc.setFontSize(8.5);
-doc.setTextColor(90,90,95);
+
+doc.setFont(
+"helvetica",
+"normal"
+);
+
+doc.setFontSize(
+8.5
+);
+
+doc.setTextColor(
+90,
+90,
+95
+);
+
 
 doc.text(
-`2026 · Chattogram Board · ${selectedThana||"All Thanas"} · ${selectedGroup} · Page ${page} of ${pages}`,
-15,51
+
+`2026 · Chattogram Board · ${
+selectedThana ||
+"All Thanas"
+} · ${
+selectedGroup
+} · Page ${
+currentPage
+} of ${
+totalPages
+}`,
+
+15,
+51
+
 );
+
+
+/* TABLE BODY */
+
+const body =
+current.map(
+(student,index)=>{
+
+
+const total =
+student.totalMarks;
+
+
+return [
+
+String(
+start + index + 1
+),
+
+
+`${student.name || "Unknown"}\nRoll: ${
+student.roll || "—"
+}`,
+
+
+String(
+student.gpa ?? "—"
+),
+
+
+total !== null
+? String(total)
+: "—",
+
+
+`${student.institute || "Unknown"}\n${
+student.thana || "—"
+}${
+student.district
+? " · " + student.district
+: ""
+}`
+
+];
+
+});
+
+
+/* AUTO TABLE */
 
 doc.autoTable({
 
 startY:57,
 
 head:[[
+
 "RANK",
+
 "STUDENT",
+
 "GPA",
+
 "TOTAL",
-"INSTITUTION"
+
+"INSTITUTION / LOCATION"
+
 ]],
 
-body:current.map((s,i)=>{
-
-let m=marks(s);
-
-return[
-String(start+i+1),
-`${s.name||"Unknown"}\nRoll: ${s.roll||"—"}`,
-String(s.gpa??"—"),
-m!==null?String(m):"—",
-`${s.institute||"Unknown"}\n${s.thana||""}`
-];
-
-}),
+body:body,
 
 theme:"grid",
 
 margin:{
+
 left:12,
+
 right:12
+
 },
 
 styles:{
+
+font:"helvetica",
+
 fontSize:7.5,
+
 cellPadding:3,
+
 valign:"middle",
-lineColor:[225,225,228],
-textColor:[35,35,38]
+
+lineColor:[
+225,
+225,
+228
+],
+
+lineWidth:.2,
+
+textColor:[
+35,
+35,
+38
+]
+
 },
 
 headStyles:{
-fillColor:[245,245,247],
-textColor:[70,70,75],
+
+fillColor:[
+245,
+245,
+247
+],
+
+textColor:[
+70,
+70,
+75
+],
+
 fontStyle:"bold",
+
 fontSize:7
+
 },
 
 columnStyles:{
-0:{cellWidth:15,halign:"center"},
-1:{cellWidth:57},
-2:{cellWidth:20,halign:"center"},
-3:{cellWidth:25,halign:"center"},
-4:{cellWidth:"auto"}
+
+0:{
+
+cellWidth:15,
+
+halign:"center"
+
+},
+
+1:{
+
+cellWidth:55
+
+},
+
+2:{
+
+cellWidth:20,
+
+halign:"center"
+
+},
+
+3:{
+
+cellWidth:23,
+
+halign:"center"
+
+},
+
+4:{
+
+cellWidth:"auto"
+
+}
+
+},
+
+alternateRowStyles:{
+
+fillColor:[
+252,
+252,
+253
+]
+
 },
 
 didDrawPage:()=>{
 
-let p=doc.internal.getNumberOfPages();
 
-doc.setDrawColor(225,225,228);
+const p =
+doc.internal
+.getNumberOfPages();
 
-doc.line(12,h-13,w-12,h-13);
 
-doc.setFontSize(7);
-doc.setTextColor(120,120,125);
-
-doc.text(
-"CTGBoardRanking • Unofficial Education Data",
-12,h-7
+doc.setDrawColor(
+225,
+225,
+228
 );
 
+
+doc.line(
+12,
+h - 13,
+w - 12,
+h - 13
+);
+
+
+doc.setFont(
+"helvetica",
+"normal"
+);
+
+doc.setFontSize(
+7
+);
+
+doc.setTextColor(
+120,
+120,
+125
+);
+
+
 doc.text(
+
+"CTGBoardRanking • Unofficial Education Data",
+
+12,
+h - 7
+
+);
+
+
+doc.text(
+
 `PDF Page ${p}`,
-w-12,h-7,{align:"right"}
+
+w - 12,
+h - 7,
+
+{
+align:"right"
+}
+
 );
 
 }
 
 });
 
-let safe=(selectedThana||"All-Thanas")
-.replace(/[^a-z0-9]+/gi,"-")
+
+/* FILE NAME */
+
+const safeThana =
+(
+selectedThana ||
+"All-Thanas"
+)
+.replace(
+/[^a-z0-9]+/gi,
+"-"
+)
 .toLowerCase();
 
+
+const safeGroup =
+(
+selectedGroup ||
+"All"
+)
+.replace(
+/[^a-z0-9]+/gi,
+"-"
+)
+.toLowerCase();
+
+
 doc.save(
-`CTGBoardRanking-Thana-Student-${safe}-Page-${page}.pdf`
+
+`CTGBoardRanking-Thana-Student-${safeThana}-${safeGroup}-Page-${currentPage}.pdf`
+
 );
 
-};
+});
+
+
+/* =========================================================
+   START
+========================================================= */
 
 load();
 
 </script>
 
 </body>
+
 </html>
