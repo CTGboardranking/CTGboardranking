@@ -50,19 +50,12 @@ ROLL_RANGES = {
 
 BATCH_SIZE = 10000
 
-# Save every 600 successful students
 SAVE_EVERY = 600
 
 MIN_DELAY = 0.1
 MAX_DELAY = 0.2
 
-# One attempt only
-MAX_RETRIES = 1
-
-# Connection timeout = 5 sec
-# Read timeout = 15 sec
 REQUEST_TIMEOUT = (5, 15)
-
 
 YEAR = 2026
 BOARD = "Chattogram Board"
@@ -185,6 +178,32 @@ def load_json(filename, default):
 
 
 # ============================================================
+# NUMBER PARSER
+# ============================================================
+
+def parse_number(value):
+
+    value = clean_text(value)
+
+    if not value:
+        return None
+
+    try:
+
+        value = (
+            value
+            .replace(",", "")
+            .strip()
+        )
+
+        return float(value)
+
+    except Exception:
+
+        return None
+
+
+# ============================================================
 # GPA PARSER
 # ============================================================
 
@@ -196,6 +215,11 @@ def parse_gpa(value):
         return None
 
     upper = value.upper()
+
+    # Examples:
+    # GPA=5.00
+    # GPA = 5.00
+    # GPA 5.00
 
     if "GPA=" in upper:
 
@@ -211,11 +235,23 @@ def parse_gpa(value):
             1
         )[1].strip()
 
+    elif "GPA" in upper:
+
+        value = upper.split(
+            "GPA",
+            1
+        )[1].replace(
+            "=",
+            ""
+        ).strip()
+
     try:
 
-        return float(value)
+        return float(
+            value.split()[0]
+        )
 
-    except ValueError:
+    except Exception:
 
         return None
 
@@ -230,6 +266,14 @@ def parse_subject_result(value):
 
     mark = None
     grade = ""
+
+    if not value:
+        return mark, grade
+
+    # Example:
+    # 85 (A+)
+    # 78(A)
+    # 67 (A-)
 
     if "(" in value:
 
@@ -246,25 +290,23 @@ def parse_subject_result(value):
             .strip()
         )
 
-        try:
+        number = parse_number(
+            mark_text
+        )
 
-            mark = int(mark_text)
-
-        except ValueError:
-
-            mark = None
+        if number is not None:
+            mark = int(number)
 
         grade = grade_text
 
     else:
 
-        try:
+        number = parse_number(
+            value
+        )
 
-            mark = int(value)
-
-        except ValueError:
-
-            mark = None
+        if number is not None:
+            mark = int(number)
 
     return mark, grade
 
@@ -278,11 +320,17 @@ def find_value_after_label(
     label
 ):
 
-    label = label.lower().strip()
+    label = clean_text(
+        label
+    ).lower()
 
     for i, value in enumerate(values):
 
-        if clean_text(value).lower() == label:
+        current = clean_text(
+            value
+        ).lower()
+
+        if current == label:
 
             if i + 1 < len(values):
 
@@ -294,47 +342,22 @@ def find_value_after_label(
 
 
 # ============================================================
-# PARSE RESULT
+# FIND LABEL VALUE MORE FLEXIBLY
 # ============================================================
 
-def parse_result(
-    html,
-    requested_roll,
-    group_name
+def find_label_value(
+    soup,
+    labels
 ):
 
-    soup = BeautifulSoup(
-        html,
-        "html.parser"
-    )
+    labels = [
+        clean_text(x).lower()
+        for x in labels
+    ]
 
-    result = {
-
-        "roll": str(requested_roll),
-
-        "name": "",
-
-        "board": "",
-
-        "group": group_name,
-
-        "session": "",
-
-        "type": "",
-
-        "institute": "",
-
-        "district": "",
-
-        "gpa": None,
-
-        "subjects": []
-    }
-
-
-    # ========================================================
-    # BASIC INFORMATION
-    # ========================================================
+    # --------------------------------------------------------
+    # TABLE ROW METHOD
+    # --------------------------------------------------------
 
     for row in soup.find_all("tr"):
 
@@ -355,37 +378,182 @@ def parse_result(
         if not values:
             continue
 
-        fields = [
-            ("Roll No", "roll"),
-            ("Name", "name"),
-            ("Board", "board"),
-            ("Group", "group"),
-            ("Session", "session"),
-            ("Type", "type"),
-            ("Institute", "institute"),
-            ("District", "district"),
+        for index, value in enumerate(values):
+
+            normalized = value.lower()
+
+            for label in labels:
+
+                if normalized == label:
+
+                    if index + 1 < len(values):
+
+                        found = clean_text(
+                            values[index + 1]
+                        )
+
+                        if found:
+                            return found
+
+    return ""
+
+
+# ============================================================
+# PARSE RESULT PAGE
+# ============================================================
+
+def parse_result(
+    html,
+    requested_roll,
+    group_name
+):
+
+    soup = BeautifulSoup(
+        html,
+        "html.parser"
+    )
+
+    result = {
+
+        "roll": str(requested_roll),
+
+        "name": "",
+
+        "board": BOARD,
+
+        "group": group_name,
+
+        "session": "",
+
+        "type": "",
+
+        "institute": "",
+
+        "district": "",
+
+        "thana": "",
+
+        "gpa": None,
+
+        "total_score": 0,
+
+        "subjects": []
+    }
+
+
+    # ========================================================
+    # BASIC INFORMATION
+    # ========================================================
+
+    result["roll"] = (
+        find_label_value(
+            soup,
+            [
+                "Roll No",
+                "Roll",
+                "Roll Number"
+            ]
+        )
+        or str(requested_roll)
+    )
+
+    result["name"] = find_label_value(
+        soup,
+        [
+            "Name",
+            "Student Name"
+        ]
+    )
+
+    result["board"] = (
+        find_label_value(
+            soup,
+            [
+                "Board"
+            ]
+        )
+        or BOARD
+    )
+
+    result["group"] = (
+        find_label_value(
+            soup,
+            [
+                "Group"
+            ]
+        )
+        or group_name
+    )
+
+    result["session"] = find_label_value(
+        soup,
+        [
+            "Session"
+        ]
+    )
+
+    result["type"] = find_label_value(
+        soup,
+        [
+            "Type"
+        ]
+    )
+
+    result["institute"] = find_label_value(
+        soup,
+        [
+            "Institute",
+            "Institution",
+            "Institution Name",
+            "School & College",
+            "College"
+        ]
+    )
+
+    result["district"] = find_label_value(
+        soup,
+        [
+            "District"
+        ]
+    )
+
+
+    # ========================================================
+    # GPA
+    # ========================================================
+
+    result_text = ""
+
+    for row in soup.find_all("tr"):
+
+        cells = row.find_all(
+            ["th", "td"]
+        )
+
+        values = [
+            clean_text(
+                cell.get_text(
+                    " ",
+                    strip=True
+                )
+            )
+            for cell in cells
         ]
 
-        for label, key in fields:
+        if not values:
+            continue
 
-            value = find_value_after_label(
-                values,
-                label
-            )
-
-            if value:
-
-                result[key] = value
-
-        result_value = find_value_after_label(
+        value = find_value_after_label(
             values,
             "Result"
         )
 
-        if result_value:
+        if value:
+
+            result_text = value
 
             gpa = parse_gpa(
-                result_value
+                value
             )
 
             if gpa is not None:
@@ -394,7 +562,7 @@ def parse_result(
 
 
     # ========================================================
-    # GPA FALLBACK
+    # GPA FALLBACK FROM FULL PAGE
     # ========================================================
 
     if result["gpa"] is None:
@@ -408,24 +576,48 @@ def parse_result(
 
         upper = page_text.upper()
 
-        if "GPA=" in upper:
+        for marker in [
+            "GPA=",
+            "GPA =",
+            "GPA"
+        ]:
 
-            try:
+            if marker in upper:
 
-                value = (
-                    upper
-                    .split("GPA=", 1)[1]
-                    .split(" ", 1)[0]
-                    .strip()
-                )
+                try:
 
-                result["gpa"] = float(
-                    value
-                )
+                    part = upper.split(
+                        marker,
+                        1
+                    )[1]
 
-            except Exception:
+                    part = (
+                        part
+                        .replace(
+                            "=",
+                            " "
+                        )
+                        .strip()
+                    )
 
-                pass
+                    token = (
+                        part
+                        .split()[0]
+                    )
+
+                    gpa = float(
+                        token
+                    )
+
+                    if 0 <= gpa <= 5:
+
+                        result["gpa"] = gpa
+
+                        break
+
+                except Exception:
+
+                    pass
 
 
     # ========================================================
@@ -455,16 +647,73 @@ def parse_result(
             if len(values) < 3:
                 continue
 
-            code = values[0]
 
-            if not code.isdigit():
+            # ------------------------------------------------
+            # FIND SUBJECT CODE
+            # ------------------------------------------------
+
+            code = ""
+
+            for value in values:
+
+                cleaned = clean_text(
+                    value
+                )
+
+                if (
+                    cleaned.isdigit()
+                    and 3 <= len(cleaned) <= 5
+                ):
+
+                    code = cleaned
+
+                    break
+
+            if not code:
                 continue
 
-            subject = values[1]
 
-            mark, grade = parse_subject_result(
-                values[2]
+            code_index = values.index(
+                code
             )
+
+            # ------------------------------------------------
+            # SUBJECT NAME
+            # ------------------------------------------------
+
+            subject = ""
+
+            if code_index + 1 < len(values):
+
+                subject = values[
+                    code_index + 1
+                ]
+
+            if not subject:
+                continue
+
+
+            # ------------------------------------------------
+            # MARK / GRADE
+            # ------------------------------------------------
+
+            mark = None
+            grade = ""
+
+            if code_index + 2 < len(values):
+
+                mark, grade = (
+                    parse_subject_result(
+                        values[
+                            code_index + 2
+                        ]
+                    )
+                )
+
+
+            # ------------------------------------------------
+            # AVOID DUPLICATES
+            # ------------------------------------------------
 
             key = (
                 code,
@@ -474,7 +723,10 @@ def parse_result(
             if key in seen:
                 continue
 
-            seen.add(key)
+            seen.add(
+                key
+            )
+
 
             result["subjects"].append({
 
@@ -489,6 +741,31 @@ def parse_result(
 
 
     # ========================================================
+    # CALCULATE TOTAL SCORE
+    # ========================================================
+
+    total_score = 0
+
+    for subject in result["subjects"]:
+
+        mark = subject.get(
+            "mark"
+        )
+
+        if isinstance(
+            mark,
+            (int, float)
+        ):
+
+            total_score += mark
+
+
+    result["total_score"] = (
+        total_score
+    )
+
+
+    # ========================================================
     # CLEAN VALUES
     # ========================================================
 
@@ -500,7 +777,8 @@ def parse_result(
         "session",
         "type",
         "institute",
-        "district"
+        "district",
+        "thana"
     ]:
 
         result[key] = clean_text(
@@ -512,10 +790,13 @@ def parse_result(
 
 
 # ============================================================
-# GENERATE ALL ROLLS
+# GENERATE ROLLS
 # ============================================================
 
 def generate_rolls():
+
+    # IMPORTANT:
+    # This order must NOT be changed.
 
     for group_name, (
         start,
@@ -546,6 +827,7 @@ failed_rolls = load_json(
     "failed_rolls.json",
     []
 )
+
 
 if not isinstance(
     students,
@@ -600,7 +882,7 @@ total_target = sum(
 # ============================================================
 
 print(
-    "=" * 60,
+    "=" * 70,
     flush=True
 )
 
@@ -610,27 +892,28 @@ print(
 )
 
 print(
-    "=" * 60,
+    "=" * 70,
     flush=True
 )
 
 print(
-    f"Total target rolls: {total_target}",
+    f"Total target rolls: {total_target:,}",
     flush=True
 )
 
 print(
-    f"Already collected: {len(existing_rolls)}",
+    f"Already collected: {len(existing_rolls):,}",
     flush=True
 )
 
 print(
-    f"Remaining: {max(total_target - len(existing_rolls), 0)}",
+    f"Remaining: "
+    f"{max(total_target - len(existing_rolls), 0):,}",
     flush=True
 )
 
 print(
-    f"Batch size: {BATCH_SIZE}",
+    f"Batch size: {BATCH_SIZE:,}",
     flush=True
 )
 
@@ -640,7 +923,28 @@ print(
 )
 
 print(
-    "=" * 60,
+    "",
+    flush=True
+)
+
+print(
+    "GROUP ORDER:",
+    flush=True
+)
+
+for group_name, (
+    start,
+    end
+) in ROLL_RANGES.items():
+
+    print(
+        f"  {group_name}: "
+        f"{start:,} - {end:,}",
+        flush=True
+    )
+
+print(
+    "=" * 70,
     flush=True
 )
 
@@ -753,7 +1057,9 @@ base_form_data = {}
 
 for inp in form.find_all("input"):
 
-    name = inp.get("name")
+    name = inp.get(
+        "name"
+    )
 
     if not name:
         continue
@@ -777,7 +1083,9 @@ for inp in form.find_all("input"):
         "radio"
     ]:
 
-        if not inp.has_attr("checked"):
+        if not inp.has_attr(
+            "checked"
+        ):
 
             continue
 
@@ -793,7 +1101,9 @@ for inp in form.find_all("input"):
 
 for select in form.find_all("select"):
 
-    name = select.get("name")
+    name = select.get(
+        "name"
+    )
 
     if not name:
         continue
@@ -811,10 +1121,12 @@ for select in form.find_all("select"):
 
     if selected:
 
-        base_form_data[name] = selected.get(
-            "value",
-            selected.get_text(
-                strip=True
+        base_form_data[name] = (
+            selected.get(
+                "value",
+                selected.get_text(
+                    strip=True
+                )
             )
         )
 
@@ -834,17 +1146,21 @@ for element in form.find_all(
         ""
     ).lower()
 
-    name = element.get("name")
+    name = element.get(
+        "name"
+    )
 
     if (
         element_type == "submit"
         and name
     ):
 
-        submit_fields[name] = element.get(
-            "value",
-            element.get_text(
-                strip=True
+        submit_fields[name] = (
+            element.get(
+                "value",
+                element.get_text(
+                    strip=True
+                )
             )
         )
 
@@ -868,8 +1184,11 @@ print(
 # ============================================================
 
 processed_this_run = 0
+
 success_this_run = 0
+
 not_found_this_run = 0
+
 error_this_run = 0
 
 
@@ -885,7 +1204,7 @@ for group_name, roll_number in generate_rolls():
 
 
     # --------------------------------------------------------
-    # SKIP ALREADY SAVED
+    # SKIP EXISTING
     # --------------------------------------------------------
 
     if roll in existing_rolls:
@@ -897,7 +1216,10 @@ for group_name, roll_number in generate_rolls():
     # BATCH LIMIT
     # --------------------------------------------------------
 
-    if processed_this_run >= BATCH_SIZE:
+    if (
+        processed_this_run
+        >= BATCH_SIZE
+    ):
 
         break
 
@@ -906,7 +1228,7 @@ for group_name, roll_number in generate_rolls():
 
 
     print(
-        "\n" + "-" * 60,
+        "\n" + "-" * 70,
         flush=True
     )
 
@@ -966,6 +1288,12 @@ for group_name, roll_number in generate_rolls():
 
         error_this_run += 1
 
+        failed_rolls.append({
+            "roll": roll,
+            "group": group_name,
+            "reason": "timeout"
+        })
+
         continue
 
     except requests.exceptions.RequestException as error:
@@ -977,11 +1305,18 @@ for group_name, roll_number in generate_rolls():
 
         error_this_run += 1
 
+        failed_rolls.append({
+            "roll": roll,
+            "group": group_name,
+            "reason": str(error)
+        })
+
         continue
 
 
     print(
-        f"REQUEST DONE: {roll} | HTTP {response.status_code}",
+        f"REQUEST DONE: {roll} | "
+        f"HTTP {response.status_code}",
         flush=True
     )
 
@@ -998,6 +1333,13 @@ for group_name, roll_number in generate_rolls():
         )
 
         error_this_run += 1
+
+        failed_rolls.append({
+            "roll": roll,
+            "group": group_name,
+            "reason":
+                f"HTTP {response.status_code}"
+        })
 
         continue
 
@@ -1022,11 +1364,19 @@ for group_name, roll_number in generate_rolls():
     except Exception as error:
 
         print(
-            f"PARSING ERROR: {roll} — {error}",
+            f"PARSING ERROR: "
+            f"{roll} — {error}",
             flush=True
         )
 
         error_this_run += 1
+
+        failed_rolls.append({
+            "roll": roll,
+            "group": group_name,
+            "reason":
+                f"parse error: {error}"
+        })
 
         continue
 
@@ -1041,7 +1391,9 @@ for group_name, roll_number in generate_rolls():
     # NOT FOUND
     # ========================================================
 
-    if not parsed.get("institute"):
+    if not parsed.get(
+        "institute"
+    ):
 
         print(
             "No result found.",
@@ -1066,25 +1418,45 @@ for group_name, roll_number in generate_rolls():
 
     print(
         "FOUND:",
-        parsed.get("name", ""),
+        parsed.get(
+            "name",
+            ""
+        ),
         flush=True
     )
 
     print(
         "Institute:",
-        parsed.get("institute", ""),
+        parsed.get(
+            "institute",
+            ""
+        ),
         flush=True
     )
 
     print(
         "District:",
-        parsed.get("district", ""),
+        parsed.get(
+            "district",
+            ""
+        ),
         flush=True
     )
 
     print(
         "GPA:",
-        parsed.get("gpa"),
+        parsed.get(
+            "gpa"
+        ),
+        flush=True
+    )
+
+    print(
+        "Total Score:",
+        parsed.get(
+            "total_score",
+            0
+        ),
         flush=True
     )
 
@@ -1118,7 +1490,7 @@ for group_name, roll_number in generate_rolls():
 
 
     # ========================================================
-    # SAVE EVERY 500
+    # CHECKPOINT
     # ========================================================
 
     if (
@@ -1127,24 +1499,24 @@ for group_name, roll_number in generate_rolls():
     ):
 
         print(
-            "\n" + "=" * 60,
+            "\n" + "=" * 70,
             flush=True
         )
 
         print(
-            f"SAVING CHECKPOINT",
+            "SAVING CHECKPOINT",
             flush=True
         )
 
         print(
             f"New students this run: "
-            f"{success_this_run}",
+            f"{success_this_run:,}",
             flush=True
         )
 
         print(
             f"Total students: "
-            f"{len(students)}",
+            f"{len(students):,}",
             flush=True
         )
 
@@ -1153,13 +1525,18 @@ for group_name, roll_number in generate_rolls():
             students
         )
 
+        save_json(
+            "failed_rolls.json",
+            failed_rolls
+        )
+
         print(
             "CHECKPOINT SAVED",
             flush=True
         )
 
         print(
-            "=" * 60,
+            "=" * 70,
             flush=True
         )
 
@@ -1190,6 +1567,11 @@ save_json(
     students
 )
 
+save_json(
+    "failed_rolls.json",
+    failed_rolls
+)
+
 
 # ============================================================
 # SUMMARY
@@ -1203,9 +1585,11 @@ remaining = max(
 
 summary = {
 
-    "year": YEAR,
+    "year":
+        YEAR,
 
-    "board": BOARD,
+    "board":
+        BOARD,
 
     "target_rolls":
         total_target,
@@ -1250,7 +1634,7 @@ save_json(
 # ============================================================
 
 print(
-    "\n" + "=" * 60,
+    "\n" + "=" * 70,
     flush=True
 )
 
@@ -1260,7 +1644,7 @@ print(
 )
 
 print(
-    "=" * 60,
+    "=" * 70,
     flush=True
 )
 
@@ -1313,7 +1697,13 @@ print(
 )
 
 print(
-    "=" * 60,
+    "Failed file:",
+    FAILED_FILE,
+    flush=True
+)
+
+print(
+    "=" * 70,
     flush=True
 )
 
