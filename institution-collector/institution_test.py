@@ -12,14 +12,9 @@ from urllib.parse import urljoin
 # CONFIG
 # ============================================================
 
-INDEX_URL = (
+SOURCE_URL = (
     "https://sresult.bise-ctg.gov.bd/"
     "to_ssc_26_ctg/index.php"
-)
-
-MASTER_URL = (
-    "https://esifssc.bise-ctg.gov.bd/"
-    "esif_accounts.php"
 )
 
 OUTPUT_FILE = Path(
@@ -30,22 +25,13 @@ FAILED_FILE = Path(
     "institution-collector/failed_institutions.json"
 )
 
-# ------------------------------------------------------------
-# FULL COLLECTION
-# ------------------------------------------------------------
-
 TEST_MODE = False
 
 TEST_EIIN = "103086"
 
-EXPECTED_INSTITUTIONS = 1293
+MIN_DELAY = 0.1
 
-# ------------------------------------------------------------
-# SPEED
-# ------------------------------------------------------------
-
-MIN_DELAY = 0.05
-MAX_DELAY = 0.3
+MAX_DELAY = 0.2
 
 TIMEOUT = (5, 20)
 
@@ -80,7 +66,6 @@ HEADERS = {
 
     "Connection":
         "keep-alive",
-
 }
 
 
@@ -165,206 +150,30 @@ def number(value):
 
 
 # ============================================================
-# DOWNLOAD MASTER INSTITUTION LIST
+# OPEN INSTITUTE RESULT PAGE
 # ============================================================
 
-def download_master_list():
+def open_page():
 
-    print()
-    print("=" * 70)
-    print("STEP 1: DOWNLOADING INSTITUTION MASTER LIST")
-    print("=" * 70)
+    print(
+        "=" * 70
+    )
+
+    print(
+        "STEP 1: OPENING INSTITUTE RESULT PAGE"
+    )
 
     print(
         "URL:",
-        MASTER_URL
+        SOURCE_URL
+    )
+
+    print(
+        "=" * 70
     )
 
     response = session.get(
-        MASTER_URL,
-        timeout=TIMEOUT
-    )
-
-    print(
-        "HTTP Status:",
-        response.status_code
-    )
-
-    response.raise_for_status()
-
-    response.encoding = (
-        response.apparent_encoding
-        or response.encoding
-    )
-
-    soup = BeautifulSoup(
-        response.text,
-        "html.parser"
-    )
-
-    tables = soup.find_all(
-        "table"
-    )
-
-    print(
-        "Tables found:",
-        len(tables)
-    )
-
-    institutions = []
-
-    for table in tables:
-
-        rows = table.find_all(
-            "tr"
-        )
-
-        for row in rows:
-
-            cells = row.find_all(
-                ["td", "th"]
-            )
-
-            if len(cells) < 3:
-                continue
-
-            values = [
-
-                clean_text(
-                    cell.get_text(
-                        " ",
-                        strip=True
-                    )
-                )
-
-                for cell in cells
-
-            ]
-
-            if len(values) < 3:
-                continue
-
-            # ------------------------------------------------
-            # Expected:
-            #
-            # 0 = SL
-            # 1 = EIIN
-            # 2 = INSTITUTE NAME
-            # 3 = TOTAL STUDENTS
-            # ------------------------------------------------
-
-            eiin = ""
-            institution_name = ""
-
-            if len(values) >= 4:
-
-                possible_eiin = values[1]
-
-                if possible_eiin.isdigit():
-
-                    eiin = possible_eiin
-
-                    institution_name = values[2]
-
-            if not eiin:
-
-                if values[0].isdigit():
-
-                    eiin = values[0]
-
-                    institution_name = values[1]
-
-            if not eiin:
-                continue
-
-            if not institution_name:
-                continue
-
-            # Header skip
-
-            if (
-                "eiin"
-                in institution_name.lower()
-            ):
-
-                continue
-
-            institutions.append({
-
-                "eiin":
-                    str(eiin),
-
-                "institution_name":
-                    institution_name,
-
-            })
-
-        # Usually first valid institution table is enough
-
-        if institutions:
-            break
-
-    # --------------------------------------------------------
-    # Remove duplicates
-    # --------------------------------------------------------
-
-    unique = {}
-
-    for item in institutions:
-
-        unique[
-            item["eiin"]
-        ] = item
-
-    institutions = list(
-        unique.values()
-    )
-
-    institutions.sort(
-        key=lambda x:
-            int(x["eiin"])
-    )
-
-    print(
-        "Institutions found:",
-        len(institutions)
-    )
-
-    if EXPECTED_INSTITUTIONS:
-
-        if len(institutions) != EXPECTED_INSTITUTIONS:
-
-            print()
-            print(
-                "WARNING:"
-            )
-
-            print(
-                "Expected:",
-                EXPECTED_INSTITUTIONS
-            )
-
-            print(
-                "Found:",
-                len(institutions)
-            )
-
-    return institutions
-
-
-# ============================================================
-# OPEN RESULT FORM
-# ============================================================
-
-def open_result_form():
-
-    print()
-    print("=" * 70)
-    print("STEP 2: OPENING SSC INSTITUTION RESULT FORM")
-    print("=" * 70)
-
-    response = session.get(
-        INDEX_URL,
+        SOURCE_URL,
         timeout=TIMEOUT
     )
 
@@ -385,6 +194,15 @@ def open_result_form():
         or response.encoding
     )
 
+    return response
+
+
+# ============================================================
+# INSPECT FORM
+# ============================================================
+
+def inspect_form(response):
+
     soup = BeautifulSoup(
         response.text,
         "html.parser"
@@ -394,6 +212,7 @@ def open_result_form():
         "form"
     )
 
+    print()
     print(
         "Forms found:",
         len(forms)
@@ -402,59 +221,116 @@ def open_result_form():
     if not forms:
 
         raise RuntimeError(
-            "No form found."
+            "No form found on index.php"
         )
 
-    selected_form = None
+    for index, form in enumerate(
+        forms,
+        start=1
+    ):
 
-    for form in forms:
+        print()
+        print(
+            "-" * 70
+        )
+
+        print(
+            f"FORM #{index}"
+        )
+
+        print(
+            "Action:",
+            form.get(
+                "action",
+                ""
+            )
+        )
+
+        print(
+            "Method:",
+            form.get(
+                "method",
+                "get"
+            )
+        )
+
+        print(
+            "INPUT FIELDS:"
+        )
 
         for inp in form.find_all(
             "input"
         ):
 
-            name = inp.get(
-                "name",
-                ""
-            )
+            print({
 
-            if name.lower() == "eiin":
+                "name":
+                    inp.get("name"),
 
-                selected_form = form
+                "type":
+                    inp.get(
+                        "type",
+                        "text"
+                    ),
 
-                break
+                "value":
+                    inp.get(
+                        "value",
+                        ""
+                    ),
 
-        if selected_form:
-            break
+                "placeholder":
+                    inp.get(
+                        "placeholder",
+                        ""
+                    )
 
-    if selected_form is None:
+            })
 
-        raise RuntimeError(
-            "EIIN form not found."
+        print(
+            "SELECT FIELDS:"
         )
 
-    action = selected_form.get(
-        "action",
-        ""
-    )
+        for select in form.find_all(
+            "select"
+        ):
 
-    method = selected_form.get(
-        "method",
-        "post"
-    ).lower()
+            print({
 
-    action_url = urljoin(
-        response.url,
-        action
-    )
+                "name":
+                    select.get("name"),
 
-    # --------------------------------------------------------
-    # Build base form fields
-    # --------------------------------------------------------
+                "options":
+                    [
+                        clean_text(
+                            option.get(
+                                "value",
+                                ""
+                            )
+                        )
+                        for option
+                        in select.find_all(
+                            "option"
+                        )
+                    ]
 
-    base_fields = {}
+            })
 
-    for inp in selected_form.find_all(
+    return soup, forms[0]
+
+
+# ============================================================
+# BUILD FORM DATA
+# ============================================================
+
+def build_form_data(
+    form,
+    eiin
+):
+
+    data = {}
+
+    for inp in form.find_all(
         "input"
     ):
 
@@ -473,7 +349,6 @@ def open_result_form():
         if input_type in (
             "button",
             "reset",
-            "submit",
             "image"
         ):
 
@@ -490,40 +365,47 @@ def open_result_form():
 
                 continue
 
-        base_fields[name] = inp.get(
+        data[name] = inp.get(
             "value",
             ""
         )
 
-    print(
-        "Result URL:",
-        action_url
-    )
+    for select in form.find_all(
+        "select"
+    ):
 
-    print(
-        "Form method:",
-        method
-    )
+        name = select.get(
+            "name"
+        )
 
-    print(
-        "Base form fields:",
-        base_fields
-    )
+        if not name:
+            continue
 
-    return (
-        response,
-        selected_form,
-        action_url,
-        method,
-        base_fields
-    )
+        selected = select.find(
+            "option",
+            selected=True
+        )
 
+        if not selected:
 
-# ============================================================
-# FIND EIIN FIELD
-# ============================================================
+            selected = select.find(
+                "option"
+            )
 
-def find_eiin_field(form):
+        if selected:
+
+            data[name] = selected.get(
+                "value",
+                clean_text(
+                    selected.get_text()
+                )
+            )
+
+    # ========================================================
+    # FIND EIIN FIELD
+    # ========================================================
+
+    eiin_field = None
 
     possible_names = [
 
@@ -537,52 +419,74 @@ def find_eiin_field(form):
 
     ]
 
-    input_names = {}
-
-    for inp in form.find_all(
-        "input"
-    ):
-
-        name = inp.get(
-            "name"
-        )
-
-        if name:
-
-            input_names[
-                name
-            ] = inp
-
     for name in possible_names:
 
-        if name in input_names:
+        if name in data:
 
-            return name
+            eiin_field = name
 
-    for name, inp in input_names.items():
+            break
 
-        placeholder = clean_text(
-            inp.get(
-                "placeholder",
-                ""
-            )
-        ).lower()
+    # If not found, inspect input names
 
-        combined = (
-            name.lower()
-            + " "
-            + placeholder
-        )
+    if eiin_field is None:
 
-        if (
-            "eiin" in combined
-            or
-            "institute" in combined
+        for inp in form.find_all(
+            "input"
         ):
 
-            return name
+            name = inp.get(
+                "name"
+            )
 
-    return None
+            placeholder = clean_text(
+                inp.get(
+                    "placeholder",
+                    ""
+                )
+            ).lower()
+
+            if not name:
+                continue
+
+            combined = (
+                name.lower()
+                + " "
+                + placeholder
+            )
+
+            if (
+                "eiin" in combined
+                or
+                "institute" in combined
+            ):
+
+                eiin_field = name
+
+                break
+
+    if eiin_field is None:
+
+        raise RuntimeError(
+            "Could not identify EIIN input field."
+        )
+
+    data[eiin_field] = str(
+        eiin
+    )
+
+    print()
+    print(
+        "EIIN field detected:",
+        eiin_field
+    )
+
+    print(
+        "POST data:",
+        data
+    )
+
+    return data
 
 
 # ============================================================
@@ -591,8 +495,7 @@ def find_eiin_field(form):
 
 def parse_result(
     html,
-    eiin,
-    fallback_name
+    eiin
 ):
 
     soup = BeautifulSoup(
@@ -609,13 +512,75 @@ def parse_result(
 
     upper = text.upper()
 
+    print()
+    print(
+        "=" * 70
+    )
+
+    print(
+        "STEP 3: PARSING INSTITUTION RESULT"
+    )
+
+    print(
+        "=" * 70
+    )
+
+    print(
+        "Tables found:",
+        len(
+            soup.find_all("table")
+        )
+    )
+
+    # ========================================================
+    # PRINT TABLES
+    # ========================================================
+
+    for table_index, table in enumerate(
+        soup.find_all("table"),
+        start=1
+    ):
+
+        print()
+        print(
+            f"TABLE #{table_index}"
+        )
+
+        for row in table.find_all("tr"):
+
+            values = [
+
+                clean_text(
+                    cell.get_text(
+                        " ",
+                        strip=True
+                    )
+                )
+
+                for cell
+                in row.find_all(
+                    ["th", "td"]
+                )
+
+            ]
+
+            if values:
+
+                print(
+                    values
+                )
+
+    # ========================================================
+    # DEFAULT
+    # ========================================================
+
     result = {
 
         "eiin":
             str(eiin),
 
         "institution_name":
-            fallback_name,
+            "",
 
         "district":
             "",
@@ -652,13 +617,11 @@ def parse_result(
 
     patterns = [
 
-        r"INSTITUTE\s+NAME\s*:\s*(.+?)"
-        r"\s*\(\s*"
+        r"INSTITUTE\s+NAME\s*:\s*(.+?)\s*\(\s*"
         + re.escape(str(eiin))
         + r"\s*\)",
 
-        r"INSTITUTE\s+NAME\s*:\s*(.+?)"
-        r"\s+ZILLA\s*:",
+        r"INSTITUTE\s+NAME\s*:\s*(.+)",
 
     ]
 
@@ -684,11 +647,9 @@ def parse_result(
                 flags=re.I
             )
 
-            if name:
-
-                result[
-                    "institution_name"
-                ] = name.title()
+            result[
+                "institution_name"
+            ] = name.title()
 
             break
 
@@ -871,19 +832,15 @@ def parse_result(
             )
 
             break
+# ========================================================
+# TOTAL GPA
+# ========================================================
 
-    # ========================================================
-    # TOTAL GPA
-    # ========================================================
-
-    # Board institution result-এর GPA5-ই
-    # এখানে total_gpa হিসেবে ব্যবহার করা হচ্ছে.
-
-    result[
-        "total_gpa"
-    ] = result[
-        "gpa5"
-    ]
+result[
+    "total_gpa"
+] = result[
+    "gpa5"
+]
 
     # ========================================================
     # PASSING RATE FALLBACK
@@ -903,9 +860,11 @@ def parse_result(
         ]
 
         if (
-            appeared is not None
-            and appeared > 0
-            and passed is not None
+            appeared
+            and
+            appeared > 0
+            and
+            passed is not None
         ):
 
             result[
@@ -921,322 +880,6 @@ def parse_result(
 
 
 # ============================================================
-# LOAD CHECKPOINT
-# ============================================================
-
-def load_checkpoint():
-
-    if not OUTPUT_FILE.exists():
-
-        return []
-
-    try:
-
-        with open(
-            OUTPUT_FILE,
-            "r",
-            encoding="utf-8"
-        ) as file:
-
-            data = json.load(
-                file
-            )
-
-        if not isinstance(
-            data,
-            list
-        ):
-
-            return []
-
-        return data
-
-    except Exception:
-
-        print(
-            "WARNING: Could not read existing output."
-        )
-
-        return []
-
-
-# ============================================================
-# SAVE RESULTS
-# ============================================================
-
-def save_results(
-    results
-):
-
-    # --------------------------------------------------------
-    # Sort by EIIN
-    # --------------------------------------------------------
-
-    results = sorted(
-        results,
-        key=lambda x:
-            int(x["eiin"])
-    )
-
-    temp_file = OUTPUT_FILE.with_suffix(
-        ".tmp"
-    )
-
-    with open(
-        temp_file,
-        "w",
-        encoding="utf-8"
-    ) as file:
-
-        json.dump(
-            results,
-            file,
-            ensure_ascii=False,
-            indent=2
-        )
-
-    temp_file.replace(
-        OUTPUT_FILE
-    )
-
-
-# ============================================================
-# SAVE FAILED
-# ============================================================
-
-def save_failed(
-    failed
-):
-
-    failed = sorted(
-        failed,
-        key=lambda x:
-            int(x["eiin"])
-    )
-
-    with open(
-        FAILED_FILE,
-        "w",
-        encoding="utf-8"
-    ) as file:
-
-        json.dump(
-            failed,
-            file,
-            ensure_ascii=False,
-            indent=2
-        )
-
-
-# ============================================================
-# LOAD FAILED
-# ============================================================
-
-def load_failed():
-
-    if not FAILED_FILE.exists():
-
-        return []
-
-    try:
-
-        with open(
-            FAILED_FILE,
-            "r",
-            encoding="utf-8"
-        ) as file:
-
-            data = json.load(
-                file
-            )
-
-        if isinstance(
-            data,
-            list
-        ):
-
-            return data
-
-    except Exception:
-
-        pass
-
-    return []
-
-
-# ============================================================
-# COLLECT ONE INSTITUTION
-# ============================================================
-
-def collect_institution(
-    eiin,
-    institution_name,
-    action_url,
-    method,
-    base_fields,
-    eiin_field
-):
-
-    data = dict(
-        base_fields
-    )
-
-    data[
-        eiin_field
-    ] = str(eiin)
-
-    print()
-    print(
-        "-" * 70
-    )
-
-    print(
-        f"EIIN: {eiin}"
-    )
-
-    print(
-        f"Institution: {institution_name}"
-    )
-
-    print(
-        "REQUEST START:",
-        eiin
-    )
-
-    try:
-
-        if method == "get":
-
-            response = session.get(
-                action_url,
-                params=data,
-                headers={
-                    "Referer":
-                        INDEX_URL
-                },
-                timeout=TIMEOUT
-            )
-
-        else:
-
-            response = session.post(
-                action_url,
-                data=data,
-                headers={
-
-                    "Referer":
-                        INDEX_URL,
-
-                    "Origin":
-                        "https://sresult.bise-ctg.gov.bd",
-
-                },
-                timeout=TIMEOUT
-            )
-
-    except Exception as error:
-
-        print(
-            "REQUEST ERROR:",
-            eiin,
-            "|",
-            error
-        )
-
-        return None
-
-    print(
-        "REQUEST DONE:",
-        eiin,
-        "| HTTP",
-        response.status_code
-    )
-
-    if response.status_code >= 400:
-
-        print(
-            "HTTP ERROR:",
-            response.status_code
-        )
-
-        return None
-
-    print(
-        "PARSING RESULT..."
-    )
-
-    result = parse_result(
-        response.text,
-        eiin,
-        institution_name
-    )
-
-    # --------------------------------------------------------
-    # Validate result
-    # --------------------------------------------------------
-
-    if (
-        not result["district"]
-        and
-        not result["thana"]
-        and
-        result["appeared"] is None
-        and
-        result["passed"] is None
-        and
-        result["gpa5"] is None
-    ):
-
-        print(
-            "RESULT DATA NOT FOUND"
-        )
-
-        return None
-
-    print(
-        "FOUND:",
-        result["institution_name"]
-    )
-
-    print(
-        "District:",
-        result["district"]
-    )
-
-    print(
-        "Thana:",
-        result["thana"]
-    )
-
-    print(
-        "Appeared:",
-        result["appeared"]
-    )
-
-    print(
-        "Passed:",
-        result["passed"]
-    )
-
-    print(
-        "Passing Rate:",
-        result["passing_rate"]
-    )
-
-    print(
-        "GPA5:",
-        result["gpa5"]
-    )
-
-    print(
-        "Total GPA:",
-        result["total_gpa"]
-    )
-
-    return result
-
-
-# ============================================================
 # MAIN
 # ============================================================
 
@@ -1244,10 +887,13 @@ def main():
 
     start = time.time()
 
-    print()
-    print("=" * 70)
-    print("SSC 2026 INSTITUTION COLLECTION")
-    print("=" * 70)
+    print(
+        "=" * 70
+    )
+
+    print(
+        "SSC 2026 INSTITUTION TEST"
+    )
 
     print(
         "TEST MODE:",
@@ -1260,11 +906,6 @@ def main():
     )
 
     print(
-        "EXPECTED INSTITUTIONS:",
-        EXPECTED_INSTITUTIONS
-    )
-
-    print(
         "MIN_DELAY:",
         MIN_DELAY
     )
@@ -1274,110 +915,66 @@ def main():
         MAX_DELAY
     )
 
-    print("=" * 70)
-
-    # ========================================================
-    # STEP 1
-    # ========================================================
-
-    institutions = download_master_list()
-
-    if not institutions:
-
-        raise SystemExit(
-            "No institutions found."
-        )
-
-    # ========================================================
-    # TEST MODE
-    # ========================================================
-
-    if TEST_MODE:
-
-        institutions = [
-
-            item
-
-            for item
-            in institutions
-
-            if item["eiin"]
-            == str(TEST_EIIN)
-
-        ]
-
-        if not institutions:
-
-            raise SystemExit(
-                f"TEST EIIN {TEST_EIIN} "
-                "not found."
-            )
-
-    # ========================================================
-    # STEP 2
-    # ========================================================
-
-    (
-        index_response,
-        form,
-        action_url,
-        method,
-        base_fields
-
-    ) = open_result_form()
-
-    eiin_field = find_eiin_field(
-        form
+    print(
+        "=" * 70
     )
 
-    if eiin_field is None:
+    # ========================================================
+    # OPEN PAGE
+    # ========================================================
 
-        raise SystemExit(
-            "EIIN input field not found."
-        )
+    response = open_page()
+
+    # ========================================================
+    # INSPECT FORM
+    # ========================================================
+
+    soup, form = inspect_form(
+        response
+    )
+
+    # ========================================================
+    # ACTION URL
+    # ========================================================
+
+    action = form.get(
+        "action",
+        ""
+    )
+
+    action_url = urljoin(
+        response.url,
+        action
+    )
+
+    method = form.get(
+        "method",
+        "get"
+    ).lower()
+
+    print()
+    print(
+        "FORM ACTION:",
+        action_url
+    )
 
     print(
-        "EIIN field detected:",
-        eiin_field
+        "FORM METHOD:",
+        method
     )
 
     # ========================================================
-    # CHECKPOINT
+    # FORM DATA
     # ========================================================
 
-    if TEST_MODE:
+    form_data = build_form_data(
+        form,
+        TEST_EIIN
+    )
 
-        results = []
-
-        failed = []
-
-    else:
-
-        results = load_checkpoint()
-
-        failed = load_failed()
-
-    # --------------------------------------------------------
-    # Existing EIIN set
-    # --------------------------------------------------------
-
-    collected_eiins = {
-
-        str(item["eiin"])
-
-        for item
-        in results
-
-    }
-
-    failed_eiins = {
-
-        str(item["eiin"])
-
-        for item
-        in failed
-
-    }
+    # ========================================================
+    # REQUEST
+    # ========================================================
 
     print()
     print(
@@ -1385,264 +982,168 @@ def main():
     )
 
     print(
-        "CHECKPOINT"
-    )
-
-    print(
-        "Already collected:",
-        len(collected_eiins)
-    )
-
-    print(
-        "Previously failed:",
-        len(failed_eiins)
+        "STEP 2: SUBMITTING EIIN"
     )
 
     print(
         "=" * 70
     )
 
-    # ========================================================
-    # COLLECTION
-    # ========================================================
-
-    total = len(
-        institutions
+    print(
+        "EIIN:",
+        TEST_EIIN
     )
 
-    processed = 0
+    print(
+        "Request URL:",
+        action_url
+    )
 
-    successful = 0
+    try:
 
-    failed_this_run = 0
+        if method == "get":
 
-    skipped = 0
-
-    for index, institution in enumerate(
-        institutions,
-        start=1
-    ):
-
-        eiin = str(
-            institution["eiin"]
-        )
-
-        name = institution[
-            "institution_name"
-        ]
-
-        # ----------------------------------------------------
-        # Skip already collected
-        # ----------------------------------------------------
-
-        if (
-            not TEST_MODE
-            and
-            eiin in collected_eiins
-        ):
-
-            skipped += 1
-
-            continue
-
-        # ----------------------------------------------------
-        # Skip previously failed
-        #
-        # Failed items are retried in this run only if
-        # they are not already in results.
-        # ----------------------------------------------------
-
-        print()
-        print(
-            f"[{index}/{total}]"
-        )
-
-        result = collect_institution(
-
-            eiin,
-
-            name,
-
-            action_url,
-
-            method,
-
-            base_fields,
-
-            eiin_field
-
-        )
-
-        processed += 1
-
-        # ----------------------------------------------------
-        # SUCCESS
-        # ----------------------------------------------------
-
-        if result is not None:
-
-            results.append(
-                result
+            result_response = (
+                session.get(
+                    action_url,
+                    params=form_data,
+                    headers={
+                        "Referer":
+                            response.url
+                    },
+                    timeout=TIMEOUT
+                )
             )
-
-            collected_eiins.add(
-                eiin
-            )
-
-            successful += 1
-
-            # Remove from failed if
-            # previously failed
-
-            failed = [
-
-                item
-
-                for item
-                in failed
-
-                if str(
-                    item["eiin"]
-                ) != eiin
-
-            ]
-
-            failed_eiins.discard(
-                eiin
-            )
-
-        # ----------------------------------------------------
-        # FAILED
-        # ----------------------------------------------------
 
         else:
 
-            failed_this_run += 1
+            result_response = (
+                session.post(
+                    action_url,
+                    data=form_data,
+                    headers={
 
-            if eiin not in failed_eiins:
+                        "Referer":
+                            response.url,
 
-                failed.append({
+                        "Origin":
+                            "https://sresult.bise-ctg.gov.bd",
 
-                    "eiin":
-                        eiin,
-
-                    "institution_name":
-                        name,
-
-                    "year":
-                        YEAR,
-
-                    "board":
-                        BOARD,
-
-                    "error":
-                        "Result parsing/request failed"
-
-                })
-
-                failed_eiins.add(
-                    eiin
+                    },
+                    timeout=TIMEOUT
                 )
-
-        # ----------------------------------------------------
-        # CHECKPOINT SAVE
-        # ----------------------------------------------------
-
-        save_results(
-            results
-        )
-
-        save_failed(
-            failed
-        )
-
-        # ----------------------------------------------------
-        # DELAY
-        # ----------------------------------------------------
-
-        if (
-            index < total
-            and not TEST_MODE
-        ):
-
-            delay = random.uniform(
-                MIN_DELAY,
-                MAX_DELAY
             )
 
-            time.sleep(
-                delay
-            )
+    except Exception as error:
 
-    # ========================================================
-    # FINAL SAVE
-    # ========================================================
+        print(
+            "REQUEST ERROR:",
+            error
+        )
 
-    save_results(
-        results
+        raise SystemExit(1)
+
+    print(
+        "HTTP Status:",
+        result_response.status_code
     )
 
-    save_failed(
-        failed
+    print(
+        "Final URL:",
+        result_response.url
+    )
+
+    print(
+        "Response size:",
+        len(
+            result_response.text
+        ),
+        "bytes"
+    )
+
+    if result_response.status_code >= 400:
+
+        raise SystemExit(
+            f"HTTP ERROR: "
+            f"{result_response.status_code}"
+        )
+
+    # ========================================================
+    # PARSE
+    # ========================================================
+
+    result = parse_result(
+        result_response.text,
+        TEST_EIIN
     )
 
     # ========================================================
-    # SUMMARY
+    # SHOW RESULT
     # ========================================================
+
+    print()
+    print(
+        "=" * 70
+    )
+
+    print(
+        "INSTITUTION TEST RESULT"
+    )
+
+    print(
+        "=" * 70
+    )
+
+    print(
+        json.dumps(
+            result,
+            ensure_ascii=False,
+            indent=2
+        )
+    )
+
+    # ========================================================
+    # SAVE TEST RESULT
+    # ========================================================
+
+    with open(
+        OUTPUT_FILE,
+        "w",
+        encoding="utf-8"
+    ) as file:
+
+        json.dump(
+            [result],
+            file,
+            ensure_ascii=False,
+            indent=2
+        )
+
+    with open(
+        FAILED_FILE,
+        "w",
+        encoding="utf-8"
+    ) as file:
+
+        json.dump(
+            [],
+            file,
+            ensure_ascii=False,
+            indent=2
+        )
 
     elapsed = round(
         time.time() - start,
         2
     )
 
-    remaining = max(
-        0,
-        total - len(results)
-    )
-
     print()
-    print("=" * 70)
-    print("SSC 2026 INSTITUTION COLLECTION COMPLETE")
-    print("=" * 70)
-
     print(
-        "Master institutions:",
-        total
+        "=" * 70
     )
 
     print(
-        "Processed this run:",
-        processed
-    )
-
-    print(
-        "Successful this run:",
-        successful
-    )
-
-    print(
-        "Failed this run:",
-        failed_this_run
-    )
-
-    print(
-        "Skipped already collected:",
-        skipped
-    )
-
-    print(
-        "Total institutions saved:",
-        len(results)
-    )
-
-    print(
-        "Remaining:",
-        remaining
-    )
-
-    print(
-        "Failed file entries:",
-        len(failed)
+        "TEST COMPLETED"
     )
 
     print(
@@ -1661,10 +1162,8 @@ def main():
         "seconds"
     )
 
-    print("=" * 70)
-
     print(
-        "DONE"
+        "=" * 70
     )
 
 
