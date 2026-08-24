@@ -266041,29 +266041,29 @@
   },
   {
     "institute": "ALIKADAM RESIDENTIAL SCHOOL, BANDARBAN",
-    "total_students": 12,
+    "total_students": 13,
     "gpa_5_count": 0,
     "gpa_5_percentage": 0.0,
     "average_gpa": 2.87,
     "institution_score": 57.4,
     "grade_distribution": {
-      "B": 26,
-      "F": 12,
-      "D": 14,
-      "A-": 10,
-      "A": 16,
-      "A+": 31,
-      "C": 29
+      "B": 29,
+      "F": 14,
+      "D": 16,
+      "A-": 11,
+      "A": 17,
+      "A+": 33,
+      "C": 30
     },
     "subject_statistics": [
       {
         "code": "101",
         "subject": "BANGLA-I",
-        "students_with_marks": 11,
-        "average_mark": 107.09,
+        "students_with_marks": 12,
+        "average_mark": 105.92,
         "grade_distribution": {
           "B": 5,
-          "C": 4,
+          "C": 5,
           "A": 2
         }
       },
@@ -266073,7 +266073,7 @@
         "students_with_marks": 10,
         "average_mark": 81.2,
         "grade_distribution": {
-          "F": 2,
+          "F": 3,
           "C": 5,
           "D": 5
         }
@@ -266087,7 +266087,7 @@
           "D": 4,
           "C": 3,
           "B": 1,
-          "F": 2
+          "F": 3
         }
       },
       {
@@ -266105,11 +266105,12 @@
       {
         "code": "114",
         "subject": "CHRISTIAN RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 6,
-        "average_mark": 80.33,
+        "students_with_marks": 7,
+        "average_mark": 77.0,
         "grade_distribution": {
           "A": 3,
-          "A+": 3
+          "A+": 3,
+          "B": 1
         }
       },
       {
@@ -266150,10 +266151,10 @@
       {
         "code": "154",
         "subject": "Information And Communication Technology",
-        "students_with_marks": 11,
-        "average_mark": 38.45,
+        "students_with_marks": 12,
+        "average_mark": 38.25,
         "grade_distribution": {
-          "A": 6,
+          "A": 7,
           "A+": 4,
           "A-": 1
         }
@@ -266172,19 +266173,19 @@
       {
         "code": "147",
         "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
-        "students_with_marks": 12,
-        "average_mark": 71.08,
+        "students_with_marks": 13,
+        "average_mark": 72.77,
         "grade_distribution": {
-          "A+": 12
+          "A+": 13
         }
       },
       {
         "code": "156",
         "subject": "Career Education",
-        "students_with_marks": 12,
-        "average_mark": 44.92,
+        "students_with_marks": 13,
+        "average_mark": 45.15,
         "grade_distribution": {
-          "A+": 12
+          "A+": 13
         }
       },
       {
@@ -266201,51 +266202,52 @@
       {
         "code": "127",
         "subject": "SCIENCE",
-        "students_with_marks": 4,
-        "average_mark": 41.75,
+        "students_with_marks": 5,
+        "average_mark": 44.0,
         "grade_distribution": {
           "D": 3,
-          "B": 1
+          "B": 2
         }
       },
       {
         "code": "110",
         "subject": "GEOGRAPHY AND ENVIRONMENT",
-        "students_with_marks": 4,
-        "average_mark": 48.75,
+        "students_with_marks": 5,
+        "average_mark": 46.6,
         "grade_distribution": {
           "B": 3,
-          "C": 1
+          "C": 1,
+          "D": 1
         }
       },
       {
         "code": "153",
         "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
-        "students_with_marks": 4,
-        "average_mark": 54.0,
+        "students_with_marks": 5,
+        "average_mark": 53.2,
         "grade_distribution": {
           "A-": 1,
           "C": 1,
-          "B": 2
+          "B": 3
         }
       },
       {
         "code": "140",
         "subject": "CIVICS AND CITIZENSHIP",
-        "students_with_marks": 4,
-        "average_mark": 41.25,
+        "students_with_marks": 5,
+        "average_mark": 40.8,
         "grade_distribution": {
           "C": 3,
-          "D": 1
+          "D": 2
         }
       },
       {
         "code": "134",
         "subject": "AGRICULTURE STUDIES",
-        "students_with_marks": 3,
-        "average_mark": 60.67,
+        "students_with_marks": 4,
+        "average_mark": 61.25,
         "grade_distribution": {
-          "A-": 2,
+          "A-": 3,
           "B": 1
         }
       }
