@@ -690,8 +690,6 @@ select:focus,
     }
 
 
-    /* Header */
-
     .header{
 
         grid-template-columns:
@@ -713,8 +711,6 @@ select:focus,
 
     }
 
-
-    /* Row */
 
     .row{
 
@@ -768,8 +764,6 @@ select:focus,
 
     }
 
-
-    /* Institution becomes separate row */
 
     .institute{
 
@@ -1461,8 +1455,6 @@ function numberValue(value){
 
 function getTotalScore(student){
 
-    /* Existing total score fields */
-
     const directFields = [
 
         student.total_score,
@@ -1832,11 +1824,6 @@ function findInstitution(student){
 
     }
 
-
-    /*
-       Fallback:
-       If no mapping is found, use student data.
-    */
 
     return {
 
@@ -2310,10 +2297,6 @@ function render(){
     );
 
 
-    /* =====================================================
-       TITLE
-    ===================================================== */
-
     if(district){
 
         title.textContent =
@@ -2512,19 +2495,11 @@ async function loadStudents(){
     }
 
 
-    /*
-       Enrich only once.
-    */
-
     students =
         rawStudents.map(
             enrichStudent
         );
 
-
-    /*
-       Remove completely invalid records.
-    */
 
     students =
         students.filter(
@@ -2562,11 +2537,6 @@ async function loadPage(){
 
         `;
 
-
-        /*
-           Institution file is relatively small.
-           Load it first because it determines District.
-        */
 
         await loadInstitutions();
 
@@ -2812,6 +2782,8 @@ function pdfDate(){
 
 /* =========================================================
    PDF
+   IMPORTANT:
+   ONLY CURRENT PAGE 100 STUDENTS
 ========================================================= */
 
 pdfBtn.addEventListener(
@@ -2842,6 +2814,39 @@ pdfBtn.addEventListener(
 
             alert(
                 "PDF library is still loading. Please try again."
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * IMPORTANT:
+         * Do NOT use the entire filtered list here.
+         *
+         * Calculate the same 100 students
+         * currently displayed on the website.
+         */
+
+        const start =
+            (page - 1) *
+            PAGE_SIZE;
+
+
+        const currentPageStudents =
+            list.slice(
+                start,
+                start + PAGE_SIZE
+            );
+
+
+        if(
+            !currentPageStudents.length
+        ){
+
+            alert(
+                "No students available on this page."
             );
 
             return;
@@ -3016,11 +3021,16 @@ pdfBtn.addEventListener(
             : group;
 
 
+        /*
+         * Show current website page
+         * in PDF header.
+         */
+
         doc.text(
             `2026 · Chattogram Board · ${
                 district ||
                 "All Districts"
-            } · ${pdfGroup}`,
+            } · ${pdfGroup} · Page ${page}`,
             15,
             51
         );
@@ -3029,17 +3039,33 @@ pdfBtn.addEventListener(
 
         /* =================================================
            PDF DATA
-           ALL FILTERED STUDENTS
+           ONLY CURRENT 100
         ================================================= */
 
         const body =
-            list.map(
+            currentPageStudents.map(
                 function(student,index){
+
+                    /*
+                     * Global ranking.
+                     *
+                     * Page 1:
+                     * 1 - 100
+                     *
+                     * Page 2:
+                     * 101 - 200
+                     */
+
+                    const globalRank =
+                        start +
+                        index +
+                        1;
+
 
                     return [
 
                         String(
-                            index + 1
+                            globalRank
                         ),
 
                         `${student.name || "Unknown"}\nRoll: ${
@@ -3073,6 +3099,7 @@ pdfBtn.addEventListener(
 
         /* =================================================
            TABLE
+           SAME PREVIOUS PDF STYLE
         ================================================= */
 
         doc.autoTable({
@@ -3190,7 +3217,7 @@ pdfBtn.addEventListener(
 
             didDrawPage:function(){
 
-                const currentPage =
+                const currentPdfPage =
                     doc.internal
                     .getNumberOfPages();
 
@@ -3236,7 +3263,7 @@ pdfBtn.addEventListener(
 
 
                 doc.text(
-                    `PDF Page ${currentPage}`,
+                    `PDF Page ${currentPdfPage}`,
                     w - 12,
                     h - 7,
                     {
@@ -3279,8 +3306,17 @@ pdfBtn.addEventListener(
             .toLowerCase();
 
 
+        /*
+         * Page number added to filename.
+         *
+         * Example:
+         * Page-1.pdf
+         * Page-2.pdf
+         * Page-3.pdf
+         */
+
         doc.save(
-            `CTGBoardRanking-District-Student-${safe}-${groupSafe}.pdf`
+            `CTGBoardRanking-District-Student-${safe}-${groupSafe}-Page-${page}.pdf`
         );
 
     }
