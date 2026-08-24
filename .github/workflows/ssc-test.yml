@@ -1,1 +1,724 @@
-name: SSC Test on: workflow_dispatch: permissions: contents: write concurrency: group: ssc-ranking-update cancel-in-progress: false jobs: test: runs-on: ubuntu-latest steps: # ===================================================== # CHECKOUT # ===================================================== - name: Checkout repository uses: actions/checkout@v4 with: fetch-depth: 0 ref: main # ===================================================== # PYTHON # ===================================================== - name: Setup Python uses: actions/setup-python@v5 with: python-version: "3.13" - name: Install dependencies run: | python -m pip install --upgrade pip pip install requests beautifulsoup4 # ===================================================== # SHOW EXISTING DATA # ===================================================== - name: Show existing collection run: | echo "========================================" echo "EXISTING SSC DATA" echo "========================================" if [ -f scraper/students.json ]; then python - <<'PY' import json path = "scraper/students.json" with open(path, "r", encoding="utf-8") as f: data = json.load(f) print("Existing students:", len(data)) if data: print("First roll:", data[0].get("roll")) print("Last roll:", data[-1].get("roll")) PY else echo "students.json not found" fi # ===================================================== # RUN SSC COLLECTION # ===================================================== - name: Run SSC data collection run: | python scraper/ssc_test.py # ===================================================== # GENERATE INSTITUTION STATISTICS # ===================================================== - name: Generate institution statistics run: | python scraper/institution_stats.py # ===================================================== # CONVERT INSTITUTION CSV # ===================================================== - name: Convert institution CSV run: | python scraper/csv_to_institutions.py # ===================================================== # VALIDATE INSTITUTION DATA # ===================================================== - name: Validate institution data run: | python scraper/ranking_validator.py # ===================================================== # INSTITUTION RANKING # ===================================================== - name: Calculate institution ranking run: | python scraper/ranking_engine.py # ===================================================== # DISTRICT RANKING # ===================================================== - name: Calculate district ranking run: | python scraper/district_ranking.py # ===================================================== # STUDENT RANKING # ===================================================== - name: Calculate student ranking run: | python scraper/student_ranking.py # ===================================================== # YEAR RANKING # ===================================================== - name: Calculate year-wise ranking run: | python scraper/year_ranking.py # ===================================================== # BOARD RANKING # ===================================================== - name: Calculate board ranking run: | python scraper/board_ranking.py # ===================================================== # SHOW SUMMARY # ===================================================== - name: Show collection summary if: always() run: | echo "========================================" echo "SSC COLLECTION SUMMARY" echo "========================================" if [ -f scraper/student_collection_summary.json ]; then cat scraper/student_collection_summary.json else echo "student_collection_summary.json not found" fi echo "" echo "========================================" echo "STUDENT COUNT" echo "========================================" if [ -f scraper/students.json ]; then python - <<'PY' import json path = "scraper/students.json" with open(path, "r", encoding="utf-8") as f: data = json.load(f) print("Total students:", len(data)) if data: print("First roll:", data[0].get("roll")) print("Last roll:", data[-1].get("roll")) groups = {} for student in data: group = student.get("group", "Unknown") groups[group] = groups.get(group, 0) + 1 print("") print("GROUP COUNTS") for group, count in sorted(groups.items()): print(f"{group}: {count}") PY else echo "students.json not found" fi # ===================================================== # PREPARE LARGE JSON FILES # ===================================================== - name: Prepare large JSON files run: | python <<'PY' import json import os import math BASE = "scraper" MAX_BYTES = 45 * 1024 * 1024 FILES = [ ( "students.json", "students_parts", "students_manifest.json" ), ( "student_ranking.json", "student_ranking_parts", "student_ranking_manifest.json" ) ] def write_json(path, data): with open( path, "w", encoding="utf-8" ) as f: json.dump( data, f, ensure_ascii=False, separators=(",", ":") ) for filename, parts_dir, manifest_name in FILES: source = os.path.join( BASE, filename ) output_dir = os.path.join( BASE, parts_dir ) if not os.path.exists(source): print( f"Skipping {source}: file not found" ) continue source_size = os.path.getsize(source) print("") print("=" * 70) print(f"Processing: {source}") print( f"Original size: " f"{source_size / 1024 / 1024:.2f} MB" ) print("=" * 70) # ------------------------------------------------- # SMALL FILE # ------------------------------------------------- if source_size <= MAX_BYTES: print( f"{filename} is below " f"{MAX_BYTES / 1024 / 1024:.0f} MB." ) continue # ------------------------------------------------- # LOAD JSON # ------------------------------------------------- print("Loading JSON...") with open( source, "r", encoding="utf-8" ) as f: data = json.load(f) # ------------------------------------------------- # DETECT ARRAY # ------------------------------------------------- if isinstance(data, list): records = data wrapper_key = None elif isinstance(data, dict): wrapper_key = None for key, value in data.items(): if isinstance(value, list): wrapper_key = key break if wrapper_key is None: raise ValueError( f"No JSON array found in {source}" ) records = data[wrapper_key] else: raise ValueError( f"Unsupported JSON structure: {source}" ) total = len(records) print( f"Total records: {total:,}" ) os.makedirs( output_dir, exist_ok=True ) # ------------------------------------------------- # REMOVE OLD PARTS # ------------------------------------------------- for old in os.listdir(output_dir): old_path = os.path.join( output_dir, old ) if os.path.isfile(old_path): os.remove(old_path) # ------------------------------------------------- # ESTIMATE PARTS # ------------------------------------------------- estimated_parts = max( 2, math.ceil( source_size / (40 * 1024 * 1024) ) ) # ------------------------------------------------- # CREATE PARTS # ------------------------------------------------- while True: chunk_size = math.ceil( total / estimated_parts ) print("") print( f"Trying {estimated_parts} parts " f"({chunk_size:,} records/part)" ) created = [] for part_number, start in enumerate( range( 0, total, chunk_size ), start=1 ): end = min( start + chunk_size, total ) part_records = records[start:end] if wrapper_key is None: output_data = part_records else: output_data = { wrapper_key: part_records } part_filename = ( f"part_{part_number:04d}.json" ) part_path = os.path.join( output_dir, part_filename ) write_json( part_path, output_data ) size = os.path.getsize( part_path ) created.append( ( part_path, len(part_records), size ) ) print( f"{part_filename}: " f"{len(part_records):,} records " f"({size / 1024 / 1024:.2f} MB)" ) oversized = [ item for item in created if item[2] > MAX_BYTES ] if not oversized: break print( "Some parts are still too large." ) for path, _, _ in created: if os.path.exists(path): os.remove(path) estimated_parts *= 2 # ------------------------------------------------- # MANIFEST # ------------------------------------------------- manifest = { "source": filename, "total_records": total, "parts": [] } for path, count, size in created: manifest["parts"].append( { "file": os.path.relpath( path, "." ), "records": count, "size_mb": round( size / 1024 / 1024, 2 ) } ) manifest_path = os.path.join( BASE, manifest_name ) with open( manifest_path, "w", encoding="utf-8" ) as f: json.dump( manifest, f, ensure_ascii=False, indent=2 ) print("") print( f"Finished {filename}" ) print( f"Total records: {total:,}" ) print( f"Parts created: {len(created)}" ) # ===================================================== # FINAL SIZE CHECK # ===================================================== print("") print("=" * 70) print("FINAL JSON SIZE CHECK") print("=" * 70) failed = False for root, dirs, files in os.walk(BASE): for name in files: if not name.endswith(".json"): continue path = os.path.join( root, name ) size = os.path.getsize(path) size_mb = ( size / 1024 / 1024 ) if size >= 100 * 1024 * 1024: if name in ( "students.json", "student_ranking.json" ): print( f"ARTIFACT ONLY: {path} " f"= {size_mb:.2f} MB" ) continue print( f"ERROR: {path} " f"= {size_mb:.2f} MB" ) failed = True else: print( f"OK: {path} " f"= {size_mb:.2f} MB" ) if failed: raise RuntimeError( "GitHub-bound JSON file exceeds 100 MB." ) print("") print("All GitHub-bound JSON files are valid.") PY # ===================================================== # CHECK GIT SIZE # ===================================================== - name: Check files before commit run: | echo "========================================" echo "FILES TO COMMIT" echo "========================================" find scraper -type f -printf '%s %p\n' | sort -nr | head -30 # ===================================================== # COMMIT # ===================================================== - name: Commit updated ranking data run: | git config user.name "github-actions[bot]" git config user.email "41898282+github-actions[bot]@users.noreply.github.com" echo "========================================" echo "PREPARING COMMIT" echo "========================================" # Add everything first. git add scraper/ # NEVER commit the huge original files. git restore --staged scraper/students.json 2>/dev/null || true git restore --staged scraper/student_ranking.json 2>/dev/null || true # Keep them locally for artifact upload. git restore scraper/students.json 2>/dev/null || true git restore scraper/student_ranking.json 2>/dev/null || true echo "" echo "STAGED FILES:" git status --short if git diff --cached --quiet; then echo "" echo "No changes to commit." exit 0 fi echo "" echo "COMMITTING..." git commit -m "Update SSC ranking data" # ===================================================== # SYNC # ===================================================== - name: Sync with latest main run: | echo "Fetching latest main..." git fetch origin main echo "Rebasing..." git rebase origin/main # ===================================================== # PUSH # ===================================================== - name: Push updated SSC data run: | echo "========================================" echo "PUSHING UPDATED DATA" echo "========================================" git push origin HEAD:main echo "" echo "========================================" echo "SSC DATA PUSHED SUCCESSFULLY" echo "========================================" # ===================================================== # FINAL COUNT # ===================================================== - name: Final student count if: always() run: | echo "========================================" echo "FINAL STUDENT DATA" echo "========================================" if [ -f scraper/students.json ]; then python - <<'PY' import json with open( "scraper/students.json", "r", encoding="utf-8" ) as f: students = json.load(f) print( "Final total students:", len(students) ) if students: print( "First roll:", students[0].get("roll") ) print( "Last roll:", students[-1].get("roll") ) PY else echo "students.json not found" fi # ===================================================== # BACKUP # ===================================================== - name: Upload SSC data backup uses: actions/upload-artifact@v4 if: always() with: name: ssc-data path: scraper/ if-no-files-found: warn 
+name: SSC Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ssc-ranking-update
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # =====================================================
+      # CHECKOUT
+      # =====================================================
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      # =====================================================
+      # PYTHON
+      # =====================================================
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+
+      # =====================================================
+      # SHOW EXISTING DATA
+      # =====================================================
+
+      - name: Show existing collection
+        run: |
+          echo "========================================"
+          echo "EXISTING SSC DATA"
+          echo "========================================"
+
+          if [ -f scraper/students.json ]; then
+            python - <<'PY'
+          import json
+
+          path = "scraper/students.json"
+
+          with open(path, "r", encoding="utf-8") as f:
+              data = json.load(f)
+
+          print("Existing students:", len(data))
+
+          if data:
+              print("First roll:", data[0].get("roll"))
+              print("Last roll:", data[-1].get("roll"))
+          PY
+          else
+            echo "students.json not found"
+          fi
+
+      # =====================================================
+      # RUN SSC COLLECTION
+      # =====================================================
+
+      - name: Run SSC data collection
+        run: |
+          python scraper/ssc_test.py
+
+      # =====================================================
+      # GENERATE INSTITUTION STATISTICS
+      # =====================================================
+
+      - name: Generate institution statistics
+        run: |
+          python scraper/institution_stats.py
+
+      # =====================================================
+      # CONVERT INSTITUTION CSV
+      # =====================================================
+
+      - name: Convert institution CSV
+        run: |
+          python scraper/csv_to_institutions.py
+
+      # =====================================================
+      # VALIDATE INSTITUTION DATA
+      # =====================================================
+
+      - name: Validate institution data
+        run: |
+          python scraper/ranking_validator.py
+
+      # =====================================================
+      # INSTITUTION RANKING
+      # =====================================================
+
+      - name: Calculate institution ranking
+        run: |
+          python scraper/ranking_engine.py
+
+      # =====================================================
+      # DISTRICT RANKING
+      # =====================================================
+
+      - name: Calculate district ranking
+        run: |
+          python scraper/district_ranking.py
+
+      # =====================================================
+      # STUDENT RANKING
+      # =====================================================
+
+      - name: Calculate student ranking
+        run: |
+          python scraper/student_ranking.py
+
+      # =====================================================
+      # YEAR RANKING
+      # =====================================================
+
+      - name: Calculate year-wise ranking
+        run: |
+          python scraper/year_ranking.py
+
+      # =====================================================
+      # BOARD RANKING
+      # =====================================================
+
+      - name: Calculate board ranking
+        run: |
+          python scraper/board_ranking.py
+
+      # =====================================================
+      # SHOW SUMMARY
+      # =====================================================
+
+      - name: Show collection summary
+        if: always()
+        run: |
+          echo "========================================"
+          echo "SSC COLLECTION SUMMARY"
+          echo "========================================"
+
+          if [ -f scraper/student_collection_summary.json ]; then
+            cat scraper/student_collection_summary.json
+          else
+            echo "student_collection_summary.json not found"
+          fi
+
+          echo ""
+          echo "========================================"
+          echo "STUDENT COUNT"
+          echo "========================================"
+
+          if [ -f scraper/students.json ]; then
+            python - <<'PY'
+          import json
+
+          path = "scraper/students.json"
+
+          with open(path, "r", encoding="utf-8") as f:
+              data = json.load(f)
+
+          print("Total students:", len(data))
+
+          if data:
+              print("First roll:", data[0].get("roll"))
+              print("Last roll:", data[-1].get("roll"))
+
+          groups = {}
+
+          for student in data:
+              group = student.get("group", "Unknown")
+              groups[group] = groups.get(group, 0) + 1
+
+          print("")
+          print("GROUP COUNTS")
+
+          for group, count in sorted(groups.items()):
+              print(f"{group}: {count}")
+          PY
+          else
+            echo "students.json not found"
+          fi
+
+      # =====================================================
+      # PREPARE LARGE JSON FILES
+      # =====================================================
+
+      - name: Prepare large JSON files
+        run: |
+          python <<'PY'
+          import json
+          import os
+          import math
+
+          BASE = "scraper"
+
+          MAX_BYTES = 45 * 1024 * 1024
+
+          FILES = [
+              (
+                  "students.json",
+                  "students_parts",
+                  "students_manifest.json"
+              ),
+              (
+                  "student_ranking.json",
+                  "student_ranking_parts",
+                  "student_ranking_manifest.json"
+              )
+          ]
+
+          def write_json(path, data):
+              with open(
+                  path,
+                  "w",
+                  encoding="utf-8"
+              ) as f:
+                  json.dump(
+                      data,
+                      f,
+                      ensure_ascii=False,
+                      separators=(",", ":")
+                  )
+
+          for filename, parts_dir, manifest_name in FILES:
+
+              source = os.path.join(
+                  BASE,
+                  filename
+              )
+
+              output_dir = os.path.join(
+                  BASE,
+                  parts_dir
+              )
+
+              if not os.path.exists(source):
+                  print(
+                      f"Skipping {source}: file not found"
+                  )
+                  continue
+
+              source_size = os.path.getsize(source)
+
+              print("")
+              print("=" * 70)
+              print(f"Processing: {source}")
+              print(
+                  f"Original size: "
+                  f"{source_size / 1024 / 1024:.2f} MB"
+              )
+              print("=" * 70)
+
+              # -------------------------------------------------
+              # SMALL FILE
+              # -------------------------------------------------
+
+              if source_size <= MAX_BYTES:
+
+                  print(
+                      f"{filename} is below "
+                      f"{MAX_BYTES / 1024 / 1024:.0f} MB."
+                  )
+
+                  continue
+
+              # -------------------------------------------------
+              # LOAD JSON
+              # -------------------------------------------------
+
+              print("Loading JSON...")
+
+              with open(
+                  source,
+                  "r",
+                  encoding="utf-8"
+              ) as f:
+                  data = json.load(f)
+
+              # -------------------------------------------------
+              # DETECT ARRAY
+              # -------------------------------------------------
+
+              if isinstance(data, list):
+
+                  records = data
+                  wrapper_key = None
+
+              elif isinstance(data, dict):
+
+                  wrapper_key = None
+
+                  for key, value in data.items():
+
+                      if isinstance(value, list):
+                          wrapper_key = key
+                          break
+
+                  if wrapper_key is None:
+                      raise ValueError(
+                          f"No JSON array found in {source}"
+                      )
+
+                  records = data[wrapper_key]
+
+              else:
+
+                  raise ValueError(
+                      f"Unsupported JSON structure: {source}"
+                  )
+
+              total = len(records)
+
+              print(
+                  f"Total records: {total:,}"
+              )
+
+              os.makedirs(
+                  output_dir,
+                  exist_ok=True
+              )
+
+              # -------------------------------------------------
+              # REMOVE OLD PARTS
+              # -------------------------------------------------
+
+              for old in os.listdir(output_dir):
+
+                  old_path = os.path.join(
+                      output_dir,
+                      old
+                  )
+
+                  if os.path.isfile(old_path):
+                      os.remove(old_path)
+
+              # -------------------------------------------------
+              # ESTIMATE PARTS
+              # -------------------------------------------------
+
+              estimated_parts = max(
+                  2,
+                  math.ceil(
+                      source_size /
+                      (40 * 1024 * 1024)
+                  )
+              )
+
+              # -------------------------------------------------
+              # CREATE PARTS
+              # -------------------------------------------------
+
+              while True:
+
+                  chunk_size = math.ceil(
+                      total /
+                      estimated_parts
+                  )
+
+                  print("")
+                  print(
+                      f"Trying {estimated_parts} parts "
+                      f"({chunk_size:,} records/part)"
+                  )
+
+                  created = []
+
+                  for part_number, start in enumerate(
+                      range(
+                          0,
+                          total,
+                          chunk_size
+                      ),
+                      start=1
+                  ):
+
+                      end = min(
+                          start + chunk_size,
+                          total
+                      )
+
+                      part_records = records[start:end]
+
+                      if wrapper_key is None:
+
+                          output_data = part_records
+
+                      else:
+
+                          output_data = {
+                              wrapper_key:
+                                  part_records
+                          }
+
+                      part_filename = (
+                          f"part_{part_number:04d}.json"
+                      )
+
+                      part_path = os.path.join(
+                          output_dir,
+                          part_filename
+                      )
+
+                      write_json(
+                          part_path,
+                          output_data
+                      )
+
+                      size = os.path.getsize(
+                          part_path
+                      )
+
+                      created.append(
+                          (
+                              part_path,
+                              len(part_records),
+                              size
+                          )
+                      )
+
+                      print(
+                          f"{part_filename}: "
+                          f"{len(part_records):,} records "
+                          f"({size / 1024 / 1024:.2f} MB)"
+                      )
+
+                  oversized = [
+                      item
+                      for item in created
+                      if item[2] > MAX_BYTES
+                  ]
+
+                  if not oversized:
+                      break
+
+                  print(
+                      "Some parts are still too large."
+                  )
+
+                  for path, _, _ in created:
+
+                      if os.path.exists(path):
+                          os.remove(path)
+
+                  estimated_parts *= 2
+
+              # -------------------------------------------------
+              # MANIFEST
+              # -------------------------------------------------
+
+              manifest = {
+                  "source": filename,
+                  "total_records": total,
+                  "parts": []
+              }
+
+              for path, count, size in created:
+
+                  manifest["parts"].append(
+                      {
+                          "file": os.path.relpath(
+                              path,
+                              "."
+                          ),
+                          "records": count,
+                          "size_mb": round(
+                              size / 1024 / 1024,
+                              2
+                          )
+                      }
+                  )
+
+              manifest_path = os.path.join(
+                  BASE,
+                  manifest_name
+              )
+
+              with open(
+                  manifest_path,
+                  "w",
+                  encoding="utf-8"
+              ) as f:
+
+                  json.dump(
+                      manifest,
+                      f,
+                      ensure_ascii=False,
+                      indent=2
+                  )
+
+              print("")
+              print(
+                  f"Finished {filename}"
+              )
+
+              print(
+                  f"Total records: {total:,}"
+              )
+
+              print(
+                  f"Parts created: {len(created)}"
+              )
+
+          # =====================================================
+          # FINAL SIZE CHECK
+          # =====================================================
+
+          print("")
+          print("=" * 70)
+          print("FINAL JSON SIZE CHECK")
+          print("=" * 70)
+
+          failed = False
+
+          for root, dirs, files in os.walk(BASE):
+
+              for name in files:
+
+                  if not name.endswith(".json"):
+                      continue
+
+                  path = os.path.join(
+                      root,
+                      name
+                  )
+
+                  size = os.path.getsize(path)
+
+                  size_mb = (
+                      size /
+                      1024 /
+                      1024
+                  )
+
+                  if size >= 100 * 1024 * 1024:
+
+                      if name in (
+                          "students.json",
+                          "student_ranking.json"
+                      ):
+
+                          print(
+                              f"ARTIFACT ONLY: {path} "
+                              f"= {size_mb:.2f} MB"
+                          )
+
+                          continue
+
+                      print(
+                          f"ERROR: {path} "
+                          f"= {size_mb:.2f} MB"
+                      )
+
+                      failed = True
+
+                  else:
+
+                      print(
+                          f"OK: {path} "
+                          f"= {size_mb:.2f} MB"
+                      )
+
+          if failed:
+              raise RuntimeError(
+                  "GitHub-bound JSON file exceeds 100 MB."
+              )
+
+          print("")
+          print("All GitHub-bound JSON files are valid.")
+          PY
+
+      # =====================================================
+      # CHECK GIT SIZE
+      # =====================================================
+
+      - name: Check files before commit
+        run: |
+          echo "========================================"
+          echo "FILES TO COMMIT"
+          echo "========================================"
+
+          find scraper -type f -printf '%s %p\n' | sort -nr | head -30
+
+      # =====================================================
+      # COMMIT
+      # =====================================================
+
+      - name: Commit updated ranking data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          echo "========================================"
+          echo "PREPARING COMMIT"
+          echo "========================================"
+
+          # Add everything first.
+          git add scraper/
+
+          # NEVER commit the huge original files.
+          git restore --staged scraper/students.json 2>/dev/null || true
+          git restore --staged scraper/student_ranking.json 2>/dev/null || true
+
+          # Keep them locally for artifact upload.
+          git restore scraper/students.json 2>/dev/null || true
+          git restore scraper/student_ranking.json 2>/dev/null || true
+
+          echo ""
+          echo "STAGED FILES:"
+          git status --short
+
+          if git diff --cached --quiet; then
+              echo ""
+              echo "No changes to commit."
+              exit 0
+          fi
+
+          echo ""
+          echo "COMMITTING..."
+
+          git commit -m "Update SSC ranking data"
+
+      # =====================================================
+      # SYNC
+      # =====================================================
+
+      - name: Sync with latest main
+        run: |
+          echo "Fetching latest main..."
+
+          git fetch origin main
+
+          echo "Rebasing..."
+
+          git rebase origin/main
+
+      # =====================================================
+      # PUSH
+      # =====================================================
+
+      - name: Push updated SSC data
+        run: |
+          echo "========================================"
+          echo "PUSHING UPDATED DATA"
+          echo "========================================"
+
+          git push origin HEAD:main
+
+          echo ""
+          echo "========================================"
+          echo "SSC DATA PUSHED SUCCESSFULLY"
+          echo "========================================"
+
+      # =====================================================
+      # FINAL COUNT
+      # =====================================================
+
+      - name: Final student count
+        if: always()
+        run: |
+          echo "========================================"
+          echo "FINAL STUDENT DATA"
+          echo "========================================"
+
+          if [ -f scraper/students.json ]; then
+
+            python - <<'PY'
+          import json
+
+          with open(
+              "scraper/students.json",
+              "r",
+              encoding="utf-8"
+          ) as f:
+              students = json.load(f)
+
+          print(
+              "Final total students:",
+              len(students)
+          )
+
+          if students:
+
+              print(
+                  "First roll:",
+                  students[0].get("roll")
+              )
+
+              print(
+                  "Last roll:",
+                  students[-1].get("roll")
+              )
+          PY
+
+          else
+
+            echo "students.json not found"
+
+          fi
+
+      # =====================================================
+      # BACKUP
+      # =====================================================
+
+      - name: Upload SSC data backup
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ssc-data
+          path: scraper/
+          if-no-files-found: warn
