@@ -781,65 +781,111 @@ return String(value ?? "")
 
 
 /* =========================================================
+   DISTRICT VALUE
+   Handles all common JSON field names
+========================================================= */
+
+function getDistrict(item){
+
+const possible = [
+
+item?.district,
+item?.DISTRICT,
+item?.district_name,
+item?.districtName,
+item?.District,
+item?.DistrictName,
+item?.["District Name"]
+
+];
+
+for(const value of possible){
+
+if(
+value !== undefined &&
+value !== null &&
+String(value).trim() !== ""
+){
+
+return String(value).trim();
+
+}
+
+}
+
+return "";
+
+}
+
+
+/* =========================================================
    NORMALIZE RECORD
 ========================================================= */
 
 function normalizeInstitution(item){
 
+const districtValue =
+getDistrict(item);
+
+
 return {
 
 eiin:
 String(
-item.eiin ??
-item.EIIN ??
+item?.eiin ??
+item?.EIIN ??
 ""
 ).trim(),
 
 name:
 String(
-item.institution_name ??
-item.institution ??
-item.institute ??
-item.name ??
+item?.institution_name ??
+item?.institution ??
+item?.institute ??
+item?.name ??
 "Unknown Institution"
 ).trim(),
 
 district:
-String(
-item.district ??
-""
-).trim(),
+districtValue,
 
 thana:
 String(
-item.thana ??
-item.upazila ??
+item?.thana ??
+item?.upazila ??
+item?.Thana ??
+item?.upazila_name ??
 ""
 ).trim(),
 
 appeared:
 num(
-item.appeared
+item?.appeared ??
+item?.Appeared
 ),
 
 passed:
 num(
-item.passed
+item?.passed ??
+item?.Passed
 ),
 
 passingRate:
 num(
-item.passing_rate ??
-item.passingRate ??
-item.pass_rate ??
-item.passRate
+item?.passing_rate ??
+item?.passingRate ??
+item?.pass_rate ??
+item?.passRate ??
+item?.PassingRate ??
+item?.["Passing Rate"]
 ),
 
 gpa5:
 num(
-item.gpa5 ??
-item.gpa_5 ??
-item.GPA5
+item?.gpa5 ??
+item?.gpa_5 ??
+item?.GPA5 ??
+item?.GPA_5
 )
 
 };
@@ -901,14 +947,9 @@ return true;
 /*
    RANKING
 
-   Primary:
-   Total GPA / GPA5
-
-   Secondary:
-   Passing Rate
-
-   Third:
-   Passed Students
+   1. Total GPA / GPA5
+   2. Passing Rate
+   3. Passed Students
 */
 
 result.sort(
@@ -959,20 +1000,53 @@ return result;
 
 /* =========================================================
    POPULATE DISTRICTS
+   IMPORTANT:
+   Districts come ONLY from institution JSON
 ========================================================= */
 
 function populateDistricts(){
 
-const districts = [
-...new Set(
-data
-.map(item => item.district)
-.filter(
-value =>
-String(value).trim()
-)
-)
-].sort(
+const uniqueMap =
+new Map();
+
+
+for(const item of data){
+
+const value =
+getDistrict(item);
+
+
+if(
+!value
+){
+
+continue;
+
+}
+
+
+const key =
+norm(value);
+
+
+if(
+!uniqueMap.has(key)
+){
+
+uniqueMap.set(
+key,
+value
+);
+
+}
+
+}
+
+
+const districts =
+Array.from(
+uniqueMap.values()
+).sort(
 (a,b)=>
 norm(a).localeCompare(
 norm(b)
@@ -982,6 +1056,7 @@ norm(b)
 
 districtSelect.innerHTML = "";
 
+
 const all =
 document.createElement("option");
 
@@ -990,11 +1065,14 @@ all.value = "";
 all.textContent =
 "All Districts";
 
-districtSelect.appendChild(all);
+districtSelect.appendChild(
+all
+);
 
 
-districts.forEach(
-name => {
+for(
+const name of districts
+){
 
 const option =
 document.createElement(
@@ -1011,7 +1089,24 @@ districtSelect.appendChild(
 option
 );
 
-});
+}
+
+
+/*
+   Console check:
+   This lets you verify all districts
+   are actually being loaded.
+*/
+
+console.log(
+"Districts loaded:",
+districts
+);
+
+console.log(
+"Total districts:",
+districts.length
+);
 
 }
 
@@ -1124,7 +1219,7 @@ ${esc(item.name)}
 ${item.eiin
 ? "EIIN: " +
 esc(item.eiin)
-: ""
+: "EIIN: —"
 }
 
 ${item.thana
@@ -1182,11 +1277,19 @@ rows.appendChild(row);
 });
 
 
+/* =====================================================
+   TITLE
+===================================================== */
+
 title.textContent =
 district
 ? `${district} Institution Ranking`
 : "All District Institutions";
 
+
+/* =====================================================
+   INFO
+===================================================== */
 
 info.textContent =
 `2026 · Chattogram Board · ${
@@ -1208,6 +1311,21 @@ list.length.toLocaleString(
 async function load(){
 
 try{
+
+rows.innerHTML = `
+
+<div class="message loading-message">
+
+<div class="loading-spinner"></div>
+
+<span>
+Loading institutions...
+</span>
+
+</div>
+
+`;
+
 
 const response =
 await fetch(
@@ -1231,12 +1349,12 @@ const json =
 await response.json();
 
 
+let raw = [];
+
+
 if(Array.isArray(json)){
 
-data =
-json.map(
-normalizeInstitution
-);
+raw = json;
 
 }
 
@@ -1247,10 +1365,8 @@ json.institutions
 )
 ){
 
-data =
-json.institutions.map(
-normalizeInstitution
-);
+raw =
+json.institutions;
 
 }
 
@@ -1261,10 +1377,8 @@ json.results
 )
 ){
 
-data =
-json.results.map(
-normalizeInstitution
-);
+raw =
+json.results;
 
 }
 
@@ -1275,21 +1389,53 @@ json.data
 )
 ){
 
-data =
-json.data.map(
-normalizeInstitution
-);
+raw =
+json.data;
 
 }
 
 else{
 
-data = [];
+raw = [];
 
 }
 
 
+/*
+   Normalize every record.
+*/
+
+data =
+raw.map(
+normalizeInstitution
+);
+
+
+/*
+   Remove only completely invalid
+   institution records.
+*/
+
+data =
+data.filter(
+item =>
+item.name ||
+item.eiin
+);
+
+
+/*
+   IMPORTANT:
+   Build district dropdown AFTER
+   normalizing every institution.
+*/
+
 populateDistricts();
+
+
+/*
+   Render ranking.
+*/
 
 render();
 
@@ -1523,7 +1669,9 @@ const h =
 doc.internal.pageSize.getHeight();
 
 
-/* HEADER */
+/* =====================================================
+   HEADER
+===================================================== */
 
 doc.setFillColor(
 248,
@@ -1596,7 +1744,9 @@ align:"right"
 );
 
 
-/* TITLE */
+/* =====================================================
+   TITLE
+===================================================== */
 
 doc.setTextColor(
 17,
@@ -1640,9 +1790,9 @@ district ||
 );
 
 
-/* PDF BODY
-   CURRENT PAGE ONLY
-*/
+/* =====================================================
+   PDF BODY — CURRENT 100 ONLY
+===================================================== */
 
 const body =
 current.map(
@@ -1658,7 +1808,7 @@ start + index + 1
 item.eiin
 ? "EIIN: " +
 item.eiin
-: ""
+: "EIIN: —"
 }`,
 
 item.gpa5
@@ -1821,7 +1971,9 @@ align:"right"
 });
 
 
-/* FILE NAME */
+/* =====================================================
+   FILE NAME
+===================================================== */
 
 const safeDistrict =
 (
@@ -1842,7 +1994,9 @@ doc.save(
 });
 
 
-/* START */
+/* =========================================================
+   START
+========================================================= */
 
 load();
 
