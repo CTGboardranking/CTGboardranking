@@ -1,0 +1,404 @@
+name: Supabase SSC Upload
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: supabase-ssc-upload
+  cancel-in-progress: false
+
+jobs:
+  upload:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # ================================================
+      # CHECKOUT
+      # ================================================
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      # ================================================
+      # PYTHON
+      # ================================================
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      # ================================================
+      # DEPENDENCIES
+      # ================================================
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      # ================================================
+      # CHECK SECRETS
+      # ================================================
+
+      - name: Check Supabase configuration
+        env:
+          SUPABASE_URL: ${{ secrets.https://mpnjnyejpqeqguxikvnl.supabase.co }}
+          SUPABASE_KEY: ${{ secrets.sb_publishable_6Pm2-m3BeYB8VDw4kwCccg_WnYe5-IT }}
+        run: |
+
+          echo "=============================================="
+          echo "CHECKING SUPABASE CONFIGURATION"
+          echo "=============================================="
+
+          if [ -z "$SUPABASE_URL" ]; then
+            echo "ERROR: SUPABASE_URL secret is missing."
+            exit 1
+          fi
+
+          if [ -z "$SUPABASE_KEY" ]; then
+            echo "ERROR: SUPABASE_KEY secret is missing."
+            exit 1
+          fi
+
+          echo "SUPABASE_URL configured."
+          echo "SUPABASE_KEY configured."
+
+      # ================================================
+      # CHECK DATA
+      # ================================================
+
+      - name: Check students.json
+        run: |
+
+          echo "=============================================="
+          echo "CHECKING STUDENT DATA"
+          echo "=============================================="
+
+          if [ ! -f scraper/students.json ]; then
+            echo "ERROR: scraper/students.json not found."
+            exit 1
+          fi
+
+          python - <<'PY'
+
+          import json
+          import os
+
+          path = "scraper/students.json"
+
+          with open(
+              path,
+              "r",
+              encoding="utf-8"
+          ) as f:
+              students = json.load(f)
+
+          if not isinstance(students, list):
+              raise SystemExit(
+                  "students.json must contain a list."
+              )
+
+          print(
+              "Total students:",
+              len(students)
+          )
+
+          print(
+              "File size:",
+              round(
+                  os.path.getsize(path)
+                  / 1024 / 1024,
+                  2
+              ),
+              "MB"
+          )
+
+          if students:
+
+              print(
+                  "First roll:",
+                  students[0].get("roll")
+              )
+
+              print(
+                  "Last roll:",
+                  students[-1].get("roll")
+              )
+
+          PY
+
+      # ================================================
+      # CHECK UPLOADER
+      # ================================================
+
+      - name: Validate upload script
+        run: |
+
+          if [ ! -f scraper/upload_to_supabase.py ]; then
+
+            echo "ERROR:"
+            echo "scraper/upload_to_supabase.py not found."
+
+            exit 1
+
+          fi
+
+          python -m py_compile \
+            scraper/upload_to_supabase.py
+
+          echo "Upload script syntax OK."
+
+      # ================================================
+      # UPLOAD TO SUPABASE
+      # ================================================
+
+      - name: Upload SSC data
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+
+          echo "=============================================="
+          echo "STARTING SUPABASE UPLOAD"
+          echo "=============================================="
+
+          python scraper/upload_to_supabase.py
+
+      # ================================================
+      # SHOW CHECKPOINT
+      # ================================================
+
+      - name: Show checkpoint
+        if: always()
+        run: |
+
+          echo "=============================================="
+          echo "SUPABASE CHECKPOINT"
+          echo "=============================================="
+
+          if [ -f scraper/supabase_upload_checkpoint.json ]; then
+
+            cat \
+              scraper/supabase_upload_checkpoint.json
+
+          else
+
+            echo "Checkpoint not found."
+
+          fi
+
+      # ================================================
+      # VALIDATE CHECKPOINT
+      # ================================================
+
+      - name: Validate checkpoint
+        if: always()
+        run: |
+
+          if [ ! -f scraper/supabase_upload_checkpoint.json ]; then
+            exit 0
+          fi
+
+          python - <<'PY'
+
+          import json
+
+          path = (
+              "scraper/"
+              "supabase_upload_checkpoint.json"
+          )
+
+          with open(
+              path,
+              "r",
+              encoding="utf-8"
+          ) as f:
+
+              data = json.load(f)
+
+          total = int(
+              data.get("total", 0)
+          )
+
+          uploaded = int(
+              data.get("uploaded", 0)
+          )
+
+          index = int(
+              data.get("last_index", 0)
+          )
+
+          remaining = max(
+              total - index,
+              0
+          )
+
+          print("Total:", total)
+          print("Uploaded:", uploaded)
+          print("Last index:", index)
+          print("Remaining:", remaining)
+
+          PY
+
+      # ================================================
+      # COMMIT CHECKPOINT
+      # ================================================
+
+      - name: Commit checkpoint
+        if: always()
+        run: |
+
+          git config user.name \
+            "github-actions[bot]"
+
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add \
+            scraper/supabase_upload_checkpoint.json \
+            2>/dev/null || true
+
+          if git diff --cached --quiet; then
+
+            echo "No checkpoint changes."
+
+          else
+
+            git commit \
+              -m "Update Supabase upload checkpoint"
+
+          fi
+
+      # ================================================
+      # SYNC MAIN
+      # ================================================
+
+      - name: Sync latest main
+        if: always()
+        run: |
+
+          git fetch origin main
+
+          git rebase origin/main
+
+      # ================================================
+      # PUSH
+      # ================================================
+
+      - name: Push checkpoint
+        if: always()
+        run: |
+
+          echo "=============================================="
+          echo "PUSHING CHECKPOINT"
+          echo "=============================================="
+
+          git push origin HEAD:main
+
+          echo "Checkpoint pushed successfully."
+
+      # ================================================
+      # BACKUP CHECKPOINT
+      # ================================================
+
+      - name: Upload checkpoint artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: supabase-upload-checkpoint
+          path: |
+            scraper/supabase_upload_checkpoint.json
+          if-no-files-found: warn
+          retention-days: 30
+
+      # ================================================
+      # FINAL STATUS
+      # ================================================
+
+      - name: Final upload status
+        if: always()
+        run: |
+
+          echo "=============================================="
+          echo "FINAL SUPABASE UPLOAD STATUS"
+          echo "=============================================="
+
+          if [ -f scraper/supabase_upload_checkpoint.json ]; then
+
+            python - <<'PY'
+
+          import json
+
+          path = (
+              "scraper/"
+              "supabase_upload_checkpoint.json"
+          )
+
+          with open(
+              path,
+              "r",
+              encoding="utf-8"
+          ) as f:
+
+              data = json.load(f)
+
+          total = int(
+              data.get("total", 0)
+          )
+
+          uploaded = int(
+              data.get("uploaded", 0)
+          )
+
+          index = int(
+              data.get("last_index", 0)
+          )
+
+          remaining = max(
+              total - index,
+              0
+          )
+
+          print("Total records:", total)
+          print("Uploaded:", uploaded)
+          print("Current index:", index)
+          print("Remaining:", remaining)
+
+          if remaining == 0:
+
+              print("")
+              print(
+                  "ALL SSC DATA UPLOADED TO SUPABASE."
+              )
+
+          else:
+
+              print("")
+              print(
+                  "UPLOAD INCOMPLETE."
+              )
+
+              print(
+                  "Run workflow again to resume."
+              )
+
+          PY
+
+          else
+
+            echo "Checkpoint not found."
+
+          fi
+
+          echo "=============================================="
+          echo "WORKFLOW FINISHED"
+          echo "=============================================="
