@@ -1,382 +1,1663 @@
-name: SSC Test
-
-on:
-  workflow_dispatch:
-
-permissions:
-  contents: write
-
-concurrency:
-  group: ssc-ranking-update
-  cancel-in-progress: false
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-
-      # =====================================================
-      # CHECKOUT
-      # =====================================================
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: main
-
-      # =====================================================
-      # PYTHON
-      # =====================================================
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests beautifulsoup4
-
-      # =====================================================
-      # SHOW EXISTING DATA
-      # =====================================================
-
-      - name: Show existing collection
-        run: |
-          echo "========================================"
-          echo "EXISTING SSC DATA"
-          echo "========================================"
-
-          if [ -f scraper/students.json ]; then
-            python - <<'PY'
-          import json
-
-          path = "scraper/students.json"
-
-          with open(path, "r", encoding="utf-8") as f:
-              data = json.load(f)
-
-          if isinstance(data, list):
-              print("Existing students:", len(data))
-
-              if data:
-                  print("First roll:", data[0].get("roll"))
-                  print("Last roll:", data[-1].get("roll"))
-          else:
-              print("ERROR: students.json is not a list")
-          PY
-          else
-            echo "students.json not found"
-          fi
-
-      # =====================================================
-      # RUN SSC COLLECTION
-      # =====================================================
-
-      - name: Run SSC data collection
-        run: |
-          python scraper/ssc_test.py
-
-      # =====================================================
-      # GENERATE INSTITUTION STATISTICS
-      # =====================================================
-
-      - name: Generate institution statistics
-        run: |
-          python scraper/institution_stats.py
-
-      # =====================================================
-      # CONVERT INSTITUTION CSV
-      # =====================================================
-
-      - name: Convert institution CSV
-        run: |
-          python scraper/csv_to_institutions.py
-
-      # =====================================================
-      # VALIDATE INSTITUTION DATA
-      # =====================================================
-
-      - name: Validate institution data
-        run: |
-          python scraper/ranking_validator.py
-
-      # =====================================================
-      # INSTITUTION RANKING
-      # =====================================================
-
-      - name: Calculate institution ranking
-        run: |
-          python scraper/ranking_engine.py
-
-      # =====================================================
-      # DISTRICT RANKING
-      # =====================================================
-
-      - name: Calculate district ranking
-        run: |
-          python scraper/district_ranking.py
-
-      # =====================================================
-      # STUDENT RANKING
-      # =====================================================
-
-      - name: Calculate student ranking
-        run: |
-          python scraper/student_ranking.py
-
-      # =====================================================
-      # YEAR RANKING
-      # =====================================================
-
-      - name: Calculate year-wise ranking
-        run: |
-          python scraper/year_ranking.py
-
-      # =====================================================
-      # BOARD RANKING
-      # =====================================================
-
-      - name: Calculate board ranking
-        run: |
-          python scraper/board_ranking.py
+import os
+import json
+import time
+import random
+import re
 
-      # =====================================================
-      # COLLECTION SUMMARY
-      # =====================================================
-
-      - name: Show collection summary
-        if: always()
-        run: |
-          echo "========================================"
-          echo "SSC COLLECTION SUMMARY"
-          echo "========================================"
+import requests
 
-          if [ -f scraper/student_collection_summary.json ]; then
-            cat scraper/student_collection_summary.json
-          else
-            echo "student_collection_summary.json not found"
-          fi
-
-          echo ""
-          echo "========================================"
-          echo "STUDENT COUNT"
-          echo "========================================"
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
 
-          if [ -f scraper/students.json ]; then
-            python - <<'PY'
-          import json
 
-          path = "scraper/students.json"
-
-          with open(path, "r", encoding="utf-8") as f:
-              data = json.load(f)
+# ============================================================
+# CONFIG
+# ============================================================
 
-          print("Total students:", len(data))
+BASE_URL = (
+    "https://sresult.bise-ctg.gov.bd/"
+    "to_ssc_26_ctg/"
+)
 
-          if data:
-              print("First roll:", data[0].get("roll"))
-              print("Last roll:", data[-1].get("roll"))
+INDIVIDUAL_URL = (
+    BASE_URL +
+    "individual/"
+)
 
-          groups = {}
+OUTPUT_DIR = "scraper"
 
-          for s in data:
-              g = s.get("group", "Unknown")
-              groups[g] = groups.get(g, 0) + 1
+STUDENTS_FILE = os.path.join(
+    OUTPUT_DIR,
+    "students.json"
+)
 
-          print("")
-          print("GROUP COUNTS")
+SUMMARY_FILE = os.path.join(
+    OUTPUT_DIR,
+    "student_collection_summary.json"
+)
 
-          for group, count in groups.items():
-              print(f"{group}: {count}")
-          PY
-          else
-            echo "students.json not found"
-          fi
+FAILED_FILE = os.path.join(
+    OUTPUT_DIR,
+    "failed_rolls.json"
+)
 
-      # =====================================================
-      # CHECK JSON FILES
-      # =====================================================
 
-      - name: Validate JSON files
-        run: |
-          python - <<'PY'
-          import json
-          import os
+# ============================================================
+# ROLL RANGES
+# ============================================================
 
-          files = []
+ROLL_RANGES = {
 
-          for root, dirs, names in os.walk("scraper"):
-              for name in names:
-                  if name.endswith(".json"):
-                      files.append(
-                          os.path.join(root, name)
-                      )
+    "Science": (
+        100001,
+        132961
+    ),
 
-          failed = False
+    "Science Irregular": (
+        700001,
+        723917
+    ),
 
-          for path in files:
+    "Humanities": (
+        300001,
+        331193
+    ),
 
-              try:
-                  with open(
-                      path,
-                      "r",
-                      encoding="utf-8"
-                  ) as f:
-                      json.load(f)
+    "Business Studies": (
+        500001,
+        541800
+    ),
+}
 
-                  size = os.path.getsize(path)
 
-                  print(
-                      f"OK: {path} "
-                      f"({size / 1024 / 1024:.2f} MB)"
-                  )
+# ============================================================
+# COLLECTION SETTINGS
+# ============================================================
 
-              except Exception as e:
+BATCH_SIZE = 1000
 
-                  print(
-                      f"ERROR: {path} -> {e}"
-                  )
+SAVE_EVERY = 600
 
-                  failed = True
+MIN_DELAY = 0.10
 
-          if failed:
-              raise SystemExit(
-                  "JSON validation failed."
-              )
+MAX_DELAY = 0.20
 
-          print("")
-          print("All JSON files are valid.")
-          PY
+REQUEST_TIMEOUT = (
+    5,
+    15
+)
 
-      # =====================================================
-      # COMMIT EVERYTHING
-      # =====================================================
+YEAR = 2026
 
-      - name: Commit updated SSC data
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+BOARD = "Chattogram Board"
 
-          echo "========================================"
-          echo "GIT STATUS BEFORE COMMIT"
-          echo "========================================"
-
-          git status --short
 
-          # IMPORTANT:
-          # Do NOT exclude students.json.
-          # Do NOT restore students.json.
-          # Do NOT remove student_ranking.json.
-
-          git add scraper/
+# ============================================================
+# HEADERS
+# ============================================================
 
-          echo ""
-          echo "========================================"
-          echo "STAGED FILES"
-          echo "========================================"
-
-          git status --short
-
-          if git diff --cached --quiet; then
-            echo ""
-            echo "No changes to commit."
-            exit 0
-          fi
-
-          echo ""
-          echo "========================================"
-          echo "COMMIT"
-          echo "========================================"
-
-          git commit -m "Update SSC ranking data"
-
-      # =====================================================
-      # SYNC WITH MAIN
-      # =====================================================
-
-      - name: Sync with latest main
-        run: |
-          echo "Fetching latest main..."
-
-          git fetch origin main
-
-          echo "Rebasing..."
-
-          git rebase origin/main
-
-      # =====================================================
-      # PUSH
-      # =====================================================
-
-      - name: Push updated SSC data
-        run: |
-          echo "========================================"
-          echo "PUSHING UPDATED DATA"
-          echo "========================================"
-
-          git push origin HEAD:main
-
-          echo ""
-          echo "========================================"
-          echo "✓ SSC DATA PUSHED SUCCESSFULLY"
-          echo "========================================"
-
-      # =====================================================
-      # FINAL CHECK
-      # =====================================================
-
-      - name: Final student count
-        if: always()
-        run: |
-          echo "========================================"
-          echo "FINAL STUDENT DATA"
-          echo "========================================"
-
-          if [ -f scraper/students.json ]; then
-
-            python - <<'PY'
-          import json
-
-          with open(
-              "scraper/students.json",
-              "r",
-              encoding="utf-8"
-          ) as f:
-              students = json.load(f)
-
-          print(
-              "Final total students:",
-              len(students)
-          )
-
-          if students:
-              print(
-                  "First roll:",
-                  students[0].get("roll")
-              )
-
-              print(
-                  "Last roll:",
-                  students[-1].get("roll")
-              )
-          PY
-
-          else
-            echo "students.json not found"
-          fi
-
-      # =====================================================
-      # BACKUP
-      # =====================================================
-
-      - name: Upload SSC data backup
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: ssc-data
-          path: scraper/
-          if-no-files-found: warn
+HEADERS = {
+
+    "User-Agent": (
+        "Mozilla/5.0 "
+        "(Linux; Android 10; Mobile) "
+        "AppleWebKit/537.36 "
+        "(KHTML, like Gecko) "
+        "Chrome/131.0.0.0 "
+        "Mobile Safari/537.36"
+    ),
+
+    "Accept": (
+        "text/html,"
+        "application/xhtml+xml,"
+        "application/xml;q=0.9,"
+        "*/*;q=0.8"
+    ),
+
+    "Accept-Language":
+        "en-US,en;q=0.9",
+
+    "Connection":
+        "keep-alive",
+}
+
+
+# ============================================================
+# DIRECTORY
+# ============================================================
+
+os.makedirs(
+    OUTPUT_DIR,
+    exist_ok=True
+)
+
+
+# ============================================================
+# SESSION
+# ============================================================
+
+session = requests.Session()
+
+session.headers.update(
+    HEADERS
+)
+
+
+# ============================================================
+# HELPERS
+# ============================================================
+
+def clean_text(value):
+
+    if value is None:
+        return ""
+
+    return " ".join(
+        str(value).split()
+    ).strip()
+
+
+def save_json(filename, data):
+
+    path = os.path.join(
+        OUTPUT_DIR,
+        filename
+    )
+
+    temp_path = (
+        path +
+        ".tmp"
+    )
+
+    with open(
+        temp_path,
+        "w",
+        encoding="utf-8"
+    ) as f:
+
+        json.dump(
+            data,
+            f,
+            ensure_ascii=False,
+            indent=2
+        )
+
+    os.replace(
+        temp_path,
+        path
+    )
+
+
+def load_json(filename, default):
+
+    path = os.path.join(
+        OUTPUT_DIR,
+        filename
+    )
+
+    if not os.path.exists(path):
+
+        return default
+
+    try:
+
+        with open(
+            path,
+            "r",
+            encoding="utf-8"
+        ) as f:
+
+            return json.load(f)
+
+    except Exception as e:
+
+        print(
+            f"Could not load "
+            f"{filename}: {e}",
+            flush=True
+        )
+
+        return default
+
+
+# ============================================================
+# GPA
+# ============================================================
+
+def parse_gpa(value):
+
+    value = clean_text(value)
+
+    if not value:
+        return None
+
+    upper = value.upper()
+
+    patterns = [
+        r"GPA\s*=\s*([0-9.]+)",
+        r"GPA\s*:\s*([0-9.]+)",
+        r"\b([0-5]\.[0-9]{1,2})\b",
+    ]
+
+    for pattern in patterns:
+
+        match = re.search(
+            pattern,
+            upper
+        )
+
+        if match:
+
+            try:
+
+                return float(
+                    match.group(1)
+                )
+
+            except Exception:
+
+                pass
+
+    try:
+
+        return float(value)
+
+    except Exception:
+
+        return None
+
+
+# ============================================================
+# TOTAL SCORE
+# ============================================================
+
+def parse_total_score(soup):
+
+    text = clean_text(
+        soup.get_text(
+            " ",
+            strip=True
+        )
+    )
+
+    patterns = [
+
+        r"TOTAL\s*SCORE\s*[:=]?\s*([0-9]+)",
+
+        r"TOTAL\s*MARKS\s*[:=]?\s*([0-9]+)",
+
+        r"SCORE\s*[:=]?\s*([0-9]+)",
+
+    ]
+
+    upper = text.upper()
+
+    for pattern in patterns:
+
+        match = re.search(
+            pattern,
+            upper
+        )
+
+        if match:
+
+            try:
+
+                return int(
+                    match.group(1)
+                )
+
+            except Exception:
+
+                pass
+
+    return None
+
+
+# ============================================================
+# SUBJECT RESULT
+# ============================================================
+
+def parse_subject_result(value):
+
+    value = clean_text(value)
+
+    mark = None
+
+    grade = ""
+
+    if "(" in value:
+
+        mark_text = (
+            value
+            .split(
+                "(",
+                1
+            )[0]
+            .strip()
+        )
+
+        grade_text = (
+            value
+            .split(
+                "(",
+                1
+            )[1]
+            .replace(
+                ")",
+                ""
+            )
+            .strip()
+        )
+
+        try:
+
+            mark = int(
+                mark_text
+            )
+
+        except Exception:
+
+            pass
+
+        grade = grade_text
+
+    else:
+
+        try:
+
+            mark = int(
+                value
+            )
+
+        except Exception:
+
+            pass
+
+    return (
+        mark,
+        grade
+    )
+
+
+# ============================================================
+# LABEL VALUE
+# ============================================================
+
+def find_value_after_label(
+    values,
+    label
+):
+
+    label = (
+        label
+        .lower()
+        .strip()
+    )
+
+    for i, value in enumerate(values):
+
+        current = (
+            clean_text(value)
+            .lower()
+        )
+
+        if current == label:
+
+            if (
+                i + 1 <
+                len(values)
+            ):
+
+                return clean_text(
+                    values[i + 1]
+                )
+
+    return ""
+
+
+# ============================================================
+# DISTRICT FROM INSTITUTE
+# ============================================================
+
+def extract_district_from_institute(
+    institute
+):
+
+    institute = clean_text(
+        institute
+    )
+
+    if not institute:
+        return ""
+
+    known_districts = [
+
+        "CHITTAGONG",
+        "CHATTOGRAM",
+        "COX'S BAZAR",
+        "COXS BAZAR",
+        "COMILLA",
+        "CUMILLA",
+        "FENI",
+        "NOAKHALI",
+        "LAKSHMIPUR",
+        "LAKSHMIPUR",
+        "CHANDPUR",
+        "BRAHMANBARIA",
+        "RANGAMATI",
+        "KHAGRACHHARI",
+        "BANDARBAN",
+    ]
+
+    upper = institute.upper()
+
+    for district in known_districts:
+
+        if district in upper:
+
+            if district in (
+                "CHITTAGONG",
+                "CHATTOGRAM"
+            ):
+
+                return "Chattogram"
+
+            if district in (
+                "COX'S BAZAR",
+                "COXS BAZAR"
+            ):
+
+                return "Cox's Bazar"
+
+            if district in (
+                "COMILLA",
+                "CUMILLA"
+            ):
+
+                return "Cumilla"
+
+            if district == "LAKSHMIPUR":
+
+                return "Lakshmipur"
+
+            return district.title()
+
+    return ""
+
+
+# ============================================================
+# PARSE RESULT
+# ============================================================
+
+def parse_result(
+    html,
+    requested_roll,
+    group_name
+):
+
+    soup = BeautifulSoup(
+        html,
+        "html.parser"
+    )
+
+    result = {
+
+        "roll":
+            str(requested_roll),
+
+        "name":
+            "",
+
+        "board":
+            "",
+
+        "group":
+            group_name,
+
+        "session":
+            "",
+
+        "type":
+            "",
+
+        "institute":
+            "",
+
+        "district":
+            "",
+
+        "gpa":
+            None,
+
+        "total_score":
+            None,
+
+        "subjects":
+            [],
+    }
+
+
+    # ========================================================
+    # TABLE DATA
+    # ========================================================
+
+    for row in soup.find_all("tr"):
+
+        cells = row.find_all(
+            ["th", "td"]
+        )
+
+        values = [
+
+            clean_text(
+                cell.get_text(
+                    " ",
+                    strip=True
+                )
+            )
+
+            for cell in cells
+        ]
+
+        if not values:
+            continue
+
+
+        fields = [
+
+            ("Roll No", "roll"),
+
+            ("Name", "name"),
+
+            ("Board", "board"),
+
+            ("Group", "group"),
+
+            ("Session", "session"),
+
+            ("Type", "type"),
+
+            ("Institute", "institute"),
+
+            ("District", "district"),
+
+        ]
+
+
+        for label, key in fields:
+
+            value = (
+                find_value_after_label(
+                    values,
+                    label
+                )
+            )
+
+            if value:
+
+                result[key] = value
+
+
+        result_value = (
+            find_value_after_label(
+                values,
+                "Result"
+            )
+        )
+
+        if result_value:
+
+            gpa = parse_gpa(
+                result_value
+            )
+
+            if gpa is not None:
+
+                result["gpa"] = gpa
+
+
+    # ========================================================
+    # GPA FALLBACK
+    # ========================================================
+
+    if result["gpa"] is None:
+
+        page_text = clean_text(
+            soup.get_text(
+                " ",
+                strip=True
+            )
+        )
+
+        result["gpa"] = parse_gpa(
+            page_text
+        )
+
+
+    # ========================================================
+    # TOTAL SCORE
+    # ========================================================
+
+    result["total_score"] = (
+        parse_total_score(
+            soup
+        )
+    )
+
+
+    # ========================================================
+    # DISTRICT FALLBACK
+    # ========================================================
+
+    if not result["district"]:
+
+        result["district"] = (
+            extract_district_from_institute(
+                result["institute"]
+            )
+        )
+
+
+    # ========================================================
+    # SUBJECTS
+    # ========================================================
+
+    seen = set()
+
+    for table in soup.find_all("table"):
+
+        for row in table.find_all("tr"):
+
+            cells = row.find_all(
+                ["th", "td"]
+            )
+
+            values = [
+
+                clean_text(
+                    cell.get_text(
+                        " ",
+                        strip=True
+                    )
+                )
+
+                for cell in cells
+            ]
+
+            if len(values) < 3:
+                continue
+
+
+            code = values[0]
+
+            if not code.isdigit():
+                continue
+
+
+            subject = values[1]
+
+            mark, grade = (
+                parse_subject_result(
+                    values[2]
+                )
+            )
+
+
+            key = (
+                code,
+                subject
+            )
+
+            if key in seen:
+                continue
+
+            seen.add(key)
+
+
+            result["subjects"].append({
+
+                "code":
+                    code,
+
+                "subject":
+                    subject,
+
+                "mark":
+                    mark,
+
+                "grade":
+                    grade,
+
+            })
+
+
+    # ========================================================
+    # CLEAN
+    # ========================================================
+
+    for key in [
+
+        "roll",
+        "name",
+        "board",
+        "group",
+        "session",
+        "type",
+        "institute",
+        "district",
+
+    ]:
+
+        result[key] = clean_text(
+            result[key]
+        )
+
+
+    return result
+
+
+# ============================================================
+# GENERATE ROLLS
+# ============================================================
+
+def generate_rolls():
+
+    for group_name, (
+        start,
+        end
+    ) in ROLL_RANGES.items():
+
+        for roll in range(
+            start,
+            end + 1
+        ):
+
+            yield (
+                group_name,
+                roll
+            )
+
+
+# ============================================================
+# LOAD EXISTING
+# ============================================================
+
+students = load_json(
+    "students.json",
+    []
+)
+
+failed_rolls = load_json(
+    "failed_rolls.json",
+    []
+)
+
+
+if not isinstance(
+    students,
+    list
+):
+
+    students = []
+
+
+if not isinstance(
+    failed_rolls,
+    list
+):
+
+    failed_rolls = []
+
+
+# ============================================================
+# EXISTING ROLLS
+# ============================================================
+
+existing_rolls = set()
+
+for student in students:
+
+    roll = str(
+        student.get(
+            "roll",
+            ""
+        )
+    ).strip()
+
+    if roll:
+
+        existing_rolls.add(
+            roll
+        )
+
+
+# ============================================================
+# TARGET
+# ============================================================
+
+total_target = sum(
+
+    end - start + 1
+
+    for start, end
+    in ROLL_RANGES.values()
+
+)
+
+
+# ============================================================
+# START
+# ============================================================
+
+print(
+    "=" * 70,
+    flush=True
+)
+
+print(
+    "SSC 2026 STUDENT DATA COLLECTOR",
+    flush=True
+)
+
+print(
+    "=" * 70,
+    flush=True
+)
+
+print(
+    "Target rolls:",
+    total_target,
+    flush=True
+)
+
+print(
+    "Already collected:",
+    len(existing_rolls),
+    flush=True
+)
+
+print(
+    "Remaining:",
+    max(
+        total_target -
+        len(existing_rolls),
+        0
+    ),
+    flush=True
+)
+
+print(
+    "Batch size:",
+    BATCH_SIZE,
+    flush=True
+)
+
+print(
+    "=" * 70,
+    flush=True
+)
+
+
+# ============================================================
+# OPEN RESULT PAGE
+# ============================================================
+
+print(
+    "Opening SSC result page...",
+    flush=True
+)
+
+try:
+
+    page = session.get(
+
+        INDIVIDUAL_URL,
+
+        headers={
+            "Referer":
+                BASE_URL
+        },
+
+        timeout=
+            REQUEST_TIMEOUT,
+
+        allow_redirects=True,
+    )
+
+    page.raise_for_status()
+
+
+except Exception as e:
+
+    raise SystemExit(
+        f"Could not open result page: {e}"
+    )
+
+
+print(
+    "GET Status:",
+    page.status_code,
+    flush=True
+)
+
+print(
+    "GET URL:",
+    page.url,
+    flush=True
+)
+
+
+# ============================================================
+# FIND FORM
+# ============================================================
+
+soup = BeautifulSoup(
+    page.text,
+    "html.parser"
+)
+
+form = soup.find("form")
+
+if not form:
+
+    raise SystemExit(
+        "ERROR: Result form not found."
+    )
+
+
+form_action = clean_text(
+    form.get(
+        "action",
+        ""
+    )
+)
+
+FORM_ACTION_URL = urljoin(
+    page.url,
+    form_action
+)
+
+
+form_method = clean_text(
+    form.get(
+        "method",
+        "post"
+    )
+).lower()
+
+
+print(
+    "Form method:",
+    form_method,
+    flush=True
+)
+
+print(
+    "Form URL:",
+    FORM_ACTION_URL,
+    flush=True
+)
+
+
+# ============================================================
+# FORM INPUTS
+# ============================================================
+
+base_form_data = {}
+
+
+for inp in form.find_all("input"):
+
+    name = inp.get(
+        "name"
+    )
+
+    if not name:
+        continue
+
+
+    input_type = inp.get(
+        "type",
+        "text"
+    ).lower()
+
+
+    if input_type in [
+
+        "submit",
+        "button",
+        "reset",
+        "image",
+
+    ]:
+
+        continue
+
+
+    if input_type in [
+
+        "checkbox",
+        "radio",
+
+    ]:
+
+        if not inp.has_attr(
+            "checked"
+        ):
+
+            continue
+
+
+    base_form_data[name] = inp.get(
+        "value",
+        ""
+    )
+
+
+# ============================================================
+# SELECT
+# ============================================================
+
+for select in form.find_all(
+    "select"
+):
+
+    name = select.get(
+        "name"
+    )
+
+    if not name:
+        continue
+
+
+    selected = select.find(
+        "option",
+        selected=True
+    )
+
+
+    if not selected:
+
+        selected = select.find(
+            "option"
+        )
+
+
+    if selected:
+
+        base_form_data[name] = (
+            selected.get(
+                "value",
+                selected.get_text(
+                    strip=True
+                )
+            )
+        )
+
+
+# ============================================================
+# SUBMIT
+# ============================================================
+
+submit_fields = {}
+
+
+for element in form.find_all(
+    ["input", "button"]
+):
+
+    element_type = element.get(
+        "type",
+        ""
+    ).lower()
+
+    name = element.get(
+        "name"
+    )
+
+
+    if (
+
+        element_type == "submit"
+
+        and name
+
+    ):
+
+        submit_fields[name] = (
+            element.get(
+                "value",
+                element.get_text(
+                    strip=True
+                )
+            )
+        )
+
+
+if not submit_fields:
+
+    submit_fields = {
+        "button2":
+            "Submit"
+    }
+
+
+print(
+    "Submit fields:",
+    submit_fields,
+    flush=True
+)
+
+
+# ============================================================
+# COUNTERS
+# ============================================================
+
+processed = 0
+
+successful = 0
+
+not_found = 0
+
+errors = 0
+
+
+# ============================================================
+# COLLECTION
+# ============================================================
+
+for group_name, roll_number in generate_rolls():
+
+    roll = str(
+        roll_number
+    )
+
+
+    # --------------------------------------------------------
+    # SKIP EXISTING
+    # --------------------------------------------------------
+
+    if roll in existing_rolls:
+
+        continue
+
+
+    # --------------------------------------------------------
+    # BATCH
+    # --------------------------------------------------------
+
+    if processed >= BATCH_SIZE:
+
+        break
+
+
+    processed += 1
+
+
+    print(
+        "\n" + "-" * 70,
+        flush=True
+    )
+
+    print(
+        f"[{processed}/{BATCH_SIZE}] "
+        f"{group_name} | Roll: {roll}",
+        flush=True
+    )
+
+
+    # ========================================================
+    # FORM DATA
+    # ========================================================
+
+    form_data = dict(
+        base_form_data
+    )
+
+    form_data["roll"] = roll
+
+
+    for key, value in (
+        submit_fields.items()
+    ):
+
+        form_data[key] = value
+
+
+    # ========================================================
+    # REQUEST
+    # ========================================================
+
+    print(
+        f"REQUEST START: {roll}",
+        flush=True
+    )
+
+
+    try:
+
+        response = session.post(
+
+            FORM_ACTION_URL,
+
+            data=form_data,
+
+            headers={
+
+                "Referer":
+                    page.url,
+
+                "Origin":
+                    "https://sresult.bise-ctg.gov.bd",
+
+                "Content-Type":
+                    "application/x-www-form-urlencoded",
+
+            },
+
+            timeout=
+                REQUEST_TIMEOUT,
+
+            allow_redirects=True,
+        )
+
+
+    except requests.exceptions.Timeout:
+
+        print(
+            f"TIMEOUT: {roll}",
+            flush=True
+        )
+
+        errors += 1
+
+        continue
+
+
+    except requests.exceptions.RequestException as e:
+
+        print(
+            f"REQUEST ERROR: "
+            f"{roll} -> {e}",
+            flush=True
+        )
+
+        errors += 1
+
+        continue
+
+
+    print(
+        f"REQUEST DONE: {roll} | "
+        f"HTTP {response.status_code}",
+        flush=True
+    )
+
+
+    # ========================================================
+    # HTTP ERROR
+    # ========================================================
+
+    if response.status_code >= 400:
+
+        errors += 1
+
+        continue
+
+
+    # ========================================================
+    # PARSE
+    # ========================================================
+
+    print(
+        f"PARSING: {roll}",
+        flush=True
+    )
+
+
+    try:
+
+        parsed = parse_result(
+
+            response.text,
+
+            roll,
+
+            group_name
+        )
+
+
+    except Exception as e:
+
+        print(
+            f"PARSING ERROR: "
+            f"{roll} -> {e}",
+            flush=True
+        )
+
+        errors += 1
+
+        continue
+
+
+    print(
+        f"PARSING DONE: {roll}",
+        flush=True
+    )
+
+
+    # ========================================================
+    # NOT FOUND
+    # ========================================================
+
+    if not parsed.get(
+        "institute"
+    ):
+
+        print(
+            "No result found.",
+            flush=True
+        )
+
+        not_found += 1
+
+        failed_rolls.append({
+            "roll": roll,
+            "group": group_name
+        })
+
+        time.sleep(
+            random.uniform(
+                MIN_DELAY,
+                MAX_DELAY
+            )
+        )
+
+        continue
+
+
+    # ========================================================
+    # SUCCESS
+    # ========================================================
+
+    print(
+        "FOUND:",
+        parsed.get(
+            "name",
+            ""
+        ),
+        flush=True
+    )
+
+    print(
+        "Institute:",
+        parsed.get(
+            "institute",
+            ""
+        ),
+        flush=True
+    )
+
+    print(
+        "District:",
+        parsed.get(
+            "district",
+            ""
+        ),
+        flush=True
+    )
+
+    print(
+        "GPA:",
+        parsed.get(
+            "gpa"
+        ),
+        flush=True
+    )
+
+    print(
+        "Total Score:",
+        parsed.get(
+            "total_score"
+        ),
+        flush=True
+    )
+
+    print(
+        "Subjects:",
+        len(
+            parsed.get(
+                "subjects",
+                []
+            )
+        ),
+        flush=True
+    )
+
+
+    # ========================================================
+    # SAVE MEMORY
+    # ========================================================
+
+    if roll not in existing_rolls:
+
+        students.append(
+            parsed
+        )
+
+        existing_rolls.add(
+            roll
+        )
+
+        successful += 1
+
+
+    # ========================================================
+    # CHECKPOINT
+    # ========================================================
+
+    if (
+
+        successful > 0
+
+        and successful % SAVE_EVERY == 0
+
+    ):
+
+        print(
+            "\nSaving checkpoint...",
+            flush=True
+        )
+
+        save_json(
+            "students.json",
+            students
+        )
+
+        save_json(
+            "failed_rolls.json",
+            failed_rolls
+        )
+
+        print(
+            "Checkpoint saved.",
+            flush=True
+        )
+
+
+    # ========================================================
+    # DELAY
+    # ========================================================
+
+    time.sleep(
+        random.uniform(
+            MIN_DELAY,
+            MAX_DELAY
+        )
+    )
+
+
+# ============================================================
+# FINAL SAVE
+# ============================================================
+
+print(
+    "\nSaving final checkpoint...",
+    flush=True
+)
+
+
+save_json(
+    "students.json",
+    students
+)
+
+save_json(
+    "failed_rolls.json",
+    failed_rolls
+)
+
+
+# ============================================================
+# SUMMARY
+# ============================================================
+
+remaining = max(
+
+    total_target -
+    len(existing_rolls),
+
+    0
+)
+
+
+summary = {
+
+    "year":
+        YEAR,
+
+    "board":
+        BOARD,
+
+    "target_rolls":
+        total_target,
+
+    "collected_total":
+        len(students),
+
+    "remaining":
+        remaining,
+
+    "processed_this_run":
+        processed,
+
+    "successful_this_run":
+        successful,
+
+    "not_found_this_run":
+        not_found,
+
+    "errors_this_run":
+        errors,
+
+    "batch_size":
+        BATCH_SIZE,
+
+    "save_every":
+        SAVE_EVERY,
+
+    "roll_ranges":
+        ROLL_RANGES,
+
+}
+
+
+save_json(
+    "student_collection_summary.json",
+    summary
+)
+
+
+# ============================================================
+# FINAL OUTPUT
+# ============================================================
+
+print(
+    "\n" + "=" * 70,
+    flush=True
+)
+
+print(
+    "SSC COLLECTION BATCH COMPLETE",
+    flush=True
+)
+
+print(
+    "=" * 70,
+    flush=True
+)
+
+print(
+    "Processed this run:",
+    processed,
+    flush=True
+)
+
+print(
+    "Successful:",
+    successful,
+    flush=True
+)
+
+print(
+    "Not found:",
+    not_found,
+    flush=True
+)
+
+print(
+    "Errors:",
+    errors,
+    flush=True
+)
+
+print(
+    "Total students saved:",
+    len(students),
+    flush=True
+)
+
+print(
+    "Remaining:",
+    remaining,
+    flush=True
+)
+
+print(
+    "Students file:",
+    STUDENTS_FILE,
+    flush=True
+)
+
+print(
+    "Summary file:",
+    SUMMARY_FILE,
+    flush=True
+)
+
+print(
+    "Failed file:",
+    FAILED_FILE,
+    flush=True
+)
+
+print(
+    "=" * 70,
+    flush=True
+)
+
+print(
+    "DONE",
+    flush=True
+)
