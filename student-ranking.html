@@ -30,8 +30,11 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
 
-
 <style>
+
+/* =========================================================
+   HERO
+========================================================= */
 
 .student-hero {
     max-width:1100px;
@@ -67,11 +70,21 @@
     font-size:17px;
 }
 
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
 .student-content {
     max-width:1100px;
     margin:auto;
     padding:20px;
 }
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
 
 .ranking-controls {
     display:grid;
@@ -110,6 +123,11 @@
     outline:none;
 }
 
+
+/* =========================================================
+   GROUP TABS
+========================================================= */
+
 .group-tabs {
     display:flex;
     gap:8px;
@@ -135,6 +153,11 @@
     color:var(--bg);
 }
 
+
+/* =========================================================
+   TITLE
+========================================================= */
+
 .ranking-title {
     display:flex;
     justify-content:space-between;
@@ -154,94 +177,183 @@
     font-size:13px;
 }
 
+
+/* =========================================================
+   PDF BUTTON
+========================================================= */
+
 .pdf-download-btn {
+
     display:inline-flex;
+
     align-items:center;
+
     justify-content:center;
+
     gap:9px;
+
     border:0;
+
     background:#111;
+
     color:#fff;
+
     padding:12px 18px;
+
     border-radius:13px;
+
     font-family:inherit;
+
     font-size:13px;
+
     font-weight:700;
+
     cursor:pointer;
+
     white-space:nowrap;
-    box-shadow:0 8px 22px rgba(0,0,0,.12);
-    transition:transform .2s,box-shadow .2s,opacity .2s;
+
+    box-shadow:
+        0 8px 22px rgba(0,0,0,.12);
+
+    transition:
+        transform .2s,
+        box-shadow .2s,
+        opacity .2s;
+
 }
 
 .pdf-download-btn:hover {
+
     transform:translateY(-1px);
-    box-shadow:0 12px 28px rgba(0,0,0,.17);
+
+    box-shadow:
+        0 12px 28px rgba(0,0,0,.17);
+
 }
 
 .pdf-download-btn:active {
+
     transform:scale(.98);
+
 }
 
 .pdf-download-btn:disabled {
+
     opacity:.55;
+
     cursor:not-allowed;
+
     transform:none;
+
 }
 
 .pdf-icon {
+
     font-size:16px;
+
     line-height:1;
+
 }
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
 
 .student-search {
     margin-bottom:18px;
     background:white;
 }
 
+
+/* =========================================================
+   STUDENT LIST
+========================================================= */
+
 .student-list {
+
     width:100%;
+
     background:rgba(255,255,255,.88);
+
     border:1px solid var(--border);
+
     border-radius:24px;
+
     overflow:hidden;
+
     box-shadow:var(--shadow);
+
 }
+
+
+/* =========================================================
+   TABLE HEADER
+========================================================= */
 
 .student-header {
+
     display:grid;
+
     grid-template-columns:
         60px
         minmax(190px,1fr)
         80px
         110px
         minmax(230px,1.15fr);
+
     align-items:center;
+
     gap:12px;
+
     padding:16px 22px;
+
     background:rgba(245,245,247,.9);
+
     border-bottom:1px solid var(--border);
+
     color:var(--muted);
+
     font-size:10px;
+
     font-weight:800;
+
     letter-spacing:.7px;
+
     text-transform:uppercase;
+
 }
 
+
+/* =========================================================
+   STUDENT ROW
+========================================================= */
+
 .student-row {
+
     display:grid;
+
     grid-template-columns:
         60px
         minmax(190px,1fr)
         80px
         110px
         minmax(230px,1.15fr);
+
     align-items:center;
+
     gap:12px;
+
     padding:18px 22px;
+
     border-bottom:1px solid var(--border);
+
     transition:.2s;
+
     min-width:0;
+
     box-sizing:border-box;
+
 }
 
 .student-row:last-child {
@@ -252,175 +364,324 @@
     background:rgba(0,113,227,.035);
 }
 
+
+/* =========================================================
+   SERIAL
+========================================================= */
+
 .student-rank {
+
     font-size:17px;
+
     font-weight:800;
+
     color:var(--muted);
+
 }
 
 .student-rank.gold {
     color:#c68a00;
 }
 
+
+/* =========================================================
+   NAME + ROLL
+========================================================= */
+
 .student-name {
+
     min-width:0;
+
     overflow:hidden;
+
 }
 
 .student-name strong {
+
     display:block;
+
     font-size:14px;
+
     font-weight:700;
+
     line-height:1.35;
+
     white-space:normal;
+
     overflow-wrap:anywhere;
+
     word-break:break-word;
+
 }
 
 .student-name span {
+
     display:block;
+
     color:var(--muted);
+
     font-size:10px;
+
     margin-top:4px;
+
     line-height:1.3;
+
 }
 
+
+/* =========================================================
+   GPA
+========================================================= */
+
 .student-gpa {
+
     min-width:0;
+
 }
 
 .student-gpa strong {
+
     display:block;
+
     font-size:16px;
+
     font-weight:800;
+
 }
 
 .student-gpa span {
+
     display:block;
+
     color:var(--muted);
+
     font-size:9px;
+
     margin-top:3px;
+
 }
 
+
+/* =========================================================
+   TOTAL MARKS
+========================================================= */
+
 .student-total {
+
     min-width:0;
+
 }
 
 .student-total strong {
+
     display:block;
+
     color:var(--blue);
+
     font-size:16px;
+
     font-weight:800;
+
 }
 
 .student-total span {
+
     display:block;
+
     color:var(--muted);
+
     font-size:9px;
+
     margin-top:3px;
+
 }
 
+
+/* =========================================================
+   INSTITUTION
+========================================================= */
+
 .student-institution {
+
     min-width:0;
+
     max-width:100%;
+
     overflow:hidden;
+
 }
 
 .student-institution strong {
+
     display:block;
+
     font-size:12px;
+
     line-height:1.4;
+
     font-weight:700;
+
     white-space:normal;
+
     overflow-wrap:anywhere;
+
     word-break:break-word;
+
 }
 
 .student-institution span {
+
     display:block;
+
     color:var(--muted);
+
     font-size:10px;
+
     margin-top:4px;
+
     line-height:1.3;
+
 }
+
+
+/* =========================================================
+   MESSAGES
+========================================================= */
 
 .loading-message,
 .empty-message,
 .error-message {
+
     text-align:center;
+
     padding:60px 20px;
+
     color:var(--muted);
+
 }
 
 .error-message {
     color:#d93025;
 }
 
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
 .pagination {
+
     display:flex;
+
     justify-content:center;
+
     align-items:center;
+
     gap:12px;
+
     padding:25px 15px;
+
     border-top:1px solid var(--border);
+
 }
 
 .pagination button {
+
     border:1px solid var(--border);
+
     background:var(--white);
+
     color:var(--text);
+
     padding:10px 18px;
+
     border-radius:12px;
+
     font-family:inherit;
+
     font-size:13px;
+
     font-weight:700;
+
     cursor:pointer;
+
     transition:.2s;
+
 }
 
 .pagination button:hover:not(:disabled) {
+
     background:var(--text);
+
     color:var(--bg);
+
 }
 
 .pagination button:disabled {
+
     opacity:.4;
+
     cursor:not-allowed;
+
 }
 
 .pagination-info {
+
     min-width:90px;
+
     text-align:center;
+
     color:var(--muted);
+
     font-size:13px;
+
     font-weight:700;
+
 }
+
+
+/* =========================================================
+   TABLET
+========================================================= */
 
 @media(max-width:900px) {
 
     .student-header {
+
         grid-template-columns:
             50px
             minmax(170px,1fr)
             70px
             95px
             minmax(190px,1fr);
+
         gap:9px;
+
         padding:15px 16px;
+
     }
 
     .student-row {
+
         grid-template-columns:
             50px
             minmax(170px,1fr)
             70px
             95px
             minmax(190px,1fr);
+
         gap:9px;
+
         padding:17px 16px;
+
     }
 
 }
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media(max-width:700px) {
 
@@ -441,154 +702,259 @@
     }
 
     .pdf-download-btn {
+
         width:100%;
+
         margin-top:15px;
+
     }
+
 
     .student-header {
+
         grid-template-columns:
             42px
             minmax(130px,1fr)
             58px
             78px;
+
         gap:7px;
+
         padding:13px 12px;
+
         font-size:8px;
+
     }
+
 
     .student-header div:nth-child(5) {
+
         display:none;
+
     }
 
+
     .student-row {
+
         grid-template-columns:
             42px
             minmax(130px,1fr)
             58px
             78px;
+
         gap:7px;
+
         padding:15px 12px;
+
     }
+
 
     .student-institution {
+
         grid-column:2 / 5;
+
         width:100%;
+
         max-width:100%;
+
         margin-top:3px;
+
         padding-top:9px;
+
         border-top:1px solid var(--border);
+
         box-sizing:border-box;
+
     }
+
 
     .student-name {
+
         width:100%;
+
         min-width:0;
+
     }
+
 
     .student-name strong {
+
         font-size:12px;
+
         line-height:1.35;
+
     }
 
+
     .student-name span {
+
         font-size:9px;
+
         margin-top:3px;
+
     }
+
 
     .student-gpa strong,
     .student-total strong {
+
         font-size:12px;
+
     }
+
 
     .student-gpa span,
     .student-total span {
+
         font-size:8px;
+
     }
+
 
     .student-institution strong {
+
         font-size:10.5px;
+
         line-height:1.4;
+
         white-space:normal;
+
         overflow-wrap:anywhere;
+
         word-break:break-word;
+
     }
+
 
     .student-institution span {
+
         font-size:9px;
+
         margin-top:3px;
+
     }
 
+
 }
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
 
 @media(max-width:430px) {
 
     .student-content {
+
         padding:15px 10px;
+
     }
 
     .student-hero {
+
         padding-left:15px;
+
         padding-right:15px;
+
     }
 
     .student-header {
+
         grid-template-columns:
             36px
             minmax(115px,1fr)
             52px
             70px;
+
         gap:6px;
+
         padding:12px 10px;
+
     }
+
 
     .student-row {
+
         grid-template-columns:
             36px
             minmax(115px,1fr)
             52px
             70px;
+
         gap:6px;
+
         padding:14px 10px;
+
     }
+
 
     .student-name strong {
+
         font-size:11.5px;
+
     }
 
+
     .student-name span {
+
         font-size:8.5px;
+
     }
+
 
     .student-gpa strong,
     .student-total strong {
+
         font-size:11px;
+
     }
+
 
     .student-institution {
+
         grid-column:2 / 5;
+
     }
+
 
     .student-institution strong {
+
         font-size:10px;
+
     }
+
 
     .student-institution span {
+
         font-size:8.5px;
+
     }
+
 
     .pagination {
+
         gap:7px;
+
         padding:20px 8px;
+
     }
+
 
     .pagination button {
+
         padding:9px 11px;
+
         font-size:11px;
+
     }
 
+
     .pagination-info {
+
         min-width:65px;
+
         font-size:11px;
+
     }
 
 }
@@ -601,6 +967,10 @@
 <body>
 
 
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
 <header class="navbar">
 
 <a href="index.html" class="logo">
@@ -610,6 +980,7 @@
 <span>CTGBoardRanking</span>
 
 </a>
+
 
 <nav class="nav-links">
 
@@ -636,6 +1007,7 @@ Statistics
 
 </nav>
 
+
 <button
     class="theme-btn"
     id="themeBtn"
@@ -648,7 +1020,12 @@ Statistics
 </header>
 
 
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
 <main>
+
 
 <section class="student-hero">
 
@@ -659,9 +1036,11 @@ Statistics
 
 </a>
 
+
 <span class="eyebrow">
 CHITTAGONG BOARD
 </span>
+
 
 <h1>
 
@@ -670,6 +1049,7 @@ Student<br>
 <span>Ranking.</span>
 
 </h1>
+
 
 <p>
 
@@ -684,7 +1064,12 @@ by group.
 <section class="student-content">
 
 
+<!-- =====================================================
+     CONTROLS
+===================================================== -->
+
 <div class="ranking-controls">
+
 
 <div class="control-card">
 
@@ -722,7 +1107,12 @@ Student Ranking
 </div>
 
 
+<!-- =====================================================
+     GROUP TABS
+===================================================== -->
+
 <div class="group-tabs">
+
 
 <button
     class="group-tab active"
@@ -732,6 +1122,7 @@ Student Ranking
 
 </button>
 
+
 <button
     class="group-tab"
     data-group="Business Studies">
@@ -739,6 +1130,7 @@ Student Ranking
 💼 Business Studies
 
 </button>
+
 
 <button
     class="group-tab"
@@ -748,6 +1140,7 @@ Student Ranking
 
 </button>
 
+
 <button
     class="group-tab"
     data-group="Science Irregular">
@@ -756,8 +1149,13 @@ Student Ranking
 
 </button>
 
+
 </div>
 
+
+<!-- =====================================================
+     TITLE + PDF
+===================================================== -->
 
 <div class="ranking-title">
 
@@ -780,6 +1178,7 @@ Science Students
 2026 · Chattogram Board
 </p>
 
+
 <button
     id="downloadPdfBtn"
     class="pdf-download-btn"
@@ -798,6 +1197,10 @@ Science Students
 </div>
 
 
+<!-- =====================================================
+     SEARCH
+===================================================== -->
+
 <input
     type="search"
     id="studentSearch"
@@ -805,6 +1208,10 @@ Science Students
     placeholder="Search student, roll or institution..."
     autocomplete="off">
 
+
+<!-- =====================================================
+     STUDENT LIST
+========================================================= -->
 
 <div class="student-list">
 
@@ -865,6 +1272,10 @@ Student ranking data could not be loaded.
 </div>
 
 
+<!-- =====================================================
+     PAGINATION
+========================================================= -->
+
 <div
     id="pagination"
     class="pagination"
@@ -906,6 +1317,10 @@ Next →
 
 </main>
 
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
 
 <footer>
 
@@ -972,7 +1387,6 @@ Education Data & Statistics
 
 
 <script>
-
 
 /* =========================================================
    DATA
@@ -1266,18 +1680,12 @@ function matchesSearch(student) {
 
 
 /* =========================================================
-   GET TOTAL MARKS
+   GET TOTAL MARKS FOR DISPLAY
 ========================================================= */
 
 function getTotalMarks(student) {
 
     const possibleValues = [
-
-        /*
-         * PRIORITY:
-         * total_score first
-         * calculated_subject_mark_sum second
-         */
 
         student.total_score,
 
@@ -1328,11 +1736,6 @@ function getTotalMarks(student) {
     }
 
 
-    /*
-     * FINAL FALLBACK:
-     * Calculate from subjects
-     */
-
     if (
         Array.isArray(
             student.subjects
@@ -1382,6 +1785,54 @@ function getTotalMarks(student) {
 
 
 /* =========================================================
+   GET TOTAL SCORE FOR RANKING
+========================================================= */
+
+function getRankingScore(student) {
+
+    /*
+     * IMPORTANT:
+     *
+     * Ranking ONLY uses total_score.
+     *
+     * calculated_subject_mark_sum
+     * is NOT used here.
+     */
+
+    const value =
+        student.total_score;
+
+
+    if (
+        value === undefined ||
+        value === null ||
+        String(value).trim() === ""
+    ) {
+
+        return null;
+
+    }
+
+
+    const score =
+        Number(value);
+
+
+    if (
+        Number.isFinite(score)
+    ) {
+
+        return score;
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
    SORT STUDENTS
 ========================================================= */
 
@@ -1390,107 +1841,104 @@ function sortStudents(list) {
     return [...list].sort(
         (a,b) => {
 
-
-            /*
-             * TOTAL SCORE
-             *
-             * Priority:
-             *
-             * 1. total_score
-             * 2. calculated_subject_mark_sum
-             * 3. score
-             */
-
             const scoreA =
-                Number(
-                    a.total_score ??
-                    a.totalScore ??
-                    a.calculated_subject_mark_sum ??
-                    a.calculatedSubjectMarkSum ??
-                    a.score ??
-                    0
-                ) || 0;
-
+                getRankingScore(a);
 
             const scoreB =
-                Number(
-                    b.total_score ??
-                    b.totalScore ??
-                    b.calculated_subject_mark_sum ??
-                    b.calculatedSubjectMarkSum ??
-                    b.score ??
-                    0
-                ) || 0;
+                getRankingScore(b);
 
 
             /*
-             * 1. HIGHER TOTAL SCORE FIRST
+             * ============================================
+             * 1. TOTAL SCORE
+             * ============================================
              */
 
             if (
-                scoreB !== scoreA
+                scoreA !== null &&
+                scoreB !== null
             ) {
 
-                return (
-                    scoreB -
-                    scoreA
-                );
+                if (
+                    scoreB !== scoreA
+                ) {
+
+                    return (
+                        scoreB -
+                        scoreA
+                    );
+
+                }
 
             }
 
 
             /*
-             * 2. HIGHER GPA FIRST
+             * Students with a real total_score
+             * always come before null total_score.
+             */
+
+            if (
+                scoreA !== null &&
+                scoreB === null
+            ) {
+
+                return -1;
+
+            }
+
+
+            if (
+                scoreA === null &&
+                scoreB !== null
+            ) {
+
+                return 1;
+
+            }
+
+
+            /*
+             * ============================================
+             * 2. GPA TIE-BREAK
+             * ============================================
              */
 
             const gpaA =
-                Number(a.gpa) || 0;
+                Number(a.gpa);
 
             const gpaB =
-                Number(b.gpa) || 0;
+                Number(b.gpa);
+
+
+            const validGpaA =
+                Number.isFinite(gpaA)
+                    ? gpaA
+                    : -Infinity;
+
+            const validGpaB =
+                Number.isFinite(gpaB)
+                    ? gpaB
+                    : -Infinity;
 
 
             if (
-                gpaB !== gpaA
+                validGpaB !==
+                validGpaA
             ) {
 
                 return (
-                    gpaB -
-                    gpaA
+                    validGpaB -
+                    validGpaA
                 );
 
             }
 
 
             /*
-             * 3. TOTAL MARKS FALLBACK
-             */
-
-            const marksA =
-                Number(
-                    getTotalMarks(a)
-                ) || 0;
-
-            const marksB =
-                Number(
-                    getTotalMarks(b)
-                ) || 0;
-
-
-            if (
-                marksB !== marksA
-            ) {
-
-                return (
-                    marksB -
-                    marksA
-                );
-
-            }
-
-
-            /*
-             * 4. ROLL NUMBER
+             * ============================================
+             * 3. ROLL
+             * ============================================
              */
 
             return String(
@@ -1498,7 +1946,12 @@ function sortStudents(list) {
             ).localeCompare(
                 String(
                     b.roll || ""
-                )
+                ),
+                undefined,
+                {
+                    numeric:true,
+                    sensitivity:"base"
+                }
             );
 
         }
@@ -1650,6 +2103,10 @@ function renderStudents() {
                 : "—";
 
 
+            /*
+             * DISPLAY TOTAL MARKS
+             */
+
             const totalMarks =
                 getTotalMarks(
                     student
@@ -1758,9 +2215,9 @@ function renderStudents() {
     );
 
 
-    /* =====================================================
-       PAGINATION
-    ===================================================== */
+    /*
+     * PAGINATION
+     */
 
     if (
         totalPages <= 1
