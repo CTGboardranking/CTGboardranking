@@ -25,7 +25,7 @@ FAILED_FILE = Path(
     "institution-collector/failed_institutions.json"
 )
 
-TEST_MODE = True
+TEST_MODE = False
 
 TEST_EIIN = "103086"
 
@@ -601,7 +601,7 @@ def parse_result(
             None,
 
         "total_gpa":
-            None,
+            gpa5,
 
         "year":
             YEAR,
