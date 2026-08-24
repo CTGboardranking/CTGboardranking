@@ -83,7 +83,6 @@ display:flex;
 gap:8px;
 overflow-x:auto;
 margin-bottom:25px;
-padding-bottom:3px;
 }
 
 .group{
@@ -106,7 +105,6 @@ display:flex;
 justify-content:space-between;
 align-items:end;
 margin-bottom:18px;
-gap:15px;
 }
 
 .title h2{
@@ -126,7 +124,6 @@ border-radius:13px;
 padding:12px 18px;
 font-weight:800;
 cursor:pointer;
-white-space:nowrap;
 }
 
 .table{
@@ -146,7 +143,6 @@ minmax(180px,1fr)
 70px
 100px
 minmax(210px,1fr);
-
 gap:12px;
 align-items:center;
 }
@@ -162,7 +158,7 @@ color:var(--muted);
 .row{
 padding:16px 18px;
 border-top:1px solid var(--border);
-transition:.2s ease;
+transition:.15s ease;
 }
 
 .row:hover{
@@ -171,15 +167,13 @@ background:rgba(127,127,127,.04);
 
 .row strong{
 font-size:12px;
-line-height:1.4;
 }
 
 .row span{
 font-size:9px;
 color:var(--muted);
 display:block;
-margin-top:4px;
-line-height:1.4;
+margin-top:3px;
 }
 
 .rank{
@@ -187,37 +181,21 @@ font-weight:800;
 color:var(--muted);
 }
 
-.rank.top-one{
-color:#b8860b;
-}
-
-.rank.top-two{
-color:#777;
-}
-
-.rank.top-three{
-color:#9b6b45;
-}
-
 .score{
 color:var(--blue);
 font-weight:800;
+font-size:13px;
 }
 
-.total-score{
-font-size:14px !important;
-font-weight:800;
-color:var(--text);
-}
-
-.gpa-value{
-font-size:14px !important;
+.gpa{
 font-weight:800;
 color:var(--blue);
 }
 
 .institute strong{
 display:block;
+font-size:11px;
+line-height:1.4;
 }
 
 .message{
@@ -234,8 +212,8 @@ gap:12px;
 }
 
 .spinner{
-width:24px;
-height:24px;
+width:25px;
+height:25px;
 border:2px solid rgba(127,127,127,.2);
 border-top-color:#0071e3;
 border-radius:50%;
@@ -273,7 +251,7 @@ cursor:not-allowed;
 
 body.dark .card,
 body.dark .table{
-background:rgba(28,28,30,.88);
+background:#1c1c1e;
 }
 
 body.dark select,
@@ -288,7 +266,8 @@ body.dark .head{
 background:#242426;
 }
 
-body.dark .pdf{
+body.dark .pdf,
+body.dark .group.active{
 background:#f5f5f7;
 color:#111;
 }
@@ -330,7 +309,6 @@ display:none;
 grid-column:2 / 5;
 border-top:1px solid var(--border);
 padding-top:8px;
-margin-top:2px;
 }
 
 .row{
@@ -345,31 +323,24 @@ font-size:10.5px;
 font-size:8px;
 }
 
-.gpa-value,
-.total-score{
-font-size:11px !important;
+.score,
+.gpa{
+font-size:11px;
 }
 
 }
 
 </style>
-
 </head>
 
-
 <body>
-
 
 <header class="navbar">
 
 <a href="index.html" class="logo">
-
 <span class="logo-mark">C</span>
-
 <span>CTGBoardRanking</span>
-
 </a>
-
 
 <nav class="nav-links">
 
@@ -396,7 +367,6 @@ Thana
 
 </nav>
 
-
 <button
 class="theme-btn"
 id="themeBtn"
@@ -407,47 +377,31 @@ type="button">
 </header>
 
 
-
 <main>
 
 <section class="wrap">
 
-
 <a
 class="back"
 href="index.html">
-
 ← Back to Home
-
 </a>
-
 
 <div class="eyebrow">
 CHITTAGONG BOARD
 </div>
 
-
 <h1>
-
 Thana<br>
-
-<span>
-Student Ranking.
-</span>
-
+<span>Student Ranking.</span>
 </h1>
 
-
 <p class="desc">
-
 Explore student performance by thana and group.
-
 </p>
 
 
-
 <div class="controls">
-
 
 <div class="card">
 
@@ -455,8 +409,7 @@ Explore student performance by thana and group.
 THANA
 </label>
 
-
-<select id="thana">
+<select id="thanaSelect">
 
 <option value="">
 All Thanas
@@ -467,14 +420,13 @@ All Thanas
 </div>
 
 
-
 <div class="card">
 
 <label>
 ACADEMIC YEAR
 </label>
 
-<select id="year">
+<select id="yearSelect">
 
 <option value="2026">
 2026
@@ -484,70 +436,50 @@ ACADEMIC YEAR
 
 </div>
 
-
 </div>
 
 
-
 <div class="groups">
-
 
 <button
 class="group active"
 data-group="All"
 type="button">
-
 All
-
 </button>
-
 
 <button
 class="group"
 data-group="Science"
 type="button">
-
 🔬 Science
-
 </button>
-
 
 <button
 class="group"
 data-group="Business Studies"
 type="button">
-
 💼 Business Studies
-
 </button>
-
 
 <button
 class="group"
 data-group="Humanities"
 type="button">
-
 🎓 Humanities
-
 </button>
-
 
 <button
 class="group"
 data-group="Science Irregular"
 type="button">
-
 📚 Science Irregular
-
 </button>
-
 
 </div>
 
 
-
 <div class="title">
-
 
 <div>
 
@@ -555,11 +487,9 @@ type="button">
 TOP PERFORMERS
 </div>
 
-
 <h2 id="heading">
 All Thana Students
 </h2>
-
 
 <p id="info">
 2026 · Chattogram Board
@@ -567,31 +497,24 @@ All Thana Students
 
 </div>
 
-
 <button
 class="pdf"
 id="pdf"
 type="button">
-
 ↓ Download PDF
-
 </button>
-
 
 </div>
 
 
-
 <input
 id="search"
+type="search"
 placeholder="Search student, roll, EIIN, institution or thana..."
-autocomplete="off"
->
-
+autocomplete="off">
 
 
 <div class="table">
-
 
 <div class="head">
 
@@ -608,7 +531,7 @@ GPA
 </div>
 
 <div>
-Total Score
+Total
 </div>
 
 <div>
@@ -618,7 +541,6 @@ Institution
 </div>
 
 
-
 <div id="rows">
 
 <div class="message loading">
@@ -626,24 +548,12 @@ Institution
 <div class="spinner"></div>
 
 <span>
-Loading student and institution data...
+Loading student data...
 </span>
 
 </div>
 
 </div>
-
-
-
-<div
-id="empty"
-class="message"
-style="display:none">
-
-No student found.
-
-</div>
-
 
 
 <div
@@ -653,39 +563,29 @@ id="pagination">
 <button
 id="prev"
 type="button">
-
 ← Previous
-
 </button>
-
 
 <span id="page">
 Page 1
 </span>
 
-
 <button
 id="next"
 type="button">
-
 Next →
-
 </button>
 
 </div>
 
-
 </div>
-
 
 </section>
 
 </main>
 
 
-
 <script src="script.js"></script>
-
 
 <script>
 
@@ -693,13 +593,11 @@ Next →
 
 
 /* =========================================================
-   DATA URL
+   DATA FILES
 ========================================================= */
 
 const STUDENT_URL =
-"scraper/students.json?v=" +
-Date.now();
-
+"scraper/students.json?v=" + Date.now();
 
 const INSTITUTION_URL =
 "institution-collector/institution_results.json?v=" +
@@ -707,7 +605,6 @@ Date.now();
 
 
 const PAGE_SIZE = 100;
-
 
 
 /* =========================================================
@@ -727,7 +624,6 @@ let selectedGroup = "All";
 let search = "";
 
 
-
 /* =========================================================
    ELEMENTS
 ========================================================= */
@@ -735,16 +631,13 @@ let search = "";
 const rows =
 document.getElementById("rows");
 
-const empty =
-document.getElementById("empty");
-
 const thanaSelect =
-document.getElementById("thana");
+document.getElementById("thanaSelect");
 
 const searchBox =
 document.getElementById("search");
 
-const pageInfo =
+const pageElement =
 document.getElementById("page");
 
 const heading =
@@ -757,9 +650,8 @@ const pagination =
 document.getElementById("pagination");
 
 
-
 /* =========================================================
-   NORMALIZE TEXT
+   NORMALIZE
 ========================================================= */
 
 function norm(value){
@@ -772,12 +664,11 @@ return String(value ?? "")
 }
 
 
-
 /* =========================================================
    NUMBER
 ========================================================= */
 
-function number(value){
+function numberValue(value){
 
 if(
 value === null ||
@@ -789,26 +680,14 @@ return null;
 
 }
 
-
-if(
-typeof value === "number"
-){
-
-return Number.isFinite(value)
-? value
-: null;
-
-}
-
-
-const n =
-Number(
+let text =
 String(value)
 .replace(/,/g,"")
 .replace(/%/g,"")
-.trim()
-);
+.trim();
 
+let n =
+Number(text);
 
 return Number.isFinite(n)
 ? n
@@ -817,9 +696,8 @@ return Number.isFinite(n)
 }
 
 
-
 /* =========================================================
-   ESCAPE HTML
+   ESCAPE
 ========================================================= */
 
 function esc(value){
@@ -834,6 +712,103 @@ return String(value ?? "")
 }
 
 
+/* =========================================================
+   GET TOTAL SCORE
+========================================================= */
+
+function getTotalScore(student){
+
+/*
+  Try every common total-score field.
+*/
+
+const fields = [
+
+"total_score",
+"totalScore",
+"total_marks",
+"totalMarks",
+"total_mark",
+"totalMark",
+"total_marks_obtained",
+"totalMarksObtained",
+"marks",
+"score",
+"total"
+
+];
+
+
+for(
+const field of fields
+){
+
+const value =
+numberValue(
+student[field]
+);
+
+if(
+value !== null
+){
+
+return value;
+
+}
+
+}
+
+
+/*
+  Sometimes total is stored
+  inside result / marks object.
+*/
+
+const nested =
+student.result ??
+student.results ??
+student.marks_data ??
+student.marksData ??
+student.subjects;
+
+
+if(
+nested &&
+typeof nested === "object" &&
+!Array.isArray(nested)
+){
+
+for(
+const field of fields
+){
+
+const value =
+numberValue(
+nested[field]
+);
+
+if(
+value !== null
+){
+
+return value;
+
+}
+
+}
+
+}
+
+
+/*
+  Last fallback:
+  score field.
+*/
+
+return null;
+
+}
+
 
 /* =========================================================
    GET EIIN
@@ -845,17 +820,19 @@ const values = [
 
 student.eiin,
 student.EIIN,
-student.eiin_no,
-student.eiinNo,
 student.institution_eiin,
 student.institutionEIIN,
 student.institute_eiin,
-student.instituteEIIN
+student.instituteEIIN,
+student.college_eiin,
+student.collegeEIIN
 
 ];
 
 
-for(const value of values){
+for(
+const value of values
+){
 
 if(
 value !== undefined &&
@@ -869,49 +846,25 @@ return String(value).trim();
 
 }
 
-
 return "";
 
 }
 
 
-
 /* =========================================================
-   GET STUDENT NAME
+   GET INSTITUTION NAME
 ========================================================= */
 
-function getName(student){
+function getInstitutionName(student){
 
 return String(
 
-student.name ??
-student.student_name ??
-student.studentName ??
-student.student ??
-student.full_name ??
-student.fullName ??
-"Unknown Student"
-
-).trim();
-
-}
-
-
-
-/* =========================================================
-   GET INSTITUTION
-========================================================= */
-
-function getInstitution(student){
-
-return String(
-
+student.institution_name ??
 student.institute ??
 student.institution ??
-student.institution_name ??
-student.institutionName ??
-student.school ??
-student.school_name ??
+student.institute_name ??
+student.college_name ??
+student.college ??
 "Unknown Institution"
 
 ).trim();
@@ -919,26 +872,26 @@ student.school_name ??
 }
 
 
-
 /* =========================================================
-   GET THANA DIRECTLY FROM STUDENT
+   GET THANA DIRECTLY
 ========================================================= */
 
-function getStudentThana(student){
+function getDirectThana(student){
 
 const values = [
 
 student.thana,
-student.Thana,
 student.upazila,
 student.upazilla,
-student.upazila_name,
-student.thana_name
+student.thana_name,
+student.upazila_name
 
 ];
 
 
-for(const value of values){
+for(
+const value of values
+){
 
 if(
 value !== undefined &&
@@ -952,350 +905,286 @@ return String(value).trim();
 
 }
 
-
 return "";
 
 }
 
 
-
 /* =========================================================
-   GET TOTAL SCORE
+   BUILD INSTITUTION MAP
 ========================================================= */
 
-function getTotalScore(student){
+function buildInstitutionMap(){
 
-/*
-   বিভিন্ন scraper/data version support
-*/
-
-const values = [
-
-student.total_score,
-student.totalScore,
-
-student.total_marks,
-student.totalMarks,
-
-student.total_mark,
-student.totalMark,
-
-student.total,
-
-student.marks,
-
-student.obtained_marks,
-student.obtainedMarks,
-
-student.total_marks_obtained,
-student.totalMarksObtained,
-
-student.score
-
-];
+const map =
+new Map();
 
 
-for(const value of values){
+institutions.forEach(
+institution => {
 
-const n = number(value);
-
-if(n !== null){
-
-return n;
-
-}
-
-}
+const eiin =
+String(
+institution.eiin ??
+institution.EIIN ??
+""
+).trim();
 
 
-/*
-   যদি subject-wise marks থাকে,
-   সেগুলো যোগ করার চেষ্টা
-*/
-
-const subjects =
-student.subjects ||
-student.marks_data ||
-student.subject_marks;
+const thana =
+String(
+institution.thana ??
+institution.upazila ??
+institution.upazilla ??
+""
+).trim();
 
 
 if(
-Array.isArray(subjects)
+eiin &&
+thana
 ){
 
-let total = 0;
-
-let found = false;
-
-
-subjects.forEach(subject=>{
-
-const n = number(
-
-subject.total ??
-subject.marks ??
-subject.obtained ??
-subject.obtained_marks ??
-subject.score
-
+map.set(
+eiin,
+thana
 );
-
-
-if(n !== null){
-
-total += n;
-
-found = true;
 
 }
 
 });
 
 
-if(found){
-
-return total;
+return map;
 
 }
-
-}
-
-
-return null;
-
-}
-
 
 
 /* =========================================================
-   GET GPA
+   RESOLVE THANA
 ========================================================= */
 
-function getGPA(student){
+function resolveThana(
+student,
+institutionMap
+){
 
-const values = [
+/*
+  1. Student file
+*/
 
-student.gpa,
-student.GPA,
-student.gpa_point,
-student.gpaPoint,
-student.grade_point,
-student.gradePoint
+const direct =
+getDirectThana(student);
 
-];
+if(direct){
 
-
-for(const value of values){
-
-const n = number(value);
-
-if(n !== null){
-
-return n;
-
-}
+return direct;
 
 }
 
 
-return null;
-
-}
-
-
-
-/* =========================================================
-   GET GROUP
-========================================================= */
-
-function getGroup(student){
-
-return String(
-
-student.group ??
-student.Group ??
-student.group_name ??
-student.groupName ??
-""
-
-).trim();
-
-}
-
-
-
-/* =========================================================
-   GET ROLL
-========================================================= */
-
-function getRoll(student){
-
-return String(
-
-student.roll ??
-student.Roll ??
-student.roll_no ??
-student.rollNo ??
-""
-
-).trim();
-
-}
-
-
-
-/* =========================================================
-   INSTITUTION LOOKUP
-========================================================= */
-
-function findInstitution(student){
+/*
+  2. EIIN → Institution Results
+*/
 
 const eiin =
 getEIIN(student);
 
+if(
+eiin &&
+institutionMap.has(eiin)
+){
 
-/*
-   প্রথমে EIIN দিয়ে match
-*/
-
-if(eiin){
-
-const exact =
-institutions.find(
-institution =>
-String(institution.eiin)
-.trim() === eiin
-);
-
-
-if(exact){
-
-return exact;
-
-}
+return institutionMap.get(eiin);
 
 }
 
 
 /*
-   EIIN না থাকলে institution name দিয়ে match
+  3. Some student files may
+     store institution data
+     directly.
 */
 
-const studentInstitution =
-norm(
-getInstitution(student)
-);
+const nested =
+student.institution ??
+student.institute_data ??
+student.institutionData;
 
 
-if(studentInstitution){
+if(
+nested &&
+typeof nested === "object"
+){
 
-const byName =
-institutions.find(
-institution =>
-norm(
-institution.name
-) === studentInstitution
-);
-
-
-if(byName){
-
-return byName;
-
-}
-
-}
-
-
-return null;
-
-}
-
-
-
-/* =========================================================
-   ENRICH STUDENT
-========================================================= */
-
-function enrichStudent(student){
-
-const institution =
-findInstitution(student);
-
-
-const institutionName =
-institution
-? institution.name
-: getInstitution(student);
-
-
-const eiin =
-getEIIN(student) ||
-(
-institution
-? String(institution.eiin)
-: ""
-);
-
-
-const thana =
-institution
-? institution.thana
-: getStudentThana(student);
-
-
-const district =
-institution
-? institution.district
-: String(
-student.district ??
+const nestedThana =
+String(
+nested.thana ??
+nested.upazila ??
 ""
 ).trim();
 
+if(nestedThana){
 
-return {
+return nestedThana;
 
-raw:student,
-
-name:getName(student),
-
-roll:getRoll(student),
-
-eiin:eiin,
-
-institution:institutionName,
-
-thana:String(
-thana ?? ""
-).trim(),
-
-district:district,
-
-group:getGroup(student),
-
-gpa:getGPA(student),
-
-totalScore:getTotalScore(student)
-
-};
+}
 
 }
 
 
+return "";
+
+}
+
 
 /* =========================================================
-   FILTER
+   PREPARE STUDENTS
+========================================================= */
+
+function prepareStudents(){
+
+const institutionMap =
+buildInstitutionMap();
+
+
+students =
+students.map(
+student => {
+
+const copy =
+{
+...student
+};
+
+
+copy._eiin =
+getEIIN(copy);
+
+copy._institution =
+getInstitutionName(copy);
+
+copy._thana =
+resolveThana(
+copy,
+institutionMap
+);
+
+copy._total =
+getTotalScore(copy);
+
+copy._gpa =
+numberValue(
+copy.gpa ??
+copy.GPA ??
+copy.gpa_point ??
+copy.gpaPoint
+);
+
+
+return copy;
+
+});
+
+}
+
+
+/* =========================================================
+   GET THANA LIST
+========================================================= */
+
+function populateThanas(){
+
+const set =
+new Map();
+
+
+students.forEach(
+student => {
+
+const value =
+String(
+student._thana || ""
+).trim();
+
+if(value){
+
+const key =
+norm(value);
+
+if(!set.has(key)){
+
+set.set(
+key,
+value
+);
+
+}
+
+}
+
+});
+
+
+const thanas =
+Array.from(
+set.values()
+).sort(
+(a,b)=>
+norm(a).localeCompare(
+norm(b)
+)
+);
+
+
+thanaSelect.innerHTML = `
+<option value="">
+All Thanas
+</option>
+`;
+
+
+thanas.forEach(
+thana => {
+
+const option =
+document.createElement(
+"option"
+);
+
+option.value =
+thana;
+
+option.textContent =
+thana;
+
+thanaSelect.appendChild(
+option
+);
+
+});
+
+}
+
+
+/* =========================================================
+   FILTER + RANK
 ========================================================= */
 
 function filtered(){
 
-return students
+let result =
+students.filter(
+student => {
 
-.filter(student=>{
+
+/*
+  THANA FILTER
+*/
 
 if(
 selectedThana &&
-norm(student.thana) !==
+norm(student._thana) !==
 norm(selectedThana)
 ){
 
@@ -1304,9 +1193,24 @@ return false;
 }
 
 
+/*
+  GROUP FILTER
+*/
+
 if(
-selectedGroup !== "All" &&
-norm(student.group) !==
+selectedGroup !== "All"
+){
+
+const group =
+norm(
+student.group ??
+student.group_name ??
+student.groupName ??
+""
+);
+
+if(
+group !==
 norm(selectedGroup)
 ){
 
@@ -1314,33 +1218,30 @@ return false;
 
 }
 
+}
+
+
+/*
+  SEARCH
+*/
 
 if(search){
 
 const text = [
 
 student.name,
-
 student.roll,
-
-student.eiin,
-
-student.institution,
-
-student.thana,
-
+student._eiin,
+student._institution,
+student._thana,
 student.district,
-
 student.group,
-
 student.gpa,
-
-student.totalScore
+student._total
 
 ]
 .join(" ")
 .toLowerCase();
-
 
 if(
 !text.includes(search)
@@ -1355,149 +1256,75 @@ return false;
 
 return true;
 
-})
+});
 
-
-.sort((a,b)=>{
 
 /*
-   PRIMARY:
-   Total Score
+  RANKING
+
+  1. Total Score
+  2. GPA
 */
 
-const aTotal =
-a.totalScore ?? -1;
+result.sort(
+(a,b)=>{
 
-const bTotal =
-b.totalScore ?? -1;
+const totalA =
+a._total === null
+? -1
+: a._total;
+
+const totalB =
+b._total === null
+? -1
+: b._total;
 
 
 if(
-bTotal !== aTotal
+totalB !== totalA
 ){
 
-return bTotal - aTotal;
+return totalB - totalA;
 
 }
 
 
-/*
-   SECONDARY:
-   GPA
-*/
+const gpaA =
+a._gpa === null
+? -1
+: a._gpa;
 
-const aGpa =
-a.gpa ?? -1;
-
-const bGpa =
-b.gpa ?? -1;
+const gpaB =
+b._gpa === null
+? -1
+: b._gpa;
 
 
 if(
-bGpa !== aGpa
+gpaB !== gpaA
 ){
 
-return bGpa - aGpa;
+return gpaB - gpaA;
 
 }
 
 
 /*
-   THIRD:
-   Roll
+  Final stable-ish sort
 */
 
-return String(a.roll)
-.localeCompare(
-String(b.roll),
-undefined,
-{
-numeric:true
-}
+return norm(
+a.name
+).localeCompare(
+norm(b.name)
 );
 
 });
 
-}
 
-
-
-/* =========================================================
-   POPULATE THANA
-========================================================= */
-
-function populateThanas(){
-
-const set =
-new Map();
-
-
-students.forEach(student=>{
-
-if(
-student.thana &&
-String(student.thana).trim()
-){
-
-const key =
-norm(student.thana);
-
-
-if(!set.has(key)){
-
-set.set(
-key,
-student.thana.trim()
-);
+return result;
 
 }
-
-}
-
-});
-
-
-const thanas =
-Array.from(set.values())
-.sort(
-(a,b)=>
-norm(a).localeCompare(
-norm(b)
-)
-);
-
-
-thanaSelect.innerHTML = "";
-
-
-const all =
-document.createElement("option");
-
-all.value = "";
-
-all.textContent =
-"All Thanas";
-
-thanaSelect.appendChild(all);
-
-
-thanas.forEach(thana=>{
-
-const option =
-document.createElement("option");
-
-option.value =
-thana;
-
-option.textContent =
-thana;
-
-thanaSelect.appendChild(option);
-
-});
-
-}
-
 
 
 /* =========================================================
@@ -1517,7 +1344,9 @@ PAGE_SIZE
 ) || 1;
 
 
-if(page > totalPages){
+if(
+page > totalPages
+){
 
 page =
 totalPages;
@@ -1547,11 +1376,22 @@ start + PAGE_SIZE
 rows.innerHTML = "";
 
 
-empty.style.display =
-current.length
-? "none"
-: "block";
+if(
+!current.length
+){
 
+rows.innerHTML = `
+
+<div class="message">
+
+No students found.
+
+</div>
+
+`;
+
+}
+else{
 
 current.forEach(
 (student,index)=>{
@@ -1561,40 +1401,29 @@ start + index + 1;
 
 
 const row =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 row.className =
 "row";
 
 
-let rankClass = "";
-
-
-if(rank === 1)
-rankClass = "top-one";
-
-else if(rank === 2)
-rankClass = "top-two";
-
-else if(rank === 3)
-rankClass = "top-three";
-
-
 const total =
-student.totalScore !== null
-? student.totalScore
+student._total !== null
+? student._total
 : "—";
 
 
 const gpa =
-student.gpa !== null
-? student.gpa
+student._gpa !== null
+? student._gpa
 : "—";
 
 
 row.innerHTML = `
 
-<div class="rank ${rankClass}">
+<div class="rank">
 ${String(rank).padStart(2,"0")}
 </div>
 
@@ -1602,55 +1431,50 @@ ${String(rank).padStart(2,"0")}
 <div>
 
 <strong>
-${esc(student.name)}
+${esc(
+student.name ||
+"Unknown Student"
+)}
 </strong>
 
 <span>
-Roll: ${esc(student.roll || "—")}
-${student.eiin
+Roll:
+${esc(
+student.roll ||
+"—"
+)}
+${student._eiin
 ? " · EIIN: " +
-esc(student.eiin)
+esc(student._eiin)
 : ""}
 </span>
 
 </div>
 
 
-<div>
-
-<strong class="gpa-value">
+<div class="gpa">
 ${esc(gpa)}
-</strong>
-
 </div>
 
 
 <div class="score">
-
-<strong class="total-score">
 ${esc(total)}
-</strong>
-
 </div>
 
 
 <div class="institute">
 
 <strong>
-${esc(student.institution)}
+${esc(
+student._institution
+)}
 </strong>
 
 <span>
-${student.thana
-? "Thana: " +
-esc(student.thana)
-: "Thana: —"}
-
-${student.district
-? " · District: " +
-esc(student.district)
-: ""}
-
+${esc(
+student._thana ||
+"No Thana Found"
+)}
 </span>
 
 </div>
@@ -1658,10 +1482,18 @@ esc(student.district)
 `;
 
 
-rows.appendChild(row);
+rows.appendChild(
+row
+);
 
 });
 
+}
+
+
+/*
+  HEADER INFORMATION
+*/
 
 heading.textContent =
 selectedThana
@@ -1676,35 +1508,32 @@ selectedThana ||
 } · ${
 selectedGroup
 } · ${
-list.length.toLocaleString("en-US")
+list.length.toLocaleString(
+"en-US"
+)
 } Students`;
 
 
-pageInfo.textContent =
+pageElement.textContent =
 `Page ${page} of ${totalPages}`;
 
 
-document.getElementById("prev")
-.disabled =
-page <= 1;
+pagination.style.display =
+list.length
+? "flex"
+: "none";
 
-
-document.getElementById("next")
-.disabled =
-page >= totalPages;
 
 }
 
 
-
 /* =========================================================
-   LOAD BOTH DATASETS
+   LOAD JSON
 ========================================================= */
 
 async function load(){
 
 try{
-
 
 rows.innerHTML = `
 
@@ -1721,14 +1550,11 @@ Loading student and institution data...
 `;
 
 
-/*
-   Load simultaneously
-*/
-
 const [
 studentResponse,
 institutionResponse
-] = await Promise.all([
+] =
+await Promise.all([
 
 fetch(
 STUDENT_URL,
@@ -1747,7 +1573,13 @@ cache:"no-store"
 ]);
 
 
-if(!studentResponse.ok){
+/*
+  STUDENTS
+*/
+
+if(
+!studentResponse.ok
+){
 
 throw new Error(
 "Student data HTTP " +
@@ -1757,26 +1589,9 @@ studentResponse.status
 }
 
 
-if(!institutionResponse.ok){
-
-throw new Error(
-"Institution data HTTP " +
-institutionResponse.status
-);
-
-}
-
-
 const studentJSON =
 await studentResponse.json();
 
-
-const institutionJSON =
-await institutionResponse.json();
-
-
-
-/* STUDENTS */
 
 if(
 Array.isArray(studentJSON)
@@ -1786,7 +1601,6 @@ students =
 studentJSON;
 
 }
-
 else if(
 studentJSON &&
 Array.isArray(
@@ -1798,7 +1612,6 @@ students =
 studentJSON.students;
 
 }
-
 else if(
 studentJSON &&
 Array.isArray(
@@ -1810,7 +1623,17 @@ students =
 studentJSON.data;
 
 }
+else if(
+studentJSON &&
+Array.isArray(
+studentJSON.results
+)
+){
 
+students =
+studentJSON.results;
+
+}
 else{
 
 students = [];
@@ -1818,21 +1641,28 @@ students = [];
 }
 
 
+/*
+  INSTITUTIONS
+*/
 
-/* INSTITUTIONS */
+if(
+institutionResponse.ok
+){
 
-let rawInstitutions = [];
+const institutionJSON =
+await institutionResponse.json();
 
 
 if(
-Array.isArray(institutionJSON)
+Array.isArray(
+institutionJSON
+)
 ){
 
-rawInstitutions =
+institutions =
 institutionJSON;
 
 }
-
 else if(
 institutionJSON &&
 Array.isArray(
@@ -1840,11 +1670,10 @@ institutionJSON.institutions
 )
 ){
 
-rawInstitutions =
+institutions =
 institutionJSON.institutions;
 
 }
-
 else if(
 institutionJSON &&
 Array.isArray(
@@ -1852,11 +1681,10 @@ institutionJSON.results
 )
 ){
 
-rawInstitutions =
+institutions =
 institutionJSON.results;
 
 }
-
 else if(
 institutionJSON &&
 Array.isArray(
@@ -1864,102 +1692,50 @@ institutionJSON.data
 )
 ){
 
-rawInstitutions =
+institutions =
 institutionJSON.data;
+
+}
+else{
+
+institutions = [];
+
+}
+
+}
+else{
+
+institutions = [];
 
 }
 
 
-
 /*
-   Normalize institution data
+  PREPARE
 */
 
-institutions =
-rawInstitutions.map(item=>{
-
-return {
-
-eiin:String(
-item.eiin ??
-item.EIIN ??
-""
-).trim(),
-
-name:String(
-item.institution_name ??
-item.institution ??
-item.institute ??
-item.name ??
-""
-).trim(),
-
-district:String(
-item.district ??
-""
-).trim(),
-
-thana:String(
-item.thana ??
-item.upazila ??
-item.upazilla ??
-""
-).trim()
-
-};
-
-});
-
+prepareStudents();
 
 
 /*
-   Enrich every student
-*/
-
-students =
-students.map(
-enrichStudent
-);
-
-
-
-/*
-   Populate Thana dropdown
+  THANA DROPDOWN
 */
 
 populateThanas();
 
 
 /*
-   Render
+  RENDER
 */
 
 render();
-
-
-console.log(
-"Students:",
-students.length
-);
-
-console.log(
-"Institutions:",
-institutions.length
-);
-
-console.log(
-"Students with Thana:",
-students.filter(
-x=>x.thana
-).length
-);
 
 
 }
 catch(error){
 
 console.error(
-"Thana Student Ranking:",
+"Thana Student Ranking Error:",
 error
 );
 
@@ -1987,24 +1763,27 @@ ${esc(error.message)}
 }
 
 
-
 /* =========================================================
    THANA CHANGE
 ========================================================= */
 
 thanaSelect.addEventListener(
 "change",
-event=>{
+function(){
 
 selectedThana =
-event.target.value;
+this.value;
 
 page = 1;
 
 render();
 
+window.scrollTo({
+top:420,
+behavior:"smooth"
 });
 
+});
 
 
 /* =========================================================
@@ -2013,10 +1792,10 @@ render();
 
 searchBox.addEventListener(
 "input",
-event=>{
+function(){
 
 search =
-event.target.value
+this.value
 .toLowerCase()
 .trim();
 
@@ -2027,21 +1806,21 @@ render();
 });
 
 
-
 /* =========================================================
    GROUP
 ========================================================= */
 
 document
 .querySelectorAll(".group")
-.forEach(button=>{
+.forEach(
+button => {
 
 button.addEventListener(
 "click",
-()=>{
+function(){
 
 selectedGroup =
-button.dataset.group;
+this.dataset.group;
 
 page = 1;
 
@@ -2056,7 +1835,7 @@ item.classList.remove(
 );
 
 
-button.classList.add(
+this.classList.add(
 "active"
 );
 
@@ -2068,7 +1847,6 @@ render();
 });
 
 
-
 /* =========================================================
    PREVIOUS
 ========================================================= */
@@ -2077,7 +1855,7 @@ document
 .getElementById("prev")
 .addEventListener(
 "click",
-()=>{
+function(){
 
 if(page > 1){
 
@@ -2086,14 +1864,13 @@ page--;
 render();
 
 window.scrollTo({
-top:450,
+top:420,
 behavior:"smooth"
 });
 
 }
 
 });
-
 
 
 /* =========================================================
@@ -2104,30 +1881,31 @@ document
 .getElementById("next")
 .addEventListener(
 "click",
-()=>{
+function(){
 
-const totalPages =
+const pages =
 Math.ceil(
 filtered().length /
 PAGE_SIZE
 ) || 1;
 
 
-if(page < totalPages){
+if(
+page < pages
+){
 
 page++;
 
 render();
 
 window.scrollTo({
-top:450,
+top:420,
 behavior:"smooth"
 });
 
 }
 
 });
-
 
 
 /* =========================================================
@@ -2138,13 +1916,15 @@ document
 .getElementById("pdf")
 .addEventListener(
 "click",
-()=>{
+function(){
 
 const list =
 filtered();
 
 
-if(!list.length){
+if(
+!list.length
+){
 
 alert(
 "No students available."
@@ -2185,7 +1965,7 @@ const totalPages =
 Math.ceil(
 list.length /
 PAGE_SIZE
-) || 1;
+);
 
 
 const {
@@ -2196,30 +1976,23 @@ window.jspdf;
 
 const doc =
 new jsPDF({
-
 orientation:"portrait",
-
 unit:"mm",
-
 format:"a4"
-
 });
 
 
 const w =
-doc.internal
-.pageSize
-.getWidth();
+doc.internal.pageSize.getWidth();
 
 
 const h =
-doc.internal
-.pageSize
-.getHeight();
+doc.internal.pageSize.getHeight();
 
 
-
-/* HEADER */
+/*
+  HEADER
+*/
 
 doc.setFillColor(
 248,
@@ -2288,7 +2061,9 @@ align:"right"
 
 doc.text(
 new Date()
-.toLocaleString("en-GB"),
+.toLocaleString(
+"en-GB"
+),
 w - 15,
 21,
 {
@@ -2297,8 +2072,9 @@ align:"right"
 );
 
 
-
-/* TITLE */
+/*
+  TITLE
+*/
 
 doc.setFont(
 "helvetica",
@@ -2334,45 +2110,32 @@ doc.setTextColor(
 );
 
 doc.text(
-
 `2026 · Chattogram Board · ${
 selectedThana ||
 "All Thanas"
 } · ${
 selectedGroup
-} · Page ${
-page
-} of ${
-totalPages
-}`,
-
+} · Page ${page} of ${totalPages}`,
 15,
 51
-
 );
 
 
-
-/* TABLE */
+/*
+  TABLE
+*/
 
 doc.autoTable({
 
 startY:57,
 
 head:[[
-
 "RANK",
-
 "STUDENT",
-
 "GPA",
-
-"TOTAL SCORE",
-
-"INSTITUTION"
-
+"TOTAL",
+"INSTITUTION / THANA"
 ]],
-
 
 body:
 
@@ -2387,82 +2150,62 @@ start + index + 1
 
 `${student.name || "Unknown"}\nRoll: ${
 student.roll || "—"
-}${student.eiin
-? "\nEIIN: " +
-student.eiin
-: ""}`,
+}`,
 
-student.gpa !== null
-? String(student.gpa)
+student._gpa !== null
+? String(student._gpa)
 : "—",
 
-student.totalScore !== null
-? String(student.totalScore)
+student._total !== null
+? String(student._total)
 : "—",
 
-`${student.institution || "Unknown"}\nThana: ${
-student.thana || "—"
+`${student._institution || "Unknown"}\n${
+student._thana || "No Thana"
 }`
 
 ];
 
 }),
 
-
 theme:"grid",
-
 
 margin:{
 left:12,
 right:12
 },
 
-
 styles:{
-
 font:"helvetica",
-
-fontSize:7.2,
-
+fontSize:7.5,
 cellPadding:3,
-
 valign:"middle",
-
 lineColor:[
 225,
 225,
 228
 ],
-
 textColor:[
 35,
 35,
 38
 ]
-
 },
 
-
 headStyles:{
-
 fillColor:[
 245,
 245,
 247
 ],
-
 textColor:[
 70,
 70,
 75
 ],
-
 fontStyle:"bold",
-
 fontSize:7
-
 },
-
 
 columnStyles:{
 
@@ -2472,7 +2215,7 @@ halign:"center"
 },
 
 1:{
-cellWidth:58
+cellWidth:57
 },
 
 2:{
@@ -2481,7 +2224,7 @@ halign:"center"
 },
 
 3:{
-cellWidth:27,
+cellWidth:25,
 halign:"center"
 },
 
@@ -2491,10 +2234,9 @@ cellWidth:"auto"
 
 },
 
-
 didDrawPage:()=>{
 
-const pdfPage =
+const p =
 doc.internal
 .getNumberOfPages();
 
@@ -2526,7 +2268,6 @@ doc.setTextColor(
 125
 );
 
-
 doc.text(
 "CTGBoardRanking • Unofficial Education Data",
 12,
@@ -2535,7 +2276,7 @@ h - 7
 
 
 doc.text(
-`PDF Page ${pdfPage}`,
+`PDF Page ${p}`,
 w - 12,
 h - 7,
 {
@@ -2548,32 +2289,39 @@ align:"right"
 });
 
 
+/*
+  FILE NAME
+*/
 
-/* FILE NAME */
-
-const safe = (
-
+const safeThana =
+(
 selectedThana ||
 "All-Thanas"
-
 )
-
 .replace(
 /[^a-z0-9]+/gi,
 "-"
 )
+.toLowerCase();
 
+
+const safeGroup =
+(
+selectedGroup ||
+"All"
+)
+.replace(
+/[^a-z0-9]+/gi,
+"-"
+)
 .toLowerCase();
 
 
 doc.save(
-
-`CTGBoardRanking-Thana-Student-${safe}-Page-${page}.pdf`
-
+`CTGBoardRanking-Thana-Student-${safeThana}-${safeGroup}-Page-${page}.pdf`
 );
 
 });
-
 
 
 /* =========================================================
