@@ -1,404 +1,1157 @@
-name: Supabase SSC Upload
+import os
+import json
+import time
+import requests
 
-on:
-  workflow_dispatch:
 
-permissions:
-  contents: write
+# ============================================================
+# CONFIG
+# ============================================================
 
-concurrency:
-  group: supabase-ssc-upload
-  cancel-in-progress: false
+SUPABASE_URL = os.getenv("SUPABASE_URL", "").strip()
+SUPABASE_KEY = os.getenv("SUPABASE_KEY", "").strip()
 
-jobs:
-  upload:
+TABLE_NAME = "students"
 
-    runs-on: ubuntu-latest
+DATA_FILE = "scraper/students.json"
 
-    steps:
-
-      # ================================================
-      # CHECKOUT
-      # ================================================
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: main
-
-      # ================================================
-      # PYTHON
-      # ================================================
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-
-      # ================================================
-      # DEPENDENCIES
-      # ================================================
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests
-
-      # ================================================
-      # CHECK SECRETS
-      # ================================================
+CHECKPOINT_FILE = (
+    "scraper/supabase_upload_checkpoint.json"
+)
 
-      - name: Check Supabase configuration
-        env:
-          SUPABASE_URL: ${{ secrets.https://mpnjnyejpqeqguxikvnl.supabase.co }}
-          SUPABASE_KEY: ${{ secrets.sb_publishable_6Pm2-m3BeYB8VDw4kwCccg_WnYe5-IT }}
-        run: |
+BATCH_SIZE = 10000
 
-          echo "=============================================="
-          echo "CHECKING SUPABASE CONFIGURATION"
-          echo "=============================================="
+REQUEST_TIMEOUT = 120
 
-          if [ -z "$SUPABASE_URL" ]; then
-            echo "ERROR: SUPABASE_URL secret is missing."
-            exit 1
-          fi
+RETRY_COUNT = 5
 
-          if [ -z "$SUPABASE_KEY" ]; then
-            echo "ERROR: SUPABASE_KEY secret is missing."
-            exit 1
-          fi
+RETRY_DELAY = 5
 
-          echo "SUPABASE_URL configured."
-          echo "SUPABASE_KEY configured."
 
-      # ================================================
-      # CHECK DATA
-      # ================================================
+# ============================================================
+# CHECK CONFIGURATION
+# ============================================================
 
-      - name: Check students.json
-        run: |
+if not SUPABASE_URL:
 
-          echo "=============================================="
-          echo "CHECKING STUDENT DATA"
-          echo "=============================================="
+    raise SystemExit(
+        "ERROR: SUPABASE_URL is not set."
+    )
 
-          if [ ! -f scraper/students.json ]; then
-            echo "ERROR: scraper/students.json not found."
-            exit 1
-          fi
 
-          python - <<'PY'
+if not SUPABASE_KEY:
 
-          import json
-          import os
+    raise SystemExit(
+        "ERROR: SUPABASE_KEY is not set."
+    )
 
-          path = "scraper/students.json"
 
-          with open(
-              path,
-              "r",
-              encoding="utf-8"
-          ) as f:
-              students = json.load(f)
+SUPABASE_URL = SUPABASE_URL.rstrip("/")
 
-          if not isinstance(students, list):
-              raise SystemExit(
-                  "students.json must contain a list."
-              )
 
-          print(
-              "Total students:",
-              len(students)
-          )
+REST_URL = (
+    f"{SUPABASE_URL}/rest/v1/{TABLE_NAME}"
+)
 
-          print(
-              "File size:",
-              round(
-                  os.path.getsize(path)
-                  / 1024 / 1024,
-                  2
-              ),
-              "MB"
-          )
 
-          if students:
+HEADERS = {
 
-              print(
-                  "First roll:",
-                  students[0].get("roll")
-              )
+    "apikey":
+        SUPABASE_KEY,
 
-              print(
-                  "Last roll:",
-                  students[-1].get("roll")
-              )
+    "Authorization":
+        f"Bearer {SUPABASE_KEY}",
 
-          PY
+    "Content-Type":
+        "application/json",
 
-      # ================================================
-      # CHECK UPLOADER
-      # ================================================
+    "Prefer":
+        "resolution=merge-duplicates,"
+        "return=minimal",
 
-      - name: Validate upload script
-        run: |
+}
 
-          if [ ! -f scraper/upload_to_supabase.py ]; then
 
-            echo "ERROR:"
-            echo "scraper/upload_to_supabase.py not found."
+# ============================================================
+# PRINT HEADER
+# ============================================================
 
-            exit 1
+print(
+    "==================================================",
+    flush=True
+)
 
-          fi
+print(
+    "SSC SUPABASE UPLOADER",
+    flush=True
+)
 
-          python -m py_compile \
-            scraper/upload_to_supabase.py
+print(
+    "==================================================",
+    flush=True
+)
 
-          echo "Upload script syntax OK."
+print(
+    "Table:",
+    TABLE_NAME,
+    flush=True
+)
 
-      # ================================================
-      # UPLOAD TO SUPABASE
-      # ================================================
+print(
+    "Batch size:",
+    BATCH_SIZE,
+    flush=True
+)
 
-      - name: Upload SSC data
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-        run: |
+print(
+    "Data file:",
+    DATA_FILE,
+    flush=True
+)
 
-          echo "=============================================="
-          echo "STARTING SUPABASE UPLOAD"
-          echo "=============================================="
+print(
+    "Checkpoint:",
+    CHECKPOINT_FILE,
+    flush=True
+)
 
-          python scraper/upload_to_supabase.py
+print(
+    "==================================================",
+    flush=True
+)
 
-      # ================================================
-      # SHOW CHECKPOINT
-      # ================================================
 
-      - name: Show checkpoint
-        if: always()
-        run: |
+# ============================================================
+# LOAD JSON
+# ============================================================
 
-          echo "=============================================="
-          echo "SUPABASE CHECKPOINT"
-          echo "=============================================="
+if not os.path.exists(DATA_FILE):
 
-          if [ -f scraper/supabase_upload_checkpoint.json ]; then
+    raise SystemExit(
+        f"ERROR: {DATA_FILE} not found."
+    )
 
-            cat \
-              scraper/supabase_upload_checkpoint.json
 
-          else
+print(
+    "Loading students.json...",
+    flush=True
+)
 
-            echo "Checkpoint not found."
 
-          fi
+try:
 
-      # ================================================
-      # VALIDATE CHECKPOINT
-      # ================================================
+    with open(
+        DATA_FILE,
+        "r",
+        encoding="utf-8"
+    ) as f:
 
-      - name: Validate checkpoint
-        if: always()
-        run: |
+        students = json.load(f)
 
-          if [ ! -f scraper/supabase_upload_checkpoint.json ]; then
-            exit 0
-          fi
+except Exception as e:
 
-          python - <<'PY'
+    raise SystemExit(
+        f"ERROR: Could not load students.json: {e}"
+    )
 
-          import json
 
-          path = (
-              "scraper/"
-              "supabase_upload_checkpoint.json"
-          )
+if not isinstance(
+    students,
+    list
+):
 
-          with open(
-              path,
-              "r",
-              encoding="utf-8"
-          ) as f:
+    raise SystemExit(
+        "ERROR: students.json must contain a JSON list."
+    )
 
-              data = json.load(f)
 
-          total = int(
-              data.get("total", 0)
-          )
+TOTAL = len(students)
 
-          uploaded = int(
-              data.get("uploaded", 0)
-          )
 
-          index = int(
-              data.get("last_index", 0)
-          )
+print(
+    "Total local records:",
+    TOTAL,
+    flush=True
+)
 
-          remaining = max(
-              total - index,
-              0
-          )
 
-          print("Total:", total)
-          print("Uploaded:", uploaded)
-          print("Last index:", index)
-          print("Remaining:", remaining)
+# ============================================================
+# CHECKPOINT HELPERS
+# ============================================================
 
-          PY
+def save_checkpoint(
+    index,
+    uploaded,
+    skipped,
+    failed,
+):
 
-      # ================================================
-      # COMMIT CHECKPOINT
-      # ================================================
+    checkpoint = {
 
-      - name: Commit checkpoint
-        if: always()
-        run: |
+        "version":
+            1,
 
-          git config user.name \
-            "github-actions[bot]"
+        "total":
+            TOTAL,
 
-          git config user.email \
-            "41898282+github-actions[bot]@users.noreply.github.com"
+        "last_index":
+            index,
 
-          git add \
-            scraper/supabase_upload_checkpoint.json \
-            2>/dev/null || true
+        "uploaded":
+            uploaded,
 
-          if git diff --cached --quiet; then
+        "skipped":
+            skipped,
 
-            echo "No checkpoint changes."
+        "failed":
+            failed,
 
-          else
+        "batch_size":
+            BATCH_SIZE,
 
-            git commit \
-              -m "Update Supabase upload checkpoint"
+        "table":
+            TABLE_NAME,
 
-          fi
+    }
 
-      # ================================================
-      # SYNC MAIN
-      # ================================================
 
-      - name: Sync latest main
-        if: always()
-        run: |
+    temp_file = (
+        CHECKPOINT_FILE +
+        ".tmp"
+    )
 
-          git fetch origin main
 
-          git rebase origin/main
+    with open(
+        temp_file,
+        "w",
+        encoding="utf-8"
+    ) as f:
 
-      # ================================================
-      # PUSH
-      # ================================================
+        json.dump(
+            checkpoint,
+            f,
+            ensure_ascii=False,
+            indent=2
+        )
 
-      - name: Push checkpoint
-        if: always()
-        run: |
 
-          echo "=============================================="
-          echo "PUSHING CHECKPOINT"
-          echo "=============================================="
+    os.replace(
+        temp_file,
+        CHECKPOINT_FILE
+    )
 
-          git push origin HEAD:main
 
-          echo "Checkpoint pushed successfully."
+def load_checkpoint():
 
-      # ================================================
-      # BACKUP CHECKPOINT
-      # ================================================
+    if not os.path.exists(
+        CHECKPOINT_FILE
+    ):
 
-      - name: Upload checkpoint artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: supabase-upload-checkpoint
-          path: |
-            scraper/supabase_upload_checkpoint.json
-          if-no-files-found: warn
-          retention-days: 30
+        return {
 
-      # ================================================
-      # FINAL STATUS
-      # ================================================
+            "last_index":
+                0,
 
-      - name: Final upload status
-        if: always()
-        run: |
+            "uploaded":
+                0,
 
-          echo "=============================================="
-          echo "FINAL SUPABASE UPLOAD STATUS"
-          echo "=============================================="
+            "skipped":
+                0,
 
-          if [ -f scraper/supabase_upload_checkpoint.json ]; then
+            "failed":
+                0,
 
-            python - <<'PY'
+        }
 
-          import json
 
-          path = (
-              "scraper/"
-              "supabase_upload_checkpoint.json"
-          )
+    try:
 
-          with open(
-              path,
-              "r",
-              encoding="utf-8"
-          ) as f:
+        with open(
+            CHECKPOINT_FILE,
+            "r",
+            encoding="utf-8"
+        ) as f:
 
-              data = json.load(f)
+            data = json.load(f)
 
-          total = int(
-              data.get("total", 0)
-          )
 
-          uploaded = int(
-              data.get("uploaded", 0)
-          )
+        if not isinstance(
+            data,
+            dict
+        ):
 
-          index = int(
-              data.get("last_index", 0)
-          )
+            raise ValueError(
+                "Invalid checkpoint format."
+            )
 
-          remaining = max(
-              total - index,
-              0
-          )
 
-          print("Total records:", total)
-          print("Uploaded:", uploaded)
-          print("Current index:", index)
-          print("Remaining:", remaining)
+        return data
 
-          if remaining == 0:
 
-              print("")
-              print(
-                  "ALL SSC DATA UPLOADED TO SUPABASE."
-              )
+    except Exception as e:
 
-          else:
+        print(
+            "WARNING: Could not load checkpoint:",
+            e,
+            flush=True
+        )
 
-              print("")
-              print(
-                  "UPLOAD INCOMPLETE."
-              )
+        print(
+            "Starting from index 0.",
+            flush=True
+        )
 
-              print(
-                  "Run workflow again to resume."
-              )
 
-          PY
+        return {
 
-          else
+            "last_index":
+                0,
 
-            echo "Checkpoint not found."
+            "uploaded":
+                0,
 
-          fi
+            "skipped":
+                0,
 
-          echo "=============================================="
-          echo "WORKFLOW FINISHED"
-          echo "=============================================="
+            "failed":
+                0,
+
+        }
+
+
+# ============================================================
+# LOAD CHECKPOINT
+# ============================================================
+
+checkpoint = load_checkpoint()
+
+
+START_INDEX = int(
+    checkpoint.get(
+        "last_index",
+        0
+    )
+)
+
+
+UPLOADED = int(
+    checkpoint.get(
+        "uploaded",
+        0
+    )
+)
+
+
+SKIPPED = int(
+    checkpoint.get(
+        "skipped",
+        0
+    )
+)
+
+
+FAILED = int(
+    checkpoint.get(
+        "failed",
+        0
+    )
+)
+
+
+# ============================================================
+# CHECKPOINT SAFETY
+# ============================================================
+
+if START_INDEX < 0:
+
+    START_INDEX = 0
+
+
+if START_INDEX > TOTAL:
+
+    START_INDEX = TOTAL
+
+
+print(
+    "",
+    flush=True
+)
+
+print(
+    "CHECKPOINT",
+    flush=True
+)
+
+print(
+    "Starting index:",
+    START_INDEX,
+    flush=True
+)
+
+print(
+    "Previously uploaded:",
+    UPLOADED,
+    flush=True
+)
+
+print(
+    "Previously skipped:",
+    SKIPPED,
+    flush=True
+)
+
+print(
+    "Previously failed:",
+    FAILED,
+    flush=True
+)
+
+print(
+    "Remaining local records:",
+    TOTAL - START_INDEX,
+    flush=True
+)
+
+print(
+    "==================================================",
+    flush=True
+)
+
+
+# ============================================================
+# NOTHING TO DO
+# ============================================================
+
+if START_INDEX >= TOTAL:
+
+    print(
+        "All local records have already been processed.",
+        flush=True
+    )
+
+    save_checkpoint(
+        TOTAL,
+        UPLOADED,
+        SKIPPED,
+        FAILED
+    )
+
+    raise SystemExit(0)
+
+
+# ============================================================
+# HTTP SESSION
+# ============================================================
+
+session = requests.Session()
+
+session.headers.update(
+    HEADERS
+)
+
+
+# ============================================================
+# CLEAN RECORD
+# ============================================================
+
+def prepare_record(
+    student
+):
+
+    if not isinstance(
+        student,
+        dict
+    ):
+
+        return None
+
+
+    record = dict(
+        student
+    )
+
+
+    # --------------------------------------------------------
+    # Roll is required
+    # --------------------------------------------------------
+
+    roll = record.get(
+        "roll"
+    )
+
+
+    if roll is None:
+
+        return None
+
+
+    roll = str(
+        roll
+    ).strip()
+
+
+    if not roll:
+
+        return None
+
+
+    record["roll"] = roll
+
+
+    # --------------------------------------------------------
+    # Make sure common fields exist
+    # --------------------------------------------------------
+
+    defaults = {
+
+        "name":
+            "",
+
+        "board":
+            "",
+
+        "group":
+            "",
+
+        "session":
+            "",
+
+        "type":
+            "",
+
+        "institute":
+            "",
+
+        "district":
+            "",
+
+        "result":
+            "",
+
+        "gpa":
+            None,
+
+        "total_score":
+            None,
+
+        "subjects":
+            [],
+
+    }
+
+
+    for key, default in defaults.items():
+
+        if key not in record:
+
+            record[key] = default
+
+
+    # --------------------------------------------------------
+    # Normalize result
+    # --------------------------------------------------------
+
+    result = record.get(
+        "result"
+    )
+
+
+    if result is None:
+
+        result = ""
+
+
+    record["result"] = str(
+        result
+    ).strip().upper()
+
+
+    # --------------------------------------------------------
+    # PASS / FAIL
+    # --------------------------------------------------------
+
+    if record["result"] in (
+        "PASS",
+        "FAIL"
+    ):
+
+        record["result"] = (
+            record["result"]
+        )
+
+
+    # --------------------------------------------------------
+    # GPA
+    # --------------------------------------------------------
+
+    if record.get(
+        "gpa"
+    ) == "":
+
+        record["gpa"] = None
+
+
+    # --------------------------------------------------------
+    # Subjects
+    # --------------------------------------------------------
+
+    if not isinstance(
+        record.get("subjects"),
+        list
+    ):
+
+        record["subjects"] = []
+
+
+    return record
+
+
+# ============================================================
+# UPLOAD ONE BATCH
+# ============================================================
+
+def upload_batch(
+    batch,
+    batch_number
+):
+
+    if not batch:
+
+        return True
+
+
+    print(
+        "",
+        flush=True
+    )
+
+    print(
+        "--------------------------------------------------",
+        flush=True
+    )
+
+    print(
+        f"Uploading batch #{batch_number}",
+        flush=True
+    )
+
+    print(
+        "Records:",
+        len(batch),
+        flush=True
+    )
+
+    first_roll = batch[0].get(
+        "roll",
+        ""
+    )
+
+    last_roll = batch[-1].get(
+        "roll",
+        ""
+    )
+
+    print(
+        "First roll:",
+        first_roll,
+        flush=True
+    )
+
+    print(
+        "Last roll:",
+        last_roll,
+        flush=True
+    )
+
+
+    # --------------------------------------------------------
+    # Retry
+    # --------------------------------------------------------
+
+    for attempt in range(
+        1,
+        RETRY_COUNT + 1
+    ):
+
+        try:
+
+            response = session.post(
+
+                REST_URL,
+
+                headers=HEADERS,
+
+                json=batch,
+
+                timeout=REQUEST_TIMEOUT,
+
+            )
+
+
+            print(
+                "HTTP:",
+                response.status_code,
+                f"(attempt {attempt})",
+                flush=True
+            )
+
+
+            if response.status_code in (
+                200,
+                201,
+                204
+            ):
+
+                print(
+                    "Batch uploaded successfully.",
+                    flush=True
+                )
+
+                return True
+
+
+            # ------------------------------------------------
+            # Duplicate / conflict
+            # ------------------------------------------------
+
+            if response.status_code == 409:
+
+                print(
+                    "Conflict detected.",
+                    flush=True
+                )
+
+                print(
+                    "Trying upsert again...",
+                    flush=True
+                )
+
+
+                retry_headers = dict(
+                    HEADERS
+                )
+
+                retry_headers["Prefer"] = (
+                    "resolution=merge-duplicates,"
+                    "return=minimal"
+                )
+
+
+                retry_response = session.post(
+
+                    REST_URL,
+
+                    headers=retry_headers,
+
+                    json=batch,
+
+                    timeout=REQUEST_TIMEOUT,
+
+                )
+
+
+                print(
+                    "Retry HTTP:",
+                    retry_response.status_code,
+                    flush=True
+                )
+
+
+                if retry_response.status_code in (
+                    200,
+                    201,
+                    204
+                ):
+
+                    print(
+                        "Batch uploaded using upsert.",
+                        flush=True
+                    )
+
+                    return True
+
+
+                print(
+                    retry_response.text[:1000],
+                    flush=True
+                )
+
+
+            else:
+
+                print(
+                    "Supabase error:",
+                    response.text[:1000],
+                    flush=True
+                )
+
+
+        except requests.exceptions.RequestException as e:
+
+            print(
+                "Request error:",
+                e,
+                flush=True
+            )
+
+
+        if attempt < RETRY_COUNT:
+
+            print(
+                f"Waiting {RETRY_DELAY}s before retry...",
+                flush=True
+            )
+
+            time.sleep(
+                RETRY_DELAY
+            )
+
+
+    return False
+
+
+# ============================================================
+# COLLECTION
+# ============================================================
+
+current_index = START_INDEX
+
+batch_number = (
+    current_index // BATCH_SIZE
+) + 1
+
+
+run_uploaded = 0
+
+run_skipped = 0
+
+run_failed = 0
+
+
+# ============================================================
+# PROCESS
+# ============================================================
+
+while current_index < TOTAL:
+
+    end_index = min(
+
+        current_index +
+        BATCH_SIZE,
+
+        TOTAL
+
+    )
+
+
+    raw_batch = students[
+        current_index:end_index
+    ]
+
+
+    valid_batch = []
+
+
+    # --------------------------------------------------------
+    # Prepare records
+    # --------------------------------------------------------
+
+    for student in raw_batch:
+
+        record = prepare_record(
+            student
+        )
+
+
+        if record is None:
+
+            run_skipped += 1
+
+            SKIPPED += 1
+
+            continue
+
+
+        valid_batch.append(
+            record
+        )
+
+
+    print(
+        "",
+        flush=True
+    )
+
+    print(
+        "==================================================",
+        flush=True
+    )
+
+    print(
+        f"PROCESSING "
+        f"{current_index + 1}-"
+        f"{end_index} / {TOTAL}",
+        flush=True
+    )
+
+    print(
+        "Valid records:",
+        len(valid_batch),
+        flush=True
+    )
+
+    print(
+        "==================================================",
+        flush=True
+    )
+
+
+    # --------------------------------------------------------
+    # Empty batch
+    # --------------------------------------------------------
+
+    if not valid_batch:
+
+        current_index = end_index
+
+        save_checkpoint(
+
+            current_index,
+
+            UPLOADED,
+
+            SKIPPED,
+
+            FAILED
+
+        )
+
+        continue
+
+
+    # --------------------------------------------------------
+    # Upload
+    # --------------------------------------------------------
+
+    success = upload_batch(
+
+        valid_batch,
+
+        batch_number
+
+    )
+
+
+    # --------------------------------------------------------
+    # Successful
+    # --------------------------------------------------------
+
+    if success:
+
+        count = len(
+            valid_batch
+        )
+
+
+        UPLOADED += count
+
+        run_uploaded += count
+
+
+        current_index = end_index
+
+
+        save_checkpoint(
+
+            current_index,
+
+            UPLOADED,
+
+            SKIPPED,
+
+            FAILED
+
+        )
+
+
+        print(
+            "",
+            flush=True
+        )
+
+        print(
+            "CHECKPOINT SAVED",
+            flush=True
+        )
+
+        print(
+            "Current index:",
+            current_index,
+            flush=True
+        )
+
+        print(
+            "Uploaded total:",
+            UPLOADED,
+            flush=True
+        )
+
+        print(
+            "Remaining:",
+            TOTAL - current_index,
+            flush=True
+        )
+
+
+        batch_number += 1
+
+        continue
+
+
+    # --------------------------------------------------------
+    # Failed batch
+    # --------------------------------------------------------
+
+    print(
+        "",
+        flush=True
+    )
+
+    print(
+        "ERROR: Batch upload failed.",
+        flush=True
+    )
+
+    print(
+        "Checkpoint will NOT move forward.",
+        flush=True
+    )
+
+    print(
+        "Run the workflow again to retry this batch.",
+        flush=True
+    )
+
+
+    FAILED += len(
+        valid_batch
+    )
+
+    run_failed += len(
+        valid_batch
+    )
+
+
+    save_checkpoint(
+
+        current_index,
+
+        UPLOADED,
+
+        SKIPPED,
+
+        FAILED
+
+    )
+
+
+    raise SystemExit(
+        "Supabase upload stopped safely."
+    )
+
+
+# ============================================================
+# FINAL CHECKPOINT
+# ============================================================
+
+save_checkpoint(
+
+    TOTAL,
+
+    UPLOADED,
+
+    SKIPPED,
+
+    FAILED
+
+)
+
+
+# ============================================================
+# FINAL RESULT
+# ============================================================
+
+print(
+    "",
+    flush=True
+)
+
+print(
+    "==================================================",
+    flush=True
+)
+
+print(
+    "SUPABASE UPLOAD COMPLETE",
+    flush=True
+)
+
+print(
+    "==================================================",
+    flush=True
+)
+
+print(
+    "Local records:",
+    TOTAL,
+    flush=True
+)
+
+print(
+    "Uploaded this run:",
+    run_uploaded,
+    flush=True
+)
+
+print(
+    "Uploaded total:",
+    UPLOADED,
+    flush=True
+)
+
+print(
+    "Skipped total:",
+    SKIPPED,
+    flush=True
+)
+
+print(
+    "Failed total:",
+    FAILED,
+    flush=True
+)
+
+print(
+    "Remaining:",
+    max(
+        TOTAL - START_INDEX - run_uploaded,
+        0
+    ),
+    flush=True
+)
+
+print(
+    "Checkpoint:",
+    CHECKPOINT_FILE,
+    flush=True
+)
+
+print(
+    "==================================================",
+    flush=True
+)
+
+print(
+    "DONE",
+    flush=True
+)
