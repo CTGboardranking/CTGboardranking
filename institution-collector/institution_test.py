@@ -30,9 +30,8 @@ FAILED_FILE = Path(
     "institution-collector/failed_institutions.json"
 )
 
-
 # ============================================================
-# COLLECTION SETTINGS
+# FULL COLLECTION
 # ============================================================
 
 TEST_MODE = False
@@ -41,21 +40,14 @@ TEST_EIIN = "103086"
 
 EXPECTED_INSTITUTIONS = 1293
 
-
 # ============================================================
 # SPEED
 # ============================================================
 
 MIN_DELAY = 0.05
-
 MAX_DELAY = 0.30
 
 TIMEOUT = (5, 20)
-
-
-# ============================================================
-# BASIC INFO
-# ============================================================
 
 YEAR = 2026
 
@@ -88,6 +80,7 @@ HEADERS = {
 
     "Connection":
         "keep-alive",
+
 }
 
 
@@ -137,8 +130,65 @@ def clean_text(value):
     return value.strip()
 
 
+def safe_int(value):
+
+    value = clean_text(value)
+
+    value = value.replace(
+        ",",
+        ""
+    )
+
+    match = re.search(
+        r"\d+",
+        value
+    )
+
+    if not match:
+        return None
+
+    try:
+        return int(
+            match.group()
+        )
+    except Exception:
+        return None
+
+
+def safe_float(value):
+
+    value = clean_text(value)
+
+    value = value.replace(
+        ",",
+        ""
+    )
+
+    match = re.search(
+        r"\d+(?:\.\d+)?",
+        value
+    )
+
+    if not match:
+        return None
+
+    try:
+
+        number = float(
+            match.group()
+        )
+
+        if number.is_integer():
+            return int(number)
+
+        return number
+
+    except Exception:
+        return None
+
+
 # ============================================================
-# DOWNLOAD MASTER INSTITUTION LIST
+# DOWNLOAD MASTER LIST
 # ============================================================
 
 def download_master_list():
@@ -214,10 +264,10 @@ def download_master_list():
 
             ]
 
-            if len(values) < 2:
+            if not values:
                 continue
 
-            eiin = ""
+            eiin = None
             institution_name = ""
 
             # ------------------------------------------------
@@ -235,18 +285,22 @@ def download_master_list():
                     institution_name = values[2]
 
             # ------------------------------------------------
-            # Alternative format:
+            # Alternative:
             #
             # EIIN | INSTITUTE NAME
             # ------------------------------------------------
 
-            if not eiin:
+            if eiin is None:
 
                 if values[0].isdigit():
 
-                    eiin = values[0]
+                    possible = values[0]
 
-                    institution_name = values[1]
+                    if 10000 <= int(possible) <= 999999:
+
+                        eiin = possible
+
+                        institution_name = values[1]
 
             if not eiin:
                 continue
@@ -256,9 +310,19 @@ def download_master_list():
 
             # Skip headers
 
+            lower_name = (
+                institution_name.lower()
+            )
+
             if (
-                "eiin"
-                in institution_name.lower()
+                "institute" in lower_name
+                and
+                "name" in lower_name
+            ):
+                continue
+
+            if (
+                "eiin" in lower_name
             ):
                 continue
 
@@ -275,9 +339,9 @@ def download_master_list():
         if institutions:
             break
 
-    # ========================================================
-    # REMOVE DUPLICATES
-    # ========================================================
+    # --------------------------------------------------------
+    # Remove duplicates
+    # --------------------------------------------------------
 
     unique = {}
 
@@ -290,10 +354,6 @@ def download_master_list():
     institutions = list(
         unique.values()
     )
-
-    # ========================================================
-    # SORT
-    # ========================================================
 
     institutions.sort(
         key=lambda x:
@@ -313,15 +373,11 @@ def download_master_list():
     ):
 
         print()
-        print(
-            "WARNING!"
-        )
-
+        print("WARNING")
         print(
             "Expected:",
             EXPECTED_INSTITUTIONS
         )
-
         print(
             "Found:",
             len(institutions)
@@ -426,9 +482,9 @@ def open_result_form():
         action
     )
 
-    # ========================================================
-    # BASE FORM FIELDS
-    # ========================================================
+    # --------------------------------------------------------
+    # Base form fields
+    # --------------------------------------------------------
 
     base_fields = {}
 
@@ -454,7 +510,6 @@ def open_result_form():
             "submit",
             "image"
         ):
-
             continue
 
         if input_type in (
@@ -465,48 +520,12 @@ def open_result_form():
             if not inp.has_attr(
                 "checked"
             ):
-
                 continue
 
         base_fields[name] = inp.get(
             "value",
             ""
         )
-
-    # ========================================================
-    # SELECT FIELDS
-    # ========================================================
-
-    for select in selected_form.find_all(
-        "select"
-    ):
-
-        name = select.get(
-            "name"
-        )
-
-        if not name:
-            continue
-
-        selected = select.find(
-            "option",
-            selected=True
-        )
-
-        if not selected:
-
-            selected = select.find(
-                "option"
-            )
-
-        if selected:
-
-            base_fields[name] = selected.get(
-                "value",
-                clean_text(
-                    selected.get_text()
-                )
-            )
 
     print(
         "Result URL:",
@@ -565,19 +584,10 @@ def find_eiin_field(form):
                 name
             ] = inp
 
-    # --------------------------------------------------------
-    # Exact names
-    # --------------------------------------------------------
-
     for name in possible_names:
 
         if name in input_names:
-
             return name
-
-    # --------------------------------------------------------
-    # Search by name / placeholder
-    # --------------------------------------------------------
 
     for name, inp in input_names.items():
 
@@ -674,7 +684,7 @@ def parse_result(
     # INSTITUTE NAME
     # ========================================================
 
-    patterns = [
+    name_patterns = [
 
         r"INSTITUTE\s+NAME\s*:\s*(.+?)"
         r"\s*\(\s*"
@@ -686,7 +696,7 @@ def parse_result(
 
     ]
 
-    for pattern in patterns:
+    for pattern in name_patterns:
 
         match = re.search(
             pattern,
@@ -788,6 +798,8 @@ def parse_result(
 
         r"APPEARED\s*:\s*(\d+)",
 
+        r"TOTAL\s+APPEARED\s*:\s*(\d+)",
+
     ]
 
     for pattern in app_patterns:
@@ -816,6 +828,8 @@ def parse_result(
         r"\bPASS\s*:\s*(\d+)",
 
         r"PASSED\s*:\s*(\d+)",
+
+        r"TOTAL\s+PASSED\s*:\s*(\d+)",
 
     ]
 
@@ -848,6 +862,9 @@ def parse_result(
         r"PASS(?:ING)?\s*RATE\s*:\s*"
         r"([0-9]+(?:\.[0-9]+)?)\s*%",
 
+        r"PASSING\s*PERCENTAGE\s*:\s*"
+        r"([0-9]+(?:\.[0-9]+)?)\s*%",
+
     ]
 
     for pattern in percent_patterns:
@@ -868,7 +885,7 @@ def parse_result(
             break
 
     # ========================================================
-    # GPA5
+    # GPA 5
     # ========================================================
 
     gpa5_patterns = [
@@ -877,7 +894,18 @@ def parse_result(
 
         r"GPA5\s*:\s*(\d+)",
 
+        r"GPA\s*5\s*=\s*(\d+)",
+
+        r"GPA5\s*=\s*(\d+)",
+
+        r"TOTAL\s+GPA\s*5\s*:\s*(\d+)",
+
     ]
+
+    # IMPORTANT:
+    # gpa5 variable is initialized BEFORE use.
+
+    gpa5 = None
 
     for pattern in gpa5_patterns:
 
@@ -888,20 +916,23 @@ def parse_result(
 
         if match:
 
-            result[
-                "gpa5"
-            ] = int(
+            gpa5 = int(
                 match.group(1)
             )
 
             break
 
+    result[
+        "gpa5"
+    ] = gpa5
+
     # ========================================================
     # TOTAL GPA
     # ========================================================
 
-    # Institution result page-এর GPA5-কে
-    # total_gpa হিসেবে রাখা হচ্ছে।
+    # Institution result page-এ আলাদা
+    # total GPA না থাকলে GPA5-কে total_gpa
+    # হিসেবে রাখা হচ্ছে.
 
     result[
         "total_gpa"
@@ -928,8 +959,10 @@ def parse_result(
 
         if (
             appeared is not None
-            and appeared > 0
-            and passed is not None
+            and
+            appeared > 0
+            and
+            passed is not None
         ):
 
             result[
@@ -945,13 +978,12 @@ def parse_result(
 
 
 # ============================================================
-# LOAD EXISTING RESULTS
+# LOAD RESULTS
 # ============================================================
 
-def load_checkpoint():
+def load_results():
 
     if not OUTPUT_FILE.exists():
-
         return []
 
     try:
@@ -975,12 +1007,8 @@ def load_checkpoint():
 
     except Exception as error:
 
-        print()
         print(
-            "WARNING: Could not read output file."
-        )
-
-        print(
+            "WARNING: Could not load results:",
             error
         )
 
@@ -994,7 +1022,6 @@ def load_checkpoint():
 def load_failed():
 
     if not FAILED_FILE.exists():
-
         return []
 
     try:
@@ -1016,16 +1043,9 @@ def load_failed():
 
             return data
 
-    except Exception as error:
+    except Exception:
 
-        print()
-        print(
-            "WARNING: Could not read failed file."
-        )
-
-        print(
-            error
-        )
+        pass
 
     return []
 
@@ -1034,17 +1054,29 @@ def load_failed():
 # SAVE RESULTS
 # ============================================================
 
-def save_results(
-    results
-):
+def save_results(results):
 
-    results = sorted(
+    # --------------------------------------------------------
+    # Remove duplicate EIIN
+    # --------------------------------------------------------
 
-        results,
+    unique = {}
 
+    for item in results:
+
+        if "eiin" in item:
+
+            unique[
+                str(item["eiin"])
+            ] = item
+
+    results = list(
+        unique.values()
+    )
+
+    results.sort(
         key=lambda x:
             int(x["eiin"])
-
     )
 
     temp_file = OUTPUT_FILE.with_suffix(
@@ -1073,25 +1105,29 @@ def save_results(
 # SAVE FAILED
 # ============================================================
 
-def save_failed(
-    failed
-):
+def save_failed(failed):
 
-    failed = sorted(
+    unique = {}
 
-        failed,
+    for item in failed:
 
-        key=lambda x:
-            int(x["eiin"])
+        if "eiin" in item:
 
+            unique[
+                str(item["eiin"])
+            ] = item
+
+    failed = list(
+        unique.values()
     )
 
-    temp_file = FAILED_FILE.with_suffix(
-        ".tmp"
+    failed.sort(
+        key=lambda x:
+            int(x["eiin"])
     )
 
     with open(
-        temp_file,
+        FAILED_FILE,
         "w",
         encoding="utf-8"
     ) as file:
@@ -1103,29 +1139,18 @@ def save_failed(
             indent=2
         )
 
-    temp_file.replace(
-        FAILED_FILE
-    )
-
 
 # ============================================================
 # COLLECT ONE INSTITUTION
 # ============================================================
 
 def collect_institution(
-
     eiin,
-
     institution_name,
-
     action_url,
-
     method,
-
     base_fields,
-
     eiin_field
-
 ):
 
     data = dict(
@@ -1157,30 +1182,20 @@ def collect_institution(
         if method == "get":
 
             response = session.get(
-
                 action_url,
-
                 params=data,
-
                 headers={
-
                     "Referer":
                         INDEX_URL
-
                 },
-
                 timeout=TIMEOUT
-
             )
 
         else:
 
             response = session.post(
-
                 action_url,
-
                 data=data,
-
                 headers={
 
                     "Referer":
@@ -1190,9 +1205,7 @@ def collect_institution(
                         "https://sresult.bise-ctg.gov.bd",
 
                 },
-
                 timeout=TIMEOUT
-
             )
 
     except Exception as error:
@@ -1226,57 +1239,39 @@ def collect_institution(
         "PARSING RESULT..."
     )
 
-    try:
+    result = parse_result(
+        response.text,
+        eiin,
+        institution_name
+    )
 
-        result = parse_result(
+    # --------------------------------------------------------
+    # Validation
+    # --------------------------------------------------------
 
-            response.text,
+    has_data = (
 
-            eiin,
+        result["appeared"] is not None
 
-            institution_name
+        or
 
-        )
+        result["passed"] is not None
 
-    except Exception as error:
+        or
 
-        print()
-        print(
-            "PARSING ERROR:",
-            eiin
-        )
+        result["gpa5"] is not None
 
-        print(
-            repr(error)
-        )
+        or
 
-        return None
+        bool(result["district"])
 
-    # ========================================================
-    # VALIDATION
-    # ========================================================
+        or
 
-    if (
+        bool(result["thana"])
 
-        not result["district"]
+    )
 
-        and
-
-        not result["thana"]
-
-        and
-
-        result["appeared"] is None
-
-        and
-
-        result["passed"] is None
-
-        and
-
-        result["gpa5"] is None
-
-    ):
+    if not has_data:
 
         print(
             "RESULT DATA NOT FOUND"
@@ -1284,9 +1279,9 @@ def collect_institution(
 
         return None
 
-    # ========================================================
-    # SHOW RESULT
-    # ========================================================
+    # --------------------------------------------------------
+    # Show result
+    # --------------------------------------------------------
 
     print(
         "FOUND:",
@@ -1393,7 +1388,8 @@ def main():
 
             item
 
-            for item in institutions
+            for item
+            in institutions
 
             if item["eiin"]
             == str(TEST_EIIN)
@@ -1403,10 +1399,7 @@ def main():
         if not institutions:
 
             raise SystemExit(
-
-                f"TEST EIIN {TEST_EIIN} "
-                "not found."
-
+                f"TEST EIIN {TEST_EIIN} not found."
             )
 
     # ========================================================
@@ -1448,19 +1441,13 @@ def main():
 
     else:
 
-        results = load_checkpoint()
+        results = load_results()
 
         failed = load_failed()
 
-    # ========================================================
-    # EXISTING EIINS
-    # ========================================================
-
     collected_eiins = {
 
-        str(
-            item["eiin"]
-        )
+        str(item["eiin"])
 
         for item
         in results
@@ -1471,9 +1458,7 @@ def main():
 
     failed_eiins = {
 
-        str(
-            item["eiin"]
-        )
+        str(item["eiin"])
 
         for item
         in failed
@@ -1516,11 +1501,8 @@ def main():
     skipped = 0
 
     for index, institution in enumerate(
-
         institutions,
-
         start=1
-
     ):
 
         eiin = str(
@@ -1531,36 +1513,24 @@ def main():
             "institution_name"
         ]
 
-        # ====================================================
-        # SKIP ALREADY COLLECTED
-        # ====================================================
+        # ----------------------------------------------------
+        # Already collected
+        # ----------------------------------------------------
 
         if (
-
             not TEST_MODE
-
             and
-
             eiin in collected_eiins
-
         ):
 
             skipped += 1
 
             continue
 
-        # ====================================================
-        # DISPLAY
-        # ====================================================
-
         print()
         print(
             f"[{index}/{total}]"
         )
-
-        # ====================================================
-        # COLLECT
-        # ====================================================
 
         result = collect_institution(
 
@@ -1580,28 +1550,11 @@ def main():
 
         processed += 1
 
-        # ====================================================
+        # ----------------------------------------------------
         # SUCCESS
-        # ====================================================
+        # ----------------------------------------------------
 
         if result is not None:
-
-            # ------------------------------------------------
-            # Prevent duplicate EIIN
-            # ------------------------------------------------
-
-            results = [
-
-                item
-
-                for item
-                in results
-
-                if str(
-                    item["eiin"]
-                ) != eiin
-
-            ]
 
             results.append(
                 result
@@ -1613,9 +1566,7 @@ def main():
 
             successful += 1
 
-            # ------------------------------------------------
-            # Remove from failed
-            # ------------------------------------------------
+            # Remove EIIN from failed list
 
             failed = [
 
@@ -1625,7 +1576,7 @@ def main():
                 in failed
 
                 if str(
-                    item["eiin"]
+                    item.get("eiin")
                 ) != eiin
 
             ]
@@ -1634,9 +1585,9 @@ def main():
                 eiin
             )
 
-        # ====================================================
+        # ----------------------------------------------------
         # FAILED
-        # ====================================================
+        # ----------------------------------------------------
 
         else:
 
@@ -1659,7 +1610,7 @@ def main():
                         BOARD,
 
                     "error":
-                        "Result parsing/request failed"
+                        "Request or result parsing failed"
 
                 })
 
@@ -1667,9 +1618,9 @@ def main():
                     eiin
                 )
 
-        # ====================================================
-        # CHECKPOINT SAVE
-        # ====================================================
+        # ----------------------------------------------------
+        # SAVE AFTER EVERY INSTITUTION
+        # ----------------------------------------------------
 
         save_results(
             results
@@ -1679,26 +1630,19 @@ def main():
             failed
         )
 
-        # ====================================================
+        # ----------------------------------------------------
         # DELAY
-        # ====================================================
+        # ----------------------------------------------------
 
         if (
-
             index < total
-
             and
-
             not TEST_MODE
-
         ):
 
             delay = random.uniform(
-
                 MIN_DELAY,
-
                 MAX_DELAY
-
             )
 
             time.sleep(
@@ -1722,19 +1666,13 @@ def main():
     # ========================================================
 
     elapsed = round(
-
         time.time() - start,
-
         2
-
     )
 
     remaining = max(
-
         0,
-
         total - len(results)
-
     )
 
     print()
@@ -1799,10 +1737,7 @@ def main():
     )
 
     print("=" * 70)
-
-    print(
-        "DONE"
-    )
+    print("DONE")
 
 
 # ============================================================
