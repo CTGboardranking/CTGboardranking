@@ -270,7 +270,7 @@ def clean_student(student):
                 ""
             ),
 
-        "group":
+        "group_name":
             student.get(
                 "group",
                 ""
