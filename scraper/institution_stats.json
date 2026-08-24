@@ -40603,6 +40603,295 @@
     "rank": 179
   },
   {
+    "institute": "MADARSHA HIGH SCHOOL, CHATTOGRAM",
+    "total_students": 54,
+    "gpa_5_count": 8,
+    "gpa_5_percentage": 14.81,
+    "average_gpa": 4.16,
+    "institution_score": 83.2,
+    "grade_distribution": {
+      "A": 107,
+      "A+": 249,
+      "A-": 71,
+      "C": 63,
+      "B": 75,
+      "D": 48,
+      "F": 35
+    },
+    "subject_statistics": [
+      {
+        "code": "101",
+        "subject": "BANGLA-I",
+        "students_with_marks": 52,
+        "average_mark": 123.85,
+        "grade_distribution": {
+          "A": 18,
+          "A-": 10,
+          "B": 10,
+          "C": 8,
+          "F": 2,
+          "A+": 3,
+          "D": 3
+        }
+      },
+      {
+        "code": "107",
+        "subject": "ENGLISH-I",
+        "students_with_marks": 42,
+        "average_mark": 123.52,
+        "grade_distribution": {
+          "A+": 10,
+          "A": 7,
+          "A-": 7,
+          "B": 4,
+          "C": 7,
+          "D": 7,
+          "F": 12
+        }
+      },
+      {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 43,
+        "average_mark": 53.3,
+        "grade_distribution": {
+          "A+": 5,
+          "A": 5,
+          "A-": 4,
+          "C": 8,
+          "B": 7,
+          "D": 14,
+          "F": 11
+        }
+      },
+      {
+        "code": "150",
+        "subject": "BANGLADESH AND GLOBAL STUDIES",
+        "students_with_marks": 21,
+        "average_mark": 80.71,
+        "grade_distribution": {
+          "A+": 15,
+          "A": 3,
+          "C": 1,
+          "A-": 2
+        }
+      },
+      {
+        "code": "112",
+        "subject": "HINDU RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 6,
+        "average_mark": 67.17,
+        "grade_distribution": {
+          "A+": 2,
+          "A": 1,
+          "A-": 1,
+          "C": 2,
+          "F": 1
+        }
+      },
+      {
+        "code": "136",
+        "subject": "PHYSICS",
+        "students_with_marks": 20,
+        "average_mark": 73.5,
+        "grade_distribution": {
+          "A+": 7,
+          "A": 7,
+          "A-": 3,
+          "B": 3,
+          "F": 1
+        }
+      },
+      {
+        "code": "137",
+        "subject": "CHEMISTRY",
+        "students_with_marks": 21,
+        "average_mark": 78.38,
+        "grade_distribution": {
+          "A+": 10,
+          "A": 7,
+          "A-": 3,
+          "B": 1
+        }
+      },
+      {
+        "code": "138",
+        "subject": "BIOLOGY",
+        "students_with_marks": 21,
+        "average_mark": 84.62,
+        "grade_distribution": {
+          "A+": 18,
+          "A-": 1,
+          "A": 1,
+          "B": 1
+        }
+      },
+      {
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 54,
+        "average_mark": 40.94,
+        "grade_distribution": {
+          "A+": 32,
+          "A": 22
+        }
+      },
+      {
+        "code": "126",
+        "subject": "HIGHER MATHEMATICS",
+        "students_with_marks": 18,
+        "average_mark": 76.72,
+        "grade_distribution": {
+          "A+": 7,
+          "A": 5,
+          "B": 3,
+          "A-": 3,
+          "F": 2
+        }
+      },
+      {
+        "code": "147",
+        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
+        "students_with_marks": 54,
+        "average_mark": 59.69,
+        "grade_distribution": {
+          "A+": 54
+        }
+      },
+      {
+        "code": "156",
+        "subject": "Career Education",
+        "students_with_marks": 54,
+        "average_mark": 49.8,
+        "grade_distribution": {
+          "A+": 54
+        }
+      },
+      {
+        "code": "111",
+        "subject": "ISLAM AND MORAL EDUCATION",
+        "students_with_marks": 47,
+        "average_mark": 73.74,
+        "grade_distribution": {
+          "A+": 23,
+          "B": 5,
+          "A": 9,
+          "C": 5,
+          "D": 2,
+          "A-": 3
+        }
+      },
+      {
+        "code": "134",
+        "subject": "AGRICULTURE STUDIES",
+        "students_with_marks": 32,
+        "average_mark": 64.41,
+        "grade_distribution": {
+          "A": 9,
+          "A-": 9,
+          "B": 11,
+          "A+": 2,
+          "F": 2,
+          "C": 1
+        }
+      },
+      {
+        "code": "127",
+        "subject": "SCIENCE",
+        "students_with_marks": 32,
+        "average_mark": 53.97,
+        "grade_distribution": {
+          "C": 8,
+          "D": 8,
+          "B": 6,
+          "A+": 2,
+          "A-": 3,
+          "A": 5,
+          "F": 1
+        }
+      },
+      {
+        "code": "110",
+        "subject": "GEOGRAPHY AND ENVIRONMENT",
+        "students_with_marks": 22,
+        "average_mark": 56.64,
+        "grade_distribution": {
+          "D": 4,
+          "A+": 3,
+          "B": 5,
+          "A-": 5,
+          "A": 1,
+          "C": 4,
+          "F": 2
+        }
+      },
+      {
+        "code": "153",
+        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
+        "students_with_marks": 24,
+        "average_mark": 50.62,
+        "grade_distribution": {
+          "D": 7,
+          "A": 1,
+          "B": 6,
+          "A-": 4,
+          "A+": 1,
+          "C": 5
+        }
+      },
+      {
+        "code": "140",
+        "subject": "CIVICS AND CITIZENSHIP",
+        "students_with_marks": 23,
+        "average_mark": 59.09,
+        "grade_distribution": {
+          "D": 1,
+          "A+": 1,
+          "B": 6,
+          "A-": 6,
+          "A": 4,
+          "C": 5,
+          "F": 1
+        }
+      },
+      {
+        "code": "146",
+        "subject": "ACCOUNTING",
+        "students_with_marks": 9,
+        "average_mark": 58.0,
+        "grade_distribution": {
+          "C": 1,
+          "A": 2,
+          "A-": 1,
+          "B": 5
+        }
+      },
+      {
+        "code": "152",
+        "subject": "FINANCE AND BANKING",
+        "students_with_marks": 9,
+        "average_mark": 43.89,
+        "grade_distribution": {
+          "C": 6,
+          "B": 1,
+          "D": 2
+        }
+      },
+      {
+        "code": "143",
+        "subject": "BUSINESS ENTREPRENEURSHIP",
+        "students_with_marks": 9,
+        "average_mark": 58.67,
+        "grade_distribution": {
+          "A-": 6,
+          "C": 2,
+          "B": 1
+        }
+      }
+    ],
+    "rank": 180
+  },
+  {
     "institute": "CHITTAGONG POWER STATION SECONDARY SCHOOL, CHATTOGRAM",
     "total_students": 29,
     "gpa_5_count": 7,
@@ -40784,7 +41073,7 @@
         }
       }
     ],
-    "rank": 180
+    "rank": 181
   },
   {
     "institute": "PEKUA GOVERNMENT MODEL G.M.C. INSTITUTION, COX'S BAZAR",
@@ -41082,7 +41371,7 @@
         }
       }
     ],
-    "rank": 181
+    "rank": 182
   },
   {
     "institute": "BAKOLIA ADARSHA GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -41362,7 +41651,7 @@
         }
       }
     ],
-    "rank": 182
+    "rank": 183
   },
   {
     "institute": "ISPAHANI ADARSHA HIGH SCHOOL, CHATTOGRAM",
@@ -41633,7 +41922,7 @@
         }
       }
     ],
-    "rank": 183
+    "rank": 184
   },
   {
     "institute": "DOHAZARI JAMIJURI GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -41908,7 +42197,7 @@
         }
       }
     ],
-    "rank": 184
+    "rank": 185
   },
   {
     "institute": "CHAKORIA GOVT. GIRLS' HIGH SCHOOL, COX'S BAZAR",
@@ -42197,7 +42486,7 @@
         }
       }
     ],
-    "rank": 185
+    "rank": 186
   },
   {
     "institute": "FAUZDARHAT COLLEGIATE SCHOOL, CHATTOGRAM",
@@ -42465,294 +42754,6 @@
         "grade_distribution": {
           "B": 5,
           "C": 3
-        }
-      }
-    ],
-    "rank": 186
-  },
-  {
-    "institute": "MADARSHA HIGH SCHOOL, CHATTOGRAM",
-    "total_students": 50,
-    "gpa_5_count": 8,
-    "gpa_5_percentage": 16.0,
-    "average_gpa": 4.1406,
-    "institution_score": 82.81,
-    "grade_distribution": {
-      "A": 99,
-      "A+": 235,
-      "A-": 68,
-      "C": 54,
-      "B": 69,
-      "D": 44,
-      "F": 31
-    },
-    "subject_statistics": [
-      {
-        "code": "101",
-        "subject": "BANGLA-I",
-        "students_with_marks": 48,
-        "average_mark": 124.4,
-        "grade_distribution": {
-          "A": 18,
-          "A-": 10,
-          "B": 8,
-          "C": 7,
-          "F": 2,
-          "A+": 2,
-          "D": 3
-        }
-      },
-      {
-        "code": "107",
-        "subject": "ENGLISH-I",
-        "students_with_marks": 41,
-        "average_mark": 123.27,
-        "grade_distribution": {
-          "A+": 10,
-          "A": 7,
-          "A-": 6,
-          "B": 4,
-          "C": 7,
-          "D": 7,
-          "F": 9
-        }
-      },
-      {
-        "code": "109",
-        "subject": "MATHEMATICS",
-        "students_with_marks": 40,
-        "average_mark": 53.73,
-        "grade_distribution": {
-          "A+": 5,
-          "A": 4,
-          "A-": 4,
-          "C": 8,
-          "B": 7,
-          "D": 12,
-          "F": 10
-        }
-      },
-      {
-        "code": "150",
-        "subject": "BANGLADESH AND GLOBAL STUDIES",
-        "students_with_marks": 21,
-        "average_mark": 80.71,
-        "grade_distribution": {
-          "A+": 15,
-          "A": 3,
-          "C": 1,
-          "A-": 2
-        }
-      },
-      {
-        "code": "112",
-        "subject": "HINDU RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 4,
-        "average_mark": 79.25,
-        "grade_distribution": {
-          "A+": 2,
-          "A": 1,
-          "A-": 1,
-          "F": 1
-        }
-      },
-      {
-        "code": "136",
-        "subject": "PHYSICS",
-        "students_with_marks": 20,
-        "average_mark": 73.5,
-        "grade_distribution": {
-          "A+": 7,
-          "A": 7,
-          "A-": 3,
-          "B": 3,
-          "F": 1
-        }
-      },
-      {
-        "code": "137",
-        "subject": "CHEMISTRY",
-        "students_with_marks": 21,
-        "average_mark": 78.38,
-        "grade_distribution": {
-          "A+": 10,
-          "A": 7,
-          "A-": 3,
-          "B": 1
-        }
-      },
-      {
-        "code": "138",
-        "subject": "BIOLOGY",
-        "students_with_marks": 21,
-        "average_mark": 84.62,
-        "grade_distribution": {
-          "A+": 18,
-          "A-": 1,
-          "A": 1,
-          "B": 1
-        }
-      },
-      {
-        "code": "154",
-        "subject": "Information And Communication Technology",
-        "students_with_marks": 50,
-        "average_mark": 41.1,
-        "grade_distribution": {
-          "A+": 31,
-          "A": 19
-        }
-      },
-      {
-        "code": "126",
-        "subject": "HIGHER MATHEMATICS",
-        "students_with_marks": 18,
-        "average_mark": 76.72,
-        "grade_distribution": {
-          "A+": 7,
-          "A": 5,
-          "B": 3,
-          "A-": 3,
-          "F": 2
-        }
-      },
-      {
-        "code": "147",
-        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
-        "students_with_marks": 50,
-        "average_mark": 60.46,
-        "grade_distribution": {
-          "A+": 50
-        }
-      },
-      {
-        "code": "156",
-        "subject": "Career Education",
-        "students_with_marks": 50,
-        "average_mark": 49.78,
-        "grade_distribution": {
-          "A+": 50
-        }
-      },
-      {
-        "code": "111",
-        "subject": "ISLAM AND MORAL EDUCATION",
-        "students_with_marks": 45,
-        "average_mark": 73.31,
-        "grade_distribution": {
-          "A+": 22,
-          "B": 5,
-          "A": 8,
-          "C": 5,
-          "D": 2,
-          "A-": 3
-        }
-      },
-      {
-        "code": "134",
-        "subject": "AGRICULTURE STUDIES",
-        "students_with_marks": 28,
-        "average_mark": 63.25,
-        "grade_distribution": {
-          "A": 7,
-          "A-": 8,
-          "B": 11,
-          "A+": 1,
-          "F": 2,
-          "C": 1
-        }
-      },
-      {
-        "code": "127",
-        "subject": "SCIENCE",
-        "students_with_marks": 28,
-        "average_mark": 53.39,
-        "grade_distribution": {
-          "C": 6,
-          "D": 8,
-          "B": 5,
-          "A+": 1,
-          "A-": 3,
-          "A": 5,
-          "F": 1
-        }
-      },
-      {
-        "code": "110",
-        "subject": "GEOGRAPHY AND ENVIRONMENT",
-        "students_with_marks": 18,
-        "average_mark": 57.06,
-        "grade_distribution": {
-          "D": 4,
-          "A+": 2,
-          "B": 5,
-          "A-": 5,
-          "A": 1,
-          "C": 1,
-          "F": 2
-        }
-      },
-      {
-        "code": "153",
-        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
-        "students_with_marks": 20,
-        "average_mark": 51.55,
-        "grade_distribution": {
-          "D": 5,
-          "A": 1,
-          "B": 6,
-          "A-": 3,
-          "A+": 1,
-          "C": 4
-        }
-      },
-      {
-        "code": "140",
-        "subject": "CIVICS AND CITIZENSHIP",
-        "students_with_marks": 19,
-        "average_mark": 59.16,
-        "grade_distribution": {
-          "D": 1,
-          "A+": 1,
-          "B": 3,
-          "A-": 6,
-          "A": 3,
-          "C": 5,
-          "F": 1
-        }
-      },
-      {
-        "code": "146",
-        "subject": "ACCOUNTING",
-        "students_with_marks": 9,
-        "average_mark": 58.0,
-        "grade_distribution": {
-          "C": 1,
-          "A": 2,
-          "A-": 1,
-          "B": 5
-        }
-      },
-      {
-        "code": "152",
-        "subject": "FINANCE AND BANKING",
-        "students_with_marks": 9,
-        "average_mark": 43.89,
-        "grade_distribution": {
-          "C": 6,
-          "B": 1,
-          "D": 2
-        }
-      },
-      {
-        "code": "143",
-        "subject": "BUSINESS ENTREPRENEURSHIP",
-        "students_with_marks": 9,
-        "average_mark": 58.67,
-        "grade_distribution": {
-          "A-": 6,
-          "C": 2,
-          "B": 1
         }
       }
     ],
@@ -43039,273 +43040,6 @@
     "rank": 188
   },
   {
-    "institute": "CHAKORIA GOVT. HIGH SCHOOL, COX'S BAZAR",
-    "total_students": 37,
-    "gpa_5_count": 2,
-    "gpa_5_percentage": 5.41,
-    "average_gpa": 4.1309,
-    "institution_score": 82.62,
-    "grade_distribution": {
-      "A+": 160,
-      "A": 76,
-      "A-": 53,
-      "B": 47,
-      "X": 1,
-      "C": 65,
-      "D": 25,
-      "F": 17
-    },
-    "subject_statistics": [
-      {
-        "code": "101",
-        "subject": "BANGLA-I",
-        "students_with_marks": 37,
-        "average_mark": 119.38,
-        "grade_distribution": {
-          "A+": 2,
-          "A": 4,
-          "A-": 11,
-          "B": 13,
-          "C": 7
-        }
-      },
-      {
-        "code": "107",
-        "subject": "ENGLISH-I",
-        "students_with_marks": 33,
-        "average_mark": 111.06,
-        "grade_distribution": {
-          "A+": 1,
-          "A": 6,
-          "A-": 5,
-          "C": 9,
-          "B": 6,
-          "D": 6,
-          "F": 4
-        }
-      },
-      {
-        "code": "109",
-        "subject": "MATHEMATICS",
-        "students_with_marks": 26,
-        "average_mark": 54.88,
-        "grade_distribution": {
-          "A": 3,
-          "A-": 5,
-          "B": 5,
-          "C": 9,
-          "D": 3,
-          "A+": 1,
-          "F": 11
-        }
-      },
-      {
-        "code": "150",
-        "subject": "BANGLADESH AND GLOBAL STUDIES",
-        "students_with_marks": 20,
-        "average_mark": 73.9,
-        "grade_distribution": {
-          "A+": 7,
-          "A": 8,
-          "B": 3,
-          "A-": 2
-        }
-      },
-      {
-        "code": "112",
-        "subject": "HINDU RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 9,
-        "average_mark": 72.89,
-        "grade_distribution": {
-          "A+": 5,
-          "A": 1,
-          "B": 1,
-          "D": 1,
-          "C": 1
-        }
-      },
-      {
-        "code": "136",
-        "subject": "PHYSICS",
-        "students_with_marks": 20,
-        "average_mark": 77.5,
-        "grade_distribution": {
-          "A+": 8,
-          "A": 8,
-          "A-": 4
-        }
-      },
-      {
-        "code": "137",
-        "subject": "CHEMISTRY",
-        "students_with_marks": 20,
-        "average_mark": 81.1,
-        "grade_distribution": {
-          "A+": 12,
-          "A": 8
-        }
-      },
-      {
-        "code": "138",
-        "subject": "BIOLOGY",
-        "students_with_marks": 20,
-        "average_mark": 85.35,
-        "grade_distribution": {
-          "A+": 17,
-          "A": 3
-        }
-      },
-      {
-        "code": "154",
-        "subject": "Information And Communication Technology",
-        "students_with_marks": 37,
-        "average_mark": 40.0,
-        "grade_distribution": {
-          "A+": 18,
-          "A": 17,
-          "A-": 2
-        }
-      },
-      {
-        "code": "126",
-        "subject": "HIGHER MATHEMATICS",
-        "students_with_marks": 20,
-        "average_mark": 82.8,
-        "grade_distribution": {
-          "A+": 15,
-          "A": 4,
-          "A-": 1
-        }
-      },
-      {
-        "code": "147",
-        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
-        "students_with_marks": 37,
-        "average_mark": 72.54,
-        "grade_distribution": {
-          "A+": 37
-        }
-      },
-      {
-        "code": "156",
-        "subject": "Career Education",
-        "students_with_marks": 36,
-        "average_mark": 49.81,
-        "grade_distribution": {
-          "A+": 36,
-          "X": 1
-        }
-      },
-      {
-        "code": "111",
-        "subject": "ISLAM AND MORAL EDUCATION",
-        "students_with_marks": 26,
-        "average_mark": 59.0,
-        "grade_distribution": {
-          "A-": 10,
-          "A": 5,
-          "B": 3,
-          "C": 8,
-          "F": 2
-        }
-      },
-      {
-        "code": "127",
-        "subject": "SCIENCE",
-        "students_with_marks": 17,
-        "average_mark": 46.47,
-        "grade_distribution": {
-          "C": 8,
-          "D": 4,
-          "B": 4,
-          "A": 1
-        }
-      },
-      {
-        "code": "110",
-        "subject": "GEOGRAPHY AND ENVIRONMENT",
-        "students_with_marks": 9,
-        "average_mark": 49.0,
-        "grade_distribution": {
-          "C": 5,
-          "D": 1,
-          "B": 2,
-          "A": 1
-        }
-      },
-      {
-        "code": "153",
-        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
-        "students_with_marks": 9,
-        "average_mark": 44.56,
-        "grade_distribution": {
-          "C": 7,
-          "D": 1,
-          "B": 1
-        }
-      },
-      {
-        "code": "140",
-        "subject": "CIVICS AND CITIZENSHIP",
-        "students_with_marks": 9,
-        "average_mark": 49.89,
-        "grade_distribution": {
-          "B": 3,
-          "C": 3,
-          "D": 2,
-          "A-": 1
-        }
-      },
-      {
-        "code": "134",
-        "subject": "AGRICULTURE STUDIES",
-        "students_with_marks": 17,
-        "average_mark": 68.18,
-        "grade_distribution": {
-          "A-": 8,
-          "B": 1,
-          "A": 7,
-          "A+": 1
-        }
-      },
-      {
-        "code": "146",
-        "subject": "ACCOUNTING",
-        "students_with_marks": 8,
-        "average_mark": 41.88,
-        "grade_distribution": {
-          "D": 5,
-          "C": 1,
-          "B": 1,
-          "A-": 1
-        }
-      },
-      {
-        "code": "152",
-        "subject": "FINANCE AND BANKING",
-        "students_with_marks": 8,
-        "average_mark": 47.25,
-        "grade_distribution": {
-          "D": 2,
-          "C": 4,
-          "A-": 2
-        }
-      },
-      {
-        "code": "143",
-        "subject": "BUSINESS ENTREPRENEURSHIP",
-        "students_with_marks": 8,
-        "average_mark": 51.5,
-        "grade_distribution": {
-          "B": 4,
-          "C": 3,
-          "A-": 1
-        }
-      }
-    ],
-    "rank": 189
-  },
-  {
     "institute": "LAMABAZAR ASAD ALI SOWDAGAR CITY CORPORATION HIGH SCHOOL, CHATTOGRAM",
     "total_students": 44,
     "gpa_5_count": 9,
@@ -43542,7 +43276,7 @@
         }
       }
     ],
-    "rank": 190
+    "rank": 189
   },
   {
     "institute": "KADALPUR SCHOOL AND COLLEGE, CHATTOGRAM",
@@ -43815,7 +43549,7 @@
         }
       }
     ],
-    "rank": 191
+    "rank": 190
   },
   {
     "institute": "CHAR KHAGRIA KHADIM ALI CHOWDHURY HIGH SCHOOL, CHATTOGRAM",
@@ -44066,7 +43800,7 @@
         }
       }
     ],
-    "rank": 192
+    "rank": 191
   },
   {
     "institute": "ZAFARNOGAR APARNACHARAN HIGH SCHOOL, CHATTOGRAM",
@@ -44343,7 +44077,7 @@
         }
       }
     ],
-    "rank": 193
+    "rank": 192
   },
   {
     "institute": "PRANHARI AMEEN ACADEMY, CHATTOGRAM",
@@ -44619,7 +44353,7 @@
         }
       }
     ],
-    "rank": 194
+    "rank": 193
   },
   {
     "institute": "NANUPUR ABU SOBHAN HIGH SCHOOL, CHATTOGRAM",
@@ -44895,7 +44629,7 @@
         }
       }
     ],
-    "rank": 195
+    "rank": 194
   },
   {
     "institute": "MONSUR ALI SIKDER IDEAL SCHOOL, COX'S BAZAR",
@@ -45155,7 +44889,7 @@
         }
       }
     ],
-    "rank": 196
+    "rank": 195
   },
   {
     "institute": "P. D. B. HIGH SCHOOL, CHATTOGRAM",
@@ -45395,7 +45129,7 @@
         }
       }
     ],
-    "rank": 197
+    "rank": 196
   },
   {
     "institute": "KALAPANIA HIGH SCHOOL, CHATTOGRAM",
@@ -45641,7 +45375,7 @@
         }
       }
     ],
-    "rank": 198
+    "rank": 197
   },
   {
     "institute": "KRISHNA KUMARI CITY CORPORATION GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -45945,7 +45679,7 @@
         }
       }
     ],
-    "rank": 199
+    "rank": 198
   },
   {
     "institute": "GAINDIA CHHARI HIGH SCHOOL, RANGAMATI",
@@ -46142,7 +45876,7 @@
         }
       }
     ],
-    "rank": 200
+    "rank": 199
   },
   {
     "institute": "AL-HAZ FAZAL AMBIA HIGH SCHOOL, COX'S BAZAR",
@@ -46421,7 +46155,7 @@
         }
       }
     ],
-    "rank": 201
+    "rank": 200
   },
   {
     "institute": "DURGAPUR NOGENDRA CHANDRA HIGH SCHOOL, CHATTOGRAM",
@@ -46678,7 +46412,7 @@
         }
       }
     ],
-    "rank": 202
+    "rank": 201
   },
   {
     "institute": "BEPZA PUBLIC SCHOOL & COLLEGE, CHATTOGRAM",
@@ -47000,7 +46734,7 @@
         }
       }
     ],
-    "rank": 203
+    "rank": 202
   },
   {
     "institute": "DILWARA JAHAN MEMORIAL COLLEGE, CHATTOGRAM",
@@ -47282,7 +47016,7 @@
         }
       }
     ],
-    "rank": 204
+    "rank": 203
   },
   {
     "institute": "LAMA MODEL GIRLS HIGH SCHOOL, BANDARBAN",
@@ -47565,7 +47299,7 @@
         }
       }
     ],
-    "rank": 205
+    "rank": 204
   },
   {
     "institute": "MOSTAFA BEGUM GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -47813,7 +47547,7 @@
         }
       }
     ],
-    "rank": 206
+    "rank": 205
   },
   {
     "institute": "JHEORY BARAKHAIN SHILAIGARA HIGH SCHOOL, CHATTOGRAM",
@@ -48087,7 +47821,7 @@
         }
       }
     ],
-    "rank": 207
+    "rank": 206
   },
   {
     "institute": "BANDARBAN POLICE LINES SCHOOL, BANDARBAN",
@@ -48257,7 +47991,7 @@
         }
       }
     ],
-    "rank": 208
+    "rank": 207
   },
   {
     "institute": "SOUTH SATKANIA GOLAM BARI GOVT. MODEL HIGH SCHOOL, CHATTOGRAM",
@@ -48571,7 +48305,7 @@
         }
       }
     ],
-    "rank": 209
+    "rank": 208
   },
   {
     "institute": "KUNDESHWARY GIRLS' BIDYA MONDIR, CHATTOGRAM",
@@ -48810,7 +48544,7 @@
         }
       }
     ],
-    "rank": 210
+    "rank": 209
   },
   {
     "institute": "MASTER TALEB ULLAH MODEL SCHOOL & COLLEGE, COX'S BAZAR",
@@ -48960,7 +48694,7 @@
         }
       }
     ],
-    "rank": 211
+    "rank": 210
   },
   {
     "institute": "AL-HAJ ABUL BASHER CHOWDHURY HIGH SCHOOL, CHATTOGRAM",
@@ -49167,7 +48901,7 @@
         }
       }
     ],
-    "rank": 212
+    "rank": 211
   },
   {
     "institute": "SATKANIA GOVT. GIRLS HIGH SCHOOL, CHATTOGRAM",
@@ -49447,7 +49181,7 @@
         }
       }
     ],
-    "rank": 213
+    "rank": 212
   },
   {
     "institute": "DEBOLCHHARI BAZAR PARA HIGH SCHOOL, KHAGRACHHARI",
@@ -49615,7 +49349,7 @@
         }
       }
     ],
-    "rank": 214
+    "rank": 213
   },
   {
     "institute": "KADHURKHIL GOVT. HIGH SCHOOL, CHATTOGRAM",
@@ -49895,7 +49629,7 @@
         }
       }
     ],
-    "rank": 215
+    "rank": 214
   },
   {
     "institute": "PANCHLAISH CITY CORP. GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -50199,7 +49933,7 @@
         }
       }
     ],
-    "rank": 216
+    "rank": 215
   },
   {
     "institute": "SUALOK HIGH SCHOOL, BANDARBAN",
@@ -50516,7 +50250,7 @@
         }
       }
     ],
-    "rank": 217
+    "rank": 216
   },
   {
     "institute": "KUTUBDIA MODEL HIGH SCHOOL AND COLLEGE, COX'S BAZAR",
@@ -50789,7 +50523,7 @@
         }
       }
     ],
-    "rank": 218
+    "rank": 217
   },
   {
     "institute": "JAHANARA MAMATAZ GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -51008,7 +50742,7 @@
         }
       }
     ],
-    "rank": 219
+    "rank": 218
   },
   {
     "institute": "BHUZPUR ADARSHA HIGH SCHOOL, CHATTOGRAM",
@@ -51279,7 +51013,7 @@
         }
       }
     ],
-    "rank": 220
+    "rank": 219
   },
   {
     "institute": "RANGUNIA MAJUMDERKHIL HIGH SCHOOL, CHATTOGRAM",
@@ -51558,7 +51292,7 @@
         }
       }
     ],
-    "rank": 221
+    "rank": 220
   },
   {
     "institute": "FATEMA GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -51804,7 +51538,7 @@
         }
       }
     ],
-    "rank": 222
+    "rank": 221
   },
   {
     "institute": "PEKUA GIRLS' HIGH SCHOOL, COX'S BAZAR",
@@ -52082,7 +51816,7 @@
         }
       }
     ],
-    "rank": 223
+    "rank": 222
   },
   {
     "institute": "AL-ZABER INSTITUTE, CHATTOGRAM",
@@ -52332,7 +52066,7 @@
         }
       }
     ],
-    "rank": 224
+    "rank": 223
   },
   {
     "institute": "BARA MAHESHKHALI GIRLS' HIGH SCHOOL, COX'S BAZAR",
@@ -52563,7 +52297,7 @@
         }
       }
     ],
-    "rank": 225
+    "rank": 224
   },
   {
     "institute": "WEST SHILOK BEDOWRA ALAM CHOWDHURY HIGH SCHOOL, CHATTOGRAM",
@@ -52823,7 +52557,7 @@
         }
       }
     ],
-    "rank": 226
+    "rank": 225
   },
   {
     "institute": "MOHAZON HAT FAZLUR RAHMAN HIGH SCHOOL, CHATTOGRAM",
@@ -53054,7 +52788,7 @@
         }
       }
     ],
-    "rank": 227
+    "rank": 226
   },
   {
     "institute": "FATEHNAGAR NOAJISHPUR WADUDIA HIGH SCHOOL, CHATTOGRAM",
@@ -53286,7 +53020,7 @@
         }
       }
     ],
-    "rank": 228
+    "rank": 227
   },
   {
     "institute": "POKEKHALI HIGH SCHOOL, COX'S BAZAR",
@@ -53535,7 +53269,7 @@
         }
       }
     ],
-    "rank": 229
+    "rank": 228
   },
   {
     "institute": "SABUJ SHIKSHAYATAN, CHATTOGRAM",
@@ -53798,6 +53532,277 @@
         "average_mark": 43.0,
         "grade_distribution": {
           "C": 1
+        }
+      }
+    ],
+    "rank": 229
+  },
+  {
+    "institute": "CHAKORIA GOVT. HIGH SCHOOL, COX'S BAZAR",
+    "total_students": 41,
+    "gpa_5_count": 2,
+    "gpa_5_percentage": 4.88,
+    "average_gpa": 4.0458,
+    "institution_score": 80.92,
+    "grade_distribution": {
+      "A+": 169,
+      "A": 81,
+      "A-": 58,
+      "B": 54,
+      "X": 1,
+      "C": 77,
+      "D": 32,
+      "F": 20
+    },
+    "subject_statistics": [
+      {
+        "code": "101",
+        "subject": "BANGLA-I",
+        "students_with_marks": 41,
+        "average_mark": 118.07,
+        "grade_distribution": {
+          "A+": 2,
+          "A": 4,
+          "A-": 12,
+          "B": 15,
+          "C": 8
+        }
+      },
+      {
+        "code": "107",
+        "subject": "ENGLISH-I",
+        "students_with_marks": 37,
+        "average_mark": 107.19,
+        "grade_distribution": {
+          "A+": 1,
+          "A": 6,
+          "A-": 5,
+          "C": 11,
+          "B": 6,
+          "D": 8,
+          "F": 4
+        }
+      },
+      {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 28,
+        "average_mark": 54.32,
+        "grade_distribution": {
+          "A": 3,
+          "A-": 5,
+          "B": 6,
+          "C": 10,
+          "D": 3,
+          "A+": 1,
+          "F": 13
+        }
+      },
+      {
+        "code": "150",
+        "subject": "BANGLADESH AND GLOBAL STUDIES",
+        "students_with_marks": 20,
+        "average_mark": 73.9,
+        "grade_distribution": {
+          "A+": 7,
+          "A": 8,
+          "B": 3,
+          "A-": 2
+        }
+      },
+      {
+        "code": "112",
+        "subject": "HINDU RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 9,
+        "average_mark": 72.89,
+        "grade_distribution": {
+          "A+": 5,
+          "A": 1,
+          "B": 1,
+          "D": 1,
+          "C": 1
+        }
+      },
+      {
+        "code": "136",
+        "subject": "PHYSICS",
+        "students_with_marks": 20,
+        "average_mark": 77.5,
+        "grade_distribution": {
+          "A+": 8,
+          "A": 8,
+          "A-": 4
+        }
+      },
+      {
+        "code": "137",
+        "subject": "CHEMISTRY",
+        "students_with_marks": 20,
+        "average_mark": 81.1,
+        "grade_distribution": {
+          "A+": 12,
+          "A": 8
+        }
+      },
+      {
+        "code": "138",
+        "subject": "BIOLOGY",
+        "students_with_marks": 20,
+        "average_mark": 85.35,
+        "grade_distribution": {
+          "A+": 17,
+          "A": 3
+        }
+      },
+      {
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 41,
+        "average_mark": 39.73,
+        "grade_distribution": {
+          "A+": 19,
+          "A": 20,
+          "A-": 2
+        }
+      },
+      {
+        "code": "126",
+        "subject": "HIGHER MATHEMATICS",
+        "students_with_marks": 20,
+        "average_mark": 82.8,
+        "grade_distribution": {
+          "A+": 15,
+          "A": 4,
+          "A-": 1
+        }
+      },
+      {
+        "code": "147",
+        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
+        "students_with_marks": 41,
+        "average_mark": 75.15,
+        "grade_distribution": {
+          "A+": 41
+        }
+      },
+      {
+        "code": "156",
+        "subject": "Career Education",
+        "students_with_marks": 40,
+        "average_mark": 49.8,
+        "grade_distribution": {
+          "A+": 40,
+          "X": 1
+        }
+      },
+      {
+        "code": "111",
+        "subject": "ISLAM AND MORAL EDUCATION",
+        "students_with_marks": 30,
+        "average_mark": 57.67,
+        "grade_distribution": {
+          "A-": 11,
+          "A": 5,
+          "B": 4,
+          "C": 9,
+          "F": 2,
+          "D": 1
+        }
+      },
+      {
+        "code": "127",
+        "subject": "SCIENCE",
+        "students_with_marks": 21,
+        "average_mark": 46.76,
+        "grade_distribution": {
+          "C": 11,
+          "D": 4,
+          "B": 4,
+          "A-": 1,
+          "A": 1
+        }
+      },
+      {
+        "code": "110",
+        "subject": "GEOGRAPHY AND ENVIRONMENT",
+        "students_with_marks": 13,
+        "average_mark": 49.54,
+        "grade_distribution": {
+          "C": 6,
+          "D": 2,
+          "B": 3,
+          "A-": 1,
+          "A": 1
+        }
+      },
+      {
+        "code": "153",
+        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
+        "students_with_marks": 13,
+        "average_mark": 44.38,
+        "grade_distribution": {
+          "C": 8,
+          "D": 3,
+          "B": 2
+        }
+      },
+      {
+        "code": "140",
+        "subject": "CIVICS AND CITIZENSHIP",
+        "students_with_marks": 13,
+        "average_mark": 47.77,
+        "grade_distribution": {
+          "B": 4,
+          "C": 5,
+          "D": 3,
+          "A-": 1
+        }
+      },
+      {
+        "code": "134",
+        "subject": "AGRICULTURE STUDIES",
+        "students_with_marks": 20,
+        "average_mark": 68.2,
+        "grade_distribution": {
+          "A-": 9,
+          "B": 1,
+          "A": 9,
+          "F": 1,
+          "A+": 1
+        }
+      },
+      {
+        "code": "146",
+        "subject": "ACCOUNTING",
+        "students_with_marks": 8,
+        "average_mark": 41.88,
+        "grade_distribution": {
+          "D": 5,
+          "C": 1,
+          "B": 1,
+          "A-": 1
+        }
+      },
+      {
+        "code": "152",
+        "subject": "FINANCE AND BANKING",
+        "students_with_marks": 8,
+        "average_mark": 47.25,
+        "grade_distribution": {
+          "D": 2,
+          "C": 4,
+          "A-": 2
+        }
+      },
+      {
+        "code": "143",
+        "subject": "BUSINESS ENTREPRENEURSHIP",
+        "students_with_marks": 8,
+        "average_mark": 51.5,
+        "grade_distribution": {
+          "B": 4,
+          "C": 3,
+          "A-": 1
         }
       }
     ],
@@ -139710,299 +139715,6 @@
     "rank": 550
   },
   {
-    "institute": "BANGABANDHU BANGLA VIDDAPIT, CHATTOGRAM",
-    "total_students": 53,
-    "gpa_5_count": 1,
-    "gpa_5_percentage": 1.89,
-    "average_gpa": 3.6522,
-    "institution_score": 73.04,
-    "grade_distribution": {
-      "B": 102,
-      "D": 33,
-      "A": 91,
-      "A+": 187,
-      "F": 41,
-      "A-": 116,
-      "C": 66
-    },
-    "subject_statistics": [
-      {
-        "code": "101",
-        "subject": "BANGLA-I",
-        "students_with_marks": 53,
-        "average_mark": 121.85,
-        "grade_distribution": {
-          "B": 15,
-          "A+": 4,
-          "A": 11,
-          "A-": 13,
-          "C": 9,
-          "D": 1
-        }
-      },
-      {
-        "code": "107",
-        "subject": "ENGLISH-I",
-        "students_with_marks": 49,
-        "average_mark": 107.76,
-        "grade_distribution": {
-          "B": 13,
-          "A+": 1,
-          "A": 6,
-          "C": 14,
-          "A-": 9,
-          "D": 6,
-          "F": 4
-        }
-      },
-      {
-        "code": "109",
-        "subject": "MATHEMATICS",
-        "students_with_marks": 42,
-        "average_mark": 49.45,
-        "grade_distribution": {
-          "D": 13,
-          "A": 3,
-          "F": 11,
-          "B": 7,
-          "C": 11,
-          "A-": 8
-        }
-      },
-      {
-        "code": "150",
-        "subject": "BANGLADESH AND GLOBAL STUDIES",
-        "students_with_marks": 36,
-        "average_mark": 67.22,
-        "grade_distribution": {
-          "B": 6,
-          "A": 10,
-          "A+": 4,
-          "A-": 15,
-          "C": 1
-        }
-      },
-      {
-        "code": "111",
-        "subject": "ISLAM AND MORAL EDUCATION",
-        "students_with_marks": 41,
-        "average_mark": 71.32,
-        "grade_distribution": {
-          "A": 8,
-          "A+": 16,
-          "A-": 7,
-          "B": 7,
-          "C": 2,
-          "D": 1
-        }
-      },
-      {
-        "code": "136",
-        "subject": "PHYSICS",
-        "students_with_marks": 17,
-        "average_mark": 61.47,
-        "grade_distribution": {
-          "B": 8,
-          "A+": 1,
-          "A": 2,
-          "F": 19,
-          "A-": 5,
-          "C": 1
-        }
-      },
-      {
-        "code": "137",
-        "subject": "CHEMISTRY",
-        "students_with_marks": 36,
-        "average_mark": 65.64,
-        "grade_distribution": {
-          "B": 12,
-          "A+": 5,
-          "A-": 11,
-          "A": 8
-        }
-      },
-      {
-        "code": "138",
-        "subject": "BIOLOGY",
-        "students_with_marks": 36,
-        "average_mark": 68.94,
-        "grade_distribution": {
-          "B": 7,
-          "A+": 5,
-          "A": 11,
-          "A-": 13
-        }
-      },
-      {
-        "code": "154",
-        "subject": "Information And Communication Technology",
-        "students_with_marks": 53,
-        "average_mark": 40.91,
-        "grade_distribution": {
-          "A+": 34,
-          "A": 19
-        }
-      },
-      {
-        "code": "126",
-        "subject": "HIGHER MATHEMATICS",
-        "students_with_marks": 26,
-        "average_mark": 62.81,
-        "grade_distribution": {
-          "F": 6,
-          "A": 4,
-          "C": 3,
-          "B": 7,
-          "A-": 10,
-          "A+": 2
-        }
-      },
-      {
-        "code": "147",
-        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
-        "students_with_marks": 53,
-        "average_mark": 65.19,
-        "grade_distribution": {
-          "A+": 53
-        }
-      },
-      {
-        "code": "156",
-        "subject": "Career Education",
-        "students_with_marks": 53,
-        "average_mark": 49.34,
-        "grade_distribution": {
-          "A+": 53
-        }
-      },
-      {
-        "code": "134",
-        "subject": "AGRICULTURE STUDIES",
-        "students_with_marks": 18,
-        "average_mark": 67.56,
-        "grade_distribution": {
-          "A": 3,
-          "A-": 13,
-          "A+": 1,
-          "F": 1,
-          "B": 1
-        }
-      },
-      {
-        "code": "113",
-        "subject": "BUDDHIST RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 5,
-        "average_mark": 87.2,
-        "grade_distribution": {
-          "A+": 4,
-          "A": 1
-        }
-      },
-      {
-        "code": "112",
-        "subject": "HINDU RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 7,
-        "average_mark": 69.86,
-        "grade_distribution": {
-          "A+": 2,
-          "A-": 2,
-          "A": 1,
-          "B": 2
-        }
-      },
-      {
-        "code": "127",
-        "subject": "SCIENCE",
-        "students_with_marks": 17,
-        "average_mark": 44.88,
-        "grade_distribution": {
-          "A-": 1,
-          "B": 4,
-          "C": 8,
-          "D": 4
-        }
-      },
-      {
-        "code": "110",
-        "subject": "GEOGRAPHY AND ENVIRONMENT",
-        "students_with_marks": 3,
-        "average_mark": 44.33,
-        "grade_distribution": {
-          "C": 3
-        }
-      },
-      {
-        "code": "153",
-        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
-        "students_with_marks": 3,
-        "average_mark": 46.67,
-        "grade_distribution": {
-          "C": 3
-        }
-      },
-      {
-        "code": "140",
-        "subject": "CIVICS AND CITIZENSHIP",
-        "students_with_marks": 3,
-        "average_mark": 63.33,
-        "grade_distribution": {
-          "A-": 2,
-          "B": 1
-        }
-      },
-      {
-        "code": "146",
-        "subject": "ACCOUNTING",
-        "students_with_marks": 14,
-        "average_mark": 55.07,
-        "grade_distribution": {
-          "A": 1,
-          "B": 2,
-          "A+": 2,
-          "A-": 3,
-          "C": 3,
-          "D": 3
-        }
-      },
-      {
-        "code": "152",
-        "subject": "FINANCE AND BANKING",
-        "students_with_marks": 14,
-        "average_mark": 48.93,
-        "grade_distribution": {
-          "B": 7,
-          "C": 5,
-          "D": 2
-        }
-      },
-      {
-        "code": "143",
-        "subject": "BUSINESS ENTREPRENEURSHIP",
-        "students_with_marks": 14,
-        "average_mark": 53.21,
-        "grade_distribution": {
-          "C": 3,
-          "B": 3,
-          "A-": 3,
-          "A": 2,
-          "D": 3
-        }
-      },
-      {
-        "code": "151",
-        "subject": "HOME SCIENCE",
-        "students_with_marks": 2,
-        "average_mark": 71.0,
-        "grade_distribution": {
-          "A-": 1,
-          "A": 1
-        }
-      }
-    ],
-    "rank": 551
-  },
-  {
     "institute": "PURANGAR SHAH SHARFUDDIN HIGH SCHOOL, CHATTOGRAM",
     "total_students": 40,
     "gpa_5_count": 1,
@@ -140280,7 +139992,7 @@
         }
       }
     ],
-    "rank": 552
+    "rank": 551
   },
   {
     "institute": "BAGMONIRAM A. RASHID CITY CORPORATION HIGH SCHOOL, CHATTOGRAM",
@@ -140589,7 +140301,7 @@
         }
       }
     ],
-    "rank": 553
+    "rank": 552
   },
   {
     "institute": "SHAKPURA ADARSHA HIGH SCHOOL, CHATTOGRAM",
@@ -140892,7 +140604,7 @@
         }
       }
     ],
-    "rank": 554
+    "rank": 553
   },
   {
     "institute": "SANOWARA SECONDARY SCHOOL, CHATTOGRAM",
@@ -141155,7 +140867,7 @@
         }
       }
     ],
-    "rank": 555
+    "rank": 554
   },
   {
     "institute": "ILISHIYA JAMILA BEGUM HIGH SCHOOL, COX'S BAZAR",
@@ -141447,7 +141159,7 @@
         }
       }
     ],
-    "rank": 556
+    "rank": 555
   },
   {
     "institute": "WEST GUZRA HIGH SCHOOL, CHATTOGRAM",
@@ -141664,7 +141376,7 @@
         }
       }
     ],
-    "rank": 557
+    "rank": 556
   },
   {
     "institute": "WEST KADHUR KHIL HIGH SCHOOL, CHATTOGRAM",
@@ -141958,7 +141670,7 @@
         }
       }
     ],
-    "rank": 558
+    "rank": 557
   },
   {
     "institute": "HAZIGOAN BORUMCHARA HIGH SCHOOL, CHATTOGRAM",
@@ -142204,7 +141916,7 @@
         }
       }
     ],
-    "rank": 559
+    "rank": 558
   },
   {
     "institute": "UTTAR BOROBIL HIGH SCHOOL, COX'S BAZAR",
@@ -142352,7 +142064,7 @@
         }
       }
     ],
-    "rank": 560
+    "rank": 559
   },
   {
     "institute": "JORARGANJ ADARSHA HIGH SCHOOL, CHATTOGRAM",
@@ -142638,7 +142350,7 @@
         }
       }
     ],
-    "rank": 561
+    "rank": 560
   },
   {
     "institute": "KATAKHALI HIGH SCHOOL, CHATTOGRAM",
@@ -142921,7 +142633,7 @@
         }
       }
     ],
-    "rank": 562
+    "rank": 561
   },
   {
     "institute": "CHUNTI HIGH SCHOOL, CHATTOGRAM",
@@ -143218,7 +142930,7 @@
         }
       }
     ],
-    "rank": 563
+    "rank": 562
   },
   {
     "institute": "PATHORGHATA GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -143502,7 +143214,7 @@
         }
       }
     ],
-    "rank": 564
+    "rank": 563
   },
   {
     "institute": "SOUTH SWANDIP HIGH SCHOOL, CHATTOGRAM",
@@ -143809,7 +143521,7 @@
         }
       }
     ],
-    "rank": 565
+    "rank": 564
   },
   {
     "institute": "WEST GOMDANDI UNION HIGH SCHOOL, CHATTOGRAM",
@@ -144120,7 +143832,7 @@
         }
       }
     ],
-    "rank": 566
+    "rank": 565
   },
   {
     "institute": "MEHER NAMA HIGH SCHOOL, COX'S BAZAR",
@@ -144394,7 +144106,7 @@
         }
       }
     ],
-    "rank": 567
+    "rank": 566
   },
   {
     "institute": "SRI AUROBINDO GIRL'S HIGH SCHOOL, CHATTOGRAM",
@@ -144645,7 +144357,7 @@
         }
       }
     ],
-    "rank": 568
+    "rank": 567
   },
   {
     "institute": "MAHESHKHALI MODEL HIGH SCHOOL, COX'S BAZAR",
@@ -144948,7 +144660,7 @@
         }
       }
     ],
-    "rank": 569
+    "rank": 568
   },
   {
     "institute": "MIRZAPUR HIGH SCHOOL, CHATTOGRAM",
@@ -145260,7 +144972,7 @@
         }
       }
     ],
-    "rank": 570
+    "rank": 569
   },
   {
     "institute": "CHHADAHA KEUCHIYA HIGH SCHOOL, CHATTOGRAM",
@@ -145516,7 +145228,7 @@
         }
       }
     ],
-    "rank": 571
+    "rank": 570
   },
   {
     "institute": "BARA DAROGAHAT ABDUR RAUF MEMORIAL HIGH SCHOOL, CHATTOGRAM",
@@ -145796,7 +145508,7 @@
         }
       }
     ],
-    "rank": 572
+    "rank": 571
   },
   {
     "institute": "SHAMLAPUR HIGH SCHOOL, COX'S BAZAR",
@@ -146093,7 +145805,7 @@
         }
       }
     ],
-    "rank": 573
+    "rank": 572
   },
   {
     "institute": "HOLDIA HIGH SCHOOL, CHATTOGRAM",
@@ -146300,7 +146012,7 @@
         }
       }
     ],
-    "rank": 574
+    "rank": 573
   },
   {
     "institute": "KATHARIA BAGMARA HIGH SCHOOL, CHATTOGRAM",
@@ -146586,7 +146298,7 @@
         }
       }
     ],
-    "rank": 575
+    "rank": 574
   },
   {
     "institute": "GUIMARA GOVT. MODEL HIGH SCHOOL, KHAGRACHHARI",
@@ -146858,7 +146570,7 @@
         }
       }
     ],
-    "rank": 576
+    "rank": 575
   },
   {
     "institute": "MADYAM ADHAR MANIK HIGH SCHOOL, CHATTOGRAM",
@@ -147144,7 +146856,7 @@
         }
       }
     ],
-    "rank": 577
+    "rank": 576
   },
   {
     "institute": "NUNCHARI HIGH SCHOOL, KHAGRACHHARI",
@@ -147346,323 +147058,7 @@
         }
       }
     ],
-    "rank": 578
-  },
-  {
-    "institute": "BANSHKHALI ADARSHA HIGH SCHOOL, CHATTOGRAM",
-    "total_students": 183,
-    "gpa_5_count": 10,
-    "gpa_5_percentage": 5.46,
-    "average_gpa": 3.6245,
-    "institution_score": 72.49,
-    "grade_distribution": {
-      "A": 254,
-      "A+": 598,
-      "A-": 264,
-      "B": 324,
-      "F": 174,
-      "C": 329,
-      "D": 251,
-      "X": 2
-    },
-    "subject_statistics": [
-      {
-        "code": "101",
-        "subject": "BANGLA-I",
-        "students_with_marks": 180,
-        "average_mark": 114.64,
-        "grade_distribution": {
-          "A": 32,
-          "A-": 36,
-          "C": 38,
-          "B": 52,
-          "A+": 7,
-          "D": 15,
-          "F": 3
-        }
-      },
-      {
-        "code": "107",
-        "subject": "ENGLISH-I",
-        "students_with_marks": 117,
-        "average_mark": 98.5,
-        "grade_distribution": {
-          "A": 10,
-          "B": 13,
-          "A-": 12,
-          "D": 42,
-          "C": 31,
-          "F": 65,
-          "A+": 9,
-          "X": 1
-        }
-      },
-      {
-        "code": "109",
-        "subject": "MATHEMATICS",
-        "students_with_marks": 128,
-        "average_mark": 49.46,
-        "grade_distribution": {
-          "A": 8,
-          "B": 12,
-          "A-": 15,
-          "D": 56,
-          "A+": 11,
-          "F": 54,
-          "C": 26,
-          "X": 1
-        }
-      },
-      {
-        "code": "150",
-        "subject": "BANGLADESH AND GLOBAL STUDIES",
-        "students_with_marks": 51,
-        "average_mark": 69.06,
-        "grade_distribution": {
-          "A": 17,
-          "A-": 10,
-          "B": 5,
-          "C": 7,
-          "A+": 12
-        }
-      },
-      {
-        "code": "112",
-        "subject": "HINDU RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 55,
-        "average_mark": 61.16,
-        "grade_distribution": {
-          "A+": 13,
-          "B": 10,
-          "C": 16,
-          "A-": 7,
-          "A": 5,
-          "D": 4
-        }
-      },
-      {
-        "code": "136",
-        "subject": "PHYSICS",
-        "students_with_marks": 45,
-        "average_mark": 67.11,
-        "grade_distribution": {
-          "A-": 14,
-          "B": 10,
-          "C": 4,
-          "A": 6,
-          "A+": 11,
-          "F": 6
-        }
-      },
-      {
-        "code": "137",
-        "subject": "CHEMISTRY",
-        "students_with_marks": 50,
-        "average_mark": 75.38,
-        "grade_distribution": {
-          "A": 17,
-          "A-": 9,
-          "A+": 19,
-          "C": 3,
-          "F": 1,
-          "B": 2
-        }
-      },
-      {
-        "code": "138",
-        "subject": "BIOLOGY",
-        "students_with_marks": 46,
-        "average_mark": 75.39,
-        "grade_distribution": {
-          "A": 10,
-          "B": 6,
-          "A-": 9,
-          "A+": 21,
-          "F": 5
-        }
-      },
-      {
-        "code": "154",
-        "subject": "Information And Communication Technology",
-        "students_with_marks": 183,
-        "average_mark": 39.2,
-        "grade_distribution": {
-          "A+": 77,
-          "A": 88,
-          "A-": 18
-        }
-      },
-      {
-        "code": "126",
-        "subject": "HIGHER MATHEMATICS",
-        "students_with_marks": 43,
-        "average_mark": 73.14,
-        "grade_distribution": {
-          "A-": 9,
-          "F": 8,
-          "A+": 15,
-          "B": 11,
-          "A": 8
-        }
-      },
-      {
-        "code": "147",
-        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
-        "students_with_marks": 183,
-        "average_mark": 67.49,
-        "grade_distribution": {
-          "A+": 183
-        }
-      },
-      {
-        "code": "156",
-        "subject": "Career Education",
-        "students_with_marks": 183,
-        "average_mark": 50.0,
-        "grade_distribution": {
-          "A+": 183
-        }
-      },
-      {
-        "code": "111",
-        "subject": "ISLAM AND MORAL EDUCATION",
-        "students_with_marks": 116,
-        "average_mark": 62.41,
-        "grade_distribution": {
-          "A+": 20,
-          "A": 17,
-          "B": 34,
-          "A-": 22,
-          "C": 17,
-          "D": 6
-        }
-      },
-      {
-        "code": "113",
-        "subject": "BUDDHIST RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 12,
-        "average_mark": 67.92,
-        "grade_distribution": {
-          "A+": 3,
-          "A-": 3,
-          "A": 2,
-          "B": 2,
-          "D": 1,
-          "C": 1
-        }
-      },
-      {
-        "code": "127",
-        "subject": "SCIENCE",
-        "students_with_marks": 126,
-        "average_mark": 48.89,
-        "grade_distribution": {
-          "B": 29,
-          "A": 7,
-          "A-": 12,
-          "C": 38,
-          "D": 36,
-          "A+": 4,
-          "F": 6
-        }
-      },
-      {
-        "code": "110",
-        "subject": "GEOGRAPHY AND ENVIRONMENT",
-        "students_with_marks": 113,
-        "average_mark": 45.6,
-        "grade_distribution": {
-          "C": 44,
-          "B": 14,
-          "D": 43,
-          "A": 2,
-          "A-": 8,
-          "A+": 2,
-          "F": 3
-        }
-      },
-      {
-        "code": "153",
-        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
-        "students_with_marks": 104,
-        "average_mark": 50.6,
-        "grade_distribution": {
-          "A-": 21,
-          "C": 34,
-          "D": 24,
-          "B": 16,
-          "A": 6,
-          "A+": 3,
-          "F": 12
-        }
-      },
-      {
-        "code": "140",
-        "subject": "CIVICS AND CITIZENSHIP",
-        "students_with_marks": 114,
-        "average_mark": 50.14,
-        "grade_distribution": {
-          "A-": 11,
-          "B": 39,
-          "C": 47,
-          "D": 13,
-          "A": 2,
-          "A+": 2,
-          "F": 2
-        }
-      },
-      {
-        "code": "134",
-        "subject": "AGRICULTURE STUDIES",
-        "students_with_marks": 123,
-        "average_mark": 60.77,
-        "grade_distribution": {
-          "A": 15,
-          "A-": 45,
-          "A+": 3,
-          "B": 57,
-          "F": 9,
-          "C": 3
-        }
-      },
-      {
-        "code": "146",
-        "subject": "ACCOUNTING",
-        "students_with_marks": 16,
-        "average_mark": 51.19,
-        "grade_distribution": {
-          "B": 5,
-          "A-": 3,
-          "C": 4,
-          "A": 1,
-          "D": 3
-        }
-      },
-      {
-        "code": "152",
-        "subject": "FINANCE AND BANKING",
-        "students_with_marks": 16,
-        "average_mark": 44.81,
-        "grade_distribution": {
-          "C": 9,
-          "B": 4,
-          "D": 3
-        }
-      },
-      {
-        "code": "143",
-        "subject": "BUSINESS ENTREPRENEURSHIP",
-        "students_with_marks": 16,
-        "average_mark": 45.44,
-        "grade_distribution": {
-          "C": 7,
-          "A": 1,
-          "D": 5,
-          "B": 3
-        }
-      }
-    ],
-    "rank": 579
+    "rank": 577
   },
   {
     "institute": "ABDUL HAMID SOWDAGAR HIGH SCHOOL, CHATTOGRAM",
@@ -147956,7 +147352,7 @@
         }
       }
     ],
-    "rank": 580
+    "rank": 578
   },
   {
     "institute": "SOUTH SHILOK M. SHAH ALAM CHOWDHURY HIGH SCHOOL, CHATTOGRAM",
@@ -148268,7 +147664,7 @@
         }
       }
     ],
-    "rank": 581
+    "rank": 579
   },
   {
     "institute": "TERIYAIL HIGH SCHOOL, CHATTOGRAM",
@@ -148545,7 +147941,7 @@
         }
       }
     ],
-    "rank": 582
+    "rank": 580
   },
   {
     "institute": "NOYAPARA HIGH SCHOOL, CHATTOGRAM",
@@ -148870,7 +148266,7 @@
         }
       }
     ],
-    "rank": 583
+    "rank": 581
   },
   {
     "institute": "GULTAZ MEMORIAL SCHOOL & COLLEGE, CHATTOGRAM",
@@ -149088,7 +148484,7 @@
         }
       }
     ],
-    "rank": 584
+    "rank": 582
   },
   {
     "institute": "LEMSHIKHALI HIGH SCHOOL, COX'S BAZAR",
@@ -149375,7 +148771,7 @@
         }
       }
     ],
-    "rank": 585
+    "rank": 583
   },
   {
     "institute": "KHAGRACHHARI GOVT. HIGH SCHOOL, KHAGRACHHARI",
@@ -149712,7 +149108,323 @@
         }
       }
     ],
-    "rank": 586
+    "rank": 584
+  },
+  {
+    "institute": "BANSHKHALI ADARSHA HIGH SCHOOL, CHATTOGRAM",
+    "total_students": 184,
+    "gpa_5_count": 10,
+    "gpa_5_percentage": 5.43,
+    "average_gpa": 3.6137,
+    "institution_score": 72.27,
+    "grade_distribution": {
+      "A": 254,
+      "A+": 601,
+      "A-": 267,
+      "B": 325,
+      "F": 174,
+      "C": 332,
+      "D": 253,
+      "X": 2
+    },
+    "subject_statistics": [
+      {
+        "code": "101",
+        "subject": "BANGLA-I",
+        "students_with_marks": 181,
+        "average_mark": 114.67,
+        "grade_distribution": {
+          "A": 32,
+          "A-": 37,
+          "C": 38,
+          "B": 52,
+          "A+": 7,
+          "D": 15,
+          "F": 3
+        }
+      },
+      {
+        "code": "107",
+        "subject": "ENGLISH-I",
+        "students_with_marks": 118,
+        "average_mark": 98.24,
+        "grade_distribution": {
+          "A": 10,
+          "B": 13,
+          "A-": 12,
+          "D": 43,
+          "C": 31,
+          "F": 65,
+          "A+": 9,
+          "X": 1
+        }
+      },
+      {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 129,
+        "average_mark": 49.36,
+        "grade_distribution": {
+          "A": 8,
+          "B": 12,
+          "A-": 15,
+          "D": 57,
+          "A+": 11,
+          "F": 54,
+          "C": 26,
+          "X": 1
+        }
+      },
+      {
+        "code": "150",
+        "subject": "BANGLADESH AND GLOBAL STUDIES",
+        "students_with_marks": 51,
+        "average_mark": 69.06,
+        "grade_distribution": {
+          "A": 17,
+          "A-": 10,
+          "B": 5,
+          "C": 7,
+          "A+": 12
+        }
+      },
+      {
+        "code": "112",
+        "subject": "HINDU RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 55,
+        "average_mark": 61.16,
+        "grade_distribution": {
+          "A+": 13,
+          "B": 10,
+          "C": 16,
+          "A-": 7,
+          "A": 5,
+          "D": 4
+        }
+      },
+      {
+        "code": "136",
+        "subject": "PHYSICS",
+        "students_with_marks": 45,
+        "average_mark": 67.11,
+        "grade_distribution": {
+          "A-": 14,
+          "B": 10,
+          "C": 4,
+          "A": 6,
+          "A+": 11,
+          "F": 6
+        }
+      },
+      {
+        "code": "137",
+        "subject": "CHEMISTRY",
+        "students_with_marks": 50,
+        "average_mark": 75.38,
+        "grade_distribution": {
+          "A": 17,
+          "A-": 9,
+          "A+": 19,
+          "C": 3,
+          "F": 1,
+          "B": 2
+        }
+      },
+      {
+        "code": "138",
+        "subject": "BIOLOGY",
+        "students_with_marks": 46,
+        "average_mark": 75.39,
+        "grade_distribution": {
+          "A": 10,
+          "B": 6,
+          "A-": 9,
+          "A+": 21,
+          "F": 5
+        }
+      },
+      {
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 184,
+        "average_mark": 39.21,
+        "grade_distribution": {
+          "A+": 78,
+          "A": 88,
+          "A-": 18
+        }
+      },
+      {
+        "code": "126",
+        "subject": "HIGHER MATHEMATICS",
+        "students_with_marks": 43,
+        "average_mark": 73.14,
+        "grade_distribution": {
+          "A-": 9,
+          "F": 8,
+          "A+": 15,
+          "B": 11,
+          "A": 8
+        }
+      },
+      {
+        "code": "147",
+        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
+        "students_with_marks": 184,
+        "average_mark": 67.39,
+        "grade_distribution": {
+          "A+": 184
+        }
+      },
+      {
+        "code": "156",
+        "subject": "Career Education",
+        "students_with_marks": 184,
+        "average_mark": 50.0,
+        "grade_distribution": {
+          "A+": 184
+        }
+      },
+      {
+        "code": "111",
+        "subject": "ISLAM AND MORAL EDUCATION",
+        "students_with_marks": 117,
+        "average_mark": 62.43,
+        "grade_distribution": {
+          "A+": 20,
+          "A": 17,
+          "B": 34,
+          "A-": 23,
+          "C": 17,
+          "D": 6
+        }
+      },
+      {
+        "code": "113",
+        "subject": "BUDDHIST RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 12,
+        "average_mark": 67.92,
+        "grade_distribution": {
+          "A+": 3,
+          "A-": 3,
+          "A": 2,
+          "B": 2,
+          "D": 1,
+          "C": 1
+        }
+      },
+      {
+        "code": "127",
+        "subject": "SCIENCE",
+        "students_with_marks": 127,
+        "average_mark": 48.87,
+        "grade_distribution": {
+          "B": 29,
+          "A": 7,
+          "A-": 12,
+          "C": 39,
+          "D": 36,
+          "A+": 4,
+          "F": 6
+        }
+      },
+      {
+        "code": "110",
+        "subject": "GEOGRAPHY AND ENVIRONMENT",
+        "students_with_marks": 114,
+        "average_mark": 45.57,
+        "grade_distribution": {
+          "C": 45,
+          "B": 14,
+          "D": 43,
+          "A": 2,
+          "A-": 8,
+          "A+": 2,
+          "F": 3
+        }
+      },
+      {
+        "code": "153",
+        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
+        "students_with_marks": 105,
+        "average_mark": 50.57,
+        "grade_distribution": {
+          "A-": 21,
+          "C": 35,
+          "D": 24,
+          "B": 16,
+          "A": 6,
+          "A+": 3,
+          "F": 12
+        }
+      },
+      {
+        "code": "140",
+        "subject": "CIVICS AND CITIZENSHIP",
+        "students_with_marks": 115,
+        "average_mark": 50.23,
+        "grade_distribution": {
+          "A-": 12,
+          "B": 39,
+          "C": 47,
+          "D": 13,
+          "A": 2,
+          "A+": 2,
+          "F": 2
+        }
+      },
+      {
+        "code": "134",
+        "subject": "AGRICULTURE STUDIES",
+        "students_with_marks": 124,
+        "average_mark": 60.71,
+        "grade_distribution": {
+          "A": 15,
+          "A-": 45,
+          "A+": 3,
+          "B": 58,
+          "F": 9,
+          "C": 3
+        }
+      },
+      {
+        "code": "146",
+        "subject": "ACCOUNTING",
+        "students_with_marks": 16,
+        "average_mark": 51.19,
+        "grade_distribution": {
+          "B": 5,
+          "A-": 3,
+          "C": 4,
+          "A": 1,
+          "D": 3
+        }
+      },
+      {
+        "code": "152",
+        "subject": "FINANCE AND BANKING",
+        "students_with_marks": 16,
+        "average_mark": 44.81,
+        "grade_distribution": {
+          "C": 9,
+          "B": 4,
+          "D": 3
+        }
+      },
+      {
+        "code": "143",
+        "subject": "BUSINESS ENTREPRENEURSHIP",
+        "students_with_marks": 16,
+        "average_mark": 45.44,
+        "grade_distribution": {
+          "C": 7,
+          "A": 1,
+          "D": 5,
+          "B": 3
+        }
+      }
+    ],
+    "rank": 585
   },
   {
     "institute": "MORIUM NAGAR HIGH SCHOOL, CHATTOGRAM",
@@ -149980,6 +149692,300 @@
           "D": 2,
           "B": 1,
           "A-": 1
+        }
+      }
+    ],
+    "rank": 586
+  },
+  {
+    "institute": "BANGABANDHU BANGLA VIDDAPIT, CHATTOGRAM",
+    "total_students": 55,
+    "gpa_5_count": 1,
+    "gpa_5_percentage": 1.82,
+    "average_gpa": 3.6132,
+    "institution_score": 72.26,
+    "grade_distribution": {
+      "B": 105,
+      "D": 34,
+      "A": 96,
+      "A+": 191,
+      "F": 41,
+      "A-": 122,
+      "C": 71
+    },
+    "subject_statistics": [
+      {
+        "code": "101",
+        "subject": "BANGLA-I",
+        "students_with_marks": 55,
+        "average_mark": 121.91,
+        "grade_distribution": {
+          "B": 15,
+          "A+": 4,
+          "A": 11,
+          "A-": 15,
+          "C": 9,
+          "D": 1
+        }
+      },
+      {
+        "code": "107",
+        "subject": "ENGLISH-I",
+        "students_with_marks": 51,
+        "average_mark": 107.82,
+        "grade_distribution": {
+          "B": 15,
+          "A+": 1,
+          "A": 6,
+          "C": 14,
+          "A-": 9,
+          "D": 6,
+          "F": 4
+        }
+      },
+      {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 44,
+        "average_mark": 49.27,
+        "grade_distribution": {
+          "D": 13,
+          "A": 3,
+          "F": 11,
+          "B": 8,
+          "C": 12,
+          "A-": 8
+        }
+      },
+      {
+        "code": "150",
+        "subject": "BANGLADESH AND GLOBAL STUDIES",
+        "students_with_marks": 36,
+        "average_mark": 67.22,
+        "grade_distribution": {
+          "B": 6,
+          "A": 10,
+          "A+": 4,
+          "A-": 15,
+          "C": 1
+        }
+      },
+      {
+        "code": "111",
+        "subject": "ISLAM AND MORAL EDUCATION",
+        "students_with_marks": 43,
+        "average_mark": 71.02,
+        "grade_distribution": {
+          "A": 9,
+          "A+": 16,
+          "A-": 8,
+          "B": 7,
+          "C": 2,
+          "D": 1
+        }
+      },
+      {
+        "code": "136",
+        "subject": "PHYSICS",
+        "students_with_marks": 17,
+        "average_mark": 61.47,
+        "grade_distribution": {
+          "B": 8,
+          "A+": 1,
+          "A": 2,
+          "F": 19,
+          "A-": 5,
+          "C": 1
+        }
+      },
+      {
+        "code": "137",
+        "subject": "CHEMISTRY",
+        "students_with_marks": 36,
+        "average_mark": 65.64,
+        "grade_distribution": {
+          "B": 12,
+          "A+": 5,
+          "A-": 11,
+          "A": 8
+        }
+      },
+      {
+        "code": "138",
+        "subject": "BIOLOGY",
+        "students_with_marks": 36,
+        "average_mark": 68.94,
+        "grade_distribution": {
+          "B": 7,
+          "A+": 5,
+          "A": 11,
+          "A-": 13
+        }
+      },
+      {
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 55,
+        "average_mark": 40.82,
+        "grade_distribution": {
+          "A+": 34,
+          "A": 21
+        }
+      },
+      {
+        "code": "126",
+        "subject": "HIGHER MATHEMATICS",
+        "students_with_marks": 26,
+        "average_mark": 62.81,
+        "grade_distribution": {
+          "F": 6,
+          "A": 4,
+          "C": 3,
+          "B": 7,
+          "A-": 10,
+          "A+": 2
+        }
+      },
+      {
+        "code": "147",
+        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
+        "students_with_marks": 55,
+        "average_mark": 66.31,
+        "grade_distribution": {
+          "A+": 55
+        }
+      },
+      {
+        "code": "156",
+        "subject": "Career Education",
+        "students_with_marks": 55,
+        "average_mark": 49.33,
+        "grade_distribution": {
+          "A+": 55
+        }
+      },
+      {
+        "code": "134",
+        "subject": "AGRICULTURE STUDIES",
+        "students_with_marks": 20,
+        "average_mark": 68.1,
+        "grade_distribution": {
+          "A": 5,
+          "A-": 13,
+          "A+": 1,
+          "F": 1,
+          "B": 1
+        }
+      },
+      {
+        "code": "113",
+        "subject": "BUDDHIST RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 5,
+        "average_mark": 87.2,
+        "grade_distribution": {
+          "A+": 4,
+          "A": 1
+        }
+      },
+      {
+        "code": "112",
+        "subject": "HINDU RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 7,
+        "average_mark": 69.86,
+        "grade_distribution": {
+          "A+": 2,
+          "A-": 2,
+          "A": 1,
+          "B": 2
+        }
+      },
+      {
+        "code": "127",
+        "subject": "SCIENCE",
+        "students_with_marks": 19,
+        "average_mark": 45.21,
+        "grade_distribution": {
+          "A-": 1,
+          "B": 4,
+          "C": 10,
+          "D": 4
+        }
+      },
+      {
+        "code": "110",
+        "subject": "GEOGRAPHY AND ENVIRONMENT",
+        "students_with_marks": 3,
+        "average_mark": 44.33,
+        "grade_distribution": {
+          "C": 3
+        }
+      },
+      {
+        "code": "153",
+        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
+        "students_with_marks": 3,
+        "average_mark": 46.67,
+        "grade_distribution": {
+          "C": 3
+        }
+      },
+      {
+        "code": "140",
+        "subject": "CIVICS AND CITIZENSHIP",
+        "students_with_marks": 3,
+        "average_mark": 63.33,
+        "grade_distribution": {
+          "A-": 2,
+          "B": 1
+        }
+      },
+      {
+        "code": "146",
+        "subject": "ACCOUNTING",
+        "students_with_marks": 16,
+        "average_mark": 56.19,
+        "grade_distribution": {
+          "A": 1,
+          "B": 2,
+          "A+": 2,
+          "A-": 5,
+          "C": 3,
+          "D": 3
+        }
+      },
+      {
+        "code": "152",
+        "subject": "FINANCE AND BANKING",
+        "students_with_marks": 16,
+        "average_mark": 49.0,
+        "grade_distribution": {
+          "B": 7,
+          "C": 5,
+          "D": 3,
+          "A-": 1
+        }
+      },
+      {
+        "code": "143",
+        "subject": "BUSINESS ENTREPRENEURSHIP",
+        "students_with_marks": 16,
+        "average_mark": 51.75,
+        "grade_distribution": {
+          "C": 5,
+          "B": 3,
+          "A-": 3,
+          "A": 2,
+          "D": 3
+        }
+      },
+      {
+        "code": "151",
+        "subject": "HOME SCIENCE",
+        "students_with_marks": 2,
+        "average_mark": 71.0,
+        "grade_distribution": {
+          "A-": 1,
+          "A": 1
         }
       }
     ],
@@ -152499,263 +152505,6 @@
     "rank": 597
   },
   {
-    "institute": "BARODONA HOQUE MEMORIAL HIGH SCHOOL, CHATTOGRAM",
-    "total_students": 30,
-    "gpa_5_count": 0,
-    "gpa_5_percentage": 0.0,
-    "average_gpa": 3.6056,
-    "institution_score": 72.11,
-    "grade_distribution": {
-      "A": 47,
-      "A+": 94,
-      "B": 60,
-      "C": 50,
-      "A-": 59,
-      "D": 31,
-      "F": 19
-    },
-    "subject_statistics": [
-      {
-        "code": "101",
-        "subject": "BANGLA-I",
-        "students_with_marks": 30,
-        "average_mark": 113.97,
-        "grade_distribution": {
-          "A": 5,
-          "B": 12,
-          "A-": 7,
-          "C": 5,
-          "D": 1
-        }
-      },
-      {
-        "code": "107",
-        "subject": "ENGLISH-I",
-        "students_with_marks": 24,
-        "average_mark": 97.75,
-        "grade_distribution": {
-          "A": 2,
-          "C": 10,
-          "B": 4,
-          "D": 5,
-          "A-": 3,
-          "F": 6
-        }
-      },
-      {
-        "code": "109",
-        "subject": "MATHEMATICS",
-        "students_with_marks": 22,
-        "average_mark": 47.45,
-        "grade_distribution": {
-          "A": 1,
-          "B": 3,
-          "A-": 4,
-          "C": 5,
-          "F": 8,
-          "D": 9
-        }
-      },
-      {
-        "code": "150",
-        "subject": "BANGLADESH AND GLOBAL STUDIES",
-        "students_with_marks": 13,
-        "average_mark": 73.15,
-        "grade_distribution": {
-          "A+": 7,
-          "A": 1,
-          "A-": 2,
-          "C": 1,
-          "B": 2
-        }
-      },
-      {
-        "code": "111",
-        "subject": "ISLAM AND MORAL EDUCATION",
-        "students_with_marks": 30,
-        "average_mark": 64.5,
-        "grade_distribution": {
-          "A+": 5,
-          "A": 7,
-          "B": 6,
-          "A-": 6,
-          "C": 4,
-          "D": 2
-        }
-      },
-      {
-        "code": "136",
-        "subject": "PHYSICS",
-        "students_with_marks": 13,
-        "average_mark": 68.38,
-        "grade_distribution": {
-          "A+": 2,
-          "B": 2,
-          "A-": 6,
-          "A": 3
-        }
-      },
-      {
-        "code": "137",
-        "subject": "CHEMISTRY",
-        "students_with_marks": 12,
-        "average_mark": 65.25,
-        "grade_distribution": {
-          "A": 3,
-          "B": 4,
-          "A-": 4,
-          "A+": 1,
-          "F": 1
-        }
-      },
-      {
-        "code": "138",
-        "subject": "BIOLOGY",
-        "students_with_marks": 12,
-        "average_mark": 71.5,
-        "grade_distribution": {
-          "A+": 4,
-          "A-": 6,
-          "B": 1,
-          "F": 1,
-          "A": 1
-        }
-      },
-      {
-        "code": "154",
-        "subject": "Information And Communication Technology",
-        "students_with_marks": 30,
-        "average_mark": 39.93,
-        "grade_distribution": {
-          "A+": 15,
-          "A": 15
-        }
-      },
-      {
-        "code": "126",
-        "subject": "HIGHER MATHEMATICS",
-        "students_with_marks": 11,
-        "average_mark": 61.45,
-        "grade_distribution": {
-          "B": 4,
-          "A-": 4,
-          "A": 2,
-          "F": 2,
-          "C": 1
-        }
-      },
-      {
-        "code": "147",
-        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
-        "students_with_marks": 30,
-        "average_mark": 60.5,
-        "grade_distribution": {
-          "A+": 30
-        }
-      },
-      {
-        "code": "156",
-        "subject": "Career Education",
-        "students_with_marks": 30,
-        "average_mark": 49.43,
-        "grade_distribution": {
-          "A+": 30
-        }
-      },
-      {
-        "code": "127",
-        "subject": "SCIENCE",
-        "students_with_marks": 16,
-        "average_mark": 48.19,
-        "grade_distribution": {
-          "C": 6,
-          "A-": 3,
-          "D": 5,
-          "B": 2,
-          "F": 1
-        }
-      },
-      {
-        "code": "110",
-        "subject": "GEOGRAPHY AND ENVIRONMENT",
-        "students_with_marks": 15,
-        "average_mark": 50.47,
-        "grade_distribution": {
-          "C": 8,
-          "B": 4,
-          "D": 1,
-          "A-": 1,
-          "A": 1
-        }
-      },
-      {
-        "code": "153",
-        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
-        "students_with_marks": 15,
-        "average_mark": 47.53,
-        "grade_distribution": {
-          "C": 6,
-          "B": 4,
-          "D": 4,
-          "A-": 1
-        }
-      },
-      {
-        "code": "140",
-        "subject": "CIVICS AND CITIZENSHIP",
-        "students_with_marks": 15,
-        "average_mark": 51.33,
-        "grade_distribution": {
-          "C": 4,
-          "D": 2,
-          "A-": 4,
-          "B": 5
-        }
-      },
-      {
-        "code": "134",
-        "subject": "AGRICULTURE STUDIES",
-        "students_with_marks": 17,
-        "average_mark": 66.76,
-        "grade_distribution": {
-          "A-": 8,
-          "A": 6,
-          "B": 3
-        }
-      },
-      {
-        "code": "146",
-        "subject": "ACCOUNTING",
-        "students_with_marks": 2,
-        "average_mark": 47.5,
-        "grade_distribution": {
-          "D": 1,
-          "B": 1
-        }
-      },
-      {
-        "code": "152",
-        "subject": "FINANCE AND BANKING",
-        "students_with_marks": 2,
-        "average_mark": 53.0,
-        "grade_distribution": {
-          "B": 2
-        }
-      },
-      {
-        "code": "143",
-        "subject": "BUSINESS ENTREPRENEURSHIP",
-        "students_with_marks": 2,
-        "average_mark": 44.5,
-        "grade_distribution": {
-          "B": 1,
-          "D": 1
-        }
-      }
-    ],
-    "rank": 598
-  },
-  {
     "institute": "TEKNAF PILOT HIGH SCHOOL, COX'S BAZAR",
     "total_students": 112,
     "gpa_5_count": 6,
@@ -153074,7 +152823,7 @@
         }
       }
     ],
-    "rank": 599
+    "rank": 598
   },
   {
     "institute": "KHUTAKHALI HIGH SCHOOL, COX'S BAZAR",
@@ -153355,7 +153104,7 @@
         }
       }
     ],
-    "rank": 600
+    "rank": 599
   },
   {
     "institute": "KHAGRACHHARI COLLEGIATE SCHOOL, KHAGRACHHARI",
@@ -153604,7 +153353,7 @@
         }
       }
     ],
-    "rank": 601
+    "rank": 600
   },
   {
     "institute": "NHEELA GIRLS' HIGH SCHOOL, COX'S BAZAR",
@@ -153881,7 +153630,7 @@
         }
       }
     ],
-    "rank": 602
+    "rank": 601
   },
   {
     "institute": "ASHIYA HIGH SCHOOL, CHATTOGRAM",
@@ -154159,7 +153908,7 @@
         }
       }
     ],
-    "rank": 603
+    "rank": 602
   },
   {
     "institute": "SERMON SCHOOL & COLLEGE, CHATTOGRAM",
@@ -154464,7 +154213,7 @@
         }
       }
     ],
-    "rank": 604
+    "rank": 603
   },
   {
     "institute": "NAHARPUR HIGH SCHOOL, CHATTOGRAM",
@@ -154738,7 +154487,7 @@
         }
       }
     ],
-    "rank": 605
+    "rank": 604
   },
   {
     "institute": "DANTMARA AZIZA BADRUZZAMAN SIKDER HIGH SCHOOL, CHATTOGRAM",
@@ -155020,7 +154769,7 @@
         }
       }
     ],
-    "rank": 606
+    "rank": 605
   },
   {
     "institute": "HALISHAHAR HOUSING ESTATE HIGH SCHOOL, CHATTOGRAM",
@@ -155310,7 +155059,7 @@
         }
       }
     ],
-    "rank": 607
+    "rank": 606
   },
   {
     "institute": "RAJAKHALI FAIZUN NASSA HIGH SCHOOL AND COLLEGE, COX'S BAZAR",
@@ -155583,7 +155332,7 @@
         }
       }
     ],
-    "rank": 608
+    "rank": 607
   },
   {
     "institute": "COX'S BAZAR PREPARETORY HIGH SCHOOL, COX'S BAZAR",
@@ -155886,6 +155635,263 @@
           "B": 4,
           "C": 5,
           "A-": 1
+        }
+      }
+    ],
+    "rank": 608
+  },
+  {
+    "institute": "BARODONA HOQUE MEMORIAL HIGH SCHOOL, CHATTOGRAM",
+    "total_students": 33,
+    "gpa_5_count": 0,
+    "gpa_5_percentage": 0.0,
+    "average_gpa": 3.5911,
+    "institution_score": 71.82,
+    "grade_distribution": {
+      "A": 49,
+      "A+": 101,
+      "B": 67,
+      "C": 53,
+      "A-": 67,
+      "D": 38,
+      "F": 21
+    },
+    "subject_statistics": [
+      {
+        "code": "101",
+        "subject": "BANGLA-I",
+        "students_with_marks": 33,
+        "average_mark": 112.88,
+        "grade_distribution": {
+          "A": 5,
+          "B": 13,
+          "A-": 8,
+          "C": 5,
+          "D": 2
+        }
+      },
+      {
+        "code": "107",
+        "subject": "ENGLISH-I",
+        "students_with_marks": 26,
+        "average_mark": 97.12,
+        "grade_distribution": {
+          "A": 2,
+          "C": 10,
+          "B": 5,
+          "D": 6,
+          "A-": 3,
+          "F": 7
+        }
+      },
+      {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 24,
+        "average_mark": 46.33,
+        "grade_distribution": {
+          "A": 1,
+          "B": 3,
+          "A-": 4,
+          "C": 5,
+          "F": 9,
+          "D": 11
+        }
+      },
+      {
+        "code": "150",
+        "subject": "BANGLADESH AND GLOBAL STUDIES",
+        "students_with_marks": 13,
+        "average_mark": 73.15,
+        "grade_distribution": {
+          "A+": 7,
+          "A": 1,
+          "A-": 2,
+          "C": 1,
+          "B": 2
+        }
+      },
+      {
+        "code": "111",
+        "subject": "ISLAM AND MORAL EDUCATION",
+        "students_with_marks": 33,
+        "average_mark": 63.73,
+        "grade_distribution": {
+          "A+": 5,
+          "A": 7,
+          "B": 7,
+          "A-": 7,
+          "C": 5,
+          "D": 2
+        }
+      },
+      {
+        "code": "136",
+        "subject": "PHYSICS",
+        "students_with_marks": 13,
+        "average_mark": 68.38,
+        "grade_distribution": {
+          "A+": 2,
+          "B": 2,
+          "A-": 6,
+          "A": 3
+        }
+      },
+      {
+        "code": "137",
+        "subject": "CHEMISTRY",
+        "students_with_marks": 12,
+        "average_mark": 65.25,
+        "grade_distribution": {
+          "A": 3,
+          "B": 4,
+          "A-": 4,
+          "A+": 1,
+          "F": 1
+        }
+      },
+      {
+        "code": "138",
+        "subject": "BIOLOGY",
+        "students_with_marks": 12,
+        "average_mark": 71.5,
+        "grade_distribution": {
+          "A+": 4,
+          "A-": 6,
+          "B": 1,
+          "F": 1,
+          "A": 1
+        }
+      },
+      {
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 33,
+        "average_mark": 39.7,
+        "grade_distribution": {
+          "A+": 16,
+          "A": 17
+        }
+      },
+      {
+        "code": "126",
+        "subject": "HIGHER MATHEMATICS",
+        "students_with_marks": 11,
+        "average_mark": 61.45,
+        "grade_distribution": {
+          "B": 4,
+          "A-": 4,
+          "A": 2,
+          "F": 2,
+          "C": 1
+        }
+      },
+      {
+        "code": "147",
+        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
+        "students_with_marks": 33,
+        "average_mark": 62.52,
+        "grade_distribution": {
+          "A+": 33
+        }
+      },
+      {
+        "code": "156",
+        "subject": "Career Education",
+        "students_with_marks": 33,
+        "average_mark": 49.45,
+        "grade_distribution": {
+          "A+": 33
+        }
+      },
+      {
+        "code": "127",
+        "subject": "SCIENCE",
+        "students_with_marks": 19,
+        "average_mark": 49.58,
+        "grade_distribution": {
+          "C": 6,
+          "A-": 5,
+          "D": 6,
+          "B": 2,
+          "F": 1
+        }
+      },
+      {
+        "code": "110",
+        "subject": "GEOGRAPHY AND ENVIRONMENT",
+        "students_with_marks": 18,
+        "average_mark": 50.28,
+        "grade_distribution": {
+          "C": 9,
+          "B": 4,
+          "D": 2,
+          "A-": 2,
+          "A": 1
+        }
+      },
+      {
+        "code": "153",
+        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
+        "students_with_marks": 18,
+        "average_mark": 47.61,
+        "grade_distribution": {
+          "C": 6,
+          "B": 6,
+          "D": 5,
+          "A-": 1
+        }
+      },
+      {
+        "code": "140",
+        "subject": "CIVICS AND CITIZENSHIP",
+        "students_with_marks": 18,
+        "average_mark": 52.33,
+        "grade_distribution": {
+          "C": 5,
+          "D": 2,
+          "A-": 5,
+          "B": 6
+        }
+      },
+      {
+        "code": "134",
+        "subject": "AGRICULTURE STUDIES",
+        "students_with_marks": 20,
+        "average_mark": 66.0,
+        "grade_distribution": {
+          "A-": 10,
+          "A": 6,
+          "B": 4
+        }
+      },
+      {
+        "code": "146",
+        "subject": "ACCOUNTING",
+        "students_with_marks": 2,
+        "average_mark": 47.5,
+        "grade_distribution": {
+          "D": 1,
+          "B": 1
+        }
+      },
+      {
+        "code": "152",
+        "subject": "FINANCE AND BANKING",
+        "students_with_marks": 2,
+        "average_mark": 53.0,
+        "grade_distribution": {
+          "B": 2
+        }
+      },
+      {
+        "code": "143",
+        "subject": "BUSINESS ENTREPRENEURSHIP",
+        "students_with_marks": 2,
+        "average_mark": 44.5,
+        "grade_distribution": {
+          "B": 1,
+          "D": 1
         }
       }
     ],
@@ -163374,297 +163380,6 @@
     "rank": 637
   },
   {
-    "institute": "MIRZAKHIL HIGH SCHOOL, CHATTOGRAM",
-    "total_students": 98,
-    "gpa_5_count": 1,
-    "gpa_5_percentage": 1.02,
-    "average_gpa": 3.5646,
-    "institution_score": 71.29,
-    "grade_distribution": {
-      "A": 130,
-      "C": 182,
-      "A+": 293,
-      "F": 113,
-      "A-": 113,
-      "B": 190,
-      "D": 128,
-      "X": 3
-    },
-    "subject_statistics": [
-      {
-        "code": "101",
-        "subject": "BANGLA-I",
-        "students_with_marks": 92,
-        "average_mark": 108.79,
-        "grade_distribution": {
-          "A": 9,
-          "A-": 14,
-          "B": 35,
-          "C": 24,
-          "A+": 2,
-          "D": 8,
-          "F": 4
-        }
-      },
-      {
-        "code": "107",
-        "subject": "ENGLISH-I",
-        "students_with_marks": 54,
-        "average_mark": 93.44,
-        "grade_distribution": {
-          "A": 3,
-          "A+": 1,
-          "A-": 3,
-          "C": 27,
-          "B": 8,
-          "D": 12,
-          "F": 40,
-          "X": 2
-        }
-      },
-      {
-        "code": "109",
-        "subject": "MATHEMATICS",
-        "students_with_marks": 84,
-        "average_mark": 45.2,
-        "grade_distribution": {
-          "C": 27,
-          "A-": 5,
-          "A+": 3,
-          "A": 2,
-          "B": 10,
-          "D": 37,
-          "F": 12
-        }
-      },
-      {
-        "code": "150",
-        "subject": "BANGLADESH AND GLOBAL STUDIES",
-        "students_with_marks": 37,
-        "average_mark": 68.46,
-        "grade_distribution": {
-          "A+": 11,
-          "A": 10,
-          "B": 8,
-          "A-": 4,
-          "C": 4
-        }
-      },
-      {
-        "code": "111",
-        "subject": "ISLAM AND MORAL EDUCATION",
-        "students_with_marks": 86,
-        "average_mark": 68.66,
-        "grade_distribution": {
-          "A+": 36,
-          "B": 15,
-          "A-": 10,
-          "A": 8,
-          "C": 15,
-          "D": 2
-        }
-      },
-      {
-        "code": "136",
-        "subject": "PHYSICS",
-        "students_with_marks": 27,
-        "average_mark": 56.63,
-        "grade_distribution": {
-          "F": 10,
-          "B": 18,
-          "A+": 2,
-          "A-": 1,
-          "A": 2,
-          "C": 4
-        }
-      },
-      {
-        "code": "137",
-        "subject": "CHEMISTRY",
-        "students_with_marks": 37,
-        "average_mark": 61.92,
-        "grade_distribution": {
-          "A-": 12,
-          "A+": 3,
-          "B": 19,
-          "A": 3
-        }
-      },
-      {
-        "code": "138",
-        "subject": "BIOLOGY",
-        "students_with_marks": 28,
-        "average_mark": 64.93,
-        "grade_distribution": {
-          "F": 9,
-          "A+": 4,
-          "B": 11,
-          "A-": 9,
-          "A": 4
-        }
-      },
-      {
-        "code": "154",
-        "subject": "Information And Communication Technology",
-        "students_with_marks": 96,
-        "average_mark": 39.03,
-        "grade_distribution": {
-          "A+": 32,
-          "A": 62,
-          "A-": 2
-        }
-      },
-      {
-        "code": "126",
-        "subject": "HIGHER MATHEMATICS",
-        "students_with_marks": 19,
-        "average_mark": 65.58,
-        "grade_distribution": {
-          "B": 7,
-          "A": 6,
-          "A+": 3,
-          "C": 3,
-          "F": 3
-        }
-      },
-      {
-        "code": "147",
-        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
-        "students_with_marks": 96,
-        "average_mark": 56.25,
-        "grade_distribution": {
-          "A+": 96
-        }
-      },
-      {
-        "code": "156",
-        "subject": "Career Education",
-        "students_with_marks": 96,
-        "average_mark": 50.0,
-        "grade_distribution": {
-          "A+": 96
-        }
-      },
-      {
-        "code": "112",
-        "subject": "HINDU RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 10,
-        "average_mark": 50.9,
-        "grade_distribution": {
-          "A+": 1,
-          "B": 2,
-          "C": 4,
-          "D": 2,
-          "A-": 1
-        }
-      },
-      {
-        "code": "134",
-        "subject": "AGRICULTURE STUDIES",
-        "students_with_marks": 72,
-        "average_mark": 64.04,
-        "grade_distribution": {
-          "A-": 35,
-          "A": 16,
-          "B": 18,
-          "F": 2,
-          "C": 2,
-          "A+": 1
-        }
-      },
-      {
-        "code": "127",
-        "subject": "SCIENCE",
-        "students_with_marks": 43,
-        "average_mark": 45.95,
-        "grade_distribution": {
-          "D": 16,
-          "B": 9,
-          "C": 14,
-          "A": 1,
-          "A-": 3,
-          "F": 16
-        }
-      },
-      {
-        "code": "110",
-        "subject": "GEOGRAPHY AND ENVIRONMENT",
-        "students_with_marks": 47,
-        "average_mark": 43.15,
-        "grade_distribution": {
-          "X": 1,
-          "D": 21,
-          "C": 17,
-          "F": 8,
-          "A-": 4,
-          "B": 4,
-          "A": 1
-        }
-      },
-      {
-        "code": "153",
-        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
-        "students_with_marks": 52,
-        "average_mark": 45.56,
-        "grade_distribution": {
-          "C": 19,
-          "B": 13,
-          "A": 2,
-          "A-": 1,
-          "D": 17,
-          "F": 4
-        }
-      },
-      {
-        "code": "140",
-        "subject": "CIVICS AND CITIZENSHIP",
-        "students_with_marks": 51,
-        "average_mark": 48.31,
-        "grade_distribution": {
-          "C": 19,
-          "A-": 6,
-          "B": 11,
-          "D": 13,
-          "F": 5,
-          "A": 1,
-          "A+": 1
-        }
-      },
-      {
-        "code": "146",
-        "subject": "ACCOUNTING",
-        "students_with_marks": 3,
-        "average_mark": 65.67,
-        "grade_distribution": {
-          "A+": 1,
-          "C": 1,
-          "A-": 1
-        }
-      },
-      {
-        "code": "152",
-        "subject": "FINANCE AND BANKING",
-        "students_with_marks": 3,
-        "average_mark": 48.0,
-        "grade_distribution": {
-          "A-": 1,
-          "C": 2
-        }
-      },
-      {
-        "code": "143",
-        "subject": "BUSINESS ENTREPRENEURSHIP",
-        "students_with_marks": 3,
-        "average_mark": 58.0,
-        "grade_distribution": {
-          "B": 2,
-          "A-": 1
-        }
-      }
-    ],
-    "rank": 638
-  },
-  {
     "institute": "MOHAMMAD ABUL KASHEM RAZA HIGH SCHOOL, CHATTOGRAM",
     "total_students": 28,
     "gpa_5_count": 2,
@@ -163931,7 +163646,7 @@
         }
       }
     ],
-    "rank": 639
+    "rank": 638
   },
   {
     "institute": "PRAVATI MADDHYAMIK SHIKKHA NIKETON, CHATTOGRAM",
@@ -164235,7 +163950,7 @@
         }
       }
     ],
-    "rank": 640
+    "rank": 639
   },
   {
     "institute": "MATIRANGA RESIDENTIAL SCHOOL, KHAGRACHHARI",
@@ -164510,7 +164225,7 @@
         }
       }
     ],
-    "rank": 641
+    "rank": 640
   },
   {
     "institute": "PATENGA IDEAL SCHOOL, CHATTOGRAM",
@@ -164851,7 +164566,7 @@
         }
       }
     ],
-    "rank": 642
+    "rank": 641
   },
   {
     "institute": "GOMDANDI PILOT MODEL HIGH SCHOOL, CHATTOGRAM",
@@ -165166,7 +164881,7 @@
         }
       }
     ],
-    "rank": 643
+    "rank": 642
   },
   {
     "institute": "KALARPOL HAZI MOHAMMAD OMRA MIAN CHOWDHURY BOHUMUKHI HIGH SCHOOL, CHATTOGRAM",
@@ -165466,7 +165181,7 @@
         }
       }
     ],
-    "rank": 644
+    "rank": 643
   },
   {
     "institute": "SAJINA CHOWDHURY HIGH SCHOOL, CHATTOGRAM",
@@ -165729,7 +165444,7 @@
         }
       }
     ],
-    "rank": 645
+    "rank": 644
   },
   {
     "institute": "BORAITOLI HIGH SCHOOL, COX'S BAZAR",
@@ -166003,7 +165718,7 @@
         }
       }
     ],
-    "rank": 646
+    "rank": 645
   },
   {
     "institute": "JOBRA P. P. SCHOOL & COLLEGE, CHATTOGRAM",
@@ -166292,7 +166007,7 @@
         }
       }
     ],
-    "rank": 647
+    "rank": 646
   },
   {
     "institute": "DAKSHIN RUPAKARI HIGH SCHOOL, RANGAMATI",
@@ -166549,7 +166264,7 @@
         }
       }
     ],
-    "rank": 648
+    "rank": 647
   },
   {
     "institute": "CHITTAGONG CHEMICAL COMPLEX HIGH SCHOOL, CHATTOGRAM",
@@ -166817,7 +166532,7 @@
         }
       }
     ],
-    "rank": 649
+    "rank": 648
   },
   {
     "institute": "GUMDUM HIGH SCHOOL, BANDARBAN",
@@ -167032,276 +166747,298 @@
         }
       }
     ],
-    "rank": 650
+    "rank": 649
   },
   {
-    "institute": "DIGHINALA MODEL GIRLS' HIGH SCHOOL, KHAGRACHHARI",
-    "total_students": 70,
-    "gpa_5_count": 0,
-    "gpa_5_percentage": 0.0,
-    "average_gpa": 3.5546,
-    "institution_score": 71.09,
+    "institute": "MIRZAKHIL HIGH SCHOOL, CHATTOGRAM",
+    "total_students": 99,
+    "gpa_5_count": 1,
+    "gpa_5_percentage": 1.01,
+    "average_gpa": 3.5519,
+    "institution_score": 71.04,
     "grade_distribution": {
-      "A": 116,
-      "B": 154,
-      "C": 130,
-      "A+": 194,
-      "A-": 101,
-      "D": 83,
-      "F": 56,
-      "X": 6
+      "A": 133,
+      "C": 182,
+      "A+": 295,
+      "F": 113,
+      "A-": 115,
+      "B": 193,
+      "D": 130,
+      "X": 3
     },
     "subject_statistics": [
       {
         "code": "101",
         "subject": "BANGLA-I",
-        "students_with_marks": 70,
-        "average_mark": 117.94,
+        "students_with_marks": 93,
+        "average_mark": 108.85,
         "grade_distribution": {
-          "A": 8,
-          "A-": 20,
+          "A": 9,
+          "A-": 14,
+          "B": 36,
+          "C": 24,
           "A+": 2,
-          "B": 29,
-          "C": 10,
-          "D": 1
+          "D": 8,
+          "F": 4
         }
       },
       {
         "code": "107",
         "subject": "ENGLISH-I",
-        "students_with_marks": 60,
-        "average_mark": 95.65,
+        "students_with_marks": 55,
+        "average_mark": 92.95,
         "grade_distribution": {
-          "B": 14,
-          "A": 4,
-          "C": 20,
-          "A-": 6,
-          "F": 10,
-          "D": 16
+          "A": 3,
+          "A+": 1,
+          "A-": 3,
+          "C": 27,
+          "B": 8,
+          "D": 13,
+          "F": 40,
+          "X": 2
         }
       },
       {
         "code": "109",
         "subject": "MATHEMATICS",
-        "students_with_marks": 41,
-        "average_mark": 44.66,
+        "students_with_marks": 85,
+        "average_mark": 45.13,
         "grade_distribution": {
-          "C": 13,
-          "D": 18,
-          "A-": 4,
-          "A": 1,
-          "B": 5,
-          "F": 26,
-          "X": 3
+          "C": 27,
+          "A-": 5,
+          "A+": 3,
+          "A": 2,
+          "B": 10,
+          "D": 38,
+          "F": 12
         }
       },
       {
         "code": "150",
         "subject": "BANGLADESH AND GLOBAL STUDIES",
-        "students_with_marks": 34,
-        "average_mark": 71.59,
+        "students_with_marks": 37,
+        "average_mark": 68.46,
         "grade_distribution": {
-          "A+": 6,
-          "A-": 8,
-          "A": 16,
-          "B": 3,
-          "C": 1
+          "A+": 11,
+          "A": 10,
+          "B": 8,
+          "A-": 4,
+          "C": 4
         }
       },
       {
         "code": "111",
         "subject": "ISLAM AND MORAL EDUCATION",
-        "students_with_marks": 18,
-        "average_mark": 57.11,
+        "students_with_marks": 87,
+        "average_mark": 68.68,
         "grade_distribution": {
-          "A-": 1,
-          "A": 5,
-          "C": 7,
-          "A+": 1,
-          "B": 2,
+          "A+": 36,
+          "B": 15,
+          "A-": 10,
+          "A": 9,
+          "C": 15,
           "D": 2
         }
       },
       {
         "code": "136",
         "subject": "PHYSICS",
-        "students_with_marks": 28,
-        "average_mark": 62.04,
+        "students_with_marks": 27,
+        "average_mark": 56.63,
         "grade_distribution": {
-          "A-": 10,
-          "A": 4,
+          "F": 10,
+          "B": 18,
           "A+": 2,
-          "B": 9,
-          "C": 3,
-          "F": 4,
-          "X": 2
+          "A-": 1,
+          "A": 2,
+          "C": 4
         }
       },
       {
         "code": "137",
         "subject": "CHEMISTRY",
-        "students_with_marks": 33,
-        "average_mark": 61.45,
+        "students_with_marks": 37,
+        "average_mark": 61.92,
         "grade_distribution": {
-          "B": 14,
-          "A-": 10,
-          "A+": 2,
-          "A": 5,
-          "C": 2,
-          "X": 1
+          "A-": 12,
+          "A+": 3,
+          "B": 19,
+          "A": 3
         }
       },
       {
         "code": "138",
         "subject": "BIOLOGY",
-        "students_with_marks": 33,
-        "average_mark": 72.67,
+        "students_with_marks": 28,
+        "average_mark": 64.93,
         "grade_distribution": {
-          "A": 12,
-          "A+": 8,
+          "F": 9,
+          "A+": 4,
+          "B": 11,
           "A-": 9,
-          "B": 3,
-          "F": 1,
-          "C": 1
+          "A": 4
         }
       },
       {
         "code": "154",
         "subject": "Information And Communication Technology",
-        "students_with_marks": 70,
-        "average_mark": 37.2,
+        "students_with_marks": 97,
+        "average_mark": 39.03,
         "grade_distribution": {
-          "A+": 18,
-          "A": 36,
-          "A-": 14,
-          "B": 2
+          "A+": 32,
+          "A": 63,
+          "A-": 2
         }
       },
       {
         "code": "126",
         "subject": "HIGHER MATHEMATICS",
-        "students_with_marks": 27,
-        "average_mark": 56.04,
+        "students_with_marks": 19,
+        "average_mark": 65.58,
         "grade_distribution": {
-          "B": 20,
-          "A-": 2,
+          "B": 7,
+          "A": 6,
+          "A+": 3,
           "C": 3,
-          "F": 7,
-          "A": 1,
-          "A+": 1
+          "F": 3
         }
       },
       {
         "code": "147",
         "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
-        "students_with_marks": 70,
-        "average_mark": 69.9,
+        "students_with_marks": 97,
+        "average_mark": 56.19,
         "grade_distribution": {
-          "A+": 69,
-          "A": 1
+          "A+": 97
         }
       },
       {
         "code": "156",
         "subject": "Career Education",
-        "students_with_marks": 70,
-        "average_mark": 44.23,
+        "students_with_marks": 97,
+        "average_mark": 50.0,
         "grade_distribution": {
-          "A+": 69,
-          "A": 1
-        }
-      },
-      {
-        "code": "113",
-        "subject": "BUDDHIST RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 37,
-        "average_mark": 65.57,
-        "grade_distribution": {
-          "A+": 10,
-          "A": 7,
-          "B": 10,
-          "C": 5,
-          "A-": 3,
-          "D": 2
+          "A+": 97
         }
       },
       {
         "code": "112",
         "subject": "HINDU RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 15,
-        "average_mark": 49.53,
+        "students_with_marks": 10,
+        "average_mark": 50.9,
         "grade_distribution": {
-          "A+": 2,
-          "A-": 1,
-          "D": 5,
-          "C": 5,
-          "B": 2
+          "A+": 1,
+          "B": 2,
+          "C": 4,
+          "D": 2,
+          "A-": 1
+        }
+      },
+      {
+        "code": "134",
+        "subject": "AGRICULTURE STUDIES",
+        "students_with_marks": 73,
+        "average_mark": 64.25,
+        "grade_distribution": {
+          "A-": 35,
+          "A": 17,
+          "B": 18,
+          "F": 2,
+          "C": 2,
+          "A+": 1
         }
       },
       {
         "code": "127",
         "subject": "SCIENCE",
-        "students_with_marks": 29,
-        "average_mark": 42.17,
+        "students_with_marks": 44,
+        "average_mark": 46.09,
         "grade_distribution": {
-          "C": 12,
-          "B": 5,
-          "D": 12,
-          "F": 7
+          "D": 16,
+          "B": 10,
+          "C": 14,
+          "A": 1,
+          "A-": 3,
+          "F": 16
         }
       },
       {
         "code": "110",
         "subject": "GEOGRAPHY AND ENVIRONMENT",
-        "students_with_marks": 36,
-        "average_mark": 43.61,
+        "students_with_marks": 48,
+        "average_mark": 43.46,
         "grade_distribution": {
-          "D": 13,
-          "C": 14,
-          "B": 7,
-          "A-": 2
+          "X": 1,
+          "D": 21,
+          "C": 17,
+          "F": 8,
+          "A-": 4,
+          "B": 5,
+          "A": 1
         }
       },
       {
         "code": "153",
         "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
-        "students_with_marks": 35,
-        "average_mark": 45.09,
+        "students_with_marks": 53,
+        "average_mark": 45.92,
         "grade_distribution": {
-          "D": 10,
-          "B": 6,
-          "C": 18,
-          "A-": 1,
-          "F": 1
+          "C": 19,
+          "B": 13,
+          "A": 2,
+          "A-": 2,
+          "D": 17,
+          "F": 4
         }
       },
       {
         "code": "140",
         "subject": "CIVICS AND CITIZENSHIP",
-        "students_with_marks": 36,
-        "average_mark": 49.28,
+        "students_with_marks": 52,
+        "average_mark": 48.65,
         "grade_distribution": {
-          "C": 15,
-          "B": 13,
-          "A-": 4,
-          "D": 4
+          "C": 19,
+          "A-": 7,
+          "B": 11,
+          "D": 13,
+          "F": 5,
+          "A": 1,
+          "A+": 1
         }
       },
       {
-        "code": "151",
-        "subject": "HOME SCIENCE",
-        "students_with_marks": 36,
-        "average_mark": 66.89,
+        "code": "146",
+        "subject": "ACCOUNTING",
+        "students_with_marks": 3,
+        "average_mark": 65.67,
         "grade_distribution": {
-          "B": 10,
-          "A": 15,
-          "A+": 4,
-          "A-": 6,
-          "C": 1
+          "A+": 1,
+          "C": 1,
+          "A-": 1
+        }
+      },
+      {
+        "code": "152",
+        "subject": "FINANCE AND BANKING",
+        "students_with_marks": 3,
+        "average_mark": 48.0,
+        "grade_distribution": {
+          "A-": 1,
+          "C": 2
+        }
+      },
+      {
+        "code": "143",
+        "subject": "BUSINESS ENTREPRENEURSHIP",
+        "students_with_marks": 3,
+        "average_mark": 58.0,
+        "grade_distribution": {
+          "B": 2,
+          "A-": 1
         }
       }
     ],
-    "rank": 651
+    "rank": 650
   },
   {
     "institute": "KHURUSHKUL HIGH SCHOOL, COX'S BAZAR",
@@ -167608,7 +167345,7 @@
         }
       }
     ],
-    "rank": 652
+    "rank": 651
   },
   {
     "institute": "BOTTALI SHAH MOHSEN AULIA (R.) HIGH SCHOOL, CHATTOGRAM",
@@ -167929,7 +167666,7 @@
         }
       }
     ],
-    "rank": 653
+    "rank": 652
   },
   {
     "institute": "PATHANTULY KHAN SHAHEB CITY CORP. GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -168225,7 +167962,7 @@
         }
       }
     ],
-    "rank": 654
+    "rank": 653
   },
   {
     "institute": "SHANTIR HAT HIGH SCHOOL, CHATTOGRAM",
@@ -168515,7 +168252,7 @@
         }
       }
     ],
-    "rank": 655
+    "rank": 654
   },
   {
     "institute": "KOINPURA HIGH SCHOOL, CHATTOGRAM",
@@ -168800,7 +168537,7 @@
         }
       }
     ],
-    "rank": 656
+    "rank": 655
   },
   {
     "institute": "KANCHANABAD HIGH SCHOOL, CHATTOGRAM",
@@ -169089,7 +168826,7 @@
         }
       }
     ],
-    "rank": 657
+    "rank": 656
   },
   {
     "institute": "S.M. PILOT HIGH SCHOOL, CHATTOGRAM",
@@ -169412,7 +169149,7 @@
         }
       }
     ],
-    "rank": 658
+    "rank": 657
   },
   {
     "institute": "SAHITYIKA HIGH SCHOOL, COX'S BAZAR",
@@ -169688,7 +169425,7 @@
         }
       }
     ],
-    "rank": 659
+    "rank": 658
   },
   {
     "institute": "NALUA DIJENDRA LAL KARAN HIGH SCHOOL, CHATTOGRAM",
@@ -169965,7 +169702,7 @@
         }
       }
     ],
-    "rank": 660
+    "rank": 659
   },
   {
     "institute": "BHAOLA MANIKCHAR HIGH SCHOOL, COX'S BAZAR",
@@ -170230,7 +169967,7 @@
         }
       }
     ],
-    "rank": 661
+    "rank": 660
   },
   {
     "institute": "MIRZARHAT HIGH SCHOOL, CHATTOGRAM",
@@ -170505,7 +170242,7 @@
         }
       }
     ],
-    "rank": 662
+    "rank": 661
   },
   {
     "institute": "SAHABDI NAGAR HIGH SCHOOL, CHATTOGRAM",
@@ -170779,7 +170516,7 @@
         }
       }
     ],
-    "rank": 663
+    "rank": 662
   },
   {
     "institute": "MANIKPUR HIGH SCHOOL, COX'S BAZAR",
@@ -171044,7 +170781,7 @@
         }
       }
     ],
-    "rank": 664
+    "rank": 663
   },
   {
     "institute": "PANCH KHAIN DARGAH DR. MD. MEAH CHOWDHURY HIGH SCHOOL, CHATTOGRAM",
@@ -171287,7 +171024,7 @@
         }
       }
     ],
-    "rank": 665
+    "rank": 664
   },
   {
     "institute": "DHAUR DENGA SARDACHARON HIGH SCHOOL, CHATTOGRAM",
@@ -171539,7 +171276,7 @@
         }
       }
     ],
-    "rank": 666
+    "rank": 665
   },
   {
     "institute": "SOUTH HALISHAHOR HIGH SCHOOL, CHATTOGRAM",
@@ -171880,7 +171617,7 @@
         }
       }
     ],
-    "rank": 667
+    "rank": 666
   },
   {
     "institute": "BAKOLIA HIGH SCHOOL, CHATTOGRAM",
@@ -172222,7 +171959,7 @@
         }
       }
     ],
-    "rank": 668
+    "rank": 667
   },
   {
     "institute": "KHURUSHIA DWARIKOPE HIGH SCHOOL, CHATTOGRAM",
@@ -172495,7 +172232,7 @@
         }
       }
     ],
-    "rank": 669
+    "rank": 668
   },
   {
     "institute": "KALIPUR EZHARUL HOQUE HIGH SCHOOL, CHATTOGRAM",
@@ -172771,7 +172508,7 @@
         }
       }
     ],
-    "rank": 670
+    "rank": 669
   },
   {
     "institute": "DIPBANDHU MUSTAFIZUR RAHMAN HIGH SCHOOL, CHATTOGRAM",
@@ -173037,7 +172774,7 @@
         }
       }
     ],
-    "rank": 671
+    "rank": 670
   },
   {
     "institute": "BANDHUK BHANGA HIGH SCHOOL, RANGAMATI",
@@ -173256,7 +172993,7 @@
         }
       }
     ],
-    "rank": 672
+    "rank": 671
   },
   {
     "institute": "NITYA NANDA HIGH SCHOOL, CHATTOGRAM",
@@ -173517,7 +173254,7 @@
         }
       }
     ],
-    "rank": 673
+    "rank": 672
   },
   {
     "institute": "SOUTH PATENGA CITY CORPORATION HIGH SCHOOL, CHATTOGRAM",
@@ -173796,7 +173533,7 @@
         }
       }
     ],
-    "rank": 674
+    "rank": 673
   },
   {
     "institute": "COLLEGIATE HIGH SCHOOL, CHATTOGRAM",
@@ -174079,7 +173816,7 @@
         }
       }
     ],
-    "rank": 675
+    "rank": 674
   },
   {
     "institute": "MIRZAPUR GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -174344,7 +174081,7 @@
         }
       }
     ],
-    "rank": 676
+    "rank": 675
   },
   {
     "institute": "BODIUL ALAM MODEL HIGH SCHOOL AND COLLEGE, CHATTOGRAM",
@@ -174591,7 +174328,7 @@
         }
       }
     ],
-    "rank": 677
+    "rank": 676
   },
   {
     "institute": "SOUTH MEKHAL HIGH SCHOOL, CHATTOGRAM",
@@ -174845,7 +174582,7 @@
         }
       }
     ],
-    "rank": 678
+    "rank": 677
   },
   {
     "institute": "WEST ADHAR MANIK GUZRA RAM MOHON HIGH SCHOOL, CHATTOGRAM",
@@ -175130,7 +174867,7 @@
         }
       }
     ],
-    "rank": 679
+    "rank": 678
   },
   {
     "institute": "AL-AZHAR HIGH SCHOOL, COX'S BAZAR",
@@ -175391,7 +175128,7 @@
         }
       }
     ],
-    "rank": 680
+    "rank": 679
   },
   {
     "institute": "MOHAMMED NAGAR H.K.C. HIGH SCHOOL, CHATTOGRAM",
@@ -175725,7 +175462,7 @@
         }
       }
     ],
-    "rank": 681
+    "rank": 680
   },
   {
     "institute": "GHAGRA GIRLS' HIGH SCHOOL, RANGAMATI",
@@ -175989,7 +175726,7 @@
         }
       }
     ],
-    "rank": 682
+    "rank": 681
   },
   {
     "institute": "HAZI AZGAR ALI HIGH SCHOOL, CHATTOGRAM",
@@ -176290,7 +176027,7 @@
         }
       }
     ],
-    "rank": 683
+    "rank": 682
   },
   {
     "institute": "WEST DHALAI HIGH SCHOOL, CHATTOGRAM",
@@ -176576,7 +176313,7 @@
         }
       }
     ],
-    "rank": 684
+    "rank": 683
   },
   {
     "institute": "WEST GATIADENGA HIGH SCHOOL, CHATTOGRAM",
@@ -176853,7 +176590,7 @@
         }
       }
     ],
-    "rank": 685
+    "rank": 684
   },
   {
     "institute": "MEHERUNNESA FAIZ HIGH SCHOOL, CHATTOGRAM",
@@ -177119,7 +176856,7 @@
         }
       }
     ],
-    "rank": 686
+    "rank": 685
   },
   {
     "institute": "CHINKI ASTANA HIGH SCHOOL, CHATTOGRAM",
@@ -177383,7 +177120,7 @@
         }
       }
     ],
-    "rank": 687
+    "rank": 686
   },
   {
     "institute": "MOHAMMAD ILIAS MIAH CHOWDHURY HIGH SCHOOL, COX'S BAZAR",
@@ -177642,7 +177379,7 @@
         }
       }
     ],
-    "rank": 688
+    "rank": 687
   },
   {
     "institute": "NORTH PADUA HIGH SCHOOL, CHATTOGRAM",
@@ -177933,7 +177670,7 @@
         }
       }
     ],
-    "rank": 689
+    "rank": 688
   },
   {
     "institute": "GORAK GHATA JUNIOR SCHOOL, COX'S BAZAR",
@@ -178200,7 +177937,7 @@
         }
       }
     ],
-    "rank": 690
+    "rank": 689
   },
   {
     "institute": "MONSA HIGH SCHOOL, CHATTOGRAM",
@@ -178483,7 +178220,7 @@
         }
       }
     ],
-    "rank": 691
+    "rank": 690
   },
   {
     "institute": "BAGMONIRAM SIRAZA KHATUN CITY CORPORATION GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -178790,7 +178527,7 @@
         }
       }
     ],
-    "rank": 692
+    "rank": 691
   },
   {
     "institute": "KHAS KHAMA GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -179031,7 +178768,7 @@
         }
       }
     ],
-    "rank": 693
+    "rank": 692
   },
   {
     "institute": "AMTALI HIGH SCHOOL, RANGAMATI",
@@ -179259,7 +178996,7 @@
         }
       }
     ],
-    "rank": 694
+    "rank": 693
   },
   {
     "institute": "REJU BOROITOLI HIGH SCHOOL, BANDARBAN",
@@ -179460,7 +179197,7 @@
         }
       }
     ],
-    "rank": 695
+    "rank": 694
   },
   {
     "institute": "TEKNAF BORDER GUARD PUBLIC SCHOOL, COX'S BAZAR",
@@ -179601,7 +179338,7 @@
         }
       }
     ],
-    "rank": 696
+    "rank": 695
   },
   {
     "institute": "HASNABAD MADINATUL ARAB HIGH SCHOOL, CHATTOGRAM",
@@ -179876,7 +179613,7 @@
         }
       }
     ],
-    "rank": 697
+    "rank": 696
   },
   {
     "institute": "SARAIPARA CITY CORPORATION HIGH SCHOOL, CHATTOGRAM",
@@ -180198,7 +179935,7 @@
         }
       }
     ],
-    "rank": 698
+    "rank": 697
   },
   {
     "institute": "CHANDRA GHONA ADARSHA HIGH SCHOOL, CHATTOGRAM",
@@ -180479,7 +180216,7 @@
         }
       }
     ],
-    "rank": 699
+    "rank": 698
   },
   {
     "institute": "KATGHAR GOLAM NABI HIGH SCHOOL, CHATTOGRAM",
@@ -180755,7 +180492,7 @@
         }
       }
     ],
-    "rank": 700
+    "rank": 699
   },
   {
     "institute": "AYEASHA OBAYEAD GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -180989,7 +180726,7 @@
         }
       }
     ],
-    "rank": 701
+    "rank": 700
   },
   {
     "institute": "HALISHAHOR BEGUMJAN HIGH SCHOOL, CHATTOGRAM",
@@ -181295,7 +181032,7 @@
         }
       }
     ],
-    "rank": 702
+    "rank": 701
   },
   {
     "institute": "SANTIPUR HIGH SCHOOL, KHAGRACHHARI",
@@ -181540,7 +181277,7 @@
         }
       }
     ],
-    "rank": 703
+    "rank": 702
   },
   {
     "institute": "SUCHIYA RAMKRISHNA HIGH SCHOOL, CHATTOGRAM",
@@ -181825,7 +181562,7 @@
         }
       }
     ],
-    "rank": 704
+    "rank": 703
   },
   {
     "institute": "GUZRA SHYAMACHARAN HIGH SCHOOL, CHATTOGRAM",
@@ -182069,7 +181806,7 @@
         }
       }
     ],
-    "rank": 705
+    "rank": 704
   },
   {
     "institute": "BORUMCHARA SHAHID BASHARUZZAMAN HIGH SCHOOL, CHATTOGRAM",
@@ -182354,7 +182091,7 @@
         }
       }
     ],
-    "rank": 706
+    "rank": 705
   },
   {
     "institute": "KOLAUZAN DR. EAKUB BAZLUR RAHMAN SHIKDER HIGH SCHOOL, CHATTOGRAM",
@@ -182652,7 +182389,7 @@
         }
       }
     ],
-    "rank": 707
+    "rank": 706
   },
   {
     "institute": "CHARIA HIGH SCHOOL, CHATTOGRAM",
@@ -182924,7 +182661,7 @@
         }
       }
     ],
-    "rank": 708
+    "rank": 707
   },
   {
     "institute": "RAICHATA PREMASHIA ADARSHA HIGH SCHOOL, CHATTOGRAM",
@@ -183210,7 +182947,7 @@
         }
       }
     ],
-    "rank": 709
+    "rank": 708
   },
   {
     "institute": "PODUA A. C. M. HIGH SCHOOL, CHATTOGRAM",
@@ -183515,7 +183252,7 @@
         }
       }
     ],
-    "rank": 710
+    "rank": 709
   },
   {
     "institute": "U. C. M. P. HIGH SCHOOL, RANGAMATI",
@@ -183801,7 +183538,7 @@
         }
       }
     ],
-    "rank": 711
+    "rank": 710
   },
   {
     "institute": "CHARAMBA HIGH SCHOOL, CHATTOGRAM",
@@ -184078,7 +183815,7 @@
         }
       }
     ],
-    "rank": 712
+    "rank": 711
   },
   {
     "institute": "EIDGAH HIGH SCHOOL, CHATTOGRAM",
@@ -184368,7 +184105,7 @@
         }
       }
     ],
-    "rank": 713
+    "rank": 712
   },
   {
     "institute": "RAILWAY HOSPITAL COLONY CITY CORPORATION HIGH SCHOOL, CHATTOGRAM",
@@ -184649,7 +184386,7 @@
         }
       }
     ],
-    "rank": 714
+    "rank": 713
   },
   {
     "institute": "JAHANATOLI HIGH SCHOOL, RANGAMATI",
@@ -184883,7 +184620,7 @@
         }
       }
     ],
-    "rank": 715
+    "rank": 714
   },
   {
     "institute": "DEWANPUR S. K. SEN HIGH SCHOOL, CHATTOGRAM",
@@ -185174,7 +184911,7 @@
         }
       }
     ],
-    "rank": 716
+    "rank": 715
   },
   {
     "institute": "CHOTTA MOHESH KHALI MODEL HIGH SCHOOL, COX'S BAZAR",
@@ -185419,7 +185156,7 @@
         }
       }
     ],
-    "rank": 717
+    "rank": 716
   },
   {
     "institute": "DULA HAZARA HIGH SCHOOL, COX'S BAZAR",
@@ -185692,7 +185429,7 @@
         }
       }
     ],
-    "rank": 718
+    "rank": 717
   },
   {
     "institute": "RUPALI HIGH SCHOOL, RANGAMATI",
@@ -185958,7 +185695,7 @@
         }
       }
     ],
-    "rank": 719
+    "rank": 718
   },
   {
     "institute": "KAZI AFAZ UDDIN HIGH SCHOOL, CHATTOGRAM",
@@ -186220,7 +185957,7 @@
         }
       }
     ],
-    "rank": 720
+    "rank": 719
   },
   {
     "institute": "MIRZAKHIL MODEL GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -186445,321 +186182,7 @@
         }
       }
     ],
-    "rank": 721
-  },
-  {
-    "institute": "BANDARBAN GOVT. GIRLS' HIGH SCHOOL, BANDARBAN",
-    "total_students": 107,
-    "gpa_5_count": 5,
-    "gpa_5_percentage": 4.67,
-    "average_gpa": 3.4705,
-    "institution_score": 69.41,
-    "grade_distribution": {
-      "A": 192,
-      "A+": 357,
-      "A-": 195,
-      "B": 200,
-      "C": 163,
-      "D": 102,
-      "F": 75
-    },
-    "subject_statistics": [
-      {
-        "code": "101",
-        "subject": "BANGLA-I",
-        "students_with_marks": 107,
-        "average_mark": 126.55,
-        "grade_distribution": {
-          "A": 22,
-          "A+": 7,
-          "A-": 40,
-          "B": 32,
-          "C": 6
-        }
-      },
-      {
-        "code": "107",
-        "subject": "ENGLISH-I",
-        "students_with_marks": 82,
-        "average_mark": 109.33,
-        "grade_distribution": {
-          "A+": 14,
-          "A": 7,
-          "C": 24,
-          "B": 11,
-          "A-": 6,
-          "F": 25,
-          "D": 20
-        }
-      },
-      {
-        "code": "109",
-        "subject": "MATHEMATICS",
-        "students_with_marks": 95,
-        "average_mark": 47.81,
-        "grade_distribution": {
-          "A+": 8,
-          "B": 9,
-          "A-": 10,
-          "D": 44,
-          "A": 3,
-          "C": 21,
-          "F": 12
-        }
-      },
-      {
-        "code": "150",
-        "subject": "BANGLADESH AND GLOBAL STUDIES",
-        "students_with_marks": 52,
-        "average_mark": 69.38,
-        "grade_distribution": {
-          "A+": 16,
-          "B": 4,
-          "A-": 13,
-          "A": 11,
-          "C": 6,
-          "D": 2,
-          "F": 1
-        }
-      },
-      {
-        "code": "114",
-        "subject": "CHRISTIAN RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 14,
-        "average_mark": 71.43,
-        "grade_distribution": {
-          "A+": 2,
-          "A": 5,
-          "A-": 5,
-          "B": 2
-        }
-      },
-      {
-        "code": "136",
-        "subject": "PHYSICS",
-        "students_with_marks": 38,
-        "average_mark": 60.47,
-        "grade_distribution": {
-          "A-": 9,
-          "A+": 2,
-          "B": 15,
-          "A": 6,
-          "F": 15,
-          "C": 6
-        }
-      },
-      {
-        "code": "137",
-        "subject": "CHEMISTRY",
-        "students_with_marks": 48,
-        "average_mark": 66.06,
-        "grade_distribution": {
-          "A": 10,
-          "A+": 7,
-          "B": 19,
-          "A-": 12,
-          "F": 5
-        }
-      },
-      {
-        "code": "138",
-        "subject": "BIOLOGY",
-        "students_with_marks": 53,
-        "average_mark": 70.81,
-        "grade_distribution": {
-          "A+": 13,
-          "A": 13,
-          "A-": 18,
-          "B": 9
-        }
-      },
-      {
-        "code": "154",
-        "subject": "Information And Communication Technology",
-        "students_with_marks": 107,
-        "average_mark": 39.43,
-        "grade_distribution": {
-          "A+": 44,
-          "A": 59,
-          "A-": 4
-        }
-      },
-      {
-        "code": "126",
-        "subject": "HIGHER MATHEMATICS",
-        "students_with_marks": 38,
-        "average_mark": 64.21,
-        "grade_distribution": {
-          "A": 8,
-          "A+": 6,
-          "A-": 11,
-          "B": 5,
-          "C": 7,
-          "F": 15,
-          "D": 1
-        }
-      },
-      {
-        "code": "147",
-        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
-        "students_with_marks": 107,
-        "average_mark": 75.69,
-        "grade_distribution": {
-          "A+": 107
-        }
-      },
-      {
-        "code": "156",
-        "subject": "Career Education",
-        "students_with_marks": 107,
-        "average_mark": 50.0,
-        "grade_distribution": {
-          "A+": 107
-        }
-      },
-      {
-        "code": "111",
-        "subject": "ISLAM AND MORAL EDUCATION",
-        "students_with_marks": 36,
-        "average_mark": 62.56,
-        "grade_distribution": {
-          "A+": 4,
-          "A": 10,
-          "A-": 7,
-          "B": 9,
-          "C": 5,
-          "D": 1
-        }
-      },
-      {
-        "code": "113",
-        "subject": "BUDDHIST RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 41,
-        "average_mark": 68.07,
-        "grade_distribution": {
-          "A+": 8,
-          "A-": 9,
-          "A": 13,
-          "B": 6,
-          "C": 5
-        }
-      },
-      {
-        "code": "112",
-        "subject": "HINDU RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 16,
-        "average_mark": 62.81,
-        "grade_distribution": {
-          "A+": 6,
-          "A-": 2,
-          "C": 5,
-          "D": 2,
-          "B": 1
-        }
-      },
-      {
-        "code": "127",
-        "subject": "SCIENCE",
-        "students_with_marks": 53,
-        "average_mark": 44.0,
-        "grade_distribution": {
-          "A-": 5,
-          "B": 6,
-          "C": 25,
-          "D": 17,
-          "F": 1
-        }
-      },
-      {
-        "code": "110",
-        "subject": "GEOGRAPHY AND ENVIRONMENT",
-        "students_with_marks": 40,
-        "average_mark": 51.45,
-        "grade_distribution": {
-          "B": 13,
-          "C": 19,
-          "A-": 4,
-          "D": 2,
-          "A": 2
-        }
-      },
-      {
-        "code": "153",
-        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
-        "students_with_marks": 40,
-        "average_mark": 54.05,
-        "grade_distribution": {
-          "B": 19,
-          "A-": 6,
-          "C": 12,
-          "A+": 1,
-          "D": 1,
-          "A": 1
-        }
-      },
-      {
-        "code": "140",
-        "subject": "CIVICS AND CITIZENSHIP",
-        "students_with_marks": 40,
-        "average_mark": 54.23,
-        "grade_distribution": {
-          "A-": 8,
-          "B": 18,
-          "A+": 2,
-          "C": 9,
-          "D": 3
-        }
-      },
-      {
-        "code": "151",
-        "subject": "HOME SCIENCE",
-        "students_with_marks": 54,
-        "average_mark": 69.17,
-        "grade_distribution": {
-          "A": 22,
-          "A+": 3,
-          "A-": 23,
-          "B": 6
-        }
-      },
-      {
-        "code": "146",
-        "subject": "ACCOUNTING",
-        "students_with_marks": 13,
-        "average_mark": 47.38,
-        "grade_distribution": {
-          "C": 3,
-          "D": 3,
-          "B": 7,
-          "F": 1
-        }
-      },
-      {
-        "code": "152",
-        "subject": "FINANCE AND BANKING",
-        "students_with_marks": 14,
-        "average_mark": 45.07,
-        "grade_distribution": {
-          "A-": 1,
-          "B": 3,
-          "C": 6,
-          "D": 4
-        }
-      },
-      {
-        "code": "143",
-        "subject": "BUSINESS ENTREPRENEURSHIP",
-        "students_with_marks": 14,
-        "average_mark": 51.64,
-        "grade_distribution": {
-          "B": 6,
-          "C": 4,
-          "A-": 2,
-          "D": 2
-        }
-      }
-    ],
-    "rank": 722
+    "rank": 720
   },
   {
     "institute": "UTTARAN MODEL SCHOOL, COX'S BAZAR",
@@ -186935,7 +186358,7 @@
         }
       }
     ],
-    "rank": 723
+    "rank": 721
   },
   {
     "institute": "MATARA BARI ADARSHA PUBLIC HIGH SCHOOL, COX'S BAZAR",
@@ -187139,7 +186562,7 @@
         }
       }
     ],
-    "rank": 724
+    "rank": 722
   },
   {
     "institute": "MASAJIDDA HIGH SCHOOL, CHATTOGRAM",
@@ -187422,7 +186845,7 @@
         }
       }
     ],
-    "rank": 725
+    "rank": 723
   },
   {
     "institute": "WEST MAYANI ADARSHA HIGH SCHOOL, CHATTOGRAM",
@@ -187699,7 +187122,7 @@
         }
       }
     ],
-    "rank": 726
+    "rank": 724
   },
   {
     "institute": "GAZALIA HIGH SCHOOL, BANDARBAN",
@@ -187990,7 +187413,7 @@
         }
       }
     ],
-    "rank": 727
+    "rank": 725
   },
   {
     "institute": "BOLUARDIGHI CITY CORP. GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -188270,7 +187693,7 @@
         }
       }
     ],
-    "rank": 728
+    "rank": 726
   },
   {
     "institute": "DR. MOHAMMAD ENAMUL HOQUE ACADEMY, CHATTOGRAM",
@@ -188529,7 +187952,7 @@
         }
       }
     ],
-    "rank": 729
+    "rank": 727
   },
   {
     "institute": "GACHBARIA MAMTAJ BEGUM SCHOOL & COLLEGE, CHATTOGRAM",
@@ -188841,7 +188264,7 @@
         }
       }
     ],
-    "rank": 730
+    "rank": 728
   },
   {
     "institute": "KARAIYA NOGAR HIGH SCHOOL, CHATTOGRAM",
@@ -189120,7 +188543,322 @@
         }
       }
     ],
-    "rank": 731
+    "rank": 729
+  },
+  {
+    "institute": "BANDARBAN GOVT. GIRLS' HIGH SCHOOL, BANDARBAN",
+    "total_students": 110,
+    "gpa_5_count": 5,
+    "gpa_5_percentage": 4.55,
+    "average_gpa": 3.4619,
+    "institution_score": 69.24,
+    "grade_distribution": {
+      "A": 197,
+      "A+": 365,
+      "A-": 199,
+      "B": 207,
+      "C": 170,
+      "D": 104,
+      "F": 78
+    },
+    "subject_statistics": [
+      {
+        "code": "101",
+        "subject": "BANGLA-I",
+        "students_with_marks": 110,
+        "average_mark": 126.5,
+        "grade_distribution": {
+          "A": 23,
+          "A+": 7,
+          "A-": 41,
+          "B": 32,
+          "C": 7
+        }
+      },
+      {
+        "code": "107",
+        "subject": "ENGLISH-I",
+        "students_with_marks": 84,
+        "average_mark": 108.67,
+        "grade_distribution": {
+          "A+": 14,
+          "A": 7,
+          "C": 25,
+          "B": 11,
+          "A-": 6,
+          "F": 26,
+          "D": 21
+        }
+      },
+      {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 97,
+        "average_mark": 47.78,
+        "grade_distribution": {
+          "A+": 8,
+          "B": 9,
+          "A-": 10,
+          "D": 44,
+          "A": 3,
+          "C": 23,
+          "F": 13
+        }
+      },
+      {
+        "code": "150",
+        "subject": "BANGLADESH AND GLOBAL STUDIES",
+        "students_with_marks": 53,
+        "average_mark": 68.81,
+        "grade_distribution": {
+          "A+": 16,
+          "B": 4,
+          "A-": 13,
+          "A": 11,
+          "C": 6,
+          "D": 3,
+          "F": 1
+        }
+      },
+      {
+        "code": "114",
+        "subject": "CHRISTIAN RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 14,
+        "average_mark": 71.43,
+        "grade_distribution": {
+          "A+": 2,
+          "A": 5,
+          "A-": 5,
+          "B": 2
+        }
+      },
+      {
+        "code": "136",
+        "subject": "PHYSICS",
+        "students_with_marks": 39,
+        "average_mark": 60.41,
+        "grade_distribution": {
+          "A-": 9,
+          "A+": 2,
+          "B": 16,
+          "A": 6,
+          "F": 15,
+          "C": 6
+        }
+      },
+      {
+        "code": "137",
+        "subject": "CHEMISTRY",
+        "students_with_marks": 49,
+        "average_mark": 65.84,
+        "grade_distribution": {
+          "A": 10,
+          "A+": 7,
+          "B": 20,
+          "A-": 12,
+          "F": 5
+        }
+      },
+      {
+        "code": "138",
+        "subject": "BIOLOGY",
+        "students_with_marks": 54,
+        "average_mark": 70.57,
+        "grade_distribution": {
+          "A+": 13,
+          "A": 13,
+          "A-": 18,
+          "B": 10
+        }
+      },
+      {
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 110,
+        "average_mark": 39.37,
+        "grade_distribution": {
+          "A+": 45,
+          "A": 61,
+          "A-": 4
+        }
+      },
+      {
+        "code": "126",
+        "subject": "HIGHER MATHEMATICS",
+        "students_with_marks": 38,
+        "average_mark": 64.21,
+        "grade_distribution": {
+          "A": 8,
+          "A+": 6,
+          "A-": 11,
+          "B": 5,
+          "C": 7,
+          "F": 16,
+          "D": 1
+        }
+      },
+      {
+        "code": "147",
+        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
+        "students_with_marks": 110,
+        "average_mark": 76.35,
+        "grade_distribution": {
+          "A+": 110
+        }
+      },
+      {
+        "code": "156",
+        "subject": "Career Education",
+        "students_with_marks": 110,
+        "average_mark": 50.0,
+        "grade_distribution": {
+          "A+": 110
+        }
+      },
+      {
+        "code": "111",
+        "subject": "ISLAM AND MORAL EDUCATION",
+        "students_with_marks": 36,
+        "average_mark": 62.56,
+        "grade_distribution": {
+          "A+": 4,
+          "A": 10,
+          "A-": 7,
+          "B": 9,
+          "C": 5,
+          "D": 1
+        }
+      },
+      {
+        "code": "113",
+        "subject": "BUDDHIST RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 44,
+        "average_mark": 68.0,
+        "grade_distribution": {
+          "A+": 9,
+          "A-": 10,
+          "A": 13,
+          "B": 7,
+          "C": 5
+        }
+      },
+      {
+        "code": "112",
+        "subject": "HINDU RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 16,
+        "average_mark": 62.81,
+        "grade_distribution": {
+          "A+": 6,
+          "A-": 2,
+          "C": 5,
+          "D": 2,
+          "B": 1
+        }
+      },
+      {
+        "code": "127",
+        "subject": "SCIENCE",
+        "students_with_marks": 55,
+        "average_mark": 44.2,
+        "grade_distribution": {
+          "C": 26,
+          "B": 7,
+          "A-": 5,
+          "D": 17,
+          "F": 1
+        }
+      },
+      {
+        "code": "110",
+        "subject": "GEOGRAPHY AND ENVIRONMENT",
+        "students_with_marks": 42,
+        "average_mark": 51.64,
+        "grade_distribution": {
+          "C": 20,
+          "A-": 5,
+          "B": 13,
+          "D": 2,
+          "A": 2
+        }
+      },
+      {
+        "code": "153",
+        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
+        "students_with_marks": 42,
+        "average_mark": 53.98,
+        "grade_distribution": {
+          "C": 13,
+          "B": 20,
+          "A-": 6,
+          "A+": 1,
+          "D": 1,
+          "A": 1
+        }
+      },
+      {
+        "code": "140",
+        "subject": "CIVICS AND CITIZENSHIP",
+        "students_with_marks": 42,
+        "average_mark": 54.86,
+        "grade_distribution": {
+          "B": 19,
+          "A": 1,
+          "A-": 8,
+          "A+": 2,
+          "C": 9,
+          "D": 3
+        }
+      },
+      {
+        "code": "151",
+        "subject": "HOME SCIENCE",
+        "students_with_marks": 56,
+        "average_mark": 69.29,
+        "grade_distribution": {
+          "A-": 24,
+          "A": 23,
+          "A+": 3,
+          "B": 6
+        }
+      },
+      {
+        "code": "146",
+        "subject": "ACCOUNTING",
+        "students_with_marks": 13,
+        "average_mark": 47.38,
+        "grade_distribution": {
+          "C": 3,
+          "D": 3,
+          "B": 7,
+          "F": 1
+        }
+      },
+      {
+        "code": "152",
+        "subject": "FINANCE AND BANKING",
+        "students_with_marks": 14,
+        "average_mark": 45.07,
+        "grade_distribution": {
+          "A-": 1,
+          "B": 3,
+          "C": 6,
+          "D": 4
+        }
+      },
+      {
+        "code": "143",
+        "subject": "BUSINESS ENTREPRENEURSHIP",
+        "students_with_marks": 14,
+        "average_mark": 51.64,
+        "grade_distribution": {
+          "B": 6,
+          "C": 4,
+          "A-": 2,
+          "D": 2
+        }
+      }
+    ],
+    "rank": 730
   },
   {
     "institute": "HALISHAHOR AL-HAJ MOHABBAT ALI CITY CORP. HIGH SCHOOL, CHATTOGRAM",
@@ -189398,7 +189136,7 @@
         }
       }
     ],
-    "rank": 732
+    "rank": 731
   },
   {
     "institute": "NORTH DHARMAPUR HIGH SCHOOL, CHATTOGRAM",
@@ -189639,301 +189377,7 @@
         }
       }
     ],
-    "rank": 733
-  },
-  {
-    "institute": "SHAPLAPUR HIGH SCHOOL, COX'S BAZAR",
-    "total_students": 59,
-    "gpa_5_count": 2,
-    "gpa_5_percentage": 3.39,
-    "average_gpa": 3.4608,
-    "institution_score": 69.22,
-    "grade_distribution": {
-      "A": 84,
-      "A-": 100,
-      "A+": 166,
-      "B": 126,
-      "D": 66,
-      "F": 58,
-      "C": 108
-    },
-    "subject_statistics": [
-      {
-        "code": "101",
-        "subject": "BANGLA-I",
-        "students_with_marks": 59,
-        "average_mark": 111.53,
-        "grade_distribution": {
-          "A": 6,
-          "A-": 11,
-          "B": 18,
-          "C": 19,
-          "D": 2,
-          "A+": 3
-        }
-      },
-      {
-        "code": "107",
-        "subject": "ENGLISH-I",
-        "students_with_marks": 47,
-        "average_mark": 101.49,
-        "grade_distribution": {
-          "A-": 8,
-          "A": 3,
-          "D": 9,
-          "C": 15,
-          "F": 12,
-          "B": 11,
-          "A+": 1
-        }
-      },
-      {
-        "code": "109",
-        "subject": "MATHEMATICS",
-        "students_with_marks": 39,
-        "average_mark": 48.62,
-        "grade_distribution": {
-          "A-": 4,
-          "D": 17,
-          "F": 20,
-          "B": 4,
-          "C": 9,
-          "A+": 3,
-          "A": 2
-        }
-      },
-      {
-        "code": "150",
-        "subject": "BANGLADESH AND GLOBAL STUDIES",
-        "students_with_marks": 25,
-        "average_mark": 62.04,
-        "grade_distribution": {
-          "A": 8,
-          "A+": 2,
-          "A-": 4,
-          "B": 6,
-          "C": 3,
-          "D": 2
-        }
-      },
-      {
-        "code": "111",
-        "subject": "ISLAM AND MORAL EDUCATION",
-        "students_with_marks": 58,
-        "average_mark": 60.64,
-        "grade_distribution": {
-          "A+": 8,
-          "A": 7,
-          "A-": 14,
-          "B": 13,
-          "D": 4,
-          "C": 12
-        }
-      },
-      {
-        "code": "136",
-        "subject": "PHYSICS",
-        "students_with_marks": 15,
-        "average_mark": 62.47,
-        "grade_distribution": {
-          "B": 5,
-          "A-": 2,
-          "F": 10,
-          "C": 3,
-          "A": 2,
-          "A+": 3
-        }
-      },
-      {
-        "code": "137",
-        "subject": "CHEMISTRY",
-        "students_with_marks": 21,
-        "average_mark": 65.1,
-        "grade_distribution": {
-          "A": 4,
-          "B": 7,
-          "C": 2,
-          "F": 4,
-          "A-": 4,
-          "A+": 4
-        }
-      },
-      {
-        "code": "138",
-        "subject": "BIOLOGY",
-        "students_with_marks": 24,
-        "average_mark": 68.62,
-        "grade_distribution": {
-          "A": 5,
-          "A-": 8,
-          "B": 6,
-          "F": 1,
-          "A+": 5
-        }
-      },
-      {
-        "code": "154",
-        "subject": "Information And Communication Technology",
-        "students_with_marks": 59,
-        "average_mark": 37.83,
-        "grade_distribution": {
-          "A+": 14,
-          "A": 35,
-          "A-": 10
-        }
-      },
-      {
-        "code": "126",
-        "subject": "HIGHER MATHEMATICS",
-        "students_with_marks": 17,
-        "average_mark": 65.65,
-        "grade_distribution": {
-          "B": 4,
-          "A": 2,
-          "F": 8,
-          "A-": 4,
-          "C": 3,
-          "A+": 4
-        }
-      },
-      {
-        "code": "147",
-        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
-        "students_with_marks": 59,
-        "average_mark": 78.0,
-        "grade_distribution": {
-          "A+": 59
-        }
-      },
-      {
-        "code": "156",
-        "subject": "Career Education",
-        "students_with_marks": 59,
-        "average_mark": 49.2,
-        "grade_distribution": {
-          "A+": 59
-        }
-      },
-      {
-        "code": "127",
-        "subject": "SCIENCE",
-        "students_with_marks": 34,
-        "average_mark": 44.35,
-        "grade_distribution": {
-          "A": 1,
-          "D": 12,
-          "B": 7,
-          "A-": 2,
-          "C": 12
-        }
-      },
-      {
-        "code": "110",
-        "subject": "GEOGRAPHY AND ENVIRONMENT",
-        "students_with_marks": 27,
-        "average_mark": 45.89,
-        "grade_distribution": {
-          "B": 5,
-          "D": 10,
-          "C": 8,
-          "A-": 4,
-          "F": 2
-        }
-      },
-      {
-        "code": "153",
-        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
-        "students_with_marks": 29,
-        "average_mark": 51.17,
-        "grade_distribution": {
-          "A+": 1,
-          "C": 11,
-          "A-": 2,
-          "A": 3,
-          "B": 7,
-          "D": 5
-        }
-      },
-      {
-        "code": "140",
-        "subject": "CIVICS AND CITIZENSHIP",
-        "students_with_marks": 29,
-        "average_mark": 54.52,
-        "grade_distribution": {
-          "A-": 6,
-          "C": 6,
-          "B": 13,
-          "A": 2,
-          "D": 2
-        }
-      },
-      {
-        "code": "151",
-        "subject": "HOME SCIENCE",
-        "students_with_marks": 21,
-        "average_mark": 58.14,
-        "grade_distribution": {
-          "A-": 9,
-          "B": 12
-        }
-      },
-      {
-        "code": "134",
-        "subject": "AGRICULTURE STUDIES",
-        "students_with_marks": 12,
-        "average_mark": 61.58,
-        "grade_distribution": {
-          "B": 5,
-          "A-": 7,
-          "F": 1
-        }
-      },
-      {
-        "code": "112",
-        "subject": "HINDU RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 1,
-        "average_mark": 71.0,
-        "grade_distribution": {
-          "A": 1
-        }
-      },
-      {
-        "code": "146",
-        "subject": "ACCOUNTING",
-        "students_with_marks": 5,
-        "average_mark": 51.4,
-        "grade_distribution": {
-          "A": 1,
-          "B": 2,
-          "C": 1,
-          "D": 1
-        }
-      },
-      {
-        "code": "152",
-        "subject": "FINANCE AND BANKING",
-        "students_with_marks": 5,
-        "average_mark": 44.6,
-        "grade_distribution": {
-          "C": 2,
-          "D": 2,
-          "A": 1
-        }
-      },
-      {
-        "code": "143",
-        "subject": "BUSINESS ENTREPRENEURSHIP",
-        "students_with_marks": 5,
-        "average_mark": 57.2,
-        "grade_distribution": {
-          "A": 1,
-          "B": 1,
-          "C": 2,
-          "A-": 1
-        }
-      }
-    ],
-    "rank": 734
+    "rank": 732
   },
   {
     "institute": "YAKUB ALI DUBASH GIRLS HIGH SCHOOL, CHATTOGRAM",
@@ -190185,7 +189629,7 @@
         }
       }
     ],
-    "rank": 735
+    "rank": 733
   },
   {
     "institute": "KELISHAHOR HIGH SCHOOL, CHATTOGRAM",
@@ -190479,7 +189923,7 @@
         }
       }
     ],
-    "rank": 736
+    "rank": 734
   },
   {
     "institute": "MATAR BARI IDEAL SCHOOL GIRLS, COX'S BAZAR",
@@ -190632,7 +190076,7 @@
         }
       }
     ],
-    "rank": 737
+    "rank": 735
   },
   {
     "institute": "KHAGRACHHARI ADARSHA HIGH SCHOOL, KHAGRACHHARI",
@@ -190859,7 +190303,309 @@
         }
       }
     ],
-    "rank": 738
+    "rank": 736
+  },
+  {
+    "institute": "DIGHINALA MODEL GIRLS' HIGH SCHOOL, KHAGRACHHARI",
+    "total_students": 74,
+    "gpa_5_count": 0,
+    "gpa_5_percentage": 0.0,
+    "average_gpa": 3.4542,
+    "institution_score": 69.08,
+    "grade_distribution": {
+      "A": 119,
+      "B": 159,
+      "C": 142,
+      "A+": 204,
+      "A-": 106,
+      "D": 94,
+      "F": 58,
+      "X": 6
+    },
+    "subject_statistics": [
+      {
+        "code": "101",
+        "subject": "BANGLA-I",
+        "students_with_marks": 74,
+        "average_mark": 117.32,
+        "grade_distribution": {
+          "A": 8,
+          "A-": 22,
+          "A+": 2,
+          "B": 29,
+          "C": 12,
+          "D": 1
+        }
+      },
+      {
+        "code": "107",
+        "subject": "ENGLISH-I",
+        "students_with_marks": 64,
+        "average_mark": 94.09,
+        "grade_distribution": {
+          "B": 14,
+          "A": 4,
+          "C": 20,
+          "A-": 6,
+          "F": 10,
+          "D": 20
+        }
+      },
+      {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 45,
+        "average_mark": 44.09,
+        "grade_distribution": {
+          "C": 14,
+          "D": 21,
+          "A-": 4,
+          "A": 1,
+          "B": 5,
+          "F": 26,
+          "X": 3
+        }
+      },
+      {
+        "code": "150",
+        "subject": "BANGLADESH AND GLOBAL STUDIES",
+        "students_with_marks": 34,
+        "average_mark": 71.59,
+        "grade_distribution": {
+          "A+": 6,
+          "A-": 8,
+          "A": 16,
+          "B": 3,
+          "C": 1
+        }
+      },
+      {
+        "code": "111",
+        "subject": "ISLAM AND MORAL EDUCATION",
+        "students_with_marks": 20,
+        "average_mark": 56.9,
+        "grade_distribution": {
+          "A-": 1,
+          "A": 6,
+          "C": 8,
+          "A+": 1,
+          "B": 2,
+          "D": 2
+        }
+      },
+      {
+        "code": "136",
+        "subject": "PHYSICS",
+        "students_with_marks": 28,
+        "average_mark": 62.04,
+        "grade_distribution": {
+          "A-": 10,
+          "A": 4,
+          "A+": 2,
+          "B": 9,
+          "C": 3,
+          "F": 4,
+          "X": 2
+        }
+      },
+      {
+        "code": "137",
+        "subject": "CHEMISTRY",
+        "students_with_marks": 33,
+        "average_mark": 61.45,
+        "grade_distribution": {
+          "B": 14,
+          "A-": 10,
+          "A+": 2,
+          "A": 5,
+          "C": 2,
+          "X": 1
+        }
+      },
+      {
+        "code": "138",
+        "subject": "BIOLOGY",
+        "students_with_marks": 33,
+        "average_mark": 72.67,
+        "grade_distribution": {
+          "A": 12,
+          "A+": 8,
+          "A-": 9,
+          "B": 3,
+          "F": 1,
+          "C": 1
+        }
+      },
+      {
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 74,
+        "average_mark": 36.88,
+        "grade_distribution": {
+          "A+": 18,
+          "A": 37,
+          "A-": 15,
+          "B": 4
+        }
+      },
+      {
+        "code": "126",
+        "subject": "HIGHER MATHEMATICS",
+        "students_with_marks": 27,
+        "average_mark": 56.04,
+        "grade_distribution": {
+          "B": 20,
+          "A-": 2,
+          "C": 3,
+          "F": 7,
+          "A": 1,
+          "A+": 1
+        }
+      },
+      {
+        "code": "147",
+        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
+        "students_with_marks": 74,
+        "average_mark": 70.68,
+        "grade_distribution": {
+          "A+": 73,
+          "A": 1
+        }
+      },
+      {
+        "code": "156",
+        "subject": "Career Education",
+        "students_with_marks": 74,
+        "average_mark": 44.09,
+        "grade_distribution": {
+          "A+": 73,
+          "A": 1
+        }
+      },
+      {
+        "code": "113",
+        "subject": "BUDDHIST RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 37,
+        "average_mark": 65.57,
+        "grade_distribution": {
+          "A+": 10,
+          "A": 7,
+          "B": 10,
+          "C": 5,
+          "A-": 3,
+          "D": 2
+        }
+      },
+      {
+        "code": "112",
+        "subject": "HINDU RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 17,
+        "average_mark": 48.82,
+        "grade_distribution": {
+          "A+": 2,
+          "A-": 1,
+          "D": 6,
+          "C": 5,
+          "B": 3
+        }
+      },
+      {
+        "code": "127",
+        "subject": "SCIENCE",
+        "students_with_marks": 32,
+        "average_mark": 42.34,
+        "grade_distribution": {
+          "C": 15,
+          "B": 5,
+          "D": 12,
+          "F": 8
+        }
+      },
+      {
+        "code": "110",
+        "subject": "GEOGRAPHY AND ENVIRONMENT",
+        "students_with_marks": 36,
+        "average_mark": 43.61,
+        "grade_distribution": {
+          "D": 13,
+          "C": 14,
+          "B": 7,
+          "A-": 2
+        }
+      },
+      {
+        "code": "153",
+        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
+        "students_with_marks": 35,
+        "average_mark": 45.09,
+        "grade_distribution": {
+          "D": 10,
+          "B": 6,
+          "C": 18,
+          "A-": 1,
+          "F": 1
+        }
+      },
+      {
+        "code": "140",
+        "subject": "CIVICS AND CITIZENSHIP",
+        "students_with_marks": 36,
+        "average_mark": 49.28,
+        "grade_distribution": {
+          "C": 15,
+          "B": 13,
+          "A-": 4,
+          "D": 4
+        }
+      },
+      {
+        "code": "151",
+        "subject": "HOME SCIENCE",
+        "students_with_marks": 40,
+        "average_mark": 67.67,
+        "grade_distribution": {
+          "B": 10,
+          "A": 15,
+          "A+": 6,
+          "A-": 8,
+          "C": 1
+        }
+      },
+      {
+        "code": "146",
+        "subject": "ACCOUNTING",
+        "students_with_marks": 4,
+        "average_mark": 44.25,
+        "grade_distribution": {
+          "C": 2,
+          "B": 1,
+          "D": 1
+        }
+      },
+      {
+        "code": "152",
+        "subject": "FINANCE AND BANKING",
+        "students_with_marks": 3,
+        "average_mark": 41.67,
+        "grade_distribution": {
+          "C": 1,
+          "D": 2,
+          "F": 1
+        }
+      },
+      {
+        "code": "143",
+        "subject": "BUSINESS ENTREPRENEURSHIP",
+        "students_with_marks": 4,
+        "average_mark": 54.75,
+        "grade_distribution": {
+          "B": 1,
+          "A": 1,
+          "C": 2
+        }
+      }
+    ],
+    "rank": 737
   },
   {
     "institute": "P. M. KHALI HIGH SCHOOL, COX'S BAZAR",
@@ -191135,7 +190881,7 @@
         }
       }
     ],
-    "rank": 739
+    "rank": 738
   },
   {
     "institute": "JORARGANJ GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -191403,7 +191149,7 @@
         }
       }
     ],
-    "rank": 740
+    "rank": 739
   },
   {
     "institute": "SHOLASHAHAR PUBLIC SCHOOL, CHATTOGRAM",
@@ -191757,7 +191503,7 @@
         }
       }
     ],
-    "rank": 741
+    "rank": 740
   },
   {
     "institute": "BHALUKIA PALONG HIGH SCHOOL, COX'S BAZAR",
@@ -192044,7 +191790,7 @@
         }
       }
     ],
-    "rank": 742
+    "rank": 741
   },
   {
     "institute": "PANIRCHHARA ADARSHA HIGH SCHOOL, COX'S BAZAR",
@@ -192311,7 +192057,7 @@
         }
       }
     ],
-    "rank": 743
+    "rank": 742
   },
   {
     "institute": "UTTAR BARAITALI HIGH SCHOOL, COX'S BAZAR",
@@ -192578,7 +192324,7 @@
         }
       }
     ],
-    "rank": 744
+    "rank": 743
   },
   {
     "institute": "JULEKHA AMINUR RAHMAN CITY CORPORATION HIGH SCHOOL, CHATTOGRAM",
@@ -192856,7 +192602,7 @@
         }
       }
     ],
-    "rank": 745
+    "rank": 744
   },
   {
     "institute": "AL-HAJ TAZUL ISLAM HIGH SCHOOL, CHATTOGRAM",
@@ -193120,7 +192866,7 @@
         }
       }
     ],
-    "rank": 746
+    "rank": 745
   },
   {
     "institute": "MIR NOWABUL HOQUE MEMORIAL HIGH SCHOOL, CHATTOGRAM",
@@ -193410,7 +193156,7 @@
         }
       }
     ],
-    "rank": 747
+    "rank": 746
   },
   {
     "institute": "PADUA SHAMILLANEY GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -193640,7 +193386,7 @@
         }
       }
     ],
-    "rank": 748
+    "rank": 747
   },
   {
     "institute": "CHITTAGONG AIRPORT HIGH SCHOOL, CHATTOGRAM",
@@ -193911,7 +193657,7 @@
         }
       }
     ],
-    "rank": 749
+    "rank": 748
   },
   {
     "institute": "BETCHARI GENERAL OSMANI HIGH SCHOOL, RANGAMATI",
@@ -194172,7 +193918,7 @@
         }
       }
     ],
-    "rank": 750
+    "rank": 749
   },
   {
     "institute": "DAULATPUR BOHUMUKHI HIGH SCHOOL, CHATTOGRAM",
@@ -194483,7 +194229,7 @@
         }
       }
     ],
-    "rank": 751
+    "rank": 750
   },
   {
     "institute": "PALAKATA HIGH SCHOOL, COX'S BAZAR",
@@ -194760,7 +194506,7 @@
         }
       }
     ],
-    "rank": 752
+    "rank": 751
   },
   {
     "institute": "BANIGRAM SADHANPUR HIGH SCHOOL, CHATTOGRAM",
@@ -195058,7 +194804,7 @@
         }
       }
     ],
-    "rank": 753
+    "rank": 752
   },
   {
     "institute": "MOHORA S. K. Q. GIRLS' HIGH SCHOOL, CHATTOGRAM",
@@ -195359,7 +195105,7 @@
         }
       }
     ],
-    "rank": 754
+    "rank": 753
   },
   {
     "institute": "BOSHIRUZZAMAN MEMORIAL EDUCATION CENTRE, CHATTOGRAM",
@@ -195625,7 +195371,7 @@
         }
       }
     ],
-    "rank": 755
+    "rank": 754
   },
   {
     "institute": "TAINDANG HIGH SCHOOL, KHAGRACHHARI",
@@ -195927,7 +195673,7 @@
         }
       }
     ],
-    "rank": 756
+    "rank": 755
   },
   {
     "institute": "BHUJPUR PUBLIC HIGH SCHOOL, CHATTOGRAM",
@@ -196204,7 +195950,7 @@
         }
       }
     ],
-    "rank": 757
+    "rank": 756
   },
   {
     "institute": "NIMTALA HIGH SCHOOL, CHATTOGRAM",
@@ -196480,7 +196226,7 @@
         }
       }
     ],
-    "rank": 758
+    "rank": 757
   },
   {
     "institute": "KHOIYAKHALI HIGH SCHOOL, CHATTOGRAM",
@@ -196753,7 +196499,7 @@
         }
       }
     ],
-    "rank": 759
+    "rank": 758
   },
   {
     "institute": "LATIFPUR AL-HAZ ABDUL JALIL HIGH SCHOOL, CHATTOGRAM",
@@ -197037,7 +196783,7 @@
         }
       }
     ],
-    "rank": 760
+    "rank": 759
   },
   {
     "institute": "CHAMBI HIGH SCHOOL & COLLEGE, BANDARBAN",
@@ -197346,7 +197092,7 @@
         }
       }
     ],
-    "rank": 761
+    "rank": 760
   },
   {
     "institute": "CHARANDWIP UNION COUNCIL HIGH SCHOOL, CHATTOGRAM",
@@ -197641,7 +197387,7 @@
         }
       }
     ],
-    "rank": 762
+    "rank": 761
   },
   {
     "institute": "LAMA GOVT. HIGH SCHOOL, BANDARBAN",
@@ -197942,6 +197688,300 @@
         "average_mark": 78.0,
         "grade_distribution": {
           "A": 1
+        }
+      }
+    ],
+    "rank": 762
+  },
+  {
+    "institute": "SHAPLAPUR HIGH SCHOOL, COX'S BAZAR",
+    "total_students": 61,
+    "gpa_5_count": 2,
+    "gpa_5_percentage": 3.28,
+    "average_gpa": 3.418,
+    "institution_score": 68.36,
+    "grade_distribution": {
+      "A": 85,
+      "A-": 104,
+      "A+": 170,
+      "B": 130,
+      "D": 70,
+      "F": 59,
+      "C": 114
+    },
+    "subject_statistics": [
+      {
+        "code": "101",
+        "subject": "BANGLA-I",
+        "students_with_marks": 61,
+        "average_mark": 111.1,
+        "grade_distribution": {
+          "A": 6,
+          "A-": 11,
+          "B": 19,
+          "C": 20,
+          "D": 2,
+          "A+": 3
+        }
+      },
+      {
+        "code": "107",
+        "subject": "ENGLISH-I",
+        "students_with_marks": 49,
+        "average_mark": 100.51,
+        "grade_distribution": {
+          "A-": 8,
+          "A": 3,
+          "D": 10,
+          "C": 16,
+          "F": 12,
+          "B": 11,
+          "A+": 1
+        }
+      },
+      {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 40,
+        "average_mark": 48.23,
+        "grade_distribution": {
+          "A-": 4,
+          "D": 18,
+          "F": 21,
+          "B": 4,
+          "C": 9,
+          "A+": 3,
+          "A": 2
+        }
+      },
+      {
+        "code": "150",
+        "subject": "BANGLADESH AND GLOBAL STUDIES",
+        "students_with_marks": 25,
+        "average_mark": 62.04,
+        "grade_distribution": {
+          "A": 8,
+          "A+": 2,
+          "A-": 4,
+          "B": 6,
+          "C": 3,
+          "D": 2
+        }
+      },
+      {
+        "code": "111",
+        "subject": "ISLAM AND MORAL EDUCATION",
+        "students_with_marks": 60,
+        "average_mark": 60.52,
+        "grade_distribution": {
+          "A+": 8,
+          "A": 7,
+          "A-": 14,
+          "B": 15,
+          "D": 4,
+          "C": 12
+        }
+      },
+      {
+        "code": "136",
+        "subject": "PHYSICS",
+        "students_with_marks": 15,
+        "average_mark": 62.47,
+        "grade_distribution": {
+          "B": 5,
+          "A-": 2,
+          "F": 10,
+          "C": 3,
+          "A": 2,
+          "A+": 3
+        }
+      },
+      {
+        "code": "137",
+        "subject": "CHEMISTRY",
+        "students_with_marks": 21,
+        "average_mark": 65.1,
+        "grade_distribution": {
+          "A": 4,
+          "B": 7,
+          "C": 2,
+          "F": 4,
+          "A-": 4,
+          "A+": 4
+        }
+      },
+      {
+        "code": "138",
+        "subject": "BIOLOGY",
+        "students_with_marks": 24,
+        "average_mark": 68.62,
+        "grade_distribution": {
+          "A": 5,
+          "A-": 8,
+          "B": 6,
+          "F": 1,
+          "A+": 5
+        }
+      },
+      {
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 61,
+        "average_mark": 37.75,
+        "grade_distribution": {
+          "A+": 14,
+          "A": 36,
+          "A-": 11
+        }
+      },
+      {
+        "code": "126",
+        "subject": "HIGHER MATHEMATICS",
+        "students_with_marks": 17,
+        "average_mark": 65.65,
+        "grade_distribution": {
+          "B": 4,
+          "A": 2,
+          "F": 8,
+          "A-": 4,
+          "C": 3,
+          "A+": 4
+        }
+      },
+      {
+        "code": "147",
+        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
+        "students_with_marks": 61,
+        "average_mark": 78.69,
+        "grade_distribution": {
+          "A+": 61
+        }
+      },
+      {
+        "code": "156",
+        "subject": "Career Education",
+        "students_with_marks": 61,
+        "average_mark": 49.23,
+        "grade_distribution": {
+          "A+": 61
+        }
+      },
+      {
+        "code": "127",
+        "subject": "SCIENCE",
+        "students_with_marks": 36,
+        "average_mark": 44.25,
+        "grade_distribution": {
+          "A": 1,
+          "D": 12,
+          "B": 7,
+          "A-": 2,
+          "C": 14
+        }
+      },
+      {
+        "code": "110",
+        "subject": "GEOGRAPHY AND ENVIRONMENT",
+        "students_with_marks": 27,
+        "average_mark": 45.89,
+        "grade_distribution": {
+          "B": 5,
+          "D": 10,
+          "C": 8,
+          "A-": 4,
+          "F": 2
+        }
+      },
+      {
+        "code": "153",
+        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
+        "students_with_marks": 29,
+        "average_mark": 51.17,
+        "grade_distribution": {
+          "A+": 1,
+          "C": 11,
+          "A-": 2,
+          "A": 3,
+          "B": 7,
+          "D": 5
+        }
+      },
+      {
+        "code": "140",
+        "subject": "CIVICS AND CITIZENSHIP",
+        "students_with_marks": 29,
+        "average_mark": 54.52,
+        "grade_distribution": {
+          "A-": 6,
+          "C": 6,
+          "B": 13,
+          "A": 2,
+          "D": 2
+        }
+      },
+      {
+        "code": "151",
+        "subject": "HOME SCIENCE",
+        "students_with_marks": 21,
+        "average_mark": 58.14,
+        "grade_distribution": {
+          "A-": 9,
+          "B": 12
+        }
+      },
+      {
+        "code": "134",
+        "subject": "AGRICULTURE STUDIES",
+        "students_with_marks": 14,
+        "average_mark": 62.36,
+        "grade_distribution": {
+          "B": 5,
+          "A-": 9,
+          "F": 1
+        }
+      },
+      {
+        "code": "112",
+        "subject": "HINDU RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 1,
+        "average_mark": 71.0,
+        "grade_distribution": {
+          "A": 1
+        }
+      },
+      {
+        "code": "146",
+        "subject": "ACCOUNTING",
+        "students_with_marks": 7,
+        "average_mark": 49.57,
+        "grade_distribution": {
+          "A": 1,
+          "B": 2,
+          "C": 3,
+          "D": 1
+        }
+      },
+      {
+        "code": "152",
+        "subject": "FINANCE AND BANKING",
+        "students_with_marks": 7,
+        "average_mark": 42.71,
+        "grade_distribution": {
+          "C": 2,
+          "D": 4,
+          "A": 1
+        }
+      },
+      {
+        "code": "143",
+        "subject": "BUSINESS ENTREPRENEURSHIP",
+        "students_with_marks": 7,
+        "average_mark": 57.86,
+        "grade_distribution": {
+          "A": 1,
+          "B": 2,
+          "C": 2,
+          "A-": 2
         }
       }
     ],
@@ -217003,6 +217043,282 @@
     "rank": 832
   },
   {
+    "institute": "GONDAMARA BARO GHONA HIGH SCHOOL, CHATTOGRAM",
+    "total_students": 78,
+    "gpa_5_count": 0,
+    "gpa_5_percentage": 0.0,
+    "average_gpa": 3.3362,
+    "institution_score": 66.72,
+    "grade_distribution": {
+      "A-": 104,
+      "C": 139,
+      "A": 128,
+      "B": 148,
+      "A+": 204,
+      "F": 86,
+      "D": 103
+    },
+    "subject_statistics": [
+      {
+        "code": "101",
+        "subject": "BANGLA-I",
+        "students_with_marks": 73,
+        "average_mark": 112.23,
+        "grade_distribution": {
+          "A-": 15,
+          "C": 20,
+          "A": 14,
+          "B": 18,
+          "D": 6,
+          "F": 3
+        }
+      },
+      {
+        "code": "107",
+        "subject": "ENGLISH-I",
+        "students_with_marks": 53,
+        "average_mark": 82.92,
+        "grade_distribution": {
+          "C": 16,
+          "D": 29,
+          "A-": 3,
+          "A": 1,
+          "F": 23,
+          "B": 4
+        }
+      },
+      {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 51,
+        "average_mark": 48.35,
+        "grade_distribution": {
+          "C": 22,
+          "B": 7,
+          "A-": 4,
+          "A": 2,
+          "F": 25,
+          "A+": 3,
+          "D": 13
+        }
+      },
+      {
+        "code": "150",
+        "subject": "BANGLADESH AND GLOBAL STUDIES",
+        "students_with_marks": 19,
+        "average_mark": 61.74,
+        "grade_distribution": {
+          "A-": 8,
+          "B": 2,
+          "A": 3,
+          "A+": 2,
+          "C": 4
+        }
+      },
+      {
+        "code": "111",
+        "subject": "ISLAM AND MORAL EDUCATION",
+        "students_with_marks": 74,
+        "average_mark": 65.99,
+        "grade_distribution": {
+          "A": 25,
+          "A+": 11,
+          "C": 14,
+          "A-": 15,
+          "B": 7,
+          "D": 2,
+          "F": 2
+        }
+      },
+      {
+        "code": "136",
+        "subject": "PHYSICS",
+        "students_with_marks": 14,
+        "average_mark": 59.79,
+        "grade_distribution": {
+          "B": 6,
+          "F": 5,
+          "A-": 5,
+          "A": 2,
+          "C": 1
+        }
+      },
+      {
+        "code": "137",
+        "subject": "CHEMISTRY",
+        "students_with_marks": 18,
+        "average_mark": 65.56,
+        "grade_distribution": {
+          "A-": 6,
+          "B": 7,
+          "A": 3,
+          "A+": 2,
+          "F": 1
+        }
+      },
+      {
+        "code": "138",
+        "subject": "BIOLOGY",
+        "students_with_marks": 18,
+        "average_mark": 66.06,
+        "grade_distribution": {
+          "A": 7,
+          "A-": 2,
+          "A+": 2,
+          "B": 7,
+          "F": 1
+        }
+      },
+      {
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 76,
+        "average_mark": 38.79,
+        "grade_distribution": {
+          "A+": 28,
+          "A": 44,
+          "A-": 4
+        }
+      },
+      {
+        "code": "126",
+        "subject": "HIGHER MATHEMATICS",
+        "students_with_marks": 8,
+        "average_mark": 64.5,
+        "grade_distribution": {
+          "B": 2,
+          "C": 1,
+          "A-": 3,
+          "A": 2,
+          "F": 3
+        }
+      },
+      {
+        "code": "147",
+        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
+        "students_with_marks": 76,
+        "average_mark": 60.41,
+        "grade_distribution": {
+          "A+": 76
+        }
+      },
+      {
+        "code": "156",
+        "subject": "Career Education",
+        "students_with_marks": 76,
+        "average_mark": 49.22,
+        "grade_distribution": {
+          "A+": 76
+        }
+      },
+      {
+        "code": "134",
+        "subject": "AGRICULTURE STUDIES",
+        "students_with_marks": 61,
+        "average_mark": 61.46,
+        "grade_distribution": {
+          "B": 31,
+          "A+": 2,
+          "A-": 13,
+          "F": 4,
+          "A": 14,
+          "C": 1
+        }
+      },
+      {
+        "code": "127",
+        "subject": "SCIENCE",
+        "students_with_marks": 53,
+        "average_mark": 51.62,
+        "grade_distribution": {
+          "A": 7,
+          "A-": 9,
+          "D": 14,
+          "C": 14,
+          "B": 8,
+          "F": 4,
+          "A+": 1
+        }
+      },
+      {
+        "code": "110",
+        "subject": "GEOGRAPHY AND ENVIRONMENT",
+        "students_with_marks": 50,
+        "average_mark": 43.82,
+        "grade_distribution": {
+          "C": 17,
+          "B": 9,
+          "D": 21,
+          "F": 3,
+          "A-": 2,
+          "A": 1
+        }
+      },
+      {
+        "code": "153",
+        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
+        "students_with_marks": 48,
+        "average_mark": 50.31,
+        "grade_distribution": {
+          "B": 18,
+          "A": 2,
+          "C": 13,
+          "D": 10,
+          "F": 5,
+          "A-": 5
+        }
+      },
+      {
+        "code": "140",
+        "subject": "CIVICS AND CITIZENSHIP",
+        "students_with_marks": 47,
+        "average_mark": 52.79,
+        "grade_distribution": {
+          "A-": 10,
+          "B": 18,
+          "C": 13,
+          "D": 5,
+          "F": 6,
+          "A": 1
+        }
+      },
+      {
+        "code": "146",
+        "subject": "ACCOUNTING",
+        "students_with_marks": 3,
+        "average_mark": 63.33,
+        "grade_distribution": {
+          "A+": 1,
+          "B": 2,
+          "F": 1
+        }
+      },
+      {
+        "code": "152",
+        "subject": "FINANCE AND BANKING",
+        "students_with_marks": 4,
+        "average_mark": 42.25,
+        "grade_distribution": {
+          "B": 1,
+          "D": 2,
+          "C": 1
+        }
+      },
+      {
+        "code": "143",
+        "subject": "BUSINESS ENTREPRENEURSHIP",
+        "students_with_marks": 4,
+        "average_mark": 45.0,
+        "grade_distribution": {
+          "B": 1,
+          "C": 2,
+          "D": 1
+        }
+      }
+    ],
+    "rank": 833
+  },
+  {
     "institute": "NORTH SORTA DARGA HIGH SCHOOL, CHATTOGRAM",
     "total_students": 35,
     "gpa_5_count": 2,
@@ -217277,7 +217593,7 @@
         }
       }
     ],
-    "rank": 833
+    "rank": 834
   },
   {
     "institute": "MAIZPARA MAHMUDUNNABI CHY. HIGH SCHOOL, CHATTOGRAM",
@@ -217561,282 +217877,6 @@
           "C": 9,
           "A-": 14,
           "A": 2
-        }
-      }
-    ],
-    "rank": 834
-  },
-  {
-    "institute": "GONDAMARA BARO GHONA HIGH SCHOOL, CHATTOGRAM",
-    "total_students": 74,
-    "gpa_5_count": 0,
-    "gpa_5_percentage": 0.0,
-    "average_gpa": 3.333,
-    "institution_score": 66.66,
-    "grade_distribution": {
-      "A-": 95,
-      "C": 132,
-      "A": 121,
-      "B": 141,
-      "A+": 195,
-      "F": 83,
-      "D": 97
-    },
-    "subject_statistics": [
-      {
-        "code": "101",
-        "subject": "BANGLA-I",
-        "students_with_marks": 69,
-        "average_mark": 112.17,
-        "grade_distribution": {
-          "A-": 14,
-          "C": 19,
-          "A": 13,
-          "B": 17,
-          "D": 6,
-          "F": 3
-        }
-      },
-      {
-        "code": "107",
-        "subject": "ENGLISH-I",
-        "students_with_marks": 52,
-        "average_mark": 83.08,
-        "grade_distribution": {
-          "C": 16,
-          "D": 28,
-          "A-": 3,
-          "A": 1,
-          "F": 20,
-          "B": 4
-        }
-      },
-      {
-        "code": "109",
-        "subject": "MATHEMATICS",
-        "students_with_marks": 47,
-        "average_mark": 48.79,
-        "grade_distribution": {
-          "C": 20,
-          "B": 6,
-          "A-": 4,
-          "A": 2,
-          "F": 25,
-          "A+": 3,
-          "D": 12
-        }
-      },
-      {
-        "code": "150",
-        "subject": "BANGLADESH AND GLOBAL STUDIES",
-        "students_with_marks": 19,
-        "average_mark": 61.74,
-        "grade_distribution": {
-          "A-": 8,
-          "B": 2,
-          "A": 3,
-          "A+": 2,
-          "C": 4
-        }
-      },
-      {
-        "code": "111",
-        "subject": "ISLAM AND MORAL EDUCATION",
-        "students_with_marks": 70,
-        "average_mark": 65.64,
-        "grade_distribution": {
-          "A": 24,
-          "A+": 10,
-          "C": 14,
-          "A-": 14,
-          "B": 6,
-          "D": 2,
-          "F": 2
-        }
-      },
-      {
-        "code": "136",
-        "subject": "PHYSICS",
-        "students_with_marks": 14,
-        "average_mark": 59.79,
-        "grade_distribution": {
-          "B": 6,
-          "F": 5,
-          "A-": 5,
-          "A": 2,
-          "C": 1
-        }
-      },
-      {
-        "code": "137",
-        "subject": "CHEMISTRY",
-        "students_with_marks": 18,
-        "average_mark": 65.56,
-        "grade_distribution": {
-          "A-": 6,
-          "B": 7,
-          "A": 3,
-          "A+": 2,
-          "F": 1
-        }
-      },
-      {
-        "code": "138",
-        "subject": "BIOLOGY",
-        "students_with_marks": 18,
-        "average_mark": 66.06,
-        "grade_distribution": {
-          "A": 7,
-          "A-": 2,
-          "A+": 2,
-          "B": 7,
-          "F": 1
-        }
-      },
-      {
-        "code": "154",
-        "subject": "Information And Communication Technology",
-        "students_with_marks": 72,
-        "average_mark": 38.93,
-        "grade_distribution": {
-          "A+": 28,
-          "A": 40,
-          "A-": 4
-        }
-      },
-      {
-        "code": "126",
-        "subject": "HIGHER MATHEMATICS",
-        "students_with_marks": 8,
-        "average_mark": 64.5,
-        "grade_distribution": {
-          "B": 2,
-          "C": 1,
-          "A-": 3,
-          "A": 2,
-          "F": 3
-        }
-      },
-      {
-        "code": "147",
-        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
-        "students_with_marks": 72,
-        "average_mark": 60.99,
-        "grade_distribution": {
-          "A+": 72
-        }
-      },
-      {
-        "code": "156",
-        "subject": "Career Education",
-        "students_with_marks": 72,
-        "average_mark": 49.18,
-        "grade_distribution": {
-          "A+": 72
-        }
-      },
-      {
-        "code": "134",
-        "subject": "AGRICULTURE STUDIES",
-        "students_with_marks": 57,
-        "average_mark": 61.39,
-        "grade_distribution": {
-          "B": 30,
-          "A+": 2,
-          "A-": 10,
-          "F": 4,
-          "A": 14,
-          "C": 1
-        }
-      },
-      {
-        "code": "127",
-        "subject": "SCIENCE",
-        "students_with_marks": 49,
-        "average_mark": 51.35,
-        "grade_distribution": {
-          "A": 6,
-          "A-": 8,
-          "D": 13,
-          "C": 13,
-          "B": 8,
-          "F": 4,
-          "A+": 1
-        }
-      },
-      {
-        "code": "110",
-        "subject": "GEOGRAPHY AND ENVIRONMENT",
-        "students_with_marks": 46,
-        "average_mark": 43.65,
-        "grade_distribution": {
-          "C": 17,
-          "B": 8,
-          "D": 19,
-          "F": 3,
-          "A-": 1,
-          "A": 1
-        }
-      },
-      {
-        "code": "153",
-        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
-        "students_with_marks": 44,
-        "average_mark": 50.61,
-        "grade_distribution": {
-          "B": 17,
-          "A": 2,
-          "C": 11,
-          "D": 9,
-          "F": 5,
-          "A-": 5
-        }
-      },
-      {
-        "code": "140",
-        "subject": "CIVICS AND CITIZENSHIP",
-        "students_with_marks": 43,
-        "average_mark": 52.19,
-        "grade_distribution": {
-          "A-": 8,
-          "B": 17,
-          "C": 12,
-          "D": 5,
-          "F": 6,
-          "A": 1
-        }
-      },
-      {
-        "code": "146",
-        "subject": "ACCOUNTING",
-        "students_with_marks": 3,
-        "average_mark": 63.33,
-        "grade_distribution": {
-          "A+": 1,
-          "B": 2,
-          "F": 1
-        }
-      },
-      {
-        "code": "152",
-        "subject": "FINANCE AND BANKING",
-        "students_with_marks": 4,
-        "average_mark": 42.25,
-        "grade_distribution": {
-          "B": 1,
-          "D": 2,
-          "C": 1
-        }
-      },
-      {
-        "code": "143",
-        "subject": "BUSINESS ENTREPRENEURSHIP",
-        "students_with_marks": 4,
-        "average_mark": 45.0,
-        "grade_distribution": {
-          "B": 1,
-          "C": 2,
-          "D": 1
         }
       }
     ],
@@ -253969,296 +254009,6 @@
     "rank": 974
   },
   {
-    "institute": "GOMOTI BIRANDRA KISHOR HIGH SCHOOL, KHAGRACHHARI",
-    "total_students": 75,
-    "gpa_5_count": 1,
-    "gpa_5_percentage": 1.33,
-    "average_gpa": 3.1313,
-    "institution_score": 62.63,
-    "grade_distribution": {
-      "A-": 113,
-      "B": 142,
-      "C": 157,
-      "A": 89,
-      "A+": 220,
-      "D": 120,
-      "F": 57,
-      "X": 2
-    },
-    "subject_statistics": [
-      {
-        "code": "101",
-        "subject": "BANGLA-I",
-        "students_with_marks": 75,
-        "average_mark": 102.88,
-        "grade_distribution": {
-          "A-": 15,
-          "A": 5,
-          "B": 9,
-          "A+": 4,
-          "C": 28,
-          "D": 14
-        }
-      },
-      {
-        "code": "107",
-        "subject": "ENGLISH-I",
-        "students_with_marks": 59,
-        "average_mark": 91.41,
-        "grade_distribution": {
-          "B": 10,
-          "D": 23,
-          "C": 19,
-          "F": 15,
-          "A+": 1,
-          "A": 4,
-          "A-": 2,
-          "X": 1
-        }
-      },
-      {
-        "code": "109",
-        "subject": "MATHEMATICS",
-        "students_with_marks": 60,
-        "average_mark": 43.95,
-        "grade_distribution": {
-          "C": 14,
-          "D": 30,
-          "A+": 1,
-          "A": 2,
-          "B": 9,
-          "A-": 4,
-          "X": 1,
-          "F": 14
-        }
-      },
-      {
-        "code": "150",
-        "subject": "BANGLADESH AND GLOBAL STUDIES",
-        "students_with_marks": 30,
-        "average_mark": 62.1,
-        "grade_distribution": {
-          "A": 3,
-          "A-": 8,
-          "A+": 5,
-          "B": 8,
-          "C": 5,
-          "D": 1
-        }
-      },
-      {
-        "code": "111",
-        "subject": "ISLAM AND MORAL EDUCATION",
-        "students_with_marks": 40,
-        "average_mark": 61.42,
-        "grade_distribution": {
-          "A": 7,
-          "A-": 12,
-          "A+": 5,
-          "C": 6,
-          "B": 6,
-          "D": 4
-        }
-      },
-      {
-        "code": "136",
-        "subject": "PHYSICS",
-        "students_with_marks": 27,
-        "average_mark": 60.44,
-        "grade_distribution": {
-          "A-": 3,
-          "B": 13,
-          "A+": 5,
-          "A": 1,
-          "C": 5,
-          "F": 3
-        }
-      },
-      {
-        "code": "137",
-        "subject": "CHEMISTRY",
-        "students_with_marks": 24,
-        "average_mark": 60.29,
-        "grade_distribution": {
-          "B": 16,
-          "F": 6,
-          "A": 2,
-          "A-": 2,
-          "A+": 3,
-          "C": 1
-        }
-      },
-      {
-        "code": "138",
-        "subject": "BIOLOGY",
-        "students_with_marks": 30,
-        "average_mark": 64.77,
-        "grade_distribution": {
-          "B": 8,
-          "A-": 15,
-          "A": 6,
-          "A+": 1
-        }
-      },
-      {
-        "code": "154",
-        "subject": "Information And Communication Technology",
-        "students_with_marks": 75,
-        "average_mark": 39.79,
-        "grade_distribution": {
-          "A": 32,
-          "A+": 37,
-          "A-": 6
-        }
-      },
-      {
-        "code": "134",
-        "subject": "AGRICULTURE STUDIES",
-        "students_with_marks": 58,
-        "average_mark": 66.95,
-        "grade_distribution": {
-          "A+": 5,
-          "A-": 26,
-          "A": 18,
-          "F": 8,
-          "B": 9
-        }
-      },
-      {
-        "code": "147",
-        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
-        "students_with_marks": 75,
-        "average_mark": 87.32,
-        "grade_distribution": {
-          "A+": 75
-        }
-      },
-      {
-        "code": "156",
-        "subject": "Career Education",
-        "students_with_marks": 75,
-        "average_mark": 47.05,
-        "grade_distribution": {
-          "A+": 75
-        }
-      },
-      {
-        "code": "126",
-        "subject": "HIGHER MATHEMATICS",
-        "students_with_marks": 4,
-        "average_mark": 67.75,
-        "grade_distribution": {
-          "F": 5,
-          "A+": 1,
-          "A-": 1,
-          "B": 1,
-          "C": 1
-        }
-      },
-      {
-        "code": "112",
-        "subject": "HINDU RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 35,
-        "average_mark": 55.94,
-        "grade_distribution": {
-          "A+": 2,
-          "A": 4,
-          "A-": 3,
-          "B": 17,
-          "C": 7,
-          "D": 2
-        }
-      },
-      {
-        "code": "127",
-        "subject": "SCIENCE",
-        "students_with_marks": 42,
-        "average_mark": 41.93,
-        "grade_distribution": {
-          "A-": 2,
-          "B": 3,
-          "D": 23,
-          "C": 13,
-          "A": 1,
-          "F": 3
-        }
-      },
-      {
-        "code": "110",
-        "subject": "GEOGRAPHY AND ENVIRONMENT",
-        "students_with_marks": 36,
-        "average_mark": 49.39,
-        "grade_distribution": {
-          "A": 2,
-          "A-": 3,
-          "F": 1,
-          "C": 25,
-          "B": 6
-        }
-      },
-      {
-        "code": "153",
-        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
-        "students_with_marks": 37,
-        "average_mark": 46.65,
-        "grade_distribution": {
-          "A": 2,
-          "B": 5,
-          "A-": 3,
-          "D": 8,
-          "C": 19
-        }
-      },
-      {
-        "code": "140",
-        "subject": "CIVICS AND CITIZENSHIP",
-        "students_with_marks": 37,
-        "average_mark": 52.03,
-        "grade_distribution": {
-          "A-": 7,
-          "C": 11,
-          "B": 15,
-          "D": 4
-        }
-      },
-      {
-        "code": "146",
-        "subject": "ACCOUNTING",
-        "students_with_marks": 7,
-        "average_mark": 38.14,
-        "grade_distribution": {
-          "F": 1,
-          "D": 5,
-          "C": 1,
-          "B": 1
-        }
-      },
-      {
-        "code": "152",
-        "subject": "FINANCE AND BANKING",
-        "students_with_marks": 7,
-        "average_mark": 36.43,
-        "grade_distribution": {
-          "D": 6,
-          "C": 1,
-          "F": 1
-        }
-      },
-      {
-        "code": "143",
-        "subject": "BUSINESS ENTREPRENEURSHIP",
-        "students_with_marks": 8,
-        "average_mark": 55.88,
-        "grade_distribution": {
-          "B": 6,
-          "A-": 1,
-          "C": 1
-        }
-      }
-    ],
-    "rank": 975
-  },
-  {
     "institute": "SUFIA SECONDARY SCHOOL, CHATTOGRAM",
     "total_students": 4,
     "gpa_5_count": 0,
@@ -254425,7 +254175,7 @@
         }
       }
     ],
-    "rank": 976
+    "rank": 975
   },
   {
     "institute": "BANCHARA HIGH SCHOOL, KHAGRACHHARI",
@@ -254649,7 +254399,7 @@
         }
       }
     ],
-    "rank": 977
+    "rank": 976
   },
   {
     "institute": "BOUDDHA SHISHUGHAR SCHOOL & COLLEGE, KHAGRACHHARI",
@@ -254932,7 +254682,7 @@
         }
       }
     ],
-    "rank": 978
+    "rank": 977
   },
   {
     "institute": "SAMADAR PARA MULTILATERAL HIGH SCHOOL, CHATTOGRAM",
@@ -255184,7 +254934,7 @@
         }
       }
     ],
-    "rank": 979
+    "rank": 978
   },
   {
     "institute": "BORO DOLU HIGH SCHOOL, KHAGRACHHARI",
@@ -255470,7 +255220,7 @@
         }
       }
     ],
-    "rank": 980
+    "rank": 979
   },
   {
     "institute": "SALEH JOHUR CITY CORPORATION HIGH SCHOOL, CHATTOGRAM",
@@ -255753,6 +255503,296 @@
           "B": 2,
           "A-": 3,
           "A": 1
+        }
+      }
+    ],
+    "rank": 980
+  },
+  {
+    "institute": "GOMOTI BIRANDRA KISHOR HIGH SCHOOL, KHAGRACHHARI",
+    "total_students": 79,
+    "gpa_5_count": 1,
+    "gpa_5_percentage": 1.27,
+    "average_gpa": 3.1219,
+    "institution_score": 62.44,
+    "grade_distribution": {
+      "A-": 120,
+      "B": 153,
+      "C": 171,
+      "A": 91,
+      "A+": 232,
+      "D": 121,
+      "F": 58,
+      "X": 2
+    },
+    "subject_statistics": [
+      {
+        "code": "101",
+        "subject": "BANGLA-I",
+        "students_with_marks": 79,
+        "average_mark": 103.46,
+        "grade_distribution": {
+          "A-": 15,
+          "A": 6,
+          "B": 12,
+          "A+": 4,
+          "C": 28,
+          "D": 14
+        }
+      },
+      {
+        "code": "107",
+        "subject": "ENGLISH-I",
+        "students_with_marks": 63,
+        "average_mark": 91.43,
+        "grade_distribution": {
+          "B": 10,
+          "D": 23,
+          "C": 23,
+          "F": 15,
+          "A+": 1,
+          "A": 4,
+          "A-": 2,
+          "X": 1
+        }
+      },
+      {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 63,
+        "average_mark": 44.02,
+        "grade_distribution": {
+          "C": 17,
+          "D": 30,
+          "A+": 1,
+          "A": 2,
+          "B": 9,
+          "A-": 4,
+          "X": 1,
+          "F": 15
+        }
+      },
+      {
+        "code": "150",
+        "subject": "BANGLADESH AND GLOBAL STUDIES",
+        "students_with_marks": 30,
+        "average_mark": 62.1,
+        "grade_distribution": {
+          "A": 3,
+          "A-": 8,
+          "A+": 5,
+          "B": 8,
+          "C": 5,
+          "D": 1
+        }
+      },
+      {
+        "code": "111",
+        "subject": "ISLAM AND MORAL EDUCATION",
+        "students_with_marks": 42,
+        "average_mark": 61.48,
+        "grade_distribution": {
+          "A": 7,
+          "A-": 14,
+          "A+": 5,
+          "C": 6,
+          "B": 6,
+          "D": 4
+        }
+      },
+      {
+        "code": "136",
+        "subject": "PHYSICS",
+        "students_with_marks": 27,
+        "average_mark": 60.44,
+        "grade_distribution": {
+          "A-": 3,
+          "B": 13,
+          "A+": 5,
+          "A": 1,
+          "C": 5,
+          "F": 3
+        }
+      },
+      {
+        "code": "137",
+        "subject": "CHEMISTRY",
+        "students_with_marks": 24,
+        "average_mark": 60.29,
+        "grade_distribution": {
+          "B": 16,
+          "F": 6,
+          "A": 2,
+          "A-": 2,
+          "A+": 3,
+          "C": 1
+        }
+      },
+      {
+        "code": "138",
+        "subject": "BIOLOGY",
+        "students_with_marks": 30,
+        "average_mark": 64.77,
+        "grade_distribution": {
+          "B": 8,
+          "A-": 15,
+          "A": 6,
+          "A+": 1
+        }
+      },
+      {
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 79,
+        "average_mark": 39.99,
+        "grade_distribution": {
+          "A": 32,
+          "A+": 41,
+          "A-": 6
+        }
+      },
+      {
+        "code": "134",
+        "subject": "AGRICULTURE STUDIES",
+        "students_with_marks": 62,
+        "average_mark": 66.9,
+        "grade_distribution": {
+          "A+": 5,
+          "A-": 29,
+          "A": 19,
+          "F": 8,
+          "B": 9
+        }
+      },
+      {
+        "code": "147",
+        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
+        "students_with_marks": 79,
+        "average_mark": 87.66,
+        "grade_distribution": {
+          "A+": 79
+        }
+      },
+      {
+        "code": "156",
+        "subject": "Career Education",
+        "students_with_marks": 79,
+        "average_mark": 46.99,
+        "grade_distribution": {
+          "A+": 79
+        }
+      },
+      {
+        "code": "126",
+        "subject": "HIGHER MATHEMATICS",
+        "students_with_marks": 4,
+        "average_mark": 67.75,
+        "grade_distribution": {
+          "F": 5,
+          "A+": 1,
+          "A-": 1,
+          "B": 1,
+          "C": 1
+        }
+      },
+      {
+        "code": "112",
+        "subject": "HINDU RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 37,
+        "average_mark": 56.0,
+        "grade_distribution": {
+          "A+": 2,
+          "A": 4,
+          "A-": 3,
+          "B": 19,
+          "C": 7,
+          "D": 2
+        }
+      },
+      {
+        "code": "127",
+        "subject": "SCIENCE",
+        "students_with_marks": 46,
+        "average_mark": 42.04,
+        "grade_distribution": {
+          "A-": 2,
+          "B": 3,
+          "D": 24,
+          "C": 16,
+          "A": 1,
+          "F": 3
+        }
+      },
+      {
+        "code": "110",
+        "subject": "GEOGRAPHY AND ENVIRONMENT",
+        "students_with_marks": 39,
+        "average_mark": 49.97,
+        "grade_distribution": {
+          "A": 2,
+          "A-": 4,
+          "F": 1,
+          "C": 25,
+          "B": 8
+        }
+      },
+      {
+        "code": "153",
+        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
+        "students_with_marks": 40,
+        "average_mark": 46.98,
+        "grade_distribution": {
+          "A": 2,
+          "B": 7,
+          "A-": 3,
+          "D": 8,
+          "C": 20
+        }
+      },
+      {
+        "code": "140",
+        "subject": "CIVICS AND CITIZENSHIP",
+        "students_with_marks": 40,
+        "average_mark": 51.75,
+        "grade_distribution": {
+          "A-": 7,
+          "C": 12,
+          "B": 17,
+          "D": 4
+        }
+      },
+      {
+        "code": "146",
+        "subject": "ACCOUNTING",
+        "students_with_marks": 8,
+        "average_mark": 38.88,
+        "grade_distribution": {
+          "C": 2,
+          "F": 1,
+          "D": 5,
+          "B": 1
+        }
+      },
+      {
+        "code": "152",
+        "subject": "FINANCE AND BANKING",
+        "students_with_marks": 8,
+        "average_mark": 37.75,
+        "grade_distribution": {
+          "C": 2,
+          "D": 6,
+          "F": 1
+        }
+      },
+      {
+        "code": "143",
+        "subject": "BUSINESS ENTREPRENEURSHIP",
+        "students_with_marks": 9,
+        "average_mark": 56.56,
+        "grade_distribution": {
+          "A-": 2,
+          "B": 6,
+          "C": 1
         }
       }
     ],
@@ -270370,206 +270410,6 @@
     "rank": 1038
   },
   {
-    "institute": "SONAICHARI HIGH SCHOOL, BANDARBAN",
-    "total_students": 19,
-    "gpa_5_count": 0,
-    "gpa_5_percentage": 0.0,
-    "average_gpa": 2.9914,
-    "institution_score": 59.83,
-    "grade_distribution": {
-      "B": 34,
-      "X": 9,
-      "C": 44,
-      "A-": 33,
-      "D": 36,
-      "A+": 45,
-      "F": 12,
-      "A": 15
-    },
-    "subject_statistics": [
-      {
-        "code": "101",
-        "subject": "BANGLA-I",
-        "students_with_marks": 19,
-        "average_mark": 103.37,
-        "grade_distribution": {
-          "B": 11,
-          "A-": 2,
-          "D": 1,
-          "C": 5
-        }
-      },
-      {
-        "code": "107",
-        "subject": "ENGLISH-I",
-        "students_with_marks": 8,
-        "average_mark": 88.38,
-        "grade_distribution": {
-          "X": 4,
-          "D": 3,
-          "F": 7,
-          "C": 4,
-          "A-": 1
-        }
-      },
-      {
-        "code": "109",
-        "subject": "MATHEMATICS",
-        "students_with_marks": 16,
-        "average_mark": 42.06,
-        "grade_distribution": {
-          "C": 4,
-          "F": 1,
-          "D": 8,
-          "B": 4,
-          "X": 2
-        }
-      },
-      {
-        "code": "127",
-        "subject": "SCIENCE",
-        "students_with_marks": 17,
-        "average_mark": 45.53,
-        "grade_distribution": {
-          "A-": 3,
-          "B": 2,
-          "C": 6,
-          "X": 1,
-          "D": 6,
-          "F": 1
-        }
-      },
-      {
-        "code": "113",
-        "subject": "BUDDHIST RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 9,
-        "average_mark": 46.89,
-        "grade_distribution": {
-          "C": 2,
-          "A-": 3,
-          "D": 4
-        }
-      },
-      {
-        "code": "110",
-        "subject": "GEOGRAPHY AND ENVIRONMENT",
-        "students_with_marks": 15,
-        "average_mark": 39.73,
-        "grade_distribution": {
-          "D": 8,
-          "C": 7,
-          "F": 2,
-          "X": 1
-        }
-      },
-      {
-        "code": "153",
-        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
-        "students_with_marks": 18,
-        "average_mark": 52.89,
-        "grade_distribution": {
-          "B": 6,
-          "A-": 5,
-          "C": 6,
-          "D": 1
-        }
-      },
-      {
-        "code": "140",
-        "subject": "CIVICS AND CITIZENSHIP",
-        "students_with_marks": 18,
-        "average_mark": 55.28,
-        "grade_distribution": {
-          "A-": 6,
-          "C": 4,
-          "D": 1,
-          "B": 7
-        }
-      },
-      {
-        "code": "154",
-        "subject": "Information And Communication Technology",
-        "students_with_marks": 19,
-        "average_mark": 36.16,
-        "grade_distribution": {
-          "A+": 3,
-          "A": 9,
-          "A-": 7
-        }
-      },
-      {
-        "code": "134",
-        "subject": "AGRICULTURE STUDIES",
-        "students_with_marks": 18,
-        "average_mark": 70.67,
-        "grade_distribution": {
-          "A-": 5,
-          "B": 3,
-          "A+": 4,
-          "F": 1,
-          "A": 6
-        }
-      },
-      {
-        "code": "147",
-        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
-        "students_with_marks": 19,
-        "average_mark": 94.21,
-        "grade_distribution": {
-          "A+": 19
-        }
-      },
-      {
-        "code": "156",
-        "subject": "Career Education",
-        "students_with_marks": 19,
-        "average_mark": 45.47,
-        "grade_distribution": {
-          "A+": 19
-        }
-      },
-      {
-        "code": "111",
-        "subject": "ISLAM AND MORAL EDUCATION",
-        "students_with_marks": 9,
-        "average_mark": 42.22,
-        "grade_distribution": {
-          "D": 3,
-          "X": 1,
-          "C": 6
-        }
-      },
-      {
-        "code": "146",
-        "subject": "ACCOUNTING",
-        "students_with_marks": 1,
-        "average_mark": 36.0,
-        "grade_distribution": {
-          "D": 1
-        }
-      },
-      {
-        "code": "152",
-        "subject": "FINANCE AND BANKING",
-        "students_with_marks": 1,
-        "average_mark": 55.0,
-        "grade_distribution": {
-          "B": 1
-        }
-      },
-      {
-        "code": "143",
-        "subject": "BUSINESS ENTREPRENEURSHIP",
-        "students_with_marks": 1,
-        "average_mark": 68.0,
-        "grade_distribution": {
-          "A-": 1
-        }
-      }
-    ],
-    "rank": 1039
-  },
-  {
     "institute": "SUBALONG KHAGRACHARI HIGH SCHOOL, RANGAMATI",
     "total_students": 56,
     "gpa_5_count": 0,
@@ -270814,7 +270654,7 @@
         }
       }
     ],
-    "rank": 1040
+    "rank": 1039
   },
   {
     "institute": "CHANGRA CHARI HIGH SCHOOL, KHAGRACHHARI",
@@ -270966,7 +270806,7 @@
         }
       }
     ],
-    "rank": 1041
+    "rank": 1040
   },
   {
     "institute": "PURBA GOMDANDI ALHAJ BUDRUCH MEHER HIGH SCHOOL, CHATTOGRAM",
@@ -271217,7 +271057,7 @@
         }
       }
     ],
-    "rank": 1042
+    "rank": 1041
   },
   {
     "institute": "BARA MOHAPURAM HIGH SCHOOL, RANGAMATI",
@@ -271494,7 +271334,7 @@
         }
       }
     ],
-    "rank": 1043
+    "rank": 1042
   },
   {
     "institute": "KARALYA CHHARI RASHID SARKAR HIGH SCHOOL, RANGAMATI",
@@ -271767,7 +271607,7 @@
         }
       }
     ],
-    "rank": 1044
+    "rank": 1043
   },
   {
     "institute": "QUEPARA JAGAT CHANDRA SEN AGRICULTURAL AND INDUSTRIAL HIGH SCHOOL, CHATTOGRAM",
@@ -272018,7 +271858,7 @@
         }
       }
     ],
-    "rank": 1045
+    "rank": 1044
   },
   {
     "institute": "SAROYATOLI HIGH SCHOOL, RANGAMATI",
@@ -272246,7 +272086,7 @@
         }
       }
     ],
-    "rank": 1046
+    "rank": 1045
   },
   {
     "institute": "PANCHARI HIGH SCHOOL, RANGAMATI",
@@ -272492,34 +272332,34 @@
         }
       }
     ],
-    "rank": 1047
+    "rank": 1046
   },
   {
     "institute": "JALEYARMAR GHAT MODEL HIGH SCHOOL, COX'S BAZAR",
-    "total_students": 11,
+    "total_students": 12,
     "gpa_5_count": 0,
     "gpa_5_percentage": 0.0,
     "average_gpa": 2.965,
     "institution_score": 59.3,
     "grade_distribution": {
-      "A-": 25,
-      "B": 26,
-      "A+": 30,
-      "C": 26,
-      "D": 11,
-      "A": 8,
-      "F": 6
+      "B": 30,
+      "F": 7,
+      "D": 12,
+      "C": 27,
+      "A-": 27,
+      "A": 9,
+      "A+": 32
     },
     "subject_statistics": [
       {
         "code": "101",
         "subject": "BANGLA-I",
-        "students_with_marks": 11,
-        "average_mark": 111.64,
+        "students_with_marks": 12,
+        "average_mark": 111.83,
         "grade_distribution": {
+          "B": 7,
           "A-": 3,
-          "C": 2,
-          "B": 6
+          "C": 2
         }
       },
       {
@@ -272528,21 +272368,21 @@
         "students_with_marks": 9,
         "average_mark": 86.11,
         "grade_distribution": {
+          "F": 3,
           "B": 1,
           "C": 4,
           "D": 3,
-          "F": 2,
           "A-": 1
         }
       },
       {
         "code": "109",
         "subject": "MATHEMATICS",
-        "students_with_marks": 7,
-        "average_mark": 40.43,
+        "students_with_marks": 8,
+        "average_mark": 39.62,
         "grade_distribution": {
+          "D": 5,
           "B": 1,
-          "D": 4,
           "F": 4,
           "C": 2
         }
@@ -272550,11 +272390,11 @@
       {
         "code": "127",
         "subject": "SCIENCE",
-        "students_with_marks": 11,
-        "average_mark": 48.82,
+        "students_with_marks": 12,
+        "average_mark": 48.67,
         "grade_distribution": {
+          "C": 5,
           "B": 4,
-          "C": 4,
           "D": 2,
           "A-": 1
         }
@@ -272562,10 +272402,10 @@
       {
         "code": "111",
         "subject": "ISLAM AND MORAL EDUCATION",
-        "students_with_marks": 11,
-        "average_mark": 56.82,
+        "students_with_marks": 12,
+        "average_mark": 57.42,
         "grade_distribution": {
-          "A-": 4,
+          "A-": 5,
           "C": 4,
           "B": 2,
           "A": 1
@@ -272574,10 +272414,10 @@
       {
         "code": "110",
         "subject": "GEOGRAPHY AND ENVIRONMENT",
-        "students_with_marks": 11,
-        "average_mark": 52.36,
+        "students_with_marks": 12,
+        "average_mark": 52.58,
         "grade_distribution": {
-          "B": 5,
+          "B": 6,
           "A-": 1,
           "C": 5
         }
@@ -272585,23 +272425,23 @@
       {
         "code": "153",
         "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
-        "students_with_marks": 11,
-        "average_mark": 56.0,
+        "students_with_marks": 12,
+        "average_mark": 56.5,
         "grade_distribution": {
+          "A-": 4,
           "A+": 1,
           "B": 3,
-          "C": 4,
-          "A-": 3
+          "C": 4
         }
       },
       {
         "code": "140",
         "subject": "CIVICS AND CITIZENSHIP",
-        "students_with_marks": 11,
-        "average_mark": 55.18,
+        "students_with_marks": 12,
+        "average_mark": 55.25,
         "grade_distribution": {
+          "B": 2,
           "A-": 7,
-          "B": 1,
           "D": 2,
           "C": 1
         }
@@ -272609,21 +272449,21 @@
       {
         "code": "154",
         "subject": "Information And Communication Technology",
-        "students_with_marks": 11,
-        "average_mark": 39.82,
+        "students_with_marks": 12,
+        "average_mark": 39.58,
         "grade_distribution": {
-          "A+": 6,
-          "A": 5
+          "A": 6,
+          "A+": 6
         }
       },
       {
         "code": "134",
         "subject": "AGRICULTURE STUDIES",
-        "students_with_marks": 11,
-        "average_mark": 63.73,
+        "students_with_marks": 12,
+        "average_mark": 63.25,
         "grade_distribution": {
+          "B": 4,
           "A-": 5,
-          "B": 3,
           "A+": 1,
           "A": 2
         }
@@ -272631,23 +272471,23 @@
       {
         "code": "147",
         "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
-        "students_with_marks": 11,
+        "students_with_marks": 12,
         "average_mark": 100.0,
         "grade_distribution": {
-          "A+": 11
+          "A+": 12
         }
       },
       {
         "code": "156",
         "subject": "Career Education",
-        "students_with_marks": 11,
+        "students_with_marks": 12,
         "average_mark": 50.0,
         "grade_distribution": {
-          "A+": 11
+          "A+": 12
         }
       }
     ],
-    "rank": 1048
+    "rank": 1047
   },
   {
     "institute": "KAIYARBIL IDEAL HIGH SCHOOL, COX'S BAZAR",
@@ -272908,7 +272748,7 @@
         }
       }
     ],
-    "rank": 1049
+    "rank": 1048
   },
   {
     "institute": "DIGHINALA BORADOM HIGH SCHOOL, KHAGRACHHARI",
@@ -273167,7 +273007,7 @@
         }
       }
     ],
-    "rank": 1050
+    "rank": 1049
   },
   {
     "institute": "CHAKRA SHALA KRISHI HIGH SCHOOL, CHATTOGRAM",
@@ -273476,7 +273316,7 @@
         }
       }
     ],
-    "rank": 1051
+    "rank": 1050
   },
   {
     "institute": "SHAHID ABDUL HAMID HIGH SCHOOL, COX'S BAZAR",
@@ -273779,7 +273619,7 @@
         }
       }
     ],
-    "rank": 1052
+    "rank": 1051
   },
   {
     "institute": "GOALIA KHOLA S.E.S.D.P MODEL HIGH SCHOOL, BANDARBAN",
@@ -274073,7 +273913,7 @@
         }
       }
     ],
-    "rank": 1053
+    "rank": 1052
   },
   {
     "institute": "RUMA GOVT. HIGH SCHOOL, BANDARBAN",
@@ -274321,7 +274161,7 @@
         }
       }
     ],
-    "rank": 1054
+    "rank": 1053
   },
   {
     "institute": "BAGANBAZAR HIGH SCHOOL, CHATTOGRAM",
@@ -274607,7 +274447,7 @@
         }
       }
     ],
-    "rank": 1055
+    "rank": 1054
   },
   {
     "institute": "STANDARD SCHOOL AND COLLEGE, CHATTOGRAM",
@@ -274734,7 +274574,7 @@
         }
       }
     ],
-    "rank": 1056
+    "rank": 1055
   },
   {
     "institute": "NOYAPARA M. B. MOLLICK HIGH SCHOOL, CHATTOGRAM",
@@ -274979,7 +274819,7 @@
         }
       }
     ],
-    "rank": 1057
+    "rank": 1056
   },
   {
     "institute": "POWAPARA GOVT. MODEL HIGH SCHOOL, RANGAMATI",
@@ -275234,7 +275074,7 @@
         }
       }
     ],
-    "rank": 1058
+    "rank": 1057
   },
   {
     "institute": "MACHALANG HIGH SCHOOL, RANGAMATI",
@@ -275504,6 +275344,209 @@
         "grade_distribution": {
           "B": 1,
           "D": 1
+        }
+      }
+    ],
+    "rank": 1058
+  },
+  {
+    "institute": "SONAICHARI HIGH SCHOOL, BANDARBAN",
+    "total_students": 21,
+    "gpa_5_count": 0,
+    "gpa_5_percentage": 0.0,
+    "average_gpa": 2.9256,
+    "institution_score": 58.51,
+    "grade_distribution": {
+      "B": 38,
+      "X": 9,
+      "C": 49,
+      "A-": 36,
+      "D": 40,
+      "A+": 49,
+      "F": 12,
+      "A": 19
+    },
+    "subject_statistics": [
+      {
+        "code": "101",
+        "subject": "BANGLA-I",
+        "students_with_marks": 21,
+        "average_mark": 104.29,
+        "grade_distribution": {
+          "B": 12,
+          "A-": 3,
+          "D": 1,
+          "C": 5
+        }
+      },
+      {
+        "code": "107",
+        "subject": "ENGLISH-I",
+        "students_with_marks": 10,
+        "average_mark": 91.1,
+        "grade_distribution": {
+          "X": 4,
+          "D": 3,
+          "F": 7,
+          "C": 5,
+          "B": 1,
+          "A-": 1
+        }
+      },
+      {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 18,
+        "average_mark": 42.67,
+        "grade_distribution": {
+          "C": 6,
+          "F": 1,
+          "D": 8,
+          "B": 4,
+          "X": 2
+        }
+      },
+      {
+        "code": "127",
+        "subject": "SCIENCE",
+        "students_with_marks": 19,
+        "average_mark": 45.63,
+        "grade_distribution": {
+          "A-": 3,
+          "B": 3,
+          "C": 6,
+          "X": 1,
+          "D": 7,
+          "F": 1
+        }
+      },
+      {
+        "code": "113",
+        "subject": "BUDDHIST RELIGION AND MORAL EDUCATION",
+        "students_with_marks": 10,
+        "average_mark": 46.8,
+        "grade_distribution": {
+          "C": 3,
+          "A-": 3,
+          "D": 4
+        }
+      },
+      {
+        "code": "110",
+        "subject": "GEOGRAPHY AND ENVIRONMENT",
+        "students_with_marks": 16,
+        "average_mark": 39.44,
+        "grade_distribution": {
+          "D": 9,
+          "C": 7,
+          "F": 2,
+          "X": 1
+        }
+      },
+      {
+        "code": "153",
+        "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
+        "students_with_marks": 19,
+        "average_mark": 53.26,
+        "grade_distribution": {
+          "B": 6,
+          "A-": 6,
+          "C": 6,
+          "D": 1
+        }
+      },
+      {
+        "code": "140",
+        "subject": "CIVICS AND CITIZENSHIP",
+        "students_with_marks": 19,
+        "average_mark": 55.63,
+        "grade_distribution": {
+          "A-": 7,
+          "C": 4,
+          "D": 1,
+          "B": 7
+        }
+      },
+      {
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 21,
+        "average_mark": 36.24,
+        "grade_distribution": {
+          "A+": 3,
+          "A": 11,
+          "A-": 7
+        }
+      },
+      {
+        "code": "134",
+        "subject": "AGRICULTURE STUDIES",
+        "students_with_marks": 20,
+        "average_mark": 71.15,
+        "grade_distribution": {
+          "A-": 5,
+          "B": 3,
+          "A+": 4,
+          "F": 1,
+          "A": 8
+        }
+      },
+      {
+        "code": "147",
+        "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
+        "students_with_marks": 21,
+        "average_mark": 94.19,
+        "grade_distribution": {
+          "A+": 21
+        }
+      },
+      {
+        "code": "156",
+        "subject": "Career Education",
+        "students_with_marks": 21,
+        "average_mark": 45.33,
+        "grade_distribution": {
+          "A+": 21
+        }
+      },
+      {
+        "code": "111",
+        "subject": "ISLAM AND MORAL EDUCATION",
+        "students_with_marks": 10,
+        "average_mark": 42.8,
+        "grade_distribution": {
+          "D": 3,
+          "X": 1,
+          "C": 7
+        }
+      },
+      {
+        "code": "146",
+        "subject": "ACCOUNTING",
+        "students_with_marks": 2,
+        "average_mark": 37.5,
+        "grade_distribution": {
+          "D": 2
+        }
+      },
+      {
+        "code": "152",
+        "subject": "FINANCE AND BANKING",
+        "students_with_marks": 2,
+        "average_mark": 47.0,
+        "grade_distribution": {
+          "D": 1,
+          "B": 1
+        }
+      },
+      {
+        "code": "143",
+        "subject": "BUSINESS ENTREPRENEURSHIP",
+        "students_with_marks": 2,
+        "average_mark": 60.5,
+        "grade_distribution": {
+          "B": 1,
+          "A-": 1
         }
       }
     ],
