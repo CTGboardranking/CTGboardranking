@@ -316,7 +316,7 @@ def parse_gpa(value):
 
 
 # ============================================================
-# PAGE GPA
+# FIND GPA FROM PAGE
 # ============================================================
 
 def find_page_gpa(soup):
@@ -389,7 +389,9 @@ def find_page_gpa(soup):
 
         for index, value in enumerate(values):
 
-            if "GPA" in value.upper():
+            upper_value = value.upper()
+
+            if "GPA" in upper_value:
 
                 gpa = parse_gpa(
                     value
@@ -468,6 +470,10 @@ def parse_total_score_direct(soup):
 
 def parse_subject_result(values):
 
+    mark = None
+
+    grade = ""
+
     if len(values) < 3:
 
         return (
@@ -476,10 +482,6 @@ def parse_subject_result(values):
         )
 
     candidates = values[2:]
-
-    mark = None
-
-    grade = ""
 
 
     for value in candidates:
@@ -543,6 +545,8 @@ def parse_subject_result(values):
 
                     mark = number
 
+                    continue
+
             except Exception:
 
                 pass
@@ -601,7 +605,10 @@ def find_value_after_label(
 
         if current == label:
 
-            if i + 1 < len(values):
+            if (
+                i + 1 <
+                len(values)
+            ):
 
                 return clean_text(
                     values[i + 1]
@@ -611,7 +618,7 @@ def find_value_after_label(
 
 
 # ============================================================
-# DISTRICT
+# DISTRICT FROM INSTITUTE
 # ============================================================
 
 def extract_district_from_institute(
@@ -682,140 +689,6 @@ def extract_district_from_institute(
 
 
 # ============================================================
-# RESULT PAGE DETECTION
-# ============================================================
-
-def looks_like_result_page(
-    soup,
-    requested_roll
-):
-
-    text = clean_text(
-        soup.get_text(
-            " ",
-            strip=True
-        )
-    )
-
-    upper = text.upper()
-
-    roll = str(
-        requested_roll
-    )
-
-    # --------------------------------------------------------
-    # Strong result indicators
-    # --------------------------------------------------------
-
-    indicators = [
-
-        "NAME",
-        "INSTITUTE",
-        "BOARD",
-        "SESSION",
-        "GROUP",
-        "RESULT",
-        "GPA",
-        "SUBJECT",
-        "SUBJECT CODE",
-        "MARK",
-        "GRADE",
-
-    ]
-
-    indicator_count = sum(
-
-        1
-
-        for item in indicators
-
-        if item in upper
-
-    )
-
-
-    # --------------------------------------------------------
-    # Roll number on result page
-    # --------------------------------------------------------
-
-    roll_found = (
-        roll in text
-    )
-
-
-    # --------------------------------------------------------
-    # Subject code detection
-    # --------------------------------------------------------
-
-    subject_code_found = bool(
-        re.search(
-            r"\b\d{3,5}\b",
-            text
-        )
-    )
-
-
-    # --------------------------------------------------------
-    # Known "not found" messages
-    # --------------------------------------------------------
-
-    not_found_phrases = [
-
-        "NO RESULT FOUND",
-
-        "RESULT NOT FOUND",
-
-        "INVALID ROLL",
-
-        "INVALID ROLL NUMBER",
-
-        "ROLL NOT FOUND",
-
-        "NO DATA FOUND",
-
-        "DATA NOT FOUND",
-
-        "RECORD NOT FOUND",
-
-    ]
-
-    explicit_not_found = any(
-
-        phrase in upper
-
-        for phrase in not_found_phrases
-
-    )
-
-
-    if explicit_not_found:
-
-        return False
-
-
-    # --------------------------------------------------------
-    # Strong evidence
-    # --------------------------------------------------------
-
-    if roll_found and indicator_count >= 2:
-
-        return True
-
-
-    if indicator_count >= 4:
-
-        return True
-
-
-    if subject_code_found and indicator_count >= 2:
-
-        return True
-
-
-    return False
-
-
-# ============================================================
 # PARSE RESULT
 # ============================================================
 
@@ -869,16 +742,6 @@ def parse_result(
 
 
     # ========================================================
-    # RESULT PAGE CHECK
-    # ========================================================
-
-    result_page = looks_like_result_page(
-        soup,
-        requested_roll
-    )
-
-
-    # ========================================================
     # TABLE DATA
     # ========================================================
 
@@ -909,8 +772,6 @@ def parse_result(
         fields = [
 
             ("Roll No", "roll"),
-
-            ("Roll", "roll"),
 
             ("Name", "name"),
 
@@ -1007,7 +868,7 @@ def parse_result(
 
 
     # ========================================================
-    # DISTRICT FALLBACK
+    # DISTRICT
     # ========================================================
 
     if not result["district"]:
@@ -1067,7 +928,6 @@ def parse_result(
 
             subject = values[1]
 
-
             if not subject:
 
                 continue
@@ -1085,11 +945,9 @@ def parse_result(
                 subject
             )
 
-
             if key in seen:
 
                 continue
-
 
             seen.add(
                 key
@@ -1101,15 +959,16 @@ def parse_result(
                 .upper()
             )
 
-
             is_optional = (
 
                 "OPTIONAL" in combined_text
 
                 or
+
                 "4TH SUBJECT" in combined_text
 
                 or
+
                 "FOURTH SUBJECT" in combined_text
 
             )
@@ -1143,7 +1002,7 @@ def parse_result(
 
 
     # ========================================================
-    # TOTAL FALLBACK
+    # TOTAL SCORE FALLBACK
     # ========================================================
 
     if result["total_score"] is None:
@@ -1177,65 +1036,7 @@ def parse_result(
         )
 
 
-    # ========================================================
-    # FINAL VALIDATION
-    # ========================================================
-
-    meaningful_fields = 0
-
-
-    if result["name"]:
-
-        meaningful_fields += 1
-
-
-    if result["institute"]:
-
-        meaningful_fields += 1
-
-
-    if result["board"]:
-
-        meaningful_fields += 1
-
-
-    if result["session"]:
-
-        meaningful_fields += 1
-
-
-    if result["gpa"] is not None:
-
-        meaningful_fields += 1
-
-
-    if result["subjects"]:
-
-        meaningful_fields += 1
-
-
-    # --------------------------------------------------------
-    # If result-like content exists, accept it.
-    #
-    # This prevents Institute-only validation from
-    # incorrectly rejecting a valid result page.
-    # --------------------------------------------------------
-
-    valid = (
-
-        result_page
-
-        and
-
-        meaningful_fields >= 2
-
-    )
-
-
-    return (
-        result,
-        valid
-    )
+    return result
 
 
 # ============================================================
@@ -1314,6 +1115,45 @@ for student in students:
 
 
 # ============================================================
+# FAILED ROLLS SET
+# ============================================================
+
+failed_roll_set = set()
+
+for item in failed_rolls:
+
+    if isinstance(
+        item,
+        dict
+    ):
+
+        roll = str(
+            item.get(
+                "roll",
+                ""
+            )
+        ).strip()
+
+        if roll:
+
+            failed_roll_set.add(
+                roll
+            )
+
+    else:
+
+        roll = str(
+            item
+        ).strip()
+
+        if roll:
+
+            failed_roll_set.add(
+                roll
+            )
+
+
+# ============================================================
 # TARGET
 # ============================================================
 
@@ -1359,10 +1199,17 @@ print(
 )
 
 print(
+    "Already failed:",
+    len(failed_roll_set),
+    flush=True
+)
+
+print(
     "Remaining:",
     max(
         total_target -
-        len(existing_rolls),
+        len(existing_rolls) -
+        len(failed_roll_set),
         0
     ),
     flush=True
@@ -1665,7 +1512,7 @@ for group_name, roll_number in generate_rolls():
 
 
     # --------------------------------------------------------
-    # SKIP EXISTING
+    # SKIP ALREADY COLLECTED
     # --------------------------------------------------------
 
     if roll in existing_rolls:
@@ -1674,7 +1521,20 @@ for group_name, roll_number in generate_rolls():
 
 
     # --------------------------------------------------------
-    # BATCH
+    # SKIP ALREADY FAILED
+    #
+    # IMPORTANT:
+    # 101485-এর মতো যেসব roll-এ কোনো result নেই,
+    # সেগুলো পরের Run-এ আর request করবে না।
+    # --------------------------------------------------------
+
+    if roll in failed_roll_set:
+
+        continue
+
+
+    # --------------------------------------------------------
+    # BATCH LIMIT
     # --------------------------------------------------------
 
     if processed >= BATCH_SIZE:
@@ -1809,7 +1669,7 @@ for group_name, roll_number in generate_rolls():
 
     try:
 
-        parsed, valid = parse_result(
+        parsed = parse_result(
 
             response.text,
 
@@ -1843,7 +1703,11 @@ for group_name, roll_number in generate_rolls():
     # NOT FOUND
     # ========================================================
 
-    if not valid:
+    if not parsed.get(
+        "name"
+    ) and not parsed.get(
+        "institute"
+    ):
 
         print(
             "No valid result detected.",
@@ -1885,17 +1749,40 @@ for group_name, roll_number in generate_rolls():
             flush=True
         )
 
+
         not_found += 1
 
-        failed_rolls.append({
 
-            "roll":
-                roll,
+        # ----------------------------------------------------
+        # SAVE FAILED ROLL
+        # ----------------------------------------------------
 
-            "group":
-                group_name
+        if roll not in failed_roll_set:
 
-        })
+            failed_rolls.append({
+
+                "roll":
+                    roll,
+
+                "group":
+                    group_name,
+
+            })
+
+            failed_roll_set.add(
+                roll
+            )
+
+
+        # ----------------------------------------------------
+        # IMPORTANT:
+        # Do NOT add failed roll to students.
+        # ----------------------------------------------------
+
+        save_json(
+            "failed_rolls.json",
+            failed_rolls
+        )
 
 
         time.sleep(
@@ -2002,7 +1889,7 @@ for group_name, roll_number in generate_rolls():
 
 
     # ========================================================
-    # SAVE MEMORY
+    # SAVE STUDENT
     # ========================================================
 
     if roll not in existing_rolls:
@@ -2094,8 +1981,11 @@ save_json(
 
 remaining = max(
 
-    total_target -
-    len(existing_rolls),
+    total_target
+    -
+    len(existing_rolls)
+    -
+    len(failed_roll_set),
 
     0
 
@@ -2115,6 +2005,9 @@ summary = {
 
     "collected_total":
         len(students),
+
+    "failed_total":
+        len(failed_roll_set),
 
     "remaining":
         remaining,
@@ -2195,6 +2088,12 @@ print(
 print(
     "Total students saved:",
     len(students),
+    flush=True
+)
+
+print(
+    "Total failed/no-result:",
+    len(failed_roll_set),
     flush=True
 )
 
