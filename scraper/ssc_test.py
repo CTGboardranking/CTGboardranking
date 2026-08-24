@@ -88,7 +88,7 @@ print(
 )
 
 print(
-    "SSC STUDENT COLLECTOR - FULL VERSION",
+    "SSC STUDENT COLLECTOR - SAFE VERSION",
     flush=True
 )
 
@@ -101,6 +101,12 @@ print(
 print(
     "MAX_DELAY:",
     MAX_DELAY,
+    flush=True
+)
+
+print(
+    "BATCH_SIZE:",
+    BATCH_SIZE,
     flush=True
 )
 
@@ -256,40 +262,6 @@ def load_json(
 
 
 # ============================================================
-# NUMBER HELPER
-# ============================================================
-
-def extract_number(value):
-
-    value = clean_text(
-        value
-    )
-
-    if not value:
-
-        return None
-
-    match = re.search(
-        r"(?<!\d)(\d{1,3})(?:\.\d+)?(?!\d)",
-        value
-    )
-
-    if not match:
-
-        return None
-
-    try:
-
-        return int(
-            match.group(1)
-        )
-
-    except Exception:
-
-        return None
-
-
-# ============================================================
 # GPA
 # ============================================================
 
@@ -344,14 +316,10 @@ def parse_gpa(value):
 
 
 # ============================================================
-# FIND GPA FROM PAGE
+# PAGE GPA
 # ============================================================
 
 def find_page_gpa(soup):
-
-    # --------------------------------------------------------
-    # 1. Search complete text
-    # --------------------------------------------------------
 
     page_text = clean_text(
         soup.get_text(
@@ -400,10 +368,6 @@ def find_page_gpa(soup):
                 pass
 
 
-    # --------------------------------------------------------
-    # 2. Search table cells
-    # --------------------------------------------------------
-
     for row in soup.find_all("tr"):
 
         cells = row.find_all(
@@ -425,9 +389,7 @@ def find_page_gpa(soup):
 
         for index, value in enumerate(values):
 
-            upper_value = value.upper()
-
-            if "GPA" in upper_value:
+            if "GPA" in value.upper():
 
                 gpa = parse_gpa(
                     value
@@ -452,7 +414,7 @@ def find_page_gpa(soup):
 
 
 # ============================================================
-# TOTAL SCORE DIRECT
+# TOTAL SCORE
 # ============================================================
 
 def parse_total_score_direct(soup):
@@ -504,17 +466,7 @@ def parse_total_score_direct(soup):
 # SUBJECT RESULT
 # ============================================================
 
-def parse_subject_result(
-    values
-):
-
-    mark = None
-
-    grade = ""
-
-    # --------------------------------------------------------
-    # Need at least subject information
-    # --------------------------------------------------------
+def parse_subject_result(values):
 
     if len(values) < 3:
 
@@ -523,22 +475,12 @@ def parse_subject_result(
             ""
         )
 
-
-    # --------------------------------------------------------
-    # Try cells after subject name
-    # --------------------------------------------------------
-
     candidates = values[2:]
 
+    mark = None
 
-    # --------------------------------------------------------
-    # First look for combined value:
-    #
-    # 75 A
-    # 75 (A+)
-    # 75(A)
-    #
-    # --------------------------------------------------------
+    grade = ""
+
 
     for value in candidates:
 
@@ -550,10 +492,6 @@ def parse_subject_result(
 
             continue
 
-
-        # ----------------------------------------------------
-        # Mark + grade
-        # ----------------------------------------------------
 
         match = re.match(
             r"^\s*(\d{1,3})\s*"
@@ -571,7 +509,6 @@ def parse_subject_result(
                     match.group(1)
                 )
 
-                # Marks normally 0-100
                 if 0 <= number <= 100:
 
                     mark = number
@@ -594,10 +531,6 @@ def parse_subject_result(
                 pass
 
 
-        # ----------------------------------------------------
-        # Plain numeric cell
-        # ----------------------------------------------------
-
         if value.isdigit():
 
             try:
@@ -610,16 +543,10 @@ def parse_subject_result(
 
                     mark = number
 
-                    continue
-
             except Exception:
 
                 pass
 
-
-    # --------------------------------------------------------
-    # If mark found but grade is empty
-    # --------------------------------------------------------
 
     if mark is not None:
 
@@ -674,10 +601,7 @@ def find_value_after_label(
 
         if current == label:
 
-            if (
-                i + 1 <
-                len(values)
-            ):
+            if i + 1 < len(values):
 
                 return clean_text(
                     values[i + 1]
@@ -687,7 +611,7 @@ def find_value_after_label(
 
 
 # ============================================================
-# DISTRICT FROM INSTITUTE
+# DISTRICT
 # ============================================================
 
 def extract_district_from_institute(
@@ -705,31 +629,18 @@ def extract_district_from_institute(
     known_districts = [
 
         "CHITTAGONG",
-
         "CHATTOGRAM",
-
         "COX'S BAZAR",
-
         "COXS BAZAR",
-
         "COMILLA",
-
         "CUMILLA",
-
         "FENI",
-
         "NOAKHALI",
-
         "LAKSHMIPUR",
-
         "CHANDPUR",
-
         "BRAHMANBARIA",
-
         "RANGAMATI",
-
         "KHAGRACHHARI",
-
         "BANDARBAN",
 
     ]
@@ -768,6 +679,140 @@ def extract_district_from_institute(
             return district.title()
 
     return ""
+
+
+# ============================================================
+# RESULT PAGE DETECTION
+# ============================================================
+
+def looks_like_result_page(
+    soup,
+    requested_roll
+):
+
+    text = clean_text(
+        soup.get_text(
+            " ",
+            strip=True
+        )
+    )
+
+    upper = text.upper()
+
+    roll = str(
+        requested_roll
+    )
+
+    # --------------------------------------------------------
+    # Strong result indicators
+    # --------------------------------------------------------
+
+    indicators = [
+
+        "NAME",
+        "INSTITUTE",
+        "BOARD",
+        "SESSION",
+        "GROUP",
+        "RESULT",
+        "GPA",
+        "SUBJECT",
+        "SUBJECT CODE",
+        "MARK",
+        "GRADE",
+
+    ]
+
+    indicator_count = sum(
+
+        1
+
+        for item in indicators
+
+        if item in upper
+
+    )
+
+
+    # --------------------------------------------------------
+    # Roll number on result page
+    # --------------------------------------------------------
+
+    roll_found = (
+        roll in text
+    )
+
+
+    # --------------------------------------------------------
+    # Subject code detection
+    # --------------------------------------------------------
+
+    subject_code_found = bool(
+        re.search(
+            r"\b\d{3,5}\b",
+            text
+        )
+    )
+
+
+    # --------------------------------------------------------
+    # Known "not found" messages
+    # --------------------------------------------------------
+
+    not_found_phrases = [
+
+        "NO RESULT FOUND",
+
+        "RESULT NOT FOUND",
+
+        "INVALID ROLL",
+
+        "INVALID ROLL NUMBER",
+
+        "ROLL NOT FOUND",
+
+        "NO DATA FOUND",
+
+        "DATA NOT FOUND",
+
+        "RECORD NOT FOUND",
+
+    ]
+
+    explicit_not_found = any(
+
+        phrase in upper
+
+        for phrase in not_found_phrases
+
+    )
+
+
+    if explicit_not_found:
+
+        return False
+
+
+    # --------------------------------------------------------
+    # Strong evidence
+    # --------------------------------------------------------
+
+    if roll_found and indicator_count >= 2:
+
+        return True
+
+
+    if indicator_count >= 4:
+
+        return True
+
+
+    if subject_code_found and indicator_count >= 2:
+
+        return True
+
+
+    return False
 
 
 # ============================================================
@@ -824,6 +869,16 @@ def parse_result(
 
 
     # ========================================================
+    # RESULT PAGE CHECK
+    # ========================================================
+
+    result_page = looks_like_result_page(
+        soup,
+        requested_roll
+    )
+
+
+    # ========================================================
     # TABLE DATA
     # ========================================================
 
@@ -854,6 +909,8 @@ def parse_result(
         fields = [
 
             ("Roll No", "roll"),
+
+            ("Roll", "roll"),
 
             ("Name", "name"),
 
@@ -886,10 +943,6 @@ def parse_result(
                 result[key] = value
 
 
-        # ----------------------------------------------------
-        # RESULT / GPA
-        # ----------------------------------------------------
-
         result_value = (
             find_value_after_label(
                 values,
@@ -907,10 +960,6 @@ def parse_result(
 
                 result["gpa"] = gpa
 
-
-        # ----------------------------------------------------
-        # GPA direct label
-        # ----------------------------------------------------
 
         for index, value in enumerate(values):
 
@@ -947,7 +996,7 @@ def parse_result(
 
 
     # ========================================================
-    # DIRECT TOTAL SCORE
+    # TOTAL SCORE
     # ========================================================
 
     result["total_score"] = (
@@ -1008,10 +1057,6 @@ def parse_result(
             code = values[0].strip()
 
 
-            # ------------------------------------------------
-            # Subject code
-            # ------------------------------------------------
-
             if not re.fullmatch(
                 r"\d{3,5}",
                 code
@@ -1051,25 +1096,26 @@ def parse_result(
             )
 
 
-            # ------------------------------------------------
-            # Optional / 4th subject detection
-            # ------------------------------------------------
-
             combined_text = (
                 " ".join(values)
                 .upper()
             )
 
+
             is_optional = (
+
                 "OPTIONAL" in combined_text
+
                 or
                 "4TH SUBJECT" in combined_text
+
                 or
                 "FOURTH SUBJECT" in combined_text
+
             )
 
 
-            subject_data = {
+            result["subjects"].append({
 
                 "code":
                     code,
@@ -1086,17 +1132,8 @@ def parse_result(
                 "optional":
                     is_optional,
 
-            }
+            })
 
-
-            result["subjects"].append(
-                subject_data
-            )
-
-
-            # ------------------------------------------------
-            # Total score source
-            # ------------------------------------------------
 
             if mark is not None:
 
@@ -1106,7 +1143,7 @@ def parse_result(
 
 
     # ========================================================
-    # TOTAL SCORE FALLBACK
+    # TOTAL FALLBACK
     # ========================================================
 
     if result["total_score"] is None:
@@ -1116,18 +1153,6 @@ def parse_result(
             result["total_score"] = sum(
                 subject_marks
             )
-
-
-    # ========================================================
-    # DEBUG INFORMATION
-    # ========================================================
-
-    if not result["subjects"]:
-
-        print(
-            "WARNING: No subject rows detected.",
-            flush=True
-        )
 
 
     # ========================================================
@@ -1152,7 +1177,65 @@ def parse_result(
         )
 
 
-    return result
+    # ========================================================
+    # FINAL VALIDATION
+    # ========================================================
+
+    meaningful_fields = 0
+
+
+    if result["name"]:
+
+        meaningful_fields += 1
+
+
+    if result["institute"]:
+
+        meaningful_fields += 1
+
+
+    if result["board"]:
+
+        meaningful_fields += 1
+
+
+    if result["session"]:
+
+        meaningful_fields += 1
+
+
+    if result["gpa"] is not None:
+
+        meaningful_fields += 1
+
+
+    if result["subjects"]:
+
+        meaningful_fields += 1
+
+
+    # --------------------------------------------------------
+    # If result-like content exists, accept it.
+    #
+    # This prevents Institute-only validation from
+    # incorrectly rejecting a valid result page.
+    # --------------------------------------------------------
+
+    valid = (
+
+        result_page
+
+        and
+
+        meaningful_fields >= 2
+
+    )
+
+
+    return (
+        result,
+        valid
+    )
 
 
 # ============================================================
@@ -1726,7 +1809,7 @@ for group_name, roll_number in generate_rolls():
 
     try:
 
-        parsed = parse_result(
+        parsed, valid = parse_result(
 
             response.text,
 
@@ -1760,12 +1843,45 @@ for group_name, roll_number in generate_rolls():
     # NOT FOUND
     # ========================================================
 
-    if not parsed.get(
-        "institute"
-    ):
+    if not valid:
 
         print(
-            "No result found.",
+            "No valid result detected.",
+            flush=True
+        )
+
+        print(
+            "Name:",
+            parsed.get(
+                "name"
+            ),
+            flush=True
+        )
+
+        print(
+            "Institute:",
+            parsed.get(
+                "institute"
+            ),
+            flush=True
+        )
+
+        print(
+            "GPA:",
+            parsed.get(
+                "gpa"
+            ),
+            flush=True
+        )
+
+        print(
+            "Subjects:",
+            len(
+                parsed.get(
+                    "subjects",
+                    []
+                )
+            ),
             flush=True
         )
 
