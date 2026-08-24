@@ -266041,19 +266041,19 @@
   },
   {
     "institute": "ALIKADAM RESIDENTIAL SCHOOL, BANDARBAN",
-    "total_students": 11,
+    "total_students": 12,
     "gpa_5_count": 0,
     "gpa_5_percentage": 0.0,
     "average_gpa": 2.87,
     "institution_score": 57.4,
     "grade_distribution": {
-      "B": 25,
+      "B": 26,
       "F": 12,
-      "D": 13,
-      "A-": 9,
-      "A": 14,
-      "A+": 29,
-      "C": 26
+      "D": 14,
+      "A-": 10,
+      "A": 16,
+      "A+": 31,
+      "C": 29
     },
     "subject_statistics": [
       {
@@ -266070,11 +266070,11 @@
       {
         "code": "107",
         "subject": "ENGLISH-I",
-        "students_with_marks": 9,
-        "average_mark": 80.11,
+        "students_with_marks": 10,
+        "average_mark": 81.2,
         "grade_distribution": {
           "F": 2,
-          "C": 4,
+          "C": 5,
           "D": 5
         }
       },
@@ -266150,10 +266150,10 @@
       {
         "code": "154",
         "subject": "Information And Communication Technology",
-        "students_with_marks": 10,
-        "average_mark": 38.5,
+        "students_with_marks": 11,
+        "average_mark": 38.45,
         "grade_distribution": {
-          "A": 5,
+          "A": 6,
           "A+": 4,
           "A-": 1
         }
@@ -266172,28 +266172,28 @@
       {
         "code": "147",
         "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
-        "students_with_marks": 11,
-        "average_mark": 70.09,
+        "students_with_marks": 12,
+        "average_mark": 71.08,
         "grade_distribution": {
-          "A+": 11
+          "A+": 12
         }
       },
       {
         "code": "156",
         "subject": "Career Education",
-        "students_with_marks": 11,
-        "average_mark": 44.64,
+        "students_with_marks": 12,
+        "average_mark": 44.92,
         "grade_distribution": {
-          "A+": 11
+          "A+": 12
         }
       },
       {
         "code": "113",
         "subject": "BUDDHIST RELIGION AND MORAL EDUCATION",
-        "students_with_marks": 4,
-        "average_mark": 64.5,
+        "students_with_marks": 5,
+        "average_mark": 66.8,
         "grade_distribution": {
-          "A": 2,
+          "A": 3,
           "B": 1,
           "A-": 1
         }
@@ -266201,50 +266201,51 @@
       {
         "code": "127",
         "subject": "SCIENCE",
-        "students_with_marks": 3,
-        "average_mark": 42.67,
+        "students_with_marks": 4,
+        "average_mark": 41.75,
         "grade_distribution": {
-          "D": 2,
+          "D": 3,
           "B": 1
         }
       },
       {
         "code": "110",
         "subject": "GEOGRAPHY AND ENVIRONMENT",
-        "students_with_marks": 3,
-        "average_mark": 51.0,
+        "students_with_marks": 4,
+        "average_mark": 48.75,
         "grade_distribution": {
-          "B": 3
+          "B": 3,
+          "C": 1
         }
       },
       {
         "code": "153",
         "subject": "HISTORY OF BANGLADESH AND WORLD CIVILIZATION",
-        "students_with_marks": 3,
-        "average_mark": 53.33,
+        "students_with_marks": 4,
+        "average_mark": 54.0,
         "grade_distribution": {
           "A-": 1,
           "C": 1,
-          "B": 1
+          "B": 2
         }
       },
       {
         "code": "140",
         "subject": "CIVICS AND CITIZENSHIP",
-        "students_with_marks": 3,
-        "average_mark": 39.67,
+        "students_with_marks": 4,
+        "average_mark": 41.25,
         "grade_distribution": {
-          "C": 2,
+          "C": 3,
           "D": 1
         }
       },
       {
         "code": "134",
         "subject": "AGRICULTURE STUDIES",
-        "students_with_marks": 2,
-        "average_mark": 57.5,
+        "students_with_marks": 3,
+        "average_mark": 60.67,
         "grade_distribution": {
-          "A-": 1,
+          "A-": 2,
           "B": 1
         }
       }
