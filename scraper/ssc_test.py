@@ -74,7 +74,7 @@ ROLL_RANGES = {
 # COLLECTION SETTINGS
 # ============================================================
 
-BATCH_SIZE = 1
+BATCH_SIZE = 5
 
 SAVE_EVERY = 600
 
