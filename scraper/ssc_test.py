@@ -74,7 +74,7 @@ ROLL_RANGES = {
 # COLLECTION SETTINGS
 # ============================================================
 
-BATCH_SIZE = 10000
+BATCH_SIZE = 1
 
 SAVE_EVERY = 600
 
@@ -82,11 +82,33 @@ MIN_DELAY = 0.1
 
 MAX_DELAY = 0.2
 
-print("========================================", flush=True)
-print("SSC TEST.PY NEW VERSION RUNNING", flush=True)
-print("MIN_DELAY:", MIN_DELAY, flush=True)
-print("MAX_DELAY:", MAX_DELAY, flush=True)
-print("========================================", flush=True)
+print(
+    "========================================",
+    flush=True
+)
+
+print(
+    "SSC STUDENT COLLECTOR - FULL VERSION",
+    flush=True
+)
+
+print(
+    "MIN_DELAY:",
+    MIN_DELAY,
+    flush=True
+)
+
+print(
+    "MAX_DELAY:",
+    MAX_DELAY,
+    flush=True
+)
+
+print(
+    "========================================",
+    flush=True
+)
+
 
 REQUEST_TIMEOUT = (
     5,
@@ -156,6 +178,7 @@ session.headers.update(
 def clean_text(value):
 
     if value is None:
+
         return ""
 
     return " ".join(
@@ -163,7 +186,10 @@ def clean_text(value):
     ).strip()
 
 
-def save_json(filename, data):
+def save_json(
+    filename,
+    data
+):
 
     path = os.path.join(
         OUTPUT_DIR,
@@ -194,7 +220,10 @@ def save_json(filename, data):
     )
 
 
-def load_json(filename, default):
+def load_json(
+    filename,
+    default
+):
 
     path = os.path.join(
         OUTPUT_DIR,
@@ -227,22 +256,65 @@ def load_json(filename, default):
 
 
 # ============================================================
+# NUMBER HELPER
+# ============================================================
+
+def extract_number(value):
+
+    value = clean_text(
+        value
+    )
+
+    if not value:
+
+        return None
+
+    match = re.search(
+        r"(?<!\d)(\d{1,3})(?:\.\d+)?(?!\d)",
+        value
+    )
+
+    if not match:
+
+        return None
+
+    try:
+
+        return int(
+            match.group(1)
+        )
+
+    except Exception:
+
+        return None
+
+
+# ============================================================
 # GPA
 # ============================================================
 
 def parse_gpa(value):
 
-    value = clean_text(value)
+    value = clean_text(
+        value
+    )
 
     if not value:
+
         return None
 
     upper = value.upper()
 
     patterns = [
-        r"GPA\s*=\s*([0-9.]+)",
-        r"GPA\s*:\s*([0-9.]+)",
+
+        r"\bGPA\s*=\s*([0-5](?:\.[0-9]{1,2})?)",
+
+        r"\bGPA\s*:\s*([0-5](?:\.[0-9]{1,2})?)",
+
+        r"\bGPA\s+([0-5](?:\.[0-9]{1,2})?)",
+
         r"\b([0-5]\.[0-9]{1,2})\b",
+
     ]
 
     for pattern in patterns:
@@ -256,28 +328,134 @@ def parse_gpa(value):
 
             try:
 
-                return float(
+                value = float(
                     match.group(1)
                 )
+
+                if 0 <= value <= 5:
+
+                    return value
 
             except Exception:
 
                 pass
 
-    try:
-
-        return float(value)
-
-    except Exception:
-
-        return None
+    return None
 
 
 # ============================================================
-# TOTAL SCORE
+# FIND GPA FROM PAGE
 # ============================================================
 
-def parse_total_score(soup):
+def find_page_gpa(soup):
+
+    # --------------------------------------------------------
+    # 1. Search complete text
+    # --------------------------------------------------------
+
+    page_text = clean_text(
+        soup.get_text(
+            " ",
+            strip=True
+        )
+    )
+
+    upper = page_text.upper()
+
+    patterns = [
+
+        r"\bGPA\s*[:=]\s*([0-5](?:\.[0-9]{1,2})?)",
+
+        r"\bGPA\s+([0-5](?:\.[0-9]{1,2})?)",
+
+        r"\bRESULT\s*[:=]?\s*GPA\s*[:=]?\s*"
+        r"([0-5](?:\.[0-9]{1,2})?)",
+
+        r"\bFINAL\s+RESULT\s*[:=]?\s*"
+        r"([0-5](?:\.[0-9]{1,2})?)",
+
+    ]
+
+    for pattern in patterns:
+
+        match = re.search(
+            pattern,
+            upper
+        )
+
+        if match:
+
+            try:
+
+                value = float(
+                    match.group(1)
+                )
+
+                if 0 <= value <= 5:
+
+                    return value
+
+            except Exception:
+
+                pass
+
+
+    # --------------------------------------------------------
+    # 2. Search table cells
+    # --------------------------------------------------------
+
+    for row in soup.find_all("tr"):
+
+        cells = row.find_all(
+            ["th", "td"]
+        )
+
+        values = [
+
+            clean_text(
+                cell.get_text(
+                    " ",
+                    strip=True
+                )
+            )
+
+            for cell in cells
+
+        ]
+
+        for index, value in enumerate(values):
+
+            upper_value = value.upper()
+
+            if "GPA" in upper_value:
+
+                gpa = parse_gpa(
+                    value
+                )
+
+                if gpa is not None:
+
+                    return gpa
+
+
+                if index + 1 < len(values):
+
+                    gpa = parse_gpa(
+                        values[index + 1]
+                    )
+
+                    if gpa is not None:
+
+                        return gpa
+
+    return None
+
+
+# ============================================================
+# TOTAL SCORE DIRECT
+# ============================================================
+
+def parse_total_score_direct(soup):
 
     text = clean_text(
         soup.get_text(
@@ -286,17 +464,19 @@ def parse_total_score(soup):
         )
     )
 
+    upper = text.upper()
+
     patterns = [
 
-        r"TOTAL\s*SCORE\s*[:=]?\s*([0-9]+)",
+        r"\bTOTAL\s*SCORE\s*[:=]\s*(\d{2,4})",
 
-        r"TOTAL\s*MARKS\s*[:=]?\s*([0-9]+)",
+        r"\bTOTAL\s*MARKS\s*[:=]\s*(\d{2,4})",
 
-        r"SCORE\s*[:=]?\s*([0-9]+)",
+        r"\bTOTAL\s*MARK\s*[:=]\s*(\d{2,4})",
+
+        r"\bTOTAL\s*[:=]\s*(\d{2,4})",
 
     ]
-
-    upper = text.upper()
 
     for pattern in patterns:
 
@@ -324,65 +504,149 @@ def parse_total_score(soup):
 # SUBJECT RESULT
 # ============================================================
 
-def parse_subject_result(value):
-
-    value = clean_text(value)
+def parse_subject_result(
+    values
+):
 
     mark = None
 
     grade = ""
 
-    if "(" in value:
+    # --------------------------------------------------------
+    # Need at least subject information
+    # --------------------------------------------------------
 
-        mark_text = (
-            value
-            .split(
-                "(",
-                1
-            )[0]
-            .strip()
+    if len(values) < 3:
+
+        return (
+            None,
+            ""
         )
 
-        grade_text = (
+
+    # --------------------------------------------------------
+    # Try cells after subject name
+    # --------------------------------------------------------
+
+    candidates = values[2:]
+
+
+    # --------------------------------------------------------
+    # First look for combined value:
+    #
+    # 75 A
+    # 75 (A+)
+    # 75(A)
+    #
+    # --------------------------------------------------------
+
+    for value in candidates:
+
+        value = clean_text(
             value
-            .split(
-                "(",
-                1
-            )[1]
-            .replace(
-                ")",
-                ""
-            )
-            .strip()
         )
 
-        try:
+        if not value:
 
-            mark = int(
-                mark_text
-            )
+            continue
 
-        except Exception:
 
-            pass
+        # ----------------------------------------------------
+        # Mark + grade
+        # ----------------------------------------------------
 
-        grade = grade_text
+        match = re.match(
+            r"^\s*(\d{1,3})\s*"
+            r"(?:\(\s*([A-F][+]?)\s*\)"
+            r"|([A-F][+]?))?\s*$",
+            value,
+            re.I
+        )
 
-    else:
+        if match:
 
-        try:
+            try:
 
-            mark = int(
+                number = int(
+                    match.group(1)
+                )
+
+                # Marks normally 0-100
+                if 0 <= number <= 100:
+
+                    mark = number
+
+                    grade = (
+                        match.group(2)
+                        or
+                        match.group(3)
+                        or
+                        ""
+                    )
+
+                    return (
+                        mark,
+                        grade.upper()
+                    )
+
+            except Exception:
+
+                pass
+
+
+        # ----------------------------------------------------
+        # Plain numeric cell
+        # ----------------------------------------------------
+
+        if value.isdigit():
+
+            try:
+
+                number = int(
+                    value
+                )
+
+                if 0 <= number <= 100:
+
+                    mark = number
+
+                    continue
+
+            except Exception:
+
+                pass
+
+
+    # --------------------------------------------------------
+    # If mark found but grade is empty
+    # --------------------------------------------------------
+
+    if mark is not None:
+
+        for value in candidates:
+
+            upper = clean_text(
                 value
-            )
+            ).upper()
 
-        except Exception:
+            if re.fullmatch(
+                r"[A-F][+]?",
+                upper
+            ):
 
-            pass
+                grade = upper
+
+                break
+
+        return (
+            mark,
+            grade
+        )
+
 
     return (
-        mark,
-        grade
+        None,
+        ""
     )
 
 
@@ -435,25 +699,39 @@ def extract_district_from_institute(
     )
 
     if not institute:
+
         return ""
 
     known_districts = [
 
         "CHITTAGONG",
+
         "CHATTOGRAM",
+
         "COX'S BAZAR",
+
         "COXS BAZAR",
+
         "COMILLA",
+
         "CUMILLA",
+
         "FENI",
+
         "NOAKHALI",
+
         "LAKSHMIPUR",
-        "LAKSHMIPUR",
+
         "CHANDPUR",
+
         "BRAHMANBARIA",
+
         "RANGAMATI",
+
         "KHAGRACHHARI",
+
         "BANDARBAN",
+
     ]
 
     upper = institute.upper()
@@ -541,6 +819,7 @@ def parse_result(
 
         "subjects":
             [],
+
     }
 
 
@@ -564,9 +843,11 @@ def parse_result(
             )
 
             for cell in cells
+
         ]
 
         if not values:
+
             continue
 
 
@@ -605,6 +886,10 @@ def parse_result(
                 result[key] = value
 
 
+        # ----------------------------------------------------
+        # RESULT / GPA
+        # ----------------------------------------------------
+
         result_value = (
             find_value_after_label(
                 values,
@@ -623,30 +908,50 @@ def parse_result(
                 result["gpa"] = gpa
 
 
+        # ----------------------------------------------------
+        # GPA direct label
+        # ----------------------------------------------------
+
+        for index, value in enumerate(values):
+
+            if "GPA" in value.upper():
+
+                gpa = parse_gpa(
+                    value
+                )
+
+                if gpa is not None:
+
+                    result["gpa"] = gpa
+
+                elif index + 1 < len(values):
+
+                    gpa = parse_gpa(
+                        values[index + 1]
+                    )
+
+                    if gpa is not None:
+
+                        result["gpa"] = gpa
+
+
     # ========================================================
     # GPA FALLBACK
     # ========================================================
 
     if result["gpa"] is None:
 
-        page_text = clean_text(
-            soup.get_text(
-                " ",
-                strip=True
-            )
-        )
-
-        result["gpa"] = parse_gpa(
-            page_text
+        result["gpa"] = find_page_gpa(
+            soup
         )
 
 
     # ========================================================
-    # TOTAL SCORE
+    # DIRECT TOTAL SCORE
     # ========================================================
 
     result["total_score"] = (
-        parse_total_score(
+        parse_total_score_direct(
             soup
         )
     )
@@ -671,6 +976,9 @@ def parse_result(
 
     seen = set()
 
+    subject_marks = []
+
+
     for table in soup.find_all("table"):
 
         for row in table.find_all("tr"):
@@ -689,23 +997,40 @@ def parse_result(
                 )
 
                 for cell in cells
+
             ]
 
             if len(values) < 3:
+
                 continue
 
 
-            code = values[0]
+            code = values[0].strip()
 
-            if not code.isdigit():
+
+            # ------------------------------------------------
+            # Subject code
+            # ------------------------------------------------
+
+            if not re.fullmatch(
+                r"\d{3,5}",
+                code
+            ):
+
                 continue
 
 
             subject = values[1]
 
+
+            if not subject:
+
+                continue
+
+
             mark, grade = (
                 parse_subject_result(
-                    values[2]
+                    values
                 )
             )
 
@@ -715,13 +1040,36 @@ def parse_result(
                 subject
             )
 
+
             if key in seen:
+
                 continue
 
-            seen.add(key)
+
+            seen.add(
+                key
+            )
 
 
-            result["subjects"].append({
+            # ------------------------------------------------
+            # Optional / 4th subject detection
+            # ------------------------------------------------
+
+            combined_text = (
+                " ".join(values)
+                .upper()
+            )
+
+            is_optional = (
+                "OPTIONAL" in combined_text
+                or
+                "4TH SUBJECT" in combined_text
+                or
+                "FOURTH SUBJECT" in combined_text
+            )
+
+
+            subject_data = {
 
                 "code":
                     code,
@@ -735,7 +1083,51 @@ def parse_result(
                 "grade":
                     grade,
 
-            })
+                "optional":
+                    is_optional,
+
+            }
+
+
+            result["subjects"].append(
+                subject_data
+            )
+
+
+            # ------------------------------------------------
+            # Total score source
+            # ------------------------------------------------
+
+            if mark is not None:
+
+                subject_marks.append(
+                    mark
+                )
+
+
+    # ========================================================
+    # TOTAL SCORE FALLBACK
+    # ========================================================
+
+    if result["total_score"] is None:
+
+        if subject_marks:
+
+            result["total_score"] = sum(
+                subject_marks
+            )
+
+
+    # ========================================================
+    # DEBUG INFORMATION
+    # ========================================================
+
+    if not result["subjects"]:
+
+        print(
+            "WARNING: No subject rows detected.",
+            flush=True
+        )
 
 
     # ========================================================
@@ -929,6 +1321,7 @@ try:
             REQUEST_TIMEOUT,
 
         allow_redirects=True,
+
     )
 
     page.raise_for_status()
@@ -963,7 +1356,9 @@ soup = BeautifulSoup(
     "html.parser"
 )
 
-form = soup.find("form")
+form = soup.find(
+    "form"
+)
 
 if not form:
 
@@ -1013,13 +1408,16 @@ print(
 base_form_data = {}
 
 
-for inp in form.find_all("input"):
+for inp in form.find_all(
+    "input"
+):
 
     name = inp.get(
         "name"
     )
 
     if not name:
+
         continue
 
 
@@ -1074,6 +1472,7 @@ for select in form.find_all(
     )
 
     if not name:
+
         continue
 
 
@@ -1144,8 +1543,10 @@ for element in form.find_all(
 if not submit_fields:
 
     submit_fields = {
+
         "button2":
             "Submit"
+
     }
 
 
@@ -1266,6 +1667,7 @@ for group_name, roll_number in generate_rolls():
                 REQUEST_TIMEOUT,
 
             allow_redirects=True,
+
         )
 
 
@@ -1331,6 +1733,7 @@ for group_name, roll_number in generate_rolls():
             roll,
 
             group_name
+
         )
 
 
@@ -1369,9 +1772,15 @@ for group_name, roll_number in generate_rolls():
         not_found += 1
 
         failed_rolls.append({
-            "roll": roll,
-            "group": group_name
+
+            "roll":
+                roll,
+
+            "group":
+                group_name
+
         })
+
 
         time.sleep(
             random.uniform(
@@ -1443,6 +1852,40 @@ for group_name, roll_number in generate_rolls():
 
 
     # ========================================================
+    # SHOW SUBJECT MARKS
+    # ========================================================
+
+    for subject in parsed.get(
+        "subjects",
+        []
+    ):
+
+        print(
+            "  SUBJECT:",
+            subject.get(
+                "code"
+            ),
+            "|",
+            subject.get(
+                "subject"
+            ),
+            "| Mark:",
+            subject.get(
+                "mark"
+            ),
+            "| Grade:",
+            subject.get(
+                "grade"
+            ),
+            "| Optional:",
+            subject.get(
+                "optional"
+            ),
+            flush=True
+        )
+
+
+    # ========================================================
     # SAVE MEMORY
     # ========================================================
 
@@ -1476,15 +1919,18 @@ for group_name, roll_number in generate_rolls():
             flush=True
         )
 
+
         save_json(
             "students.json",
             students
         )
 
+
         save_json(
             "failed_rolls.json",
             failed_rolls
         )
+
 
         print(
             "Checkpoint saved.",
@@ -1519,6 +1965,7 @@ save_json(
     students
 )
 
+
 save_json(
     "failed_rolls.json",
     failed_rolls
@@ -1535,6 +1982,7 @@ remaining = max(
     len(existing_rolls),
 
     0
+
 )
 
 
