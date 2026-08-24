@@ -8,87 +8,40 @@ from pathlib import Path
 
 
 # ============================================================
-# SSC 2026 INSTITUTION COLLECTOR
+# CONFIG
 # ============================================================
-
-YEAR = 2026
-BOARD = "Chattogram Board"
 
 MASTER_URL = (
     "https://esifssc.bise-ctg.gov.bd/"
     "esif_accounts.php"
 )
 
-SSC_BASE_URL = (
+SSC_URL = (
     "https://sresult.bise-ctg.gov.bd/"
     "to_ssc_26_ctg/"
-)
-
-SSC_INDIVIDUAL_URL = (
-    SSC_BASE_URL +
     "individual/"
 )
 
-SSC_RESULT_URL = (
-    SSC_INDIVIDUAL_URL +
-    "result.php"
+OUTPUT_FILE = Path(
+    "institution-collector/institution_results.json"
 )
 
-
-# ============================================================
-# FILES
-# ============================================================
-
-OUTPUT_DIR = Path("institution-collector")
-
-OUTPUT_DIR.mkdir(
-    parents=True,
-    exist_ok=True
+FAILED_FILE = Path(
+    "institution-collector/failed_institutions.json"
 )
-
-OUTPUT_FILE = (
-    OUTPUT_DIR /
-    "institution_results.json"
-)
-
-MASTER_FILE = (
-    OUTPUT_DIR /
-    "institutions.json"
-)
-
-FAILED_FILE = (
-    OUTPUT_DIR /
-    "failed_institutions.json"
-)
-
-
-# ============================================================
-# SETTINGS
-# ============================================================
-
-REQUEST_TIMEOUT = (
-    5,
-    20
-)
-
-MIN_DELAY = 0.10
-MAX_DELAY = 0.20
-
-SAVE_EVERY = 50
-
-# ------------------------------------------------------------
-# TEST MODE
-# ------------------------------------------------------------
-# প্রথমে True রাখো।
-# তাহলে শুধু TEST_EIIN নিয়ে কাজ করবে।
-#
-# সব institution চালাতে:
-# TEST_MODE = False
-# ------------------------------------------------------------
 
 TEST_MODE = True
 
 TEST_EIIN = "103086"
+
+MIN_DELAY = 0.1
+MAX_DELAY = 0.2
+
+TIMEOUT = (5, 20)
+
+YEAR = 2026
+
+BOARD = "Chattogram Board"
 
 
 # ============================================================
@@ -96,14 +49,12 @@ TEST_EIIN = "103086"
 # ============================================================
 
 HEADERS = {
-
     "User-Agent": (
         "Mozilla/5.0 "
         "(Linux; Android 10; Mobile) "
         "AppleWebKit/537.36 "
         "(KHTML, like Gecko) "
-        "Chrome/140.0.0.0 "
-        "Mobile Safari/537.36"
+        "Chrome/140.0 Mobile Safari/537.36"
     ),
 
     "Accept": (
@@ -115,10 +66,17 @@ HEADERS = {
 
     "Accept-Language":
         "en-US,en;q=0.9",
-
-    "Connection":
-        "keep-alive",
 }
+
+
+# ============================================================
+# DIRECTORY
+# ============================================================
+
+OUTPUT_FILE.parent.mkdir(
+    parents=True,
+    exist_ok=True
+)
 
 
 # ============================================================
@@ -133,7 +91,7 @@ session.headers.update(
 
 
 # ============================================================
-# HELPERS
+# CLEAN
 # ============================================================
 
 def clean_text(value):
@@ -157,38 +115,13 @@ def clean_text(value):
     return value.strip()
 
 
-def to_int(value):
+# ============================================================
+# NUMBER
+# ============================================================
 
-    value = clean_text(
-        value
-    )
+def number(value):
 
-    value = value.replace(
-        ",",
-        ""
-    )
-
-    match = re.search(
-        r"\d+",
-        value
-    )
-
-    if not match:
-        return 0
-
-    try:
-        return int(
-            match.group()
-        )
-    except Exception:
-        return 0
-
-
-def to_float(value):
-
-    value = clean_text(
-        value
-    )
+    value = clean_text(value)
 
     value = value.replace(
         ",",
@@ -204,85 +137,63 @@ def to_float(value):
         return None
 
     try:
-        return float(
+        number_value = float(
             match.group()
         )
+
+        if number_value.is_integer():
+            return int(number_value)
+
+        return number_value
+
     except Exception:
         return None
 
 
-def save_json(path, data):
-
-    temp_path = Path(
-        str(path) +
-        ".tmp"
-    )
-
-    with open(
-        temp_path,
-        "w",
-        encoding="utf-8"
-    ) as f:
-
-        json.dump(
-            data,
-            f,
-            ensure_ascii=False,
-            indent=2
-        )
-
-    temp_path.replace(
-        path
-    )
-
-
 # ============================================================
-# MASTER LIST
+# DOWNLOAD MASTER
 # ============================================================
 
-def download_master_page():
+def get_master():
 
     print(
-        "=" * 70,
-        flush=True
+        "=" * 70
     )
 
     print(
-        "STEP 1: DOWNLOADING INSTITUTION MASTER LIST",
-        flush=True
+        "STEP 1: DOWNLOADING INSTITUTION MASTER LIST"
     )
 
     print(
         "URL:",
-        MASTER_URL,
-        flush=True
+        MASTER_URL
+    )
+
+    print(
+        "=" * 70
     )
 
     response = session.get(
         MASTER_URL,
-        timeout=REQUEST_TIMEOUT
+        timeout=TIMEOUT
     )
 
     print(
         "HTTP Status:",
-        response.status_code,
-        flush=True
+        response.status_code
     )
 
     response.raise_for_status()
 
     response.encoding = (
         response.apparent_encoding
+        or response.encoding
     )
 
-    return response.text
-
-
-# ============================================================
-# FIND MASTER TABLE
-# ============================================================
-
-def find_master_table(soup):
+    soup = BeautifulSoup(
+        response.text,
+        "html.parser"
+    )
 
     tables = soup.find_all(
         "table"
@@ -290,166 +201,101 @@ def find_master_table(soup):
 
     print(
         "Tables found:",
-        len(tables),
-        flush=True
+        len(tables)
     )
+
+    institution_table = None
 
     for table in tables:
 
-        first_row = table.find(
-            "tr"
-        )
-
-        if not first_row:
-            continue
-
-        headers = [
-
-            clean_text(
-                cell.get_text(
-                    " ",
-                    strip=True
-                )
-            ).lower()
-
-            for cell in first_row.find_all(
-                ["th", "td"]
+        text = clean_text(
+            table.get_text(
+                " ",
+                strip=True
             )
-        ]
-
-        text = " ".join(
-            headers
-        )
+        ).upper()
 
         if (
-            "eiin" in text
-            and (
-                "institute" in text
-                or "institution" in text
-            )
+            "EIIN" in text
+            and
+            "INSTITUTE NAME" in text
         ):
 
-            return table
+            institution_table = table
+            break
 
-    return None
-
-
-# ============================================================
-# PARSE MASTER DATA
-# ============================================================
-
-def parse_master_data(html):
-
-    soup = BeautifulSoup(
-        html,
-        "html.parser"
-    )
-
-    table = find_master_table(
-        soup
-    )
-
-    if table is None:
+    if institution_table is None:
 
         raise RuntimeError(
-            "Institution master table not found."
+            "Institution table not found."
         )
-
-    rows = table.find_all(
-        "tr"
-    )
 
     institutions = []
 
-    for row in rows:
+    for row in institution_table.find_all("tr"):
 
         cells = row.find_all(
             ["td", "th"]
         )
 
-        if len(cells) < 3:
-            continue
-
         values = [
-
             clean_text(
                 cell.get_text(
                     " ",
                     strip=True
                 )
             )
-
             for cell in cells
         ]
 
-        # ----------------------------------------------------
-        # Find EIIN position dynamically
-        # ----------------------------------------------------
-
-        eiin_index = None
-
-        for i, value in enumerate(
-            values
-        ):
-
-            if re.fullmatch(
-                r"\d{5,7}",
-                value
-            ):
-
-                eiin_index = i
-
-                break
-
-        if eiin_index is None:
+        if len(values) < 3:
             continue
 
-        eiin = values[
-            eiin_index
-        ]
+        eiin = ""
 
-        # ----------------------------------------------------
-        # Institution name
-        # ----------------------------------------------------
-
-        name_index = (
-            eiin_index + 1
-        )
-
-        if (
-            name_index >=
-            len(values)
-        ):
-
-            continue
-
-        institution_name = clean_text(
-            values[name_index]
-        )
-
-        if not institution_name:
-            continue
-
-        # ----------------------------------------------------
-        # First numeric value after name
-        # is normally total students.
-        # ----------------------------------------------------
+        name = ""
 
         total_students = 0
 
-        for value in values[
-            name_index + 1:
-        ]:
+        # Normal table:
+        # SL | EIIN | NAME | STUDENTS
 
-            number = to_int(
-                value
-            )
+        if len(values) >= 4:
 
-            if number > 0:
+            if values[1].isdigit():
 
-                total_students = number
+                eiin = values[1]
 
-                break
+                name = values[2]
+
+                total_students = (
+                    number(values[3])
+                    or 0
+                )
+
+        # Fallback:
+        # EIIN | NAME | STUDENTS
+
+        if not eiin:
+
+            if values[0].isdigit():
+
+                eiin = values[0]
+
+                name = values[1]
+
+                if len(values) >= 3:
+
+                    total_students = (
+                        number(values[2])
+                        or 0
+                    )
+
+        if not eiin:
+            continue
+
+        if not name:
+            continue
 
         institutions.append({
 
@@ -457,22 +303,14 @@ def parse_master_data(html):
                 eiin,
 
             "institution_name":
-                institution_name,
+                name,
 
             "total_students":
                 total_students,
 
-            "year":
-                YEAR,
-
-            "board":
-                BOARD,
-
         })
 
-    # --------------------------------------------------------
-    # Remove duplicate EIIN
-    # --------------------------------------------------------
+    # Remove duplicates
 
     unique = {}
 
@@ -486,83 +324,44 @@ def parse_master_data(html):
         unique.values()
     )
 
-    institutions.sort(
-        key=lambda x:
-            x["eiin"]
+    print(
+        "Institutions found:",
+        len(institutions)
     )
 
     return institutions
 
 
 # ============================================================
-# SAVE MASTER
+# OPEN SSC FORM
 # ============================================================
 
-def save_master(
-    institutions
-):
+def open_ssc_form():
 
-    data = {
-
-        "metadata": {
-
-            "year":
-                YEAR,
-
-            "board":
-                BOARD,
-
-            "total_institutions":
-                len(institutions),
-
-            "source":
-                MASTER_URL,
-
-        },
-
-        "institutions":
-            institutions
-
-    }
-
-    save_json(
-        MASTER_FILE,
-        data
-    )
-
-
-# ============================================================
-# SSC PAGE
-# ============================================================
-
-def open_ssc_page():
-
+    print()
     print(
-        "=" * 70,
-        flush=True
+        "=" * 70
     )
 
     print(
-        "STEP 2: OPENING SSC RESULT FORM",
-        flush=True
+        "STEP 2: OPENING SSC RESULT FORM"
+    )
+
+    print(
+        "=" * 70
     )
 
     response = session.get(
-        SSC_INDIVIDUAL_URL,
-        timeout=REQUEST_TIMEOUT
+        SSC_URL,
+        timeout=TIMEOUT
     )
 
     print(
         "HTTP Status:",
-        response.status_code,
-        flush=True
+        response.status_code
     )
 
     response.raise_for_status()
-
-    response.encoding = (
-        response.apparent_encoding
-    )
 
     soup = BeautifulSoup(
         response.text,
@@ -579,65 +378,35 @@ def open_ssc_page():
             "SSC result form not found."
         )
 
-    action = clean_text(
-        form.get(
-            "action",
-            ""
-        )
+    action = form.get(
+        "action",
+        ""
     )
 
-    if not action:
+    method = form.get(
+        "method",
+        "post"
+    ).lower()
 
-        action = "result.php"
+    from urllib.parse import urljoin
 
-    if action.startswith(
-        "http"
-    ):
-
-        result_url = action
-
-    else:
-
-        result_url = (
-            SSC_INDIVIDUAL_URL +
-            action
-        )
-
-    print(
-        "Result URL:",
-        result_url,
-        flush=True
+    action_url = urljoin(
+        response.url,
+        action
     )
 
-    return (
-        soup,
-        form,
-        result_url
-    )
+    base_data = {}
 
+    for inp in form.find_all("input"):
 
-# ============================================================
-# FORM DATA
-# ============================================================
-
-def get_base_form_data(
-    form
-):
-
-    data = {}
-
-    for element in form.find_all(
-        "input"
-    ):
-
-        name = element.get(
+        name = inp.get(
             "name"
         )
 
         if not name:
             continue
 
-        input_type = element.get(
+        input_type = inp.get(
             "type",
             "text"
         ).lower()
@@ -648,236 +417,43 @@ def get_base_form_data(
             "reset",
             "image"
         ):
-
             continue
 
-        if input_type in (
-            "checkbox",
-            "radio"
-        ):
-
-            if not element.has_attr(
-                "checked"
-            ):
-
-                continue
-
-        data[name] = element.get(
+        base_data[name] = inp.get(
             "value",
             ""
         )
 
-    for select in form.find_all(
-        "select"
-    ):
-
-        name = select.get(
-            "name"
-        )
-
-        if not name:
-            continue
-
-        option = select.find(
-            "option",
-            selected=True
-        )
-
-        if option is None:
-
-            option = select.find(
-                "option"
-            )
-
-        if option:
-
-            data[name] = option.get(
-                "value",
-                clean_text(
-                    option.get_text()
-                )
-            )
-
-    return data
-
-
-# ============================================================
-# GPA PARSER
-# ============================================================
-
-def parse_gpa(text):
-
-    text = clean_text(
-        text
+    print(
+        "Result URL:",
+        action_url
     )
 
-    patterns = [
-
-        r"GPA\s*[:=]\s*([0-5](?:\.\d+)?)",
-
-        r"RESULT\s*[:=]\s*([0-5](?:\.\d+)?)",
-
-    ]
-
-    for pattern in patterns:
-
-        match = re.search(
-            pattern,
-            text,
-            re.I
-        )
-
-        if match:
-
-            return to_float(
-                match.group(1)
-            )
-
-    return None
-
-
-# ============================================================
-# TOTAL SCORE
-# ============================================================
-
-def parse_total_score(
-    soup
-):
-
-    text = clean_text(
-        soup.get_text(
-            " ",
-            strip=True
-        )
+    print(
+        "Form method:",
+        method
     )
 
-    patterns = [
+    print(
+        "Base form fields:",
+        base_data
+    )
 
-        r"TOTAL\s*SCORE\s*[:=]?\s*(\d+)",
-
-        r"TOTAL\s*MARKS\s*[:=]?\s*(\d+)",
-
-        r"TOTAL\s*[:=]\s*(\d+)",
-
-    ]
-
-    for pattern in patterns:
-
-        match = re.search(
-            pattern,
-            text,
-            re.I
-        )
-
-        if match:
-
-            return to_int(
-                match.group(1)
-            )
-
-    return None
+    return (
+        action_url,
+        method,
+        base_data,
+        response.url
+    )
 
 
 # ============================================================
-# SUBJECT MARKS
+# PARSE INSTITUTION RESULT
 # ============================================================
 
-def parse_subjects(
-    soup
-):
-
-    subjects = []
-
-    seen = set()
-
-    for table in soup.find_all(
-        "table"
-    ):
-
-        for row in table.find_all(
-            "tr"
-        ):
-
-            cells = row.find_all(
-                ["td", "th"]
-            )
-
-            values = [
-
-                clean_text(
-                    c.get_text(
-                        " ",
-                        strip=True
-                    )
-                )
-
-                for c in cells
-            ]
-
-            if len(values) < 3:
-                continue
-
-            if not values[0].isdigit():
-                continue
-
-            code = values[0]
-
-            subject = values[1]
-
-            mark = None
-
-            match = re.search(
-                r"\b(\d{1,3})\b",
-                values[2]
-            )
-
-            if match:
-
-                try:
-
-                    mark = int(
-                        match.group(1)
-                    )
-
-                except Exception:
-
-                    pass
-
-            key = (
-                code,
-                subject
-            )
-
-            if key in seen:
-                continue
-
-            seen.add(
-                key
-            )
-
-            subjects.append({
-
-                "code":
-                    code,
-
-                "subject":
-                    subject,
-
-                "mark":
-                    mark,
-
-            })
-
-    return subjects
-
-
-# ============================================================
-# PARSE STUDENT RESULT
-# ============================================================
-
-def parse_student_result(
+def parse_institution_result(
     html,
-    requested_roll
+    institution
 ):
 
     soup = BeautifulSoup(
@@ -885,179 +461,15 @@ def parse_student_result(
         "html.parser"
     )
 
-    text = clean_text(
-        soup.get_text(
-            " ",
-            strip=True
-        )
-    )
+    result = {
 
-    upper = text.upper()
+        "eiin":
+            institution["eiin"],
 
-    # --------------------------------------------------------
-    # NAME
-    # --------------------------------------------------------
-
-    name = ""
-
-    match = re.search(
-        r"NAME\s*[:\-]?\s*([A-Z .'-]+)",
-        upper
-    )
-
-    if match:
-
-        name = clean_text(
-            match.group(1)
-        )
-
-    # --------------------------------------------------------
-    # INSTITUTE
-    # --------------------------------------------------------
-
-    institute = ""
-
-    patterns = [
-
-        r"INSTITUTE\s*[:\-]\s*(.*?)(?=\s+(?:DISTRICT|GPA|RESULT|ROLL|GROUP)\b)",
-
-        r"INSTITUTION\s*[:\-]\s*(.*?)(?=\s+(?:DISTRICT|GPA|RESULT|ROLL|GROUP)\b)",
-
-    ]
-
-    for pattern in patterns:
-
-        match = re.search(
-            pattern,
-            upper
-        )
-
-        if match:
-
-            institute = clean_text(
-                match.group(1)
-            )
-
-            break
-
-    # --------------------------------------------------------
-    # DISTRICT
-    # --------------------------------------------------------
-
-    district = ""
-
-    match = re.search(
-        r"DISTRICT\s*[:\-]\s*([A-Z .'-]+)",
-        upper
-    )
-
-    if match:
-
-        district = clean_text(
-            match.group(1)
-        )
-
-    # --------------------------------------------------------
-    # GPA
-    # --------------------------------------------------------
-
-    gpa = parse_gpa(
-        text
-    )
-
-    # --------------------------------------------------------
-    # TOTAL SCORE
-    # --------------------------------------------------------
-
-    total_score = parse_total_score(
-        soup
-    )
-
-    # --------------------------------------------------------
-    # SUBJECTS
-    # --------------------------------------------------------
-
-    subjects = parse_subjects(
-        soup
-    )
-
-    return {
-
-        "roll":
-            str(requested_roll),
-
-        "name":
-            name,
-
-        "institute":
-            institute,
-
-        "district":
-            district,
-
-        "gpa":
-            gpa,
-
-        "total_score":
-            total_score,
-
-        "subjects":
-            subjects,
-
-    }
-
-
-# ============================================================
-# GET INSTITUTION RESULT
-# ============================================================
-
-def collect_institution(
-    institution,
-    base_form_data,
-    result_url
-):
-
-    eiin = str(
-        institution["eiin"]
-    )
-
-    print()
-    print(
-        "-" * 70,
-        flush=True
-    )
-
-    print(
-        "EIIN:",
-        eiin,
-        flush=True
-    )
-
-    print(
-        "Institution:",
-        institution[
-            "institution_name"
-        ],
-        flush=True
-    )
-
-    # --------------------------------------------------------
-    # IMPORTANT
-    #
-    # The institution master page gives institution-level
-    # aggregate information.
-    #
-    # The SSC individual endpoint requires ROLL, not EIIN.
-    #
-    # Therefore this function currently performs the
-    # institution lookup and preserves the master data.
-    # --------------------------------------------------------
-
-    result = dict(
-        institution
-    )
-
-    result.update({
+        "institution_name":
+            institution[
+                "institution_name"
+            ],
 
         "district":
             "",
@@ -1066,10 +478,9 @@ def collect_institution(
             "",
 
         "appeared":
-            institution.get(
-                "total_students",
-                0
-            ),
+            institution[
+                "total_students"
+            ],
 
         "passed":
             0,
@@ -1083,7 +494,212 @@ def collect_institution(
         "total_gpa":
             0,
 
-    })
+        "year":
+            YEAR,
+
+        "board":
+            BOARD,
+
+    }
+
+    page_text = clean_text(
+        soup.get_text(
+            " ",
+            strip=True
+        )
+    )
+
+    upper = page_text.upper()
+
+    # ========================================================
+    # SHOW TABLE STRUCTURE
+    # ========================================================
+
+    print()
+    print(
+        "RESULT PAGE TABLES:",
+        len(
+            soup.find_all("table")
+        )
+    )
+
+    for table_index, table in enumerate(
+        soup.find_all("table")
+    ):
+
+        rows = table.find_all("tr")
+
+        print()
+        print(
+            f"TABLE #{table_index + 1}"
+        )
+
+        for row in rows[:5]:
+
+            cells = row.find_all(
+                ["th", "td"]
+            )
+
+            values = [
+                clean_text(
+                    cell.get_text(
+                        " ",
+                        strip=True
+                    )
+                )
+                for cell in cells
+            ]
+
+            if values:
+
+                print(
+                    values
+                )
+
+    # ========================================================
+    # TEXT BASED EXTRACTION
+    # ========================================================
+
+    patterns = {
+
+        "appeared": [
+            r"TOTAL\s*(?:CANDIDATE|STUDENT|EXAMINEE).*?(\d+)",
+            r"APPEARED.*?(\d+)",
+        ],
+
+        "passed": [
+            r"TOTAL\s*PASSED.*?(\d+)",
+            r"PASSED.*?(\d+)",
+        ],
+
+        "gpa5": [
+            r"GPA\s*5.*?(\d+)",
+            r"GPA5.*?(\d+)",
+            r"5\.00.*?(\d+)",
+        ],
+
+        "passing_rate": [
+            r"PASSING\s*RATE.*?([0-9]+(?:\.[0-9]+)?)",
+            r"PASS\s*RATE.*?([0-9]+(?:\.[0-9]+)?)",
+        ],
+
+    }
+
+    for field, field_patterns in patterns.items():
+
+        for pattern in field_patterns:
+
+            match = re.search(
+                pattern,
+                upper
+            )
+
+            if match:
+
+                value = number(
+                    match.group(1)
+                )
+
+                if value is not None:
+
+                    result[field] = value
+
+                    break
+
+    # ========================================================
+    # DISTRICT
+    # ========================================================
+
+    district_patterns = [
+
+        r"DISTRICT\s*[:\-]\s*([A-Z .']+)",
+
+        r"DISTRICT\s+([A-Z .']+)",
+
+    ]
+
+    for pattern in district_patterns:
+
+        match = re.search(
+            pattern,
+            upper
+        )
+
+        if match:
+
+            value = clean_text(
+                match.group(1)
+            )
+
+            if value:
+
+                result["district"] = (
+                    value.title()
+                )
+
+                break
+
+    # ========================================================
+    # THANA
+    # ========================================================
+
+    thana_patterns = [
+
+        r"THANA\s*[:\-]\s*([A-Z .']+)",
+
+        r"UPAZILA\s*[:\-]\s*([A-Z .']+)",
+
+        r"THANA\s+([A-Z .']+)",
+
+    ]
+
+    for pattern in thana_patterns:
+
+        match = re.search(
+            pattern,
+            upper
+        )
+
+        if match:
+
+            value = clean_text(
+                match.group(1)
+            )
+
+            if value:
+
+                result["thana"] = (
+                    value.title()
+                )
+
+                break
+
+    # ========================================================
+    # PASSING RATE CALCULATION
+    # ========================================================
+
+    appeared = number(
+        result["appeared"]
+    )
+
+    passed = number(
+        result["passed"]
+    )
+
+    if (
+        appeared
+        and
+        appeared > 0
+        and
+        passed is not None
+    ):
+
+        result["passing_rate"] = round(
+            passed /
+            appeared *
+            100,
+            2
+        )
 
     return result
 
@@ -1094,7 +710,7 @@ def collect_institution(
 
 def main():
 
-    start_time = time.time()
+    start = time.time()
 
     print()
     print(
@@ -1106,20 +722,14 @@ def main():
     )
 
     print(
-        "=" * 70
-    )
-
-    print(
         "TEST MODE:",
         TEST_MODE
     )
 
-    if TEST_MODE:
-
-        print(
-            "TEST EIIN:",
-            TEST_EIIN
-        )
+    print(
+        "TEST EIIN:",
+        TEST_EIIN
+    )
 
     print(
         "MIN_DELAY:",
@@ -1135,127 +745,52 @@ def main():
         "=" * 70
     )
 
+    # --------------------------------------------------------
+    # MASTER
+    # --------------------------------------------------------
 
-    # ========================================================
-    # MASTER DATA
-    # ========================================================
-
-    try:
-
-        html = download_master_page()
-
-        institutions = parse_master_data(
-            html
-        )
-
-    except Exception as error:
-
-        print()
-        print(
-            "MASTER COLLECTION ERROR:",
-            error
-        )
-
-        return
-
-
-    print()
-    print(
-        "Institutions found:",
-        len(institutions)
-    )
-
-
-    if not institutions:
-
-        print(
-            "No institutions found."
-        )
-
-        return
-
-
-    save_master(
-        institutions
-    )
-
-
-    # ========================================================
-    # TEST FILTER
-    # ========================================================
+    institutions = get_master()
 
     if TEST_MODE:
 
-        selected = [
+        institutions = [
 
             item
-
             for item in institutions
 
-            if str(
-                item["eiin"]
-            ) == str(
-                TEST_EIIN
-            )
+            if item["eiin"] ==
+            TEST_EIIN
 
         ]
 
-        if not selected:
+    if not institutions:
 
-            print(
-                "TEST EIIN not found:",
-                TEST_EIIN
-            )
+        raise RuntimeError(
+            "No institution selected."
+        )
 
-            return
-
-        institutions = selected
-
-
-    # ========================================================
+    # --------------------------------------------------------
     # SSC FORM
-    # ========================================================
+    # --------------------------------------------------------
 
-    try:
-
-        (
-            soup,
-            form,
-            result_url
-        ) = open_ssc_page()
-
-        base_form_data = (
-            get_base_form_data(
-                form
-            )
-        )
-
-    except Exception as error:
-
-        print()
-        print(
-            "SSC FORM ERROR:",
-            error
-        )
-
-        return
-
-
-    print()
-    print(
-        "Base form fields:",
-        base_form_data
-    )
-
-
-    # ========================================================
-    # COLLECTION
-    # ========================================================
+    (
+        action_url,
+        method,
+        base_data,
+        referer
+    ) = open_ssc_form()
 
     results = []
 
     failed = []
 
+    # --------------------------------------------------------
+    # COLLECTION
+    # --------------------------------------------------------
+
+    total = len(
+        institutions
+    )
 
     for index, institution in enumerate(
         institutions,
@@ -1264,38 +799,91 @@ def main():
 
         print()
         print(
-            f"[{index}/{len(institutions)}]"
+            "-" * 70
+        )
+
+        print(
+            f"[{index}/{total}]"
+        )
+
+        print(
+            "EIIN:",
+            institution["eiin"]
+        )
+
+        print(
+            "Institution:",
+            institution[
+                "institution_name"
+            ]
+        )
+
+        # ----------------------------------------------------
+        # REQUEST
+        # ----------------------------------------------------
+
+        data = dict(
+            base_data
+        )
+
+        # IMPORTANT:
+        # Institution-wise SSC page uses EIIN.
+
+        data["eiin"] = (
+            institution["eiin"]
+        )
+
+        # Keep roll empty if the form
+        # contains it.
+
+        if "roll" in data:
+
+            data["roll"] = ""
+
+        print(
+            "REQUEST START:",
+            institution["eiin"]
         )
 
         try:
 
-            result = collect_institution(
+            if method == "get":
 
-                institution,
+                response = session.get(
+                    action_url,
+                    params=data,
+                    headers={
+                        "Referer":
+                            referer
+                    },
+                    timeout=TIMEOUT
+                )
 
-                base_form_data,
+            else:
 
-                result_url
-
-            )
-
-            results.append(
-                result
-            )
+                response = session.post(
+                    action_url,
+                    data=data,
+                    headers={
+                        "Referer":
+                            referer,
+                        "Origin":
+                            "https://sresult.bise-ctg.gov.bd",
+                    },
+                    timeout=TIMEOUT
+                )
 
         except Exception as error:
 
             print(
-                "ERROR:",
+                "REQUEST ERROR:",
                 error
             )
 
             failed.append({
 
                 "eiin":
-                    institution[
-                        "eiin"
-                    ],
+                    institution["eiin"],
 
                 "institution_name":
                     institution[
@@ -1307,47 +895,97 @@ def main():
 
             })
 
+            continue
+
+        print(
+            "REQUEST DONE:",
+            institution["eiin"],
+            "| HTTP",
+            response.status_code
+        )
 
         # ----------------------------------------------------
-        # CHECKPOINT
+        # HTTP
         # ----------------------------------------------------
 
-        if (
-            len(results) %
-            SAVE_EVERY == 0
-            and results
-        ):
+        if response.status_code >= 400:
 
-            save_json(
-                OUTPUT_FILE,
-                {
-                    "metadata": {
+            failed.append({
 
-                        "year":
-                            YEAR,
+                "eiin":
+                    institution["eiin"],
 
-                        "board":
-                            BOARD,
+                "institution_name":
+                    institution[
+                        "institution_name"
+                    ],
 
-                        "total":
-                            len(results),
+                "error":
+                    f"HTTP {response.status_code}"
 
-                    },
+            })
 
-                    "institutions":
-                        results
-                }
+            continue
+
+        # ----------------------------------------------------
+        # PARSE
+        # ----------------------------------------------------
+
+        print(
+            "PARSING RESULT..."
+        )
+
+        try:
+
+            result = parse_institution_result(
+                response.text,
+                institution
             )
 
-            save_json(
-                FAILED_FILE,
-                failed
-            )
+        except Exception as error:
 
             print(
-                "Checkpoint saved."
+                "PARSING ERROR:",
+                error
             )
 
+            failed.append({
+
+                "eiin":
+                    institution["eiin"],
+
+                "institution_name":
+                    institution[
+                        "institution_name"
+                    ],
+
+                "error":
+                    str(error)
+
+            })
+
+            continue
+
+        # ----------------------------------------------------
+        # OUTPUT
+        # ----------------------------------------------------
+
+        print()
+        print(
+            "PARSED INSTITUTION DATA:"
+        )
+
+        print(
+            json.dumps(
+                result,
+                ensure_ascii=False,
+                indent=2
+            )
+        )
+
+        results.append(
+            result
+        )
 
         time.sleep(
             random.uniform(
@@ -1356,58 +994,42 @@ def main():
             )
         )
 
+    # --------------------------------------------------------
+    # SAVE
+    # --------------------------------------------------------
 
-    # ========================================================
-    # FINAL SAVE
-    # ========================================================
-
-    final_data = {
-
-        "metadata": {
-
-            "year":
-                YEAR,
-
-            "board":
-                BOARD,
-
-            "total_institutions":
-                len(results),
-
-            "source":
-                MASTER_URL,
-
-            "created":
-                time.strftime(
-                    "%Y-%m-%d %H:%M:%S"
-                ),
-
-        },
-
-        "institutions":
-            results
-
-    }
-
-
-    save_json(
+    with open(
         OUTPUT_FILE,
-        final_data
-    )
+        "w",
+        encoding="utf-8"
+    ) as file:
 
-    save_json(
+        json.dump(
+            results,
+            file,
+            ensure_ascii=False,
+            indent=2
+        )
+
+    with open(
         FAILED_FILE,
-        failed
-    )
+        "w",
+        encoding="utf-8"
+    ) as file:
 
+        json.dump(
+            failed,
+            file,
+            ensure_ascii=False,
+            indent=2
+        )
 
-    # ========================================================
-    # SUMMARY
-    # ========================================================
+    # --------------------------------------------------------
+    # FINAL
+    # --------------------------------------------------------
 
     elapsed = round(
-        time.time() -
-        start_time,
+        time.time() - start,
         2
     )
 
@@ -1417,7 +1039,7 @@ def main():
     )
 
     print(
-        "INSTITUTION COLLECTION COMPLETE"
+        "INSTITUTION TEST COMPLETE"
     )
 
     print(
@@ -1425,7 +1047,12 @@ def main():
     )
 
     print(
-        "Institutions collected:",
+        "Institutions processed:",
+        len(institutions)
+    )
+
+    print(
+        "Successful:",
         len(results)
     )
 
