@@ -82,6 +82,12 @@ MIN_DELAY = 0.1
 
 MAX_DELAY = 0.2
 
+print("========================================", flush=True)
+print("SSC TEST.PY NEW VERSION RUNNING", flush=True)
+print("MIN_DELAY:", MIN_DELAY, flush=True)
+print("MAX_DELAY:", MAX_DELAY, flush=True)
+print("========================================", flush=True)
+
 REQUEST_TIMEOUT = (
     5,
     15
