@@ -1,9 +1,20 @@
-<!DOCTYPE html><html lang="en">
-<head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Institution Ranking — CTGBoardRanking</title><meta name="description"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Institution Ranking — CTGBoardRanking</title>
+
+<meta name="description"
 content="SSC 2026 Chattogram Board Institution Ranking">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script><style>
+<!-- PDF LIBRARIES -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
 
 :root{
   --bg:#f5f5f7;
@@ -577,34 +588,37 @@ button{
 
 
 /* =========================================================
-   PDF TEMPORARY RENDER
+   PDF RENDER AREA
 ========================================================= */
 
-#pdfSinglePage{
-  position:fixed;
+#pdfRenderArea{
+  position:absolute;
   left:-10000px;
   top:0;
   width:794px;
-  height:1123px;
   background:#ffffff;
   z-index:-1;
   pointer-events:none;
 }
 
-
-/* =========================================================
-   PDF PAGE
-========================================================= */
-
 .pdf-page{
   width:794px;
   height:1123px;
+  min-height:1123px;
+  max-height:1123px;
   background:#ffffff;
   color:#111113;
   padding:38px 38px 35px;
   position:relative;
   overflow:hidden;
   font-family:Arial,Helvetica,sans-serif;
+  page-break-after:always;
+  break-after:page;
+}
+
+.pdf-page:last-child{
+  page-break-after:auto;
+  break-after:auto;
 }
 
 .pdf-header{
@@ -662,6 +676,19 @@ button{
   table-layout:fixed;
   margin-top:13px;
   font-size:6.5px;
+}
+
+.pdf-table thead{
+  display:table-header-group;
+}
+
+.pdf-table tbody{
+  display:table-row-group;
+}
+
+.pdf-table tr{
+  page-break-inside:avoid;
+  break-inside:avoid;
 }
 
 .pdf-table th{
@@ -723,137 +750,291 @@ button{
   letter-spacing:1.1px;
 }
 
-</style></head><body><div class="background-glow glow-one"></div>
-<div class="background-glow glow-two"></div><div class="page"><header class="topbar">  <a href="index.html" class="brand"><div class="brand-icon">
-  CTG
-</div>
 
-<div>
-  <strong>CTGBoardRanking</strong>
-  <small>SSC 2026 · Chattogram Board</small>
-</div>
+/* =========================================================
+   PDF PROGRESS
+========================================================= */
 
-  </a><button
-id="themeToggle"
-class="theme-toggle"
-type="button">
-◐
-</button>
+.pdf-progress{
+  position:fixed;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  z-index:9999999;
+  width:min(330px,calc(100% - 40px));
+  padding:22px;
+  border-radius:20px;
+  background:rgba(28,28,30,.96);
+  color:#fff;
+  box-shadow:0 25px 80px rgba(0,0,0,.35);
+  text-align:center;
+  display:none;
+}
 
-</header><section class="hero">  <div class="eyebrow">
+.pdf-progress strong{
+  display:block;
+  font-size:14px;
+}
+
+.pdf-progress span{
+  display:block;
+  margin-top:7px;
+  font-size:11px;
+  color:#b8b8bd;
+}
+
+.pdf-progress-bar{
+  width:100%;
+  height:6px;
+  margin-top:16px;
+  border-radius:999px;
+  background:#3a3a3c;
+  overflow:hidden;
+}
+
+.pdf-progress-fill{
+  width:0%;
+  height:100%;
+  background:#2997ff;
+  border-radius:999px;
+  transition:width:.2s ease;
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="background-glow glow-one"></div>
+<div class="background-glow glow-two"></div>
+
+
+<div class="page">
+
+<header class="topbar">
+
+  <a href="index.html" class="brand">
+
+    <div class="brand-icon">
+      CTG
+    </div>
+
+    <div>
+      <strong>CTGBoardRanking</strong>
+      <small>SSC 2026 · Chattogram Board</small>
+    </div>
+
+  </a>
+
+  <button
+    id="themeToggle"
+    class="theme-toggle"
+    type="button">
+    ◐
+  </button>
+
+</header>
+
+
+<section class="hero">
+
+  <div class="eyebrow">
     <span class="status-dot"></span>
     SSC 2026 · Chattogram Board
-  </div>  <h1>
-    Institution
-    <span>Ranking.</span>
-  </h1>  <p>
-    All Chattogram Board SSC 2026 institutions,
-    ranked by total number of GPA-5 results.
-  </p></section><div class="controls">  <div class="control-left"><div class="stat">
-  TOTAL
-  <strong id="totalCount">0</strong>
-</div>
-
-<div class="stat">
-  YEAR
-  <strong>2026</strong>
-</div>
-
-<div class="stat">
-  SORT
-  <strong>GPA-5</strong>
-</div>
-
-  </div><button
-id="pdfBtn"
-class="pdf-btn"
-type="button">
-
-↓ Download PDF
-
-  </button></div><section
-  id="rankingCard"
-  class="ranking-card">  <div class="card-header"><div class="card-title">
-
-  <div class="mini-logo">
-    CTG
   </div>
 
-  <div>
+  <h1>
+    Institution
+    <span>Ranking.</span>
+  </h1>
 
-    <strong>
-      Institution Ranking
-    </strong>
+  <p>
+    All Chattogram Board SSC 2026 institutions,
+    ranked by total number of GPA-5 results.
+  </p>
 
-    <span id="rangeText">
-      Loading…
+</section>
+
+
+<div class="controls">
+
+  <div class="control-left">
+
+    <div class="stat">
+      TOTAL
+      <strong id="totalCount">0</strong>
+    </div>
+
+    <div class="stat">
+      YEAR
+      <strong>2026</strong>
+    </div>
+
+    <div class="stat">
+      SORT
+      <strong>GPA-5</strong>
+    </div>
+
+  </div>
+
+  <button
+    id="pdfBtn"
+    class="pdf-btn"
+    type="button">
+
+    ↓ Download PDF
+
+  </button>
+
+</div>
+
+
+<section
+  id="rankingCard"
+  class="ranking-card">
+
+  <div class="card-header">
+
+    <div class="card-title">
+
+      <div class="mini-logo">
+        CTG
+      </div>
+
+      <div>
+
+        <strong>
+          Institution Ranking
+        </strong>
+
+        <span id="rangeText">
+          Loading…
+        </span>
+
+      </div>
+
+    </div>
+
+    <div class="unofficial">
+      UNOFFICIAL
+    </div>
+
+  </div>
+
+
+  <div
+    id="errorBox"
+    class="error hidden">
+  </div>
+
+
+  <div class="table-wrap">
+
+    <table class="ranking-table">
+
+      <thead>
+
+        <tr>
+
+          <th>RANK</th>
+          <th>INSTITUTION</th>
+          <th>EIIN</th>
+          <th>DISTRICT</th>
+          <th>THANA</th>
+          <th>APPEARED</th>
+          <th>PASSED</th>
+          <th>PASSING RATE</th>
+          <th>GPA-5</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody id="rankingBody">
+
+        <tr>
+
+          <td
+            colspan="9"
+            class="loading">
+
+            Loading institution ranking…
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+
+  <div
+    id="pagination"
+    class="pagination">
+  </div>
+
+
+  <div class="card-footer">
+
+    <span>
+      Ranking based on total GPA-5
+    </span>
+
+    <span>
+      CTGBoardRanking · SSC 2026
     </span>
 
   </div>
 
-</div>
+</section>
 
-<div class="unofficial">
-  UNOFFICIAL
-</div>
 
-  </div>  <div
-    id="errorBox"
-    class="error hidden">
-  </div>  <div class="table-wrap"><table class="ranking-table">
+<footer class="site-footer">
 
-  <thead>
-
-    <tr>
-
-      <th>RANK</th>
-      <th>INSTITUTION</th>
-      <th>EIIN</th>
-      <th>DISTRICT</th>
-      <th>THANA</th>
-      <th>APPEARED</th>
-      <th>PASSED</th>
-      <th>PASSING RATE</th>
-      <th>GPA-5</th>
-
-    </tr>
-
-  </thead>
-
-  <tbody id="rankingBody">
-
-    <tr>
-
-      <td
-        colspan="9"
-        class="loading">
-
-        Loading institution ranking…
-
-      </td>
-
-    </tr>
-
-  </tbody>
-
-</table>
-
-  </div>  <div
-    id="pagination"
-    class="pagination">
-  </div>  <div class="card-footer"><span>
-  Ranking based on total GPA-5
-</span>
-
-<span>
-  CTGBoardRanking · SSC 2026
-</span>
-
-  </div></section><footer class="site-footer">  <div>
+  <div>
     © 2026 <strong>CTGBoardRanking</strong>
-  </div>  <div>
+  </div>
+
+  <div>
     Independent educational data platform
-  </div></footer></div><!-- PDF ONLY TEMPORARY SINGLE PAGE --><div id="pdfSinglePage"></div><script>
+  </div>
+
+</footer>
+
+</div>
+
+
+<!-- =====================================================
+     PDF RENDER AREA
+===================================================== -->
+
+<div id="pdfRenderArea"></div>
+
+<div id="pdfProgress" class="pdf-progress">
+
+  <strong>
+    Creating PDF…
+  </strong>
+
+  <span id="pdfProgressText">
+    Preparing pages…
+  </span>
+
+  <div class="pdf-progress-bar">
+    <div
+      id="pdfProgressFill"
+      class="pdf-progress-fill">
+    </div>
+  </div>
+
+</div>
+
+
+<script>
 
 /* =========================================================
    THEME
@@ -907,6 +1088,15 @@ const totalCount =
 
 const rangeText =
   document.getElementById("rangeText");
+
+const pdfProgress =
+  document.getElementById("pdfProgress");
+
+const pdfProgressText =
+  document.getElementById("pdfProgressText");
+
+const pdfProgressFill =
+  document.getElementById("pdfProgressFill");
 
 
 /* =========================================================
@@ -1557,10 +1747,24 @@ pdfBtn.addEventListener(
     }
 
 
+    if(
+      typeof html2canvas === "undefined" ||
+      typeof window.jspdf === "undefined"
+    ){
+
+      alert(
+        "PDF library load হয়নি। Internet connection check করে আবার চেষ্টা করুন।"
+      );
+
+      return;
+
+    }
+
+
     pdfBtn.disabled = true;
 
     pdfBtn.textContent =
-      "Preparing PDF…";
+      "Creating PDF…";
 
 
     try{
@@ -1582,8 +1786,7 @@ pdfBtn.addEventListener(
     }
     finally{
 
-      pdfBtn.disabled =
-        false;
+      pdfBtn.disabled = false;
 
       pdfBtn.textContent =
         "↓ Download PDF";
@@ -1616,7 +1819,7 @@ function getGeneratedDateTime(){
 
 
 /* =========================================================
-   CREATE PDF ROW
+   PDF ROW
 ========================================================= */
 
 function createPDFRow(item,index){
@@ -1689,19 +1892,20 @@ function createPDFRow(item,index){
 
 
 /* =========================================================
-   CREATE ONE PDF PAGE
+   CREATE SINGLE PDF PAGE
 ========================================================= */
 
-function createPDFPage(
-  pageData,
-  pageNumber,
-  totalPDFPages,
-  generated,
-  start,
-  end
-){
+function createPDFPage(pageData,start,page,totalPages,generated){
+
+  const pageElement =
+    document.createElement("div");
+
+  pageElement.className =
+    "pdf-page";
+
 
   let rows = "";
+
 
   pageData.forEach(
     function(item,index){
@@ -1716,14 +1920,11 @@ function createPDFPage(
   );
 
 
-  const page =
-    document.createElement("div");
-
-  page.className =
-    "pdf-page";
+  const end =
+    start + pageData.length;
 
 
-  page.innerHTML = `
+  pageElement.innerHTML = `
 
     <div class="pdf-header">
 
@@ -1753,7 +1954,7 @@ function createPDFPage(
       </div>
 
       <div class="pdf-badge">
-        PAGE ${pageNumber} OF ${totalPDFPages}
+        PAGE ${page + 1} OF ${totalPages}
       </div>
 
     </div>
@@ -1789,21 +1990,13 @@ function createPDFPage(
         <tr>
 
           <th>RANK</th>
-
           <th>INSTITUTION</th>
-
           <th>EIIN</th>
-
           <th>DISTRICT</th>
-
           <th>THANA</th>
-
           <th>APPEARED</th>
-
           <th>PASSED</th>
-
           <th>PASS %</th>
-
           <th>GPA-5</th>
 
         </tr>
@@ -1823,16 +2016,12 @@ function createPDFPage(
     <div class="pdf-page-footer">
 
       <div class="pdf-page-number">
-
         CTGBoardRanking · SSC 2026
         · Institutions ${start + 1}–${end}
-
       </div>
 
       <div class="pdf-unofficial">
-
         Unofficial Notice
-
       </div>
 
     </div>
@@ -1840,42 +2029,21 @@ function createPDFPage(
   `;
 
 
-  return page;
+  return pageElement;
 
 }
 
 
 /* =========================================================
-   PDF GENERATOR
-   FIXED VERSION
+   PDF GENERATOR — MOBILE SAFE
 ========================================================= */
 
 async function generateFullPDF(){
 
   const renderArea =
     document.getElementById(
-      "pdfSinglePage"
+      "pdfRenderArea"
     );
-
-
-  /*
-    IMPORTANT:
-
-    We do NOT render the complete PDF
-    as one giant HTML document.
-
-    Each 50-row page is rendered separately
-    into its own canvas.
-
-    Then every canvas is inserted into
-    ONE jsPDF document.
-
-    This completely avoids the previous
-    blank-white PDF problem.
-  */
-
-
-  renderArea.innerHTML = "";
 
 
   const generated =
@@ -1886,39 +2054,68 @@ async function generateFullPDF(){
     allInstitutions.length;
 
 
-  /*
-    PDF = 50 institutions per page.
-  */
+  const ROWS_PER_PAGE = 50;
+
 
   const totalPDFPages =
     Math.ceil(
-      totalInstitutions / 50
+      totalInstitutions /
+      ROWS_PER_PAGE
     );
 
 
+  if(!totalPDFPages){
+
+    throw new Error(
+      "No institution data available."
+    );
+
+  }
+
+
   /*
-    Create ONE PDF document.
+    jsPDF
   */
 
-  const { jsPDF } =
-    window.jspdf
-      ? window.jspdf
-      : {};
+  const {
+    jsPDF
+  } = window.jspdf;
+
+
+  const pdf =
+    new jsPDF({
+
+      orientation:"portrait",
+
+      unit:"mm",
+
+      format:"a4",
+
+      compress:true
+
+    });
 
 
   /*
-    html2pdf bundle already contains jsPDF,
-    but depending on CDN build it may expose
-    jsPDF differently.
-
-    Therefore create the document using
-    the html2pdf worker and process each
-    page separately.
+    Show progress
   */
 
+  pdfProgress.style.display =
+    "block";
 
-  let pdfDocument = null;
+  pdfProgressFill.style.width =
+    "0%";
 
+  pdfProgressText.textContent =
+    `Preparing ${totalPDFPages} pages…`;
+
+
+  /*
+    Generate one page at a time.
+
+    This is the important fix.
+    We NEVER create one giant canvas.
+  */
 
   for(
     let page = 0;
@@ -1927,12 +2124,13 @@ async function generateFullPDF(){
   ){
 
     const start =
-      page * 50;
+      page *
+      ROWS_PER_PAGE;
 
 
     const end =
       Math.min(
-        start + 50,
+        start + ROWS_PER_PAGE,
         totalInstitutions
       );
 
@@ -1945,7 +2143,7 @@ async function generateFullPDF(){
 
 
     /*
-      Create only ONE page in DOM.
+      Clear previous page
     */
 
     renderArea.innerHTML = "";
@@ -1954,11 +2152,10 @@ async function generateFullPDF(){
     const pageElement =
       createPDFPage(
         pageData,
-        page + 1,
-        totalPDFPages,
-        generated,
         start,
-        end
+        page,
+        totalPDFPages,
+        generated
       );
 
 
@@ -1968,7 +2165,7 @@ async function generateFullPDF(){
 
 
     /*
-      Make it visible to html2canvas.
+      Make render area visible to html2canvas
     */
 
     renderArea.style.position =
@@ -1992,15 +2189,15 @@ async function generateFullPDF(){
     renderArea.style.zIndex =
       "999999";
 
-    renderArea.style.visibility =
-      "visible";
-
     renderArea.style.opacity =
       "1";
 
+    renderArea.style.visibility =
+      "visible";
+
 
     /*
-      Wait for browser paint.
+      Wait for browser paint
     */
 
     await new Promise(
@@ -2015,84 +2212,63 @@ async function generateFullPDF(){
 
 
     /*
-      Convert ONLY this page.
-
-      html2canvas returns a real canvas.
+      Render ONLY this page
     */
 
     const canvas =
       await html2canvas(
         pageElement,
         {
-          scale:2,
+
+          scale:1.5,
+
           useCORS:true,
-          allowTaint:true,
+
+          allowTaint:false,
+
           backgroundColor:"#ffffff",
+
           logging:false,
-          letterRendering:true,
+
+          imageTimeout:10000,
+
           width:794,
+
           height:1123,
+
           windowWidth:794,
+
           windowHeight:1123,
+
           scrollX:0,
+
           scrollY:0
+
         }
       );
 
 
     /*
-      JPEG image from canvas.
+      Convert canvas to JPEG.
+
+      JPEG keeps the PDF file size
+      much smaller than PNG.
     */
 
     const imageData =
       canvas.toDataURL(
         "image/jpeg",
-        0.98
+        0.94
       );
 
 
     /*
-      Create the jsPDF document
-      using html2pdf's internal jsPDF.
-    */
-
-    if(!pdfDocument){
-
-      const worker =
-        html2pdf()
-          .set({
-
-            margin:0,
-
-            image:{
-              type:"jpeg",
-              quality:0.98
-            },
-
-            jsPDF:{
-              unit:"mm",
-              format:"a4",
-              orientation:"portrait",
-              compress:true
-            }
-
-          });
-
-
-      pdfDocument =
-        await worker.get("pdf");
-
-    }
-
-
-    /*
-      Every page after the first gets
-      a new A4 page.
+      Add page to PDF
     */
 
     if(page > 0){
 
-      pdfDocument.addPage(
+      pdf.addPage(
         "a4",
         "portrait"
       );
@@ -2100,56 +2276,122 @@ async function generateFullPDF(){
     }
 
 
-    /*
-      A4 dimensions in mm.
-    */
-
-    const pageWidth =
-      pdfDocument.internal.pageSize.getWidth();
-
-    const pageHeight =
-      pdfDocument.internal.pageSize.getHeight();
-
-
-    /*
-      Put the rendered page exactly
-      inside the A4 page.
-    */
-
-    pdfDocument.addImage(
+    pdf.addImage(
       imageData,
       "JPEG",
       0,
       0,
-      pageWidth,
-      pageHeight,
+      210,
+      297,
       undefined,
       "FAST"
+    );
+
+
+    /*
+      Release canvas memory
+    */
+
+    canvas.width = 1;
+    canvas.height = 1;
+
+
+    /*
+      Remove rendered page
+    */
+
+    renderArea.innerHTML = "";
+
+
+    /*
+      Update progress
+    */
+
+    const percent =
+      Math.round(
+        ((page + 1) /
+        totalPDFPages) *
+        100
+      );
+
+
+    pdfProgressFill.style.width =
+      percent + "%";
+
+
+    pdfProgressText.textContent =
+      `Creating page ${page + 1} of ${totalPDFPages}…`;
+
+
+    /*
+      Give mobile browser a small
+      breathing interval between pages.
+    */
+
+    await new Promise(
+      resolve =>
+        setTimeout(
+          resolve,
+          20
+        )
     );
 
   }
 
 
   /*
-    Download the final PDF.
+    Hide render area
   */
-
-  pdfDocument.save(
-    "CTGBoardRanking_Institution_Ranking_2026.pdf"
-  );
-
-
-  /*
-    Cleanup.
-  */
-
-  renderArea.innerHTML = "";
 
   renderArea.style.display =
     "none";
 
   renderArea.style.visibility =
     "hidden";
+
+  renderArea.innerHTML = "";
+
+
+  /*
+    Update progress
+  */
+
+  pdfProgressText.textContent =
+    "Finalizing PDF…";
+
+  pdfProgressFill.style.width =
+    "100%";
+
+
+  /*
+    Small delay so user sees
+    finalizing state.
+  */
+
+  await new Promise(
+    resolve =>
+      setTimeout(
+        resolve,
+        200
+      )
+  );
+
+
+  /*
+    SAVE
+  */
+
+  pdf.save(
+    "CTGBoardRanking_Institution_Ranking_2026.pdf"
+  );
+
+
+  /*
+    Hide progress
+  */
+
+  pdfProgress.style.display =
+    "none";
 
 }
 
@@ -2160,5 +2402,7 @@ async function generateFullPDF(){
 
 loadInstitutionRanking();
 
-</script></body>
+</script>
+
+</body>
 </html>
