@@ -1000,6 +1000,8 @@ footer,
 
 </style>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
 
@@ -1640,15 +1642,23 @@ Top Humanities students
 
         <div class="home-result-actions">
 
-            <a
-                href="result.html"
-                id="homeFullResultLink"
-                class="secondary-btn"
-            >
-                Open Full Result →
-            </a>
+    <a
+        href="result.html"
+        id="homeFullResultLink"
+        class="secondary-btn"
+    >
+        Open Full Result →
+    </a>
 
-        </div>
+    <button
+        type="button"
+        id="homeDownloadPdfBtn"
+        class="primary-btn"
+    >
+        Download PDF ↓
+    </button>
+
+</div>
 
     </div>
 
