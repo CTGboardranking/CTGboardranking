@@ -3655,7 +3655,365 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
-      
+
+/* =====================================================
+   HOMEPAGE INDIVIDUAL RESULT SEARCH
+===================================================== */
+
+(function () {
+
+    const form =
+        document.getElementById("homeResultForm");
+
+    const input =
+        document.getElementById("homeRollInput");
+
+    const button =
+        document.getElementById("homeResultBtn");
+
+    const buttonText =
+        document.getElementById("homeResultBtnText");
+
+    const message =
+        document.getElementById("homeResultMessage");
+
+    const resultBox =
+        document.getElementById("homeResultBox");
+
+    const nameElement =
+        document.getElementById("homeResultName");
+
+    const rollElement =
+        document.getElementById("homeResultRoll");
+
+    const gpaElement =
+        document.getElementById("homeResultGPA");
+
+    const totalElement =
+        document.getElementById("homeResultTotal");
+
+    const subjectList =
+        document.getElementById("homeSubjectList");
+
+    const fullResultLink =
+        document.getElementById("homeFullResultLink");
+
+
+    if (!form || !input) {
+        return;
+    }
+
+
+    form.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            const roll =
+                input.value.trim();
+
+
+            message.textContent = "";
+            message.className =
+                "home-result-message";
+
+
+            resultBox.hidden = true;
+
+
+            if (!/^\d+$/.test(roll)) {
+
+                message.textContent =
+                    "Please enter a valid roll number.";
+
+                message.classList.add("error");
+
+                input.focus();
+
+                return;
+
+            }
+
+
+            button.disabled = true;
+
+            buttonText.textContent =
+                "Searching...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/result?roll=" +
+                        encodeURIComponent(roll),
+                        {
+                            method: "GET",
+                            cache: "no-store"
+                        }
+                    );
+
+
+                let data = null;
+
+
+                try {
+
+                    data =
+                        await response.json();
+
+                } catch (_) {
+
+                    data = null;
+
+                }
+
+
+                if (
+                    !response.ok ||
+                    !data ||
+                    data.error
+                ) {
+
+                    throw new Error(
+                        data?.error ||
+                        "Result not found."
+                    );
+
+                }
+
+
+                renderHomeResult(
+                    data,
+                    roll
+                );
+
+
+                message.textContent =
+                    "Result found successfully.";
+
+                message.classList.add(
+                    "success"
+                );
+
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "INDIVIDUAL RESULT ERROR:",
+                    error
+                );
+
+
+                message.textContent =
+                    error.message ||
+                    "Result could not be found.";
+
+                message.classList.add(
+                    "error"
+                );
+
+            }
+
+            finally {
+
+                button.disabled = false;
+
+                buttonText.textContent =
+                    "View Result →";
+
+            }
+
+        }
+    );
+
+
+    function renderHomeResult(
+        data,
+        searchedRoll
+    ) {
+
+        const student =
+            data.result ||
+            data.data ||
+            data.student ||
+            data;
+
+
+        const name =
+            student.name ||
+            "Unknown Student";
+
+
+        const roll =
+            student.roll ||
+            searchedRoll;
+
+
+        const gpa =
+            student.gpa;
+
+
+        const totalScore =
+            student.total_score ??
+            student.totalScore;
+
+
+        const subjects =
+            Array.isArray(student.subjects)
+                ? student.subjects
+                : [];
+
+
+        nameElement.textContent =
+            name;
+
+
+        rollElement.textContent =
+            "Roll: " + roll;
+
+
+        gpaElement.textContent =
+            gpa !== null &&
+            gpa !== undefined &&
+            gpa !== ""
+                ? Number(gpa).toFixed(2)
+                : "—";
+
+
+        totalElement.textContent =
+            totalScore !== null &&
+            totalScore !== undefined
+                ? Number(totalScore)
+                    .toLocaleString("en-US")
+                : "—";
+
+
+        subjectList.innerHTML = "";
+
+
+        if (!subjects.length) {
+
+            subjectList.innerHTML =
+                `<div class="home-subject-row">
+                    <div class="home-subject-name">
+                        <strong>
+                            Subject data unavailable
+                        </strong>
+                    </div>
+                </div>`;
+
+        }
+
+        else {
+
+            subjects.forEach(
+                function (subject) {
+
+                    const row =
+                        document.createElement(
+                            "div"
+                        );
+
+                    row.className =
+                        "home-subject-row";
+
+
+                    row.innerHTML = `
+
+                        <div class="home-subject-name">
+
+                            <strong>
+                                ${escapeHTML(
+                                    subject.subject ||
+                                    "Subject"
+                                )}
+                            </strong>
+
+                            <span>
+                                ${escapeHTML(
+                                    subject.code ||
+                                    ""
+                                )}
+                            </span>
+
+                        </div>
+
+
+                        <div class="home-subject-mark">
+
+                            <strong>
+                                ${subject.mark ?? "—"}
+                            </strong>
+
+                            <span>
+                                Mark
+                            </span>
+
+                        </div>
+
+
+                        <div class="home-subject-grade">
+
+                            <strong>
+                                ${escapeHTML(
+                                    subject.grade ||
+                                    "—"
+                                )}
+                            </strong>
+
+                            <span>
+                                Grade
+                            </span>
+
+                        </div>
+
+                    `;
+
+
+                    subjectList.appendChild(
+                        row
+                    );
+
+                }
+            );
+
+        }
+
+
+        fullResultLink.href =
+            "result.html?roll=" +
+            encodeURIComponent(roll);
+
+
+        resultBox.hidden = false;
+
+
+        resultBox.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+
+    function escapeHTML(value) {
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+})();
+
 </script>
 
 
