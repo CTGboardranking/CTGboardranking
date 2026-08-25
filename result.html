@@ -15,54 +15,45 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet">
 
-<style>
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-/* =========================================================
-   APPLE DESIGN SYSTEM
-========================================================= */
+<style>
 
 :root{
     --blue:#0071e3;
-    --blue2:#0066cc;
+    --blue-dark:#0066cc;
 
     --bg:#f5f5f7;
-    --card:rgba(255,255,255,.88);
-    --solid:#ffffff;
+    --card:#ffffff;
+    --soft:#f2f2f7;
 
     --text:#1d1d1f;
     --muted:#6e6e73;
 
     --border:rgba(0,0,0,.08);
-    --soft:rgba(0,0,0,.045);
 
     --green:#34c759;
+    --orange:#ff9500;
     --red:#ff3b30;
 
-    --shadow:
-        0 20px 60px rgba(0,0,0,.08);
+    --shadow:0 20px 60px rgba(0,0,0,.08);
 
     --radius:28px;
 }
 
 body.dark{
-    --bg:#000;
-    --card:rgba(28,28,30,.92);
-    --solid:#1c1c1e;
+    --bg:#000000;
+    --card:#1c1c1e;
+    --soft:#2c2c2e;
 
     --text:#f5f5f7;
     --muted:#a1a1a6;
 
     --border:rgba(255,255,255,.10);
-    --soft:rgba(255,255,255,.06);
 
-    --shadow:
-        0 25px 70px rgba(0,0,0,.45);
+    --shadow:0 25px 70px rgba(0,0,0,.45);
 }
-
-
-/* =========================================================
-   GLOBAL
-========================================================= */
 
 *{
     box-sizing:border-box;
@@ -74,22 +65,24 @@ html{
 
 body{
     margin:0;
-    font-family:Inter,-apple-system,BlinkMacSystemFont,
-                "Segoe UI",sans-serif;
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
 
     background:var(--bg);
     color:var(--text);
 
-    transition:
-        background .25s ease,
-        color .25s ease;
+    transition:.25s ease;
 }
 
 button,
 input{
     font:inherit;
 }
-
 
 /* =========================================================
    NAVBAR
@@ -108,16 +101,16 @@ input{
 
     padding:0 22px;
 
-    background:rgba(255,255,255,.75);
+    background:rgba(255,255,255,.78);
 
     border-bottom:1px solid var(--border);
 
-    backdrop-filter:blur(22px);
-    -webkit-backdrop-filter:blur(22px);
+    backdrop-filter:blur(25px);
+    -webkit-backdrop-filter:blur(25px);
 }
 
 body.dark .navbar{
-    background:rgba(0,0,0,.72);
+    background:rgba(0,0,0,.78);
 }
 
 .logo{
@@ -134,8 +127,8 @@ body.dark .navbar{
 }
 
 .logo-mark{
-    width:29px;
-    height:29px;
+    width:30px;
+    height:30px;
 
     display:flex;
     align-items:center;
@@ -144,7 +137,7 @@ body.dark .navbar{
     border-radius:9px;
 
     background:var(--blue);
-    color:white;
+    color:#fff;
 
     font-size:14px;
     font-weight:800;
@@ -152,46 +145,38 @@ body.dark .navbar{
 
 .nav-actions{
     display:flex;
-    align-items:center;
     gap:8px;
 }
 
 .nav-home,
 .theme-btn{
-    border:1px solid var(--border);
-
-    background:var(--soft);
-    color:var(--text);
-
-    text-decoration:none;
-
-    min-width:42px;
     height:40px;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
+    border:1px solid var(--border);
     border-radius:13px;
+
+    background:var(--soft);
+    color:var(--text);
+
+    text-decoration:none;
 
     font-size:12px;
     font-weight:700;
 
     cursor:pointer;
-
-    transition:.2s ease;
 }
 
 .nav-home{
     padding:0 14px;
 }
 
-.nav-home:hover,
-.theme-btn:hover{
-    transform:translateY(-1px);
-    background:var(--card);
+.theme-btn{
+    width:42px;
 }
-
 
 /* =========================================================
    PAGE
@@ -200,14 +185,12 @@ body.dark .navbar{
 .page{
     min-height:calc(100vh - 64px);
 
-    padding:
-        60px 15px
-        90px;
+    padding:55px 15px 80px;
 
     background:
         radial-gradient(
             circle at 50% 0%,
-            rgba(0,113,227,.10),
+            rgba(0,113,227,.11),
             transparent 38%
         );
 }
@@ -217,14 +200,13 @@ body.dark .navbar{
     margin:auto;
 }
 
-
 /* =========================================================
    HERO
 ========================================================= */
 
 .hero{
     text-align:center;
-    margin-bottom:35px;
+    margin-bottom:32px;
 }
 
 .eyebrow{
@@ -240,10 +222,9 @@ body.dark .navbar{
 }
 
 .hero h1{
-    margin:14px 0 14px;
+    margin:14px 0;
 
-    font-size:
-        clamp(40px,8vw,72px);
+    font-size:clamp(40px,8vw,70px);
 
     line-height:.98;
 
@@ -256,6 +237,7 @@ body.dark .navbar{
 
 .hero p{
     max-width:620px;
+
     margin:auto;
 
     color:var(--muted);
@@ -263,7 +245,6 @@ body.dark .navbar{
     font-size:14px;
     line-height:1.7;
 }
-
 
 /* =========================================================
    SEARCH
@@ -278,9 +259,6 @@ body.dark .navbar{
     background:var(--card);
 
     box-shadow:var(--shadow);
-
-    backdrop-filter:blur(25px);
-    -webkit-backdrop-filter:blur(25px);
 }
 
 .search-card h2{
@@ -294,6 +272,7 @@ body.dark .navbar{
     margin:0 0 20px;
 
     color:var(--muted);
+
     font-size:13px;
 }
 
@@ -318,16 +297,13 @@ body.dark .navbar{
     color:var(--text);
 
     font-size:14px;
-
-    transition:.2s ease;
 }
 
 .search-input:focus{
     border-color:var(--blue);
 
     box-shadow:
-        0 0 0 4px
-        rgba(0,113,227,.10);
+        0 0 0 4px rgba(0,113,227,.10);
 }
 
 .search-button{
@@ -339,26 +315,22 @@ body.dark .navbar{
     border-radius:15px;
 
     background:var(--blue);
-    color:#fff;
+    color:white;
 
     font-size:13px;
     font-weight:700;
 
     cursor:pointer;
-
-    transition:.2s ease;
 }
 
 .search-button:hover{
-    background:var(--blue2);
-    transform:translateY(-1px);
+    background:var(--blue-dark);
 }
 
 .search-button:disabled{
     opacity:.6;
     cursor:wait;
 }
-
 
 /* =========================================================
    ERROR
@@ -374,15 +346,33 @@ body.dark .navbar{
     border-radius:14px;
 
     background:rgba(255,59,48,.09);
+
     color:var(--red);
 
     font-size:12px;
     font-weight:600;
 }
 
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading{
+    display:none;
+
+    margin-top:20px;
+
+    padding:25px;
+
+    text-align:center;
+
+    color:var(--muted);
+
+    font-size:12px;
+}
 
 /* =========================================================
-   RESULT AREA
+   RESULT
 ========================================================= */
 
 #resultArea{
@@ -393,37 +383,34 @@ body.dark .navbar{
 .result-card{
     overflow:hidden;
 
-    border:
-        1px solid var(--border);
-
+    border:1px solid var(--border);
     border-radius:32px;
 
-    background:var(--solid);
+    background:var(--card);
 
     box-shadow:var(--shadow);
 }
 
-
 /* =========================================================
-   RESULT TOP
+   RESULT HEADER
 ========================================================= */
 
 .result-top{
     padding:30px;
 
-    border-bottom:
-        1px solid var(--border);
+    border-bottom:1px solid var(--border);
 
     background:
         linear-gradient(
             135deg,
-            rgba(0,113,227,.11),
-            transparent 65%
+            rgba(0,113,227,.12),
+            transparent 70%
         );
 }
 
 .result-top-row{
     display:flex;
+
     align-items:flex-start;
     justify-content:space-between;
 
@@ -431,7 +418,7 @@ body.dark .navbar{
 }
 
 .student-name{
-    margin:7px 0 5px;
+    margin:8px 0 5px;
 
     font-size:30px;
     line-height:1.15;
@@ -445,8 +432,6 @@ body.dark .navbar{
 }
 
 .status{
-    flex-shrink:0;
-
     padding:8px 13px;
 
     border-radius:50px;
@@ -460,20 +445,14 @@ body.dark .navbar{
     letter-spacing:.06em;
 }
 
-body.dark .status{
-    color:#30d158;
-}
-
-
 /* =========================================================
-   INFO GRID
+   INFO
 ========================================================= */
 
 .info-grid{
     display:grid;
 
-    grid-template-columns:
-        repeat(3,1fr);
+    grid-template-columns:repeat(3,1fr);
 
     gap:12px;
 
@@ -504,8 +483,6 @@ body.dark .status{
 .info-value{
     display:block;
 
-    color:var(--text);
-
     font-size:12px;
     font-weight:700;
 
@@ -514,27 +491,21 @@ body.dark .status{
     word-break:break-word;
 }
 
-
 /* =========================================================
-   SCORE GRID
+   SCORE
 ========================================================= */
 
 .score-grid{
     display:grid;
 
-    grid-template-columns:
-        repeat(3,1fr);
+    grid-template-columns:repeat(3,1fr);
 
     gap:12px;
 
-    padding:
-        0 30px 28px;
+    padding:0 30px 28px;
 }
 
 .score{
-    position:relative;
-    overflow:hidden;
-
     padding:22px;
 
     border-radius:21px;
@@ -544,37 +515,15 @@ body.dark .status{
     text-align:center;
 }
 
-.score::after{
-    content:"";
-
-    position:absolute;
-
-    width:90px;
-    height:90px;
-
-    right:-40px;
-    top:-40px;
-
-    border-radius:50%;
-
-    background:
-        rgba(0,113,227,.08);
-}
-
 .score strong{
-    position:relative;
-    z-index:1;
-
     display:block;
 
     font-size:29px;
+
     letter-spacing:-1px;
 }
 
 .score span{
-    position:relative;
-    z-index:1;
-
     display:block;
 
     margin-top:5px;
@@ -588,28 +537,23 @@ body.dark .status{
 }
 
 .score.total{
-    background:
-        rgba(0,113,227,.09);
-}
-
-.score.rank{
-    background:
-        rgba(255,149,0,.09);
+    background:rgba(0,113,227,.09);
 }
 
 .score.gpa{
-    background:
-        rgba(52,199,89,.09);
+    background:rgba(52,199,89,.09);
 }
 
+.score.rank{
+    background:rgba(255,149,0,.09);
+}
 
 /* =========================================================
    SUBJECTS
 ========================================================= */
 
 .subject-section{
-    padding:
-        0 30px 30px;
+    padding:0 30px 30px;
 }
 
 .subject-heading{
@@ -637,8 +581,7 @@ body.dark .status{
 .subject-table{
     overflow:hidden;
 
-    border:
-        1px solid var(--border);
+    border:1px solid var(--border);
 
     border-radius:19px;
 }
@@ -656,8 +599,7 @@ body.dark .status{
 
     align-items:center;
 
-    padding:
-        14px 17px;
+    padding:14px 17px;
 }
 
 .subject-head{
@@ -674,10 +616,7 @@ body.dark .status{
 .subject-row{
     min-height:49px;
 
-    border-top:
-        1px solid var(--border);
-
-    color:var(--text);
+    border-top:1px solid var(--border);
 
     font-size:12px;
 }
@@ -691,7 +630,6 @@ body.dark .status{
     font-weight:800;
 }
 
-
 /* =========================================================
    ACTIONS
 ========================================================= */
@@ -702,21 +640,23 @@ body.dark .status{
 
     gap:10px;
 
-    padding:
-        0 30px 28px;
+    padding:0 30px 28px;
 }
 
 .action-button{
-    min-height:44px;
+    min-height:46px;
 
-    padding:0 17px;
+    padding:0 18px;
 
-    border-radius:14px;
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
 
     border:1px solid var(--border);
+    border-radius:14px;
 
     background:var(--soft);
-
     color:var(--text);
 
     font-size:12px;
@@ -725,27 +665,17 @@ body.dark .status{
     cursor:pointer;
 
     text-decoration:none;
-
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-
-    transition:.2s ease;
-}
-
-.action-button:hover{
-    transform:translateY(-1px);
 }
 
 .download-button{
     border:0;
 
     background:var(--blue);
-    color:#fff;
+    color:white;
 }
 
 .download-button:hover{
-    background:var(--blue2);
+    background:var(--blue-dark);
 }
 
 .download-button:disabled{
@@ -753,14 +683,12 @@ body.dark .status{
     cursor:wait;
 }
 
-
 /* =========================================================
    FOOTNOTE
 ========================================================= */
 
 .footnote{
-    padding:
-        0 30px 30px;
+    padding:0 30px 30px;
 
     color:var(--muted);
 
@@ -773,26 +701,6 @@ body.dark .status{
     color:var(--text);
 }
 
-
-/* =========================================================
-   LOADING
-========================================================= */
-
-.loading{
-    display:none;
-
-    margin-top:20px;
-
-    padding:25px;
-
-    text-align:center;
-
-    color:var(--muted);
-
-    font-size:12px;
-}
-
-
 /* =========================================================
    MOBILE
 ========================================================= */
@@ -804,13 +712,7 @@ body.dark .status{
     }
 
     .page{
-        padding:
-            45px 12px
-            70px;
-    }
-
-    .hero h1{
-        letter-spacing:-3px;
+        padding:45px 12px 70px;
     }
 
     .search-card{
@@ -838,27 +740,18 @@ body.dark .status{
         font-size:24px;
     }
 
-    .status{
-        align-self:flex-start;
-    }
-
     .info-grid{
         grid-template-columns:1fr 1fr;
-
-        padding:
-            20px;
+        padding:20px;
     }
 
     .score-grid{
         grid-template-columns:1fr;
-
-        padding:
-            0 20px 22px;
+        padding:0 20px 22px;
     }
 
     .subject-section{
-        padding:
-            0 20px 25px;
+        padding:0 20px 25px;
     }
 
     .subject-table{
@@ -871,8 +764,7 @@ body.dark .status{
     }
 
     .actions{
-        padding:
-            0 20px 25px;
+        padding:0 20px 25px;
     }
 
     .action-button{
@@ -880,8 +772,7 @@ body.dark .status{
     }
 
     .footnote{
-        padding:
-            0 20px 25px;
+        padding:0 20px 25px;
     }
 }
 
@@ -896,9 +787,8 @@ body.dark .status{
     }
 }
 
-
 /* =========================================================
-   PRINT / SAVE AS PDF
+   PRINT
 ========================================================= */
 
 @media print{
@@ -906,11 +796,6 @@ body.dark .status{
     @page{
         size:A4;
         margin:12mm;
-    }
-
-    *{
-        -webkit-print-color-adjust:exact !important;
-        print-color-adjust:exact !important;
     }
 
     body{
@@ -927,14 +812,8 @@ body.dark .status{
     }
 
     .page{
-        min-height:auto !important;
         padding:0 !important;
         background:#fff !important;
-    }
-
-    .container{
-        width:100% !important;
-        max-width:none !important;
     }
 
     #resultArea{
@@ -943,39 +822,14 @@ body.dark .status{
     }
 
     .result-card{
-        display:block !important;
-
-        width:100% !important;
-
-        border:
-            1px solid #ddd !important;
-
+        border:1px solid #ddd !important;
         border-radius:0 !important;
-
         box-shadow:none !important;
-
         background:#fff !important;
-
-        color:#1d1d1f !important;
     }
 
     .result-top{
         background:#f5f8fc !important;
-        color:#1d1d1f !important;
-    }
-
-    .student-name,
-    .info-value,
-    .score strong,
-    .subject-heading h3,
-    .subject-row{
-        color:#1d1d1f !important;
-    }
-
-    .roll-label,
-    .info-label,
-    .subject-heading span{
-        color:#6e6e73 !important;
     }
 
     .info,
@@ -987,30 +841,9 @@ body.dark .status{
         overflow:visible !important;
     }
 
-    .subject-head,
-    .subject-row{
-        min-width:0 !important;
-    }
-
     .subject-row{
         break-inside:avoid;
         page-break-inside:avoid;
-    }
-
-    .info,
-    .score,
-    .subject-table{
-        break-inside:avoid;
-        page-break-inside:avoid;
-    }
-
-    .footnote{
-        color:#6e6e73 !important;
-    }
-
-    .status{
-        background:#e8f7ef !important;
-        color:#16834b !important;
     }
 }
 
@@ -1033,10 +866,9 @@ body.dark .status{
         </a>
 
         <button
-            type="button"
             id="themeBtn"
             class="theme-btn"
-            aria-label="Toggle dark mode">
+            type="button">
             ◐
         </button>
 
@@ -1048,8 +880,6 @@ body.dark .status{
 <div class="page">
 
 <main class="container">
-
-    <!-- HERO -->
 
     <section class="hero">
 
@@ -1063,27 +893,25 @@ body.dark .status{
         </h1>
 
         <p>
-            Search your roll number to view your complete
-            SSC 2026 result, subject-wise marks, GPA,
-            total score and student rank.
+            Enter your SSC 2026 roll number to view
+            your result, marks, GPA, total score and
+            student rank.
         </p>
 
     </section>
 
 
-    <!-- SEARCH -->
-
     <section class="search-card">
 
-        <h2>
-            Find your result
-        </h2>
+        <h2>Find your result</h2>
 
         <p>
             Enter your SSC 2026 roll number.
         </p>
 
-        <form id="resultSearchForm" class="search-form">
+        <form
+            id="resultSearchForm"
+            class="search-form">
 
             <input
                 id="roll"
@@ -1093,14 +921,15 @@ body.dark .status{
                 autocomplete="off"
                 maxlength="6"
                 placeholder="Enter Roll Number"
-                required
-            >
+                required>
 
             <button
                 id="searchButton"
                 class="search-button"
                 type="submit">
+
                 View Result →
+
             </button>
 
         </form>
@@ -1113,18 +942,24 @@ body.dark .status{
     </section>
 
 
-    <div id="loading" class="loading">
+    <div
+        id="loading"
+        class="loading">
+
         Loading result…
+
     </div>
 
 
-    <!-- RESULT -->
+    <section
+        id="resultArea">
 
-    <section id="resultArea">
+        <div
+            id="fullResult"
+            class="result-card">
 
-        <div id="fullResult" class="result-card">
 
-            <!-- RESULT HEADER -->
+            <!-- HEADER -->
 
             <div class="result-top">
 
@@ -1166,6 +1001,7 @@ body.dark .status{
             <div class="info-grid">
 
                 <div class="info">
+
                     <span class="info-label">
                         ROLL
                     </span>
@@ -1175,10 +1011,12 @@ body.dark .status{
                         class="info-value">
                         —
                     </strong>
+
                 </div>
 
 
                 <div class="info">
+
                     <span class="info-label">
                         REGISTRATION
                     </span>
@@ -1188,10 +1026,12 @@ body.dark .status{
                         class="info-value">
                         —
                     </strong>
+
                 </div>
 
 
                 <div class="info">
+
                     <span class="info-label">
                         YEAR
                     </span>
@@ -1201,10 +1041,12 @@ body.dark .status{
                         class="info-value">
                         —
                     </strong>
+
                 </div>
 
 
                 <div class="info">
+
                     <span class="info-label">
                         GROUP
                     </span>
@@ -1214,10 +1056,12 @@ body.dark .status{
                         class="info-value">
                         —
                     </strong>
+
                 </div>
 
 
                 <div class="info">
+
                     <span class="info-label">
                         INSTITUTION
                     </span>
@@ -1227,10 +1071,12 @@ body.dark .status{
                         class="info-value">
                         —
                     </strong>
+
                 </div>
 
 
                 <div class="info">
+
                     <span class="info-label">
                         DISTRICT
                     </span>
@@ -1240,6 +1086,7 @@ body.dark .status{
                         class="info-value">
                         —
                     </strong>
+
                 </div>
 
             </div>
@@ -1311,22 +1158,6 @@ body.dark .status{
                     id="subjectTable"
                     class="subject-table">
 
-                    <div class="subject-head">
-
-                        <div>
-                            SUBJECT
-                        </div>
-
-                        <div>
-                            MARKS
-                        </div>
-
-                        <div>
-                            GRADE
-                        </div>
-
-                    </div>
-
                 </div>
 
             </div>
@@ -1351,7 +1182,7 @@ body.dark .status{
                     class="action-button"
                     type="button">
 
-                    Print / Save PDF
+                    Print
 
                 </button>
 
@@ -1360,20 +1191,16 @@ body.dark .status{
                     href="index.html"
                     class="action-button">
 
-                    ← Back to Home
+                    ← Home
 
                 </a>
 
             </div>
 
 
-            <!-- FOOTNOTE -->
-
             <div class="footnote">
 
-                <strong>
-                    CTGBoardRanking
-                </strong>
+                <strong>CTGBoardRanking</strong>
                 is an independent, unofficial educational
                 data platform. Result information is provided
                 for educational, research and statistical purposes.
@@ -1424,6 +1251,13 @@ const themeBtn =
 
 
 /* =========================================================
+   CURRENT STUDENT
+========================================================= */
+
+let currentStudent = null;
+
+
+/* =========================================================
    DARK MODE
 ========================================================= */
 
@@ -1453,16 +1287,38 @@ themeBtn.addEventListener("click",()=>{
 
 function showError(message){
 
-    errorMessage.textContent = message;
+    errorMessage.textContent =
+        message;
 
-    errorMessage.style.display = "block";
+    errorMessage.style.display =
+        "block";
 }
 
 function hideError(){
 
-    errorMessage.textContent = "";
+    errorMessage.textContent =
+        "";
 
-    errorMessage.style.display = "none";
+    errorMessage.style.display =
+        "none";
+}
+
+
+/* =========================================================
+   DISPLAY VALUE
+========================================================= */
+
+function displayValue(value){
+
+    if(
+        value === null ||
+        value === undefined ||
+        value === ""
+    ){
+        return "—";
+    }
+
+    return String(value);
 }
 
 
@@ -1482,30 +1338,12 @@ function escapeHTML(value){
 
 
 /* =========================================================
-   FORMAT VALUE
-========================================================= */
-
-function displayValue(value){
-
-    if(
-        value === null ||
-        value === undefined ||
-        value === ""
-    ){
-        return "—";
-    }
-
-    return String(value);
-}
-
-
-/* =========================================================
    SEARCH
 ========================================================= */
 
 form.addEventListener(
     "submit",
-    async function(event){
+    async event => {
 
         event.preventDefault();
 
@@ -1545,22 +1383,20 @@ async function searchResult(){
     }
 
 
-    searchButton.disabled = true;
-    searchButton.textContent = "Searching…";
+    searchButton.disabled =
+        true;
 
-    loading.style.display = "block";
+    searchButton.textContent =
+        "Searching…";
 
-    resultArea.style.display = "none";
+    loading.style.display =
+        "block";
+
+    resultArea.style.display =
+        "none";
 
 
     try{
-
-        /*
-         * IMPORTANT:
-         * We use ONLY the Vercel API.
-         *
-         * /api/result.js
-         */
 
         const response =
             await fetch(
@@ -1568,10 +1404,12 @@ async function searchResult(){
                 encodeURIComponent(roll),
                 {
                     method:"GET",
+
                     headers:{
                         "Accept":
                             "application/json"
                     },
+
                     cache:"no-store"
                 }
             );
@@ -1614,9 +1452,7 @@ async function searchResult(){
         }
 
 
-        if(
-            !json.student
-        ){
+        if(!json.student){
 
             throw new Error(
                 "Student result data is missing."
@@ -1625,8 +1461,12 @@ async function searchResult(){
         }
 
 
+        currentStudent =
+            json.student;
+
+
         displayResult(
-            json.student
+            currentStudent
         );
 
     }
@@ -1647,9 +1487,11 @@ async function searchResult(){
 
     finally{
 
-        loading.style.display = "none";
+        loading.style.display =
+            "none";
 
-        searchButton.disabled = false;
+        searchButton.disabled =
+            false;
 
         searchButton.textContent =
             "View Result →";
@@ -1664,10 +1506,6 @@ async function searchResult(){
 ========================================================= */
 
 function displayResult(student){
-
-    /* -----------------------------------------------
-       HEADER
-    ----------------------------------------------- */
 
     document.getElementById(
         "studentName"
@@ -1693,10 +1531,6 @@ function displayResult(student){
             student.result_status
         ).toUpperCase();
 
-
-    /* -----------------------------------------------
-       BASIC INFORMATION
-    ----------------------------------------------- */
 
     document.getElementById(
         "showRoll"
@@ -1746,27 +1580,19 @@ function displayResult(student){
         );
 
 
-    /* -----------------------------------------------
-       TOTAL SCORE
-    ----------------------------------------------- */
+    /* TOTAL */
 
-    let totalScore =
+    let total =
         student.total_score;
 
 
-    /*
-     * API already calculates total_score.
-     * But if it is missing, calculate again
-     * from subject marks as a fallback.
-     */
-
     if(
-        totalScore === null ||
-        totalScore === undefined ||
-        totalScore === ""
+        total === null ||
+        total === undefined ||
+        total === ""
     ){
 
-        totalScore =
+        total =
             calculateTotal(
                 student.subjects
             );
@@ -1777,15 +1603,12 @@ function displayResult(student){
     document.getElementById(
         "totalScore"
     ).textContent =
-        totalScore !== null
-            ? Number(totalScore)
-                .toLocaleString("en-US")
+        total !== null
+            ? Number(total).toLocaleString("en-US")
             : "—";
 
 
-    /* -----------------------------------------------
-       GPA
-    ----------------------------------------------- */
+    /* GPA */
 
     const gpa =
         student.gpa;
@@ -1803,9 +1626,7 @@ function displayResult(student){
             : "—";
 
 
-    /* -----------------------------------------------
-       STUDENT RANK
-    ----------------------------------------------- */
+    /* RANK */
 
     const rank =
         student.student_rank;
@@ -1823,20 +1644,13 @@ function displayResult(student){
             : "—";
 
 
-    /* -----------------------------------------------
-       SUBJECTS
-    ----------------------------------------------- */
-
     renderSubjects(
         student.subjects || []
     );
 
 
-    /* -----------------------------------------------
-       SHOW RESULT
-    ----------------------------------------------- */
-
-    resultArea.style.display = "block";
+    resultArea.style.display =
+        "block";
 
 
     setTimeout(()=>{
@@ -1852,7 +1666,7 @@ function displayResult(student){
 
 
 /* =========================================================
-   CALCULATE TOTAL FALLBACK
+   TOTAL FALLBACK
 ========================================================= */
 
 function calculateTotal(subjects){
@@ -1882,9 +1696,7 @@ function calculateTotal(subjects){
             Number(raw);
 
 
-        if(
-            Number.isFinite(mark)
-        ){
+        if(Number.isFinite(mark)){
 
             total += mark;
             valid++;
@@ -2010,36 +1822,1011 @@ function renderSubjects(subjects){
 
 
 /* =========================================================
-   PRINT / SAVE PDF
+   DATE
 ========================================================= */
 
-printBtn.addEventListener(
-    "click",
-    function(){
+function getFormattedDate(){
 
-        if(
-            resultArea.style.display === "none"
-        ){
-            return;
+    return new Intl.DateTimeFormat(
+        "en-GB",
+        {
+            day:"2-digit",
+            month:"long",
+            year:"numeric"
         }
+    ).format(new Date());
 
-        window.print();
-
-    }
-);
+}
 
 
 /* =========================================================
-   DOWNLOAD PDF
+   PDF TEXT HELPER
+========================================================= */
+
+function safePdfText(value){
+
+    if(
+        value === null ||
+        value === undefined ||
+        value === ""
+    ){
+        return "—";
+    }
+
+    return String(value);
+
+}
+
+
+/* =========================================================
+   PDF
+   IMPORTANT:
+   This PDF is generated directly with jsPDF.
+   No html2canvas.
+   Therefore blank canvas/PDF problem is avoided.
+========================================================= */
+
+async function downloadPDF(){
+
+    if(!currentStudent){
+
+        showError(
+            "Please search a result first."
+        );
+
+        return;
+    }
+
+
+    if(
+        !window.jspdf ||
+        !window.jspdf.jsPDF
+    ){
+
+        showError(
+            "PDF library could not be loaded. Please refresh the page and try again."
+        );
+
+        return;
+    }
+
+
+    downloadPdfBtn.disabled =
+        true;
+
+    downloadPdfBtn.textContent =
+        "Creating PDF…";
+
+
+    try{
+
+        const {
+            jsPDF
+        } = window.jspdf;
+
+
+        const doc =
+            new jsPDF({
+                orientation:"portrait",
+                unit:"mm",
+                format:"a4"
+            });
+
+
+        const pageWidth =
+            doc.internal.pageSize.getWidth();
+
+        const pageHeight =
+            doc.internal.pageSize.getHeight();
+
+
+        const margin = 15;
+
+        let y = 15;
+
+
+        /* =================================================
+           PDF HEADER
+        ================================================= */
+
+        doc.setFillColor(
+            245,248,252
+        );
+
+        doc.roundedRect(
+            margin,
+            y,
+            pageWidth - margin*2,
+            30,
+            5,
+            5,
+            "F"
+        );
+
+
+        /* CTGBoardRanking */
+
+        doc.setTextColor(
+            29,29,31
+        );
+
+        doc.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        doc.setFontSize(17);
+
+        doc.text(
+            "CTGBoardRanking",
+            margin + 7,
+            y + 10
+        );
+
+
+        doc.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        doc.setFontSize(7);
+
+        doc.setTextColor(
+            110,110,115
+        );
+
+        doc.text(
+            "SSC 2026 · CHATTAGRAM BOARD",
+            margin + 7,
+            y + 17
+        );
+
+
+        /* Generated by */
+
+        doc.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        doc.setFontSize(8);
+
+        doc.setTextColor(
+            29,29,31
+        );
+
+        doc.text(
+            "Generated by Shadat",
+            pageWidth - margin - 7,
+            y + 10,
+            {
+                align:"right"
+            }
+        );
+
+
+        doc.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        doc.setFontSize(7);
+
+        doc.setTextColor(
+            110,110,115
+        );
+
+        doc.text(
+            getFormattedDate(),
+            pageWidth - margin - 7,
+            y + 17,
+            {
+                align:"right"
+            }
+        );
+
+
+        y += 38;
+
+
+        /* =================================================
+           STUDENT HEADER
+        ================================================= */
+
+        doc.setTextColor(
+            29,29,31
+        );
+
+        doc.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        doc.setFontSize(20);
+
+        doc.text(
+            safePdfText(
+                currentStudent.student_name
+            ),
+            margin,
+            y
+        );
+
+
+        y += 7;
+
+
+        doc.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        doc.setFontSize(9);
+
+        doc.setTextColor(
+            110,110,115
+        );
+
+        doc.text(
+            "Roll: " +
+            safePdfText(
+                currentStudent.roll
+            ),
+            margin,
+            y
+        );
+
+
+        const status =
+            safePdfText(
+                currentStudent.result_status
+            ).toUpperCase();
+
+
+        doc.setTextColor(
+            22,131,75
+        );
+
+        doc.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        doc.text(
+            status,
+            pageWidth - margin,
+            y,
+            {
+                align:"right"
+            }
+        );
+
+
+        y += 13;
+
+
+        /* =================================================
+           INFORMATION CARDS
+        ================================================= */
+
+        const infoItems = [
+
+            [
+                "YEAR",
+                safePdfText(
+                    currentStudent.year
+                )
+            ],
+
+            [
+                "REGISTRATION",
+                safePdfText(
+                    currentStudent.registration
+                )
+            ],
+
+            [
+                "GROUP",
+                safePdfText(
+                    currentStudent.group_name
+                )
+            ],
+
+            [
+                "INSTITUTION",
+                safePdfText(
+                    currentStudent.institution
+                )
+            ],
+
+            [
+                "DISTRICT",
+                safePdfText(
+                    currentStudent.district
+                )
+            ],
+
+            [
+                "EXAM",
+                safePdfText(
+                    currentStudent.exam
+                )
+            ]
+
+        ];
+
+
+        const cardGap = 4;
+
+        const cardWidth =
+            (
+                pageWidth -
+                margin*2 -
+                cardGap*2
+            ) / 3;
+
+        const cardHeight = 20;
+
+
+        infoItems.forEach(
+            (item,index)=>{
+
+                const col =
+                    index % 3;
+
+                const row =
+                    Math.floor(index / 3);
+
+
+                const x =
+                    margin +
+                    col *
+                    (cardWidth + cardGap);
+
+
+                const cardY =
+                    y +
+                    row *
+                    (cardHeight + cardGap);
+
+
+                doc.setFillColor(
+                    245,245,247
+                );
+
+                doc.roundedRect(
+                    x,
+                    cardY,
+                    cardWidth,
+                    cardHeight,
+                    3,
+                    3,
+                    "F"
+                );
+
+
+                doc.setTextColor(
+                    110,110,115
+                );
+
+                doc.setFont(
+                    "helvetica",
+                    "bold"
+                );
+
+                doc.setFontSize(6);
+
+                doc.text(
+                    item[0],
+                    x + 4,
+                    cardY + 7
+                );
+
+
+                doc.setTextColor(
+                    29,29,31
+                );
+
+                doc.setFont(
+                    "helvetica",
+                    "bold"
+                );
+
+                doc.setFontSize(8);
+
+
+                let value =
+                    item[1];
+
+
+                if(value.length > 28){
+
+                    value =
+                        value.substring(
+                            0,
+                            27
+                        ) + "…";
+
+                }
+
+
+                doc.text(
+                    value,
+                    x + 4,
+                    cardY + 14
+                );
+
+            }
+        );
+
+
+        y +=
+            2 *
+            (cardHeight + cardGap) +
+            8;
+
+
+        /* =================================================
+           SCORE CARDS
+        ================================================= */
+
+        let total =
+            currentStudent.total_score;
+
+
+        if(
+            total === null ||
+            total === undefined ||
+            total === ""
+        ){
+
+            total =
+                calculateTotal(
+                    currentStudent.subjects
+                );
+
+        }
+
+
+        const scoreItems = [
+
+            [
+                "TOTAL SCORE",
+                total !== null
+                    ? Number(total).toLocaleString("en-US")
+                    : "—"
+            ],
+
+            [
+                "GPA",
+                currentStudent.gpa !== null &&
+                currentStudent.gpa !== undefined &&
+                currentStudent.gpa !== ""
+                    ? Number(
+                        currentStudent.gpa
+                    ).toFixed(2)
+                    : "—"
+            ],
+
+            [
+                "STUDENT RANK",
+                currentStudent.student_rank !== null &&
+                currentStudent.student_rank !== undefined &&
+                currentStudent.student_rank !== ""
+                    ? Number(
+                        currentStudent.student_rank
+                    ).toLocaleString("en-US")
+                    : "—"
+            ]
+
+        ];
+
+
+        const scoreGap = 5;
+
+        const scoreWidth =
+            (
+                pageWidth -
+                margin*2 -
+                scoreGap*2
+            ) / 3;
+
+
+        scoreItems.forEach(
+            (item,index)=>{
+
+                const x =
+                    margin +
+                    index *
+                    (scoreWidth + scoreGap);
+
+
+                doc.setFillColor(
+                    index === 0
+                        ? 235
+                        : index === 1
+                            ? 237
+                            : 255,
+                    index === 0
+                        ? 246
+                        : index === 1
+                            ? 249
+                            : 246,
+                    index === 0
+                        ? 255
+                        : index === 1
+                            ? 240
+                            : 230
+                );
+
+
+                doc.roundedRect(
+                    x,
+                    y,
+                    scoreWidth,
+                    27,
+                    4,
+                    4,
+                    "F"
+                );
+
+
+                doc.setTextColor(
+                    29,29,31
+                );
+
+                doc.setFont(
+                    "helvetica",
+                    "bold"
+                );
+
+                doc.setFontSize(17);
+
+                doc.text(
+                    item[1],
+                    x + scoreWidth/2,
+                    y + 12,
+                    {
+                        align:"center"
+                    }
+                );
+
+
+                doc.setTextColor(
+                    110,110,115
+                );
+
+                doc.setFontSize(6);
+
+                doc.text(
+                    item[0],
+                    x + scoreWidth/2,
+                    y + 20,
+                    {
+                        align:"center"
+                    }
+                );
+
+            }
+        );
+
+
+        y += 37;
+
+
+        /* =================================================
+           SUBJECT TITLE
+        ================================================= */
+
+        doc.setTextColor(
+            29,29,31
+        );
+
+        doc.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        doc.setFontSize(12);
+
+        doc.text(
+            "Subject-wise Result",
+            margin,
+            y
+        );
+
+
+        y += 7;
+
+
+        /* =================================================
+           SUBJECT TABLE
+        ================================================= */
+
+        const subjects =
+            Array.isArray(
+                currentStudent.subjects
+            )
+                ? currentStudent.subjects
+                : [];
+
+
+        const tableWidth =
+            pageWidth -
+            margin*2;
+
+
+        const col1 =
+            tableWidth - 55;
+
+
+        const col2 = 27;
+
+        const col3 = 28;
+
+
+        /* Header */
+
+        doc.setFillColor(
+            245,245,247
+        );
+
+        doc.roundedRect(
+            margin,
+            y,
+            tableWidth,
+            9,
+            2,
+            2,
+            "F"
+        );
+
+
+        doc.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        doc.setFontSize(6);
+
+        doc.setTextColor(
+            110,110,115
+        );
+
+        doc.text(
+            "SUBJECT",
+            margin + 4,
+            y + 6
+        );
+
+        doc.text(
+            "MARKS",
+            margin + col1 + 4,
+            y + 6
+        );
+
+        doc.text(
+            "GRADE",
+            margin + col1 + col2 + 4,
+            y + 6
+        );
+
+
+        y += 9;
+
+
+        subjects.forEach(
+            (subject,index)=>{
+
+                if(y > pageHeight - 30){
+
+                    doc.addPage();
+
+                    y = 18;
+
+                }
+
+
+                const name =
+                    safePdfText(
+                        subject.subject_name ??
+                        subject.subject ??
+                        subject.subject_title ??
+                        subject.subject_code ??
+                        subject.code
+                    );
+
+
+                const marks =
+                    safePdfText(
+                        subject.marks ??
+                        subject.mark ??
+                        subject.total_marks ??
+                        subject.total_mark
+                    );
+
+
+                const grade =
+                    safePdfText(
+                        subject.grade ??
+                        subject.grade_name
+                    );
+
+
+                if(index % 2 === 0){
+
+                    doc.setFillColor(
+                        250,250,252
+                    );
+
+                    doc.rect(
+                        margin,
+                        y,
+                        tableWidth,
+                        9,
+                        "F"
+                    );
+
+                }
+
+
+                doc.setTextColor(
+                    29,29,31
+                );
+
+                doc.setFont(
+                    "helvetica",
+                    "normal"
+                );
+
+                doc.setFontSize(7);
+
+
+                let subjectName =
+                    name;
+
+
+                if(
+                    subjectName.length > 45
+                ){
+
+                    subjectName =
+                        subjectName.substring(
+                            0,
+                            44
+                        ) + "…";
+
+                }
+
+
+                doc.text(
+                    subjectName,
+                    margin + 4,
+                    y + 6
+                );
+
+
+                doc.text(
+                    marks,
+                    margin + col1 + 4,
+                    y + 6
+                );
+
+
+                doc.setFont(
+                    "helvetica",
+                    "bold"
+                );
+
+                doc.text(
+                    grade,
+                    margin + col1 + col2 + 4,
+                    y + 6
+                );
+
+
+                y += 9;
+
+            }
+        );
+
+
+        /* =================================================
+           FOOTER
+        ================================================= */
+
+        if(y > pageHeight - 35){
+
+            doc.addPage();
+
+            y = pageHeight - 30;
+
+        }
+        else{
+
+            y += 8;
+
+        }
+
+
+        doc.setDrawColor(
+            220,220,223
+        );
+
+        doc.line(
+            margin,
+            y,
+            pageWidth - margin,
+            y
+        );
+
+
+        y += 7;
+
+
+        doc.setTextColor(
+            110,110,115
+        );
+
+        doc.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        doc.setFontSize(7);
+
+
+        doc.text(
+            "CTGBoardRanking",
+            margin,
+            y
+        );
+
+
+        doc.text(
+            "Unofficial Notice",
+            pageWidth/2,
+            y,
+            {
+                align:"center"
+            }
+        );
+
+
+        doc.text(
+            "Generated by Shadat",
+            pageWidth - margin,
+            y,
+            {
+                align:"right"
+            }
+        );
+
+
+        y += 5;
+
+
+        doc.setFontSize(6);
+
+        doc.setTextColor(
+            150,150,155
+        );
+
+
+        doc.text(
+            "This document is unofficial and intended for educational, research and statistical purposes.",
+            pageWidth/2,
+            y,
+            {
+                align:"center"
+            }
+        );
+
+
+        /* =================================================
+           PAGE NUMBERS
+        ================================================= */
+
+        const pageCount =
+            doc.internal.getNumberOfPages();
+
+
+        for(
+            let page = 1;
+            page <= pageCount;
+            page++
+        ){
+
+            doc.setPage(page);
+
+            doc.setFont(
+                "helvetica",
+                "normal"
+            );
+
+            doc.setFontSize(6);
+
+            doc.setTextColor(
+                150,150,155
+            );
+
+            doc.text(
+                `${page} / ${pageCount}`,
+                pageWidth - margin,
+                pageHeight - 7,
+                {
+                    align:"right"
+                }
+            );
+
+        }
+
+
+        /* =================================================
+           SAVE
+        ================================================= */
+
+        const safeRoll =
+            String(
+                currentStudent.roll ||
+                "result"
+            ).replace(
+                /[^a-zA-Z0-9_-]/g,
+                ""
+            );
+
+
+        doc.save(
+            `CTGBoardRanking_Result_${safeRoll}.pdf`
+        );
+
+    }
+
+    catch(error){
+
+        console.error(
+            "PDF error:",
+            error
+        );
+
+        showError(
+            "PDF তৈরি করা যায়নি। আবার চেষ্টা করুন।"
+        );
+
+    }
+
+    finally{
+
+        downloadPdfBtn.disabled =
+            false;
+
+        downloadPdfBtn.textContent =
+            "Download PDF ↓";
+
+    }
+
+}
+
+
+/* =========================================================
+   DOWNLOAD BUTTON
 ========================================================= */
 
 downloadPdfBtn.addEventListener(
     "click",
-    function(){
+    downloadPDF
+);
 
-        if(
-            resultArea.style.display === "none"
-        ){
+
+/* =========================================================
+   PRINT
+========================================================= */
+
+printBtn.addEventListener(
+    "click",
+    ()=>{
+
+        if(!currentStudent){
 
             showError(
                 "Please search a result first."
@@ -2048,35 +2835,7 @@ downloadPdfBtn.addEventListener(
             return;
         }
 
-
-        /*
-         * Native browser PDF.
-         *
-         * This avoids html2canvas/html2pdf
-         * blank-page problems.
-         */
-
-        downloadPdfBtn.disabled = true;
-
-        downloadPdfBtn.textContent =
-            "Preparing PDF…";
-
-
-        setTimeout(()=>{
-
-            window.print();
-
-            setTimeout(()=>{
-
-                downloadPdfBtn.disabled =
-                    false;
-
-                downloadPdfBtn.textContent =
-                    "Download PDF ↓";
-
-            },800);
-
-        },100);
+        window.print();
 
     }
 );
