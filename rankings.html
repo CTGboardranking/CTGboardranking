@@ -10,7 +10,8 @@
 <meta name="description"
 content="SSC 2026 Chattogram Board Institution Ranking">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<!-- PDF LIBRARY -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 
@@ -586,16 +587,15 @@ button{
 
 
 /* =========================================================
-   PREMIUM APPLE INSPIRED PDF AREA
+   PDF OFF-SCREEN RENDER AREA
 ========================================================= */
 
 #pdfRenderArea{
-  position:absolute;
-  left:-100000px;
+  position:fixed;
+  left:-10000px;
   top:0;
   width:794px;
   background:#fff;
-  display:none;
   pointer-events:none;
   z-index:-1;
 }
@@ -603,9 +603,9 @@ button{
 .pdf-page{
   width:794px;
   height:1123px;
-  background:#ffffff;
-  color:#1d1d1f;
-  padding:42px 44px 45px;
+  background:#fff;
+  color:#111113;
+  padding:42px 42px 38px;
   position:relative;
   overflow:hidden;
 
@@ -617,209 +617,6 @@ button{
     "Helvetica Neue",
     Arial,
     sans-serif;
-
-  page-break-after:always;
-  break-after:page;
-}
-
-.pdf-page:last-child{
-  page-break-after:auto;
-  break-after:auto;
-}
-
-
-/* PDF HEADER */
-
-.pdf-header{
-  text-align:center;
-  padding-bottom:16px;
-  border-bottom:1px solid #e6e6e8;
-}
-
-.pdf-brand{
-  font-size:27px;
-  line-height:1;
-  font-weight:800;
-  letter-spacing:-1.4px;
-  color:#1d1d1f;
-}
-
-.pdf-generated{
-  margin-top:6px;
-  color:#86868b;
-  font-size:8px;
-  letter-spacing:.01em;
-}
-
-
-/* PDF TITLE */
-
-.pdf-title{
-  text-align:center;
-  padding-top:17px;
-}
-
-.pdf-title-main{
-  font-size:20px;
-  line-height:1.1;
-  font-weight:800;
-  letter-spacing:-.6px;
-  color:#1d1d1f;
-}
-
-.pdf-title-sub{
-  margin-top:5px;
-  font-size:8px;
-  color:#86868b;
-}
-
-.pdf-badge{
-  display:inline-block;
-  margin-top:9px;
-  padding:5px 10px;
-  border-radius:999px;
-  background:#f5f5f7;
-  color:#6e6e73;
-  font-size:6.5px;
-  font-weight:800;
-  letter-spacing:.5px;
-}
-
-
-/* PDF TABLE */
-
-.pdf-table{
-  width:100%;
-  border-collapse:collapse;
-  table-layout:fixed;
-  margin-top:18px;
-
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Text",
-    "Helvetica Neue",
-    Arial,
-    sans-serif;
-
-  font-size:7.5px;
-}
-
-.pdf-table thead{
-  display:table-header-group;
-}
-
-.pdf-table tbody{
-  display:table-row-group;
-}
-
-.pdf-table tr{
-  page-break-inside:avoid;
-  break-inside:avoid;
-}
-
-.pdf-table th{
-  height:28px;
-  padding:6px 5px;
-  text-align:left;
-  background:#f5f5f7;
-  color:#6e6e73;
-
-  font-size:6.5px;
-  font-weight:800;
-  letter-spacing:.25px;
-
-  border-bottom:1px solid #dedee0;
-}
-
-.pdf-table td{
-  height:27px;
-  padding:6px 5px;
-
-  border-bottom:1px solid #eeeeef;
-
-  vertical-align:middle;
-
-  font-size:7.5px;
-  line-height:1.1;
-
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
-
-  color:#1d1d1f;
-}
-
-.pdf-table tbody tr:nth-child(even){
-  background:#fafafa;
-}
-
-.pdf-table .pdf-rank{
-  font-weight:800;
-  color:#1d1d1f;
-}
-
-.pdf-table .pdf-inst{
-  font-weight:700;
-  color:#1d1d1f;
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
-}
-
-.pdf-table .pdf-muted{
-  color:#6e6e73;
-}
-
-.pdf-table .pdf-gpa5{
-  color:#168a4b;
-  font-weight:800;
-}
-
-
-/* PDF FOOTER */
-
-.pdf-page-footer{
-  position:absolute;
-  left:44px;
-  right:44px;
-  bottom:24px;
-
-  padding-top:10px;
-
-  border-top:1px solid #e6e6e8;
-
-  text-align:center;
-}
-
-.pdf-page-number{
-  color:#86868b;
-  font-size:6.5px;
-  font-weight:500;
-}
-
-.pdf-unofficial{
-  margin-top:5px;
-  color:#ff3b30;
-  font-size:6.5px;
-  font-weight:800;
-  letter-spacing:.8px;
-}
-
-
-/* =========================================================
-   PDF PRINT SAFETY
-========================================================= */
-
-@media print{
-
-  #pdfRenderArea{
-    display:block!important;
-    position:static!important;
-    left:0!important;
-    top:0!important;
-  }
-
 }
 
 </style>
@@ -1030,10 +827,6 @@ button{
 </div>
 
 
-<!-- =====================================================
-     PDF RENDER AREA
-===================================================== -->
-
 <div id="pdfRenderArea"></div>
 
 
@@ -1150,7 +943,7 @@ function numberValue(value){
 
 
 /* =========================================================
-   GPA-5 VALUE
+   GPA-5
 ========================================================= */
 
 function getGPA5(item){
@@ -1749,7 +1542,7 @@ pdfBtn.addEventListener(
 
     try{
 
-      await generateCurrentPagePDF();
+      await generateFullPDF();
 
     }
     catch(error){
@@ -1778,7 +1571,7 @@ pdfBtn.addEventListener(
 
 
 /* =========================================================
-   DATE + TIME
+   DATE
 ========================================================= */
 
 function getGeneratedDateTime(){
@@ -1799,135 +1592,82 @@ function getGeneratedDateTime(){
 
 
 /* =========================================================
-   PDF ROW
+   PDF GENERATOR
+   NATIVE jsPDF
+   25 ROWS / PAGE
 ========================================================= */
 
-function createPDFRow(item,rank){
+async function generateFullPDF(){
 
-  return `
-
-    <tr>
-
-      <td class="pdf-rank">
-        ${rank}
-      </td>
-
-      <td class="pdf-inst">
-        ${escapeHTML(
-          item.institution_name
-        )}
-      </td>
-
-      <td class="pdf-muted">
-        ${escapeHTML(
-          item.eiin ?? "—"
-        )}
-      </td>
-
-      <td class="pdf-muted">
-        ${escapeHTML(
-          item.district ?? "—"
-        )}
-      </td>
-
-      <td class="pdf-muted">
-        ${escapeHTML(
-          item.thana ?? "—"
-        )}
-      </td>
-
-      <td>
-        ${numberValue(
-          item.appeared
-        ).toLocaleString("en-US")}
-      </td>
-
-      <td>
-        ${numberValue(
-          item.passed
-        ).toLocaleString("en-US")}
-      </td>
-
-      <td>
-        ${numberValue(
-          item.passing_rate
-        ).toFixed(2)}%
-      </td>
-
-      <td class="pdf-gpa5">
-        ${numberValue(
-          item.gpa5
-        ).toLocaleString("en-US")}
-      </td>
-
-    </tr>
-
-  `;
-
-}
+  const jsPDF =
+    window.jspdf &&
+    window.jspdf.jsPDF;
 
 
-/* =========================================================
-   CURRENT PAGE PDF
-   25 INSTITUTIONS PER PDF PAGE
-========================================================= */
+  if(!jsPDF){
 
-async function generateCurrentPagePDF(){
-
-  const renderArea =
-    document.getElementById(
-      "pdfRenderArea"
+    throw new Error(
+      "PDF library failed to load."
     );
 
-
-  renderArea.innerHTML = "";
+  }
 
 
   /*
-    IMPORTANT:
-    Website pagination = 100 institutions.
+   * IMPORTANT:
+   * Export ONLY the currently visible
+   * website pagination page.
+   */
 
-    PDF = only the currently selected
-    website page.
-
-    Example:
-    Website page 1 → ranks 1–100
-    Website page 2 → ranks 101–200
-
-    PDF of current page:
-    25 institutions per PDF page.
-
-    Therefore:
-    100 institutions = 4 PDF pages.
-  */
-
-  const websiteStart =
-    (currentPage - 1) *
-    PAGE_SIZE;
+  const pageStart =
+    (currentPage - 1) * PAGE_SIZE;
 
 
-  const websiteEnd =
+  const pageEnd =
     Math.min(
-      websiteStart + PAGE_SIZE,
+      pageStart + PAGE_SIZE,
       allInstitutions.length
     );
 
 
-  const currentPageData =
+  const currentData =
     allInstitutions.slice(
-      websiteStart,
-      websiteEnd
+      pageStart,
+      pageEnd
     );
 
 
-  const PDF_PAGE_SIZE = 25;
+  if(!currentData.length){
+
+    throw new Error(
+      "No data available for PDF."
+    );
+
+  }
 
 
-  const totalPDFPages =
+  const ROWS_PER_PAGE = 25;
+
+
+  const totalPages =
     Math.ceil(
-      currentPageData.length /
-      PDF_PAGE_SIZE
+      currentData.length /
+      ROWS_PER_PAGE
     );
+
+
+  const pdf =
+    new jsPDF({
+
+      orientation:"portrait",
+
+      unit:"mm",
+
+      format:"a4",
+
+      compress:true
+
+    });
 
 
   const generated =
@@ -1935,318 +1675,792 @@ async function generateCurrentPagePDF(){
 
 
   /*
-    Build 25-row PDF pages.
-  */
+   * A4
+   */
 
-  for(
-    let page = 0;
-    page < totalPDFPages;
-    page++
-  ){
+  const pageWidth = 210;
 
-    const start =
-      page * PDF_PAGE_SIZE;
+  const pageHeight = 297;
 
 
-    const end =
-      Math.min(
-        start + PDF_PAGE_SIZE,
-        currentPageData.length
-      );
+  const marginLeft = 12;
+
+  const marginRight = 12;
+
+  const usableWidth =
+    pageWidth -
+    marginLeft -
+    marginRight;
 
 
-    const pageData =
-      currentPageData.slice(
-        start,
-        end
-      );
+  /*
+   * Column widths
+   * Total = 186mm
+   */
+
+  const columns = [
+
+    {
+      title:"RANK",
+      width:10
+    },
+
+    {
+      title:"INSTITUTION",
+      width:57
+    },
+
+    {
+      title:"EIIN",
+      width:18
+    },
+
+    {
+      title:"DISTRICT",
+      width:23
+    },
+
+    {
+      title:"THANA",
+      width:23
+    },
+
+    {
+      title:"APPEARED",
+      width:17
+    },
+
+    {
+      title:"PASSED",
+      width:16
+    },
+
+    {
+      title:"PASS %",
+      width:12
+    },
+
+    {
+      title:"GPA-5",
+      width:10
+    }
+
+  ];
 
 
-    let rows = "";
+  /*
+   * Safety check.
+   */
 
-
-    pageData.forEach(
-      function(item,index){
-
-        /*
-          Keep original global ranking.
-        */
-
-        const globalRank =
-          websiteStart +
-          start +
-          index +
-          1;
-
-
-        rows +=
-          createPDFRow(
-            item,
-            globalRank
-          );
-
-      }
+  const widthTotal =
+    columns.reduce(
+      (sum,column) =>
+        sum + column.width,
+      0
     );
 
 
-    const pageElement =
-      document.createElement("div");
+  if(
+    Math.abs(
+      widthTotal -
+      usableWidth
+    ) > .01
+  ){
 
-
-    pageElement.className =
-      "pdf-page";
-
-
-    pageElement.innerHTML = `
-
-      <div class="pdf-header">
-
-        <div class="pdf-brand">
-          CTGBoardRanking
-        </div>
-
-        <div class="pdf-generated">
-          Generated by Shadat Fatih
-        </div>
-
-        <div class="pdf-generated">
-          ${escapeHTML(generated)}
-        </div>
-
-      </div>
-
-
-      <div class="pdf-title">
-
-        <div class="pdf-title-main">
-          Institution Ranking
-        </div>
-
-        <div class="pdf-title-sub">
-          SSC 2026 · Chattogram Education Board
-        </div>
-
-        <div class="pdf-badge">
-          PAGE ${page + 1} OF ${totalPDFPages}
-          · RANKS ${websiteStart + start + 1}–${websiteStart + end}
-        </div>
-
-      </div>
-
-
-      <table class="pdf-table">
-
-        <colgroup>
-
-          <col style="width:6%">
-
-          <col style="width:31%">
-
-          <col style="width:9%">
-
-          <col style="width:12%">
-
-          <col style="width:12%">
-
-          <col style="width:8%">
-
-          <col style="width:8%">
-
-          <col style="width:8%">
-
-          <col style="width:6%">
-
-        </colgroup>
-
-
-        <thead>
-
-          <tr>
-
-            <th>RANK</th>
-            <th>INSTITUTION</th>
-            <th>EIIN</th>
-            <th>DISTRICT</th>
-            <th>THANA</th>
-            <th>APPEARED</th>
-            <th>PASSED</th>
-            <th>PASS %</th>
-            <th>GPA-5</th>
-
-          </tr>
-
-        </thead>
-
-
-        <tbody>
-
-          ${rows}
-
-        </tbody>
-
-      </table>
-
-
-      <div class="pdf-page-footer">
-
-        <div class="pdf-page-number">
-
-          CTGBoardRanking · SSC 2026
-          · Website Page ${currentPage}
-          · Institutions
-          ${websiteStart + start + 1}–${websiteStart + end}
-
-        </div>
-
-        <div class="pdf-unofficial">
-          UNOFFICIAL NOTICE
-        </div>
-
-      </div>
-
-    `;
-
-
-    renderArea.appendChild(
-      pageElement
+    throw new Error(
+      "PDF column width error."
     );
 
   }
 
 
   /*
-    Make the render area temporarily visible
-    to html2canvas.
+   * Helper: truncate text
+   */
 
-    It is placed outside the viewport so
-    the user does not see the render.
-  */
+  function truncate(
+    value,
+    maxChars
+  ){
 
-  renderArea.style.display =
-    "block";
-
-  renderArea.style.position =
-    "absolute";
-
-  renderArea.style.left =
-    "-100000px";
-
-  renderArea.style.top =
-    "0";
-
-  renderArea.style.zIndex =
-    "999999";
-
-  renderArea.style.opacity =
-    "1";
-
-  renderArea.style.visibility =
-    "visible";
+    const text =
+      String(value ?? "—");
 
 
-  /*
-    Wait for browser paint.
-  */
+    if(text.length <= maxChars)
+      return text;
 
-  await new Promise(
-    resolve =>
-      requestAnimationFrame(
-        () =>
-          requestAnimationFrame(
-            resolve
-          )
-      )
-  );
+
+    return (
+      text.substring(
+        0,
+        Math.max(
+          1,
+          maxChars - 1
+        )
+      ) +
+      "…"
+    );
+
+  }
 
 
   /*
-    Generate PDF.
+   * Helper: draw rounded header
+   */
 
-    High-resolution rendering:
-    scale = 3
+  function drawHeader(
+    pageNumber
+  ){
 
-    This produces much sharper
-    text and table lines than scale 2.
-  */
+    /*
+     * White background
+     */
 
-  await html2pdf()
-    .set({
+    pdf.setFillColor(
+      255,
+      255,
+      255
+    );
 
-      margin:0,
+    pdf.rect(
+      0,
+      0,
+      pageWidth,
+      pageHeight,
+      "F"
+    );
 
-      filename:
-        `CTGBoardRanking_Institution_Ranking_Page_${currentPage}_2026.pdf`,
 
-      image:{
-        type:"jpeg",
-        quality:1
-      },
+    /*
+     * Brand
+     */
 
-      html2canvas:{
+    pdf.setTextColor(
+      17,
+      17,
+      19
+    );
 
-        scale:3,
+    pdf.setFont(
+      "helvetica",
+      "bold"
+    );
 
-        useCORS:true,
+    pdf.setFontSize(19);
 
-        allowTaint:false,
+    pdf.text(
+      "CTGBoardRanking",
+      pageWidth / 2,
+      17,
+      {
+        align:"center"
+      }
+    );
 
-        backgroundColor:"#ffffff",
 
-        logging:false,
+    /*
+     * Generated
+     */
 
-        letterRendering:true,
+    pdf.setFont(
+      "helvetica",
+      "normal"
+    );
 
-        scrollX:0,
+    pdf.setFontSize(6.5);
 
-        scrollY:0,
+    pdf.setTextColor(
+      134,
+      134,
+      139
+    );
 
-        windowWidth:794,
+    pdf.text(
+      "Generated by Shadat Fatih",
+      pageWidth / 2,
+      22,
+      {
+        align:"center"
+      }
+    );
 
-        windowHeight:1123,
+    pdf.text(
+      generated,
+      pageWidth / 2,
+      26,
+      {
+        align:"center"
+      }
+    );
 
-        imageTimeout:15000
 
-      },
+    /*
+     * Divider
+     */
 
-      jsPDF:{
+    pdf.setDrawColor(
+      229,
+      229,
+      231
+    );
 
-        unit:"mm",
+    pdf.setLineWidth(.25);
 
-        format:"a4",
+    pdf.line(
+      marginLeft,
+      31,
+      pageWidth - marginRight,
+      31
+    );
 
-        orientation:"portrait",
 
-        compress:false,
+    /*
+     * Title
+     */
 
-        precision:16
+    pdf.setFont(
+      "helvetica",
+      "bold"
+    );
 
-      },
+    pdf.setFontSize(13);
 
-      pagebreak:{
+    pdf.setTextColor(
+      17,
+      17,
+      19
+    );
 
-        mode:[
-          "css",
-          "legacy"
-        ]
+    pdf.text(
+      "Institution Ranking",
+      pageWidth / 2,
+      40,
+      {
+        align:"center"
+      }
+    );
+
+
+    pdf.setFont(
+      "helvetica",
+      "normal"
+    );
+
+    pdf.setFontSize(6.5);
+
+    pdf.setTextColor(
+      110,
+      110,
+      115
+    );
+
+    pdf.text(
+      "SSC 2026 · Chattogram Education Board",
+      pageWidth / 2,
+      45,
+      {
+        align:"center"
+      }
+    );
+
+
+    /*
+     * Page badge
+     */
+
+    pdf.setFillColor(
+      242,
+      242,
+      247
+    );
+
+    pdf.roundedRect(
+      84,
+      48,
+      42,
+      7,
+      3.5,
+      3.5,
+      "F"
+    );
+
+
+    pdf.setFont(
+      "helvetica",
+      "bold"
+    );
+
+    pdf.setFontSize(5.5);
+
+    pdf.setTextColor(
+      0,
+      113,
+      227
+    );
+
+    pdf.text(
+      `PAGE ${pageNumber} OF ${totalPages}`,
+      pageWidth / 2,
+      52.6,
+      {
+        align:"center"
+      }
+    );
+
+  }
+
+
+  /*
+   * Draw table header
+   */
+
+  function drawTableHeader(
+    y
+  ){
+
+    let x =
+      marginLeft;
+
+
+    const height = 9;
+
+
+    pdf.setFillColor(
+      245,
+      245,
+      247
+    );
+
+
+    pdf.setDrawColor(
+      225,
+      225,
+      228
+    );
+
+
+    pdf.setLineWidth(.2);
+
+
+    pdf.rect(
+      marginLeft,
+      y,
+      usableWidth,
+      height,
+      "FD"
+    );
+
+
+    columns.forEach(
+      function(column){
+
+        pdf.setFont(
+          "helvetica",
+          "bold"
+        );
+
+        pdf.setFontSize(5.1);
+
+        pdf.setTextColor(
+          90,
+          90,
+          95
+        );
+
+
+        pdf.text(
+          column.title,
+          x + 1.5,
+          y + 5.8
+        );
+
+
+        x += column.width;
 
       }
+    );
 
-    })
-    .from(renderArea)
-    .save();
+
+    return y + height;
+
+  }
 
 
   /*
-    Cleanup.
-  */
+   * Draw institution row
+   */
 
-  renderArea.innerHTML = "";
+  function drawRow(
+    item,
+    rank,
+    y,
+    rowNumber
+  ){
 
-  renderArea.style.display =
-    "none";
+    const rowHeight = 8;
 
-  renderArea.style.left =
-    "-100000px";
+
+    /*
+     * Alternate subtle background
+     */
+
+    if(rowNumber % 2 === 0){
+
+      pdf.setFillColor(
+        250,
+        250,
+        250
+      );
+
+      pdf.rect(
+        marginLeft,
+        y,
+        usableWidth,
+        rowHeight,
+        "F"
+      );
+
+    }
+
+
+    /*
+     * Bottom border
+     */
+
+    pdf.setDrawColor(
+      235,
+      235,
+      238
+    );
+
+    pdf.setLineWidth(.18);
+
+    pdf.line(
+      marginLeft,
+      y + rowHeight,
+      pageWidth - marginRight,
+      y + rowHeight
+    );
+
+
+    const values = [
+
+      `#${rank}`,
+
+      truncate(
+        item.institution_name,
+        31
+      ),
+
+      truncate(
+        item.eiin ?? "—",
+        11
+      ),
+
+      truncate(
+        item.district ?? "—",
+        13
+      ),
+
+      truncate(
+        item.thana ?? "—",
+        13
+      ),
+
+      numberValue(
+        item.appeared
+      ).toLocaleString("en-US"),
+
+      numberValue(
+        item.passed
+      ).toLocaleString("en-US"),
+
+      numberValue(
+        item.passing_rate
+      ).toFixed(2) + "%",
+
+      numberValue(
+        item.gpa5
+      ).toLocaleString("en-US")
+
+    ];
+
+
+    let x =
+      marginLeft;
+
+
+    values.forEach(
+      function(value,index){
+
+        /*
+         * Text style
+         */
+
+        if(index === 8){
+
+          pdf.setTextColor(
+            22,
+            138,
+            75
+          );
+
+          pdf.setFont(
+            "helvetica",
+            "bold"
+          );
+
+        }
+        else if(index === 0){
+
+          pdf.setTextColor(
+            17,
+            17,
+            19
+          );
+
+          pdf.setFont(
+            "helvetica",
+            "bold"
+          );
+
+        }
+        else if(index === 1){
+
+          pdf.setTextColor(
+            17,
+            17,
+            19
+          );
+
+          pdf.setFont(
+            "helvetica",
+            "bold"
+          );
+
+        }
+        else{
+
+          pdf.setTextColor(
+            45,
+            45,
+            48
+          );
+
+          pdf.setFont(
+            "helvetica",
+            "normal"
+          );
+
+        }
+
+
+        pdf.setFontSize(
+          index === 1
+            ? 5.8
+            : 5.4
+        );
+
+
+        pdf.text(
+          String(value),
+          x + 1.5,
+          y + 5.1
+        );
+
+
+        x += columns[index].width;
+
+      }
+    );
+
+
+    return y + rowHeight;
+
+  }
+
+
+  /*
+   * Footer
+   */
+
+  function drawFooter(
+    pageNumber,
+    firstRank,
+    lastRank
+  ){
+
+    const y = 282;
+
+
+    pdf.setDrawColor(
+      229,
+      229,
+      231
+    );
+
+    pdf.setLineWidth(.25);
+
+    pdf.line(
+      marginLeft,
+      y,
+      pageWidth - marginRight,
+      y
+    );
+
+
+    pdf.setFont(
+      "helvetica",
+      "normal"
+    );
+
+    pdf.setFontSize(5.5);
+
+    pdf.setTextColor(
+      134,
+      134,
+      139
+    );
+
+
+    pdf.text(
+      `CTGBoardRanking · SSC 2026 · Institutions ${firstRank}–${lastRank}`,
+      marginLeft,
+      y + 7
+    );
+
+
+    pdf.setFont(
+      "helvetica",
+      "bold"
+    );
+
+    pdf.setTextColor(
+      215,
+      0,
+      21
+    );
+
+
+    pdf.text(
+      "UNOFFICIAL",
+      pageWidth - marginRight,
+      y + 7,
+      {
+        align:"right"
+      }
+    );
+
+
+    pdf.setFont(
+      "helvetica",
+      "normal"
+    );
+
+    pdf.setTextColor(
+      134,
+      134,
+      139
+    );
+
+    pdf.text(
+      `Page ${pageNumber} of ${totalPages}`,
+      pageWidth / 2,
+      y + 14,
+      {
+        align:"center"
+      }
+    );
+
+  }
+
+
+  /*
+   * Build PDF pages.
+   */
+
+  for(
+    let pageIndex = 0;
+    pageIndex < totalPages;
+    pageIndex++
+  ){
+
+    if(pageIndex > 0){
+
+      pdf.addPage();
+
+    }
+
+
+    drawHeader(
+      pageIndex + 1
+    );
+
+
+    let y =
+      drawTableHeader(
+        61
+      );
+
+
+    const start =
+      pageIndex *
+      ROWS_PER_PAGE;
+
+
+    const end =
+      Math.min(
+        start + ROWS_PER_PAGE,
+        currentData.length
+      );
+
+
+    const pageData =
+      currentData.slice(
+        start,
+        end
+      );
+
+
+    pageData.forEach(
+      function(item,index){
+
+        y =
+          drawRow(
+            item,
+            pageStart +
+            start +
+            index +
+            1,
+            y,
+            index
+          );
+
+      }
+    );
+
+
+    drawFooter(
+      pageIndex + 1,
+      pageStart + start + 1,
+      pageStart + end
+    );
+
+  }
+
+
+  /*
+   * Filename
+   */
+
+  const filename =
+    `CTGBoardRanking_Institution_Ranking_2026_Page_${currentPage}.pdf`;
+
+
+  pdf.save(
+    filename
+  );
 
 }
 
