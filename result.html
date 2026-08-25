@@ -15,43 +15,34 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet">
 
-<!-- jsPDF -->
+<!-- PDF GENERATOR -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
 <style>
-
 :root{
     --blue:#0071e3;
     --blue-dark:#0066cc;
-
     --bg:#f5f5f7;
     --card:#ffffff;
     --soft:#f2f2f7;
-
     --text:#1d1d1f;
     --muted:#6e6e73;
-
     --border:rgba(0,0,0,.08);
-
     --green:#34c759;
-    --orange:#ff9500;
     --red:#ff3b30;
-
+    --orange:#ff9500;
     --shadow:0 20px 60px rgba(0,0,0,.08);
-
     --radius:28px;
 }
 
 body.dark{
-    --bg:#000000;
+    --bg:#000;
     --card:#1c1c1e;
     --soft:#2c2c2e;
-
     --text:#f5f5f7;
     --muted:#a1a1a6;
-
     --border:rgba(255,255,255,.10);
-
     --shadow:0 25px 70px rgba(0,0,0,.45);
 }
 
@@ -65,28 +56,17 @@ html{
 
 body{
     margin:0;
-
-    font-family:
-        Inter,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
     background:var(--bg);
     color:var(--text);
-
     transition:.25s ease;
 }
 
-button,
-input{
+button,input{
     font:inherit;
 }
 
-/* =========================================================
-   NAVBAR
-========================================================= */
+/* NAVBAR */
 
 .navbar{
     position:sticky;
@@ -102,15 +82,14 @@ input{
     padding:0 22px;
 
     background:rgba(255,255,255,.78);
-
     border-bottom:1px solid var(--border);
 
-    backdrop-filter:blur(25px);
-    -webkit-backdrop-filter:blur(25px);
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
 }
 
 body.dark .navbar{
-    background:rgba(0,0,0,.78);
+    background:rgba(0,0,0,.75);
 }
 
 .logo{
@@ -137,7 +116,7 @@ body.dark .navbar{
     border-radius:9px;
 
     background:var(--blue);
-    color:#fff;
+    color:white;
 
     font-size:14px;
     font-weight:800;
@@ -151,10 +130,13 @@ body.dark .navbar{
 .nav-home,
 .theme-btn{
     height:40px;
+    min-width:42px;
 
     display:flex;
     align-items:center;
     justify-content:center;
+
+    padding:0 14px;
 
     border:1px solid var(--border);
     border-radius:13px;
@@ -170,43 +152,31 @@ body.dark .navbar{
     cursor:pointer;
 }
 
-.nav-home{
-    padding:0 14px;
-}
-
-.theme-btn{
-    width:42px;
-}
-
-/* =========================================================
-   PAGE
-========================================================= */
+/* PAGE */
 
 .page{
     min-height:calc(100vh - 64px);
 
-    padding:55px 15px 80px;
+    padding:55px 14px 90px;
 
     background:
         radial-gradient(
             circle at 50% 0%,
-            rgba(0,113,227,.11),
+            rgba(0,113,227,.12),
             transparent 38%
         );
 }
 
 .container{
-    width:min(950px,100%);
+    width:min(920px,100%);
     margin:auto;
 }
 
-/* =========================================================
-   HERO
-========================================================= */
+/* HERO */
 
 .hero{
     text-align:center;
-    margin-bottom:32px;
+    margin-bottom:30px;
 }
 
 .eyebrow{
@@ -225,7 +195,6 @@ body.dark .navbar{
     margin:14px 0;
 
     font-size:clamp(40px,8vw,70px);
-
     line-height:.98;
 
     letter-spacing:-4px;
@@ -237,7 +206,6 @@ body.dark .navbar{
 
 .hero p{
     max-width:620px;
-
     margin:auto;
 
     color:var(--muted);
@@ -246,18 +214,15 @@ body.dark .navbar{
     line-height:1.7;
 }
 
-/* =========================================================
-   SEARCH
-========================================================= */
+/* SEARCH */
 
 .search-card{
-    padding:26px;
+    padding:25px;
 
     border:1px solid var(--border);
     border-radius:var(--radius);
 
     background:var(--card);
-
     box-shadow:var(--shadow);
 }
 
@@ -272,7 +237,6 @@ body.dark .navbar{
     margin:0 0 20px;
 
     color:var(--muted);
-
     font-size:13px;
 }
 
@@ -329,12 +293,9 @@ body.dark .navbar{
 
 .search-button:disabled{
     opacity:.6;
-    cursor:wait;
 }
 
-/* =========================================================
-   ERROR
-========================================================= */
+/* ERROR */
 
 .error{
     display:none;
@@ -345,22 +306,17 @@ body.dark .navbar{
 
     border-radius:14px;
 
-    background:rgba(255,59,48,.09);
-
+    background:rgba(255,59,48,.10);
     color:var(--red);
 
     font-size:12px;
     font-weight:600;
 }
 
-/* =========================================================
-   LOADING
-========================================================= */
+/* LOADING */
 
 .loading{
     display:none;
-
-    margin-top:20px;
 
     padding:25px;
 
@@ -371,9 +327,7 @@ body.dark .navbar{
     font-size:12px;
 }
 
-/* =========================================================
-   RESULT
-========================================================= */
+/* RESULT */
 
 #resultArea{
     display:none;
@@ -387,13 +341,10 @@ body.dark .navbar{
     border-radius:32px;
 
     background:var(--card);
-
     box-shadow:var(--shadow);
 }
 
-/* =========================================================
-   RESULT HEADER
-========================================================= */
+/* RESULT HEADER */
 
 .result-top{
     padding:30px;
@@ -404,15 +355,14 @@ body.dark .navbar{
         linear-gradient(
             135deg,
             rgba(0,113,227,.12),
-            transparent 70%
+            transparent 65%
         );
 }
 
 .result-top-row{
     display:flex;
-
-    align-items:flex-start;
     justify-content:space-between;
+    align-items:flex-start;
 
     gap:20px;
 }
@@ -432,6 +382,8 @@ body.dark .navbar{
 }
 
 .status{
+    flex-shrink:0;
+
     padding:8px 13px;
 
     border-radius:50px;
@@ -445,15 +397,11 @@ body.dark .navbar{
     letter-spacing:.06em;
 }
 
-/* =========================================================
-   INFO
-========================================================= */
+/* INFO */
 
 .info-grid{
     display:grid;
-
     grid-template-columns:repeat(3,1fr);
-
     gap:12px;
 
     padding:25px 30px;
@@ -491,28 +439,27 @@ body.dark .navbar{
     word-break:break-word;
 }
 
-/* =========================================================
-   SCORE
-========================================================= */
+/* SCORE */
 
 .score-grid{
     display:grid;
-
     grid-template-columns:repeat(3,1fr);
-
     gap:12px;
 
     padding:0 30px 28px;
 }
 
 .score{
+    position:relative;
+    overflow:hidden;
+
     padding:22px;
 
     border-radius:21px;
 
-    background:var(--soft);
-
     text-align:center;
+
+    background:var(--soft);
 }
 
 .score strong{
@@ -537,20 +484,18 @@ body.dark .navbar{
 }
 
 .score.total{
-    background:rgba(0,113,227,.09);
+    background:rgba(0,113,227,.10);
 }
 
 .score.gpa{
-    background:rgba(52,199,89,.09);
+    background:rgba(52,199,89,.10);
 }
 
 .score.rank{
-    background:rgba(255,149,0,.09);
+    background:rgba(255,149,0,.10);
 }
 
-/* =========================================================
-   SUBJECTS
-========================================================= */
+/* SUBJECT */
 
 .subject-section{
     padding:0 30px 30px;
@@ -558,7 +503,6 @@ body.dark .navbar{
 
 .subject-heading{
     display:flex;
-
     justify-content:space-between;
     align-items:end;
 
@@ -574,7 +518,6 @@ body.dark .navbar{
 
 .subject-heading span{
     color:var(--muted);
-
     font-size:10px;
 }
 
@@ -582,7 +525,6 @@ body.dark .navbar{
     overflow:hidden;
 
     border:1px solid var(--border);
-
     border-radius:19px;
 }
 
@@ -590,10 +532,7 @@ body.dark .navbar{
 .subject-row{
     display:grid;
 
-    grid-template-columns:
-        minmax(0,1fr)
-        100px
-        100px;
+    grid-template-columns:minmax(0,1fr) 100px 100px;
 
     gap:10px;
 
@@ -621,8 +560,8 @@ body.dark .navbar{
     font-size:12px;
 }
 
-.subject-row > div:nth-child(2),
-.subject-row > div:nth-child(3){
+.subject-row>div:nth-child(2),
+.subject-row>div:nth-child(3){
     text-align:right;
 }
 
@@ -630,52 +569,42 @@ body.dark .navbar{
     font-weight:800;
 }
 
-/* =========================================================
-   ACTIONS
-========================================================= */
+/* DOWNLOAD */
 
 .actions{
-    display:flex;
-    flex-wrap:wrap;
-
-    gap:10px;
-
     padding:0 30px 28px;
 }
 
-.action-button{
-    min-height:46px;
+.download-button{
+    width:100%;
 
-    padding:0 18px;
+    min-height:52px;
 
-    display:inline-flex;
-
+    display:flex;
     align-items:center;
     justify-content:center;
+    gap:9px;
 
-    border:1px solid var(--border);
-    border-radius:14px;
-
-    background:var(--soft);
-    color:var(--text);
-
-    font-size:12px;
-    font-weight:700;
-
-    cursor:pointer;
-
-    text-decoration:none;
-}
-
-.download-button{
     border:0;
+    border-radius:16px;
 
     background:var(--blue);
     color:white;
+
+    font-size:13px;
+    font-weight:800;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 10px 25px rgba(0,113,227,.20);
+
+    transition:.2s ease;
 }
 
 .download-button:hover{
     background:var(--blue-dark);
+    transform:translateY(-1px);
 }
 
 .download-button:disabled{
@@ -683,9 +612,7 @@ body.dark .navbar{
     cursor:wait;
 }
 
-/* =========================================================
-   FOOTNOTE
-========================================================= */
+/* FOOTNOTE */
 
 .footnote{
     padding:0 30px 30px;
@@ -693,7 +620,6 @@ body.dark .navbar{
     color:var(--muted);
 
     font-size:10px;
-
     line-height:1.7;
 }
 
@@ -701,9 +627,7 @@ body.dark .navbar{
     color:var(--text);
 }
 
-/* =========================================================
-   MOBILE
-========================================================= */
+/* MOBILE */
 
 @media(max-width:700px){
 
@@ -712,12 +636,7 @@ body.dark .navbar{
     }
 
     .page{
-        padding:45px 12px 70px;
-    }
-
-    .search-card{
-        padding:20px;
-        border-radius:23px;
+        padding:42px 12px 70px;
     }
 
     .search-form{
@@ -767,10 +686,6 @@ body.dark .navbar{
         padding:0 20px 25px;
     }
 
-    .action-button{
-        flex:1;
-    }
-
     .footnote{
         padding:0 20px 25px;
     }
@@ -786,77 +701,23 @@ body.dark .navbar{
         font-size:13px;
     }
 }
-
-/* =========================================================
-   PRINT
-========================================================= */
-
-@media print{
-
-    @page{
-        size:A4;
-        margin:12mm;
-    }
-
-    body{
-        background:#fff !important;
-        color:#1d1d1f !important;
-    }
-
-    .navbar,
-    .hero,
-    .search-card,
-    .loading,
-    .actions{
-        display:none !important;
-    }
-
-    .page{
-        padding:0 !important;
-        background:#fff !important;
-    }
-
-    #resultArea{
-        display:block !important;
-        margin:0 !important;
-    }
-
-    .result-card{
-        border:1px solid #ddd !important;
-        border-radius:0 !important;
-        box-shadow:none !important;
-        background:#fff !important;
-    }
-
-    .result-top{
-        background:#f5f8fc !important;
-    }
-
-    .info,
-    .score{
-        background:#f5f5f7 !important;
-    }
-
-    .subject-table{
-        overflow:visible !important;
-    }
-
-    .subject-row{
-        break-inside:avoid;
-        page-break-inside:avoid;
-    }
-}
-
 </style>
 </head>
 
 <body>
 
+<!-- NAVBAR -->
+
 <header class="navbar">
 
     <a href="index.html" class="logo">
+
         <span class="logo-mark">C</span>
-        <span>CTGBoardRanking</span>
+
+        <span>
+            CTGBoardRanking
+        </span>
+
     </a>
 
     <div class="nav-actions">
@@ -881,6 +742,8 @@ body.dark .navbar{
 
 <main class="container">
 
+    <!-- HERO -->
+
     <section class="hero">
 
         <span class="eyebrow">
@@ -894,16 +757,20 @@ body.dark .navbar{
 
         <p>
             Enter your SSC 2026 roll number to view
-            your result, marks, GPA, total score and
-            student rank.
+            your result, subject-wise marks, total score
+            and student rank.
         </p>
 
     </section>
 
 
+    <!-- SEARCH -->
+
     <section class="search-card">
 
-        <h2>Find your result</h2>
+        <h2>
+            Find your result
+        </h2>
 
         <p>
             Enter your SSC 2026 roll number.
@@ -951,13 +818,11 @@ body.dark .navbar{
     </div>
 
 
-    <section
-        id="resultArea">
+    <!-- RESULT -->
 
-        <div
-            id="fullResult"
-            class="result-card">
+    <section id="resultArea">
 
+        <div class="result-card">
 
             <!-- HEADER -->
 
@@ -1163,47 +1028,38 @@ body.dark .navbar{
             </div>
 
 
-            <!-- ACTIONS -->
+            <!-- ONLY DOWNLOAD BUTTON -->
+            <!-- Open Full Results / Print button removed -->
 
             <div class="actions">
 
                 <button
                     id="downloadPdfBtn"
-                    class="action-button download-button"
+                    class="download-button"
                     type="button">
 
-                    Download PDF ↓
+                    <span>↓</span>
+
+                    <span>
+                        Download PDF Result
+                    </span>
 
                 </button>
-
-
-                <button
-                    id="printBtn"
-                    class="action-button"
-                    type="button">
-
-                    Print
-
-                </button>
-
-
-                <a
-                    href="index.html"
-                    class="action-button">
-
-                    ← Home
-
-                </a>
 
             </div>
 
 
+            <!-- FOOTNOTE -->
+
             <div class="footnote">
 
-                <strong>CTGBoardRanking</strong>
+                <strong>
+                    CTGBoardRanking
+                </strong>
                 is an independent, unofficial educational
                 data platform. Result information is provided
-                for educational, research and statistical purposes.
+                for educational, research and statistical
+                purposes only.
 
             </div>
 
@@ -1243,16 +1099,9 @@ const loading =
 const downloadPdfBtn =
     document.getElementById("downloadPdfBtn");
 
-const printBtn =
-    document.getElementById("printBtn");
-
 const themeBtn =
     document.getElementById("themeBtn");
 
-
-/* =========================================================
-   CURRENT STUDENT
-========================================================= */
 
 let currentStudent = null;
 
@@ -1287,20 +1136,16 @@ themeBtn.addEventListener("click",()=>{
 
 function showError(message){
 
-    errorMessage.textContent =
-        message;
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
 
-    errorMessage.style.display =
-        "block";
 }
 
 function hideError(){
 
-    errorMessage.textContent =
-        "";
+    errorMessage.textContent = "";
+    errorMessage.style.display = "none";
 
-    errorMessage.style.display =
-        "none";
 }
 
 
@@ -1319,6 +1164,7 @@ function displayValue(value){
     }
 
     return String(value);
+
 }
 
 
@@ -1334,6 +1180,7 @@ function escapeHTML(value){
         .replace(/>/g,"&gt;")
         .replace(/"/g,"&quot;")
         .replace(/'/g,"&#039;");
+
 }
 
 
@@ -1371,7 +1218,9 @@ async function searchResult(){
         );
 
         return;
+
     }
+
 
     if(!/^\d+$/.test(roll)){
 
@@ -1380,20 +1229,16 @@ async function searchResult(){
         );
 
         return;
+
     }
 
 
-    searchButton.disabled =
-        true;
+    searchButton.disabled = true;
+    searchButton.textContent = "Searching…";
 
-    searchButton.textContent =
-        "Searching…";
+    loading.style.display = "block";
 
-    loading.style.display =
-        "block";
-
-    resultArea.style.display =
-        "none";
+    resultArea.style.display = "none";
 
 
     try{
@@ -1404,12 +1249,9 @@ async function searchResult(){
                 encodeURIComponent(roll),
                 {
                     method:"GET",
-
                     headers:{
-                        "Accept":
-                            "application/json"
+                        "Accept":"application/json"
                     },
-
                     cache:"no-store"
                 }
             );
@@ -1419,11 +1261,9 @@ async function searchResult(){
 
         try{
 
-            json =
-                await response.json();
+            json = await response.json();
 
-        }
-        catch{
+        }catch{
 
             throw new Error(
                 "Invalid response from result API."
@@ -1487,11 +1327,9 @@ async function searchResult(){
 
     finally{
 
-        loading.style.display =
-            "none";
+        loading.style.display = "none";
 
-        searchButton.disabled =
-            false;
+        searchButton.disabled = false;
 
         searchButton.textContent =
             "View Result →";
@@ -1519,9 +1357,7 @@ function displayResult(student){
         "resultRoll"
     ).textContent =
         "Roll: " +
-        displayValue(
-            student.roll
-        );
+        displayValue(student.roll);
 
 
     document.getElementById(
@@ -1532,12 +1368,12 @@ function displayResult(student){
         ).toUpperCase();
 
 
+    /* BASIC INFO */
+
     document.getElementById(
         "showRoll"
     ).textContent =
-        displayValue(
-            student.roll
-        );
+        displayValue(student.roll);
 
 
     document.getElementById(
@@ -1551,36 +1387,28 @@ function displayResult(student){
     document.getElementById(
         "showYear"
     ).textContent =
-        displayValue(
-            student.year
-        );
+        displayValue(student.year);
 
 
     document.getElementById(
         "showGroup"
     ).textContent =
-        displayValue(
-            student.group_name
-        );
+        displayValue(student.group_name);
 
 
     document.getElementById(
         "showInstitution"
     ).textContent =
-        displayValue(
-            student.institution
-        );
+        displayValue(student.institution);
 
 
     document.getElementById(
         "showDistrict"
     ).textContent =
-        displayValue(
-            student.district
-        );
+        displayValue(student.district);
 
 
-    /* TOTAL */
+    /* TOTAL SCORE */
 
     let total =
         student.total_score;
@@ -1644,13 +1472,16 @@ function displayResult(student){
             : "—";
 
 
+    /* SUBJECTS */
+
     renderSubjects(
         student.subjects || []
     );
 
 
-    resultArea.style.display =
-        "block";
+    /* SHOW */
+
+    resultArea.style.display = "block";
 
 
     setTimeout(()=>{
@@ -1666,7 +1497,7 @@ function displayResult(student){
 
 
 /* =========================================================
-   TOTAL FALLBACK
+   CALCULATE TOTAL
 ========================================================= */
 
 function calculateTotal(subjects){
@@ -1709,6 +1540,7 @@ function calculateTotal(subjects){
     return valid > 0
         ? total
         : null;
+
 }
 
 
@@ -1727,13 +1559,9 @@ function renderSubjects(subjects){
     table.innerHTML = `
 
         <div class="subject-head">
-
             <div>SUBJECT</div>
-
             <div>MARKS</div>
-
             <div>GRADE</div>
-
         </div>
 
     `;
@@ -1754,13 +1582,16 @@ function renderSubjects(subjects){
 
                 <div>—</div>
 
-                <div class="grade">—</div>
+                <div class="grade">
+                    —
+                </div>
 
             </div>
 
         `;
 
         return;
+
     }
 
 
@@ -1789,32 +1620,25 @@ function renderSubjects(subjects){
             "—";
 
 
-        const row =
-            document.createElement("div");
+        table.innerHTML += `
 
+            <div class="subject-row">
 
-        row.className =
-            "subject-row";
+                <div>
+                    ${escapeHTML(name)}
+                </div>
 
+                <div>
+                    ${escapeHTML(marks)}
+                </div>
 
-        row.innerHTML = `
+                <div class="grade">
+                    ${escapeHTML(grade)}
+                </div>
 
-            <div>
-                ${escapeHTML(name)}
-            </div>
-
-            <div>
-                ${escapeHTML(marks)}
-            </div>
-
-            <div class="grade">
-                ${escapeHTML(grade)}
             </div>
 
         `;
-
-
-        table.appendChild(row);
 
     });
 
@@ -1822,28 +1646,10 @@ function renderSubjects(subjects){
 
 
 /* =========================================================
-   DATE
+   PDF HELPERS
 ========================================================= */
 
-function getFormattedDate(){
-
-    return new Intl.DateTimeFormat(
-        "en-GB",
-        {
-            day:"2-digit",
-            month:"long",
-            year:"numeric"
-        }
-    ).format(new Date());
-
-}
-
-
-/* =========================================================
-   PDF TEXT HELPER
-========================================================= */
-
-function safePdfText(value){
+function pdfText(value){
 
     if(
         value === null ||
@@ -1858,15 +1664,31 @@ function safePdfText(value){
 }
 
 
+function formatPdfDate(){
+
+    const date =
+        new Date();
+
+    return date.toLocaleDateString(
+        "en-GB",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric"
+        }
+    );
+
+}
+
+
 /* =========================================================
-   PDF
-   IMPORTANT:
-   This PDF is generated directly with jsPDF.
-   No html2canvas.
-   Therefore blank canvas/PDF problem is avoided.
+   REAL PDF GENERATOR
+   NO HTML SCREENSHOT
+   NO html2canvas
+   NO window.print()
 ========================================================= */
 
-async function downloadPDF(){
+async function generatePDF(){
 
     if(!currentStudent){
 
@@ -1875,27 +1697,18 @@ async function downloadPDF(){
         );
 
         return;
+
     }
 
 
-    if(
-        !window.jspdf ||
-        !window.jspdf.jsPDF
-    ){
-
-        showError(
-            "PDF library could not be loaded. Please refresh the page and try again."
-        );
-
-        return;
-    }
+    const student =
+        currentStudent;
 
 
-    downloadPdfBtn.disabled =
-        true;
+    downloadPdfBtn.disabled = true;
 
-    downloadPdfBtn.textContent =
-        "Creating PDF…";
+    downloadPdfBtn.innerHTML =
+        "Preparing PDF…";
 
 
     try{
@@ -1913,41 +1726,77 @@ async function downloadPDF(){
             });
 
 
+        /* =================================================
+           PAGE SETTINGS
+        ================================================= */
+
         const pageWidth =
             doc.internal.pageSize.getWidth();
 
         const pageHeight =
             doc.internal.pageSize.getHeight();
 
-
-        const margin = 15;
-
-        let y = 15;
+        const margin = 16;
 
 
         /* =================================================
-           PDF HEADER
+           APPLE INSPIRED COLOURS
+        ================================================= */
+
+        const blue = [
+            0,
+            113,
+            227
+        ];
+
+        const dark = [
+            29,
+            29,
+            31
+        ];
+
+        const gray = [
+            110,
+            110,
+            115
+        ];
+
+        const light = [
+            245,
+            245,
+            247
+        ];
+
+        const green = [
+            52,
+            199,
+            89
+        ];
+
+
+        /* =================================================
+           HEADER
         ================================================= */
 
         doc.setFillColor(
-            245,248,252
+            ...blue
         );
 
         doc.roundedRect(
             margin,
-            y,
-            pageWidth - margin*2,
-            30,
-            5,
-            5,
+            13,
+            11,
+            11,
+            3,
+            3,
             "F"
         );
 
 
-        /* CTGBoardRanking */
-
         doc.setTextColor(
-            29,29,31
+            255,
+            255,
+            255
         );
 
         doc.setFont(
@@ -1955,34 +1804,32 @@ async function downloadPDF(){
             "bold"
         );
 
+        doc.setFontSize(8);
+
+        doc.text(
+            "C",
+            margin + 5.5,
+            20.5,
+            {
+                align:"center"
+            }
+        );
+
+
+        doc.setTextColor(
+            ...dark
+        );
+
         doc.setFontSize(17);
 
         doc.text(
             "CTGBoardRanking",
-            margin + 7,
-            y + 10
+            margin + 16,
+            21
         );
 
 
-        doc.setFont(
-            "helvetica",
-            "normal"
-        );
-
-        doc.setFontSize(7);
-
-        doc.setTextColor(
-            110,110,115
-        );
-
-        doc.text(
-            "SSC 2026 · CHATTAGRAM BOARD",
-            margin + 7,
-            y + 17
-        );
-
-
-        /* Generated by */
+        /* RIGHT HEADER */
 
         doc.setFont(
             "helvetica",
@@ -1992,13 +1839,13 @@ async function downloadPDF(){
         doc.setFontSize(8);
 
         doc.setTextColor(
-            29,29,31
+            ...dark
         );
 
         doc.text(
             "Generated by Shadat",
-            pageWidth - margin - 7,
-            y + 10,
+            pageWidth - margin,
+            17,
             {
                 align:"right"
             }
@@ -2013,28 +1860,41 @@ async function downloadPDF(){
         doc.setFontSize(7);
 
         doc.setTextColor(
-            110,110,115
+            ...gray
         );
 
         doc.text(
-            getFormattedDate(),
-            pageWidth - margin - 7,
-            y + 17,
+            formatPdfDate(),
+            pageWidth - margin,
+            22,
             {
                 align:"right"
             }
         );
 
 
-        y += 38;
+        /* BLUE LINE */
+
+        doc.setDrawColor(
+            ...blue
+        );
+
+        doc.setLineWidth(.7);
+
+        doc.line(
+            margin,
+            30,
+            pageWidth - margin,
+            30
+        );
 
 
         /* =================================================
-           STUDENT HEADER
+           TITLE
         ================================================= */
 
         doc.setTextColor(
-            29,29,31
+            ...dark
         );
 
         doc.setFont(
@@ -2042,18 +1902,13 @@ async function downloadPDF(){
             "bold"
         );
 
-        doc.setFontSize(20);
+        doc.setFontSize(19);
 
         doc.text(
-            safePdfText(
-                currentStudent.student_name
-            ),
+            "SSC 2026 Individual Result",
             margin,
-            y
+            42
         );
-
-
-        y += 7;
 
 
         doc.setFont(
@@ -2061,30 +1916,40 @@ async function downloadPDF(){
             "normal"
         );
 
-        doc.setFontSize(9);
+        doc.setFontSize(8);
 
         doc.setTextColor(
-            110,110,115
+            ...gray
         );
 
         doc.text(
-            "Roll: " +
-            safePdfText(
-                currentStudent.roll
-            ),
+            "Chattogram Board · Unofficial Result Information",
             margin,
-            y
+            48
         );
 
 
-        const status =
-            safePdfText(
-                currentStudent.result_status
-            ).toUpperCase();
+        /* =================================================
+           STUDENT NAME
+        ================================================= */
+
+        doc.setFillColor(
+            ...light
+        );
+
+        doc.roundedRect(
+            margin,
+            56,
+            pageWidth - margin * 2,
+            25,
+            4,
+            4,
+            "F"
+        );
 
 
         doc.setTextColor(
-            22,131,75
+            ...dark
         );
 
         doc.setFont(
@@ -2092,83 +1957,126 @@ async function downloadPDF(){
             "bold"
         );
 
+        doc.setFontSize(15);
+
         doc.text(
-            status,
-            pageWidth - margin,
-            y,
+            pdfText(
+                student.student_name
+            ),
+            margin + 7,
+            67
+        );
+
+
+        doc.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        doc.setFontSize(8);
+
+        doc.setTextColor(
+            ...gray
+        );
+
+        doc.text(
+            "Roll: " +
+            pdfText(student.roll),
+            margin + 7,
+            75
+        );
+
+
+        /* STATUS */
+
+        doc.setFillColor(
+            ...green
+        );
+
+        doc.roundedRect(
+            pageWidth - margin - 32,
+            63,
+            25,
+            8,
+            4,
+            4,
+            "F"
+        );
+
+
+        doc.setTextColor(
+            255,
+            255,
+            255
+        );
+
+        doc.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        doc.setFontSize(6.5);
+
+        doc.text(
+            pdfText(
+                student.result_status ||
+                "RESULT"
+            ).toUpperCase(),
+            pageWidth - margin - 19.5,
+            68.3,
             {
-                align:"right"
+                align:"center"
             }
         );
 
 
-        y += 13;
-
-
         /* =================================================
-           INFORMATION CARDS
+           INFORMATION
         ================================================= */
 
-        const infoItems = [
+        let y = 91;
+
+
+        const info = [
 
             [
-                "YEAR",
-                safePdfText(
-                    currentStudent.year
-                )
+                "ROLL",
+                pdfText(student.roll)
             ],
 
             [
                 "REGISTRATION",
-                safePdfText(
-                    currentStudent.registration
-                )
+                pdfText(student.registration)
+            ],
+
+            [
+                "YEAR",
+                pdfText(student.year)
             ],
 
             [
                 "GROUP",
-                safePdfText(
-                    currentStudent.group_name
-                )
+                pdfText(student.group_name)
             ],
 
             [
                 "INSTITUTION",
-                safePdfText(
-                    currentStudent.institution
-                )
+                pdfText(student.institution)
             ],
 
             [
                 "DISTRICT",
-                safePdfText(
-                    currentStudent.district
-                )
-            ],
-
-            [
-                "EXAM",
-                safePdfText(
-                    currentStudent.exam
-                )
+                pdfText(student.district)
             ]
 
         ];
 
 
-        const cardGap = 4;
-
-        const cardWidth =
-            (
-                pageWidth -
-                margin*2 -
-                cardGap*2
-            ) / 3;
-
-        const cardHeight = 20;
+        const colWidth =
+            (pageWidth - margin * 2 - 8) / 3;
 
 
-        infoItems.forEach(
+        info.forEach(
             (item,index)=>{
 
                 const col =
@@ -2177,28 +2085,25 @@ async function downloadPDF(){
                 const row =
                     Math.floor(index / 3);
 
-
                 const x =
                     margin +
                     col *
-                    (cardWidth + cardGap);
+                    (colWidth + 4);
 
-
-                const cardY =
+                const yy =
                     y +
-                    row *
-                    (cardHeight + cardGap);
+                    row * 22;
 
 
                 doc.setFillColor(
-                    245,245,247
+                    ...light
                 );
 
                 doc.roundedRect(
                     x,
-                    cardY,
-                    cardWidth,
-                    cardHeight,
+                    yy,
+                    colWidth,
+                    18,
                     3,
                     3,
                     "F"
@@ -2206,7 +2111,7 @@ async function downloadPDF(){
 
 
                 doc.setTextColor(
-                    110,110,115
+                    ...gray
                 );
 
                 doc.setFont(
@@ -2214,17 +2119,17 @@ async function downloadPDF(){
                     "bold"
                 );
 
-                doc.setFontSize(6);
+                doc.setFontSize(5.8);
 
                 doc.text(
                     item[0],
-                    x + 4,
-                    cardY + 7
+                    x + 5,
+                    yy + 6
                 );
 
 
                 doc.setTextColor(
-                    29,29,31
+                    ...dark
                 );
 
                 doc.setFont(
@@ -2232,38 +2137,30 @@ async function downloadPDF(){
                     "bold"
                 );
 
-                doc.setFontSize(8);
-
+                doc.setFontSize(7.5);
 
                 let value =
                     item[1];
 
-
-                if(value.length > 28){
-
+                if(value.length > 35){
                     value =
                         value.substring(
                             0,
-                            27
+                            35
                         ) + "…";
-
                 }
-
 
                 doc.text(
                     value,
-                    x + 4,
-                    cardY + 14
+                    x + 5,
+                    yy + 13
                 );
 
             }
         );
 
 
-        y +=
-            2 *
-            (cardHeight + cardGap) +
-            8;
+        y = 140;
 
 
         /* =================================================
@@ -2271,7 +2168,7 @@ async function downloadPDF(){
         ================================================= */
 
         let total =
-            currentStudent.total_score;
+            student.total_score;
 
 
         if(
@@ -2282,13 +2179,35 @@ async function downloadPDF(){
 
             total =
                 calculateTotal(
-                    currentStudent.subjects
+                    student.subjects
                 );
 
         }
 
 
-        const scoreItems = [
+        const gpa =
+            (
+                student.gpa !== null &&
+                student.gpa !== undefined &&
+                student.gpa !== ""
+            )
+                ? Number(student.gpa).toFixed(2)
+                : "—";
+
+
+        const rank =
+            (
+                student.student_rank !== null &&
+                student.student_rank !== undefined &&
+                student.student_rank !== ""
+            )
+                ? Number(
+                    student.student_rank
+                  ).toLocaleString("en-US")
+                : "—";
+
+
+        const scores = [
 
             [
                 "TOTAL SCORE",
@@ -2299,72 +2218,39 @@ async function downloadPDF(){
 
             [
                 "GPA",
-                currentStudent.gpa !== null &&
-                currentStudent.gpa !== undefined &&
-                currentStudent.gpa !== ""
-                    ? Number(
-                        currentStudent.gpa
-                    ).toFixed(2)
-                    : "—"
+                gpa
             ],
 
             [
                 "STUDENT RANK",
-                currentStudent.student_rank !== null &&
-                currentStudent.student_rank !== undefined &&
-                currentStudent.student_rank !== ""
-                    ? Number(
-                        currentStudent.student_rank
-                    ).toLocaleString("en-US")
-                    : "—"
+                rank
             ]
 
         ];
 
 
-        const scoreGap = 5;
-
         const scoreWidth =
-            (
-                pageWidth -
-                margin*2 -
-                scoreGap*2
-            ) / 3;
+            (pageWidth - margin * 2 - 8) / 3;
 
 
-        scoreItems.forEach(
+        scores.forEach(
             (item,index)=>{
 
                 const x =
                     margin +
                     index *
-                    (scoreWidth + scoreGap);
+                    (scoreWidth + 4);
 
 
                 doc.setFillColor(
-                    index === 0
-                        ? 235
-                        : index === 1
-                            ? 237
-                            : 255,
-                    index === 0
-                        ? 246
-                        : index === 1
-                            ? 249
-                            : 246,
-                    index === 0
-                        ? 255
-                        : index === 1
-                            ? 240
-                            : 230
+                    ...light
                 );
-
 
                 doc.roundedRect(
                     x,
                     y,
                     scoreWidth,
-                    27,
+                    24,
                     4,
                     4,
                     "F"
@@ -2372,7 +2258,7 @@ async function downloadPDF(){
 
 
                 doc.setTextColor(
-                    29,29,31
+                    ...blue
                 );
 
                 doc.setFont(
@@ -2380,12 +2266,12 @@ async function downloadPDF(){
                     "bold"
                 );
 
-                doc.setFontSize(17);
+                doc.setFontSize(15);
 
                 doc.text(
                     item[1],
-                    x + scoreWidth/2,
-                    y + 12,
+                    x + scoreWidth / 2,
+                    y + 11,
                     {
                         align:"center"
                     }
@@ -2393,15 +2279,15 @@ async function downloadPDF(){
 
 
                 doc.setTextColor(
-                    110,110,115
+                    ...gray
                 );
 
-                doc.setFontSize(6);
+                doc.setFontSize(5.8);
 
                 doc.text(
                     item[0],
-                    x + scoreWidth/2,
-                    y + 20,
+                    x + scoreWidth / 2,
+                    y + 18,
                     {
                         align:"center"
                     }
@@ -2411,15 +2297,15 @@ async function downloadPDF(){
         );
 
 
-        y += 37;
-
-
         /* =================================================
-           SUBJECT TITLE
+           SUBJECT TABLE
         ================================================= */
 
+        y = 174;
+
+
         doc.setTextColor(
-            29,29,31
+            ...dark
         );
 
         doc.setFont(
@@ -2436,142 +2322,134 @@ async function downloadPDF(){
         );
 
 
-        y += 7;
-
-
-        /* =================================================
-           SUBJECT TABLE
-        ================================================= */
-
         const subjects =
             Array.isArray(
-                currentStudent.subjects
+                student.subjects
             )
-                ? currentStudent.subjects
+                ? student.subjects
                 : [];
 
 
-        const tableWidth =
-            pageWidth -
-            margin*2;
+        const rows =
+            subjects.map(
+                subject => [
 
-
-        const col1 =
-            tableWidth - 55;
-
-
-        const col2 = 27;
-
-        const col3 = 28;
-
-
-        /* Header */
-
-        doc.setFillColor(
-            245,245,247
-        );
-
-        doc.roundedRect(
-            margin,
-            y,
-            tableWidth,
-            9,
-            2,
-            2,
-            "F"
-        );
-
-
-        doc.setFont(
-            "helvetica",
-            "bold"
-        );
-
-        doc.setFontSize(6);
-
-        doc.setTextColor(
-            110,110,115
-        );
-
-        doc.text(
-            "SUBJECT",
-            margin + 4,
-            y + 6
-        );
-
-        doc.text(
-            "MARKS",
-            margin + col1 + 4,
-            y + 6
-        );
-
-        doc.text(
-            "GRADE",
-            margin + col1 + col2 + 4,
-            y + 6
-        );
-
-
-        y += 9;
-
-
-        subjects.forEach(
-            (subject,index)=>{
-
-                if(y > pageHeight - 30){
-
-                    doc.addPage();
-
-                    y = 18;
-
-                }
-
-
-                const name =
-                    safePdfText(
+                    pdfText(
                         subject.subject_name ??
                         subject.subject ??
                         subject.subject_title ??
                         subject.subject_code ??
                         subject.code
-                    );
+                    ),
 
-
-                const marks =
-                    safePdfText(
+                    pdfText(
                         subject.marks ??
                         subject.mark ??
                         subject.total_marks ??
                         subject.total_mark
-                    );
+                    ),
 
-
-                const grade =
-                    safePdfText(
+                    pdfText(
                         subject.grade ??
                         subject.grade_name
-                    );
+                    )
+
+                ]
+            );
 
 
-                if(index % 2 === 0){
+        if(rows.length === 0){
 
-                    doc.setFillColor(
-                        250,250,252
-                    );
+            rows.push([
+                "Subject details unavailable",
+                "—",
+                "—"
+            ]);
 
-                    doc.rect(
-                        margin,
-                        y,
-                        tableWidth,
-                        9,
-                        "F"
-                    );
+        }
 
+
+        doc.autoTable({
+
+            startY:y + 6,
+
+            head:[
+                [
+                    "SUBJECT",
+                    "MARKS",
+                    "GRADE"
+                ]
+            ],
+
+            body:rows,
+
+            margin:{
+                left:margin,
+                right:margin
+            },
+
+            theme:"grid",
+
+            styles:{
+                font:"helvetica",
+                fontSize:8,
+                cellPadding:3.2,
+                textColor:dark,
+                lineColor:[225,225,225],
+                lineWidth:.2
+            },
+
+            headStyles:{
+                fillColor:blue,
+                textColor:[255,255,255],
+                fontStyle:"bold",
+                fontSize:7
+            },
+
+            alternateRowStyles:{
+                fillColor:[250,250,252]
+            },
+
+            columnStyles:{
+                0:{
+                    cellWidth:"auto"
+                },
+                1:{
+                    cellWidth:28,
+                    halign:"right"
+                },
+                2:{
+                    cellWidth:28,
+                    halign:"right"
                 }
+            },
+
+            didDrawPage: function(){
+
+                /* FOOTER */
+
+                const footerY =
+                    pageHeight - 13;
+
+
+                doc.setDrawColor(
+                    225,
+                    225,
+                    225
+                );
+
+                doc.setLineWidth(.3);
+
+                doc.line(
+                    margin,
+                    footerY - 5,
+                    pageWidth - margin,
+                    footerY - 5
+                );
 
 
                 doc.setTextColor(
-                    29,29,31
+                    ...gray
                 );
 
                 doc.setFont(
@@ -2579,187 +2457,37 @@ async function downloadPDF(){
                     "normal"
                 );
 
-                doc.setFontSize(7);
-
-
-                let subjectName =
-                    name;
-
-
-                if(
-                    subjectName.length > 45
-                ){
-
-                    subjectName =
-                        subjectName.substring(
-                            0,
-                            44
-                        ) + "…";
-
-                }
-
+                doc.setFontSize(6.5);
 
                 doc.text(
-                    subjectName,
-                    margin + 4,
-                    y + 6
+                    "CTGBoardRanking",
+                    margin,
+                    footerY
                 );
 
 
                 doc.text(
-                    marks,
-                    margin + col1 + 4,
-                    y + 6
+                    "Unofficial Notice",
+                    pageWidth / 2,
+                    footerY,
+                    {
+                        align:"center"
+                    }
                 );
 
-
-                doc.setFont(
-                    "helvetica",
-                    "bold"
-                );
 
                 doc.text(
-                    grade,
-                    margin + col1 + col2 + 4,
-                    y + 6
+                    "Generated by Shadat",
+                    pageWidth - margin,
+                    footerY,
+                    {
+                        align:"right"
+                    }
                 );
 
-
-                y += 9;
-
             }
-        );
 
-
-        /* =================================================
-           FOOTER
-        ================================================= */
-
-        if(y > pageHeight - 35){
-
-            doc.addPage();
-
-            y = pageHeight - 30;
-
-        }
-        else{
-
-            y += 8;
-
-        }
-
-
-        doc.setDrawColor(
-            220,220,223
-        );
-
-        doc.line(
-            margin,
-            y,
-            pageWidth - margin,
-            y
-        );
-
-
-        y += 7;
-
-
-        doc.setTextColor(
-            110,110,115
-        );
-
-        doc.setFont(
-            "helvetica",
-            "normal"
-        );
-
-        doc.setFontSize(7);
-
-
-        doc.text(
-            "CTGBoardRanking",
-            margin,
-            y
-        );
-
-
-        doc.text(
-            "Unofficial Notice",
-            pageWidth/2,
-            y,
-            {
-                align:"center"
-            }
-        );
-
-
-        doc.text(
-            "Generated by Shadat",
-            pageWidth - margin,
-            y,
-            {
-                align:"right"
-            }
-        );
-
-
-        y += 5;
-
-
-        doc.setFontSize(6);
-
-        doc.setTextColor(
-            150,150,155
-        );
-
-
-        doc.text(
-            "This document is unofficial and intended for educational, research and statistical purposes.",
-            pageWidth/2,
-            y,
-            {
-                align:"center"
-            }
-        );
-
-
-        /* =================================================
-           PAGE NUMBERS
-        ================================================= */
-
-        const pageCount =
-            doc.internal.getNumberOfPages();
-
-
-        for(
-            let page = 1;
-            page <= pageCount;
-            page++
-        ){
-
-            doc.setPage(page);
-
-            doc.setFont(
-                "helvetica",
-                "normal"
-            );
-
-            doc.setFontSize(6);
-
-            doc.setTextColor(
-                150,150,155
-            );
-
-            doc.text(
-                `${page} / ${pageCount}`,
-                pageWidth - margin,
-                pageHeight - 7,
-                {
-                    align:"right"
-                }
-            );
-
-        }
+        });
 
 
         /* =================================================
@@ -2768,8 +2496,7 @@ async function downloadPDF(){
 
         const safeRoll =
             String(
-                currentStudent.roll ||
-                "result"
+                student.roll || "student"
             ).replace(
                 /[^a-zA-Z0-9_-]/g,
                 ""
@@ -2777,7 +2504,7 @@ async function downloadPDF(){
 
 
         doc.save(
-            `CTGBoardRanking_Result_${safeRoll}.pdf`
+            `CTGBoardRanking_SSC2026_${safeRoll}.pdf`
         );
 
     }
@@ -2785,23 +2512,22 @@ async function downloadPDF(){
     catch(error){
 
         console.error(
-            "PDF error:",
+            "PDF generation error:",
             error
         );
 
         showError(
-            "PDF তৈরি করা যায়নি। আবার চেষ্টা করুন।"
+            "PDF তৈরি করা যায়নি। আবার চেষ্টা করুন।"
         );
 
     }
 
     finally{
 
-        downloadPdfBtn.disabled =
-            false;
+        downloadPdfBtn.disabled = false;
 
-        downloadPdfBtn.textContent =
-            "Download PDF ↓";
+        downloadPdfBtn.innerHTML =
+            "<span>↓</span><span>Download PDF Result</span>";
 
     }
 
@@ -2814,35 +2540,12 @@ async function downloadPDF(){
 
 downloadPdfBtn.addEventListener(
     "click",
-    downloadPDF
+    generatePDF
 );
 
 
 /* =========================================================
-   PRINT
-========================================================= */
-
-printBtn.addEventListener(
-    "click",
-    ()=>{
-
-        if(!currentStudent){
-
-            showError(
-                "Please search a result first."
-            );
-
-            return;
-        }
-
-        window.print();
-
-    }
-);
-
-
-/* =========================================================
-   AUTO LOAD ?roll=
+   AUTO LOAD ?roll=123456
 ========================================================= */
 
 const params =
@@ -2863,7 +2566,7 @@ if(urlRoll){
         ()=>{
             searchResult();
         },
-        250
+        300
     );
 
 }
