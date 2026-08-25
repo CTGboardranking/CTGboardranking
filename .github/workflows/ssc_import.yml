@@ -1,0 +1,228 @@
+name: Import Existing SSC Data
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+
+  import:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          ref: main
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install supabase
+
+      - name: Import students.json to Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+
+          python - <<'PY'
+          import os
+          import json
+          from supabase import create_client
+
+          SUPABASE_URL = os.environ["SUPABASE_URL"]
+          SUPABASE_KEY = os.environ["SUPABASE_KEY"]
+
+          supabase = create_client(
+              SUPABASE_URL,
+              SUPABASE_KEY
+          )
+
+          path = "scraper/students.json"
+
+          with open(
+              path,
+              "r",
+              encoding="utf-8"
+          ) as f:
+
+              students = json.load(f)
+
+          print(
+              "Students in JSON:",
+              len(students)
+          )
+
+          batch_size = 500
+
+          total_saved = 0
+
+          for start in range(
+              0,
+              len(students),
+              batch_size
+          ):
+
+              batch = students[
+                  start:start + batch_size
+              ]
+
+              payload = []
+
+              for student in batch:
+
+                  payload.append({
+
+                      "roll": str(
+                          student.get(
+                              "roll",
+                              ""
+                          )
+                      ),
+
+                      "name": student.get(
+                          "name",
+                          ""
+                      ),
+
+                      "board": student.get(
+                          "board",
+                          ""
+                      ),
+
+                      "group": student.get(
+                          "group",
+                          ""
+                      ),
+
+                      "father_name": student.get(
+                          "father_name",
+                          ""
+                      ),
+
+                      "mother_name": student.get(
+                          "mother_name",
+                          ""
+                      ),
+
+                      "session": student.get(
+                          "session",
+                          ""
+                      ),
+
+                      "reg_no": student.get(
+                          "reg_no",
+                          ""
+                      ),
+
+                      "type": student.get(
+                          "type",
+                          ""
+                      ),
+
+                      "institute": student.get(
+                          "institute",
+                          ""
+                      ),
+
+                      "district": student.get(
+                          "district",
+                          ""
+                      ),
+
+                      "result": student.get(
+                          "result",
+                          ""
+                      ),
+
+                      "date_of_birth": student.get(
+                          "date_of_birth",
+                          ""
+                      ),
+
+                      "gpa": student.get(
+                          "gpa"
+                      ),
+
+                      "total_score": student.get(
+                          "total_score"
+                      ),
+
+                      "subjects": student.get(
+                          "subjects",
+                          []
+                      ),
+
+                  })
+
+              response = (
+                  supabase
+                  .table("students")
+                  .upsert(
+                      payload,
+                      on_conflict="roll"
+                  )
+                  .execute()
+              )
+
+              total_saved += len(payload)
+
+              print(
+                  f"Imported: "
+                  f"{min(start + batch_size, len(students))}"
+                  f"/{len(students)}"
+              )
+
+          print("")
+          print(
+              "IMPORT COMPLETE"
+          )
+
+          print(
+              "Total processed:",
+              total_saved
+          )
+          PY
+
+      - name: Verify Supabase count
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+
+          python - <<'PY'
+          import os
+          from supabase import create_client
+
+          supabase = create_client(
+              os.environ["SUPABASE_URL"],
+              os.environ["SUPABASE_KEY"]
+          )
+
+          response = (
+              supabase
+              .table("students")
+              .select(
+                  "roll",
+                  count="exact"
+              )
+              .limit(1)
+              .execute()
+          )
+
+          print(
+              "Supabase total students:",
+              response.count
+          )
+          PY
