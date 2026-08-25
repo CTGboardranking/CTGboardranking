@@ -587,6 +587,7 @@ button{
 
 /* =========================================================
    PDF RENDER AREA
+   FIXED: NO opacity 0 / NO negative z-index
 ========================================================= */
 
 #pdfRenderArea{
@@ -594,67 +595,77 @@ button{
   left:0;
   top:0;
   width:794px;
-  background:#fff;
-  z-index:-9999;
-  opacity:1;
+  background:#ffffff;
+  z-index:999999;
+  display:none;
   pointer-events:none;
 }
 
 .pdf-page{
   width:794px;
   height:1123px;
-  background:#fff;
+  min-height:1123px;
+  max-height:1123px;
+  background:#ffffff;
   color:#111113;
-  padding:42px 42px 38px;
+  padding:38px 38px 35px;
   position:relative;
   overflow:hidden;
   font-family:Arial,Helvetica,sans-serif;
+  page-break-after:always;
+  break-after:page;
+}
+
+.pdf-page:last-child{
+  page-break-after:auto;
+  break-after:auto;
 }
 
 .pdf-header{
   text-align:center;
   border-bottom:1px solid #e5e5e7;
-  padding-bottom:18px;
+  padding-bottom:13px;
 }
 
 .pdf-brand{
-  font-size:27px;
+  font-size:26px;
   line-height:1;
   font-weight:900;
   letter-spacing:-1.2px;
+  color:#111113;
 }
 
 .pdf-generated{
-  margin-top:7px;
+  margin-top:5px;
   color:#6e6e73;
-  font-size:9px;
+  font-size:8px;
 }
 
 .pdf-title{
-  margin-top:20px;
+  margin-top:14px;
   text-align:center;
 }
 
 .pdf-title-main{
-  font-size:20px;
+  font-size:18px;
   font-weight:900;
-  letter-spacing:-.5px;
+  letter-spacing:-.4px;
 }
 
 .pdf-title-sub{
-  margin-top:5px;
-  font-size:9px;
+  margin-top:4px;
+  font-size:8px;
   color:#6e6e73;
 }
 
 .pdf-badge{
   display:inline-block;
-  margin-top:10px;
-  padding:6px 10px;
+  margin-top:7px;
+  padding:5px 9px;
   border-radius:7px;
   background:#fff1f0;
   color:#d70015;
-  font-size:7px;
+  font-size:6.5px;
   font-weight:900;
   letter-spacing:1px;
 }
@@ -663,33 +674,49 @@ button{
   width:100%;
   border-collapse:collapse;
   table-layout:fixed;
-  margin-top:18px;
-  font-size:7px;
+  margin-top:13px;
+  font-size:6.5px;
+}
+
+.pdf-table thead{
+  display:table-header-group;
+}
+
+.pdf-table tbody{
+  display:table-row-group;
+}
+
+.pdf-table tr{
+  page-break-inside:avoid;
+  break-inside:avoid;
 }
 
 .pdf-table th{
-  height:28px;
-  padding:6px 5px;
+  height:25px;
+  padding:5px 4px;
   text-align:left;
-  background:#f5f5f7;
-  color:#6e6e73;
-  font-size:6.5px;
+  background:#f2f2f5;
+  color:#55555a;
+  font-size:6px;
   font-weight:900;
   white-space:nowrap;
 }
 
 .pdf-table td{
-  height:18px;
-  padding:4px 5px;
+  height:17px;
+  padding:3px 4px;
   border-top:1px solid #e8e8ea;
   vertical-align:middle;
-  line-height:1.15;
+  line-height:1.1;
   overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
 }
 
 .pdf-table .pdf-inst{
   font-weight:800;
   white-space:nowrap;
+  overflow:hidden;
   text-overflow:ellipsis;
 }
 
@@ -704,23 +731,23 @@ button{
 
 .pdf-page-footer{
   position:absolute;
-  left:42px;
-  right:42px;
-  bottom:26px;
+  left:38px;
+  right:38px;
+  bottom:22px;
   text-align:center;
 }
 
 .pdf-page-number{
   color:#6e6e73;
-  font-size:7px;
+  font-size:6.5px;
 }
 
 .pdf-unofficial{
-  margin-top:8px;
-  font-size:8px;
+  margin-top:6px;
+  font-size:7px;
   font-weight:900;
   color:#d70015;
-  letter-spacing:1.2px;
+  letter-spacing:1.1px;
 }
 
 </style>
@@ -932,7 +959,7 @@ button{
 
 
 <!-- =====================================================
-     HIDDEN PDF RENDER AREA
+     PDF RENDER AREA
 ===================================================== -->
 
 <div id="pdfRenderArea"></div>
@@ -998,4 +1025,1111 @@ const rangeText =
    GLOBAL DATA
 ========================================================= */
 
-[...]
+let allInstitutions = [];
+
+let currentPage = 1;
+
+const PAGE_SIZE = 100;
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================================
+   NUMBER
+========================================================= */
+
+function numberValue(value){
+
+  if(
+    value === null ||
+    value === undefined ||
+    value === ""
+  ){
+    return 0;
+  }
+
+  const cleaned =
+    String(value)
+      .replace(/,/g,"")
+      .trim();
+
+  const n =
+    Number(cleaned);
+
+  return Number.isFinite(n)
+    ? n
+    : 0;
+
+}
+
+
+/* =========================================================
+   GPA-5 VALUE
+========================================================= */
+
+function getGPA5(item){
+
+  const candidates = [
+
+    item.total_gpa5,
+    item.gpa5,
+    item.GPA5,
+    item.GPA_5,
+    item.total_gpa_5,
+    item.total_gpa
+
+  ];
+
+  for(const value of candidates){
+
+    if(
+      value !== undefined &&
+      value !== null &&
+      value !== ""
+    ){
+
+      return numberValue(value);
+
+    }
+
+  }
+
+  return 0;
+
+}
+
+
+/* =========================================================
+   PASSING RATE
+========================================================= */
+
+function getPassingRate(item){
+
+  if(
+    item.passing_rate !== undefined &&
+    item.passing_rate !== null &&
+    item.passing_rate !== ""
+  ){
+
+    return numberValue(
+      item.passing_rate
+    );
+
+  }
+
+  const appeared =
+    numberValue(item.appeared);
+
+  const passed =
+    numberValue(item.passed);
+
+  if(appeared > 0){
+
+    return (
+      passed /
+      appeared *
+      100
+    );
+
+  }
+
+  return 0;
+
+}
+
+
+/* =========================================================
+   LOAD JSON
+========================================================= */
+
+async function loadInstitutionRanking(){
+
+  try{
+
+    const response =
+      await fetch(
+        "institution-collector/institution_results.json",
+        {
+          method:"GET",
+          cache:"no-store"
+        }
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "Unable to load institution_results.json"
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    if(!Array.isArray(data)){
+
+      throw new Error(
+        "Invalid institution data format."
+      );
+
+    }
+
+
+    createRanking(data);
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    rankingBody.innerHTML = "";
+
+    errorBox.textContent =
+      error.message ||
+      "Unable to load institution ranking.";
+
+    errorBox.classList.remove("hidden");
+
+  }
+
+}
+
+
+/* =========================================================
+   CREATE RANKING
+========================================================= */
+
+function createRanking(data){
+
+  allInstitutions =
+    data
+      .filter(
+        item =>
+          item &&
+          (
+            item.institution_name ||
+            item.name ||
+            item.institution
+          )
+      )
+      .map(
+        item => {
+
+          return {
+
+            ...item,
+
+            institution_name:
+              item.institution_name ||
+              item.name ||
+              item.institution ||
+              "Unknown Institution",
+
+            gpa5:
+              getGPA5(item),
+
+            passing_rate:
+              getPassingRate(item)
+
+          };
+
+        }
+      );
+
+
+  allInstitutions.sort(
+    function(a,b){
+
+      const gpaDifference =
+        b.gpa5 -
+        a.gpa5;
+
+      if(gpaDifference !== 0)
+        return gpaDifference;
+
+
+      const rateDifference =
+        b.passing_rate -
+        a.passing_rate;
+
+      if(rateDifference !== 0)
+        return rateDifference;
+
+
+      const passedDifference =
+        numberValue(b.passed) -
+        numberValue(a.passed);
+
+      if(passedDifference !== 0)
+        return passedDifference;
+
+
+      const appearedDifference =
+        numberValue(b.appeared) -
+        numberValue(a.appeared);
+
+      if(appearedDifference !== 0)
+        return appearedDifference;
+
+
+      return String(
+        a.institution_name
+      ).localeCompare(
+        String(b.institution_name)
+      );
+
+    }
+  );
+
+
+  totalCount.textContent =
+    allInstitutions.length.toLocaleString("en-US");
+
+  currentPage = 1;
+
+  renderPage();
+
+}
+
+
+/* =========================================================
+   RENDER PAGE
+========================================================= */
+
+function renderPage(){
+
+  rankingBody.innerHTML = "";
+
+  const totalPages =
+    Math.max(
+      1,
+      Math.ceil(
+        allInstitutions.length /
+        PAGE_SIZE
+      )
+    );
+
+
+  if(currentPage > totalPages)
+    currentPage = totalPages;
+
+
+  const start =
+    (currentPage - 1) *
+    PAGE_SIZE;
+
+
+  const end =
+    Math.min(
+      start + PAGE_SIZE,
+      allInstitutions.length
+    );
+
+
+  const pageData =
+    allInstitutions.slice(
+      start,
+      end
+    );
+
+
+  rangeText.textContent =
+    `${start + 1}–${end} of ${allInstitutions.length}`;
+
+
+  if(!pageData.length){
+
+    rankingBody.innerHTML = `
+
+      <tr>
+
+        <td
+          colspan="9"
+          class="loading">
+
+          No institution data found.
+
+        </td>
+
+      </tr>
+
+    `;
+
+    renderPagination();
+
+    return;
+
+  }
+
+
+  pageData.forEach(
+    function(item,index){
+
+      const rank =
+        start + index + 1;
+
+
+      let rankClass = "";
+
+      if(rank === 1)
+        rankClass = "top-one";
+
+      else if(rank === 2)
+        rankClass = "top-two";
+
+      else if(rank === 3)
+        rankClass = "top-three";
+
+
+      const row =
+        document.createElement("tr");
+
+
+      row.innerHTML = `
+
+        <td class="rank ${rankClass}">
+          #${rank}
+        </td>
+
+        <td class="institution-name">
+          ${escapeHTML(
+            item.institution_name
+          )}
+        </td>
+
+        <td class="eiin">
+          ${escapeHTML(
+            item.eiin ?? "—"
+          )}
+        </td>
+
+        <td class="district">
+          ${escapeHTML(
+            item.district ?? "—"
+          )}
+        </td>
+
+        <td>
+          ${escapeHTML(
+            item.thana ?? "—"
+          )}
+        </td>
+
+        <td class="number">
+          ${numberValue(
+            item.appeared
+          ).toLocaleString("en-US")}
+        </td>
+
+        <td class="number">
+          ${numberValue(
+            item.passed
+          ).toLocaleString("en-US")}
+        </td>
+
+        <td class="rate">
+
+          ${numberValue(
+            item.passing_rate
+          ).toFixed(2)}%
+
+          <span>
+            pass
+          </span>
+
+        </td>
+
+        <td class="gpa5">
+          ${numberValue(
+            item.gpa5
+          ).toLocaleString("en-US")}
+        </td>
+
+      `;
+
+
+      rankingBody.appendChild(row);
+
+    }
+  );
+
+
+  renderPagination();
+
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+function renderPagination(){
+
+  pagination.innerHTML = "";
+
+  const totalPages =
+    Math.ceil(
+      allInstitutions.length /
+      PAGE_SIZE
+    );
+
+
+  if(totalPages <= 1)
+    return;
+
+
+  const previous =
+    document.createElement("button");
+
+  previous.className =
+    "page-btn";
+
+  previous.textContent =
+    "‹";
+
+  previous.disabled =
+    currentPage === 1;
+
+  previous.onclick =
+    function(){
+
+      if(currentPage > 1){
+
+        currentPage--;
+
+        renderPage();
+
+        window.scrollTo({
+          top:0,
+          behavior:"smooth"
+        });
+
+      }
+
+    };
+
+  pagination.appendChild(previous);
+
+
+  for(
+    let page = 1;
+    page <= totalPages;
+    page++
+  ){
+
+    if(
+      page !== 1 &&
+      page !== totalPages &&
+      Math.abs(page - currentPage) > 2
+    ){
+
+      if(
+        page === 2 ||
+        page === totalPages - 1
+      ){
+
+        const dots =
+          document.createElement("span");
+
+        dots.textContent =
+          "…";
+
+        dots.style.color =
+          "var(--muted)";
+
+        pagination.appendChild(dots);
+
+      }
+
+      continue;
+
+    }
+
+
+    const button =
+      document.createElement("button");
+
+    button.className =
+      "page-btn";
+
+
+    if(page === currentPage)
+      button.classList.add("active");
+
+
+    const first =
+      (page - 1) *
+      PAGE_SIZE +
+      1;
+
+
+    const last =
+      Math.min(
+        page * PAGE_SIZE,
+        allInstitutions.length
+      );
+
+
+    button.textContent =
+      page;
+
+    button.title =
+      `${first}-${last}`;
+
+
+    button.onclick =
+      function(){
+
+        currentPage =
+          page;
+
+        renderPage();
+
+        window.scrollTo({
+          top:0,
+          behavior:"smooth"
+        });
+
+      };
+
+
+    pagination.appendChild(button);
+
+  }
+
+
+  const next =
+    document.createElement("button");
+
+  next.className =
+    "page-btn";
+
+  next.textContent =
+    "›";
+
+  next.disabled =
+    currentPage === totalPages;
+
+  next.onclick =
+    function(){
+
+      if(currentPage < totalPages){
+
+        currentPage++;
+
+        renderPage();
+
+        window.scrollTo({
+          top:0,
+          behavior:"smooth"
+        });
+
+      }
+
+    };
+
+  pagination.appendChild(next);
+
+}
+
+
+/* =========================================================
+   PDF BUTTON
+========================================================= */
+
+pdfBtn.addEventListener(
+  "click",
+  async function(){
+
+    if(!allInstitutions.length){
+
+      alert(
+        "Institution data is not loaded yet."
+      );
+
+      return;
+
+    }
+
+
+    pdfBtn.disabled = true;
+
+    pdfBtn.textContent =
+      "Preparing PDF…";
+
+
+    try{
+
+      await generateFullPDF();
+
+    }
+    catch(error){
+
+      console.error(
+        "PDF ERROR:",
+        error
+      );
+
+      alert(
+        "PDF তৈরি করা যায়নি। আবার চেষ্টা করুন।"
+      );
+
+    }
+    finally{
+
+      pdfBtn.disabled = false;
+
+      pdfBtn.textContent =
+        "↓ Download PDF";
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   DATE + TIME
+========================================================= */
+
+function getGeneratedDateTime(){
+
+  return new Date().toLocaleString(
+    "en-GB",
+    {
+      day:"2-digit",
+      month:"long",
+      year:"numeric",
+      hour:"2-digit",
+      minute:"2-digit",
+      hour12:true
+    }
+  );
+
+}
+
+
+/* =========================================================
+   PDF ROW
+========================================================= */
+
+function createPDFRow(item,index){
+
+  const rank =
+    index + 1;
+
+
+  return `
+
+    <tr>
+
+      <td class="pdf-rank">
+        ${rank}
+      </td>
+
+      <td class="pdf-inst">
+        ${escapeHTML(
+          item.institution_name
+        )}
+      </td>
+
+      <td>
+        ${escapeHTML(
+          item.eiin ?? "—"
+        )}
+      </td>
+
+      <td>
+        ${escapeHTML(
+          item.district ?? "—"
+        )}
+      </td>
+
+      <td>
+        ${escapeHTML(
+          item.thana ?? "—"
+        )}
+      </td>
+
+      <td>
+        ${numberValue(
+          item.appeared
+        ).toLocaleString("en-US")}
+      </td>
+
+      <td>
+        ${numberValue(
+          item.passed
+        ).toLocaleString("en-US")}
+      </td>
+
+      <td>
+        ${numberValue(
+          item.passing_rate
+        ).toFixed(2)}%
+      </td>
+
+      <td class="pdf-gpa5">
+        ${numberValue(
+          item.gpa5
+        ).toLocaleString("en-US")}
+      </td>
+
+    </tr>
+
+  `;
+
+}
+
+
+/* =========================================================
+   PDF GENERATOR — FIXED
+========================================================= */
+
+async function generateFullPDF(){
+
+  const renderArea =
+    document.getElementById(
+      "pdfRenderArea"
+    );
+
+
+  renderArea.innerHTML = "";
+
+  const generated =
+    getGeneratedDateTime();
+
+
+  const totalInstitutions =
+    allInstitutions.length;
+
+
+  const totalPDFPages =
+    Math.ceil(
+      totalInstitutions / 50
+    );
+
+
+  /*
+    Create every PDF page separately.
+    This prevents html2pdf/html2canvas from
+    producing one blank giant canvas.
+  */
+
+  for(
+    let page = 0;
+    page < totalPDFPages;
+    page++
+  ){
+
+    const start =
+      page * 50;
+
+
+    const end =
+      Math.min(
+        start + 50,
+        totalInstitutions
+      );
+
+
+    const pageData =
+      allInstitutions.slice(
+        start,
+        end
+      );
+
+
+    let rows = "";
+
+
+    pageData.forEach(
+      function(item,index){
+
+        rows +=
+          createPDFRow(
+            item,
+            start + index
+          );
+
+      }
+    );
+
+
+    const pageElement =
+      document.createElement("div");
+
+
+    pageElement.className =
+      "pdf-page";
+
+
+    pageElement.innerHTML = `
+
+      <div class="pdf-header">
+
+        <div class="pdf-brand">
+          CTGBoardRanking
+        </div>
+
+        <div class="pdf-generated">
+          Generated by Shadat Fatih
+        </div>
+
+        <div class="pdf-generated">
+          ${escapeHTML(generated)}
+        </div>
+
+      </div>
+
+
+      <div class="pdf-title">
+
+        <div class="pdf-title-main">
+          Institution Ranking
+        </div>
+
+        <div class="pdf-title-sub">
+          SSC 2026 · Chattogram Education Board
+        </div>
+
+        <div class="pdf-badge">
+          PAGE ${page + 1} OF ${totalPDFPages}
+        </div>
+
+      </div>
+
+
+      <table class="pdf-table">
+
+        <colgroup>
+
+          <col style="width:6%">
+
+          <col style="width:31%">
+
+          <col style="width:9%">
+
+          <col style="width:12%">
+
+          <col style="width:12%">
+
+          <col style="width:8%">
+
+          <col style="width:8%">
+
+          <col style="width:8%">
+
+          <col style="width:6%">
+
+        </colgroup>
+
+
+        <thead>
+
+          <tr>
+
+            <th>RANK</th>
+            <th>INSTITUTION</th>
+            <th>EIIN</th>
+            <th>DISTRICT</th>
+            <th>THANA</th>
+            <th>APPEARED</th>
+            <th>PASSED</th>
+            <th>PASS %</th>
+            <th>GPA-5</th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          ${rows}
+
+        </tbody>
+
+      </table>
+
+
+      <div class="pdf-page-footer">
+
+        <div class="pdf-page-number">
+          CTGBoardRanking · SSC 2026
+          · Institutions ${start + 1}–${end}
+        </div>
+
+        <div class="pdf-unofficial">
+          Unofficial Notice
+        </div>
+
+      </div>
+
+    `;
+
+
+    renderArea.appendChild(
+      pageElement
+    );
+
+  }
+
+
+  /*
+    IMPORTANT FIX:
+    The render area MUST be visible to html2canvas.
+
+    Previous version used problematic stacking/
+    positioning which could result in a completely
+    white canvas.
+
+    We temporarily put it at the top of the page
+    and give it real dimensions.
+  */
+
+  renderArea.style.display =
+    "block";
+
+  renderArea.style.position =
+    "absolute";
+
+  renderArea.style.left =
+    "0";
+
+  renderArea.style.top =
+    "0";
+
+  renderArea.style.zIndex =
+    "999999";
+
+  renderArea.style.opacity =
+    "1";
+
+  renderArea.style.visibility =
+    "visible";
+
+
+  /*
+    Wait until browser has actually painted
+    all PDF pages.
+  */
+
+  await new Promise(
+    resolve =>
+      requestAnimationFrame(
+        () =>
+          requestAnimationFrame(
+            resolve
+          )
+      )
+  );
+
+
+  /*
+    Generate directly from the visible render area.
+    Portrait A4.
+  */
+
+  await html2pdf()
+    .set({
+
+      margin:0,
+
+      filename:
+        "CTGBoardRanking_Institution_Ranking_2026.pdf",
+
+      image:{
+        type:"jpeg",
+        quality:0.98
+      },
+
+      html2canvas:{
+
+        scale:2,
+
+        useCORS:true,
+
+        allowTaint:true,
+
+        backgroundColor:"#ffffff",
+
+        logging:false,
+
+        letterRendering:true,
+
+        scrollX:0,
+
+        scrollY:0,
+
+        windowWidth:794,
+
+        windowHeight:1123
+
+      },
+
+      jsPDF:{
+
+        unit:"mm",
+
+        format:"a4",
+
+        orientation:"portrait",
+
+        compress:true
+
+      },
+
+      pagebreak:{
+
+        mode:[
+          "css",
+          "legacy"
+        ]
+
+      }
+
+    })
+    .from(renderArea)
+    .save();
+
+
+  /*
+    Cleanup.
+  */
+
+  renderArea.innerHTML = "";
+
+  renderArea.style.display =
+    "none";
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+loadInstitutionRanking();
+
+</script>
+
+</body>
+</html>
