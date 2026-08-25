@@ -414,5 +414,25 @@
   {
     "roll": "101485",
     "group": "Science"
+  },
+  {
+    "roll": "306275",
+    "group": "Humanities",
+    "reason": "No valid result"
+  },
+  {
+    "roll": "307867",
+    "group": "Humanities",
+    "reason": "No valid result"
+  },
+  {
+    "roll": "312122",
+    "group": "Humanities",
+    "reason": "No valid result"
+  },
+  {
+    "roll": "314733",
+    "group": "Humanities",
+    "reason": "No valid result"
   }
 ]
