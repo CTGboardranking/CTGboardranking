@@ -1,1 +1,1001 @@
-<FULL FILE CONTENT>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Institution Ranking — CTGBoardRanking</title>
+
+<meta name="description"
+content="SSC 2026 Chattogram Board Institution Ranking">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+
+:root{
+  --bg:#f5f5f7;
+  --surface:#ffffff;
+  --surface-soft:rgba(255,255,255,.78);
+  --text:#111113;
+  --muted:#6e6e73;
+  --border:rgba(0,0,0,.08);
+  --blue:#0071e3;
+  --blue2:#2997ff;
+  --green:#168a4b;
+  --orange:#b76e00;
+  --shadow:0 20px 60px rgba(0,0,0,.08);
+  --radius:26px;
+}
+
+html.dark{
+  --bg:#000;
+  --surface:#1c1c1e;
+  --surface-soft:rgba(28,28,30,.82);
+  --text:#f5f5f7;
+  --muted:#98989d;
+  --border:rgba(255,255,255,.10);
+  --blue:#2997ff;
+  --blue2:#4aa7ff;
+  --green:#30d158;
+  --orange:#ff9f0a;
+  --shadow:0 25px 80px rgba(0,0,0,.45);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:var(--bg);
+  color:var(--text);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+}
+
+button{
+  font:inherit;
+  cursor:pointer;
+}
+
+.hidden{
+  display:none!important;
+}
+
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+.background-glow{
+  position:fixed;
+  width:430px;
+  height:430px;
+  border-radius:50%;
+  filter:blur(110px);
+  opacity:.12;
+  pointer-events:none;
+  z-index:-1;
+}
+
+.glow-one{
+  top:-200px;
+  left:-130px;
+  background:#0071e3;
+}
+
+.glow-two{
+  right:-170px;
+  bottom:-200px;
+  background:#8e8e93;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page{
+  width:min(1250px,calc(100% - 28px));
+  margin:auto;
+  padding-bottom:55px;
+}
+
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+.topbar{
+  height:88px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  text-decoration:none;
+  color:var(--text);
+}
+
+.brand-icon{
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:var(--text);
+  color:var(--bg);
+  font-size:11px;
+  font-weight:900;
+}
+
+.brand strong{
+  display:block;
+  font-size:15px;
+  letter-spacing:-.02em;
+}
+
+.brand small{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.theme-toggle{
+  width:43px;
+  height:43px;
+  border:1px solid var(--border);
+  border-radius:50%;
+  background:var(--surface-soft);
+  color:var(--text);
+  backdrop-filter:blur(20px);
+  font-size:18px;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+  max-width:900px;
+  margin:65px auto 35px;
+  text-align:center;
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 13px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  background:var(--surface-soft);
+  color:var(--muted);
+  font-size:11px;
+  font-weight:700;
+  backdrop-filter:blur(20px);
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 0 4px rgba(48,209,88,.12);
+}
+
+.hero h1{
+  margin:20px 0 10px;
+  font-size:clamp(42px,7vw,72px);
+  line-height:.98;
+  letter-spacing:-.065em;
+}
+
+.hero h1 span{
+  color:var(--blue);
+}
+
+.hero p{
+  max-width:650px;
+  margin:auto;
+  color:var(--muted);
+  line-height:1.6;
+  font-size:14px;
+}
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+.controls{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin:30px 0 18px;
+}
+
+.control-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.stat{
+  padding:11px 14px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:var(--surface-soft);
+  color:var(--muted);
+  font-size:11px;
+  font-weight:700;
+  backdrop-filter:blur(20px);
+}
+
+.stat strong{
+  color:var(--text);
+  margin-left:4px;
+}
+
+.pdf-btn{
+  min-height:45px;
+  padding:0 18px;
+  border:0;
+  border-radius:14px;
+  background:var(--blue);
+  color:white;
+  font-weight:800;
+  box-shadow:0 8px 25px rgba(0,113,227,.18);
+  transition:.2s ease;
+}
+
+.pdf-btn:hover{
+  background:var(--blue2);
+  transform:translateY(-1px);
+}
+
+.pdf-btn:disabled{
+  opacity:.6;
+  cursor:wait;
+}
+
+
+/* =========================================================
+   TABLE CARD
+========================================================= */
+
+.ranking-card{
+  overflow:hidden;
+  border:1px solid var(--border);
+  border-radius:28px;
+  background:var(--surface);
+  box-shadow:var(--shadow);
+}
+
+.card-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:22px 25px;
+  border-bottom:1px solid var(--border);
+}
+
+.card-title{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.mini-logo{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  background:var(--text);
+  color:var(--bg);
+  font-size:10px;
+  font-weight:900;
+}
+
+.card-title strong{
+  display:block;
+  font-size:13px;
+}
+
+.card-title span{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.unofficial{
+  padding:7px 10px;
+  border:1px solid rgba(255,59,48,.25);
+  border-radius:8px;
+  color:#d70015;
+  background:rgba(255,59,48,.06);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-wrap{
+  overflow-x:auto;
+}
+
+.ranking-table{
+  width:100%;
+  min-width:920px;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+
+.ranking-table th{
+  padding:15px 14px;
+  background:rgba(127,127,127,.055);
+  color:var(--muted);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-align:left;
+  white-space:nowrap;
+}
+
+.ranking-table td{
+  padding:16px 14px;
+  border-top:1px solid var(--border);
+  font-size:12px;
+  vertical-align:middle;
+  overflow:hidden;
+}
+
+.ranking-table tbody tr{
+  transition:.15s ease;
+}
+
+.ranking-table tbody tr:hover{
+  background:rgba(127,127,127,.035);
+}
+
+.rank{
+  width:70px;
+  font-size:15px!important;
+  font-weight:900;
+}
+
+.rank.top-one{
+  color:#b8860b;
+}
+
+.rank.top-two{
+  color:#7d8790;
+}
+
+.rank.top-three{
+  color:#a96835;
+}
+
+.institution-name{
+  min-width:240px;
+  font-weight:800;
+  color:var(--text);
+  white-space:normal;
+  word-break:break-word;
+}
+
+.eiin{
+  color:var(--muted);
+  font-family:monospace;
+  font-size:11px;
+}
+
+.district{
+  font-weight:700;
+}
+
+.number{
+  font-weight:800;
+}
+
+.gpa5{
+  font-size:17px!important;
+  font-weight:900!important;
+  color:var(--green);
+}
+
+.rate{
+  font-weight:900;
+}
+
+.rate span{
+  color:var(--muted);
+  font-weight:600;
+  font-size:10px;
+}
+
+.loading{
+  padding:50px!important;
+  text-align:center;
+  color:var(--muted);
+}
+
+.error{
+  margin:18px;
+  padding:14px 16px;
+  border-radius:14px;
+  background:rgba(215,0,21,.06);
+  border:1px solid rgba(215,0,21,.16);
+  color:#d70015;
+  font-size:13px;
+  font-weight:700;
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.pagination{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:7px;
+  flex-wrap:wrap;
+  padding:20px;
+  border-top:1px solid var(--border);
+}
+
+.page-btn{
+  min-width:38px;
+  height:38px;
+  padding:0 10px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  background:var(--surface);
+  color:var(--text);
+  font-size:11px;
+  font-weight:800;
+}
+
+.page-btn.active{
+  background:var(--blue);
+  color:white;
+  border-color:var(--blue);
+}
+
+.page-btn:hover{
+  border-color:var(--blue);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.card-footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  padding:20px 25px;
+  border-top:1px solid var(--border);
+  color:var(--muted);
+  font-size:10px;
+}
+
+.site-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top:45px;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+  color:var(--muted);
+  font-size:10px;
+}
+
+.site-footer strong{
+  color:var(--text);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:700px){
+
+  .page{
+    width:min(100% - 20px,1250px);
+  }
+
+  .topbar{
+    height:72px;
+  }
+
+  .hero{
+    margin:48px auto 30px;
+  }
+
+  .hero h1{
+    font-size:51px;
+  }
+
+  .controls{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .control-left{
+    width:100%;
+  }
+
+  .stat{
+    flex:1;
+    text-align:center;
+  }
+
+  .pdf-btn{
+    width:100%;
+  }
+
+  .card-header{
+    padding:17px;
+  }
+
+  .card-footer{
+    padding:18px;
+  }
+
+  .site-footer{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:6px;
+  }
+}
+
+
+/* =========================================================
+   PDF RENDER AREA
+========================================================= */
+
+#pdfRenderArea{
+  position:fixed;
+  left:0;
+  top:0;
+  width:794px;
+  background:#fff;
+  z-index:-9999;
+  opacity:1;
+  pointer-events:none;
+}
+
+.pdf-page{
+  width:794px;
+  height:1123px;
+  background:#fff;
+  color:#111113;
+  padding:42px 42px 38px;
+  position:relative;
+  overflow:hidden;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+.pdf-header{
+  text-align:center;
+  border-bottom:1px solid #e5e5e7;
+  padding-bottom:18px;
+}
+
+.pdf-brand{
+  font-size:27px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:-1.2px;
+}
+
+.pdf-generated{
+  margin-top:7px;
+  color:#6e6e73;
+  font-size:9px;
+}
+
+.pdf-title{
+  margin-top:20px;
+  text-align:center;
+}
+
+.pdf-title-main{
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:-.5px;
+}
+
+.pdf-title-sub{
+  margin-top:5px;
+  font-size:9px;
+  color:#6e6e73;
+}
+
+.pdf-badge{
+  display:inline-block;
+  margin-top:10px;
+  padding:6px 10px;
+  border-radius:7px;
+  background:#fff1f0;
+  color:#d70015;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.pdf-table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+  margin-top:18px;
+  font-size:7px;
+}
+
+.pdf-table th{
+  height:28px;
+  padding:6px 5px;
+  text-align:left;
+  background:#f5f5f7;
+  color:#6e6e73;
+  font-size:6.5px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.pdf-table td{
+  height:18px;
+  padding:4px 5px;
+  border-top:1px solid #e8e8ea;
+  vertical-align:middle;
+  line-height:1.15;
+  overflow:hidden;
+}
+
+.pdf-table .pdf-inst{
+  font-weight:800;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+.pdf-table .pdf-rank{
+  font-weight:900;
+}
+
+.pdf-table .pdf-gpa5{
+  color:#168a4b;
+  font-weight:900;
+}
+
+.pdf-page-footer{
+  position:absolute;
+  left:42px;
+  right:42px;
+  bottom:26px;
+  text-align:center;
+}
+
+.pdf-page-number{
+  color:#6e6e73;
+  font-size:7px;
+}
+
+.pdf-unofficial{
+  margin-top:8px;
+  font-size:8px;
+  font-weight:900;
+  color:#d70015;
+  letter-spacing:1.2px;
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="background-glow glow-one"></div>
+<div class="background-glow glow-two"></div>
+
+
+<div class="page">
+
+<header class="topbar">
+
+  <a href="index.html" class="brand">
+
+    <div class="brand-icon">
+      CTG
+    </div>
+
+    <div>
+      <strong>CTGBoardRanking</strong>
+      <small>SSC 2026 · Chattogram Board</small>
+    </div>
+
+  </a>
+
+  <button
+    id="themeToggle"
+    class="theme-toggle"
+    type="button">
+    ◐
+  </button>
+
+</header>
+
+
+<section class="hero">
+
+  <div class="eyebrow">
+    <span class="status-dot"></span>
+    SSC 2026 · Chattogram Board
+  </div>
+
+  <h1>
+    Institution
+    <span>Ranking.</span>
+  </h1>
+
+  <p>
+    All Chattogram Board SSC 2026 institutions,
+    ranked by total number of GPA-5 results.
+  </p>
+
+</section>
+
+
+<div class="controls">
+
+  <div class="control-left">
+
+    <div class="stat">
+      TOTAL
+      <strong id="totalCount">0</strong>
+    </div>
+
+    <div class="stat">
+      YEAR
+      <strong>2026</strong>
+    </div>
+
+    <div class="stat">
+      SORT
+      <strong>GPA-5</strong>
+    </div>
+
+  </div>
+
+  <button
+    id="pdfBtn"
+    class="pdf-btn"
+    type="button">
+
+    ↓ Download PDF
+
+  </button>
+
+</div>
+
+
+<section
+  id="rankingCard"
+  class="ranking-card">
+
+  <div class="card-header">
+
+    <div class="card-title">
+
+      <div class="mini-logo">
+        CTG
+      </div>
+
+      <div>
+
+        <strong>
+          Institution Ranking
+        </strong>
+
+        <span id="rangeText">
+          Loading…
+        </span>
+
+      </div>
+
+    </div>
+
+    <div class="unofficial">
+      UNOFFICIAL
+    </div>
+
+  </div>
+
+
+  <div
+    id="errorBox"
+    class="error hidden">
+  </div>
+
+
+  <div class="table-wrap">
+
+    <table class="ranking-table">
+
+      <thead>
+
+        <tr>
+
+          <th>RANK</th>
+          <th>INSTITUTION</th>
+          <th>EIIN</th>
+          <th>DISTRICT</th>
+          <th>THANA</th>
+          <th>APPEARED</th>
+          <th>PASSED</th>
+          <th>PASSING RATE</th>
+          <th>GPA-5</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody id="rankingBody">
+
+        <tr>
+
+          <td
+            colspan="9"
+            class="loading">
+
+            Loading institution ranking…
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+
+  <div
+    id="pagination"
+    class="pagination">
+  </div>
+
+
+  <div class="card-footer">
+
+    <span>
+      Ranking based on total GPA-5
+    </span>
+
+    <span>
+      CTGBoardRanking · SSC 2026
+    </span>
+
+  </div>
+
+</section>
+
+
+<footer class="site-footer">
+
+  <div>
+    © 2026 <strong>CTGBoardRanking</strong>
+  </div>
+
+  <div>
+    Independent educational data platform
+  </div>
+
+</footer>
+
+</div>
+
+
+<!-- =====================================================
+     HIDDEN PDF RENDER AREA
+===================================================== -->
+
+<div id="pdfRenderArea"></div>
+
+
+<script>
+
+/* =========================================================
+   THEME
+========================================================= */
+
+const themeToggle =
+  document.getElementById("themeToggle");
+
+const savedTheme =
+  localStorage.getItem("ctg-theme");
+
+if(savedTheme === "dark"){
+  document.documentElement.classList.add("dark");
+}
+
+themeToggle.addEventListener(
+  "click",
+  function(){
+
+    document.documentElement.classList.toggle("dark");
+
+    localStorage.setItem(
+      "ctg-theme",
+      document.documentElement.classList.contains("dark")
+        ? "dark"
+        : "light"
+    );
+
+  }
+);
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const rankingBody =
+  document.getElementById("rankingBody");
+
+const errorBox =
+  document.getElementById("errorBox");
+
+const pdfBtn =
+  document.getElementById("pdfBtn");
+
+const pagination =
+  document.getElementById("pagination");
+
+const totalCount =
+  document.getElementById("totalCount");
+
+const rangeText =
+  document.getElementById("rangeText");
+
+
+/* =========================================================
+   GLOBAL DATA
+========================================================= */
+
+[...]
