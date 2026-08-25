@@ -3,58 +3,40 @@
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Individual Result — CTGBoardRanking</title>
+<title>Individual Result — CTGboardranking</title>
 
 <meta name="description"
       content="SSC 2026 Individual Result — Chattogram Board">
 
-<link rel="preconnect"
-      href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet">
 
-
-<!-- =====================================================
-     PDF LIBRARIES
-===================================================== -->
-
-<script
-src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js">
-</script>
-
-<script
-src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js">
-</script>
-
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 
-/* =====================================================
+/* =========================================================
    APPLE INSPIRED DESIGN
-===================================================== */
+========================================================= */
 
 :root{
-
     --blue:#0071e3;
     --blue-dark:#0066cc;
 
     --bg:#f5f5f7;
     --card:#ffffff;
-    --soft:#f2f2f7;
 
     --text:#1d1d1f;
     --muted:#6e6e73;
 
     --border:rgba(0,0,0,.08);
+    --soft:#f5f5f7;
 
     --green:#34c759;
     --orange:#ff9500;
@@ -66,26 +48,25 @@ src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.a
     --radius:28px;
 }
 
-
 body.dark{
 
     --bg:#000000;
     --card:#1c1c1e;
-    --soft:#2c2c2e;
 
     --text:#f5f5f7;
     --muted:#a1a1a6;
 
     --border:rgba(255,255,255,.10);
+    --soft:#2c2c2e;
 
     --shadow:
         0 25px 70px rgba(0,0,0,.45);
 }
 
 
-/* =====================================================
+/* =========================================================
    GLOBAL
-===================================================== */
+========================================================= */
 
 *{
     box-sizing:border-box;
@@ -116,20 +97,18 @@ body{
 
 button,
 input{
-
     font:inherit;
 }
 
 
-/* =====================================================
+/* =========================================================
    NAVBAR
-===================================================== */
+========================================================= */
 
 .navbar{
 
     position:sticky;
     top:0;
-
     z-index:1000;
 
     height:64px;
@@ -140,25 +119,18 @@ input{
 
     padding:0 22px;
 
-    background:
-        rgba(255,255,255,.78);
+    background:rgba(255,255,255,.78);
 
     border-bottom:
         1px solid var(--border);
 
-    backdrop-filter:
-        blur(22px);
-
-    -webkit-backdrop-filter:
-        blur(22px);
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
 }
 
 body.dark .navbar{
-
-    background:
-        rgba(0,0,0,.78);
+    background:rgba(0,0,0,.75);
 }
-
 
 .logo{
 
@@ -167,16 +139,15 @@ body.dark .navbar{
 
     gap:9px;
 
-    color:var(--text);
-
     text-decoration:none;
+
+    color:var(--text);
 
     font-size:15px;
     font-weight:800;
 
     letter-spacing:-.4px;
 }
-
 
 .logo-mark{
 
@@ -190,13 +161,11 @@ body.dark .navbar{
     border-radius:9px;
 
     background:var(--blue);
-
     color:#fff;
 
     font-size:14px;
     font-weight:800;
 }
-
 
 .nav-actions{
 
@@ -205,7 +174,6 @@ body.dark .navbar{
 
     gap:8px;
 }
-
 
 .nav-button{
 
@@ -217,13 +185,11 @@ body.dark .navbar{
     align-items:center;
     justify-content:center;
 
-    border:
-        1px solid var(--border);
-
     border-radius:13px;
 
-    background:var(--soft);
+    border:1px solid var(--border);
 
+    background:var(--soft);
     color:var(--text);
 
     text-decoration:none;
@@ -237,16 +203,13 @@ body.dark .navbar{
 }
 
 .nav-button:hover{
-
-    transform:
-        translateY(-1px);
-
+    transform:translateY(-1px);
 }
 
 
-/* =====================================================
+/* =========================================================
    PAGE
-===================================================== */
+========================================================= */
 
 .page{
 
@@ -254,7 +217,8 @@ body.dark .navbar{
         calc(100vh - 64px);
 
     padding:
-        55px 15px 90px;
+        55px 15px
+        90px;
 
     background:
 
@@ -265,7 +229,6 @@ body.dark .navbar{
         );
 }
 
-
 .container{
 
     width:
@@ -275,9 +238,9 @@ body.dark .navbar{
 }
 
 
-/* =====================================================
+/* =========================================================
    HERO
-===================================================== */
+========================================================= */
 
 .hero{
 
@@ -285,7 +248,6 @@ body.dark .navbar{
 
     margin-bottom:34px;
 }
-
 
 .eyebrow{
 
@@ -301,26 +263,22 @@ body.dark .navbar{
     text-transform:uppercase;
 }
 
-
 .hero h1{
 
     margin:
-        13px 0 14px;
+        13px 0 13px;
 
     font-size:
-        clamp(38px,8vw,70px);
+        clamp(40px,8vw,70px);
 
     line-height:.98;
 
     letter-spacing:-4px;
 }
 
-
 .hero h1 span{
-
     color:var(--blue);
 }
-
 
 .hero p{
 
@@ -336,9 +294,9 @@ body.dark .navbar{
 }
 
 
-/* =====================================================
+/* =========================================================
    SEARCH CARD
-===================================================== */
+========================================================= */
 
 .search-card{
 
@@ -349,22 +307,12 @@ body.dark .navbar{
 
     border-radius:var(--radius);
 
-    background:
-        color-mix(
-            in srgb,
-            var(--card) 90%,
-            transparent
-        );
+    background:var(--card);
 
     box-shadow:var(--shadow);
 
-    backdrop-filter:
-        blur(25px);
-
-    -webkit-backdrop-filter:
-        blur(25px);
+    backdrop-filter:blur(25px);
 }
-
 
 .search-card h2{
 
@@ -376,7 +324,6 @@ body.dark .navbar{
     letter-spacing:-.6px;
 }
 
-
 .search-card p{
 
     margin:
@@ -387,14 +334,12 @@ body.dark .navbar{
     font-size:13px;
 }
 
-
 .search-form{
 
     display:flex;
 
     gap:10px;
 }
-
 
 .search-input{
 
@@ -421,17 +366,14 @@ body.dark .navbar{
     transition:.2s ease;
 }
 
-
 .search-input:focus{
 
-    border-color:
-        var(--blue);
+    border-color:var(--blue);
 
     box-shadow:
         0 0 0 4px
         rgba(0,113,227,.10);
 }
-
 
 .search-button{
 
@@ -444,8 +386,7 @@ body.dark .navbar{
 
     border-radius:15px;
 
-    background:
-        var(--blue);
+    background:var(--blue);
 
     color:#fff;
 
@@ -457,29 +398,22 @@ body.dark .navbar{
     transition:.2s ease;
 }
 
-
 .search-button:hover{
 
-    background:
-        var(--blue-dark);
+    background:var(--blue-dark);
 
-    transform:
-        translateY(-1px);
+    transform:translateY(-1px);
 }
-
 
 .search-button:disabled{
-
     opacity:.6;
-
     cursor:wait;
-
 }
 
 
-/* =====================================================
+/* =========================================================
    ERROR
-===================================================== */
+========================================================= */
 
 .error{
 
@@ -502,9 +436,9 @@ body.dark .navbar{
 }
 
 
-/* =====================================================
+/* =========================================================
    LOADING
-===================================================== */
+========================================================= */
 
 .loading{
 
@@ -512,7 +446,7 @@ body.dark .navbar{
 
     margin-top:20px;
 
-    padding:22px;
+    padding:25px;
 
     text-align:center;
 
@@ -522,9 +456,9 @@ body.dark .navbar{
 }
 
 
-/* =====================================================
+/* =========================================================
    RESULT
-===================================================== */
+========================================================= */
 
 #resultArea{
 
@@ -532,7 +466,6 @@ body.dark .navbar{
 
     margin-top:25px;
 }
-
 
 .result-card{
 
@@ -549,43 +482,40 @@ body.dark .navbar{
 }
 
 
-/* =====================================================
+/* =========================================================
    RESULT HEADER
-===================================================== */
+========================================================= */
 
 .result-header{
 
-    padding:31px;
-
-    border-bottom:
-        1px solid var(--border);
+    padding:30px;
 
     background:
-
         linear-gradient(
             135deg,
             rgba(0,113,227,.12),
             transparent 65%
         );
-}
 
+    border-bottom:
+        1px solid var(--border);
+}
 
 .result-header-row{
 
     display:flex;
 
-    align-items:flex-start;
-
     justify-content:space-between;
+
+    align-items:flex-start;
 
     gap:20px;
 }
 
-
 .student-name{
 
     margin:
-        8px 0 5px;
+        7px 0 6px;
 
     font-size:30px;
 
@@ -594,14 +524,12 @@ body.dark .navbar{
     letter-spacing:-1px;
 }
 
-
 .roll-text{
 
     color:var(--muted);
 
     font-size:12px;
 }
-
 
 .status{
 
@@ -618,15 +546,16 @@ body.dark .navbar{
     color:#16834b;
 
     font-size:10px;
+
     font-weight:800;
 
     letter-spacing:.06em;
 }
 
 
-/* =====================================================
-   BASIC INFO
-===================================================== */
+/* =========================================================
+   INFORMATION
+========================================================= */
 
 .info-grid{
 
@@ -641,7 +570,6 @@ body.dark .navbar{
         25px 30px;
 }
 
-
 .info{
 
     padding:17px;
@@ -650,7 +578,6 @@ body.dark .navbar{
 
     background:var(--soft);
 }
-
 
 .info-label{
 
@@ -666,7 +593,6 @@ body.dark .navbar{
 
     letter-spacing:.09em;
 }
-
 
 .info-value{
 
@@ -684,9 +610,9 @@ body.dark .navbar{
 }
 
 
-/* =====================================================
+/* =========================================================
    SCORE CARDS
-===================================================== */
+========================================================= */
 
 .score-grid{
 
@@ -701,7 +627,6 @@ body.dark .navbar{
         0 30px 28px;
 }
 
-
 .score{
 
     position:relative;
@@ -712,16 +637,14 @@ body.dark .navbar{
 
     border-radius:21px;
 
-    text-align:center;
-
     background:var(--soft);
-}
 
+    text-align:center;
+}
 
 .score strong{
 
     position:relative;
-
     z-index:1;
 
     display:block;
@@ -731,16 +654,14 @@ body.dark .navbar{
     letter-spacing:-1px;
 }
 
-
 .score span{
 
     position:relative;
-
     z-index:1;
 
     display:block;
 
-    margin-top:5px;
+    margin-top:6px;
 
     color:var(--muted);
 
@@ -751,13 +672,11 @@ body.dark .navbar{
     letter-spacing:.09em;
 }
 
-
 .score.total{
 
     background:
         rgba(0,113,227,.10);
 }
-
 
 .score.gpa{
 
@@ -765,17 +684,16 @@ body.dark .navbar{
         rgba(52,199,89,.10);
 }
 
-
 .score.rank{
 
     background:
-        rgba(255,149,0,.10);
+        rgba(255,149,0,.11);
 }
 
 
-/* =====================================================
+/* =========================================================
    SUBJECTS
-===================================================== */
+========================================================= */
 
 .subject-section{
 
@@ -783,18 +701,16 @@ body.dark .navbar{
         0 30px 30px;
 }
 
-
 .subject-heading{
 
     display:flex;
 
-    align-items:end;
-
     justify-content:space-between;
+
+    align-items:end;
 
     margin-bottom:13px;
 }
-
 
 .subject-heading h3{
 
@@ -805,14 +721,12 @@ body.dark .navbar{
     letter-spacing:-.4px;
 }
 
-
 .subject-heading span{
 
     color:var(--muted);
 
     font-size:10px;
 }
-
 
 .subject-table{
 
@@ -823,7 +737,6 @@ body.dark .navbar{
 
     border-radius:19px;
 }
-
 
 .subject-head,
 .subject-row{
@@ -843,7 +756,6 @@ body.dark .navbar{
         14px 17px;
 }
 
-
 .subject-head{
 
     background:var(--soft);
@@ -857,7 +769,6 @@ body.dark .navbar{
     letter-spacing:.08em;
 }
 
-
 .subject-row{
 
     min-height:49px;
@@ -870,30 +781,26 @@ body.dark .navbar{
     font-size:12px;
 }
 
-
 .subject-row > div:nth-child(2),
 .subject-row > div:nth-child(3){
 
     text-align:right;
 }
 
-
 .grade{
-
     font-weight:800;
 }
 
 
-/* =====================================================
+/* =========================================================
    DOWNLOAD AREA
-===================================================== */
+========================================================= */
 
 .download-area{
 
     padding:
         0 30px 30px;
 }
-
 
 .download-button{
 
@@ -905,12 +812,7 @@ body.dark .navbar{
 
     border-radius:16px;
 
-    background:
-        linear-gradient(
-            135deg,
-            #0071e3,
-            #0077ed
-        );
+    background:var(--blue);
 
     color:#fff;
 
@@ -920,28 +822,23 @@ body.dark .navbar{
 
     cursor:pointer;
 
-    box-shadow:
-        0 8px 25px
-        rgba(0,113,227,.20);
-
     transition:.2s ease;
 }
 
-
 .download-button:hover{
 
-    transform:
-        translateY(-1px);
+    background:var(--blue-dark);
+
+    transform:translateY(-1px);
 
     box-shadow:
-        0 12px 30px
-        rgba(0,113,227,.28);
+        0 8px 25px
+        rgba(0,113,227,.25);
 }
-
 
 .download-button:disabled{
 
-    opacity:.6;
+    opacity:.65;
 
     cursor:wait;
 
@@ -949,9 +846,9 @@ body.dark .navbar{
 }
 
 
-/* =====================================================
+/* =========================================================
    FOOTNOTE
-===================================================== */
+========================================================= */
 
 .footnote{
 
@@ -965,102 +862,75 @@ body.dark .navbar{
     line-height:1.7;
 }
 
-
 .footnote strong{
-
     color:var(--text);
 }
 
 
-/* =====================================================
+/* =========================================================
    MOBILE
-===================================================== */
+========================================================= */
 
 @media(max-width:700px){
 
     .navbar{
-
-        padding:
-            0 14px;
+        padding:0 14px;
     }
-
 
     .page{
-
         padding:
-            45px 12px 70px;
+            45px 12px
+            70px;
     }
 
-
     .hero h1{
-
         letter-spacing:-3px;
     }
 
-
     .search-card{
-
         padding:20px;
-
         border-radius:23px;
     }
 
-
     .search-form{
-
         flex-direction:column;
     }
 
-
     .search-button{
-
         width:100%;
     }
 
-
     .result-header{
-
         padding:23px;
     }
 
-
     .result-header-row{
-
         flex-direction:column;
     }
 
-
     .student-name{
-
         font-size:24px;
     }
 
-
     .status{
-
         align-self:flex-start;
     }
-
 
     .info-grid{
 
         grid-template-columns:
             1fr 1fr;
 
-        padding:
-            20px;
+        padding:20px;
     }
-
 
     .score-grid{
 
-        grid-template-columns:
-            1fr;
+        grid-template-columns:1fr;
 
         padding:
             0 20px 22px;
     }
-
 
     .subject-section{
 
@@ -1068,19 +938,14 @@ body.dark .navbar{
             0 20px 25px;
     }
 
-
     .subject-table{
-
         overflow-x:auto;
     }
 
-
     .subject-head,
     .subject-row{
-
         min-width:440px;
     }
-
 
     .download-area{
 
@@ -1088,37 +953,39 @@ body.dark .navbar{
             0 20px 25px;
     }
 
-
     .footnote{
 
         padding:
             0 20px 25px;
     }
-
 }
-
 
 @media(max-width:430px){
 
     .info-grid{
-
         grid-template-columns:1fr;
     }
 
+    .logo span:last-child{
+        font-size:13px;
+    }
 }
 
 
-/* =====================================================
+/* =========================================================
    PRINT
-===================================================== */
+========================================================= */
 
 @media print{
 
     @page{
-
         size:A4;
+        margin:12mm;
+    }
 
-        margin:10mm;
+    body{
+        background:#fff !important;
+        color:#1d1d1f !important;
     }
 
     .navbar,
@@ -1126,22 +993,23 @@ body.dark .navbar{
     .search-card,
     .loading,
     .download-area{
-
         display:none !important;
-    }
-
-    body{
-
-        background:#fff !important;
-
-        color:#111 !important;
     }
 
     .page{
 
+        min-height:auto !important;
+
         padding:0 !important;
 
         background:#fff !important;
+    }
+
+    .container{
+
+        width:100% !important;
+
+        max-width:none !important;
     }
 
     #resultArea{
@@ -1153,49 +1021,72 @@ body.dark .navbar{
 
     .result-card{
 
+        border:
+            1px solid #ddd !important;
+
         border-radius:0 !important;
 
         box-shadow:none !important;
 
-        border:1px solid #ddd !important;
+        background:#fff !important;
+    }
+
+    .result-header{
+
+        background:#f5f8fc !important;
+    }
+
+    .student-name,
+    .info-value,
+    .score strong,
+    .subject-heading h3,
+    .subject-row{
+
+        color:#1d1d1f !important;
+    }
+
+    .info,
+    .score{
+
+        background:#f5f5f7 !important;
+    }
+
+    .subject-table{
+        overflow:visible !important;
+    }
+
+    .subject-head,
+    .subject-row{
+        min-width:0 !important;
+    }
+
+    .subject-row{
+        page-break-inside:avoid;
     }
 
 }
 
-
-/* =====================================================
-   HIDDEN PDF CONTAINER
-===================================================== */
-
-#pdfContent{
-
-    display:none;
-}
-
 </style>
-
 </head>
 
 
 <body>
 
 
-<!-- =====================================================
+<!-- =======================================================
      NAVBAR
-===================================================== -->
+======================================================= -->
 
 <header class="navbar">
 
-    <a
-        href="index.html"
-        class="logo">
+    <a href="index.html" class="logo">
 
         <span class="logo-mark">
             C
         </span>
 
         <span>
-            CTGBoardRanking
+            CTGboardranking
         </span>
 
     </a>
@@ -1213,10 +1104,10 @@ body.dark .navbar{
 
 
         <button
-            type="button"
             id="themeBtn"
             class="nav-button"
-            aria-label="Toggle dark mode">
+            type="button"
+            aria-label="Toggle theme">
 
             ◐
 
@@ -1228,450 +1119,418 @@ body.dark .navbar{
 
 
 
-<!-- =====================================================
+<!-- =======================================================
      PAGE
-===================================================== -->
+======================================================= -->
 
 <div class="page">
 
 <main class="container">
 
 
-<!-- =====================================================
-     HERO
-===================================================== -->
+    <!-- ===================================================
+         HERO
+    =================================================== -->
 
-<section class="hero">
+    <section class="hero">
 
-    <span class="eyebrow">
-        SSC 2026 · CHATTAGRAM BOARD
-    </span>
-
-
-    <h1>
-
-        Your result.<br>
-
-        <span>
-            All in one place.
+        <span class="eyebrow">
+            SSC 2026 · CHATTAGRAM BOARD
         </span>
 
-    </h1>
+
+        <h1>
+
+            Your result.<br>
+
+            <span>
+                All in one place.
+            </span>
+
+        </h1>
 
 
-    <p>
+        <p>
 
-        Search your roll number to view your
-        SSC 2026 result, subject-wise marks,
-        GPA, total score and student rank.
+            Search your roll number to view your
+            SSC 2026 result, subject-wise marks,
+            GPA, total score and student rank.
 
-    </p>
+        </p>
 
-</section>
-
-
-
-<!-- =====================================================
-     SEARCH
-===================================================== -->
-
-<section class="search-card">
-
-    <h2>
-        Find your result
-    </h2>
+    </section>
 
 
-    <p>
-        Enter your SSC 2026 roll number.
-    </p>
+
+    <!-- ===================================================
+         SEARCH
+    =================================================== -->
+
+    <section class="search-card">
+
+        <h2>
+            Find your result
+        </h2>
 
 
-    <form
-        id="resultSearchForm"
-        class="search-form">
+        <p>
+            Enter your SSC 2026 roll number.
+        </p>
 
 
-        <input
-            id="roll"
-            class="search-input"
-            type="text"
-            inputmode="numeric"
-            autocomplete="off"
-            maxlength="6"
-            placeholder="Enter Roll Number"
-            required>
+        <form
+            id="resultSearchForm"
+            class="search-form">
+
+            <input
+                id="roll"
+                class="search-input"
+                type="text"
+                inputmode="numeric"
+                autocomplete="off"
+                maxlength="6"
+                placeholder="Enter Roll Number"
+                required
+            >
 
 
-        <button
-            id="searchButton"
-            class="search-button"
-            type="submit">
+            <button
+                id="searchButton"
+                class="search-button"
+                type="submit">
 
-            View Result →
+                View Result →
 
-        </button>
+            </button>
+
+        </form>
 
 
-    </form>
+        <div
+            id="errorMessage"
+            class="error">
+        </div>
+
+    </section>
+
 
 
     <div
-        id="errorMessage"
-        class="error">
+        id="loading"
+        class="loading">
+
+        Loading result…
+
     </div>
 
-</section>
+
+
+    <!-- ===================================================
+         RESULT
+         NO "OPEN FULL RESULTS"
+    =================================================== -->
+
+    <section id="resultArea">
+
+        <div
+            id="fullResult"
+            class="result-card">
+
+
+            <!-- RESULT HEADER -->
+
+            <div class="result-header">
+
+                <div class="result-header-row">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            SSC 2026 · CHATTAGRAM BOARD
+                        </span>
+
+
+                        <h2
+                            id="studentName"
+                            class="student-name">
+
+                            —
+
+                        </h2>
+
+
+                        <span
+                            id="resultRoll"
+                            class="roll-text">
+
+                            Roll: —
+
+                        </span>
+
+                    </div>
+
+
+                    <span
+                        id="resultStatus"
+                        class="status">
+
+                        —
+
+                    </span>
+
+                </div>
+
+            </div>
 
 
 
-<!-- =====================================================
-     LOADING
-===================================================== -->
+            <!-- BASIC INFORMATION -->
 
-<div
-    id="loading"
-    class="loading">
-
-    Loading result…
-
-</div>
+            <div class="info-grid">
 
 
+                <div class="info">
 
-<!-- =====================================================
-     RESULT AREA
-===================================================== -->
+                    <span class="info-label">
+                        ROLL
+                    </span>
 
-<section
-    id="resultArea">
+                    <strong
+                        id="showRoll"
+                        class="info-value">
 
+                        —
 
-<div
-    id="resultCard"
-    class="result-card">
+                    </strong>
 
-
-
-<!-- =====================================================
-     RESULT HEADER
-===================================================== -->
-
-<div class="result-header">
-
-    <div class="result-header-row">
+                </div>
 
 
-        <div>
+                <div class="info">
 
-            <span class="eyebrow">
+                    <span class="info-label">
+                        REGISTRATION
+                    </span>
 
-                SSC 2026 · CHATTAGRAM BOARD
+                    <strong
+                        id="showRegistration"
+                        class="info-value">
 
-            </span>
+                        —
 
+                    </strong>
 
-            <h2
-                id="studentName"
-                class="student-name">
-
-                —
-
-            </h2>
+                </div>
 
 
-            <span
-                id="resultRoll"
-                class="roll-text">
+                <div class="info">
 
-                Roll: —
+                    <span class="info-label">
+                        YEAR
+                    </span>
 
-            </span>
+                    <strong
+                        id="showYear"
+                        class="info-value">
+
+                        —
+
+                    </strong>
+
+                </div>
+
+
+                <div class="info">
+
+                    <span class="info-label">
+                        GROUP
+                    </span>
+
+                    <strong
+                        id="showGroup"
+                        class="info-value">
+
+                        —
+
+                    </strong>
+
+                </div>
+
+
+                <div class="info">
+
+                    <span class="info-label">
+                        INSTITUTION
+                    </span>
+
+                    <strong
+                        id="showInstitution"
+                        class="info-value">
+
+                        —
+
+                    </strong>
+
+                </div>
+
+
+                <div class="info">
+
+                    <span class="info-label">
+                        DISTRICT
+                    </span>
+
+                    <strong
+                        id="showDistrict"
+                        class="info-value">
+
+                        —
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- SCORE -->
+
+            <div class="score-grid">
+
+
+                <div class="score total">
+
+                    <strong
+                        id="totalScore">
+
+                        —
+
+                    </strong>
+
+                    <span>
+                        TOTAL SCORE
+                    </span>
+
+                </div>
+
+
+                <div class="score gpa">
+
+                    <strong
+                        id="gpa">
+
+                        —
+
+                    </strong>
+
+                    <span>
+                        GPA
+                    </span>
+
+                </div>
+
+
+                <div class="score rank">
+
+                    <strong
+                        id="studentRank">
+
+                        —
+
+                    </strong>
+
+                    <span>
+                        STUDENT RANK
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- SUBJECTS -->
+
+            <div class="subject-section">
+
+                <div class="subject-heading">
+
+                    <h3>
+                        Subject-wise Result
+                    </h3>
+
+                    <span>
+                        Marks & Grade
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="subjectTable"
+                    class="subject-table">
+
+                    <div class="subject-head">
+
+                        <div>
+                            SUBJECT
+                        </div>
+
+                        <div>
+                            MARKS
+                        </div>
+
+                        <div>
+                            GRADE
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- DOWNLOAD PDF -->
+
+            <div class="download-area">
+
+                <button
+                    id="downloadPdfBtn"
+                    class="download-button"
+                    type="button">
+
+                    Download PDF
+
+                </button>
+
+            </div>
+
+
+
+            <!-- FOOTNOTE -->
+
+            <div class="footnote">
+
+                <strong>
+                    CTGboardranking
+                </strong>
+                is an independent and unofficial
+                educational data platform.
+
+                Result information is provided for
+                educational, research and statistical
+                purposes only.
+
+            </div>
+
 
         </div>
 
+    </section>
 
-        <span
-            id="resultStatus"
-            class="status">
-
-            —
-
-        </span>
-
-
-    </div>
-
-</div>
-
-
-
-<!-- =====================================================
-     INFORMATION
-===================================================== -->
-
-<div class="info-grid">
-
-
-    <div class="info">
-
-        <span class="info-label">
-            ROLL
-        </span>
-
-        <strong
-            id="showRoll"
-            class="info-value">
-
-            —
-
-        </strong>
-
-    </div>
-
-
-
-    <div class="info">
-
-        <span class="info-label">
-            REGISTRATION
-        </span>
-
-        <strong
-            id="showRegistration"
-            class="info-value">
-
-            —
-
-        </strong>
-
-    </div>
-
-
-
-    <div class="info">
-
-        <span class="info-label">
-            YEAR
-        </span>
-
-        <strong
-            id="showYear"
-            class="info-value">
-
-            —
-
-        </strong>
-
-    </div>
-
-
-
-    <div class="info">
-
-        <span class="info-label">
-            GROUP
-        </span>
-
-        <strong
-            id="showGroup"
-            class="info-value">
-
-            —
-
-        </strong>
-
-    </div>
-
-
-
-    <div class="info">
-
-        <span class="info-label">
-            INSTITUTION
-        </span>
-
-        <strong
-            id="showInstitution"
-            class="info-value">
-
-            —
-
-        </strong>
-
-    </div>
-
-
-
-    <div class="info">
-
-        <span class="info-label">
-            DISTRICT
-        </span>
-
-        <strong
-            id="showDistrict"
-            class="info-value">
-
-            —
-
-        </strong>
-
-    </div>
-
-
-</div>
-
-
-
-<!-- =====================================================
-     SCORE
-===================================================== -->
-
-<div class="score-grid">
-
-
-    <div class="score total">
-
-        <strong
-            id="totalScore">
-
-            —
-
-        </strong>
-
-        <span>
-            TOTAL SCORE
-        </span>
-
-    </div>
-
-
-
-    <div class="score gpa">
-
-        <strong
-            id="gpa">
-
-            —
-
-        </strong>
-
-        <span>
-            GPA
-        </span>
-
-    </div>
-
-
-
-    <div class="score rank">
-
-        <strong
-            id="studentRank">
-
-            —
-
-        </strong>
-
-        <span>
-            STUDENT RANK
-        </span>
-
-    </div>
-
-
-</div>
-
-
-
-<!-- =====================================================
-     SUBJECT RESULTS
-===================================================== -->
-
-<div class="subject-section">
-
-
-    <div class="subject-heading">
-
-        <h3>
-            Subject-wise Result
-        </h3>
-
-        <span>
-            Marks & Grade
-        </span>
-
-    </div>
-
-
-    <div
-        id="subjectTable"
-        class="subject-table">
-
-
-        <div class="subject-head">
-
-            <div>
-                SUBJECT
-            </div>
-
-            <div>
-                MARKS
-            </div>
-
-            <div>
-                GRADE
-            </div>
-
-        </div>
-
-
-    </div>
-
-</div>
-
-
-
-<!-- =====================================================
-     DOWNLOAD PDF
-===================================================== -->
-
-<div class="download-area">
-
-    <button
-        id="downloadPdfBtn"
-        class="download-button"
-        type="button">
-
-        ↓ &nbsp; Download PDF
-
-    </button>
-
-</div>
-
-
-
-<!-- =====================================================
-     FOOTNOTE
-===================================================== -->
-
-<div class="footnote">
-
-    <strong>
-        CTGBoardRanking
-    </strong>
-
-    is an independent, unofficial educational
-    data platform. Result information is provided
-    for educational, research and statistical purposes.
-
-</div>
-
-
-</div>
-
-</section>
 
 </main>
 
@@ -1679,57 +1538,46 @@ body.dark .navbar{
 
 
 
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
-
 <script>
 
-/* =====================================================
+/* =========================================================
    ELEMENTS
-===================================================== */
+========================================================= */
 
 const form =
     document.getElementById(
         "resultSearchForm"
     );
 
-
 const rollInput =
     document.getElementById(
         "roll"
     );
-
 
 const searchButton =
     document.getElementById(
         "searchButton"
     );
 
-
 const errorMessage =
     document.getElementById(
         "errorMessage"
     );
-
-
-const resultArea =
-    document.getElementById(
-        "resultArea"
-    );
-
 
 const loading =
     document.getElementById(
         "loading"
     );
 
+const resultArea =
+    document.getElementById(
+        "resultArea"
+    );
 
 const downloadPdfBtn =
     document.getElementById(
         "downloadPdfBtn"
     );
-
 
 const themeBtn =
     document.getElementById(
@@ -1737,16 +1585,9 @@ const themeBtn =
     );
 
 
-/* =====================================================
-   STORE CURRENT STUDENT
-===================================================== */
-
-let currentStudent = null;
-
-
-/* =====================================================
-   DARK MODE
-===================================================== */
+/* =========================================================
+   THEME
+========================================================= */
 
 if(
     localStorage.getItem(
@@ -1763,7 +1604,7 @@ if(
 
 themeBtn.addEventListener(
     "click",
-    function(){
+    ()=>{
 
         document.body.classList.toggle(
             "dark"
@@ -1784,9 +1625,9 @@ themeBtn.addEventListener(
 );
 
 
-/* =====================================================
+/* =========================================================
    ERROR
-===================================================== */
+========================================================= */
 
 function showError(message){
 
@@ -1808,9 +1649,9 @@ function hideError(){
 }
 
 
-/* =====================================================
-   DISPLAY VALUE
-===================================================== */
+/* =========================================================
+   SAFE VALUE
+========================================================= */
 
 function displayValue(value){
 
@@ -1828,36 +1669,31 @@ function displayValue(value){
 }
 
 
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
 
 function escapeHTML(value){
 
     return String(
         value ?? ""
     )
-
     .replace(
         /&/g,
         "&amp;"
     )
-
     .replace(
         /</g,
         "&lt;"
     )
-
     .replace(
         />/g,
         "&gt;"
     )
-
     .replace(
         /"/g,
         "&quot;"
     )
-
     .replace(
         /'/g,
         "&#039;"
@@ -1866,13 +1702,13 @@ function escapeHTML(value){
 }
 
 
-/* =====================================================
-   FORM
-===================================================== */
+/* =========================================================
+   SEARCH FORM
+========================================================= */
 
 form.addEventListener(
     "submit",
-    async function(event){
+    async(event)=>{
 
         event.preventDefault();
 
@@ -1882,9 +1718,9 @@ form.addEventListener(
 );
 
 
-/* =====================================================
+/* =========================================================
    SEARCH RESULT
-===================================================== */
+========================================================= */
 
 async function searchResult(){
 
@@ -1921,10 +1757,8 @@ async function searchResult(){
     searchButton.textContent =
         "Searching…";
 
-
     loading.style.display =
         "block";
-
 
     resultArea.style.display =
         "none";
@@ -1932,15 +1766,12 @@ async function searchResult(){
 
     try{
 
-
-        /* =================================================
-           API
-        ================================================= */
-
         const response =
             await fetch(
                 "/api/result?roll=" +
-                encodeURIComponent(roll),
+                encodeURIComponent(
+                    roll
+                ),
                 {
                     method:"GET",
 
@@ -1963,7 +1794,6 @@ async function searchResult(){
                 await response.json();
 
         }
-
         catch{
 
             throw new Error(
@@ -1974,7 +1804,7 @@ async function searchResult(){
 
 
         console.log(
-            "CTGBoardRanking Result API:",
+            "RESULT API:",
             json
         );
 
@@ -2004,17 +1834,11 @@ async function searchResult(){
         }
 
 
-        currentStudent =
-            json.student;
-
-
         displayResult(
-            currentStudent
+            json.student
         );
 
-
     }
-
     catch(error){
 
         console.error(
@@ -2029,16 +1853,13 @@ async function searchResult(){
         );
 
     }
-
     finally{
 
         loading.style.display =
             "none";
 
-
         searchButton.disabled =
             false;
-
 
         searchButton.textContent =
             "View Result →";
@@ -2048,73 +1869,15 @@ async function searchResult(){
 }
 
 
-/* =====================================================
-   CALCULATE TOTAL FALLBACK
-===================================================== */
-
-function calculateTotal(subjects){
-
-    if(
-        !Array.isArray(subjects) ||
-        subjects.length === 0
-    ){
-
-        return null;
-
-    }
-
-
-    let total = 0;
-
-    let valid = 0;
-
-
-    subjects.forEach(
-        subject => {
-
-            const raw =
-                subject.marks ??
-                subject.mark ??
-                subject.total_marks ??
-                subject.total_mark ??
-                null;
-
-
-            const mark =
-                Number(raw);
-
-
-            if(
-                Number.isFinite(mark)
-            ){
-
-                total += mark;
-
-                valid++;
-
-            }
-
-        }
-    );
-
-
-    return valid > 0
-        ? total
-        : null;
-
-}
-
-
-/* =====================================================
+/* =========================================================
    DISPLAY RESULT
-===================================================== */
+========================================================= */
 
 function displayResult(student){
 
-
-    /* =================================================
-       HEADER
-    ================================================= */
+    /* -----------------------------------------------
+       STUDENT
+    ----------------------------------------------- */
 
     document.getElementById(
         "studentName"
@@ -2141,10 +1904,9 @@ function displayResult(student){
         ).toUpperCase();
 
 
-
-    /* =================================================
-       BASIC INFORMATION
-    ================================================= */
+    /* -----------------------------------------------
+       INFORMATION
+    ----------------------------------------------- */
 
     document.getElementById(
         "showRoll"
@@ -2194,22 +1956,21 @@ function displayResult(student){
         );
 
 
-
-    /* =================================================
+    /* -----------------------------------------------
        TOTAL SCORE
-    ================================================= */
+    ----------------------------------------------- */
 
-    let totalScore =
+    let total =
         student.total_score;
 
 
     if(
-        totalScore === null ||
-        totalScore === undefined ||
-        totalScore === ""
+        total === null ||
+        total === undefined ||
+        total === ""
     ){
 
-        totalScore =
+        total =
             calculateTotal(
                 student.subjects
             );
@@ -2220,22 +1981,18 @@ function displayResult(student){
     document.getElementById(
         "totalScore"
     ).textContent =
-
-        totalScore !== null &&
-        totalScore !== undefined
-
-            ? Number(totalScore)
+        total !== null &&
+        total !== undefined
+            ? Number(total)
                 .toLocaleString(
                     "en-US"
                 )
-
             : "—";
 
 
-
-    /* =================================================
+    /* -----------------------------------------------
        GPA
-    ================================================= */
+    ----------------------------------------------- */
 
     const gpa =
         student.gpa;
@@ -2255,10 +2012,9 @@ function displayResult(student){
             : "—";
 
 
-
-    /* =================================================
+    /* -----------------------------------------------
        STUDENT RANK
-    ================================================= */
+    ----------------------------------------------- */
 
     const rank =
         student.student_rank;
@@ -2280,43 +2036,94 @@ function displayResult(student){
             : "—";
 
 
-
-    /* =================================================
+    /* -----------------------------------------------
        SUBJECTS
-    ================================================= */
+    ----------------------------------------------- */
 
     renderSubjects(
         student.subjects || []
     );
 
 
-
-    /* =================================================
+    /* -----------------------------------------------
        SHOW
-    ================================================= */
+    ----------------------------------------------- */
 
     resultArea.style.display =
         "block";
 
 
-    setTimeout(
-        function(){
+    setTimeout(()=>{
 
-            resultArea.scrollIntoView({
-                behavior:"smooth",
-                block:"start"
-            });
+        resultArea.scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+        });
 
-        },
-        100
-    );
+    },50);
 
 }
 
 
-/* =====================================================
+/* =========================================================
+   CALCULATE TOTAL FALLBACK
+========================================================= */
+
+function calculateTotal(subjects){
+
+    if(
+        !Array.isArray(subjects) ||
+        subjects.length === 0
+    ){
+
+        return null;
+
+    }
+
+
+    let total = 0;
+
+    let valid = 0;
+
+
+    subjects.forEach(
+        subject=>{
+
+            const raw =
+                subject.marks ??
+                subject.mark ??
+                subject.total_marks ??
+                subject.total_mark;
+
+
+            const mark =
+                Number(raw);
+
+
+            if(
+                Number.isFinite(mark)
+            ){
+
+                total += mark;
+
+                valid++;
+
+            }
+
+        }
+    );
+
+
+    return valid > 0
+        ? total
+        : null;
+
+}
+
+
+/* =========================================================
    SUBJECT TABLE
-===================================================== */
+========================================================= */
 
 function renderSubjects(subjects){
 
@@ -2330,11 +2137,17 @@ function renderSubjects(subjects){
 
         <div class="subject-head">
 
-            <div>SUBJECT</div>
+            <div>
+                SUBJECT
+            </div>
 
-            <div>MARKS</div>
+            <div>
+                MARKS
+            </div>
 
-            <div>GRADE</div>
+            <div>
+                GRADE
+            </div>
 
         </div>
 
@@ -2354,9 +2167,13 @@ function renderSubjects(subjects){
                     Subject details unavailable
                 </div>
 
-                <div>—</div>
+                <div>
+                    —
+                </div>
 
-                <div class="grade">—</div>
+                <div class="grade">
+                    —
+                </div>
 
             </div>
 
@@ -2368,8 +2185,7 @@ function renderSubjects(subjects){
 
 
     subjects.forEach(
-        subject => {
-
+        subject=>{
 
             const name =
                 subject.subject_name ??
@@ -2431,70 +2247,44 @@ function renderSubjects(subjects){
 }
 
 
-/* =====================================================
-   PDF DATE
-===================================================== */
-
-function getFormattedDate(){
-
-    const date =
-        new Date();
-
-
-    return date.toLocaleDateString(
-        "en-GB",
-        {
-            day:"2-digit",
-            month:"long",
-            year:"numeric"
-        }
-    );
-
-}
-
-
-/* =====================================================
-   PDF SAFE VALUE
-===================================================== */
-
-function pdfValue(value){
-
-    if(
-        value === null ||
-        value === undefined ||
-        value === ""
-    ){
-
-        return "—";
-
-    }
-
-    return String(value);
-
-}
-
-
-/* =====================================================
-   DOWNLOAD PDF
-===================================================== */
+/* =========================================================
+   PDF — APPLE INSPIRED
+========================================================= */
 
 downloadPdfBtn.addEventListener(
     "click",
-    async function(){
+    async()=>{
 
-        if(!currentStudent){
+        if(
+            resultArea.style.display ===
+            "none"
+        ){
 
             showError(
                 "Please search a result first."
             );
 
             return;
+
+        }
+
+
+        if(
+            !window.jspdf ||
+            !window.jspdf.jsPDF
+        ){
+
+            showError(
+                "PDF library could not be loaded. Please try again."
+            );
+
+            return;
+
         }
 
 
         downloadPdfBtn.disabled =
             true;
-
 
         downloadPdfBtn.textContent =
             "Preparing PDF…";
@@ -2502,16 +2292,13 @@ downloadPdfBtn.addEventListener(
 
         try{
 
-            await generatePDF(
-                currentStudent
-            );
+            await generatePDF();
 
         }
-
         catch(error){
 
             console.error(
-                "PDF error:",
+                "PDF ERROR:",
                 error
             );
 
@@ -2521,15 +2308,13 @@ downloadPdfBtn.addEventListener(
             );
 
         }
-
         finally{
 
             downloadPdfBtn.disabled =
                 false;
 
-
             downloadPdfBtn.textContent =
-                "↓  Download PDF";
+                "Download PDF";
 
         }
 
@@ -2537,30 +2322,17 @@ downloadPdfBtn.addEventListener(
 );
 
 
-/* =====================================================
+/* =========================================================
    GENERATE PDF
-===================================================== */
+========================================================= */
 
-async function generatePDF(student){
+async function generatePDF(){
 
-    if(
-        !window.jspdf ||
-        !window.jspdf.jsPDF
-    ){
-
-        throw new Error(
-            "PDF library failed to load."
-        );
-
-    }
+    const { jsPDF } =
+        window.jspdf;
 
 
-    const {
-        jsPDF
-    } = window.jspdf;
-
-
-    const doc =
+    const pdf =
         new jsPDF({
             orientation:"portrait",
             unit:"mm",
@@ -2568,265 +2340,350 @@ async function generatePDF(student){
         });
 
 
-    /* =================================================
-       PAGE SIZE
-    ================================================= */
-
-    const pageWidth =
-        doc.internal.pageSize.getWidth();
+    const studentName =
+        document.getElementById(
+            "studentName"
+        ).textContent;
 
 
-    const pageHeight =
-        doc.internal.pageSize.getHeight();
+    const roll =
+        document.getElementById(
+            "showRoll"
+        ).textContent;
 
 
-    const margin = 14;
+    const registration =
+        document.getElementById(
+            "showRegistration"
+        ).textContent;
 
 
+    const year =
+        document.getElementById(
+            "showYear"
+        ).textContent;
 
-    /* =================================================
+
+    const group =
+        document.getElementById(
+            "showGroup"
+        ).textContent;
+
+
+    const institution =
+        document.getElementById(
+            "showInstitution"
+        ).textContent;
+
+
+    const district =
+        document.getElementById(
+            "showDistrict"
+        ).textContent;
+
+
+    const totalScore =
+        document.getElementById(
+            "totalScore"
+        ).textContent;
+
+
+    const gpa =
+        document.getElementById(
+            "gpa"
+        ).textContent;
+
+
+    const rank =
+        document.getElementById(
+            "studentRank"
+        ).textContent;
+
+
+    const status =
+        document.getElementById(
+            "resultStatus"
+        ).textContent;
+
+
+    /* =====================================================
        COLORS
-    ================================================= */
+    ===================================================== */
 
     const BLUE =
         [0,113,227];
 
-
     const DARK =
         [29,29,31];
-
 
     const MUTED =
         [110,110,115];
 
-
     const LIGHT =
         [245,245,247];
 
+    const BORDER =
+        [225,225,230];
 
     const GREEN =
         [52,199,89];
-
 
     const ORANGE =
         [255,149,0];
 
 
+    const pageWidth =
+        210;
 
-    /* =================================================
-       HEADER BLUE LINE
-    ================================================= */
+    const pageHeight =
+        297;
 
-    doc.setFillColor(
-        ...BLUE
+
+    const margin =
+        15;
+
+
+    /* =====================================================
+       BACKGROUND
+    ===================================================== */
+
+    pdf.setFillColor(
+        255,
+        255,
+        255
     );
 
-
-    doc.roundedRect(
-        margin,
-        10,
-        pageWidth - margin * 2,
-        2,
-        1,
-        1,
+    pdf.rect(
+        0,
+        0,
+        pageWidth,
+        pageHeight,
         "F"
     );
 
 
-
-    /* =================================================
+    /* =====================================================
        HEADER
-    ================================================= */
+    ===================================================== */
 
-    doc.setFont(
-        "helvetica",
-        "bold"
-    );
-
-
-    doc.setFontSize(
-        20
-    );
-
-
-    doc.setTextColor(
-        ...DARK
-    );
-
-
-    doc.text(
-        "CTGBoardRanking",
-        margin,
-        23
-    );
-
-
-    /* =================================================
-       GENERATED BY
-    ================================================= */
-
-    doc.setFont(
-        "helvetica",
-        "bold"
-    );
-
-
-    doc.setFontSize(
-        8
-    );
-
-
-    doc.setTextColor(
-        ...DARK
-    );
-
-
-    doc.text(
-        "Generated by Shadat",
-        pageWidth - margin,
-        19,
-        {
-            align:"right"
-        }
-    );
-
-
-    doc.setFont(
-        "helvetica",
-        "normal"
-    );
-
-
-    doc.setFontSize(
-        7.5
-    );
-
-
-    doc.setTextColor(
-        ...MUTED
-    );
-
-
-    doc.text(
-        getFormattedDate(),
-        pageWidth - margin,
-        24,
-        {
-            align:"right"
-        }
-    );
-
-
-
-    /* =================================================
-       TITLE
-    ================================================= */
-
-    doc.setFont(
-        "helvetica",
-        "bold"
-    );
-
-
-    doc.setFontSize(
-        13
-    );
-
-
-    doc.setTextColor(
+    pdf.setTextColor(
         ...BLUE
     );
 
-
-    doc.text(
-        "SSC 2026 · CHATTAGRAM BOARD",
-        margin,
-        36
-    );
-
-
-
-    /* =================================================
-       STUDENT NAME
-    ================================================= */
-
-    doc.setFont(
+    pdf.setFont(
         "helvetica",
         "bold"
     );
 
+    pdf.setFontSize(
+        19
+    );
 
-    doc.setFontSize(
+    pdf.text(
+        "CTGboardranking",
+        margin,
         18
     );
 
 
-    doc.setTextColor(
+    pdf.setTextColor(
         ...DARK
     );
 
+    pdf.setFont(
+        "helvetica",
+        "bold"
+    );
 
-    doc.text(
-        pdfValue(
-            student.student_name
-        ),
-        margin,
-        46
+    pdf.setFontSize(
+        9
+    );
+
+    pdf.text(
+        "Generated by Shadat",
+        pageWidth - margin,
+        15,
+        {
+            align:"right"
+        }
     );
 
 
+    const now =
+        new Date();
 
-    /* =================================================
-       ROLL
-    ================================================= */
 
-    doc.setFont(
+    const dateText =
+        now.toLocaleDateString(
+            "en-GB",
+            {
+                day:"2-digit",
+                month:"short",
+                year:"numeric"
+            }
+        );
+
+
+    pdf.setTextColor(
+        ...MUTED
+    );
+
+    pdf.setFont(
         "helvetica",
         "normal"
     );
 
+    pdf.setFontSize(
+        8
+    );
 
-    doc.setFontSize(
-        9
+    pdf.text(
+        dateText,
+        pageWidth - margin,
+        21,
+        {
+            align:"right"
+        }
     );
 
 
-    doc.setTextColor(
+    pdf.setDrawColor(
+        ...BORDER
+    );
+
+    pdf.line(
+        margin,
+        27,
+        pageWidth - margin,
+        27
+    );
+
+
+    /* =====================================================
+       EXAM TITLE
+    ===================================================== */
+
+    pdf.setTextColor(
+        ...DARK
+    );
+
+    pdf.setFont(
+        "helvetica",
+        "bold"
+    );
+
+    pdf.setFontSize(
+        18
+    );
+
+    pdf.text(
+        "SSC 2026 Individual Result",
+        margin,
+        40
+    );
+
+
+    pdf.setTextColor(
         ...MUTED
     );
 
+    pdf.setFont(
+        "helvetica",
+        "normal"
+    );
 
-    doc.text(
-        "Roll: " +
-        pdfValue(
-            student.roll
-        ),
+    pdf.setFontSize(
+        9
+    );
+
+    pdf.text(
+        "Chattogram Education Board",
         margin,
-        52
+        47
     );
 
 
-    /* =================================================
-       STATUS
-    ================================================= */
+    /* =====================================================
+       STUDENT CARD
+    ===================================================== */
 
-    const status =
-        pdfValue(
-            student.result_status
-        ).toUpperCase();
+    let y =
+        58;
 
 
-    doc.setFillColor(
-        232,
-        247,
-        239
+    pdf.setFillColor(
+        ...LIGHT
+    );
+
+    pdf.roundedRect(
+        margin,
+        y,
+        pageWidth - margin * 2,
+        36,
+        5,
+        5,
+        "F"
     );
 
 
-    doc.roundedRect(
-        pageWidth - margin - 32,
-        42,
-        32,
+    pdf.setTextColor(
+        ...DARK
+    );
+
+    pdf.setFont(
+        "helvetica",
+        "bold"
+    );
+
+    pdf.setFontSize(
+        15
+    );
+
+    pdf.text(
+        studentName,
+        margin + 7,
+        y + 11
+    );
+
+
+    pdf.setTextColor(
+        ...MUTED
+    );
+
+    pdf.setFont(
+        "helvetica",
+        "normal"
+    );
+
+    pdf.setFontSize(
+        8
+    );
+
+    pdf.text(
+        "Roll: " + roll,
+        margin + 7,
+        y + 19
+    );
+
+
+    pdf.text(
+        "Registration: " +
+        registration,
+        margin + 7,
+        y + 26
+    );
+
+
+    /* Status */
+
+    pdf.setFillColor(
+        ...GREEN
+    );
+
+    pdf.roundedRect(
+        pageWidth - margin - 30,
+        y + 8,
+        23,
         9,
         4.5,
         4.5,
@@ -2834,651 +2691,643 @@ async function generatePDF(student){
     );
 
 
-    doc.setFont(
+    pdf.setTextColor(
+        255,
+        255,
+        255
+    );
+
+    pdf.setFont(
         "helvetica",
         "bold"
     );
 
-
-    doc.setFontSize(
+    pdf.setFontSize(
         7
     );
 
-
-    doc.setTextColor(
-        22,
-        131,
-        75
-    );
-
-
-    doc.text(
-        status,
-        pageWidth - margin - 16,
-        48,
+    pdf.text(
+        status || "RESULT",
+        pageWidth - margin - 18.5,
+        y + 13.7,
         {
             align:"center"
         }
     );
 
 
-
-    /* =================================================
-       INFORMATION BOX
-    ================================================= */
-
-    const infoTop = 61;
-
-    const boxWidth =
-        pageWidth - margin * 2;
+    y += 46;
 
 
-    const infoHeight = 48;
+    /* =====================================================
+       INFORMATION SECTION
+    ===================================================== */
 
-
-    doc.setFillColor(
-        ...LIGHT
+    pdf.setTextColor(
+        ...DARK
     );
 
+    pdf.setFont(
+        "helvetica",
+        "bold"
+    );
 
-    doc.roundedRect(
+    pdf.setFontSize(
+        11
+    );
+
+    pdf.text(
+        "Student Information",
         margin,
-        infoTop,
-        boxWidth,
-        infoHeight,
-        5,
-        5,
-        "F"
+        y
     );
 
 
-    const colWidth =
-        boxWidth / 3;
+    y += 7;
 
 
     const infoItems = [
 
-        [
-            "YEAR",
-            pdfValue(student.year)
-        ],
+        ["Year",year],
 
-        [
-            "INSTITUTION",
-            pdfValue(student.institution)
-        ],
+        ["Group",group],
 
-        [
-            "DISTRICT",
-            pdfValue(student.district)
-        ],
+        ["Institution",institution],
 
-        [
-            "REGISTRATION",
-            pdfValue(student.registration)
-        ],
-
-        [
-            "GROUP",
-            pdfValue(student.group_name)
-        ],
-
-        [
-            "ROLL",
-            pdfValue(student.roll)
-        ]
+        ["District",district]
 
     ];
+
+
+    const colWidth =
+        (pageWidth - margin * 2 - 6) / 2;
 
 
     infoItems.forEach(
-        (item,index) => {
+        (item,index)=>{
 
-            const column =
-                index % 3;
+            const col =
+                index % 2;
 
             const row =
-                Math.floor(
-                    index / 3
-                );
+                Math.floor(index / 2);
 
 
             const x =
                 margin +
-                column * colWidth +
-                6;
+                col *
+                (colWidth + 6);
 
 
-            const y =
-                infoTop +
-                10 +
-                row * 22;
+            const iy =
+                y +
+                row * 23;
 
 
-            doc.setFont(
-                "helvetica",
-                "bold"
+            pdf.setFillColor(
+                ...LIGHT
             );
 
-
-            doc.setFontSize(
-                6.5
-            );
-
-
-            doc.setTextColor(
-                ...MUTED
-            );
-
-
-            doc.text(
-                item[0],
+            pdf.roundedRect(
                 x,
-                y
-            );
-
-
-            doc.setFont(
-                "helvetica",
-                "bold"
-            );
-
-
-            doc.setFontSize(
-                8
-            );
-
-
-            doc.setTextColor(
-                ...DARK
-            );
-
-
-            const value =
-                doc.splitTextToSize(
-                    item[1],
-                    colWidth - 10
-                );
-
-
-            doc.text(
-                value.slice(0,2),
-                x,
-                y + 6
-            );
-
-        }
-    );
-
-
-
-    /* =================================================
-       SCORE BOXES
-    ================================================= */
-
-    const scoreTop =
-        infoTop + infoHeight + 8;
-
-
-    const scoreGap = 5;
-
-
-    const scoreWidth =
-        (boxWidth - scoreGap * 2) / 3;
-
-
-    const scoreItems = [
-
-        [
-            "TOTAL SCORE",
-            student.total_score ??
-            calculateTotal(
-                student.subjects
-            ),
-            BLUE
-        ],
-
-        [
-            "GPA",
-            student.gpa !== null &&
-            student.gpa !== undefined &&
-            student.gpa !== ""
-                ? Number(student.gpa).toFixed(2)
-                : "—",
-            GREEN
-        ],
-
-        [
-            "STUDENT RANK",
-            student.student_rank ??
-            "—",
-            ORANGE
-        ]
-
-    ];
-
-
-    scoreItems.forEach(
-        (item,index) => {
-
-            const x =
-                margin +
-                index *
-                (scoreWidth + scoreGap);
-
-
-            let bg =
-                [245,245,247];
-
-
-            if(index === 0){
-
-                bg =
-                    [235,244,253];
-
-            }
-
-            if(index === 1){
-
-                bg =
-                    [235,248,239];
-
-            }
-
-            if(index === 2){
-
-                bg =
-                    [255,246,230];
-
-            }
-
-
-            doc.setFillColor(
-                ...bg
-            );
-
-
-            doc.roundedRect(
-                x,
-                scoreTop,
-                scoreWidth,
-                27,
-                5,
-                5,
+                iy,
+                colWidth,
+                18,
+                3,
+                3,
                 "F"
             );
 
 
-            doc.setFont(
+            pdf.setTextColor(
+                ...MUTED
+            );
+
+            pdf.setFont(
                 "helvetica",
                 "bold"
             );
 
+            pdf.setFontSize(
+                6.5
+            );
 
-            doc.setFontSize(
-                15
+            pdf.text(
+                item[0].toUpperCase(),
+                x + 5,
+                iy + 6
             );
 
 
-            doc.setTextColor(
+            pdf.setTextColor(
                 ...DARK
+            );
+
+            pdf.setFont(
+                "helvetica",
+                "normal"
+            );
+
+            pdf.setFontSize(
+                8
             );
 
 
             const value =
-                item[1] !== null &&
-                item[1] !== undefined &&
-                item[1] !== ""
-                    ? Number(item[1])
-                        .toLocaleString("en-US")
-                    : "—";
+                pdf.splitTextToSize(
+                    String(item[1] || "—"),
+                    colWidth - 10
+                );
 
 
-            doc.text(
-                String(value),
-                x + scoreWidth / 2,
-                scoreTop + 12,
-                {
-                    align:"center"
-                }
-            );
-
-
-            doc.setFontSize(
-                6.5
-            );
-
-
-            doc.setTextColor(
-                ...MUTED
-            );
-
-
-            doc.text(
-                item[0],
-                x + scoreWidth / 2,
-                scoreTop + 20,
-                {
-                    align:"center"
-                }
+            pdf.text(
+                value.slice(0,2),
+                x + 5,
+                iy + 12
             );
 
         }
     );
 
 
-
-    /* =================================================
-       SUBJECT TABLE
-    ================================================= */
-
-    const subjects =
-        Array.isArray(
-            student.subjects
-        )
-            ? student.subjects
-            : [];
+    y += 53;
 
 
-    const tableData =
-        subjects.map(
-            subject => {
+    /* =====================================================
+       SCORE SECTION
+    ===================================================== */
 
-                const name =
-                    subject.subject_name ??
-                    subject.subject ??
-                    subject.subject_title ??
-                    subject.subject_code ??
-                    subject.code ??
-                    "—";
+    pdf.setTextColor(
+        ...DARK
+    );
 
-
-                const marks =
-                    subject.marks ??
-                    subject.mark ??
-                    subject.total_marks ??
-                    subject.total_mark ??
-                    "—";
-
-
-                const grade =
-                    subject.grade ??
-                    subject.grade_name ??
-                    "—";
-
-
-                return [
-
-                    String(name),
-
-                    String(marks),
-
-                    String(grade)
-
-                ];
-
-            }
-        );
-
-
-    const tableTop =
-        scoreTop + 36;
-
-
-    doc.setFont(
+    pdf.setFont(
         "helvetica",
         "bold"
     );
 
-
-    doc.setFontSize(
+    pdf.setFontSize(
         11
     );
 
+    pdf.text(
+        "Performance",
+        margin,
+        y
+    );
 
-    doc.setTextColor(
+
+    y += 7;
+
+
+    const scoreWidth =
+        (pageWidth - margin * 2 - 8) / 3;
+
+
+    const scores = [
+
+        {
+            title:"TOTAL SCORE",
+            value:totalScore,
+            color:BLUE
+        },
+
+        {
+            title:"GPA",
+            value:gpa,
+            color:GREEN
+        },
+
+        {
+            title:"STUDENT RANK",
+            value:rank,
+            color:ORANGE
+        }
+
+    ];
+
+
+    scores.forEach(
+        (item,index)=>{
+
+            const x =
+                margin +
+                index *
+                (scoreWidth + 4);
+
+
+            pdf.setFillColor(
+                247,
+                248,
+                250
+            );
+
+            pdf.roundedRect(
+                x,
+                y,
+                scoreWidth,
+                28,
+                4,
+                4,
+                "F"
+            );
+
+
+            pdf.setTextColor(
+                ...item.color
+            );
+
+            pdf.setFont(
+                "helvetica",
+                "bold"
+            );
+
+            pdf.setFontSize(
+                16
+            );
+
+            pdf.text(
+                String(item.value || "—"),
+                x + scoreWidth / 2,
+                y + 13,
+                {
+                    align:"center"
+                }
+            );
+
+
+            pdf.setTextColor(
+                ...MUTED
+            );
+
+            pdf.setFont(
+                "helvetica",
+                "bold"
+            );
+
+            pdf.setFontSize(
+                6
+            );
+
+            pdf.text(
+                item.title,
+                x + scoreWidth / 2,
+                y + 21,
+                {
+                    align:"center"
+                }
+            );
+
+        }
+    );
+
+
+    y += 40;
+
+
+    /* =====================================================
+       SUBJECT SECTION
+    ===================================================== */
+
+    pdf.setTextColor(
         ...DARK
     );
 
-
-    doc.text(
-        "Subject-wise Result",
-        margin,
-        tableTop
-    );
-
-
-    doc.autoTable({
-
-        startY:
-            tableTop + 5,
-
-        margin:{
-            left:margin,
-            right:margin
-        },
-
-        head:[
-            [
-                "SUBJECT",
-                "MARKS",
-                "GRADE"
-            ]
-        ],
-
-        body:
-            tableData.length
-                ? tableData
-                : [
-                    [
-                        "Subject details unavailable",
-                        "—",
-                        "—"
-                    ]
-                ],
-
-        theme:"grid",
-
-        styles:{
-
-            font:"helvetica",
-
-            fontSize:8,
-
-            textColor:DARK,
-
-            lineColor:[
-                225,
-                225,
-                230
-            ],
-
-            lineWidth:.2,
-
-            cellPadding:4
-
-        },
-
-        headStyles:{
-
-            fillColor:[
-                245,
-                245,
-                247
-            ],
-
-            textColor:[
-                110,
-                110,
-                115
-            ],
-
-            fontStyle:"bold",
-
-            fontSize:7
-
-        },
-
-        alternateRowStyles:{
-
-            fillColor:[
-                250,
-                250,
-                252
-            ]
-
-        },
-
-        columnStyles:{
-
-            0:{
-                cellWidth:"auto"
-            },
-
-            1:{
-                cellWidth:30,
-                halign:"right"
-            },
-
-            2:{
-                cellWidth:30,
-                halign:"right"
-            }
-
-        }
-
-    });
-
-
-
-    /* =================================================
-       FOOTER
-    ================================================= */
-
-    let finalY =
-        doc.lastAutoTable &&
-        doc.lastAutoTable.finalY
-            ? doc.lastAutoTable.finalY + 10
-            : pageHeight - 35;
-
-
-    if(
-        finalY >
-        pageHeight - 30
-    ){
-
-        doc.addPage();
-
-        finalY = 20;
-
-    }
-
-
-    doc.setDrawColor(
-        225,
-        225,
-        230
-    );
-
-
-    doc.line(
-        margin,
-        finalY,
-        pageWidth - margin,
-        finalY
-    );
-
-
-    doc.setFont(
+    pdf.setFont(
         "helvetica",
         "bold"
     );
 
-
-    doc.setFontSize(
-        7
+    pdf.setFontSize(
+        11
     );
 
-
-    doc.setTextColor(
-        ...DARK
-    );
-
-
-    doc.text(
-        "CTGBoardRanking",
+    pdf.text(
+        "Subject-wise Result",
         margin,
-        finalY + 7
+        y
     );
 
 
-    doc.setFont(
+    y += 7;
+
+
+    /* Table Header */
+
+    pdf.setFillColor(
+        ...LIGHT
+    );
+
+    pdf.roundedRect(
+        margin,
+        y,
+        pageWidth - margin * 2,
+        10,
+        2,
+        2,
+        "F"
+    );
+
+
+    pdf.setTextColor(
+        ...MUTED
+    );
+
+    pdf.setFont(
         "helvetica",
-        "normal"
+        "bold"
     );
 
-
-    doc.setFontSize(
+    pdf.setFontSize(
         6.5
     );
 
 
-    doc.setTextColor(
-        ...MUTED
+    pdf.text(
+        "SUBJECT",
+        margin + 5,
+        y + 6.5
     );
 
 
-    doc.text(
-        "Unofficial Notice",
-        pageWidth - margin,
-        finalY + 7,
+    pdf.text(
+        "MARKS",
+        pageWidth - 55,
+        y + 6.5,
         {
             align:"right"
         }
     );
 
 
-    doc.text(
-        "This document is unofficial and provided for educational, research and statistical purposes.",
-        margin,
-        finalY + 14
+    pdf.text(
+        "GRADE",
+        pageWidth - margin - 5,
+        y + 6.5,
+        {
+            align:"right"
+        }
     );
 
 
+    y += 10;
 
-    /* =================================================
-       FILE NAME
-    ================================================= */
 
-    const safeRoll =
-        String(
-            student.roll || "student"
-        ).replace(
-            /[^a-zA-Z0-9_-]/g,
-            ""
+    const rows =
+        document.querySelectorAll(
+            "#subjectTable .subject-row"
         );
 
 
-    const fileName =
-        "CTGBoardRanking_" +
-        safeRoll +
-        "_SSC2026.pdf";
+    rows.forEach(
+        row=>{
+
+            if(
+                y > 260
+            ){
+
+                addPdfPageFooter(
+                    pdf,
+                    pageWidth,
+                    pageHeight,
+                    margin
+                );
+
+                pdf.addPage();
+
+                y = 20;
+
+            }
 
 
-    /* =================================================
-       DOWNLOAD
-    ================================================= */
+            const cells =
+                row.children;
 
-    doc.save(
-        fileName
+
+            const subject =
+                cells[0]
+                    ?.textContent
+                    .trim() || "—";
+
+
+            const marks =
+                cells[1]
+                    ?.textContent
+                    .trim() || "—";
+
+
+            const grade =
+                cells[2]
+                    ?.textContent
+                    .trim() || "—";
+
+
+            pdf.setFillColor(
+                255,
+                255,
+                255
+            );
+
+
+            pdf.rect(
+                margin,
+                y,
+                pageWidth - margin * 2,
+                9,
+                "F"
+            );
+
+
+            pdf.setDrawColor(
+                ...BORDER
+            );
+
+
+            pdf.line(
+                margin,
+                y + 9,
+                pageWidth - margin,
+                y + 9
+            );
+
+
+            pdf.setTextColor(
+                ...DARK
+            );
+
+            pdf.setFont(
+                "helvetica",
+                "normal"
+            );
+
+            pdf.setFontSize(
+                7.5
+            );
+
+
+            const subjectText =
+                pdf.splitTextToSize(
+                    subject,
+                    105
+                );
+
+
+            pdf.text(
+                subjectText[0],
+                margin + 5,
+                y + 6
+            );
+
+
+            pdf.text(
+                marks,
+                pageWidth - 55,
+                y + 6,
+                {
+                    align:"right"
+                }
+            );
+
+
+            pdf.setFont(
+                "helvetica",
+                "bold"
+            );
+
+
+            pdf.text(
+                grade,
+                pageWidth - margin - 5,
+                y + 6,
+                {
+                    align:"right"
+                }
+            );
+
+
+            y += 9;
+
+        }
+    );
+
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+
+    addPdfPageFooter(
+        pdf,
+        pageWidth,
+        pageHeight,
+        margin
+    );
+
+
+    /* =====================================================
+       FILE NAME
+    ===================================================== */
+
+    const safeName =
+        String(studentName || "Student")
+            .replace(
+                /[^a-zA-Z0-9\s_-]/g,
+                ""
+            )
+            .trim()
+            .replace(
+                /\s+/g,
+                "_"
+            );
+
+
+    const safeRoll =
+        String(roll)
+            .replace(
+                /[^0-9]/g,
+                ""
+            );
+
+
+    pdf.save(
+        `CTGboardranking_${safeRoll}_${safeName || "Result"}.pdf`
     );
 
 }
 
 
-/* =====================================================
-   AUTO LOAD ?roll=123456
-===================================================== */
+/* =========================================================
+   PDF FOOTER
+========================================================= */
+
+function addPdfPageFooter(
+    pdf,
+    pageWidth,
+    pageHeight,
+    margin
+){
+
+    pdf.setDrawColor(
+        225,
+        225,
+        230
+    );
+
+    pdf.line(
+        margin,
+        pageHeight - 19,
+        pageWidth - margin,
+        pageHeight - 19
+    );
+
+
+    pdf.setTextColor(
+        110,
+        110,
+        115
+    );
+
+    pdf.setFont(
+        "helvetica",
+        "normal"
+    );
+
+    pdf.setFontSize(
+        6.5
+    );
+
+
+    pdf.text(
+        "CTGboardranking",
+        margin,
+        pageHeight - 12
+    );
+
+
+    pdf.text(
+        "Unofficial Notice",
+        pageWidth / 2,
+        pageHeight - 12,
+        {
+            align:"center"
+        }
+    );
+
+
+    pdf.text(
+        "Generated by Shadat",
+        pageWidth - margin,
+        pageHeight - 12,
+        {
+            align:"right"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   AUTO LOAD ROLL FROM URL
+========================================================= */
 
 const params =
     new URLSearchParams(
@@ -3487,9 +3336,7 @@ const params =
 
 
 const urlRoll =
-    params.get(
-        "roll"
-    );
+    params.get("roll");
 
 
 if(urlRoll){
@@ -3497,14 +3344,11 @@ if(urlRoll){
     rollInput.value =
         urlRoll;
 
-
     setTimeout(
-        function(){
-
+        ()=>{
             searchResult();
-
         },
-        300
+        250
     );
 
 }
