@@ -3697,8 +3697,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const subjectList =
         document.getElementById("homeSubjectList");
 
-    const fullResultLink =
-        document.getElementById("homeFullResultLink");
+    const downloadPdfBtn =
+    document.getElementById("homeDownloadPdfBtn");
 
 
     if (!form || !input) {
@@ -4045,7 +4045,227 @@ if (
             .replace(/'/g, "&#039;");
 
     }
+/* =====================================================
+   HOMEPAGE RESULT PDF DOWNLOAD
+===================================================== */
 
+if (downloadPdfBtn) {
+
+    downloadPdfBtn.addEventListener(
+        "click",
+        downloadHomeResultPDF
+    );
+
+}
+
+
+async function downloadHomeResultPDF() {
+
+    if (!window.jspdf || !window.html2canvas) {
+
+        message.textContent =
+            "PDF library is still loading. Please try again.";
+
+        message.className =
+            "home-result-message error";
+
+        return;
+    }
+
+
+    if (resultBox.hidden) {
+
+        message.textContent =
+            "Please search for a result first.";
+
+        message.className =
+            "home-result-message error";
+
+        return;
+    }
+
+
+    const originalText =
+        downloadPdfBtn.innerHTML;
+
+
+    downloadPdfBtn.disabled = true;
+
+    downloadPdfBtn.innerHTML =
+        "Generating...";
+
+
+    try {
+
+        const canvas =
+            await html2canvas(
+                resultBox,
+                {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: "#ffffff",
+                    logging: false
+                }
+            );
+
+
+        const imageData =
+            canvas.toDataURL(
+                "image/png",
+                1.0
+            );
+
+
+        const { jsPDF } =
+            window.jspdf;
+
+
+        const pdf =
+            new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: "a4",
+                compress: true
+            });
+
+
+        const pageWidth =
+            pdf.internal.pageSize.getWidth();
+
+        const pageHeight =
+            pdf.internal.pageSize.getHeight();
+
+        const margin = 8;
+
+        const usableWidth =
+            pageWidth - margin * 2;
+
+
+        const imageHeight =
+            (
+                canvas.height *
+                usableWidth
+            ) /
+            canvas.width;
+
+
+        let heightLeft =
+            imageHeight;
+
+        let position =
+            margin;
+
+
+        pdf.addImage(
+            imageData,
+            "PNG",
+            margin,
+            position,
+            usableWidth,
+            imageHeight,
+            undefined,
+            "FAST"
+        );
+
+
+        heightLeft -=
+            pageHeight - margin * 2;
+
+
+        while (heightLeft > 0) {
+
+            position =
+                -(
+                    imageHeight -
+                    heightLeft
+                ) +
+                margin;
+
+
+            pdf.addPage();
+
+
+            pdf.addImage(
+                imageData,
+                "PNG",
+                margin,
+                position,
+                usableWidth,
+                imageHeight,
+                undefined,
+                "FAST"
+            );
+
+
+            heightLeft -=
+                pageHeight - margin * 2;
+
+        }
+
+
+        const rollText =
+            document.getElementById(
+                "homeResultRoll"
+            )?.textContent || "student";
+
+
+        const roll =
+            rollText.replace(
+                /[^0-9]/g,
+                ""
+            ) || "student";
+
+
+        const studentName =
+            document.getElementById(
+                "homeResultName"
+            )?.textContent || "result";
+
+
+        const safeName =
+            studentName
+                .trim()
+                .replace(
+                    /[^a-z0-9]+/gi,
+                    "-"
+                )
+                .replace(
+                    /^-+|-+$/g,
+                    ""
+                )
+                .toLowerCase();
+
+
+        pdf.save(
+            `SSC-2026-${roll}-${safeName}.pdf`
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Homepage PDF error:",
+            error
+        );
+
+
+        message.textContent =
+            "Unable to generate PDF. Please try again.";
+
+        message.className =
+            "home-result-message error";
+
+    } finally {
+
+        downloadPdfBtn.disabled = false;
+
+        downloadPdfBtn.innerHTML =
+            originalText;
+
+    }
+
+}
+      
 })();
 
 </script>
