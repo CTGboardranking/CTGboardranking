@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Statistics - CTGBoardRanking</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            color: #222;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 25px 15px 50px;
+        }
+
+        .header {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .header h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 0;
+            color: #777;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 18px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .card h3 {
+            margin: 0 0 10px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .card .number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .section {
+            margin-top: 25px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .section h2 {
+            margin-top: 0;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        th {
+            background: #f1f3f5;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 700px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .header h1 {
+                font-size: 23px;
+            }
+
+            .card {
+                padding: 18px 10px;
+            }
+
+            .card .number {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>📊 CTGBoardRanking Statistics</h1>
+        <p>SSC 2026 Chattogram Board Statistics</p>
+
+        <a href="index.html" class="back">
+            ← Back to Home
+        </a>
+    </div>
+
+
+    <!-- STATISTICS CARDS -->
+
+    <div class="stats">
+
+        <div class="card">
+            <h3>Total Institutions</h3>
+            <div class="number" id="institutions">—</div>
+        </div>
+
+        <div class="card">
+            <h3>Total Students</h3>
+            <div class="number" id="students">—</div>
+        </div>
+
+        <div class="card">
+            <h3>Total Passed</h3>
+            <div class="number" id="passed">—</div>
+        </div>
+
+        <div class="card">
+            <h3>GPA 5</h3>
+            <div class="number" id="gpa5">—</div>
+        </div>
+
+    </div>
+
+
+    <!-- PERFORMANCE -->
+
+    <div class="section">
+
+        <h2>Overall Performance</h2>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <tr>
+                    <th>Statistics</th>
+                    <th>Value</th>
+                </tr>
+
+                <tr>
+                    <td>Pass Rate</td>
+                    <td id="passRate">—</td>
+                </tr>
+
+                <tr>
+                    <td>GPA 5 Rate</td>
+                    <td id="gpa5Rate">—</td>
+                </tr>
+
+                <tr>
+                    <td>Average Students per Institution</td>
+                    <td id="average">—</td>
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- TOP INSTITUTIONS -->
+
+    <div class="section">
+
+        <h2>Top Institutions</h2>
+
+        <div id="tableContainer">
+
+            <div class="loading">
+                Loading statistics...
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+async function loadStatistics() {
+
+    try {
+
+        /*
+         * আপনার JSON ফাইলের path
+         */
+        const response = await fetch(
+            "institution-collector/institution_results.json"
+        );
+
+        if (!response.ok) {
+            throw new Error("JSON file not found");
+        }
+
+        const data = await response.json();
+
+
+        /*
+         * JSON যদি সরাসরি Array হয়
+         */
+        let institutions = Array.isArray(data)
+            ? data
+            : (
+                data.institutions ||
+                data.results ||
+                data.data ||
+                []
+            );
+
+
+        if (!institutions.length) {
+
+            throw new Error(
+                "No institution data found"
+            );
+
+        }
+
+
+        let totalStudents = 0;
+        let totalPassed = 0;
+        let totalGPA5 = 0;
+
+
+        institutions.forEach(item => {
+
+            totalStudents += Number(
+                item.appeared ||
+                item.total_students ||
+                item.total_appeared ||
+                0
+            );
+
+            totalPassed += Number(
+                item.passed ||
+                item.total_passed ||
+                0
+            );
+
+            totalGPA5 += Number(
+                item.gpa5 ||
+                item.gpa_5 ||
+                item.gpa5_count ||
+                item.gpa_5_count ||
+                0
+            );
+
+        });
+
+
+        /*
+         * Rates
+         */
+
+        const passRate =
+            totalStudents > 0
+                ? (totalPassed / totalStudents) * 100
+                : 0;
+
+        const gpa5Rate =
+            totalStudents > 0
+                ? (totalGPA5 / totalStudents) * 100
+                : 0;
+
+        const average =
+            institutions.length > 0
+                ? totalStudents / institutions.length
+                : 0;
+
+
+        /*
+         * Cards
+         */
+
+        document.getElementById(
+            "institutions"
+        ).textContent =
+            institutions.length.toLocaleString();
+
+        document.getElementById(
+            "students"
+        ).textContent =
+            totalStudents.toLocaleString();
+
+        document.getElementById(
+            "passed"
+        ).textContent =
+            totalPassed.toLocaleString();
+
+        document.getElementById(
+            "gpa5"
+        ).textContent =
+            totalGPA5.toLocaleString();
+
+
+        /*
+         * Performance
+         */
+
+        document.getElementById(
+            "passRate"
+        ).textContent =
+            passRate.toFixed(2) + "%";
+
+        document.getElementById(
+            "gpa5Rate"
+        ).textContent =
+            gpa5Rate.toFixed(2) + "%";
+
+        document.getElementById(
+            "average"
+        ).textContent =
+            Math.round(average).toLocaleString();
+
+
+        /*
+         * Sort institutions
+         * GPA 5 বেশি হলে আগে
+         */
+
+        institutions.sort(
+            (a, b) =>
+                Number(
+                    b.gpa5 ||
+                    b.gpa_5 ||
+                    b.gpa5_count ||
+                    0
+                )
+                -
+                Number(
+                    a.gpa5 ||
+                    a.gpa_5 ||
+                    a.gpa5_count ||
+                    0
+                )
+        );
+
+
+        /*
+         * Top 20 table
+         */
+
+        let html = `
+            <div class="table-wrapper">
+
+            <table>
+
+                <tr>
+                    <th>Rank</th>
+                    <th>Institution</th>
+                    <th>Students</th>
+                    <th>Passed</th>
+                    <th>GPA 5</th>
+                </tr>
+        `;
+
+
+        institutions
+            .slice(0, 20)
+            .forEach((item, index) => {
+
+                const name =
+                    item.institution_name ||
+                    item.institution ||
+                    item.institute ||
+                    item.name ||
+                    "Unknown";
+
+
+                const students =
+                    Number(
+                        item.appeared ||
+                        item.total_students ||
+                        item.total_appeared ||
+                        0
+                    );
+
+
+                const passed =
+                    Number(
+                        item.passed ||
+                        item.total_passed ||
+                        0
+                    );
+
+
+                const gpa5 =
+                    Number(
+                        item.gpa5 ||
+                        item.gpa_5 ||
+                        item.gpa5_count ||
+                        0
+                    );
+
+
+                html += `
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                ${index + 1}
+                            </strong>
+                        </td>
+
+                        <td>
+                            ${name}
+                        </td>
+
+                        <td>
+                            ${students.toLocaleString()}
+                        </td>
+
+                        <td>
+                            ${passed.toLocaleString()}
+                        </td>
+
+                        <td>
+                            <strong>
+                                ${gpa5.toLocaleString()}
+                            </strong>
+                        </td>
+
+                    </tr>
+
+                `;
+
+            });
+
+
+        html += `
+            </table>
+            </div>
+        `;
+
+
+        document.getElementById(
+            "tableContainer"
+        ).innerHTML = html;
+
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "tableContainer"
+        ).innerHTML = `
+            <div class="error">
+                Unable to load statistics.
+                <br>
+                Please check the JSON file path.
+            </div>
+        `;
+
+    }
+
+}
+
+
+/*
+ * Start
+ */
+
+loadStatistics();
+
+</script>
+
+</body>
+</html>
