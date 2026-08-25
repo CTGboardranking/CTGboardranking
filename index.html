@@ -3850,15 +3850,47 @@ document.addEventListener("DOMContentLoaded", function () {
             student.gpa;
 
 
-        const totalScore =
-            student.total_score ??
-            student.totalScore;
-
-
         const subjects =
-            Array.isArray(student.subjects)
-                ? student.subjects
-                : [];
+    Array.isArray(student.subjects)
+        ? student.subjects
+        : [];
+
+
+let totalScore =
+    student.total_score ??
+    student.totalScore ??
+    student.total ??
+    null;
+
+
+/* Total score missing হলে subjects থেকে calculate */
+if (
+    (totalScore === null ||
+     totalScore === undefined ||
+     totalScore === "") &&
+    subjects.length
+) {
+
+    const calculatedTotal =
+        subjects.reduce(
+            (sum, subject) => {
+
+                const mark =
+                    Number(subject.mark);
+
+                return Number.isFinite(mark)
+                    ? sum + mark
+                    : sum;
+
+            },
+            0
+        );
+
+    if (calculatedTotal > 0) {
+        totalScore = calculatedTotal;
+    }
+
+}
 
 
         nameElement.textContent =
