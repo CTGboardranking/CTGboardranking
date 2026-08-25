@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: ssc-ranking-update
@@ -25,7 +25,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
           ref: main
 
       # =====================================================
@@ -38,337 +38,149 @@ jobs:
           python-version: "3.13"
 
       # =====================================================
-      # DEPENDENCIES
+      # CHECK STUDENTS JSON
       # =====================================================
 
-      - name: Install dependencies
+      - name: Check students JSON
         run: |
-          python -m pip install --upgrade pip
-          pip install requests beautifulsoup4 supabase
 
-      # =====================================================
-      # CHECK SUPABASE CONFIG
-      # =====================================================
+          echo "=============================================="
+          echo "CHECKING STUDENTS JSON"
+          echo "=============================================="
 
-      - name: Check Supabase configuration
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-        run: |
-          echo "SUPABASE_URL configured:"
-          if [ -n "$SUPABASE_URL" ]; then
-            echo "YES"
-          else
-            echo "NO"
+          if [ ! -f scraper/students.json ]; then
+
+            echo "ERROR: scraper/students.json not found."
+
             exit 1
-          fi
-
-          echo "SUPABASE_KEY configured:"
-          if [ -n "$SUPABASE_KEY" ]; then
-            echo "YES"
-          else
-            echo "NO"
-            exit 1
-          fi
-
-      # =====================================================
-      # SHOW EXISTING DATA
-      # =====================================================
-
-      - name: Show existing data
-        run: |
-          echo "=============================================="
-          echo "EXISTING LOCAL DATA"
-          echo "=============================================="
-
-          if [ -f scraper/attempted_rolls.json ]; then
-
-            python - <<'PY'
-          import json
-
-          with open(
-              "scraper/attempted_rolls.json",
-              "r",
-              encoding="utf-8"
-          ) as f:
-              data = json.load(f)
-
-          print(
-              "Attempted rolls:",
-              len(data)
-          )
-          PY
-
-          else
-
-            echo "attempted_rolls.json not found"
 
           fi
 
-      # =====================================================
-      # SSC COLLECTION
-      # =====================================================
-
-      - name: Run SSC data collection
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-          SUPABASE_TABLE: students
-        run: |
-          python scraper/ssc_test.py
-
-      # =====================================================
-      # SHOW COLLECTION RESULT
-      # =====================================================
-
-      - name: Show collection result
-        if: always()
-        run: |
-          echo "=============================================="
-          echo "SSC COLLECTION RESULT"
-          echo "=============================================="
-
-          if [ -f scraper/student_collection_summary.json ]; then
-            cat scraper/student_collection_summary.json
-          fi
-
-      # =====================================================
-      # INSTITUTION STATISTICS
-      # =====================================================
-
-      - name: Generate institution statistics
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-        run: |
-          python scraper/institution_stats.py
-
-      # =====================================================
-      # INSTITUTION CSV
-      # =====================================================
-
-      - name: Convert institution CSV
-        run: |
-          python scraper/csv_to_institutions.py
-
-      # =====================================================
-      # VALIDATION
-      # =====================================================
-
-      - name: Validate institution data
-        run: |
-          python scraper/ranking_validator.py
-
-      # =====================================================
-      # INSTITUTION RANKING
-      # =====================================================
-
-      - name: Calculate institution ranking
-        run: |
-          python scraper/ranking_engine.py
-
-      # =====================================================
-      # DISTRICT RANKING
-      # =====================================================
-
-      - name: Calculate district ranking
-        run: |
-          python scraper/district_ranking.py
-
-      # =====================================================
-      # STUDENT RANKING
-      # =====================================================
-
-      - name: Calculate student ranking
-        run: |
-          python scraper/student_ranking.py
-
-      # =====================================================
-      # YEAR RANKING
-      # =====================================================
-
-      - name: Calculate year-wise ranking
-        run: |
-          python scraper/year_ranking.py
-
-      # =====================================================
-      # BOARD RANKING
-      # =====================================================
-
-      - name: Calculate board ranking
-        run: |
-          python scraper/board_ranking.py
-
-      # =====================================================
-      # VALIDATE JSON
-      # =====================================================
-
-      - name: Validate JSON files
-        run: |
           python - <<'PY'
+
           import json
           import os
 
-          failed = False
+          path = "scraper/students.json"
 
-          for root, dirs, files in os.walk("scraper"):
+          with open(
+              path,
+              "r",
+              encoding="utf-8"
+          ) as f:
 
-              for name in files:
+              data = json.load(f)
 
-                  if not name.endswith(".json"):
-                      continue
 
-                  path = os.path.join(
-                      root,
-                      name
+          print("")
+          print("==============================================")
+          print("STUDENTS JSON CHECK")
+          print("==============================================")
+
+
+          print(
+              "students.json total:",
+              len(data)
+          )
+
+
+          rolls = set()
+
+
+          for student in data:
+
+              if not isinstance(
+                  student,
+                  dict
+              ):
+                  continue
+
+              roll = str(
+                  student.get(
+                      "roll",
+                      ""
                   )
+              ).strip()
 
-                  try:
+              if roll:
+                  rolls.add(roll)
 
-                      with open(
-                          path,
-                          "r",
-                          encoding="utf-8"
-                      ) as f:
 
-                          json.load(f)
+          print(
+              "unique rolls:",
+              len(rolls)
+          )
 
-                      size = os.path.getsize(path)
 
-                      print(
-                          f"OK: {path} "
-                          f"({size / 1024 / 1024:.2f} MB)"
-                      )
+          if rolls:
 
-                  except Exception as e:
-
-                      print(
-                          f"ERROR: {path} -> {e}"
-                      )
-
-                      failed = True
-
-          if failed:
-              raise SystemExit(
-                  "JSON validation failed."
+              print(
+                  "first roll:",
+                  min(
+                      rolls,
+                      key=int
+                  )
               )
 
-          print("All JSON files are valid.")
+              print(
+                  "last roll:",
+                  max(
+                      rolls,
+                      key=int
+                  )
+              )
+
+
+          print("")
+          print("FILE SIZE")
+
+          size = os.path.getsize(path)
+
+          print(
+              f"{size / 1024 / 1024:.2f} MB"
+          )
+
+
+          print("")
+          print("==============================================")
+          print("GROUP COUNTS")
+          print("==============================================")
+
+
+          groups = {}
+
+
+          for student in data:
+
+              if not isinstance(
+                  student,
+                  dict
+              ):
+                  continue
+
+              group = student.get(
+                  "group",
+                  "Unknown"
+              )
+
+              groups[group] = (
+                  groups.get(
+                      group,
+                      0
+                  ) + 1
+              )
+
+
+          for group, count in groups.items():
+
+              print(
+                  f"{group}: {count}"
+              )
+
+
+          print("")
+          print("==============================================")
+          print("CHECK COMPLETE")
+          print("==============================================")
+
           PY
-
-      # =====================================================
-      # GIT STATUS
-      # =====================================================
-
-      - name: Show generated files
-        if: always()
-        run: |
-          echo "=============================================="
-          echo "GENERATED FILES"
-          echo "=============================================="
-
-          find scraper \
-            -type f \
-            -printf "%p %k KB\n" \
-            | sort
-
-      # =====================================================
-      # COMMIT
-      # =====================================================
-
-      - name: Commit ranking data
-        run: |
-
-          git config user.name "github-actions[bot]"
-
-          git config user.email \
-            "41898282+github-actions[bot]@users.noreply.github.com"
-
-          echo "=============================================="
-          echo "PREPARING COMMIT"
-          echo "=============================================="
-
-          # -------------------------------------------------
-          # IMPORTANT:
-          # students.json is NOT used as permanent database.
-          # Do NOT restore/delete it here.
-          # -------------------------------------------------
-
-          git add scraper/
-
-          echo ""
-          echo "STAGED CHANGES"
-
-          git status --short
-
-          if git diff --cached --quiet; then
-
-            echo ""
-            echo "No Git changes detected."
-
-          else
-
-            git commit \
-              -m "Update SSC ranking data"
-
-          fi
-
-      # =====================================================
-      # SYNC
-      # =====================================================
-
-      - name: Sync latest main
-        run: |
-
-          git fetch origin main
-
-          git rebase origin/main
-
-      # =====================================================
-      # PUSH
-      # =====================================================
-
-      - name: Push changes
-        run: |
-
-          echo "=============================================="
-          echo "PUSHING DATA"
-          echo "=============================================="
-
-          git push origin HEAD:main
-
-          echo ""
-          echo "=============================================="
-          echo "SSC DATA PUSHED SUCCESSFULLY"
-          echo "=============================================="
-
-      # =====================================================
-      # FINAL
-      # =====================================================
-
-      - name: Final collection status
-        if: always()
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-        run: |
-
-          echo "=============================================="
-          echo "FINAL SSC COLLECTION STATUS"
-          echo "=============================================="
-
-          if [ -f scraper/student_collection_summary.json ]; then
-            cat scraper/student_collection_summary.json
-          fi
-
-      # =====================================================
-      # BACKUP
-      # =====================================================
-
-      - name: Upload SSC data backup
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: ssc-data
-          path: scraper/
-          if-no-files-found: warn
