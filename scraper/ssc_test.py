@@ -8,18 +8,48 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
+
+# ============================================================
+# SUPABASE
+# ============================================================
+
 try:
-    from supabase import create_client
+    from supabase import create_client, Client
 except ImportError:
     create_client = None
+    Client = None
 
 
 # ============================================================
-# CONFIG
+# SSC 2026 STUDENT COLLECTOR
+#
+# VERSION:
+# Supabase Primary Storage
+# Supabase Pagination
+# Duplicate Roll Protection
+# Local Checkpoint
+# No date_of_birth column dependency
+# Retry on temporary request errors
 # ============================================================
 
-BASE_URL = "https://sresult.bise-ctg.gov.bd/to_ssc_26_ctg/"
-INDIVIDUAL_URL = BASE_URL + "individual/"
+
+# ============================================================
+# URL
+# ============================================================
+
+BASE_URL = (
+    "https://sresult.bise-ctg.gov.bd/"
+    "to_ssc_26_ctg/"
+)
+
+INDIVIDUAL_URL = (
+    BASE_URL + "individual/"
+)
+
+
+# ============================================================
+# LOCAL FILES
+# ============================================================
 
 OUTPUT_DIR = "scraper"
 
@@ -43,21 +73,15 @@ ATTEMPTED_FILE = os.path.join(
     "attempted_rolls.json"
 )
 
+
+# ============================================================
+# SUPABASE TABLE
+# ============================================================
+
 SUPABASE_TABLE = os.getenv(
     "SUPABASE_TABLE",
     "students"
 )
-
-YEAR = 2026
-BOARD = "Chattogram Board"
-
-BATCH_SIZE = 10000
-SAVE_EVERY = 500
-
-MIN_DELAY = 0.1
-MAX_DELAY = 0.2
-
-REQUEST_TIMEOUT = (5, 15)
 
 
 # ============================================================
@@ -89,6 +113,122 @@ ROLL_RANGES = {
 
 
 # ============================================================
+# SETTINGS
+# ============================================================
+
+BATCH_SIZE = 10000
+
+SAVE_EVERY = 500
+
+MIN_DELAY = 0.1
+
+MAX_DELAY = 0.2
+
+REQUEST_TIMEOUT = (
+    5,
+    15
+)
+
+MAX_RETRIES = 2
+
+SUPABASE_PAGE_SIZE = 1000
+
+YEAR = 2026
+
+BOARD = "Chattogram Board"
+
+
+# ============================================================
+# HEADERS
+# ============================================================
+
+HEADERS = {
+
+    "User-Agent": (
+        "Mozilla/5.0 "
+        "(Linux; Android 10; Mobile) "
+        "AppleWebKit/537.36 "
+        "(KHTML, like Gecko) "
+        "Chrome/131.0.0.0 "
+        "Mobile Safari/537.36"
+    ),
+
+    "Accept": (
+        "text/html,"
+        "application/xhtml+xml,"
+        "application/xml;q=0.9,"
+        "*/*;q=0.8"
+    ),
+
+    "Accept-Language":
+        "en-US,en;q=0.9",
+
+    "Connection":
+        "keep-alive",
+}
+
+
+# ============================================================
+# STARTUP
+# ============================================================
+
+print(
+    "=" * 70,
+    flush=True
+)
+
+print(
+    "SSC 2026 STUDENT COLLECTOR",
+    flush=True
+)
+
+print(
+    "SUPABASE PRIMARY STORAGE VERSION",
+    flush=True
+)
+
+print(
+    "=" * 70,
+    flush=True
+)
+
+print(
+    "Batch size:",
+    BATCH_SIZE,
+    flush=True
+)
+
+print(
+    "Save every:",
+    SAVE_EVERY,
+    flush=True
+)
+
+print(
+    "Min delay:",
+    MIN_DELAY,
+    flush=True
+)
+
+print(
+    "Max delay:",
+    MAX_DELAY,
+    flush=True
+)
+
+print(
+    "Max retries:",
+    MAX_RETRIES,
+    flush=True
+)
+
+print(
+    "=" * 70,
+    flush=True
+)
+
+
+# ============================================================
 # DIRECTORY
 # ============================================================
 
@@ -99,40 +239,93 @@ os.makedirs(
 
 
 # ============================================================
-# HEADERS
-# ============================================================
-
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 "
-        "(Linux; Android 10; Mobile) "
-        "AppleWebKit/537.36 "
-        "(KHTML, like Gecko) "
-        "Chrome/131.0.0.0 "
-        "Mobile Safari/537.36"
-    ),
-    "Accept": (
-        "text/html,"
-        "application/xhtml+xml,"
-        "application/xml;q=0.9,"
-        "*/*;q=0.8"
-    ),
-    "Accept-Language": "en-US,en;q=0.9",
-    "Connection": "keep-alive",
-}
-
-
-# ============================================================
 # SESSION
 # ============================================================
 
 session = requests.Session()
-session.headers.update(HEADERS)
+
+session.headers.update(
+    HEADERS
+)
 
 
 # ============================================================
-# JSON HELPERS
+# SUPABASE CONNECTION
 # ============================================================
+
+SUPABASE_URL = os.getenv(
+    "SUPABASE_URL"
+)
+
+SUPABASE_KEY = os.getenv(
+    "SUPABASE_KEY"
+)
+
+supabase = None
+
+SUPABASE_ENABLED = False
+
+
+if (
+    SUPABASE_URL
+    and
+    SUPABASE_KEY
+    and
+    create_client is not None
+):
+
+    try:
+
+        supabase = create_client(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        )
+
+        SUPABASE_ENABLED = True
+
+        print(
+            "Supabase: CONNECTED",
+            flush=True
+        )
+
+        print(
+            "Supabase table:",
+            SUPABASE_TABLE,
+            flush=True
+        )
+
+    except Exception as e:
+
+        print(
+            "Supabase connection error:",
+            e,
+            flush=True
+        )
+
+        raise SystemExit(
+            "Supabase connection is required."
+        )
+
+else:
+
+    raise SystemExit(
+        "SUPABASE_URL / SUPABASE_KEY not configured."
+    )
+
+
+# ============================================================
+# HELPERS
+# ============================================================
+
+def clean_text(value):
+
+    if value is None:
+        return ""
+
+    return " ".join(
+        str(value).split()
+    ).strip()
+
 
 def save_json(filename, data):
 
@@ -192,260 +385,6 @@ def load_json(filename, default):
         return default
 
 
-def clean_text(value):
-
-    if value is None:
-        return ""
-
-    return " ".join(
-        str(value).split()
-    ).strip()
-
-
-# ============================================================
-# SUPABASE
-# ============================================================
-
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-
-supabase = None
-SUPABASE_ENABLED = False
-
-
-if (
-    SUPABASE_URL
-    and SUPABASE_KEY
-    and create_client is not None
-):
-
-    try:
-
-        supabase = create_client(
-            SUPABASE_URL,
-            SUPABASE_KEY
-        )
-
-        SUPABASE_ENABLED = True
-
-        print(
-            "Supabase: CONNECTED",
-            flush=True
-        )
-
-        print(
-            "Supabase table:",
-            SUPABASE_TABLE,
-            flush=True
-        )
-
-    except Exception as e:
-
-        print(
-            "Supabase connection error:",
-            e,
-            flush=True
-        )
-
-else:
-
-    print(
-        "ERROR: Supabase is NOT configured.",
-        flush=True
-    )
-
-    print(
-        "SUPABASE_URL present:",
-        bool(SUPABASE_URL),
-        flush=True
-    )
-
-    print(
-        "SUPABASE_KEY present:",
-        bool(SUPABASE_KEY),
-        flush=True
-    )
-
-    print(
-        "supabase package available:",
-        create_client is not None,
-        flush=True
-    )
-
-
-if not SUPABASE_ENABLED:
-
-    raise SystemExit(
-        "Supabase is required. "
-        "Configure SUPABASE_URL and SUPABASE_KEY."
-    )
-
-
-# ============================================================
-# LOAD ALL SUPABASE ROLLS
-#
-# Supabase normally limits rows returned per request.
-# Therefore pagination is used.
-# ============================================================
-
-def load_supabase_rolls():
-
-    result = set()
-
-    page_size = 1000
-    offset = 0
-
-    print(
-        "Loading existing Supabase rolls...",
-        flush=True
-    )
-
-    while True:
-
-        try:
-
-            response = (
-                supabase
-                .table(SUPABASE_TABLE)
-                .select("roll")
-                .range(
-                    offset,
-                    offset + page_size - 1
-                )
-                .execute()
-            )
-
-            rows = response.data or []
-
-        except Exception as e:
-
-            print(
-                "Supabase roll loading error:",
-                e,
-                flush=True
-            )
-
-            raise SystemExit(
-                "Could not load Supabase rolls."
-            )
-
-        if not rows:
-            break
-
-        for row in rows:
-
-            if not isinstance(
-                row,
-                dict
-            ):
-                continue
-
-            roll = str(
-                row.get(
-                    "roll",
-                    ""
-                )
-            ).strip()
-
-            if roll:
-                result.add(roll)
-
-        print(
-            f"Loaded {len(result)} Supabase rolls...",
-            flush=True
-        )
-
-        if len(rows) < page_size:
-            break
-
-        offset += page_size
-
-    print(
-        "Supabase existing rolls:",
-        len(result),
-        flush=True
-    )
-
-    return result
-
-
-supabase_rolls = load_supabase_rolls()
-
-
-# ============================================================
-# LOAD LOCAL ATTEMPTED / FAILED
-# ============================================================
-
-attempted_rolls = load_json(
-    "attempted_rolls.json",
-    []
-)
-
-failed_rolls = load_json(
-    "failed_rolls.json",
-    []
-)
-
-
-attempted_set = set()
-
-for item in attempted_rolls:
-
-    if isinstance(item, dict):
-
-        roll = str(
-            item.get(
-                "roll",
-                ""
-            )
-        ).strip()
-
-    else:
-
-        roll = str(item).strip()
-
-    if roll:
-        attempted_set.add(roll)
-
-
-failed_set = set()
-
-for item in failed_rolls:
-
-    if isinstance(item, dict):
-
-        roll = str(
-            item.get(
-                "roll",
-                ""
-            )
-        ).strip()
-
-    else:
-
-        roll = str(item).strip()
-
-    if roll:
-        failed_set.add(roll)
-
-
-# ============================================================
-# EXISTING LOCAL STUDENTS
-# ============================================================
-
-students = load_json(
-    "students.json",
-    []
-)
-
-if not isinstance(
-    students,
-    list
-):
-
-    students = []
-
-
 # ============================================================
 # GPA
 # ============================================================
@@ -480,12 +419,12 @@ def parse_gpa(value):
 
             try:
 
-                value = float(
+                gpa = float(
                     match.group(1)
                 )
 
-                if 0 <= value <= 5:
-                    return value
+                if 0 <= gpa <= 5:
+                    return gpa
 
             except Exception:
                 pass
@@ -493,37 +432,123 @@ def parse_gpa(value):
     return None
 
 
+# ============================================================
+# FIND GPA
+# ============================================================
+
 def find_page_gpa(soup):
 
-    text = clean_text(
+    page_text = clean_text(
         soup.get_text(
             " ",
             strip=True
         )
     )
 
-    match = re.search(
-        r"\bGPA\s*[:=]?\s*"
+    upper = page_text.upper()
+
+    patterns = [
+
+        r"\bGPA\s*[:=]\s*([0-5](?:\.[0-9]{1,2})?)",
+
+        r"\bGPA\s+([0-5](?:\.[0-9]{1,2})?)",
+
+        r"\bRESULT\s*[:=]?\s*GPA\s*[:=]?\s*"
         r"([0-5](?:\.[0-9]{1,2})?)",
-        text,
-        re.I
-    )
 
-    if match:
+        r"\bFINAL\s+RESULT\s*[:=]?\s*"
+        r"([0-5](?:\.[0-9]{1,2})?)",
 
-        try:
+    ]
 
-            value = float(
-                match.group(1)
+    for pattern in patterns:
+
+        match = re.search(
+            pattern,
+            upper
+        )
+
+        if match:
+
+            try:
+
+                gpa = float(
+                    match.group(1)
+                )
+
+                if 0 <= gpa <= 5:
+                    return gpa
+
+            except Exception:
+                pass
+
+
+    for row in soup.find_all("tr"):
+
+        cells = row.find_all(
+            ["th", "td"]
+        )
+
+        values = [
+
+            clean_text(
+                cell.get_text(
+                    " ",
+                    strip=True
+                )
             )
 
-            if 0 <= value <= 5:
-                return value
+            for cell in cells
 
-        except Exception:
-            pass
+        ]
+
+        for index, value in enumerate(values):
+
+            if "GPA" in value.upper():
+
+                gpa = parse_gpa(value)
+
+                if gpa is not None:
+                    return gpa
+
+                if index + 1 < len(values):
+
+                    gpa = parse_gpa(
+                        values[index + 1]
+                    )
+
+                    if gpa is not None:
+                        return gpa
 
     return None
+
+
+# ============================================================
+# LABEL VALUE
+# ============================================================
+
+def find_value_after_label(
+    values,
+    label
+):
+
+    label = label.lower().strip()
+
+    for i, value in enumerate(values):
+
+        current = clean_text(
+            value
+        ).lower()
+
+        if current == label:
+
+            if i + 1 < len(values):
+
+                return clean_text(
+                    values[i + 1]
+                )
+
+    return ""
 
 
 # ============================================================
@@ -543,21 +568,47 @@ def extract_district_from_institute(
 
     known = {
 
-        "CHITTAGONG": "Chattogram",
-        "CHATTOGRAM": "Chattogram",
-        "COX'S BAZAR": "Cox's Bazar",
-        "COXS BAZAR": "Cox's Bazar",
-        "COMILLA": "Cumilla",
-        "CUMILLA": "Cumilla",
-        "FENI": "Feni",
-        "NOAKHALI": "Noakhali",
-        "LAKSHMIPUR": "Lakshmipur",
-        "CHANDPUR": "Chandpur",
-        "BRAHMANBARIA": "Brahmanbaria",
-        "RANGAMATI": "Rangamati",
-        "KHAGRACHHARI": "Khagrachhari",
-        "BANDARBAN": "Bandarban",
+        "CHITTAGONG":
+            "Chattogram",
 
+        "CHATTOGRAM":
+            "Chattogram",
+
+        "COX'S BAZAR":
+            "Cox's Bazar",
+
+        "COXS BAZAR":
+            "Cox's Bazar",
+
+        "COMILLA":
+            "Cumilla",
+
+        "CUMILLA":
+            "Cumilla",
+
+        "FENI":
+            "Feni",
+
+        "NOAKHALI":
+            "Noakhali",
+
+        "LAKSHMIPUR":
+            "Lakshmipur",
+
+        "CHANDPUR":
+            "Chandpur",
+
+        "BRAHMANBARIA":
+            "Brahmanbaria",
+
+        "RANGAMATI":
+            "Rangamati",
+
+        "KHAGRACHHARI":
+            "Khagrachhari",
+
+        "BANDARBAN":
+            "Bandarban",
     }
 
     upper = institute.upper()
@@ -584,44 +635,66 @@ def normalize_grade(value):
 
     value = clean_text(value)
 
+    if not value:
+        return ""
+
     value = value.replace(
         "(",
         ""
     ).replace(
         ")",
         ""
-    ).replace(
+    )
+
+    value = value.replace(
         " ",
         ""
-    ).upper()
+    )
 
-    if GRADE_PATTERN.fullmatch(value):
+    value = value.upper()
+
+    if GRADE_PATTERN.fullmatch(
+        value
+    ):
         return value
 
     return ""
 
 
 # ============================================================
-# SUBJECT
+# SUBJECT MARK + GRADE
 # ============================================================
 
 def parse_subject_values(values):
 
     mark = None
+
     grade = ""
 
     for value in values:
 
-        normalized = clean_text(
-            value
-        ).replace(
+        value = clean_text(value)
+
+        if not value:
+            continue
+
+        normalized = value.upper()
+
+        normalized = normalized.replace(
             " ",
             ""
-        ).upper()
+        )
+
+
+        # 80(A+)
 
         match = re.fullmatch(
-            r"(\d{1,3})\((A\+|A-|A|B|C|D|F)\)",
-            normalized
+            r"(\d{1,3})"
+            r"\("
+            r"(A\+|A-|A|B|C|D|F)"
+            r"\)",
+            normalized,
+            re.I
         )
 
         if match:
@@ -634,13 +707,17 @@ def parse_subject_values(values):
 
                 return (
                     number,
-                    match.group(2)
+                    match.group(2).upper()
                 )
 
 
+        # 80A+
+
         match = re.fullmatch(
-            r"(\d{1,3})(A\+|A-|A|B|C|D|F)",
-            normalized
+            r"(\d{1,3})"
+            r"(A\+|A-|A|B|C|D|F)",
+            normalized,
+            re.I
         )
 
         if match:
@@ -653,7 +730,7 @@ def parse_subject_values(values):
 
                 return (
                     number,
-                    match.group(2)
+                    match.group(2).upper()
                 )
 
 
@@ -662,7 +739,22 @@ def parse_subject_values(values):
         )
 
         if grade_only:
+
             grade = grade_only
+
+            continue
+
+
+        match = re.fullmatch(
+            r"\((A\+|A-|A|B|C|D|F)\)",
+            normalized,
+            re.I
+        )
+
+        if match:
+
+            grade = match.group(1).upper()
+
             continue
 
 
@@ -676,6 +768,7 @@ def parse_subject_values(values):
             )
 
             if 0 <= number <= 100:
+
                 mark = number
 
     return (
@@ -684,14 +777,23 @@ def parse_subject_values(values):
     )
 
 
+# ============================================================
+# SUBJECT PARSER
+# ============================================================
+
 def parse_subjects(soup):
 
     subjects = []
+
     seen = set()
 
-    for table in soup.find_all("table"):
+    for table in soup.find_all(
+        "table"
+    ):
 
-        for row in table.find_all("tr"):
+        for row in table.find_all(
+            "tr"
+        ):
 
             cells = row.find_all(
                 ["th", "td"]
@@ -736,8 +838,10 @@ def parse_subjects(soup):
 
             seen.add(key)
 
-            mark, grade = parse_subject_values(
-                values[2:]
+            mark, grade = (
+                parse_subject_values(
+                    values[2:]
+                )
             )
 
             combined = " ".join(
@@ -746,21 +850,28 @@ def parse_subjects(soup):
 
             optional = (
                 "OPTIONAL" in combined
-                or "4TH SUBJECT" in combined
-                or "FOURTH SUBJECT" in combined
+                or
+                "4TH SUBJECT" in combined
+                or
+                "FOURTH SUBJECT" in combined
             )
 
             subjects.append({
 
-                "code": code,
+                "code":
+                    code,
 
-                "subject": subject_name,
+                "subject":
+                    subject_name,
 
-                "mark": mark,
+                "mark":
+                    mark,
 
-                "grade": grade,
+                "grade":
+                    grade,
 
-                "optional": optional,
+                "optional":
+                    optional,
 
             })
 
@@ -768,21 +879,30 @@ def parse_subjects(soup):
 
 
 # ============================================================
-# TOTAL
+# TOTAL MARKS
 # ============================================================
 
-def calculate_total_score(subjects):
+def calculate_total_score(
+    subjects
+):
 
     total = 0
+
     found = False
 
     for subject in subjects:
 
-        mark = subject.get("mark")
+        mark = subject.get(
+            "mark"
+        )
 
-        if isinstance(mark, int):
+        if isinstance(
+            mark,
+            int
+        ):
 
             total += mark
+
             found = True
 
     if found:
@@ -792,7 +912,7 @@ def calculate_total_score(subjects):
 
 
 # ============================================================
-# RESULT
+# RESULT STATUS
 # ============================================================
 
 def detect_result(
@@ -800,31 +920,92 @@ def detect_result(
     subjects
 ):
 
-    text = clean_text(
+    page_text = clean_text(
         soup.get_text(
             " ",
             strip=True
         )
-    ).upper()
-
-    match = re.search(
-        r"\bRESULT\s*[:\-]\s*(PASS|FAIL)\b",
-        text
     )
 
-    if match:
-        return match.group(1)
+    upper = page_text.upper()
+
+    patterns = [
+
+        r"\bRESULT\s*[:\-]\s*(PASS|FAIL)\b",
+
+        r"\bFINAL\s+RESULT\s*[:\-]?\s*"
+        r"(PASS|FAIL)\b",
+
+    ]
+
+    for pattern in patterns:
+
+        match = re.search(
+            pattern,
+            upper
+        )
+
+        if match:
+
+            return (
+                match.group(1).upper()
+            )
+
+
+    for row in soup.find_all(
+        "tr"
+    ):
+
+        values = [
+
+            clean_text(
+                cell.get_text(
+                    " ",
+                    strip=True
+                )
+            )
+
+            for cell in row.find_all(
+                ["th", "td"]
+            )
+
+        ]
+
+        if not values:
+            continue
+
+        joined = " ".join(
+            values
+        ).upper()
+
+        if "RESULT" in joined:
+
+            if re.search(
+                r"\bPASS\b",
+                joined
+            ):
+                return "PASS"
+
+            if re.search(
+                r"\bFAIL\b",
+                joined
+            ):
+                return "FAIL"
+
 
     for subject in subjects:
 
-        if str(
+        grade = str(
             subject.get(
                 "grade",
                 ""
             )
-        ).upper() == "F":
+        ).upper()
+
+        if grade == "F":
 
             return "FAIL"
+
 
     return ""
 
@@ -846,64 +1027,68 @@ def parse_result(
 
     result = {
 
-        "roll": str(requested_roll),
+        "roll":
+            str(requested_roll),
 
-        "name": "",
+        "name":
+            "",
 
-        "board": "",
+        "board":
+            "",
 
-        "group": group_name,
+        "group":
+            group_name,
 
-        "father_name": "",
+        "father_name":
+            "",
 
-        "mother_name": "",
+        "mother_name":
+            "",
 
-        "session": "",
+        "session":
+            "",
 
-        "reg_no": "",
+        "reg_no":
+            "",
 
-        "type": "",
+        "type":
+            "",
 
-        "institute": "",
+        "institute":
+            "",
 
-        "district": "",
+        "district":
+            "",
 
-        "result": "",
+        "result":
+            "",
 
-        "date_of_birth": "",
+        "date_of_birth":
+            "",
 
-        "gpa": None,
+        "gpa":
+            None,
 
-        "total_score": None,
+        "total_score":
+            None,
 
-        "subjects": [],
+        "subjects":
+            [],
 
     }
 
 
-    fields = [
+    # ========================================================
+    # BASIC INFORMATION
+    # ========================================================
 
-        ("Roll No", "roll"),
-        ("Name", "name"),
-        ("Board", "board"),
-        ("Father's Name", "father_name"),
-        ("Father Name", "father_name"),
-        ("Group", "group"),
-        ("Mother's Name", "mother_name"),
-        ("Mother Name", "mother_name"),
-        ("Session", "session"),
-        ("Reg. NO", "reg_no"),
-        ("Reg. No", "reg_no"),
-        ("Registration No", "reg_no"),
-        ("Type", "type"),
-        ("Institute", "institute"),
-        ("DATE OF BIRTH", "date_of_birth"),
-        ("Date of Birth", "date_of_birth"),
+    for row in soup.find_all(
+        "tr"
+    ):
 
-    ]
-
-
-    for row in soup.find_all("tr"):
+        cells = row.find_all(
+            ["th", "td"]
+        )
 
         values = [
 
@@ -914,50 +1099,145 @@ def parse_result(
                 )
             )
 
-            for cell in row.find_all(
-                ["th", "td"]
-            )
+            for cell in cells
 
         ]
 
         if not values:
             continue
 
+        fields = [
+
+            ("Roll No", "roll"),
+
+            ("Name", "name"),
+
+            ("Board", "board"),
+
+            ("Father's Name", "father_name"),
+
+            ("Father Name", "father_name"),
+
+            ("Group", "group"),
+
+            ("Mother's Name", "mother_name"),
+
+            ("Mother Name", "mother_name"),
+
+            ("Session", "session"),
+
+            ("Reg. NO", "reg_no"),
+
+            ("Reg. No", "reg_no"),
+
+            ("Registration No", "reg_no"),
+
+            ("Type", "type"),
+
+            ("Institute", "institute"),
+
+            ("DATE OF BIRTH", "date_of_birth"),
+
+            ("Date of Birth", "date_of_birth"),
+
+        ]
+
         for label, key in fields:
 
-            for index, value in enumerate(values):
+            value = find_value_after_label(
+                values,
+                label
+            )
 
-                if value.lower() == label.lower():
+            if value:
 
-                    if index + 1 < len(values):
-
-                        result[key] = clean_text(
-                            values[index + 1]
-                        )
-
-
-                elif value.lower().startswith(
-                    label.lower() + ":"
-                ):
-
-                    result[key] = clean_text(
-                        value.split(
-                            ":",
-                            1
-                        )[1]
-                    )
+                result[key] = value
 
 
-    result["gpa"] = find_page_gpa(soup)
+        result_value = (
+            find_value_after_label(
+                values,
+                "Result"
+            )
+        )
+
+        if result_value:
+
+            result_value = clean_text(
+                result_value
+            ).upper()
+
+            if result_value in (
+                "PASS",
+                "FAIL"
+            ):
+
+                result["result"] = (
+                    result_value
+                )
+
+
+    # ========================================================
+    # FALLBACK RESULT
+    # ========================================================
+
+    page_text = clean_text(
+        soup.get_text(
+            " ",
+            strip=True
+        )
+    )
+
+
+    if not result["result"]:
+
+        match = re.search(
+            r"\bRESULT\s*[:\-]\s*"
+            r"(PASS|FAIL)\b",
+            page_text,
+            re.I
+        )
+
+        if match:
+
+            result["result"] = (
+                match.group(1).upper()
+            )
+
+
+    # ========================================================
+    # GPA
+    # ========================================================
+
+    result["gpa"] = find_page_gpa(
+        soup
+    )
+
+
+    # ========================================================
+    # SUBJECTS
+    # ========================================================
 
     result["subjects"] = parse_subjects(
         soup
     )
 
-    result["result"] = detect_result(
-        soup,
-        result["subjects"]
-    )
+
+    # ========================================================
+    # RESULT FALLBACK
+    # ========================================================
+
+    if not result["result"]:
+
+        result["result"] = detect_result(
+            soup,
+            result["subjects"]
+        )
+
+
+    # ========================================================
+    # TOTAL SCORE
+    # ========================================================
 
     result["total_score"] = (
         calculate_total_score(
@@ -965,28 +1245,55 @@ def parse_result(
         )
     )
 
-    result["district"] = (
-        extract_district_from_institute(
-            result["institute"]
-        )
-    )
 
+    # ========================================================
+    # DISTRICT
+    # ========================================================
+
+    if not result["district"]:
+
+        result["district"] = (
+            extract_district_from_institute(
+                result["institute"]
+            )
+        )
+
+
+    # ========================================================
+    # VALID RESULT CHECK
+    # ========================================================
 
     has_data = (
 
-        bool(result["name"])
+        bool(
+            result["name"]
+        )
+
         or
-        bool(result["institute"])
+
+        bool(
+            result["institute"]
+        )
+
         or
-        len(result["subjects"]) > 0
+
+        len(
+            result["subjects"]
+        ) > 0
 
     )
 
+
     if not has_data:
+
         return None
 
 
-    for key in [
+    # ========================================================
+    # CLEAN STRINGS
+    # ========================================================
+
+    string_fields = [
 
         "roll",
         "name",
@@ -1002,7 +1309,9 @@ def parse_result(
         "result",
         "date_of_birth",
 
-    ]:
+    ]
+
+    for key in string_fields:
 
         result[key] = clean_text(
             result[key]
@@ -1010,110 +1319,6 @@ def parse_result(
 
 
     return result
-
-
-# ============================================================
-# SUPABASE UPSERT
-# ============================================================
-
-def supabase_upsert_student(student):
-
-    payload = {
-
-        "roll": str(
-            student.get(
-                "roll",
-                ""
-            )
-        ),
-
-        "name": student.get(
-            "name",
-            ""
-        ),
-
-        "board": student.get(
-            "board",
-            ""
-        ),
-
-        "group": student.get(
-            "group",
-            ""
-        ),
-
-        "father_name": student.get(
-            "father_name",
-            ""
-        ),
-
-        "mother_name": student.get(
-            "mother_name",
-            ""
-        ),
-
-        "session": student.get(
-            "session",
-            ""
-        ),
-
-        "reg_no": student.get(
-            "reg_no",
-            ""
-        ),
-
-        "type": student.get(
-            "type",
-            ""
-        ),
-
-        "institute": student.get(
-            "institute",
-            ""
-        ),
-
-        "district": student.get(
-            "district",
-            ""
-        ),
-
-        "result": student.get(
-            "result",
-            ""
-        ),
-
-        "date_of_birth": student.get(
-            "date_of_birth",
-            ""
-        ),
-
-        "gpa": student.get(
-            "gpa"
-        ),
-
-        "total_score": student.get(
-            "total_score"
-        ),
-
-        "subjects": student.get(
-            "subjects",
-            []
-        ),
-
-    }
-
-
-    response = (
-        supabase
-        .table(SUPABASE_TABLE)
-        .upsert(
-            payload,
-            on_conflict="roll"
-        )
-        .execute()
-    )
-
-    return response
 
 
 # ============================================================
@@ -1139,6 +1344,407 @@ def generate_rolls():
 
 
 # ============================================================
+# LOAD LOCAL DATA
+# ============================================================
+
+students = load_json(
+    "students.json",
+    []
+)
+
+failed_rolls = load_json(
+    "failed_rolls.json",
+    []
+)
+
+attempted_rolls = load_json(
+    "attempted_rolls.json",
+    []
+)
+
+
+if not isinstance(
+    students,
+    list
+):
+
+    students = []
+
+
+if not isinstance(
+    failed_rolls,
+    list
+):
+
+    failed_rolls = []
+
+
+if not isinstance(
+    attempted_rolls,
+    list
+):
+
+    attempted_rolls = []
+
+
+# ============================================================
+# LOCAL EXISTING ROLLS
+# ============================================================
+
+existing_rolls = set()
+
+for student in students:
+
+    if not isinstance(
+        student,
+        dict
+    ):
+        continue
+
+    roll = str(
+        student.get(
+            "roll",
+            ""
+        )
+    ).strip()
+
+    if roll:
+
+        existing_rolls.add(
+            roll
+        )
+
+
+# ============================================================
+# FAILED ROLLS
+# ============================================================
+
+failed_set = set()
+
+for item in failed_rolls:
+
+    if isinstance(
+        item,
+        dict
+    ):
+
+        roll = str(
+            item.get(
+                "roll",
+                ""
+            )
+        ).strip()
+
+    else:
+
+        roll = str(
+            item
+        ).strip()
+
+    if roll:
+
+        failed_set.add(
+            roll
+        )
+
+
+# ============================================================
+# SUPABASE EXISTING ROLLS
+# ============================================================
+
+def load_supabase_rolls():
+
+    if not SUPABASE_ENABLED:
+
+        return set()
+
+
+    result_set = set()
+
+    try:
+
+        print(
+            "",
+            flush=True
+        )
+
+        print(
+            "Loading existing Supabase rolls...",
+            flush=True
+        )
+
+
+        offset = 0
+
+        while True:
+
+            response = (
+
+                supabase
+
+                .table(
+                    SUPABASE_TABLE
+                )
+
+                .select(
+                    "roll"
+                )
+
+                .range(
+                    offset,
+                    offset + SUPABASE_PAGE_SIZE - 1
+                )
+
+                .execute()
+
+            )
+
+
+            rows = response.data or []
+
+
+            if not rows:
+
+                break
+
+
+            for row in rows:
+
+                if not isinstance(
+                    row,
+                    dict
+                ):
+                    continue
+
+                roll = str(
+                    row.get(
+                        "roll",
+                        ""
+                    )
+                ).strip()
+
+                if roll:
+
+                    result_set.add(
+                        roll
+                    )
+
+
+            print(
+                "Loaded Supabase rolls:",
+                len(result_set),
+                flush=True
+            )
+
+
+            if len(rows) < SUPABASE_PAGE_SIZE:
+
+                break
+
+
+            offset += SUPABASE_PAGE_SIZE
+
+
+        print(
+            "",
+            flush=True
+        )
+
+        print(
+            "Supabase existing rolls:",
+            len(result_set),
+            flush=True
+        )
+
+
+    except Exception as e:
+
+        print(
+            "",
+            flush=True
+        )
+
+        print(
+            "Could not load Supabase rolls:",
+            e,
+            flush=True
+        )
+
+        raise SystemExit(
+            "Supabase pre-check failed. "
+            "Stopping to prevent duplicate collection."
+        )
+
+
+    return result_set
+
+
+supabase_rolls = load_supabase_rolls()
+
+
+# ============================================================
+# SUPABASE UPSERT
+# ============================================================
+
+def supabase_upsert_student(
+    student
+):
+
+    if not SUPABASE_ENABLED:
+
+        return (
+            False,
+            "Supabase disabled"
+        )
+
+
+    try:
+
+        roll = str(
+            student.get(
+                "roll",
+                ""
+            )
+        ).strip()
+
+
+        if not roll:
+
+            return (
+                False,
+                "Missing roll"
+            )
+
+
+        # ----------------------------------------------------
+        # IMPORTANT
+        #
+        # date_of_birth is intentionally NOT included.
+        #
+        # Your Supabase table does not have that column.
+        # ----------------------------------------------------
+
+        payload = {
+
+            "roll":
+                roll,
+
+            "name":
+                student.get(
+                    "name",
+                    ""
+                ),
+
+            "board":
+                student.get(
+                    "board",
+                    ""
+                ),
+
+            "group":
+                student.get(
+                    "group",
+                    ""
+                ),
+
+            "father_name":
+                student.get(
+                    "father_name",
+                    ""
+                ),
+
+            "mother_name":
+                student.get(
+                    "mother_name",
+                    ""
+                ),
+
+            "session":
+                student.get(
+                    "session",
+                    ""
+                ),
+
+            "reg_no":
+                student.get(
+                    "reg_no",
+                    ""
+                ),
+
+            "type":
+                student.get(
+                    "type",
+                    ""
+                ),
+
+            "institute":
+                student.get(
+                    "institute",
+                    ""
+                ),
+
+            "district":
+                student.get(
+                    "district",
+                    ""
+                ),
+
+            "result":
+                student.get(
+                    "result",
+                    ""
+                ),
+
+            "gpa":
+                student.get(
+                    "gpa"
+                ),
+
+            "total_score":
+                student.get(
+                    "total_score"
+                ),
+
+            "subjects":
+                student.get(
+                    "subjects",
+                    []
+                ),
+
+        }
+
+
+        (
+            supabase
+
+            .table(
+                SUPABASE_TABLE
+            )
+
+            .upsert(
+                payload,
+                on_conflict="roll"
+            )
+
+            .execute()
+        )
+
+
+        return (
+            True,
+            "Upsert successful"
+        )
+
+
+    except Exception as e:
+
+        return (
+            False,
+            str(e)
+        )
+
+
+# ============================================================
 # TARGET
 # ============================================================
 
@@ -1153,8 +1759,13 @@ total_target = sum(
 
 
 # ============================================================
-# OPEN FORM
+# START INFO
 # ============================================================
+
+print(
+    "",
+    flush=True
+)
 
 print(
     "=" * 70,
@@ -1162,44 +1773,62 @@ print(
 )
 
 print(
-    "SSC 2026 COLLECTOR",
+    "SSC 2026 COLLECTION START",
     flush=True
 )
 
 print(
-    "Supabase master database: ENABLED",
+    "=" * 70,
     flush=True
 )
 
 print(
-    "Existing Supabase rolls:",
-    len(supabase_rolls),
-    flush=True
-)
-
-print(
-    "Local attempted rolls:",
-    len(attempted_set),
-    flush=True
-)
-
-print(
-    "Local failed rolls:",
-    len(failed_set),
-    flush=True
-)
-
-print(
-    "Total target:",
+    "Target rolls:",
     total_target,
     flush=True
 )
 
 print(
+    "Local students:",
+    len(existing_rolls),
+    flush=True
+)
+
+print(
+    "Local failed:",
+    len(failed_set),
+    flush=True
+)
+
+print(
+    "Supabase existing:",
+    len(supabase_rolls),
+    flush=True
+)
+
+print(
+    "New rolls available:",
+    max(
+        total_target - len(supabase_rolls),
+        0
+    ),
+    flush=True
+)
+
+print(
     "=" * 70,
     flush=True
 )
 
+
+# ============================================================
+# OPEN RESULT PAGE
+# ============================================================
+
+print(
+    "Opening SSC result page...",
+    flush=True
+)
 
 try:
 
@@ -1208,16 +1837,19 @@ try:
         INDIVIDUAL_URL,
 
         headers={
-            "Referer": BASE_URL
+            "Referer":
+                BASE_URL
         },
 
-        timeout=REQUEST_TIMEOUT,
+        timeout=
+            REQUEST_TIMEOUT,
 
         allow_redirects=True,
 
     )
 
     page.raise_for_status()
+
 
 except Exception as e:
 
@@ -1226,17 +1858,36 @@ except Exception as e:
     )
 
 
+print(
+    "GET Status:",
+    page.status_code,
+    flush=True
+)
+
+print(
+    "GET URL:",
+    page.url,
+    flush=True
+)
+
+
+# ============================================================
+# FIND FORM
+# ============================================================
+
 soup = BeautifulSoup(
     page.text,
     "html.parser"
 )
 
-form = soup.find("form")
+form = soup.find(
+    "form"
+)
 
 if not form:
 
     raise SystemExit(
-        "Result form not found."
+        "ERROR: Result form not found."
     )
 
 
@@ -1252,36 +1903,77 @@ FORM_ACTION_URL = urljoin(
     form_action
 )
 
+form_method = clean_text(
+    form.get(
+        "method",
+        "post"
+    )
+).lower()
+
+
+print(
+    "Form method:",
+    form_method,
+    flush=True
+)
+
+print(
+    "Form URL:",
+    FORM_ACTION_URL,
+    flush=True
+)
+
+
+# ============================================================
+# FORM INPUTS
+# ============================================================
+
 base_form_data = {}
 
 
-for inp in form.find_all("input"):
+for inp in form.find_all(
+    "input"
+):
 
-    name = inp.get("name")
+    name = inp.get(
+        "name"
+    )
 
     if not name:
         continue
+
 
     input_type = inp.get(
         "type",
         "text"
     ).lower()
 
+
     if input_type in [
+
         "submit",
         "button",
         "reset",
-        "image"
+        "image",
+
     ]:
+
         continue
 
+
     if input_type in [
+
         "checkbox",
-        "radio"
+        "radio",
+
     ]:
 
-        if not inp.has_attr("checked"):
+        if not inp.has_attr(
+            "checked"
+        ):
+
             continue
+
 
     base_form_data[name] = inp.get(
         "value",
@@ -1289,32 +1981,53 @@ for inp in form.find_all("input"):
     )
 
 
-for select in form.find_all("select"):
+# ============================================================
+# SELECT INPUTS
+# ============================================================
 
-    name = select.get("name")
+for select in form.find_all(
+    "select"
+):
+
+    name = select.get(
+        "name"
+    )
 
     if not name:
         continue
+
 
     selected = select.find(
         "option",
         selected=True
     )
 
+
     if not selected:
-        selected = select.find("option")
+
+        selected = select.find(
+            "option"
+        )
+
 
     if selected:
 
-        base_form_data[name] = selected.get(
-            "value",
-            selected.get_text(
-                strip=True
+        base_form_data[name] = (
+            selected.get(
+                "value",
+                selected.get_text(
+                    strip=True
+                )
             )
         )
 
 
+# ============================================================
+# SUBMIT BUTTON
+# ============================================================
+
 submit_fields = {}
+
 
 for element in form.find_all(
     ["input", "button"]
@@ -1325,17 +2038,21 @@ for element in form.find_all(
         ""
     ).lower()
 
-    name = element.get("name")
+    name = element.get(
+        "name"
+    )
 
     if (
         element_type == "submit"
         and name
     ):
 
-        submit_fields[name] = element.get(
-            "value",
-            element.get_text(
-                strip=True
+        submit_fields[name] = (
+            element.get(
+                "value",
+                element.get_text(
+                    strip=True
+                )
             )
         )
 
@@ -1343,8 +2060,16 @@ for element in form.find_all(
 if not submit_fields:
 
     submit_fields = {
-        "button2": "Submit"
+        "button2":
+            "Submit"
     }
+
+
+print(
+    "Submit fields:",
+    submit_fields,
+    flush=True
+)
 
 
 # ============================================================
@@ -1352,31 +2077,50 @@ if not submit_fields:
 # ============================================================
 
 processed = 0
+
 successful = 0
+
 not_found = 0
+
 errors = 0
-supabase_saved = 0
-supabase_errors = 0
+
+skipped_failed = 0
+
+skipped_existing = 0
 
 skipped_supabase = 0
-skipped_attempted = 0
-skipped_failed = 0
+
+supabase_saved = 0
+
+supabase_errors = 0
+
+temporary_request_errors = 0
 
 
 # ============================================================
-# COLLECTION
+# COLLECTION LOOP
 # ============================================================
 
 for group_name, roll_number in generate_rolls():
 
-    if processed >= BATCH_SIZE:
-        break
-
-    roll = str(roll_number)
+    roll = str(
+        roll_number
+    )
 
 
     # --------------------------------------------------------
-    # SUPABASE MASTER CHECK
+    # LOCAL EXISTING
+    # --------------------------------------------------------
+
+    if roll in existing_rolls:
+
+        skipped_existing += 1
+
+        continue
+
+
+    # --------------------------------------------------------
+    # SUPABASE EXISTING
     # --------------------------------------------------------
 
     if roll in supabase_rolls:
@@ -1387,18 +2131,9 @@ for group_name, roll_number in generate_rolls():
 
 
     # --------------------------------------------------------
-    # ATTEMPTED
-    # --------------------------------------------------------
-
-    if roll in attempted_set:
-
-        skipped_attempted += 1
-
-        continue
-
-
-    # --------------------------------------------------------
     # FAILED
+    #
+    # Existing failed rolls are skipped.
     # --------------------------------------------------------
 
     if roll in failed_set:
@@ -1408,32 +2143,50 @@ for group_name, roll_number in generate_rolls():
         continue
 
 
+    # --------------------------------------------------------
+    # BATCH LIMIT
+    # --------------------------------------------------------
+
+    if processed >= BATCH_SIZE:
+
+        break
+
+
     processed += 1
+
+
+    print(
+        "",
+        flush=True
+    )
+
+    print(
+        "-" * 70,
+        flush=True
+    )
 
     print(
         f"[{processed}/{BATCH_SIZE}] "
-        f"{group_name} | Roll {roll}",
+        f"{group_name} | Roll: {roll}",
         flush=True
     )
 
 
-    # --------------------------------------------------------
-    # PERSIST ATTEMPTED
-    # --------------------------------------------------------
+    # ========================================================
+    # ATTEMPTED
+    #
+    # Used only for statistics/checkpoint.
+    # It does NOT prevent future retry.
+    # ========================================================
 
-    attempted_set.add(roll)
-
-    attempted_rolls.append(roll)
-
-    save_json(
-        "attempted_rolls.json",
-        attempted_rolls
+    attempted_rolls.append(
+        roll
     )
 
 
-    # --------------------------------------------------------
-    # REQUEST
-    # --------------------------------------------------------
+    # ========================================================
+    # FORM DATA
+    # ========================================================
 
     form_data = dict(
         base_form_data
@@ -1441,83 +2194,169 @@ for group_name, roll_number in generate_rolls():
 
     form_data["roll"] = roll
 
+
     for key, value in submit_fields.items():
 
         form_data[key] = value
 
 
-    try:
+    # ========================================================
+    # REQUEST WITH RETRIES
+    # ========================================================
 
-        response = session.post(
+    response = None
 
-            FORM_ACTION_URL,
+    request_success = False
 
-            data=form_data,
 
-            headers={
+    for attempt in range(
+        MAX_RETRIES + 1
+    ):
 
-                "Referer": page.url,
+        try:
 
-                "Origin":
-                    "https://sresult.bise-ctg.gov.bd",
+            print(
+                f"REQUEST START: "
+                f"{roll} "
+                f"(attempt {attempt + 1})",
+                flush=True
+            )
 
-                "Content-Type":
-                    "application/x-www-form-urlencoded",
 
-            },
+            response = session.post(
 
-            timeout=REQUEST_TIMEOUT,
+                FORM_ACTION_URL,
 
-            allow_redirects=True,
+                data=form_data,
 
-        )
+                headers={
 
-    except requests.exceptions.RequestException as e:
+                    "Referer":
+                        page.url,
+
+                    "Origin":
+                        "https://sresult.bise-ctg.gov.bd",
+
+                    "Content-Type":
+                        "application/x-www-form-urlencoded",
+
+                },
+
+                timeout=
+                    REQUEST_TIMEOUT,
+
+                allow_redirects=True,
+
+            )
+
+
+            print(
+                f"REQUEST DONE: "
+                f"{roll} | "
+                f"HTTP {response.status_code}",
+                flush=True
+            )
+
+
+            if response.status_code < 400:
+
+                request_success = True
+
+                break
+
+
+            print(
+                f"HTTP ERROR: {roll}",
+                flush=True
+            )
+
+
+        except requests.exceptions.Timeout:
+
+            print(
+                f"TIMEOUT: {roll}",
+                flush=True
+            )
+
+
+        except requests.exceptions.RequestException as e:
+
+            print(
+                f"REQUEST ERROR: "
+                f"{roll} -> {e}",
+                flush=True
+            )
+
+
+        if attempt < MAX_RETRIES:
+
+            retry_delay = random.uniform(
+                1.0,
+                2.0
+            )
+
+            print(
+                f"Retrying in "
+                f"{retry_delay:.1f}s...",
+                flush=True
+            )
+
+            time.sleep(
+                retry_delay
+            )
+
+
+    # ========================================================
+    # REQUEST FAILED
+    # ========================================================
+
+    if not request_success:
+
+        errors += 1
+
+        temporary_request_errors += 1
 
         print(
-            "REQUEST ERROR:",
-            roll,
-            e,
+            f"REQUEST FAILED AFTER "
+            f"{MAX_RETRIES + 1} ATTEMPTS: "
+            f"{roll}",
             flush=True
         )
 
-        errors += 1
+        # DO NOT mark as permanent failed.
+        # It can be retried on a future workflow run.
 
         continue
 
 
-    if response.status_code >= 400:
-
-        print(
-            "HTTP ERROR:",
-            roll,
-            response.status_code,
-            flush=True
-        )
-
-        errors += 1
-
-        continue
-
-
-    # --------------------------------------------------------
+    # ========================================================
     # PARSE
-    # --------------------------------------------------------
+    # ========================================================
+
+    print(
+        f"PARSING: {roll}",
+        flush=True
+    )
+
 
     try:
 
         parsed = parse_result(
+
             response.text,
+
             roll,
+
             group_name
+
         )
+
 
     except Exception as e:
 
         print(
-            "PARSING ERROR:",
-            roll,
-            e,
+            f"PARSING ERROR: "
+            f"{roll} -> {e}",
             flush=True
         )
 
@@ -1526,30 +2365,50 @@ for group_name, roll_number in generate_rolls():
         continue
 
 
-    # --------------------------------------------------------
+    print(
+        f"PARSING DONE: {roll}",
+        flush=True
+    )
+
+
+    # ========================================================
     # NOT FOUND
-    # --------------------------------------------------------
+    # ========================================================
 
     if parsed is None:
 
+        print(
+            "No valid result detected.",
+            flush=True
+        )
+
         not_found += 1
+
 
         failed_rolls.append({
 
-            "roll": roll,
+            "roll":
+                roll,
 
-            "group": group_name,
+            "group":
+                group_name,
 
-            "reason": "No valid result",
+            "reason":
+                "No valid result",
 
         })
 
-        failed_set.add(roll)
+
+        failed_set.add(
+            roll
+        )
+
 
         save_json(
             "failed_rolls.json",
             failed_rolls
         )
+
 
         time.sleep(
             random.uniform(
@@ -1561,63 +2420,234 @@ for group_name, roll_number in generate_rolls():
         continue
 
 
-    # --------------------------------------------------------
+    # ========================================================
+    # SUCCESS
+    # ========================================================
+
+    print(
+        "",
+        flush=True
+    )
+
+    print(
+        "FOUND:",
+        parsed.get(
+            "name",
+            ""
+        ),
+        flush=True
+    )
+
+    print(
+        "Institute:",
+        parsed.get(
+            "institute",
+            ""
+        ),
+        flush=True
+    )
+
+    print(
+        "District:",
+        parsed.get(
+            "district",
+            ""
+        ),
+        flush=True
+    )
+
+    print(
+        "Result:",
+        parsed.get(
+            "result",
+            ""
+        ),
+        flush=True
+    )
+
+    print(
+        "GPA:",
+        parsed.get(
+            "gpa"
+        ),
+        flush=True
+    )
+
+    print(
+        "Total Score:",
+        parsed.get(
+            "total_score"
+        ),
+        flush=True
+    )
+
+    print(
+        "Subjects:",
+        len(
+            parsed.get(
+                "subjects",
+                []
+            )
+        ),
+        flush=True
+    )
+
+
+    # ========================================================
+    # SUBJECT OUTPUT
+    # ========================================================
+
+    for subject in parsed.get(
+        "subjects",
+        []
+    ):
+
+        print(
+            "  SUBJECT:",
+            subject.get(
+                "code"
+            ),
+            "|",
+            subject.get(
+                "subject"
+            ),
+            "| Mark:",
+            subject.get(
+                "mark"
+            ),
+            "| Grade:",
+            subject.get(
+                "grade"
+            ),
+            "| Optional:",
+            subject.get(
+                "optional"
+            ),
+            flush=True
+        )
+
+
+    # ========================================================
     # SUPABASE SAVE
-    # --------------------------------------------------------
+    # ========================================================
 
-    try:
+    print(
+        "SUPABASE UPSERT:",
+        roll,
+        flush=True
+    )
 
+
+    supabase_ok, supabase_message = (
         supabase_upsert_student(
             parsed
+        )
+    )
+
+
+    if supabase_ok:
+
+        print(
+            "SUPABASE:",
+            supabase_message,
+            flush=True
         )
 
         supabase_saved += 1
 
-        supabase_rolls.add(roll)
-
-        successful += 1
-
-        print(
-            "SAVED:",
-            roll,
-            parsed.get("name", ""),
-            flush=True
+        supabase_rolls.add(
+            roll
         )
 
-    except Exception as e:
 
-        supabase_errors += 1
+    else:
 
         print(
             "SUPABASE ERROR:",
-            roll,
-            e,
+            supabase_message,
+            flush=True
+        )
+
+        supabase_errors += 1
+
+        # Do NOT mark as successful.
+        # This roll can be retried later.
+
+        time.sleep(
+            random.uniform(
+                MIN_DELAY,
+                MAX_DELAY
+            )
+        )
+
+        continue
+
+
+    # ========================================================
+    # LOCAL SAVE
+    # ========================================================
+
+    if roll not in existing_rolls:
+
+        students.append(
+            parsed
+        )
+
+        existing_rolls.add(
+            roll
+        )
+
+        successful += 1
+
+
+    # ========================================================
+    # CHECKPOINT
+    # ========================================================
+
+    if (
+        successful > 0
+        and
+        successful % SAVE_EVERY == 0
+    ):
+
+        print(
+            "",
+            flush=True
+        )
+
+        print(
+            "Saving checkpoint...",
             flush=True
         )
 
 
-    # --------------------------------------------------------
-    # LOCAL TEMPORARY SAVE
-    # --------------------------------------------------------
-
-    if successful % SAVE_EVERY == 0:
-
-        # Only keep a temporary working copy.
         save_json(
             "students.json",
             students
         )
 
-        save_json(
-            "attempted_rolls.json",
-            attempted_rolls
-        )
 
         save_json(
             "failed_rolls.json",
             failed_rolls
         )
 
+
+        save_json(
+            "attempted_rolls.json",
+            attempted_rolls
+        )
+
+
+        print(
+            "Checkpoint saved.",
+            flush=True
+        )
+
+
+    # ========================================================
+    # DELAY
+    # ========================================================
 
     time.sleep(
         random.uniform(
@@ -1628,13 +2658,25 @@ for group_name, roll_number in generate_rolls():
 
 
 # ============================================================
-# FINAL LOCAL CHECKPOINT
+# FINAL SAVE
 # ============================================================
 
-save_json(
-    "attempted_rolls.json",
-    attempted_rolls
+print(
+    "",
+    flush=True
 )
+
+print(
+    "Saving final checkpoint...",
+    flush=True
+)
+
+
+save_json(
+    "students.json",
+    students
+)
+
 
 save_json(
     "failed_rolls.json",
@@ -1642,34 +2684,62 @@ save_json(
 )
 
 
+save_json(
+    "attempted_rolls.json",
+    attempted_rolls
+)
+
+
+# ============================================================
+# FINAL SUPABASE COUNT
+# ============================================================
+
+final_supabase_count = len(
+    supabase_rolls
+)
+
+
+# ============================================================
+# REMAINING
+# ============================================================
+
+remaining = max(
+
+    total_target
+    -
+    final_supabase_count,
+
+    0
+
+)
+
+
 # ============================================================
 # SUMMARY
 # ============================================================
 
-remaining = max(
-    total_target - len(supabase_rolls),
-    0
-)
-
 summary = {
 
-    "year": YEAR,
+    "year":
+        YEAR,
 
-    "board": BOARD,
+    "board":
+        BOARD,
 
-    "target_rolls": total_target,
+    "target_rolls":
+        total_target,
 
     "collected_total":
-        len(supabase_rolls),
+        len(students),
+
+    "supabase_total":
+        final_supabase_count,
 
     "failed_total":
         len(failed_set),
 
     "attempted_total":
-        len(attempted_set),
-
-    "supabase_existing_total":
-        len(supabase_rolls),
+        len(attempted_rolls),
 
     "remaining":
         remaining,
@@ -1686,20 +2756,23 @@ summary = {
     "errors_this_run":
         errors,
 
+    "temporary_request_errors":
+        temporary_request_errors,
+
     "supabase_saved_this_run":
         supabase_saved,
 
     "supabase_errors_this_run":
         supabase_errors,
 
-    "skipped_supabase":
-        skipped_supabase,
-
-    "skipped_attempted":
-        skipped_attempted,
+    "skipped_existing":
+        skipped_existing,
 
     "skipped_failed":
         skipped_failed,
+
+    "skipped_supabase":
+        skipped_supabase,
 
     "batch_size":
         BATCH_SIZE,
@@ -1712,6 +2785,9 @@ summary = {
 
     "max_delay":
         MAX_DELAY,
+
+    "max_retries":
+        MAX_RETRIES,
 
     "roll_ranges":
         ROLL_RANGES,
@@ -1726,68 +2802,137 @@ save_json(
 
 
 # ============================================================
-# FINAL
+# FINAL OUTPUT
 # ============================================================
 
-print("")
-print("=" * 70)
-print("SSC COLLECTION BATCH COMPLETE")
-print("=" * 70)
+print(
+    "",
+    flush=True
+)
+
+print(
+    "=" * 70,
+    flush=True
+)
+
+print(
+    "SSC COLLECTION BATCH COMPLETE",
+    flush=True
+)
+
+print(
+    "=" * 70,
+    flush=True
+)
 
 print(
     "Processed this run:",
-    processed
+    processed,
+    flush=True
 )
 
 print(
     "Successful:",
-    successful
+    successful,
+    flush=True
 )
 
 print(
     "Not found:",
-    not_found
+    not_found,
+    flush=True
 )
 
 print(
     "Errors:",
-    errors
+    errors,
+    flush=True
+)
+
+print(
+    "Temporary request errors:",
+    temporary_request_errors,
+    flush=True
 )
 
 print(
     "Supabase saved:",
-    supabase_saved
+    supabase_saved,
+    flush=True
 )
 
 print(
     "Supabase errors:",
-    supabase_errors
+    supabase_errors,
+    flush=True
 )
 
 print(
-    "Skipped Supabase:",
-    skipped_supabase
-)
-
-print(
-    "Skipped attempted:",
-    skipped_attempted
+    "Skipped existing:",
+    skipped_existing,
+    flush=True
 )
 
 print(
     "Skipped failed:",
-    skipped_failed
+    skipped_failed,
+    flush=True
 )
 
 print(
-    "Total in Supabase:",
-    len(supabase_rolls)
+    "Skipped Supabase:",
+    skipped_supabase,
+    flush=True
+)
+
+print(
+    "Local students:",
+    len(students),
+    flush=True
+)
+
+print(
+    "Supabase students:",
+    final_supabase_count,
+    flush=True
 )
 
 print(
     "Remaining:",
-    remaining
+    remaining,
+    flush=True
 )
 
-print("=" * 70)
-print("DONE")
+print(
+    "Students file:",
+    STUDENTS_FILE,
+    flush=True
+)
+
+print(
+    "Attempted file:",
+    ATTEMPTED_FILE,
+    flush=True
+)
+
+print(
+    "Summary file:",
+    SUMMARY_FILE,
+    flush=True
+)
+
+print(
+    "Failed file:",
+    FAILED_FILE,
+    flush=True
+)
+
+print(
+    "=" * 70,
+    flush=True
+)
+
+print(
+    "DONE",
+    flush=True
+)
