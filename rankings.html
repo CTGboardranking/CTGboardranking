@@ -1,76 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Individual Result — CTGBoardRanking</title>
+<title>Institution Ranking — CTGBoardRanking</title>
 
 <meta name="description"
-      content="SSC 2026 individual result — Chattogram Board">
+      content="SSC 2026 Chattogram Board Top 100 Institution Ranking">
 
-<!-- PDF LIBRARY -->
-<script
-src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
 
-:root {
-  --bg: #f5f5f7;
-  --surface: rgba(255,255,255,.78);
-  --surface-solid: #ffffff;
-  --text: #111113;
-  --muted: #6e6e73;
-  --border: rgba(0,0,0,.08);
-  --border-strong: rgba(0,0,0,.12);
-
-  --accent: #0071e3;
-  --accent-hover: #0077ed;
-
-  --danger: #d70015;
-  --success: #168a4b;
-
-  --shadow: 0 20px 60px rgba(0,0,0,.08);
-
-  --radius: 28px;
+:root{
+  --bg:#f5f5f7;
+  --surface:#ffffff;
+  --surface-soft:rgba(255,255,255,.78);
+  --text:#111113;
+  --muted:#6e6e73;
+  --border:rgba(0,0,0,.08);
+  --blue:#0071e3;
+  --blue2:#2997ff;
+  --green:#168a4b;
+  --orange:#b76e00;
+  --shadow:0 20px 60px rgba(0,0,0,.08);
+  --radius:26px;
 }
 
-html.dark {
-  --bg: #000;
-  --surface: rgba(28,28,30,.78);
-  --surface-solid: #1c1c1e;
-  --text: #f5f5f7;
-  --muted: #98989d;
-
-  --border: rgba(255,255,255,.09);
-  --border-strong: rgba(255,255,255,.14);
-
-  --accent: #2997ff;
-  --accent-hover: #4aa7ff;
-
-  --danger: #ff453a;
-  --success: #30d158;
-
-  --shadow: 0 25px 80px rgba(0,0,0,.45);
+html.dark{
+  --bg:#000;
+  --surface:#1c1c1e;
+  --surface-soft:rgba(28,28,30,.82);
+  --text:#f5f5f7;
+  --muted:#98989d;
+  --border:rgba(255,255,255,.10);
+  --blue:#2997ff;
+  --blue2:#4aa7ff;
+  --green:#30d158;
+  --orange:#ff9f0a;
+  --shadow:0 25px 80px rgba(0,0,0,.45);
 }
 
-* {
+*{
   box-sizing:border-box;
 }
 
-html {
+html{
   scroll-behavior:smooth;
 }
 
-body {
+body{
   margin:0;
   min-height:100vh;
-
   background:var(--bg);
   color:var(--text);
-
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -81,21 +65,16 @@ body {
     Helvetica,
     Arial,
     sans-serif;
-
   transition:.3s ease;
 }
 
-button,
-input {
+button{
   font:inherit;
-}
-
-button {
   cursor:pointer;
 }
 
-.hidden {
-  display:none !important;
+.hidden{
+  display:none!important;
 }
 
 
@@ -103,32 +82,26 @@ button {
    BACKGROUND
 ========================================================= */
 
-.background-glow {
+.background-glow{
   position:fixed;
-
-  width:420px;
-  height:420px;
-
+  width:430px;
+  height:430px;
   border-radius:50%;
-
-  filter:blur(100px);
-
+  filter:blur(110px);
   opacity:.12;
-
   pointer-events:none;
-
   z-index:-1;
 }
 
-.glow-one {
-  top:-180px;
-  left:-120px;
+.glow-one{
+  top:-200px;
+  left:-130px;
   background:#0071e3;
 }
 
-.glow-two {
-  right:-150px;
-  bottom:-180px;
+.glow-two{
+  right:-170px;
+  bottom:-200px;
   background:#8e8e93;
 }
 
@@ -137,12 +110,10 @@ button {
    PAGE
 ========================================================= */
 
-.page {
-  width:min(1180px,calc(100% - 32px));
-
+.page{
+  width:min(1250px,calc(100% - 28px));
   margin:auto;
-
-  padding-bottom:50px;
+  padding-bottom:55px;
 }
 
 
@@ -150,997 +121,373 @@ button {
    TOPBAR
 ========================================================= */
 
-.topbar {
+.topbar{
   height:88px;
-
   display:flex;
-
   align-items:center;
-
   justify-content:space-between;
 }
 
-.brand {
+.brand{
   display:flex;
-
   align-items:center;
-
   gap:11px;
-
   text-decoration:none;
-
   color:var(--text);
 }
 
-.brand-icon,
-.mini-logo {
+.brand-icon{
+  width:43px;
+  height:43px;
   display:grid;
-
   place-items:center;
-
+  border-radius:14px;
   background:var(--text);
-
   color:var(--bg);
-
-  font-weight:800;
+  font-size:11px;
+  font-weight:900;
 }
 
-.brand-icon {
-  width:42px;
-  height:42px;
-
-  border-radius:13px;
-
-  font-size:12px;
-}
-
-.brand strong {
+.brand strong{
   display:block;
-
   font-size:15px;
-
   letter-spacing:-.02em;
 }
 
-.brand small {
+.brand small{
   display:block;
-
-  margin-top:2px;
-
+  margin-top:3px;
   color:var(--muted);
-
-  font-size:11px;
+  font-size:10px;
 }
 
-.theme-toggle {
-  width:42px;
-  height:42px;
-
+.theme-toggle{
+  width:43px;
+  height:43px;
   border:1px solid var(--border);
-
   border-radius:50%;
-
-  background:var(--surface);
-
+  background:var(--surface-soft);
   color:var(--text);
-
   backdrop-filter:blur(20px);
-
   font-size:18px;
-
-  transition:.2s ease;
-}
-
-.theme-toggle:hover {
-  transform:scale(1.05);
 }
 
 
 /* =========================================================
-   SEARCH
+   HERO
 ========================================================= */
 
-.search-section {
-  max-width:800px;
-
-  margin:70px auto 50px;
-
+.hero{
+  max-width:900px;
+  margin:65px auto 35px;
   text-align:center;
 }
 
-.eyebrow {
+.eyebrow{
   display:inline-flex;
-
   align-items:center;
-
   gap:8px;
-
   padding:8px 13px;
-
   border:1px solid var(--border);
-
   border-radius:999px;
-
-  background:var(--surface);
-
+  background:var(--surface-soft);
   color:var(--muted);
-
-  font-size:12px;
-
-  font-weight:600;
-
+  font-size:11px;
+  font-weight:700;
   backdrop-filter:blur(20px);
 }
 
-.status-dot {
+.status-dot{
   width:7px;
   height:7px;
-
   border-radius:50%;
-
-  background:var(--success);
-
-  box-shadow:
-    0 0 0 4px rgba(48,209,88,.12);
+  background:var(--green);
+  box-shadow:0 0 0 4px rgba(48,209,88,.12);
 }
 
-.search-section h1 {
-  margin:20px 0 12px;
-
-  font-size:clamp(44px,7vw,76px);
-
+.hero h1{
+  margin:20px 0 10px;
+  font-size:clamp(42px,7vw,72px);
   line-height:.98;
-
   letter-spacing:-.065em;
-
-  font-weight:750;
 }
 
-.search-section h1 span {
-  display:block;
-
-  color:var(--accent);
+.hero h1 span{
+  color:var(--blue);
 }
 
-.hero-description {
-  max-width:590px;
-
+.hero p{
+  max-width:650px;
   margin:auto;
-
   color:var(--muted);
-
   line-height:1.6;
-
-  font-size:15px;
-}
-
-
-/* =========================================================
-   SEARCH BOX
-========================================================= */
-
-.search-box {
-  display:flex;
-
-  gap:10px;
-
-  margin-top:28px;
-
-  padding:8px;
-
-  border:1px solid var(--border-strong);
-
-  border-radius:22px;
-
-  background:var(--surface);
-
-  box-shadow:var(--shadow);
-
-  backdrop-filter:blur(25px);
-}
-
-.input-wrapper {
-  position:relative;
-
-  flex:1;
-}
-
-.input-wrapper input {
-  width:100%;
-
-  height:56px;
-
-  padding:0 45px;
-
-  border:0;
-
-  outline:0;
-
-  border-radius:15px;
-
-  background:transparent;
-
-  color:var(--text);
-
-  font-size:17px;
-
-  font-weight:600;
-}
-
-.input-wrapper input::placeholder {
-  color:var(--muted);
-}
-
-.search-icon {
-  position:absolute;
-
-  top:50%;
-  left:16px;
-
-  transform:translateY(-53%);
-
-  color:var(--muted);
-
-  font-size:25px;
-
-  pointer-events:none;
-}
-
-.clear-btn {
-  position:absolute;
-
-  right:10px;
-  top:50%;
-
-  width:30px;
-  height:30px;
-
-  transform:translateY(-50%);
-
-  border:0;
-
-  border-radius:50%;
-
-  background:var(--border);
-
-  color:var(--muted);
-}
-
-.search-btn {
-  min-width:145px;
-
-  border:0;
-
-  border-radius:15px;
-
-  padding:0 22px;
-
-  background:var(--accent);
-
-  color:white;
-
-  font-weight:700;
-
-  transition:.2s ease;
-}
-
-.search-btn:hover {
-  background:var(--accent-hover);
-
-  transform:translateY(-1px);
-}
-
-.search-btn:disabled {
-  opacity:.7;
-
-  cursor:wait;
-}
-
-
-/* =========================================================
-   SPINNER
-========================================================= */
-
-.spinner {
-  width:18px;
-  height:18px;
-
-  display:inline-block;
-
-  border:2px solid rgba(255,255,255,.4);
-
-  border-top-color:white;
-
-  border-radius:50%;
-
-  animation:spin .7s linear infinite;
-
-  vertical-align:middle;
-}
-
-@keyframes spin {
-  to {
-    transform:rotate(360deg);
-  }
-}
-
-
-/* =========================================================
-   ERROR
-========================================================= */
-
-.error-message {
-  margin-top:15px;
-
-  padding:13px 16px;
-
-  border:1px solid rgba(215,0,21,.16);
-
-  border-radius:14px;
-
-  background:rgba(215,0,21,.06);
-
-  color:var(--danger);
-
   font-size:14px;
-
-  font-weight:600;
 }
 
 
 /* =========================================================
-   RESULT
+   CONTROLS
 ========================================================= */
 
-.result-section {
-  margin-top:20px;
-
-  animation:resultIn .5s ease both;
-}
-
-@keyframes resultIn {
-
-  from {
-    opacity:0;
-
-    transform:translateY(15px);
-  }
-
-  to {
-    opacity:1;
-
-    transform:translateY(0);
-  }
-
-}
-
-
-/* =========================================================
-   DOWNLOAD ACTION
-========================================================= */
-
-.result-actions {
+.controls{
   display:flex;
-
-  justify-content:flex-end;
-
-  gap:10px;
-
-  margin-bottom:15px;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin:30px 0 18px;
 }
 
-.download-btn {
-  min-height:46px;
+.control-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
 
-  padding:0 20px;
-
-  border:0;
-
+.stat{
+  padding:11px 14px;
+  border:1px solid var(--border);
   border-radius:14px;
-
-  background:var(--accent);
-
-  color:#fff;
-
+  background:var(--surface-soft);
+  color:var(--muted);
+  font-size:11px;
   font-weight:700;
+  backdrop-filter:blur(20px);
+}
 
-  box-shadow:
-    0 8px 25px rgba(0,113,227,.18);
+.stat strong{
+  color:var(--text);
+  margin-left:4px;
+}
 
+.pdf-btn{
+  min-height:45px;
+  padding:0 18px;
+  border:0;
+  border-radius:14px;
+  background:var(--blue);
+  color:white;
+  font-weight:800;
+  box-shadow:0 8px 25px rgba(0,113,227,.18);
   transition:.2s ease;
 }
 
-.download-btn:hover {
-  background:var(--accent-hover);
-
+.pdf-btn:hover{
+  background:var(--blue2);
   transform:translateY(-1px);
 }
 
-.download-btn:disabled {
+.pdf-btn:disabled{
   opacity:.6;
-
   cursor:wait;
 }
 
 
 /* =========================================================
-   RESULT CARD
+   TABLE CARD
 ========================================================= */
 
-.result-card {
+.ranking-card{
   overflow:hidden;
-
   border:1px solid var(--border);
-
-  border-radius:30px;
-
-  background:var(--surface-solid);
-
+  border-radius:28px;
+  background:var(--surface);
   box-shadow:var(--shadow);
 }
 
-
-/* =========================================================
-   RESULT HEADER
-========================================================= */
-
-.result-header {
-  min-height:76px;
-
+.card-header{
   display:flex;
-
   align-items:center;
-
   justify-content:space-between;
-
-  padding:18px 24px;
-
+  padding:22px 25px;
   border-bottom:1px solid var(--border);
 }
 
-.result-brand {
+.card-title{
   display:flex;
-
   align-items:center;
-
-  gap:10px;
+  gap:11px;
 }
 
-.mini-logo {
+.mini-logo{
   width:38px;
   height:38px;
-
+  display:grid;
+  place-items:center;
   border-radius:11px;
-
+  background:var(--text);
+  color:var(--bg);
   font-size:10px;
+  font-weight:900;
 }
 
-.result-brand strong,
-.result-brand span {
+.card-title strong{
   display:block;
-}
-
-.result-brand strong {
   font-size:13px;
 }
 
-.result-brand span {
+.card-title span{
+  display:block;
   margin-top:3px;
-
   color:var(--muted);
-
   font-size:10px;
 }
 
-.unofficial-badge {
+.unofficial{
   padding:7px 10px;
-
   border:1px solid rgba(255,59,48,.25);
-
   border-radius:8px;
-
-  color:var(--danger);
-
+  color:#d70015;
   background:rgba(255,59,48,.06);
-
   font-size:9px;
-
-  font-weight:800;
-
+  font-weight:900;
   letter-spacing:.08em;
 }
 
 
 /* =========================================================
-   RESULT TITLE
+   TABLE
 ========================================================= */
 
-.result-title {
-  padding:42px 40px 28px;
-}
-
-.result-kicker {
-  margin:0 0 7px;
-
-  color:var(--accent);
-
-  font-size:10px;
-
-  font-weight:800;
-
-  letter-spacing:.12em;
-}
-
-.result-title h2 {
-  margin:0;
-
-  font-size:36px;
-
-  letter-spacing:-.05em;
-}
-
-.result-title p {
-  margin:8px 0 0;
-
-  color:var(--muted);
-
-  font-size:13px;
-}
-
-
-/* =========================================================
-   STUDENT PROFILE
-========================================================= */
-
-.student-profile {
-  display:flex;
-
-  justify-content:space-between;
-
-  gap:20px;
-
-  margin:0 40px;
-
-  padding:24px 0;
-
-  border-top:1px solid var(--border);
-
-  border-bottom:1px solid var(--border);
-}
-
-.label {
-  display:block;
-
-  color:var(--muted);
-
-  font-size:9px;
-
-  font-weight:800;
-
-  letter-spacing:.11em;
-}
-
-.student-main h3 {
-  margin:6px 0 13px;
-
-  font-size:25px;
-
-  letter-spacing:-.035em;
-}
-
-.student-meta {
-  display:flex;
-
-  flex-wrap:wrap;
-
-  gap:8px;
-}
-
-.student-meta span {
-  padding:7px 10px;
-
-  border:1px solid var(--border);
-
-  border-radius:9px;
-
-  color:var(--muted);
-
-  font-size:11px;
-}
-
-.student-meta strong {
-  margin-left:3px;
-
-  color:var(--text);
-}
-
-.student-result-status {
-  min-width:120px;
-
-  align-self:center;
-
-  text-align:right;
-}
-
-.student-result-status strong {
-  display:block;
-
-  margin-top:5px;
-
-  color:var(--success);
-
-  font-size:20px;
-}
-
-
-/* =========================================================
-   SCORE GRID
-========================================================= */
-
-.score-grid {
-  display:grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap:14px;
-
-  margin:24px 40px;
-}
-
-.score-card {
-  padding:23px;
-
-  border:1px solid var(--border);
-
-  border-radius:20px;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(0,113,227,.08),
-      transparent
-    );
-}
-
-.gpa-score {
-  background:
-    linear-gradient(
-      135deg,
-      rgba(48,209,88,.08),
-      transparent
-    );
-}
-
-.rank-score {
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255,149,0,.10),
-      transparent
-    );
-}
-
-.score-label {
-  display:block;
-
-  color:var(--muted);
-
-  font-size:10px;
-
-  font-weight:800;
-
-  letter-spacing:.1em;
-}
-
-.score-card strong {
-  display:block;
-
-  margin:6px 0;
-
-  font-size:42px;
-
-  letter-spacing:-.06em;
-}
-
-.score-card small {
-  color:var(--muted);
-
-  font-size:11px;
-}
-
-
-/* =========================================================
-   ADDITIONAL INFO
-========================================================= */
-
-.additional-info {
-  display:grid;
-
-  grid-template-columns:
-    repeat(4,1fr);
-
-  gap:10px;
-
-  margin:0 40px 30px;
-}
-
-.info-item {
-  min-width:0;
-
-  padding:14px;
-
-  border:1px solid var(--border);
-
-  border-radius:14px;
-}
-
-.info-item span {
-  display:block;
-
-  margin-bottom:5px;
-
-  color:var(--muted);
-
-  font-size:9px;
-
-  font-weight:700;
-}
-
-.info-item strong {
-  display:block;
-
-  overflow:hidden;
-
-  font-size:11px;
-
-  text-overflow:ellipsis;
-
-  white-space:nowrap;
-}
-
-
-/* =========================================================
-   SUBJECTS
-========================================================= */
-
-.subjects-section {
-  padding:30px 40px 35px;
-}
-
-.section-heading {
-  display:flex;
-
-  align-items:end;
-
-  justify-content:space-between;
-
-  margin-bottom:18px;
-}
-
-.section-heading h3 {
-  margin:0;
-
-  font-size:23px;
-
-  letter-spacing:-.04em;
-}
-
-.subject-count {
-  color:var(--muted);
-
-  font-size:11px;
-
-  font-weight:600;
-}
-
-.subjects-table-wrapper {
+.table-wrap{
   overflow-x:auto;
-
-  border:1px solid var(--border);
-
-  border-radius:18px;
 }
 
-.subjects-table {
+.ranking-table{
   width:100%;
-
-  min-width:600px;
-
+  min-width:920px;
   border-collapse:collapse;
 }
 
-.subjects-table th {
-  padding:14px;
-
-  background:rgba(127,127,127,.06);
-
-  color:var(--muted);
-
-  font-size:9px;
-
-  font-weight:800;
-
-  letter-spacing:.08em;
-
-  text-align:left;
-}
-
-.subjects-table td {
+.ranking-table th{
   padding:15px 14px;
-
-  border-top:1px solid var(--border);
-
-  font-size:12px;
-}
-
-.subjects-table td:first-child {
-  width:45px;
-
+  background:rgba(127,127,127,.055);
   color:var(--muted);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-align:left;
+  white-space:nowrap;
 }
 
-.subject-name {
+.ranking-table td{
+  padding:16px 14px;
+  border-top:1px solid var(--border);
+  font-size:12px;
+  vertical-align:middle;
+}
+
+.ranking-table tbody tr{
+  transition:.15s ease;
+}
+
+.ranking-table tbody tr:hover{
+  background:rgba(127,127,127,.035);
+}
+
+.rank{
+  width:70px;
+  font-size:15px!important;
+  font-weight:900;
+}
+
+.rank.top-one{
+  color:#b8860b;
+}
+
+.rank.top-two{
+  color:#7d8790;
+}
+
+.rank.top-three{
+  color:#a96835;
+}
+
+.institution-name{
+  min-width:240px;
+  font-weight:800;
+  color:var(--text);
+}
+
+.eiin{
+  color:var(--muted);
+  font-family:monospace;
+  font-size:11px;
+}
+
+.district{
   font-weight:700;
 }
 
-.subject-code {
-  color:var(--muted);
-
-  font-family:monospace;
-}
-
-.mark-cell {
-  font-weight:800;
-
-  font-size:14px !important;
-}
-
-.grade-cell {
+.number{
   font-weight:800;
 }
 
-.grade-a-plus {
-  color:var(--success);
+.total-gpa{
+  font-size:17px!important;
+  font-weight:900!important;
+  color:var(--blue);
 }
 
-.grade-a,
-.grade-a-minus {
-  color:var(--accent);
+.gpa5{
+  font-weight:900;
+  color:var(--green);
 }
 
-.grade-b,
-.grade-c,
-.grade-d {
-  color:#b76e00;
+.rate{
+  font-weight:900;
 }
 
-.grade-f {
-  color:var(--danger);
-}
-
-
-/* =========================================================
-   RESULT FOOTER
-========================================================= */
-
-.result-footer {
-  display:flex;
-
-  align-items:center;
-
-  justify-content:space-between;
-
-  gap:15px;
-
-  padding:22px 40px;
-
-  border-top:1px solid var(--border);
-}
-
-.result-footer strong,
-.result-footer span {
-  display:block;
-}
-
-.result-footer strong {
-  font-size:11px;
-}
-
-.result-footer span {
-  margin-top:4px;
-
+.rate span{
   color:var(--muted);
-
-  font-size:9px;
+  font-weight:600;
+  font-size:10px;
 }
 
-.disclaimer {
-  padding:0 40px 25px;
-
-  color:var(--muted);
-
-  font-size:9px;
-
-  line-height:1.6;
-}
-
-
-/* =========================================================
-   EMPTY
-========================================================= */
-
-.empty-state {
-  max-width:520px;
-
-  margin:40px auto 90px;
-
+.loading{
+  padding:50px!important;
   text-align:center;
-}
-
-.empty-icon {
-  width:58px;
-  height:58px;
-
-  display:grid;
-
-  place-items:center;
-
-  margin:auto;
-
-  border:1px solid var(--border);
-
-  border-radius:18px;
-
-  background:var(--surface);
-
-  color:var(--accent);
-
-  font-size:24px;
-
-  box-shadow:var(--shadow);
-}
-
-.empty-state h2 {
-  margin:18px 0 7px;
-
-  font-size:22px;
-}
-
-.empty-state p {
-  margin:0;
-
   color:var(--muted);
+}
 
+.error{
+  margin:18px;
+  padding:14px 16px;
+  border-radius:14px;
+  background:rgba(215,0,21,.06);
+  border:1px solid rgba(215,0,21,.16);
+  color:#d70015;
   font-size:13px;
-
-  line-height:1.6;
+  font-weight:700;
 }
 
 
 /* =========================================================
-   SITE FOOTER
+   FOOTER
 ========================================================= */
 
-.site-footer {
+.card-footer{
   display:flex;
-
-  align-items:center;
-
   justify-content:space-between;
-
-  margin-top:50px;
-
-  padding-top:20px;
-
+  align-items:center;
+  gap:15px;
+  padding:20px 25px;
   border-top:1px solid var(--border);
-
   color:var(--muted);
-
-  font-size:11px;
+  font-size:10px;
 }
 
-.site-footer strong {
+.site-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top:45px;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+  color:var(--muted);
+  font-size:10px;
+}
+
+.site-footer strong{
   color:var(--text);
 }
 
@@ -1149,119 +496,54 @@ button {
    MOBILE
 ========================================================= */
 
-@media(max-width:700px) {
+@media(max-width:700px){
 
-  .page {
-    width:min(100% - 20px,1180px);
+  .page{
+    width:min(100% - 20px,1250px);
   }
 
-  .topbar {
-    height:70px;
+  .topbar{
+    height:72px;
   }
 
-  .search-section {
-    margin:48px auto 35px;
+  .hero{
+    margin:48px auto 30px;
   }
 
-  .search-section h1 {
+  .hero h1{
     font-size:51px;
   }
 
-  .search-box {
+  .controls{
     flex-direction:column;
-
-    border-radius:19px;
+    align-items:stretch;
   }
 
-  .search-btn {
-    width:100%;
-
-    height:52px;
-  }
-
-  .result-actions {
-    justify-content:stretch;
-  }
-
-  .download-btn {
+  .control-left{
     width:100%;
   }
 
-  .result-header {
-    padding:15px;
+  .stat{
+    flex:1;
+    text-align:center;
   }
 
-  .result-title {
-    padding:28px 20px 22px;
+  .pdf-btn{
+    width:100%;
   }
 
-  .result-title h2 {
-    font-size:29px;
+  .card-header{
+    padding:17px;
   }
 
-  .student-profile {
-    margin:0 20px;
+  .card-footer{
+    padding:18px;
+  }
 
+  .site-footer{
     flex-direction:column;
-  }
-
-  .student-result-status {
-    text-align:left;
-  }
-
-  .score-grid {
-    margin:18px 20px;
-
-    grid-template-columns:1fr;
-  }
-
-  .score-card strong {
-    font-size:37px;
-  }
-
-  .additional-info {
-    grid-template-columns:1fr 1fr;
-
-    margin:0 20px 25px;
-  }
-
-  .subjects-section {
-    padding:25px 20px;
-  }
-
-  .result-footer {
-    padding:20px;
-  }
-
-  .disclaimer {
-    padding:0 20px 22px;
-  }
-
-  .site-footer {
-    flex-direction:column;
-
     align-items:flex-start;
-
-    gap:5px;
-  }
-}
-
-@media(max-width:430px) {
-
-  .additional-info {
-    grid-template-columns:1fr;
-  }
-
-  .student-meta {
-    flex-direction:column;
-
-    align-items:flex-start;
-  }
-
-  .result-footer {
-    flex-direction:column;
-
-    align-items:flex-start;
+    gap:6px;
   }
 }
 
@@ -1270,52 +552,41 @@ button {
    PRINT
 ========================================================= */
 
-@media print {
+@media print{
 
-  @page {
-    size:A4;
-
-    margin:10mm;
+  @page{
+    size:A4 landscape;
+    margin:8mm;
   }
 
-  body {
-    background:white !important;
-
-    color:#111 !important;
+  body{
+    background:white!important;
+    color:#111!important;
   }
 
   .topbar,
-  .search-section,
-  .result-actions,
-  .empty-state,
-  .site-footer,
-  .background-glow {
-    display:none !important;
+  .hero,
+  .controls,
+  .site-footer{
+    display:none!important;
   }
 
-  .page {
+  .page{
     width:100%;
-
     padding:0;
   }
 
-  .result-section {
-    display:block !important;
-  }
-
-  .result-card {
+  .ranking-card{
     border:0;
-
     box-shadow:none;
-
     border-radius:0;
   }
 
 }
 
 </style>
-
 </head>
+
 
 <body>
 
@@ -1345,16 +616,14 @@ button {
     id="themeToggle"
     class="theme-toggle"
     type="button">
-
     ◐
-
   </button>
 
 </header>
 
 
 
-<section class="search-section">
+<section class="hero">
 
   <div class="eyebrow">
 
@@ -1366,442 +635,165 @@ button {
 
 
   <h1>
-
-    Your result.
-    <span>All in one place.</span>
-
+    Institution
+    <span>Ranking.</span>
   </h1>
 
 
-  <p class="hero-description">
-
-    Enter your SSC 2026 roll number to view
-    your result, subject-wise marks, total score
-    and student rank.
-
+  <p>
+    Top 100 institutions of Chattogram Board SSC 2026,
+    ranked primarily by Total GPA with GPA-5,
+    passing rate and passed students used as tie-breakers.
   </p>
-
-
-  <form
-    id="searchForm"
-    class="search-box">
-
-    <div class="input-wrapper">
-
-      <span class="search-icon">
-        ⌕
-      </span>
-
-      <input
-        id="rollInput"
-        type="text"
-        inputmode="numeric"
-        maxlength="6"
-        autocomplete="off"
-        placeholder="Enter Roll Number"
-        required
-      >
-
-      <button
-        type="button"
-        id="clearBtn"
-        class="clear-btn"
-        hidden>
-        ×
-      </button>
-
-    </div>
-
-
-    <button
-      id="searchBtn"
-      class="search-btn"
-      type="submit">
-
-      View Result
-
-    </button>
-
-  </form>
-
-
-  <div
-    id="errorMessage"
-    class="error-message hidden">
-  </div>
 
 </section>
 
 
 
-<!-- =====================================================
-     RESULT
-===================================================== -->
+<div class="controls">
 
-<section
-  id="resultSection"
-  class="result-section hidden">
+  <div class="control-left">
 
+    <div class="stat">
+      TOP
+      <strong>100</strong>
+    </div>
 
-  <!-- ONLY DOWNLOAD BUTTON -->
-  <div class="result-actions">
+    <div class="stat">
+      YEAR
+      <strong>2026</strong>
+    </div>
 
-    <button
-      id="downloadPdfBtn"
-      class="download-btn"
-      type="button">
-
-      ↓ Download PDF
-
-    </button>
+    <div class="stat">
+      SORT
+      <strong>Total GPA</strong>
+    </div>
 
   </div>
 
 
+  <button
+    id="pdfBtn"
+    class="pdf-btn"
+    type="button">
 
-  <div
-    id="resultCard"
-    class="result-card">
+    ↓ Download PDF
+
+  </button>
+
+</div>
 
 
-    <!-- HEADER -->
 
-    <div class="result-header">
+<section
+  id="rankingCard"
+  class="ranking-card">
 
-      <div class="result-brand">
 
-        <div class="mini-logo">
-          CTG
-        </div>
+  <div class="card-header">
 
-        <div>
+    <div class="card-title">
 
-          <strong>
-            CTGBoardRanking
-          </strong>
-
-          <span>
-            SSC 2026 · Chattogram Board
-          </span>
-
-        </div>
-
+      <div class="mini-logo">
+        CTG
       </div>
-
-
-      <div class="unofficial-badge">
-        UNOFFICIAL
-      </div>
-
-    </div>
-
-
-
-    <!-- TITLE -->
-
-    <div class="result-title">
-
-      <p class="result-kicker">
-        INDIVIDUAL RESULT
-      </p>
-
-      <h2>
-        SSC Examination 2026
-      </h2>
-
-      <p>
-        Chattogram Education Board
-      </p>
-
-    </div>
-
-
-
-    <!-- STUDENT -->
-
-    <div class="student-profile">
-
-      <div class="student-main">
-
-        <span class="label">
-          STUDENT
-        </span>
-
-        <h3 id="studentName">
-          —
-        </h3>
-
-
-        <div class="student-meta">
-
-          <span>
-            Roll:
-            <strong id="studentRoll">
-              —
-            </strong>
-          </span>
-
-          <span>
-            Registration:
-            <strong id="studentRegistration">
-              —
-            </strong>
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <div class="student-result-status">
-
-        <span class="label">
-          RESULT STATUS
-        </span>
-
-        <strong id="resultStatus">
-          —
-        </strong>
-
-      </div>
-
-    </div>
-
-
-
-    <!-- SCORE -->
-
-    <div class="score-grid">
-
-
-      <div class="score-card">
-
-        <span class="score-label">
-          TOTAL SCORE
-        </span>
-
-        <strong id="totalScore">
-          —
-        </strong>
-
-        <small>
-          Calculated from subject marks
-        </small>
-
-      </div>
-
-
-      <div class="score-card gpa-score">
-
-        <span class="score-label">
-          GPA
-        </span>
-
-        <strong id="gpa">
-          —
-        </strong>
-
-        <small>
-          Grade Point Average
-        </small>
-
-      </div>
-
-
-      <div class="score-card rank-score">
-
-        <span class="score-label">
-          STUDENT RANK
-        </span>
-
-        <strong id="studentRank">
-          —
-        </strong>
-
-        <small>
-          Among available students
-        </small>
-
-      </div>
-
-
-    </div>
-
-
-
-    <!-- ADDITIONAL INFO -->
-
-    <div class="additional-info">
-
-
-      <div class="info-item">
-
-        <span>YEAR</span>
-
-        <strong id="showYear">
-          —
-        </strong>
-
-      </div>
-
-
-      <div class="info-item">
-
-        <span>GROUP</span>
-
-        <strong id="showGroup">
-          —
-        </strong>
-
-      </div>
-
-
-      <div class="info-item">
-
-        <span>INSTITUTION</span>
-
-        <strong id="showInstitution">
-          —
-        </strong>
-
-      </div>
-
-
-      <div class="info-item">
-
-        <span>DISTRICT</span>
-
-        <strong id="showDistrict">
-          —
-        </strong>
-
-      </div>
-
-
-    </div>
-
-
-
-    <!-- SUBJECTS -->
-
-    <div class="subjects-section">
-
-      <div class="section-heading">
-
-        <div>
-
-          <p class="result-kicker">
-            ACADEMIC DETAILS
-          </p>
-
-          <h3>
-            Subject-wise Result
-          </h3>
-
-        </div>
-
-        <span
-          id="subjectCount"
-          class="subject-count">
-          —
-        </span>
-
-      </div>
-
-
-      <div class="subjects-table-wrapper">
-
-        <table class="subjects-table">
-
-          <thead>
-
-            <tr>
-
-              <th>#</th>
-
-              <th>SUBJECT</th>
-
-              <th>CODE</th>
-
-              <th>MARKS</th>
-
-              <th>GRADE</th>
-
-            </tr>
-
-          </thead>
-
-
-          <tbody id="subjectsBody">
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </div>
-
-
-
-    <!-- FOOTER -->
-
-    <div class="result-footer">
 
       <div>
 
         <strong>
-          CTGBoardRanking
+          Institution Ranking
         </strong>
 
         <span>
-          Independent educational data platform
+          SSC 2026 · Chattogram Board
         </span>
 
       </div>
 
-
-      <div class="unofficial-badge">
-        UNOFFICIAL NOTICE
-      </div>
-
     </div>
 
 
-    <div class="disclaimer">
-
-      This result is provided for educational,
-      research and statistical purposes only.
-      CTGBoardRanking is not an official website
-      of the Chattogram Education Board.
-
+    <div class="unofficial">
+      UNOFFICIAL
     </div>
 
+  </div>
+
+
+
+  <div
+    id="errorBox"
+    class="error hidden">
+  </div>
+
+
+
+  <div class="table-wrap">
+
+    <table class="ranking-table">
+
+      <thead>
+
+        <tr>
+
+          <th>RANK</th>
+
+          <th>INSTITUTION</th>
+
+          <th>EIIN</th>
+
+          <th>DISTRICT</th>
+
+          <th>THANA</th>
+
+          <th>APPEARED</th>
+
+          <th>PASSED</th>
+
+          <th>PASSING RATE</th>
+
+          <th>GPA-5</th>
+
+          <th>TOTAL GPA</th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody id="rankingBody">
+
+        <tr>
+
+          <td
+            colspan="10"
+            class="loading">
+
+            Loading institution ranking…
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
 
   </div>
 
-</section>
 
 
+  <div class="card-footer">
 
-<!-- EMPTY -->
+    <span>
+      Ranking based on Total GPA
+    </span>
 
-<section
-  id="emptyState"
-  class="empty-state">
+    <span>
+      CTGBoardRanking · SSC 2026
+    </span>
 
-  <div class="empty-icon">
-    ⌕
   </div>
-
-  <h2>
-    Search your result
-  </h2>
-
-  <p>
-    Enter your SSC 2026 roll number above
-    to view the individual result.
-  </p>
 
 </section>
 
@@ -1814,7 +806,7 @@ button {
   </div>
 
   <div>
-    Unofficial educational platform
+    Independent educational data platform
   </div>
 
 </footer>
@@ -1826,50 +818,18 @@ button {
 <script>
 
 /* =========================================================
-   ELEMENTS
+   THEME
 ========================================================= */
-
-const searchForm =
-  document.getElementById("searchForm");
-
-const rollInput =
-  document.getElementById("rollInput");
-
-const searchBtn =
-  document.getElementById("searchBtn");
-
-const clearBtn =
-  document.getElementById("clearBtn");
-
-const errorMessage =
-  document.getElementById("errorMessage");
-
-const resultSection =
-  document.getElementById("resultSection");
-
-const emptyState =
-  document.getElementById("emptyState");
-
-const downloadPdfBtn =
-  document.getElementById("downloadPdfBtn");
 
 const themeToggle =
   document.getElementById("themeToggle");
-
-
-/* =========================================================
-   THEME
-========================================================= */
 
 const savedTheme =
   localStorage.getItem("ctg-theme");
 
 if(savedTheme === "dark"){
-
   document.documentElement.classList.add("dark");
-
 }
-
 
 themeToggle.addEventListener(
   "click",
@@ -1889,84 +849,21 @@ themeToggle.addEventListener(
 
 
 /* =========================================================
-   INPUT
+   ELEMENTS
 ========================================================= */
 
-rollInput.addEventListener(
-  "input",
-  function(){
+const rankingBody =
+  document.getElementById("rankingBody");
 
-    clearBtn.hidden =
-      !rollInput.value;
+const errorBox =
+  document.getElementById("errorBox");
 
-  }
-);
-
-
-clearBtn.addEventListener(
-  "click",
-  function(){
-
-    rollInput.value = "";
-
-    clearBtn.hidden = true;
-
-    rollInput.focus();
-
-  }
-);
+const pdfBtn =
+  document.getElementById("pdfBtn");
 
 
 /* =========================================================
-   ERROR
-========================================================= */
-
-function showError(message){
-
-  errorMessage.textContent =
-    message;
-
-  errorMessage.classList.remove(
-    "hidden"
-  );
-
-}
-
-
-function hideError(){
-
-  errorMessage.textContent = "";
-
-  errorMessage.classList.add(
-    "hidden"
-  );
-
-}
-
-
-/* =========================================================
-   DISPLAY
-========================================================= */
-
-function value(value){
-
-  if(
-    value === null ||
-    value === undefined ||
-    value === ""
-  ){
-
-    return "—";
-
-  }
-
-  return String(value);
-
-}
-
-
-/* =========================================================
-   ESCAPE
+   ESCAPE HTML
 ========================================================= */
 
 function escapeHTML(value){
@@ -1982,425 +879,205 @@ function escapeHTML(value){
 
 
 /* =========================================================
-   SEARCH
+   NUMBER
 ========================================================= */
 
-searchForm.addEventListener(
-  "submit",
-  async function(event){
+function numberValue(value){
 
-    event.preventDefault();
+  const n =
+    Number(value);
 
-    await searchResult();
+  return Number.isFinite(n)
+    ? n
+    : 0;
 
-  }
-);
+}
 
 
 /* =========================================================
-   SEARCH RESULT
+   LOAD JSON
 ========================================================= */
 
-async function searchResult(){
-
-  const roll =
-    rollInput.value.trim();
-
-  hideError();
-
-  if(!roll){
-
-    showError(
-      "Please enter your roll number."
-    );
-
-    return;
-
-  }
-
-
-  if(!/^\d+$/.test(roll)){
-
-    showError(
-      "Roll number must contain numbers only."
-    );
-
-    return;
-
-  }
-
-
-  searchBtn.disabled = true;
-
-  searchBtn.innerHTML =
-    `<span class="spinner"></span>`;
-
-
-  resultSection.classList.add(
-    "hidden"
-  );
-
-  emptyState.classList.remove(
-    "hidden"
-  );
-
+async function loadInstitutionRanking(){
 
   try{
 
+    /*
+      IMPORTANT:
+
+      This path assumes your JSON file is available
+      from the website root.
+
+      Example:
+
+      institution-collector/
+        institution_results.json
+
+      If your repository structure is:
+
+      /institution-collector/institution_results.json
+
+      then this path is correct.
+    */
+
     const response =
       await fetch(
-        "/api/result?roll=" +
-        encodeURIComponent(roll),
+        "institution-collector/institution_results.json",
         {
           method:"GET",
-
-          headers:{
-            "Accept":
-              "application/json"
-          },
-
           cache:"no-store"
         }
       );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "Unable to load institution_results.json"
+      );
+
+    }
 
 
     const data =
       await response.json();
 
 
-    console.log(
-      "Result API:",
-      data
-    );
-
-
-    if(
-      !response.ok ||
-      !data ||
-      data.success !== true
-    ){
+    if(!Array.isArray(data)){
 
       throw new Error(
-        data?.message ||
-        "Result not found."
+        "Invalid institution data format."
       );
 
     }
 
 
-    if(!data.student){
-
-      throw new Error(
-        "Student result data is missing."
-      );
-
-    }
-
-
-    renderResult(
-      data.student
-    );
+    createRanking(data);
 
 
   }
   catch(error){
 
-    console.error(
-      error
-    );
+    console.error(error);
 
-    showError(
+    rankingBody.innerHTML = "";
+
+    errorBox.textContent =
       error.message ||
-      "Unable to load result."
+      "Unable to load institution ranking.";
+
+    errorBox.classList.remove(
+      "hidden"
     );
 
   }
-  finally{
-
-    searchBtn.disabled = false;
-
-    searchBtn.textContent =
-      "View Result";
-
-  }
 
 }
 
 
 /* =========================================================
-   RENDER RESULT
+   CREATE RANKING
 ========================================================= */
 
-function renderResult(student){
+function createRanking(data){
 
-  /* NAME */
+  /*
+    RANKING PRIORITY
 
-  document.getElementById(
-    "studentName"
-  ).textContent =
-    value(student.student_name);
+    1. total_gpa DESC
+    2. gpa5 DESC
+    3. passing_rate DESC
+    4. passed DESC
+    5. appeared DESC
+    6. institution_name ASC
+  */
 
+  const sorted =
+    data
+      .filter(
+        item =>
+          item &&
+          item.institution_name
+      )
+      .sort(
+        function(a,b){
 
-  /* ROLL */
+          const totalGpaDifference =
+            numberValue(b.total_gpa) -
+            numberValue(a.total_gpa);
 
-  document.getElementById(
-    "studentRoll"
-  ).textContent =
-    value(student.roll);
-
-
-  /* REGISTRATION */
-
-  document.getElementById(
-    "studentRegistration"
-  ).textContent =
-    value(student.registration);
-
-
-  /* STATUS */
-
-  document.getElementById(
-    "resultStatus"
-  ).textContent =
-    value(
-      student.result_status
-    ).toUpperCase();
+          if(totalGpaDifference !== 0)
+            return totalGpaDifference;
 
 
-  /* YEAR */
+          const gpa5Difference =
+            numberValue(b.gpa5) -
+            numberValue(a.gpa5);
 
-  document.getElementById(
-    "showYear"
-  ).textContent =
-    value(student.year);
-
-
-  /* GROUP */
-
-  document.getElementById(
-    "showGroup"
-  ).textContent =
-    value(student.group_name);
+          if(gpa5Difference !== 0)
+            return gpa5Difference;
 
 
-  /* INSTITUTION */
+          const rateDifference =
+            numberValue(b.passing_rate) -
+            numberValue(a.passing_rate);
 
-  document.getElementById(
-    "showInstitution"
-  ).textContent =
-    value(student.institution);
-
-
-  /* DISTRICT */
-
-  document.getElementById(
-    "showDistrict"
-  ).textContent =
-    value(student.district);
+          if(rateDifference !== 0)
+            return rateDifference;
 
 
-  /* =====================================================
-     TOTAL SCORE
-  ===================================================== */
+          const passedDifference =
+            numberValue(b.passed) -
+            numberValue(a.passed);
 
-  let total =
-    student.total_score;
-
-
-  if(
-    total === null ||
-    total === undefined ||
-    total === ""
-  ){
-
-    total =
-      calculateTotal(
-        student.subjects
-      );
-
-  }
+          if(passedDifference !== 0)
+            return passedDifference;
 
 
-  document.getElementById(
-    "totalScore"
-  ).textContent =
-    total !== null
-      ? Number(total)
-          .toLocaleString("en-US")
-      : "—";
+          const appearedDifference =
+            numberValue(b.appeared) -
+            numberValue(a.appeared);
+
+          if(appearedDifference !== 0)
+            return appearedDifference;
 
 
-  /* =====================================================
-     GPA
-  ===================================================== */
+          return String(
+            a.institution_name
+          ).localeCompare(
+            String(b.institution_name)
+          );
 
-  const gpa =
-    student.gpa;
-
-
-  document.getElementById(
-    "gpa"
-  ).textContent =
-    gpa !== null &&
-    gpa !== undefined &&
-    gpa !== ""
-      ? Number(gpa).toFixed(2)
-      : "—";
+        }
+      )
+      .slice(0,100);
 
 
-  /* =====================================================
-     RANK
-  ===================================================== */
-
-  const rank =
-    student.student_rank ??
-    student.rank ??
-    student.studentRank ??
-    null;
-
-
-  document.getElementById(
-    "studentRank"
-  ).textContent =
-    rank !== null &&
-    rank !== undefined &&
-    rank !== ""
-      ? Number(rank)
-          .toLocaleString("en-US")
-      : "—";
-
-
-  /* =====================================================
-     SUBJECTS
-  ===================================================== */
-
-  renderSubjects(
-    student.subjects || []
-  );
-
-
-  /* SHOW */
-
-  emptyState.classList.add(
-    "hidden"
-  );
-
-  resultSection.classList.remove(
-    "hidden"
-  );
-
-
-  setTimeout(
-    function(){
-
-      resultSection.scrollIntoView({
-        behavior:"smooth",
-        block:"start"
-      });
-
-    },
-    100
-  );
+  renderRanking(sorted);
 
 }
 
 
 /* =========================================================
-   TOTAL FALLBACK
+   RENDER
 ========================================================= */
 
-function calculateTotal(subjects){
+function renderRanking(data){
 
-  if(
-    !Array.isArray(subjects) ||
-    subjects.length === 0
-  ){
-
-    return null;
-
-  }
+  rankingBody.innerHTML = "";
 
 
-  let total = 0;
+  if(!data.length){
 
-  let count = 0;
-
-
-  subjects.forEach(
-    function(subject){
-
-      const raw =
-        subject.marks ??
-        subject.mark ??
-        subject.total_marks ??
-        subject.total_mark ??
-        null;
-
-
-      const mark =
-        Number(raw);
-
-
-      if(
-        Number.isFinite(mark)
-      ){
-
-        total += mark;
-
-        count++;
-
-      }
-
-    }
-  );
-
-
-  return count > 0
-    ? total
-    : null;
-
-}
-
-
-/* =========================================================
-   SUBJECTS
-========================================================= */
-
-function renderSubjects(subjects){
-
-  const body =
-    document.getElementById(
-      "subjectsBody"
-    );
-
-
-  body.innerHTML = "";
-
-
-  document.getElementById(
-    "subjectCount"
-  ).textContent =
-    Array.isArray(subjects)
-      ? subjects.length + " Subjects"
-      : "0 Subjects";
-
-
-  if(
-    !Array.isArray(subjects) ||
-    subjects.length === 0
-  ){
-
-    body.innerHTML = `
+    rankingBody.innerHTML = `
 
       <tr>
 
-        <td colspan="5"
-            style="
-              text-align:center;
-              color:var(--muted);
-            ">
+        <td
+          colspan="10"
+          class="loading">
 
-          Subject details unavailable
+          No institution data found.
 
         </td>
 
@@ -2413,85 +1090,108 @@ function renderSubjects(subjects){
   }
 
 
-  subjects.forEach(
-    function(subject,index){
+  data.forEach(
+    function(item,index){
 
-      const name =
-        subject.subject_name ??
-        subject.subject ??
-        subject.subject_title ??
-        "—";
+      const rank =
+        index + 1;
 
 
-      const code =
-        subject.subject_code ??
-        subject.code ??
-        "—";
+      let rankClass = "";
+
+      if(rank === 1)
+        rankClass = "top-one";
+
+      else if(rank === 2)
+        rankClass = "top-two";
+
+      else if(rank === 3)
+        rankClass = "top-three";
 
 
-      const marks =
-        subject.marks ??
-        subject.mark ??
-        subject.total_marks ??
-        subject.total_mark ??
-        "—";
+      const row =
+        document.createElement("tr");
 
 
-      const grade =
-        subject.grade ??
-        subject.grade_name ??
-        "—";
+      row.innerHTML = `
 
-
-      const gradeClass =
-        getGradeClass(
-          grade
-        );
-
-
-      const tr =
-        document.createElement(
-          "tr"
-        );
-
-
-      tr.innerHTML = `
-
-        <td>
-          ${index + 1}
+        <td class="rank ${rankClass}">
+          #${rank}
         </td>
 
-        <td>
 
-          <div class="subject-name">
-            ${escapeHTML(name)}
-          </div>
-
+        <td class="institution-name">
+          ${escapeHTML(
+            item.institution_name
+          )}
         </td>
 
-        <td>
 
-          <span class="subject-code">
-            ${escapeHTML(code)}
+        <td class="eiin">
+          ${escapeHTML(
+            item.eiin ?? "—"
+          )}
+        </td>
+
+
+        <td class="district">
+          ${escapeHTML(
+            item.district ?? "—"
+          )}
+        </td>
+
+
+        <td>
+          ${escapeHTML(
+            item.thana ?? "—"
+          )}
+        </td>
+
+
+        <td class="number">
+          ${numberValue(
+            item.appeared
+          ).toLocaleString("en-US")}
+        </td>
+
+
+        <td class="number">
+          ${numberValue(
+            item.passed
+          ).toLocaleString("en-US")}
+        </td>
+
+
+        <td class="rate">
+
+          ${numberValue(
+            item.passing_rate
+          ).toFixed(2)}%
+
+          <span>
+            pass
           </span>
 
         </td>
 
-        <td class="mark-cell">
-          ${escapeHTML(marks)}
+
+        <td class="gpa5">
+          ${numberValue(
+            item.gpa5
+          ).toLocaleString("en-US")}
         </td>
 
-        <td
-          class="grade-cell ${gradeClass}">
-          ${escapeHTML(grade)}
+
+        <td class="total-gpa">
+          ${numberValue(
+            item.total_gpa
+          ).toLocaleString("en-US")}
         </td>
 
       `;
 
 
-      body.appendChild(
-        tr
-      );
+      rankingBody.appendChild(row);
 
     }
   );
@@ -2500,81 +1200,29 @@ function renderSubjects(subjects){
 
 
 /* =========================================================
-   GRADE CLASS
+   PDF
 ========================================================= */
 
-function getGradeClass(grade){
-
-  const g =
-    String(grade)
-      .toUpperCase()
-      .replace(/\s/g,"");
-
-
-  if(g === "A+" || g === "A PLUS")
-    return "grade-a-plus";
-
-
-  if(g === "A")
-    return "grade-a";
-
-
-  if(g === "A-")
-    return "grade-a-minus";
-
-
-  if(g === "B")
-    return "grade-b";
-
-
-  if(g === "C")
-    return "grade-c";
-
-
-  if(g === "D")
-    return "grade-d";
-
-
-  if(g === "F")
-    return "grade-f";
-
-
-  return "";
-
-}
-
-
-/* =========================================================
-   PDF DOWNLOAD
-========================================================= */
-
-downloadPdfBtn.addEventListener(
+pdfBtn.addEventListener(
   "click",
   async function(){
 
-    const studentName =
-      document.getElementById(
-        "studentName"
-      ).textContent;
-
-
-    if(
-      !studentName ||
-      studentName === "—"
-    ){
-
-      showError(
-        "Please search a result first."
+    const rows =
+      rankingBody.querySelectorAll(
+        "tr"
       );
+
+
+    if(!rows.length){
 
       return;
 
     }
 
 
-    downloadPdfBtn.disabled = true;
+    pdfBtn.disabled = true;
 
-    downloadPdfBtn.textContent =
+    pdfBtn.textContent =
       "Preparing PDF…";
 
 
@@ -2590,17 +1238,16 @@ downloadPdfBtn.addEventListener(
         error
       );
 
-      showError(
-        "Unable to generate PDF. Please try again."
+      alert(
+        "Unable to generate PDF."
       );
 
     }
     finally{
 
-      downloadPdfBtn.disabled =
-        false;
+      pdfBtn.disabled = false;
 
-      downloadPdfBtn.textContent =
+      pdfBtn.textContent =
         "↓ Download PDF";
 
     }
@@ -2610,34 +1257,13 @@ downloadPdfBtn.addEventListener(
 
 
 /* =========================================================
-   GENERATE PDF
+   PDF GENERATOR
 ========================================================= */
 
 async function generatePDF(){
 
-  const student =
-    getCurrentStudentData();
-
-
-  const now =
-    new Date();
-
-
-  const date =
-    now.toLocaleDateString(
-      "en-GB",
-      {
-        day:"2-digit",
-        month:"long",
-        year:"numeric"
-      }
-    );
-
-
   const pdf =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
 
   pdf.style.position =
@@ -2650,7 +1276,7 @@ async function generatePDF(){
     "0";
 
   pdf.style.width =
-    "794px";
+    "1123px";
 
   pdf.style.background =
     "#ffffff";
@@ -2662,33 +1288,187 @@ async function generatePDF(){
     "Arial, Helvetica, sans-serif";
 
 
+  const rows =
+    rankingBody.querySelectorAll(
+      "tr"
+    );
+
+
+  let tableRows = "";
+
+
+  rows.forEach(
+    function(row){
+
+      const cells =
+        row.querySelectorAll("td");
+
+
+      if(cells.length < 10)
+        return;
+
+
+      tableRows += `
+
+        <tr>
+
+          <td style="
+            padding:9px;
+            border-top:1px solid #e8e8ea;
+            font-weight:800;
+          ">
+            ${escapeHTML(
+              cells[0].innerText
+            )}
+          </td>
+
+
+          <td style="
+            padding:9px;
+            border-top:1px solid #e8e8ea;
+            font-weight:700;
+            width:290px;
+          ">
+            ${escapeHTML(
+              cells[1].innerText
+            )}
+          </td>
+
+
+          <td style="
+            padding:9px;
+            border-top:1px solid #e8e8ea;
+            color:#6e6e73;
+          ">
+            ${escapeHTML(
+              cells[2].innerText
+            )}
+          </td>
+
+
+          <td style="
+            padding:9px;
+            border-top:1px solid #e8e8ea;
+          ">
+            ${escapeHTML(
+              cells[3].innerText
+            )}
+          </td>
+
+
+          <td style="
+            padding:9px;
+            border-top:1px solid #e8e8ea;
+          ">
+            ${escapeHTML(
+              cells[4].innerText
+            )}
+          </td>
+
+
+          <td style="
+            padding:9px;
+            border-top:1px solid #e8e8ea;
+            font-weight:700;
+          ">
+            ${escapeHTML(
+              cells[5].innerText
+            )}
+          </td>
+
+
+          <td style="
+            padding:9px;
+            border-top:1px solid #e8e8ea;
+            font-weight:700;
+          ">
+            ${escapeHTML(
+              cells[6].innerText
+            )}
+          </td>
+
+
+          <td style="
+            padding:9px;
+            border-top:1px solid #e8e8ea;
+            font-weight:700;
+          ">
+            ${escapeHTML(
+              cells[7].innerText
+            )}
+          </td>
+
+
+          <td style="
+            padding:9px;
+            border-top:1px solid #e8e8ea;
+            color:#168a4b;
+            font-weight:800;
+          ">
+            ${escapeHTML(
+              cells[8].innerText
+            )}
+          </td>
+
+
+          <td style="
+            padding:9px;
+            border-top:1px solid #e8e8ea;
+            color:#0071e3;
+            font-weight:900;
+            font-size:13px;
+          ">
+            ${escapeHTML(
+              cells[9].innerText
+            )}
+          </td>
+
+        </tr>
+
+      `;
+
+    }
+  );
+
+
+  const today =
+    new Date().toLocaleDateString(
+      "en-GB",
+      {
+        day:"2-digit",
+        month:"long",
+        year:"numeric"
+      }
+    );
+
+
   pdf.innerHTML = `
 
     <div style="
-      width:794px;
-      min-height:1123px;
+      width:1123px;
+      min-height:794px;
       background:#ffffff;
-      padding:42px 48px;
+      padding:38px 45px;
       position:relative;
     ">
 
 
-      <!-- PDF HEADER -->
+      <!-- HEADER -->
 
       <div style="
         display:flex;
-        justify-content:space-between;
         align-items:flex-start;
-        padding-bottom:25px;
+        justify-content:space-between;
+        padding-bottom:22px;
         border-bottom:1px solid #e5e5e7;
       ">
 
         <div>
 
           <div style="
-            font-size:25px;
-            font-weight:800;
-            letter-spacing:-1px;
+            font-size:27px;
+            font-weight:900;
+            letter-spacing:-1.2px;
             color:#111113;
           ">
             CTGBoardRanking
@@ -2696,11 +1476,11 @@ async function generatePDF(){
 
           <div style="
             margin-top:5px;
-            font-size:10px;
             color:#6e6e73;
-            letter-spacing:.5px;
+            font-size:10px;
+            letter-spacing:.6px;
           ">
-            SSC 2026 · CHATTAGRAM BOARD
+            SSC 2026 · CHATTOGRAM BOARD
           </div>
 
         </div>
@@ -2711,19 +1491,24 @@ async function generatePDF(){
         ">
 
           <div style="
-            font-size:10px;
-            font-weight:700;
-            color:#111113;
+            display:inline-block;
+            padding:7px 10px;
+            border-radius:8px;
+            background:#fff3f2;
+            color:#d70015;
+            font-size:8px;
+            font-weight:900;
+            letter-spacing:1px;
           ">
-            Generated by Shadat
+            UNOFFICIAL
           </div>
 
           <div style="
-            margin-top:4px;
-            font-size:9px;
+            margin-top:8px;
             color:#6e6e73;
+            font-size:9px;
           ">
-            ${escapeHTML(date)}
+            Generated ${escapeHTML(today)}
           </div>
 
         </div>
@@ -2735,230 +1520,90 @@ async function generatePDF(){
       <!-- TITLE -->
 
       <div style="
-        padding:35px 0 22px;
+        padding:28px 0 22px;
       ">
 
         <div style="
           color:#0071e3;
           font-size:9px;
-          font-weight:800;
-          letter-spacing:1.5px;
+          font-weight:900;
+          letter-spacing:1.6px;
         ">
-          INDIVIDUAL RESULT
+          INSTITUTION RANKING
         </div>
 
         <div style="
           margin-top:7px;
-          font-size:27px;
-          font-weight:800;
-          letter-spacing:-1px;
+          font-size:29px;
+          font-weight:900;
+          letter-spacing:-1.2px;
         ">
-          SSC Examination 2026
+          Top 100 Institutions
         </div>
 
         <div style="
-          margin-top:5px;
-          font-size:10px;
+          margin-top:6px;
           color:#6e6e73;
+          font-size:10px;
         ">
-          Chattogram Education Board
+          SSC Examination 2026 · Chattogram Education Board
         </div>
 
       </div>
 
 
 
-      <!-- STUDENT -->
+      <!-- RANKING METHOD -->
 
       <div style="
-        padding:20px 0;
-        border-top:1px solid #e5e5e7;
-        border-bottom:1px solid #e5e5e7;
+        display:flex;
+        gap:10px;
+        margin-bottom:20px;
       ">
 
         <div style="
+          padding:11px 14px;
+          border-radius:11px;
+          background:#f0f7ff;
+          color:#0071e3;
           font-size:9px;
           font-weight:800;
-          color:#6e6e73;
-          letter-spacing:1px;
         ">
-          STUDENT
+          PRIMARY: TOTAL GPA
         </div>
 
         <div style="
-          margin-top:7px;
-          font-size:21px;
+          padding:11px 14px;
+          border-radius:11px;
+          background:#f0faf4;
+          color:#168a4b;
+          font-size:9px;
           font-weight:800;
         ">
-          ${escapeHTML(student.student_name)}
+          TIE-BREAK: GPA-5
         </div>
 
-
         <div style="
-          display:flex;
-          gap:35px;
-          margin-top:12px;
-          font-size:10px;
-          color:#6e6e73;
-        ">
-
-          <span>
-            Roll:
-            <strong style="color:#111113">
-              ${escapeHTML(student.roll)}
-            </strong>
-          </span>
-
-          <span>
-            Registration:
-            <strong style="color:#111113">
-              ${escapeHTML(student.registration)}
-            </strong>
-          </span>
-
-          <span>
-            Status:
-            <strong style="color:#168a4b">
-              ${escapeHTML(student.result_status)}
-            </strong>
-          </span>
-
-        </div>
-
-      </div>
-
-
-
-      <!-- SCORES -->
-
-      <div style="
-        display:grid;
-        grid-template-columns:repeat(3,1fr);
-        gap:12px;
-        margin:22px 0;
-      ">
-
-
-        <div style="
-          padding:18px;
-          border-radius:15px;
-          background:#f0f7ff;
-        ">
-
-          <div style="
-            color:#6e6e73;
-            font-size:8px;
-            font-weight:800;
-            letter-spacing:1px;
-          ">
-            TOTAL SCORE
-          </div>
-
-          <div style="
-            margin-top:6px;
-            color:#0071e3;
-            font-size:27px;
-            font-weight:800;
-          ">
-            ${escapeHTML(student.total_score)}
-          </div>
-
-        </div>
-
-
-        <div style="
-          padding:18px;
-          border-radius:15px;
-          background:#f0faf4;
-        ">
-
-          <div style="
-            color:#6e6e73;
-            font-size:8px;
-            font-weight:800;
-            letter-spacing:1px;
-          ">
-            GPA
-          </div>
-
-          <div style="
-            margin-top:6px;
-            color:#168a4b;
-            font-size:27px;
-            font-weight:800;
-          ">
-            ${escapeHTML(student.gpa)}
-          </div>
-
-        </div>
-
-
-        <div style="
-          padding:18px;
-          border-radius:15px;
+          padding:11px 14px;
+          border-radius:11px;
           background:#fff7e8;
+          color:#b76e00;
+          font-size:9px;
+          font-weight:800;
         ">
-
-          <div style="
-            color:#6e6e73;
-            font-size:8px;
-            font-weight:800;
-            letter-spacing:1px;
-          ">
-            STUDENT RANK
-          </div>
-
-          <div style="
-            margin-top:6px;
-            color:#b76e00;
-            font-size:27px;
-            font-weight:800;
-          ">
-            ${escapeHTML(student.student_rank)}
-          </div>
-
+          TOP 100
         </div>
 
       </div>
 
 
 
-      <!-- INFO -->
-
-      <div style="
-        display:grid;
-        grid-template-columns:repeat(4,1fr);
-        gap:9px;
-        margin-bottom:25px;
-      ">
-
-        ${pdfInfo("YEAR",student.year)}
-
-        ${pdfInfo("GROUP",student.group_name)}
-
-        ${pdfInfo("INSTITUTION",student.institution)}
-
-        ${pdfInfo("DISTRICT",student.district)}
-
-      </div>
-
-
-
-      <!-- SUBJECT -->
-
-      <div style="
-        font-size:17px;
-        font-weight:800;
-        margin-bottom:12px;
-      ">
-        Subject-wise Result
-      </div>
-
+      <!-- TABLE -->
 
       <table style="
         width:100%;
         border-collapse:collapse;
-        font-size:9px;
+        font-size:8px;
       ">
 
         <thead>
@@ -2967,44 +1612,44 @@ async function generatePDF(){
             background:#f5f5f7;
           ">
 
-            <th style="
-              padding:11px;
-              text-align:left;
-              color:#6e6e73;
-            ">
-              #
+            <th style="padding:10px;text-align:left;color:#6e6e73;">
+              RANK
             </th>
 
-            <th style="
-              padding:11px;
-              text-align:left;
-              color:#6e6e73;
-            ">
-              SUBJECT
+            <th style="padding:10px;text-align:left;color:#6e6e73;">
+              INSTITUTION
             </th>
 
-            <th style="
-              padding:11px;
-              text-align:left;
-              color:#6e6e73;
-            ">
-              CODE
+            <th style="padding:10px;text-align:left;color:#6e6e73;">
+              EIIN
             </th>
 
-            <th style="
-              padding:11px;
-              text-align:left;
-              color:#6e6e73;
-            ">
-              MARKS
+            <th style="padding:10px;text-align:left;color:#6e6e73;">
+              DISTRICT
             </th>
 
-            <th style="
-              padding:11px;
-              text-align:left;
-              color:#6e6e73;
-            ">
-              GRADE
+            <th style="padding:10px;text-align:left;color:#6e6e73;">
+              THANA
+            </th>
+
+            <th style="padding:10px;text-align:left;color:#6e6e73;">
+              APPEARED
+            </th>
+
+            <th style="padding:10px;text-align:left;color:#6e6e73;">
+              PASSED
+            </th>
+
+            <th style="padding:10px;text-align:left;color:#6e6e73;">
+              PASS %
+            </th>
+
+            <th style="padding:10px;text-align:left;color:#6e6e73;">
+              GPA-5
+            </th>
+
+            <th style="padding:10px;text-align:left;color:#6e6e73;">
+              TOTAL GPA
             </th>
 
           </tr>
@@ -3014,70 +1659,7 @@ async function generatePDF(){
 
         <tbody>
 
-          ${student.subjects.map(
-            (subject,index)=>`
-
-            <tr>
-
-              <td style="
-                padding:10px;
-                border-top:1px solid #eeeeef;
-                color:#6e6e73;
-              ">
-                ${index+1}
-              </td>
-
-              <td style="
-                padding:10px;
-                border-top:1px solid #eeeeef;
-                font-weight:700;
-              ">
-                ${escapeHTML(
-                  subject.subject_name ??
-                  subject.subject ??
-                  "—"
-                )}
-              </td>
-
-              <td style="
-                padding:10px;
-                border-top:1px solid #eeeeef;
-                color:#6e6e73;
-              ">
-                ${escapeHTML(
-                  subject.subject_code ??
-                  subject.code ??
-                  "—"
-                )}
-              </td>
-
-              <td style="
-                padding:10px;
-                border-top:1px solid #eeeeef;
-                font-weight:800;
-              ">
-                ${escapeHTML(
-                  subject.marks ??
-                  subject.mark ??
-                  "—"
-                )}
-              </td>
-
-              <td style="
-                padding:10px;
-                border-top:1px solid #eeeeef;
-                font-weight:800;
-              ">
-                ${escapeHTML(
-                  subject.grade ??
-                  subject.grade_name ??
-                  "—"
-                )}
-              </td>
-
-            </tr>
-
-          `).join("")}
+          ${tableRows}
 
         </tbody>
 
@@ -3085,38 +1667,28 @@ async function generatePDF(){
 
 
 
-      <!-- BOTTOM -->
+      <!-- FOOTER -->
 
       <div style="
         position:absolute;
-        left:48px;
-        right:48px;
-        bottom:42px;
-
-        padding-top:15px;
-
+        left:45px;
+        right:45px;
+        bottom:28px;
+        padding-top:12px;
         border-top:1px solid #e5e5e7;
-
         display:flex;
         justify-content:space-between;
-        align-items:center;
+        color:#6e6e73;
+        font-size:8px;
       ">
 
-        <div style="
-          font-size:9px;
-          color:#6e6e73;
-        ">
-          CTGBoardRanking · Generated by Shadat
-        </div>
+        <span>
+          CTGBoardRanking · SSC 2026
+        </span>
 
-        <div style="
-          color:#d70015;
-          font-size:8px;
-          font-weight:800;
-          letter-spacing:1px;
-        ">
-          UNOFFICIAL NOTICE
-        </div>
+        <span>
+          Institution Ranking based on Total GPA
+        </span>
 
       </div>
 
@@ -3125,23 +1697,13 @@ async function generatePDF(){
   `;
 
 
-  document.body.appendChild(
-    pdf
-  );
+  document.body.appendChild(pdf);
 
-
-  /* wait for browser paint */
 
   await new Promise(
     resolve =>
-      setTimeout(resolve,300)
+      setTimeout(resolve,400)
   );
-
-
-  const filename =
-    "CTGBoardRanking_" +
-    String(student.roll || "Result") +
-    ".pdf";
 
 
   await html2pdf()
@@ -3149,7 +1711,8 @@ async function generatePDF(){
 
       margin:0,
 
-      filename:filename,
+      filename:
+        "CTGBoardRanking_Institution_Top100_2026.pdf",
 
       image:{
         type:"jpeg",
@@ -3158,25 +1721,19 @@ async function generatePDF(){
 
       html2canvas:{
         scale:2,
-
         useCORS:true,
-
         backgroundColor:"#ffffff",
-
         logging:false
       },
 
       jsPDF:{
         unit:"mm",
-
         format:"a4",
-
-        orientation:"portrait"
+        orientation:"landscape"
       },
 
       pagebreak:{
         mode:[
-          "avoid-all",
           "css",
           "legacy"
         ]
@@ -3187,193 +1744,16 @@ async function generatePDF(){
     .save();
 
 
-  document.body.removeChild(
-    pdf
-  );
+  document.body.removeChild(pdf);
 
 }
 
 
 /* =========================================================
-   PDF INFO
+   START
 ========================================================= */
 
-function pdfInfo(label,data){
-
-  return `
-
-    <div style="
-      padding:12px;
-      border:1px solid #e8e8ea;
-      border-radius:12px;
-    ">
-
-      <div style="
-        color:#6e6e73;
-        font-size:7px;
-        font-weight:800;
-        letter-spacing:.8px;
-        margin-bottom:5px;
-      ">
-        ${label}
-      </div>
-
-      <div style="
-        font-size:9px;
-        font-weight:700;
-        white-space:nowrap;
-        overflow:hidden;
-        text-overflow:ellipsis;
-      ">
-        ${escapeHTML(data ?? "—")}
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-
-/* =========================================================
-   CURRENT STUDENT DATA
-========================================================= */
-
-function getCurrentStudentData(){
-
-  const subjects = [];
-
-  document
-    .querySelectorAll(
-      "#subjectsBody tr"
-    )
-    .forEach(
-      function(row){
-
-        const cells =
-          row.querySelectorAll(
-            "td"
-          );
-
-
-        if(cells.length < 5)
-          return;
-
-
-        subjects.push({
-
-          subject_name:
-            cells[1].innerText.trim(),
-
-          subject_code:
-            cells[2].innerText.trim(),
-
-          marks:
-            cells[3].innerText.trim(),
-
-          grade:
-            cells[4].innerText.trim()
-
-        });
-
-      }
-    );
-
-
-  return {
-
-    student_name:
-      document.getElementById(
-        "studentName"
-      ).textContent,
-
-    roll:
-      document.getElementById(
-        "studentRoll"
-      ).textContent,
-
-    registration:
-      document.getElementById(
-        "studentRegistration"
-      ).textContent,
-
-    result_status:
-      document.getElementById(
-        "resultStatus"
-      ).textContent,
-
-    total_score:
-      document.getElementById(
-        "totalScore"
-      ).textContent,
-
-    gpa:
-      document.getElementById(
-        "gpa"
-      ).textContent,
-
-    student_rank:
-      document.getElementById(
-        "studentRank"
-      ).textContent,
-
-    year:
-      document.getElementById(
-        "showYear"
-      ).textContent,
-
-    group_name:
-      document.getElementById(
-        "showGroup"
-      ).textContent,
-
-    institution:
-      document.getElementById(
-        "showInstitution"
-      ).textContent,
-
-    district:
-      document.getElementById(
-        "showDistrict"
-      ).textContent,
-
-    subjects:subjects
-
-  };
-
-}
-
-
-/* =========================================================
-   URL ?roll=
-========================================================= */
-
-const params =
-  new URLSearchParams(
-    window.location.search
-  );
-
-const urlRoll =
-  params.get("roll");
-
-
-if(urlRoll){
-
-  rollInput.value =
-    urlRoll;
-
-  clearBtn.hidden = false;
-
-  setTimeout(
-    function(){
-
-      searchResult();
-
-    },
-    300
-  );
-
-}
+loadInstitutionRanking();
 
 </script>
 
