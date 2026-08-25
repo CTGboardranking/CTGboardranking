@@ -1780,80 +1780,27 @@ async function searchResult() {
            MAIN RESULT
         ========================================= */
 
-        const {
-            data,
-            error
-        } = await supabaseClient
+        const response = await fetch(
+    `/api/result?roll=${encodeURIComponent(roll)}`
+);
 
-            .from(
-                "student_results"
-            )
+const result = await response.json();
 
-            .select(
-                `
-                id,
-                year,
-                exam,
-                roll,
-                registration,
-                student_name,
-                institution,
-                institution_code,
-                district,
-                group_name,
-                total_marks,
-                total_score,
-                gpa,
-                result_status
-                `
-            )
+if (!response.ok || !result.success) {
+    showError(
+        result.message ||
+        "No result found for roll number " + roll
+    );
+    return;
+}
 
-            .eq(
-                "roll",
-                roll
-            )
+const student = result.student;
 
-            .limit(1);
+displayResult(
+    student,
+    student.subjects || []
+);
 
-
-        console.log(
-            "RESULT:",
-            data
-        );
-
-
-        console.log(
-            "ERROR:",
-            error
-        );
-
-
-        if (error) {
-
-            throw new Error(
-                error.message
-            );
-
-        }
-
-
-        if (
-            !data ||
-            data.length === 0
-        ) {
-
-            showError(
-                "No result found for roll number " +
-                roll
-            );
-
-            return;
-
-        }
-
-
-        const student =
-            data[0];
 
 
         /* =========================================
