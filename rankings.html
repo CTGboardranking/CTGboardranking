@@ -586,129 +586,123 @@ button{
 
 
 /* =========================================================
-   PDF RENDER AREA
-   FIXED A4
+   PREMIUM APPLE INSPIRED PDF AREA
 ========================================================= */
 
 #pdfRenderArea{
   position:absolute;
-  left:0;
+  left:-100000px;
   top:0;
   width:794px;
-  height:1123px;
-  background:#ffffff;
-  z-index:-9999;
+  background:#fff;
   display:none;
   pointer-events:none;
-  overflow:hidden;
+  z-index:-1;
 }
-
-
-/* =========================================================
-   PDF PAGE
-========================================================= */
 
 .pdf-page{
   width:794px;
   height:1123px;
-  min-width:794px;
-  min-height:1123px;
-  max-width:794px;
-  max-height:1123px;
-
   background:#ffffff;
-  color:#111113;
-
-  padding:38px 38px 35px;
-
+  color:#1d1d1f;
+  padding:42px 44px 45px;
   position:relative;
   overflow:hidden;
 
   font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    "Helvetica Neue",
     Arial,
-    Helvetica,
     sans-serif;
 
+  page-break-after:always;
+  break-after:page;
+}
+
+.pdf-page:last-child{
   page-break-after:auto;
   break-after:auto;
 }
 
 
-/* =========================================================
-   PDF HEADER
-========================================================= */
+/* PDF HEADER */
 
 .pdf-header{
   text-align:center;
-  border-bottom:1px solid #e5e5e7;
-  padding-bottom:13px;
+  padding-bottom:16px;
+  border-bottom:1px solid #e6e6e8;
 }
 
 .pdf-brand{
-  font-size:26px;
+  font-size:27px;
   line-height:1;
-  font-weight:900;
-  letter-spacing:-1.2px;
-  color:#111113;
+  font-weight:800;
+  letter-spacing:-1.4px;
+  color:#1d1d1f;
 }
 
 .pdf-generated{
-  margin-top:5px;
-  color:#6e6e73;
+  margin-top:6px;
+  color:#86868b;
   font-size:8px;
+  letter-spacing:.01em;
 }
 
 
-/* =========================================================
-   PDF TITLE
-========================================================= */
+/* PDF TITLE */
 
 .pdf-title{
-  margin-top:14px;
   text-align:center;
+  padding-top:17px;
 }
 
 .pdf-title-main{
-  font-size:18px;
-  font-weight:900;
-  letter-spacing:-.4px;
+  font-size:20px;
+  line-height:1.1;
+  font-weight:800;
+  letter-spacing:-.6px;
+  color:#1d1d1f;
 }
 
 .pdf-title-sub{
-  margin-top:4px;
+  margin-top:5px;
   font-size:8px;
-  color:#6e6e73;
+  color:#86868b;
 }
 
 .pdf-badge{
   display:inline-block;
-  margin-top:7px;
-  padding:5px 9px;
-  border-radius:7px;
-  background:#fff1f0;
-  color:#d70015;
+  margin-top:9px;
+  padding:5px 10px;
+  border-radius:999px;
+  background:#f5f5f7;
+  color:#6e6e73;
   font-size:6.5px;
-  font-weight:900;
-  letter-spacing:1px;
+  font-weight:800;
+  letter-spacing:.5px;
 }
 
 
-/* =========================================================
-   PDF TABLE
-========================================================= */
+/* PDF TABLE */
 
 .pdf-table{
-  width:718px;
-  max-width:718px;
-  table-layout:fixed;
+  width:100%;
   border-collapse:collapse;
-  border-spacing:0;
+  table-layout:fixed;
+  margin-top:18px;
 
-  margin-top:13px;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
 
-  font-size:6.5px;
-
-  color:#111113;
+  font-size:7.5px;
 }
 
 .pdf-table thead{
@@ -725,86 +719,107 @@ button{
 }
 
 .pdf-table th{
-  height:25px;
-  padding:5px 4px;
-
+  height:28px;
+  padding:6px 5px;
   text-align:left;
+  background:#f5f5f7;
+  color:#6e6e73;
 
-  background:#f2f2f5;
-  color:#55555a;
+  font-size:6.5px;
+  font-weight:800;
+  letter-spacing:.25px;
 
-  font-size:6px;
-  font-weight:900;
-
-  white-space:nowrap;
-  overflow:hidden;
+  border-bottom:1px solid #dedee0;
 }
 
 .pdf-table td{
-  height:17px;
+  height:27px;
+  padding:6px 5px;
 
-  padding:3px 4px;
-
-  border-top:1px solid #e8e8ea;
+  border-bottom:1px solid #eeeeef;
 
   vertical-align:middle;
 
+  font-size:7.5px;
   line-height:1.1;
 
   overflow:hidden;
-
   white-space:nowrap;
   text-overflow:ellipsis;
+
+  color:#1d1d1f;
 }
 
-.pdf-table .pdf-inst{
-  font-weight:800;
-
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+.pdf-table tbody tr:nth-child(even){
+  background:#fafafa;
 }
 
 .pdf-table .pdf-rank{
-  font-weight:900;
+  font-weight:800;
+  color:#1d1d1f;
+}
+
+.pdf-table .pdf-inst{
+  font-weight:700;
+  color:#1d1d1f;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+.pdf-table .pdf-muted{
+  color:#6e6e73;
 }
 
 .pdf-table .pdf-gpa5{
   color:#168a4b;
-  font-weight:900;
+  font-weight:800;
 }
 
 
-/* =========================================================
-   PDF FOOTER
-========================================================= */
+/* PDF FOOTER */
 
 .pdf-page-footer{
   position:absolute;
+  left:44px;
+  right:44px;
+  bottom:24px;
 
-  left:38px;
-  right:38px;
+  padding-top:10px;
 
-  bottom:22px;
+  border-top:1px solid #e6e6e8;
 
   text-align:center;
 }
 
 .pdf-page-number{
-  color:#6e6e73;
+  color:#86868b;
   font-size:6.5px;
+  font-weight:500;
 }
 
 .pdf-unofficial{
-  margin-top:6px;
+  margin-top:5px;
+  color:#ff3b30;
+  font-size:6.5px;
+  font-weight:800;
+  letter-spacing:.8px;
+}
 
-  font-size:7px;
 
-  font-weight:900;
+/* =========================================================
+   PDF PRINT SAFETY
+========================================================= */
 
-  color:#d70015;
+@media print{
 
-  letter-spacing:1.1px;
+  #pdfRenderArea{
+    display:block!important;
+    position:static!important;
+    left:0!important;
+    top:0!important;
+  }
+
 }
 
 </style>
@@ -1709,7 +1724,6 @@ function renderPagination(){
 
 /* =========================================================
    PDF BUTTON
-   CURRENT PAGINATION PAGE ONLY
 ========================================================= */
 
 pdfBtn.addEventListener(
@@ -1720,17 +1734,6 @@ pdfBtn.addEventListener(
 
       alert(
         "Institution data is not loaded yet."
-      );
-
-      return;
-
-    }
-
-
-    if(typeof html2pdf === "undefined"){
-
-      alert(
-        "PDF library is not loaded. Please refresh the page."
       );
 
       return;
@@ -1799,11 +1802,7 @@ function getGeneratedDateTime(){
    PDF ROW
 ========================================================= */
 
-function createPDFRow(item,index){
-
-  const rank =
-    index + 1;
-
+function createPDFRow(item,rank){
 
   return `
 
@@ -1819,19 +1818,19 @@ function createPDFRow(item,index){
         )}
       </td>
 
-      <td>
+      <td class="pdf-muted">
         ${escapeHTML(
           item.eiin ?? "—"
         )}
       </td>
 
-      <td>
+      <td class="pdf-muted">
         ${escapeHTML(
           item.district ?? "—"
         )}
       </td>
 
-      <td>
+      <td class="pdf-muted">
         ${escapeHTML(
           item.thana ?? "—"
         )}
@@ -1869,8 +1868,8 @@ function createPDFRow(item,index){
 
 
 /* =========================================================
-   PDF GENERATOR
-   CURRENT PAGE ONLY
+   CURRENT PAGE PDF
+   25 INSTITUTIONS PER PDF PAGE
 ========================================================= */
 
 async function generateCurrentPagePDF(){
@@ -1881,45 +1880,53 @@ async function generateCurrentPagePDF(){
     );
 
 
+  renderArea.innerHTML = "";
+
+
   /*
-    CURRENT PAGE DATA ONLY
+    IMPORTANT:
+    Website pagination = 100 institutions.
+
+    PDF = only the currently selected
+    website page.
+
+    Example:
+    Website page 1 → ranks 1–100
+    Website page 2 → ranks 101–200
+
+    PDF of current page:
+    25 institutions per PDF page.
+
+    Therefore:
+    100 institutions = 4 PDF pages.
   */
 
-  const start =
+  const websiteStart =
     (currentPage - 1) *
     PAGE_SIZE;
 
 
-  const end =
+  const websiteEnd =
     Math.min(
-      start + PAGE_SIZE,
+      websiteStart + PAGE_SIZE,
       allInstitutions.length
     );
 
 
-  const pageData =
+  const currentPageData =
     allInstitutions.slice(
-      start,
-      end
+      websiteStart,
+      websiteEnd
     );
 
 
-  if(!pageData.length){
-
-    throw new Error(
-      "No institution data available."
-    );
-
-  }
+  const PDF_PAGE_SIZE = 25;
 
 
-  const totalPages =
-    Math.max(
-      1,
-      Math.ceil(
-        allInstitutions.length /
-        PAGE_SIZE
-      )
+  const totalPDFPages =
+    Math.ceil(
+      currentPageData.length /
+      PDF_PAGE_SIZE
     );
 
 
@@ -1928,156 +1935,191 @@ async function generateCurrentPagePDF(){
 
 
   /*
-    Clear old render.
+    Build 25-row PDF pages.
   */
 
-  renderArea.innerHTML = "";
+  for(
+    let page = 0;
+    page < totalPDFPages;
+    page++
+  ){
+
+    const start =
+      page * PDF_PAGE_SIZE;
+
+
+    const end =
+      Math.min(
+        start + PDF_PAGE_SIZE,
+        currentPageData.length
+      );
+
+
+    const pageData =
+      currentPageData.slice(
+        start,
+        end
+      );
+
+
+    let rows = "";
+
+
+    pageData.forEach(
+      function(item,index){
+
+        /*
+          Keep original global ranking.
+        */
+
+        const globalRank =
+          websiteStart +
+          start +
+          index +
+          1;
+
+
+        rows +=
+          createPDFRow(
+            item,
+            globalRank
+          );
+
+      }
+    );
+
+
+    const pageElement =
+      document.createElement("div");
+
+
+    pageElement.className =
+      "pdf-page";
+
+
+    pageElement.innerHTML = `
+
+      <div class="pdf-header">
+
+        <div class="pdf-brand">
+          CTGBoardRanking
+        </div>
+
+        <div class="pdf-generated">
+          Generated by Shadat Fatih
+        </div>
+
+        <div class="pdf-generated">
+          ${escapeHTML(generated)}
+        </div>
+
+      </div>
+
+
+      <div class="pdf-title">
+
+        <div class="pdf-title-main">
+          Institution Ranking
+        </div>
+
+        <div class="pdf-title-sub">
+          SSC 2026 · Chattogram Education Board
+        </div>
+
+        <div class="pdf-badge">
+          PAGE ${page + 1} OF ${totalPDFPages}
+          · RANKS ${websiteStart + start + 1}–${websiteStart + end}
+        </div>
+
+      </div>
+
+
+      <table class="pdf-table">
+
+        <colgroup>
+
+          <col style="width:6%">
+
+          <col style="width:31%">
+
+          <col style="width:9%">
+
+          <col style="width:12%">
+
+          <col style="width:12%">
+
+          <col style="width:8%">
+
+          <col style="width:8%">
+
+          <col style="width:8%">
+
+          <col style="width:6%">
+
+        </colgroup>
+
+
+        <thead>
+
+          <tr>
+
+            <th>RANK</th>
+            <th>INSTITUTION</th>
+            <th>EIIN</th>
+            <th>DISTRICT</th>
+            <th>THANA</th>
+            <th>APPEARED</th>
+            <th>PASSED</th>
+            <th>PASS %</th>
+            <th>GPA-5</th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          ${rows}
+
+        </tbody>
+
+      </table>
+
+
+      <div class="pdf-page-footer">
+
+        <div class="pdf-page-number">
+
+          CTGBoardRanking · SSC 2026
+          · Website Page ${currentPage}
+          · Institutions
+          ${websiteStart + start + 1}–${websiteStart + end}
+
+        </div>
+
+        <div class="pdf-unofficial">
+          UNOFFICIAL NOTICE
+        </div>
+
+      </div>
+
+    `;
+
+
+    renderArea.appendChild(
+      pageElement
+    );
+
+  }
 
 
   /*
-    Create ONE fixed A4 page.
-  */
+    Make the render area temporarily visible
+    to html2canvas.
 
-  const pageElement =
-    document.createElement("div");
-
-  pageElement.className =
-    "pdf-page";
-
-
-  /*
-    Build rows.
-    Same exact order as website.
-  */
-
-  let rows = "";
-
-
-  pageData.forEach(
-    function(item,index){
-
-      rows +=
-        createPDFRow(
-          item,
-          start + index
-        );
-
-    }
-  );
-
-
-  pageElement.innerHTML = `
-
-    <div class="pdf-header">
-
-      <div class="pdf-brand">
-        CTGBoardRanking
-      </div>
-
-      <div class="pdf-generated">
-        Generated by Shadat Fatih
-      </div>
-
-      <div class="pdf-generated">
-        ${escapeHTML(generated)}
-      </div>
-
-    </div>
-
-
-    <div class="pdf-title">
-
-      <div class="pdf-title-main">
-        Institution Ranking
-      </div>
-
-      <div class="pdf-title-sub">
-        SSC 2026 · Chattogram Education Board
-      </div>
-
-      <div class="pdf-badge">
-        PAGE ${currentPage} OF ${totalPages}
-      </div>
-
-    </div>
-
-
-    <table
-      class="pdf-table"
-      cellspacing="0"
-      cellpadding="0"
-    >
-
-      <colgroup>
-
-        <col style="width:6%">
-        <col style="width:31%">
-        <col style="width:9%">
-        <col style="width:12%">
-        <col style="width:12%">
-        <col style="width:8%">
-        <col style="width:8%">
-        <col style="width:8%">
-        <col style="width:6%">
-
-      </colgroup>
-
-
-      <thead>
-
-        <tr>
-
-          <th>RANK</th>
-          <th>INSTITUTION</th>
-          <th>EIIN</th>
-          <th>DISTRICT</th>
-          <th>THANA</th>
-          <th>APPEARED</th>
-          <th>PASSED</th>
-          <th>PASS %</th>
-          <th>GPA-5</th>
-
-        </tr>
-
-      </thead>
-
-
-      <tbody>
-
-        ${rows}
-
-      </tbody>
-
-    </table>
-
-
-    <div class="pdf-page-footer">
-
-      <div class="pdf-page-number">
-
-        CTGBoardRanking · SSC 2026
-        · Institutions ${start + 1}–${end}
-
-      </div>
-
-      <div class="pdf-unofficial">
-        Unofficial Notice
-      </div>
-
-    </div>
-
-  `;
-
-
-  renderArea.appendChild(
-    pageElement
-  );
-
-
-  /*
-    =======================================================
-    MAKE RENDER AREA REAL AND VISIBLE
-    =======================================================
+    It is placed outside the viewport so
+    the user does not see the render.
   */
 
   renderArea.style.display =
@@ -2087,116 +2129,44 @@ async function generateCurrentPagePDF(){
     "absolute";
 
   renderArea.style.left =
-    "0px";
+    "-100000px";
 
   renderArea.style.top =
-    "0px";
-
-  renderArea.style.width =
-    "794px";
-
-  renderArea.style.height =
-    "1123px";
+    "0";
 
   renderArea.style.zIndex =
     "999999";
 
-  renderArea.style.background =
-    "#ffffff";
+  renderArea.style.opacity =
+    "1";
 
   renderArea.style.visibility =
     "visible";
 
-  renderArea.style.opacity =
-    "1";
-
-  renderArea.style.overflow =
-    "hidden";
-
 
   /*
-    Force exact dimensions.
-  */
-
-  pageElement.style.width =
-    "794px";
-
-  pageElement.style.height =
-    "1123px";
-
-  pageElement.style.minWidth =
-    "794px";
-
-  pageElement.style.minHeight =
-    "1123px";
-
-  pageElement.style.maxWidth =
-    "794px";
-
-  pageElement.style.maxHeight =
-    "1123px";
-
-  pageElement.style.overflow =
-    "hidden";
-
-
-  /*
-    Wait until browser paints the page.
+    Wait for browser paint.
   */
 
   await new Promise(
-    function(resolve){
-
+    resolve =>
       requestAnimationFrame(
-        function(){
-
+        () =>
           requestAnimationFrame(
-            function(){
-
-              setTimeout(
-                resolve,
-                200
-              );
-
-            }
-          );
-
-        }
-      );
-
-    }
+            resolve
+          )
+      )
   );
 
 
   /*
-    Verify actual rendered size.
-  */
+    Generate PDF.
 
-  const rect =
-    pageElement.getBoundingClientRect();
+    High-resolution rendering:
+    scale = 3
 
-
-  if(
-    rect.width < 700 ||
-    rect.height < 1000
-  ){
-
-    throw new Error(
-      "PDF render area is invalid."
-    );
-
-  }
-
-
-  /*
-    =======================================================
-    GENERATE PDF
-    =======================================================
-    
-    IMPORTANT:
-    No CSS pagebreak processing.
-    
-    Only ONE fixed page is rendered.
+    This produces much sharper
+    text and table lines than scale 2.
   */
 
   await html2pdf()
@@ -2205,7 +2175,7 @@ async function generateCurrentPagePDF(){
       margin:0,
 
       filename:
-        `CTGBoardRanking_Institution_Ranking_2026_Page_${currentPage}.pdf`,
+        `CTGBoardRanking_Institution_Ranking_Page_${currentPage}_2026.pdf`,
 
       image:{
         type:"jpeg",
@@ -2230,15 +2200,11 @@ async function generateCurrentPagePDF(){
 
         scrollY:0,
 
-        width:794,
-
-        height:1123,
-
         windowWidth:794,
 
         windowHeight:1123,
 
-        imageTimeout:0
+        imageTimeout:15000
 
       },
 
@@ -2250,18 +2216,23 @@ async function generateCurrentPagePDF(){
 
         orientation:"portrait",
 
-        compress:false
+        compress:false,
+
+        precision:16
 
       },
 
       pagebreak:{
-        mode:[]
+
+        mode:[
+          "css",
+          "legacy"
+        ]
+
       }
 
     })
-
-    .from(pageElement)
-
+    .from(renderArea)
     .save();
 
 
@@ -2274,11 +2245,8 @@ async function generateCurrentPagePDF(){
   renderArea.style.display =
     "none";
 
-  renderArea.style.visibility =
-    "hidden";
-
-  renderArea.style.zIndex =
-    "-9999";
+  renderArea.style.left =
+    "-100000px";
 
 }
 
