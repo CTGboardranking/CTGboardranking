@@ -23,60 +23,236 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet">
 
-<link rel="stylesheet"
-      href="style.css">
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+<!-- PDF Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 
 <style>
 
 /* =====================================================
-   APPLE RESULT PAGE
+   APPLE INSPIRED VARIABLES
 ===================================================== */
 
 :root {
 
-    --result-blue:#0071e3;
-    --result-blue-dark:#0066cc;
+    --blue:#0071e3;
+    --blue-dark:#0066cc;
 
-    --result-bg:#f5f5f7;
-    --result-card:#ffffff;
+    --green:#34c759;
+    --red:#ff3b30;
 
-    --result-text:#1d1d1f;
-    --result-muted:#6e6e73;
+    --bg:#f5f5f7;
+    --card:#ffffff;
 
-    --result-border:rgba(0,0,0,.08);
-    --result-soft:rgba(0,0,0,.045);
+    --text:#1d1d1f;
+    --muted:#6e6e73;
 
-    --result-shadow:
+    --border:rgba(0,0,0,.08);
+    --soft:rgba(0,0,0,.045);
+
+    --shadow:
         0 20px 60px rgba(0,0,0,.08);
 
 }
 
 
-/* =====================================================
-   DARK MODE
-===================================================== */
-
 body.dark {
 
-    --result-bg:#000000;
-    --result-card:#1c1c1e;
+    --bg:#000000;
+    --card:#1c1c1e;
 
-    --result-text:#f5f5f7;
-    --result-muted:#a1a1a6;
+    --text:#f5f5f7;
+    --muted:#a1a1a6;
 
-    --result-border:
-        rgba(255,255,255,.10);
+    --border:rgba(255,255,255,.10);
+    --soft:rgba(255,255,255,.06);
 
-    --result-soft:
-        rgba(255,255,255,.06);
+    --shadow:
+        0 25px 70px rgba(0,0,0,.5);
 
-    --result-shadow:
-        0 25px 70px rgba(0,0,0,.45);
+}
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    box-sizing:border-box;
+}
+
+
+html {
+    scroll-behavior:smooth;
+}
+
+
+body {
+
+    margin:0;
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    background:var(--bg);
+
+    color:var(--text);
+
+}
+
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+.navbar {
+
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+
+    height:64px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 22px;
+
+    background:
+        rgba(255,255,255,.72);
+
+    border-bottom:
+        1px solid var(--border);
+
+    backdrop-filter:
+        blur(22px);
+
+    -webkit-backdrop-filter:
+        blur(22px);
+
+}
+
+
+body.dark .navbar {
+
+    background:
+        rgba(0,0,0,.72);
+
+}
+
+
+.logo {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    color:var(--text);
+
+    text-decoration:none;
+
+    font-size:14px;
+
+    font-weight:800;
+
+    letter-spacing:-.3px;
+
+}
+
+
+.logo-mark {
+
+    width:30px;
+
+    height:30px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:9px;
+
+    background:var(--blue);
+
+    color:#fff;
+
+    font-size:14px;
+
+    font-weight:800;
+
+}
+
+
+.nav-actions {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+}
+
+
+.home-button {
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    min-height:38px;
+
+    padding:0 14px;
+
+    border-radius:11px;
+
+    border:1px solid var(--border);
+
+    background:var(--soft);
+
+    color:var(--text);
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+
+.theme-button {
+
+    width:38px;
+
+    height:38px;
+
+    border:1px solid var(--border);
+
+    border-radius:11px;
+
+    background:var(--soft);
+
+    color:var(--text);
+
+    cursor:pointer;
+
+    font-size:16px;
 
 }
 
@@ -87,17 +263,19 @@ body.dark {
 
 .result-page {
 
-    min-height:100vh;
-
-    background:
-        radial-gradient(
-            circle at top,
-            rgba(0,113,227,.08),
-            transparent 38%
-        ),
-        var(--result-bg);
+    min-height:calc(100vh - 64px);
 
     padding-bottom:80px;
+
+    background:
+
+        radial-gradient(
+            circle at top,
+            rgba(0,113,227,.09),
+            transparent 38%
+        ),
+
+        var(--bg);
 
 }
 
@@ -109,25 +287,30 @@ body.dark {
 .result-hero {
 
     max-width:1000px;
+
     margin:auto;
 
-    padding:75px 20px 35px;
+    padding:
+        70px
+        20px
+        35px;
 
     text-align:center;
 
 }
 
 
-.result-hero .eyebrow {
+.eyebrow {
 
     display:inline-block;
 
+    color:var(--blue);
+
     font-size:10px;
+
     font-weight:800;
 
     letter-spacing:.12em;
-
-    color:var(--result-blue);
 
 }
 
@@ -136,24 +319,21 @@ body.dark {
 
     margin:14px 0 16px;
 
-    font-size:clamp(
-        42px,
-        7vw,
-        72px
-    );
+    color:var(--text);
+
+    font-size:
+        clamp(42px,7vw,72px);
 
     line-height:.98;
 
     letter-spacing:-4px;
-
-    color:var(--result-text);
 
 }
 
 
 .result-hero h1 span {
 
-    color:var(--result-blue);
+    color:var(--blue);
 
 }
 
@@ -164,7 +344,7 @@ body.dark {
 
     margin:auto;
 
-    color:var(--result-muted);
+    color:var(--muted);
 
     font-size:15px;
 
@@ -179,10 +359,11 @@ body.dark {
 
 .result-container {
 
-    width:min(
-        920px,
-        calc(100% - 30px)
-    );
+    width:
+        min(
+            920px,
+            calc(100% - 30px)
+        );
 
     margin:auto;
 
@@ -197,19 +378,21 @@ body.dark {
 
     padding:26px;
 
-    border:1px solid var(--result-border);
+    border:
+        1px solid var(--border);
 
     border-radius:28px;
 
     background:
         rgba(255,255,255,.78);
 
-    box-shadow:
-        var(--result-shadow);
+    box-shadow:var(--shadow);
 
-    backdrop-filter:blur(20px);
+    backdrop-filter:
+        blur(20px);
 
-    -webkit-backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:
+        blur(20px);
 
 }
 
@@ -217,7 +400,7 @@ body.dark {
 body.dark .search-card {
 
     background:
-        rgba(28,28,30,.85);
+        rgba(28,28,30,.88);
 
 }
 
@@ -226,9 +409,11 @@ body.dark .search-card {
 
     margin:0 0 7px;
 
-    color:var(--result-text);
+    color:var(--text);
 
     font-size:22px;
+
+    letter-spacing:-.4px;
 
 }
 
@@ -237,7 +422,7 @@ body.dark .search-card {
 
     margin:0 0 20px;
 
-    color:var(--result-muted);
+    color:var(--muted);
 
     font-size:13px;
 
@@ -247,6 +432,7 @@ body.dark .search-card {
 .search-form {
 
     display:flex;
+
     gap:10px;
 
 }
@@ -258,30 +444,30 @@ body.dark .search-card {
 
     height:50px;
 
-    box-sizing:border-box;
+    padding:
+        0 16px;
 
-    padding:0 16px;
-
-    border:1px solid var(--result-border);
+    border:
+        1px solid var(--border);
 
     border-radius:15px;
 
-    background:var(--result-soft);
+    outline:none;
 
-    color:var(--result-text);
+    background:var(--soft);
+
+    color:var(--text);
 
     font-family:inherit;
 
     font-size:14px;
-
-    outline:none;
 
 }
 
 
 .search-input:focus {
 
-    border-color:var(--result-blue);
+    border-color:var(--blue);
 
     box-shadow:
         0 0 0 4px
@@ -294,15 +480,16 @@ body.dark .search-card {
 
     height:50px;
 
-    padding:0 22px;
+    padding:
+        0 22px;
 
     border:0;
 
     border-radius:15px;
 
-    background:var(--result-blue);
+    background:var(--blue);
 
-    color:white;
+    color:#fff;
 
     font-family:inherit;
 
@@ -312,12 +499,16 @@ body.dark .search-card {
 
     cursor:pointer;
 
+    transition:.2s ease;
+
 }
 
 
 .search-button:hover {
 
-    background:var(--result-blue-dark);
+    background:var(--blue-dark);
+
+    transform:translateY(-1px);
 
 }
 
@@ -327,6 +518,8 @@ body.dark .search-card {
     opacity:.6;
 
     cursor:wait;
+
+    transform:none;
 
 }
 
@@ -341,13 +534,14 @@ body.dark .search-card {
 
     margin-top:12px;
 
-    padding:12px 14px;
+    padding:13px 15px;
 
     border-radius:13px;
 
-    background:rgba(255,59,48,.08);
+    background:
+        rgba(255,59,48,.08);
 
-    color:#ff3b30;
+    color:var(--red);
 
     font-size:12px;
 
@@ -373,16 +567,51 @@ body.dark .search-card {
 
     overflow:hidden;
 
-    border:1px solid var(--result-border);
+    border:
+        1px solid var(--border);
 
     border-radius:30px;
 
-    background:var(--result-card);
+    background:var(--card);
 
-    box-shadow:var(--result-shadow);
+    box-shadow:var(--shadow);
+
+    animation:
+        resultReveal
+        .5s
+        ease both;
 
 }
 
+
+@keyframes resultReveal {
+
+    from {
+
+        opacity:0;
+
+        transform:
+            translateY(18px)
+            scale(.99);
+
+    }
+
+    to {
+
+        opacity:1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+
+/* =====================================================
+   RESULT HEADER
+===================================================== */
 
 .result-header {
 
@@ -391,11 +620,12 @@ body.dark .search-card {
     background:
         linear-gradient(
             135deg,
-            rgba(0,113,227,.10),
+            rgba(0,113,227,.11),
             transparent 65%
         );
 
-    border-bottom:1px solid var(--result-border);
+    border-bottom:
+        1px solid var(--border);
 
 }
 
@@ -404,44 +634,32 @@ body.dark .search-card {
 
     display:flex;
 
-    align-items:flex-start;
-
     justify-content:space-between;
+
+    align-items:flex-start;
 
     gap:20px;
 
 }
 
 
-.result-header .eyebrow {
-
-    color:var(--result-blue);
-
-    font-size:10px;
-
-    font-weight:800;
-
-    letter-spacing:.1em;
-
-}
-
-
 .result-header h2 {
 
-    margin:7px 0 5px;
+    margin:
+        7px 0 5px;
 
-    color:var(--result-text);
+    color:var(--text);
 
     font-size:28px;
 
-    letter-spacing:-.7px;
+    letter-spacing:-.8px;
 
 }
 
 
 .result-roll {
 
-    color:var(--result-muted);
+    color:var(--muted);
 
     font-size:12px;
 
@@ -452,11 +670,13 @@ body.dark .search-card {
 
     flex-shrink:0;
 
-    padding:8px 13px;
+    padding:
+        8px 13px;
 
     border-radius:50px;
 
-    background:#e8f7ef;
+    background:
+        rgba(52,199,89,.12);
 
     color:#16834b;
 
@@ -464,12 +684,12 @@ body.dark .search-card {
 
     font-weight:800;
 
+    letter-spacing:.05em;
+
 }
 
 
 body.dark .result-status {
-
-    background:rgba(52,199,89,.15);
 
     color:#30d158;
 
@@ -477,7 +697,7 @@ body.dark .result-status {
 
 
 /* =====================================================
-   INFORMATION
+   STUDENT INFO
 ===================================================== */
 
 .student-info {
@@ -496,11 +716,13 @@ body.dark .result-status {
 
 .info-box {
 
+    min-width:0;
+
     padding:16px;
 
     border-radius:17px;
 
-    background:var(--result-soft);
+    background:var(--soft);
 
 }
 
@@ -511,7 +733,7 @@ body.dark .result-status {
 
     margin-bottom:6px;
 
-    color:var(--result-muted);
+    color:var(--muted);
 
     font-size:9px;
 
@@ -526,7 +748,7 @@ body.dark .result-status {
 
     display:block;
 
-    color:var(--result-text);
+    color:var(--text);
 
     font-size:12px;
 
@@ -538,7 +760,7 @@ body.dark .result-status {
 
 
 /* =====================================================
-   SCORE
+   SUMMARY
 ===================================================== */
 
 .result-summary {
@@ -550,7 +772,8 @@ body.dark .result-status {
 
     gap:12px;
 
-    padding:0 30px 25px;
+    padding:
+        0 30px 25px;
 
 }
 
@@ -565,18 +788,46 @@ body.dark .result-status {
 
     border-radius:20px;
 
-    background:var(--result-soft);
+    background:var(--soft);
 
     text-align:center;
 
 }
 
 
+.summary-box.total {
+
+    background:
+        rgba(0,113,227,.09);
+
+}
+
+
+.summary-box.gpa {
+
+    background:
+        rgba(52,199,89,.09);
+
+}
+
+
+.summary-box.rank {
+
+    background:
+        rgba(175,82,222,.09);
+
+}
+
+
 .summary-box strong {
+
+    position:relative;
+
+    z-index:2;
 
     display:block;
 
-    color:var(--result-text);
+    color:var(--text);
 
     font-size:28px;
 
@@ -587,11 +838,15 @@ body.dark .result-status {
 
 .summary-box span {
 
+    position:relative;
+
+    z-index:2;
+
     display:block;
 
     margin-top:4px;
 
-    color:var(--result-muted);
+    color:var(--muted);
 
     font-size:9px;
 
@@ -602,29 +857,14 @@ body.dark .result-status {
 }
 
 
-.summary-box.total {
-
-    background:
-        rgba(0,113,227,.08);
-
-}
-
-
-.summary-box.gpa {
-
-    background:
-        rgba(52,199,89,.08);
-
-}
-
-
 /* =====================================================
-   SUBJECT
+   SUBJECT SECTION
 ===================================================== */
 
 .subject-section {
 
-    padding:0 30px 30px;
+    padding:
+        0 30px 30px;
 
 }
 
@@ -648,7 +888,7 @@ body.dark .result-status {
 
     margin:0;
 
-    color:var(--result-text);
+    color:var(--text);
 
     font-size:17px;
 
@@ -657,7 +897,7 @@ body.dark .result-status {
 
 .subject-title span {
 
-    color:var(--result-muted);
+    color:var(--muted);
 
     font-size:10px;
 
@@ -668,7 +908,8 @@ body.dark .result-status {
 
     overflow:hidden;
 
-    border:1px solid var(--result-border);
+    border:
+        1px solid var(--border);
 
     border-radius:19px;
 
@@ -689,16 +930,17 @@ body.dark .result-status {
 
     gap:10px;
 
-    padding:14px 17px;
+    padding:
+        14px 17px;
 
 }
 
 
 .subject-header {
 
-    background:var(--result-soft);
+    background:var(--soft);
 
-    color:var(--result-muted);
+    color:var(--muted);
 
     font-size:9px;
 
@@ -713,9 +955,10 @@ body.dark .result-status {
 
     min-height:47px;
 
-    border-top:1px solid var(--result-border);
+    border-top:
+        1px solid var(--border);
 
-    color:var(--result-text);
+    color:var(--text);
 
     font-size:12px;
 
@@ -745,11 +988,12 @@ body.dark .result-status {
 
     display:flex;
 
-    gap:9px;
-
     flex-wrap:wrap;
 
-    padding:0 30px 25px;
+    gap:9px;
+
+    padding:
+        0 30px 25px;
 
 }
 
@@ -757,19 +1001,18 @@ body.dark .result-status {
 .result-actions button,
 .result-actions a {
 
+    min-height:42px;
+
     display:inline-flex;
 
     align-items:center;
 
     justify-content:center;
 
-    min-height:42px;
-
-    padding:0 16px;
+    padding:
+        0 16px;
 
     border-radius:13px;
-
-    box-sizing:border-box;
 
     font-family:inherit;
 
@@ -777,9 +1020,9 @@ body.dark .result-status {
 
     font-weight:700;
 
-    text-decoration:none;
-
     cursor:pointer;
+
+    text-decoration:none;
 
 }
 
@@ -788,27 +1031,28 @@ body.dark .result-status {
 
     border:0;
 
-    background:var(--result-blue);
+    background:var(--blue);
 
-    color:white;
+    color:#fff;
 
 }
 
 
 .download-button:hover {
 
-    background:var(--result-blue-dark);
+    background:var(--blue-dark);
 
 }
 
 
 .back-button {
 
-    border:1px solid var(--result-border);
+    border:
+        1px solid var(--border);
 
-    background:var(--result-soft);
+    background:var(--soft);
 
-    color:var(--result-text);
+    color:var(--text);
 
 }
 
@@ -819,9 +1063,10 @@ body.dark .result-status {
 
 .result-footnote {
 
-    padding:0 30px 30px;
+    padding:
+        0 30px 30px;
 
-    color:var(--result-muted);
+    color:var(--muted);
 
     font-size:10px;
 
@@ -832,7 +1077,30 @@ body.dark .result-status {
 
 .result-footnote strong {
 
-    color:var(--result-text);
+    color:var(--text);
+
+}
+
+
+/* =====================================================
+   PDF MODE
+===================================================== */
+
+.pdf-copy {
+
+    position:fixed;
+
+    left:-100000px;
+
+    top:0;
+
+    width:794px;
+
+    background:#fff;
+
+    color:#1d1d1f;
+
+    z-index:-999;
 
 }
 
@@ -843,10 +1111,31 @@ body.dark .result-status {
 
 @media(max-width:700px) {
 
+    .navbar {
+
+        padding:0 15px;
+
+    }
+
+
+    .logo {
+
+        font-size:13px;
+
+    }
+
+
     .result-hero {
 
         padding:
-            60px 15px 30px;
+            55px 15px 30px;
+
+    }
+
+
+    .result-hero h1 {
+
+        letter-spacing:-3px;
 
     }
 
@@ -891,9 +1180,7 @@ body.dark .result-status {
     .result-actions {
 
         padding:
-            0
-            20px
-            25px;
+            0 20px 25px;
 
     }
 
@@ -921,9 +1208,7 @@ body.dark .result-status {
         grid-template-columns:1fr;
 
         padding:
-            0
-            20px
-            20px;
+            0 20px 20px;
 
     }
 
@@ -931,9 +1216,7 @@ body.dark .result-status {
     .subject-section {
 
         padding:
-            0
-            20px
-            25px;
+            0 20px 25px;
 
     }
 
@@ -956,9 +1239,7 @@ body.dark .result-status {
     .result-footnote {
 
         padding:
-            0
-            20px
-            25px;
+            0 20px 25px;
 
     }
 
@@ -983,99 +1264,6 @@ body.dark .result-status {
 }
 
 
-/* =====================================================
-   PDF CAPTURE MODE
-===================================================== */
-
-.pdf-mode {
-
-    width:820px !important;
-
-    max-width:820px !important;
-
-    margin:0 !important;
-
-    padding:0 !important;
-
-    background:#ffffff !important;
-
-    color:#1d1d1f !important;
-
-}
-
-
-.pdf-mode * {
-
-    color:#1d1d1f !important;
-
-    box-shadow:none !important;
-
-}
-
-
-.pdf-mode .result-header {
-
-    background:#f2f7ff !important;
-
-}
-
-
-.pdf-mode .info-box {
-
-    background:#f5f5f7 !important;
-
-}
-
-
-.pdf-mode .summary-box {
-
-    background:#f5f5f7 !important;
-
-}
-
-
-.pdf-mode .summary-box.total {
-
-    background:#eaf3ff !important;
-
-}
-
-
-.pdf-mode .summary-box.gpa {
-
-    background:#eaf8ef !important;
-
-}
-
-
-.pdf-mode .subject-header {
-
-    background:#f5f5f7 !important;
-
-}
-
-
-.pdf-mode .result-actions {
-
-    display:none !important;
-
-}
-
-
-.pdf-mode .result-footnote {
-
-    color:#6e6e73 !important;
-
-}
-
-
-.pdf-mode .result-footnote strong {
-
-    color:#1d1d1f !important;
-
-}
-
-
 </style>
 
 </head>
@@ -1090,46 +1278,39 @@ body.dark .result-status {
 
 <header class="navbar">
 
-<a href="index.html"
-   class="logo">
+<a
+    href="index.html"
+    class="logo">
 
-<span class="logo-mark">
-C
-</span>
+    <span class="logo-mark">
+        C
+    </span>
 
-<span>
-CTGBoardRanking
-</span>
+    <span>
+        CTGBoardRanking
+    </span>
 
 </a>
 
 
-<div style="
-display:flex;
-align-items:center;
-gap:8px;
-">
+<div class="nav-actions">
 
-<a href="index.html"
-   class="secondary-btn"
-   style="
-   text-decoration:none;
-   padding:10px 14px;
-   border-radius:12px;
-   font-size:12px;
-   ">
+<a
+    href="index.html"
+    class="home-button">
 
-Home
+    Home
 
 </a>
 
 
 <button
-    class="theme-btn"
+    type="button"
     id="themeBtn"
-    type="button">
+    class="theme-button"
+    aria-label="Toggle dark mode">
 
-◐
+    ◐
 
 </button>
 
@@ -1143,8 +1324,6 @@ Home
 ===================================================== -->
 
 <div class="result-page">
-
-<main>
 
 
 <section class="result-hero">
@@ -1177,7 +1356,9 @@ marks, grades, GPA and total score.
 <section class="result-container">
 
 
-<!-- SEARCH -->
+<!-- =====================================================
+     SEARCH
+===================================================== -->
 
 <div class="search-card">
 
@@ -1185,8 +1366,9 @@ marks, grades, GPA and total score.
 Find your result
 </h2>
 
+
 <p>
-Enter your roll number to view your result.
+Enter your roll number to view your complete result.
 </p>
 
 
@@ -1195,20 +1377,21 @@ Enter your roll number to view your result.
     class="search-form">
 
 <input
-    type="text"
     id="roll"
     class="search-input"
+    type="text"
     inputmode="numeric"
     autocomplete="off"
     maxlength="6"
     placeholder="Enter Roll Number"
-    required>
+    required
+>
 
 
 <button
-    type="submit"
+    id="searchButton"
     class="search-button"
-    id="searchButton">
+    type="submit">
 
 View Result →
 
@@ -1225,7 +1408,9 @@ View Result →
 </div>
 
 
-<!-- RESULT -->
+<!-- =====================================================
+     RESULT AREA
+===================================================== -->
 
 <div id="resultArea">
 
@@ -1254,8 +1439,8 @@ Student Name
 
 
 <span
-    class="result-roll"
-    id="resultRoll">
+    id="resultRoll"
+    class="result-roll">
 
 Roll: —
 
@@ -1265,8 +1450,8 @@ Roll: —
 
 
 <span
-    class="result-status"
-    id="resultStatus">
+    id="resultStatus"
+    class="result-status">
 
 PASSED
 
@@ -1298,6 +1483,17 @@ PASSED
 <span>REGISTRATION</span>
 
 <strong id="showRegistration">
+—
+</strong>
+
+</div>
+
+
+<div class="info-box">
+
+<span>DATE OF BIRTH</span>
+
+<strong id="showDOB">
 —
 </strong>
 
@@ -1347,10 +1543,32 @@ PASSED
 
 </div>
 
+
+<div class="info-box">
+
+<span>FATHER</span>
+
+<strong id="showFather">
+—
+</strong>
+
 </div>
 
 
-<!-- SCORE -->
+<div class="info-box">
+
+<span>MOTHER</span>
+
+<strong id="showMother">
+—
+</strong>
+
+</div>
+
+</div>
+
+
+<!-- SUMMARY -->
 
 <div class="result-summary">
 
@@ -1381,7 +1599,7 @@ GPA
 </div>
 
 
-<div class="summary-box">
+<div class="summary-box rank">
 
 <strong id="rank">
 —
@@ -1414,14 +1632,22 @@ Marks & Grade
 
 
 <div
-    class="subject-table"
-    id="subjectTable">
+    id="subjectTable"
+    class="subject-table">
 
 <div class="subject-header">
 
-<div>SUBJECT</div>
-<div>MARKS</div>
-<div>GRADE</div>
+<div>
+SUBJECT
+</div>
+
+<div>
+MARKS
+</div>
+
+<div>
+GRADE
+</div>
 
 </div>
 
@@ -1473,30 +1699,25 @@ for educational, research and statistical purposes.
 
 </section>
 
-</main>
-
 </div>
 
 
 <script>
 
 /* =====================================================
-   SUPABASE
+   CONFIGURATION
 ===================================================== */
 
-const SUPABASE_URL =
-    "https://mpnjnyejpqeqguxikvnl.supabase.co";
+/*
+ * IMPORTANT:
+ *
+ * এখানে সরাসরি Supabase থেকে
+ * student_results table query করা হচ্ছে না।
+ *
+ * তোমার api/result.js ব্যবহার করা হচ্ছে।
+ */
 
-
-const SUPABASE_KEY =
-    "sb_publishable_6Pm2-m3BeYB8VDw4kwCccg_WnYe5-IT";
-
-
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+const API_URL = "/api/result";
 
 
 /* =====================================================
@@ -1508,29 +1729,28 @@ const form =
         "resultSearchForm"
     );
 
+
 const rollInput =
     document.getElementById(
         "roll"
     );
+
 
 const searchButton =
     document.getElementById(
         "searchButton"
     );
 
+
 const errorMessage =
     document.getElementById(
         "errorMessage"
     );
 
+
 const resultArea =
     document.getElementById(
         "resultArea"
-    );
-
-const themeBtn =
-    document.getElementById(
-        "themeBtn"
     );
 
 
@@ -1538,15 +1758,19 @@ const themeBtn =
    DARK MODE
 ===================================================== */
 
+const themeBtn =
+    document.getElementById(
+        "themeBtn"
+    );
+
+
 if (
-    localStorage.getItem(
-        "ctg-theme"
-    ) === "dark"
+    localStorage.getItem("ctg-theme")
+    ===
+    "dark"
 ) {
 
-    document.body.classList.add(
-        "dark"
-    );
+    document.body.classList.add("dark");
 
 }
 
@@ -1555,11 +1779,12 @@ if (themeBtn) {
 
     themeBtn.addEventListener(
         "click",
-        () => {
+        function() {
 
             document.body.classList.toggle(
                 "dark"
             );
+
 
             localStorage.setItem(
                 "ctg-theme",
@@ -1578,7 +1803,7 @@ if (themeBtn) {
 
 
 /* =====================================================
-   SEARCH
+   FORM
 ===================================================== */
 
 form.addEventListener(
@@ -1592,6 +1817,10 @@ form.addEventListener(
     }
 );
 
+
+/* =====================================================
+   SEARCH RESULT
+===================================================== */
 
 async function searchResult() {
 
@@ -1608,23 +1837,29 @@ async function searchResult() {
             "Please enter your roll number."
         );
 
+        rollInput.focus();
+
         return;
 
     }
 
 
-    if (!/^[0-9]+$/.test(roll)) {
+    if (!/^\d+$/.test(roll)) {
 
         showError(
             "Roll number must contain numbers only."
         );
 
+        rollInput.focus();
+
         return;
 
     }
 
 
-    searchButton.disabled = true;
+    searchButton.disabled =
+        true;
+
 
     searchButton.textContent =
         "Searching...";
@@ -1636,159 +1871,149 @@ async function searchResult() {
 
     try {
 
-        /* =========================================
-           MAIN STUDENT RESULT
-        ========================================= */
+        /*
+         * তোমার api/result.js
+         * এখানে call হবে।
+         */
 
-        const {
-            data,
-            error
-        } = await supabaseClient
+        const response =
+            await fetch(
+                API_URL +
+                "?roll=" +
+                encodeURIComponent(roll),
+                {
+                    method:"GET",
+                    headers:{
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
 
-            .from(
-                "student_results"
-            )
 
-            .select(`
-                id,
-                year,
-                exam,
-                roll,
-                registration,
-                student_name,
-                institution,
-                institution_code,
-                district,
-                group_name,
-                total_marks,
-                total_score,
-                gpa,
-                result_status
-            `)
+        let result;
 
-            .eq(
-                "roll",
-                roll
-            )
 
-            .limit(1);
+        try {
+
+            result =
+                await response.json();
+
+        }
+
+        catch {
+
+            throw new Error(
+                "Invalid response from result API."
+            );
+
+        }
 
 
         console.log(
-            "Student Result:",
-            data
+            "RESULT API:",
+            result
         );
 
 
-        if (error) {
-
-            console.error(
-                "Supabase error:",
-                error
-            );
+        if (!response.ok) {
 
             throw new Error(
-                error.message
+                result.message ||
+                "Unable to load result."
             );
 
         }
 
 
         if (
-            !data ||
-            data.length === 0
+            !result ||
+            !result.success ||
+            !result.student
         ) {
 
-            showError(
-                "No result found for roll number " +
-                roll
+            throw new Error(
+                result?.message ||
+                "Result not found."
             );
-
-            return;
 
         }
 
 
         const student =
-            data[0];
+            result.student;
 
 
-        /* =========================================
-           SUBJECT RESULTS
-        ========================================= */
+        /*
+         * API থেকে subjects এসেছে।
+         */
 
-        let subjects = [];
-
-
-        if (student.id) {
-
-            const {
-                data: subjectData,
-                error: subjectError
-            } = await supabaseClient
-
-                .from(
-                    "student_subject_results"
-                )
-
-                .select("*")
-
-                .eq(
-                    "student_result_id",
-                    student.id
-                )
-
-                .order(
-                    "id",
-                    {
-                        ascending:true
-                    }
-                );
+        let subjects =
+            student.subjects;
 
 
-            if (subjectError) {
+        if (
+            typeof subjects ===
+            "string"
+        ) {
 
-                console.warn(
-                    "Subject error:",
-                    subjectError
-                );
+            try {
+
+                subjects =
+                    JSON.parse(subjects);
 
             }
 
-            else {
+            catch {
 
-                subjects =
-                    subjectData || [];
+                subjects = [];
 
             }
 
         }
 
 
-        console.log(
-            "Subjects:",
-            subjects
-        );
+        if (
+            !Array.isArray(subjects)
+        ) {
 
+            subjects = [];
+
+        }
+
+
+        /*
+         * Result display
+         */
 
         displayResult(
             student,
             subjects
         );
 
+
+        /*
+         * Rank calculate
+         */
+
+        calculateRank(
+            student
+        );
+
+
     }
 
     catch(error) {
 
         console.error(
-            "RESULT ERROR:",
+            "RESULT SEARCH ERROR:",
             error
         );
 
 
         showError(
-            "Unable to load result. " +
-            error.message
+            error.message ||
+            "Unable to load result."
         );
 
     }
@@ -1797,6 +2022,7 @@ async function searchResult() {
 
         searchButton.disabled =
             false;
+
 
         searchButton.textContent =
             "View Result →";
@@ -1807,7 +2033,7 @@ async function searchResult() {
 
 
 /* =====================================================
-   DISPLAY
+   DISPLAY RESULT
 ===================================================== */
 
 function displayResult(
@@ -1815,212 +2041,427 @@ function displayResult(
     subjects
 ) {
 
+    /* ---------------------------------------------
+       NAME
+    --------------------------------------------- */
+
     document.getElementById(
         "studentName"
     ).textContent =
-        student.student_name || "—";
+        student.name ||
+        "—";
 
+
+    /* ---------------------------------------------
+       ROLL
+    --------------------------------------------- */
 
     document.getElementById(
         "resultRoll"
     ).textContent =
         "Roll: " +
-        (student.roll || "—");
-
-
-    document.getElementById(
-        "resultStatus"
-    ).textContent =
         (
-            student.result_status ||
-            "RESULT"
-        ).toUpperCase();
+            student.roll ||
+            "—"
+        );
 
 
     document.getElementById(
         "showRoll"
     ).textContent =
-        student.roll || "—";
+        student.roll ||
+        "—";
 
+
+    /* ---------------------------------------------
+       REGISTRATION
+    --------------------------------------------- */
 
     document.getElementById(
         "showRegistration"
     ).textContent =
-        student.registration || "—";
+        student.reg_no ||
+        "—";
 
+
+    /* ---------------------------------------------
+       DATE OF BIRTH
+    --------------------------------------------- */
+
+    document.getElementById(
+        "showDOB"
+    ).textContent =
+        formatDate(
+            student.date_of_birth
+        );
+
+
+    /* ---------------------------------------------
+       YEAR
+    --------------------------------------------- */
 
     document.getElementById(
         "showYear"
     ).textContent =
-        student.year || "—";
+        student.session ||
+        "2026";
 
+
+    /* ---------------------------------------------
+       GROUP
+    --------------------------------------------- */
 
     document.getElementById(
         "showGroup"
     ).textContent =
-        student.group_name || "—";
+        student.group_name ||
+        student.group ||
+        "—";
 
+
+    /* ---------------------------------------------
+       INSTITUTION
+    --------------------------------------------- */
 
     document.getElementById(
         "showInstitution"
     ).textContent =
-        student.institution || "—";
+        student.institute ||
+        "—";
 
+
+    /* ---------------------------------------------
+       DISTRICT
+    --------------------------------------------- */
 
     document.getElementById(
         "showDistrict"
     ).textContent =
-        student.district || "—";
+        student.district ||
+        "—";
 
 
-    /* =================================================
-       TOTAL SCORE — FIXED
-    ================================================= */
+    /* ---------------------------------------------
+       FATHER
+    --------------------------------------------- */
 
-    let totalScore = null;
+    document.getElementById(
+        "showFather"
+    ).textContent =
+        student.father_name ||
+        "—";
 
 
-    /* Priority 1 */
+    /* ---------------------------------------------
+       MOTHER
+    --------------------------------------------- */
+
+    document.getElementById(
+        "showMother"
+    ).textContent =
+        student.mother_name ||
+        "—";
+
+
+    /* ---------------------------------------------
+       STATUS
+    --------------------------------------------- */
+
+    const status =
+        student.result ||
+        "RESULT";
+
+
+    document.getElementById(
+        "resultStatus"
+    ).textContent =
+        String(status).toUpperCase();
+
+
+    /* ---------------------------------------------
+       TOTAL SCORE
+    --------------------------------------------- */
+
+    let totalScore =
+        student.total_score;
+
+
+    /*
+     * API থেকে total_score না থাকলে
+     * subjects থেকে calculate করবে।
+     */
 
     if (
-        student.total_score !== null &&
-        student.total_score !== undefined &&
-        student.total_score !== ""
+        totalScore === null ||
+        totalScore === undefined ||
+        totalScore === ""
     ) {
 
         totalScore =
-            Number(
-                student.total_score
+            calculateSubjectTotal(
+                subjects
             );
 
     }
 
-
-    /* Priority 2 */
-
-    if (
-        (
-            totalScore === null ||
-            !Number.isFinite(totalScore)
-        ) &&
-        student.total_marks !== null &&
-        student.total_marks !== undefined &&
-        student.total_marks !== ""
-    ) {
-
-        totalScore =
-            Number(
-                student.total_marks
-            );
-
-    }
-
-
-    /* Priority 3 — calculate from subjects */
-
-    if (
-        (
-            totalScore === null ||
-            !Number.isFinite(totalScore)
-        ) &&
-        Array.isArray(subjects) &&
-        subjects.length > 0
-    ) {
-
-        let calculated = 0;
-
-        let hasMarks = false;
-
-
-        subjects.forEach(
-            subject => {
-
-                const markValue =
-                    subject.marks ??
-                    subject.mark ??
-                    subject.total_marks ??
-                    subject.total_score;
-
-
-                const mark =
-                    Number(
-                        markValue
-                    );
-
-
-                if (
-                    Number.isFinite(mark)
-                ) {
-
-                    calculated += mark;
-
-                    hasMarks = true;
-
-                }
-
-            }
-        );
-
-
-        if (hasMarks) {
-
-            totalScore =
-                calculated;
-
-        }
-
-    }
-
-
-    /* Display */
 
     document.getElementById(
         "totalMarks"
     ).textContent =
-
-        Number.isFinite(totalScore)
-
-            ? totalScore.toLocaleString(
-                "en-US"
-            )
-
-            : "—";
+        formatNumber(
+            totalScore
+        );
 
 
-    /* =================================================
+    /* ---------------------------------------------
        GPA
-    ================================================= */
+    --------------------------------------------- */
 
     const gpa =
-        Number(
-            student.gpa
-        );
+        student.gpa;
 
 
     document.getElementById(
         "gpa"
     ).textContent =
-
-        Number.isFinite(gpa)
-
-            ? gpa.toFixed(2)
-
-            : "—";
+        formatGPA(
+            gpa
+        );
 
 
-    /* =================================================
-       RANK
-    ================================================= */
+    /* ---------------------------------------------
+       RANK INITIAL
+       পরে calculateRank() update করবে
+    --------------------------------------------- */
 
     document.getElementById(
         "rank"
     ).textContent =
-        "—";
+        "Calculating...";
 
 
-    /* =================================================
+    /* ---------------------------------------------
        SUBJECT TABLE
-    ================================================= */
+    --------------------------------------------- */
+
+    renderSubjects(
+        subjects
+    );
+
+
+    /* ---------------------------------------------
+       SHOW RESULT
+    --------------------------------------------- */
+
+    resultArea.style.display =
+        "block";
+
+
+    setTimeout(
+        function() {
+
+            resultArea.scrollIntoView({
+                behavior:"smooth",
+                block:"start"
+            });
+
+        },
+        100
+    );
+
+}
+
+
+/* =====================================================
+   CALCULATE SUBJECT TOTAL
+===================================================== */
+
+function calculateSubjectTotal(
+    subjects
+) {
+
+    if (
+        !Array.isArray(subjects) ||
+        subjects.length === 0
+    ) {
+
+        return null;
+
+    }
+
+
+    let total = 0;
+
+    let found = false;
+
+
+    subjects.forEach(
+        function(subject) {
+
+            const mark =
+                Number(
+                    subject.marks ??
+                    subject.mark ??
+                    subject.total ??
+                    0
+                );
+
+
+            if (
+                Number.isFinite(mark) &&
+                mark > 0
+            ) {
+
+                total += mark;
+
+                found = true;
+
+            }
+
+        }
+    );
+
+
+    return found
+        ? total
+        : null;
+
+}
+
+
+/* =====================================================
+   CALCULATE RANK
+===================================================== */
+
+async function calculateRank(
+    student
+) {
+
+    /*
+     * Rank calculation-এর জন্য
+     * সরাসরি Supabase browser থেকে
+     * query করা হচ্ছে না।
+     *
+     * কারণ API key security এবং RLS issue
+     * এড়ানো দরকার।
+     *
+     * তোমার API-তে rank endpoint থাকলে
+     * সেটি ব্যবহার করা যাবে।
+     *
+     * আপাতত API result-এর total_score থাকলে
+     * rank endpoint call করার চেষ্টা করবে।
+     */
+
+    const roll =
+        String(
+            student.roll || ""
+        ).trim();
+
+
+    if (!roll) {
+
+        document.getElementById(
+            "rank"
+        ).textContent =
+            "—";
+
+        return;
+
+    }
+
+
+    try {
+
+        const rankResponse =
+            await fetch(
+                "/api/rank?roll=" +
+                encodeURIComponent(roll),
+                {
+                    method:"GET",
+                    headers:{
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        if (
+            !rankResponse.ok
+        ) {
+
+            /*
+             * Rank API না থাকলে
+             * error দেখানো হবে না।
+             */
+
+            document.getElementById(
+                "rank"
+            ).textContent =
+                "—";
+
+            return;
+
+        }
+
+
+        const rankData =
+            await rankResponse.json();
+
+
+        if (
+            rankData &&
+            rankData.success &&
+            rankData.rank
+        ) {
+
+            document.getElementById(
+                "rank"
+            ).textContent =
+                Number(
+                    rankData.rank
+                ).toLocaleString(
+                    "en-US"
+                );
+
+        }
+
+        else {
+
+            document.getElementById(
+                "rank"
+            ).textContent =
+                "—";
+
+        }
+
+    }
+
+    catch(error) {
+
+        console.warn(
+            "Rank API unavailable:",
+            error
+        );
+
+
+        document.getElementById(
+            "rank"
+        ).textContent =
+            "—";
+
+    }
+
+}
+
+
+/* =====================================================
+   RENDER SUBJECTS
+===================================================== */
+
+function renderSubjects(
+    subjects
+) {
 
     const table =
         document.getElementById(
@@ -2032,11 +2473,17 @@ function displayResult(
 
         <div class="subject-header">
 
-            <div>SUBJECT</div>
+            <div>
+                SUBJECT
+            </div>
 
-            <div>MARKS</div>
+            <div>
+                MARKS
+            </div>
 
-            <div>GRADE</div>
+            <div>
+                GRADE
+            </div>
 
         </div>
 
@@ -2044,7 +2491,7 @@ function displayResult(
 
 
     if (
-        !Array.isArray(subjects) ||
+        !subjects ||
         subjects.length === 0
     ) {
 
@@ -2056,7 +2503,9 @@ function displayResult(
                     Subject details unavailable
                 </div>
 
-                <div>—</div>
+                <div>
+                    —
+                </div>
 
                 <div class="grade">
                     —
@@ -2066,84 +2515,193 @@ function displayResult(
 
         `;
 
+        return;
+
     }
 
-    else {
 
-        subjects.forEach(
-            subject => {
+    subjects.forEach(
+        function(subject) {
 
-                const subjectName =
-                    subject.subject_name ||
-                    subject.subject ||
-                    subject.subject_code ||
-                    subject.code ||
-                    "—";
-
-
-                const marks =
-                    subject.marks ??
-                    subject.mark ??
-                    subject.total_marks ??
-                    "—";
+            const subjectName =
+                subject.subject_name ||
+                subject.subject ||
+                subject.subjectName ||
+                subject.code ||
+                subject.subject_code ||
+                "—";
 
 
-                const grade =
-                    subject.grade ||
-                    "—";
+            const marks =
+                subject.marks ??
+                subject.mark ??
+                subject.total ??
+                "—";
 
 
-                const row =
-                    document.createElement(
-                        "div"
-                    );
+            const grade =
+                subject.grade ||
+                subject.grade_name ||
+                "—";
 
 
-                row.className =
-                    "subject-row";
-
-
-                row.innerHTML = `
-
-                    <div>
-                        ${escapeHTML(
-                            subjectName
-                        )}
-                    </div>
-
-                    <div>
-                        ${escapeHTML(
-                            marks
-                        )}
-                    </div>
-
-                    <div class="grade">
-                        ${escapeHTML(
-                            grade
-                        )}
-                    </div>
-
-                `;
-
-
-                table.appendChild(
-                    row
+            const row =
+                document.createElement(
+                    "div"
                 );
 
-            }
-        );
+
+            row.className =
+                "subject-row";
+
+
+            row.innerHTML = `
+
+                <div>
+                    ${escapeHTML(
+                        subjectName
+                    )}
+                </div>
+
+                <div>
+                    ${escapeHTML(
+                        marks
+                    )}
+                </div>
+
+                <div class="grade">
+                    ${escapeHTML(
+                        grade
+                    )}
+                </div>
+
+            `;
+
+
+            table.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   FORMAT NUMBER
+===================================================== */
+
+function formatNumber(
+    value
+) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        value === ""
+    ) {
+
+        return "—";
 
     }
 
 
-    resultArea.style.display =
-        "block";
+    const number =
+        Number(value);
 
 
-    resultArea.scrollIntoView({
-        behavior:"smooth",
-        block:"start"
-    });
+    if (
+        !Number.isFinite(number)
+    ) {
+
+        return String(value);
+
+    }
+
+
+    return number.toLocaleString(
+        "en-US"
+    );
+
+}
+
+
+/* =====================================================
+   FORMAT GPA
+===================================================== */
+
+function formatGPA(
+    value
+) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        value === ""
+    ) {
+
+        return "—";
+
+    }
+
+
+    const number =
+        Number(value);
+
+
+    if (
+        !Number.isFinite(number)
+    ) {
+
+        return String(value);
+
+    }
+
+
+    return number.toFixed(2);
+
+}
+
+
+/* =====================================================
+   FORMAT DATE
+===================================================== */
+
+function formatDate(
+    value
+) {
+
+    if (!value) {
+
+        return "—";
+
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return String(value);
+
+    }
+
+
+    return date.toLocaleDateString(
+        "en-GB",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric"
+        }
+    );
 
 }
 
@@ -2152,7 +2710,9 @@ function displayResult(
    ERROR
 ===================================================== */
 
-function showError(message) {
+function showError(
+    message
+) {
 
     errorMessage.textContent =
         message;
@@ -2178,7 +2738,9 @@ function hideError() {
    ESCAPE HTML
 ===================================================== */
 
-function escapeHTML(value) {
+function escapeHTML(
+    value
+) {
 
     return String(
         value ?? ""
@@ -2213,7 +2775,7 @@ function escapeHTML(value) {
 
 
 /* =====================================================
-   AUTO LOAD
+   AUTO LOAD ROLL
 ===================================================== */
 
 const urlParams =
@@ -2235,7 +2797,7 @@ if (urlRoll) {
 
 
     setTimeout(
-        () => {
+        function() {
 
             searchResult();
 
@@ -2247,7 +2809,7 @@ if (urlRoll) {
 
 
 /* =====================================================
-   PDF DOWNLOAD — FIXED
+   PDF DOWNLOAD
 ===================================================== */
 
 const downloadPdfBtn =
@@ -2262,6 +2824,20 @@ if (downloadPdfBtn) {
         "click",
         async function() {
 
+            if (
+                !resultArea ||
+                resultArea.style.display === "none"
+            ) {
+
+                alert(
+                    "Please search for a result first."
+                );
+
+                return;
+
+            }
+
+
             const original =
                 document.getElementById(
                     "fullResult"
@@ -2269,7 +2845,9 @@ if (downloadPdfBtn) {
 
 
             if (!original) {
+
                 return;
+
             }
 
 
@@ -2297,66 +2875,252 @@ if (downloadPdfBtn) {
                 "Creating PDF...";
 
 
-            /*
-             * Clone result instead of rendering
-             * the original dark/glass UI.
-             */
-
-            const pdfElement =
-                original.cloneNode(
-                    true
-                );
-
-
-            pdfElement.id =
-                "pdfResultClone";
-
-
-            pdfElement.classList.add(
-                "pdf-mode"
-            );
-
-
-            /*
-             * Place clone outside normal page.
-             */
-
-            pdfElement.style.position =
-                "fixed";
-
-            pdfElement.style.left =
-                "-10000px";
-
-            pdfElement.style.top =
-                "0";
-
-            pdfElement.style.width =
-                "820px";
-
-            pdfElement.style.background =
-                "#ffffff";
-
-            pdfElement.style.color =
-                "#1d1d1f";
-
-
-            document.body.appendChild(
-                pdfElement
-            );
-
-
             try {
 
                 /*
-                 * Wait for browser to render
+                 * ====================================
+                 * PDF CLONE
+                 * ====================================
+                 *
+                 * Original dark/light CSS থেকে
+                 * PDF blank হওয়ার সমস্যা এড়াতে
+                 * আলাদা white PDF layout তৈরি করা হচ্ছে।
+                 */
+
+                const pdf =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                pdf.className =
+                    "pdf-copy";
+
+
+                pdf.style.position =
+                    "fixed";
+
+                pdf.style.left =
+                    "-100000px";
+
+                pdf.style.top =
+                    "0";
+
+                pdf.style.width =
+                    "794px";
+
+                pdf.style.background =
+                    "#ffffff";
+
+                pdf.style.color =
+                    "#1d1d1f";
+
+                pdf.style.padding =
+                    "35px";
+
+                pdf.style.fontFamily =
+                    "Inter, Arial, sans-serif";
+
+
+                /*
+                 * Header
+                 */
+
+                pdf.innerHTML = `
+
+                    <div style="
+                        text-align:center;
+                        margin-bottom:25px;
+                    ">
+
+                        <div style="
+                            font-size:10px;
+                            font-weight:800;
+                            letter-spacing:2px;
+                            color:#0071e3;
+                            margin-bottom:8px;
+                        ">
+                            CTGBOARDRANKING
+                        </div>
+
+                        <h1 style="
+                            margin:0;
+                            font-size:30px;
+                            color:#1d1d1f;
+                        ">
+                            SSC 2026 Result
+                        </h1>
+
+                        <div style="
+                            margin-top:7px;
+                            font-size:12px;
+                            color:#6e6e73;
+                        ">
+                            Chattogram Board
+                        </div>
+
+                    </div>
+
+
+                    <div style="
+                        padding:20px;
+                        border:1px solid #e0e0e0;
+                        border-radius:16px;
+                        margin-bottom:18px;
+                    ">
+
+                        <h2 style="
+                            margin:0 0 5px;
+                            font-size:22px;
+                            color:#1d1d1f;
+                        ">
+                            ${escapeHTML(studentName)}
+                        </h2>
+
+                        <div style="
+                            font-size:12px;
+                            color:#6e6e73;
+                        ">
+                            Roll: ${escapeHTML(roll)}
+                        </div>
+
+                    </div>
+
+
+                    <div style="
+                        display:grid;
+                        grid-template-columns:repeat(3,1fr);
+                        gap:10px;
+                        margin-bottom:18px;
+                    ">
+
+                        ${createPDFInfo(
+                            "ROLL",
+                            document.getElementById("showRoll").textContent
+                        )}
+
+                        ${createPDFInfo(
+                            "REGISTRATION",
+                            document.getElementById("showRegistration").textContent
+                        )}
+
+                        ${createPDFInfo(
+                            "YEAR",
+                            document.getElementById("showYear").textContent
+                        )}
+
+                        ${createPDFInfo(
+                            "GROUP",
+                            document.getElementById("showGroup").textContent
+                        )}
+
+                        ${createPDFInfo(
+                            "INSTITUTION",
+                            document.getElementById("showInstitution").textContent
+                        )}
+
+                        ${createPDFInfo(
+                            "DISTRICT",
+                            document.getElementById("showDistrict").textContent
+                        )}
+
+                        ${createPDFInfo(
+                            "DATE OF BIRTH",
+                            document.getElementById("showDOB").textContent
+                        )}
+
+                        ${createPDFInfo(
+                            "FATHER",
+                            document.getElementById("showFather").textContent
+                        )}
+
+                        ${createPDFInfo(
+                            "MOTHER",
+                            document.getElementById("showMother").textContent
+                        )}
+
+                    </div>
+
+
+                    <div style="
+                        display:grid;
+                        grid-template-columns:repeat(3,1fr);
+                        gap:10px;
+                        margin-bottom:25px;
+                    ">
+
+                        ${createPDFSummary(
+                            "TOTAL SCORE",
+                            document.getElementById("totalMarks").textContent
+                        )}
+
+                        ${createPDFSummary(
+                            "GPA",
+                            document.getElementById("gpa").textContent
+                        )}
+
+                        ${createPDFSummary(
+                            "STUDENT RANK",
+                            document.getElementById("rank").textContent
+                        )}
+
+                    </div>
+
+
+                    <h3 style="
+                        margin:0 0 10px;
+                        font-size:17px;
+                        color:#1d1d1f;
+                    ">
+                        Subject-wise Result
+                    </h3>
+
+
+                    ${createPDFSubjectTable()}
+
+
+                    <div style="
+                        margin-top:25px;
+                        padding-top:15px;
+                        border-top:1px solid #e0e0e0;
+                        font-size:9px;
+                        line-height:1.6;
+                        color:#6e6e73;
+                    ">
+
+                        <strong style="
+                            color:#1d1d1f;
+                        ">
+                            CTGBoardRanking
+                        </strong>
+
+                        is an independent, unofficial
+                        educational data platform.
+
+                    </div>
+
+                `;
+
+
+                document.body.appendChild(
+                    pdf
+                );
+
+
+                /*
+                 * Browser render হওয়ার জন্য
+                 * সামান্য wait
                  */
 
                 await new Promise(
-                    resolve =>
+                    function(resolve) {
+
                         setTimeout(
                             resolve,
-                            500
-                        )
+                            300
+                        );
+
+                    }
                 );
 
 
@@ -2373,7 +3137,7 @@ if (downloadPdfBtn) {
 
                         type:"jpeg",
 
-                        quality:0.98
+                        quality:.98
 
                     },
 
@@ -2383,38 +3147,21 @@ if (downloadPdfBtn) {
 
                         useCORS:true,
 
-                        allowTaint:false,
+                        allowTaint:true,
 
-                        backgroundColor:
-                            "#ffffff",
+                        backgroundColor:"#ffffff",
 
-                        logging:false,
-
-                        scrollX:0,
-
-                        scrollY:0,
-
-                        windowWidth:820
+                        logging:false
 
                     },
 
                     jsPDF:{
 
-                        unit:"mm",
+                        unit:"in",
 
                         format:"a4",
 
-                        orientation:
-                            "portrait"
-
-                    },
-
-                    pagebreak:{
-
-                        mode:[
-                            "css",
-                            "legacy"
-                        ]
+                        orientation:"portrait"
 
                     }
 
@@ -2425,10 +3172,16 @@ if (downloadPdfBtn) {
 
                     .set(options)
 
-                    .from(pdfElement)
+                    .from(pdf)
 
                     .save();
 
+
+                /*
+                 * Remove clone
+                 */
+
+                pdf.remove();
 
             }
 
@@ -2448,26 +3201,8 @@ if (downloadPdfBtn) {
 
             finally {
 
-                /*
-                 * Remove cloned PDF element
-                 */
-
-                if (
-                    pdfElement &&
-                    pdfElement.parentNode
-                ) {
-
-                    pdfElement.parentNode
-                        .removeChild(
-                            pdfElement
-                        );
-
-                }
-
-
                 downloadPdfBtn.disabled =
                     false;
-
 
                 downloadPdfBtn.textContent =
                     "Download PDF ↓";
@@ -2479,7 +3214,228 @@ if (downloadPdfBtn) {
 
 }
 
+
+/* =====================================================
+   PDF INFO
+===================================================== */
+
+function createPDFInfo(
+    label,
+    value
+) {
+
+    return `
+
+        <div style="
+            padding:12px;
+            background:#f5f5f7;
+            border-radius:10px;
+            min-height:50px;
+        ">
+
+            <div style="
+                font-size:8px;
+                font-weight:800;
+                letter-spacing:1px;
+                color:#6e6e73;
+                margin-bottom:5px;
+            ">
+                ${escapeHTML(label)}
+            </div>
+
+            <div style="
+                font-size:11px;
+                font-weight:600;
+                color:#1d1d1f;
+                word-break:break-word;
+            ">
+                ${escapeHTML(value)}
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   PDF SUMMARY
+===================================================== */
+
+function createPDFSummary(
+    label,
+    value
+) {
+
+    return `
+
+        <div style="
+            padding:18px 10px;
+            border-radius:12px;
+            background:#f5f5f7;
+            text-align:center;
+        ">
+
+            <div style="
+                font-size:21px;
+                font-weight:800;
+                color:#1d1d1f;
+            ">
+                ${escapeHTML(value)}
+            </div>
+
+            <div style="
+                margin-top:4px;
+                font-size:8px;
+                font-weight:800;
+                letter-spacing:1px;
+                color:#6e6e73;
+            ">
+                ${escapeHTML(label)}
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   PDF SUBJECT TABLE
+===================================================== */
+
+function createPDFSubjectTable() {
+
+    const rows =
+        document.querySelectorAll(
+            "#subjectTable .subject-row"
+        );
+
+
+    let html = `
+
+        <table style="
+            width:100%;
+            border-collapse:collapse;
+            font-size:10px;
+        ">
+
+            <thead>
+
+                <tr>
+
+                    <th style="
+                        text-align:left;
+                        padding:10px;
+                        background:#f5f5f7;
+                        border:1px solid #ddd;
+                    ">
+                        SUBJECT
+                    </th>
+
+                    <th style="
+                        text-align:right;
+                        padding:10px;
+                        background:#f5f5f7;
+                        border:1px solid #ddd;
+                    ">
+                        MARKS
+                    </th>
+
+                    <th style="
+                        text-align:right;
+                        padding:10px;
+                        background:#f5f5f7;
+                        border:1px solid #ddd;
+                    ">
+                        GRADE
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+    `;
+
+
+    rows.forEach(
+        function(row) {
+
+            const cells =
+                row.querySelectorAll(
+                    "div"
+                );
+
+
+            if (
+                cells.length >= 3
+            ) {
+
+                html += `
+
+                    <tr>
+
+                        <td style="
+                            padding:9px 10px;
+                            border:1px solid #ddd;
+                            color:#1d1d1f;
+                        ">
+                            ${escapeHTML(
+                                cells[0].textContent.trim()
+                            )}
+                        </td>
+
+                        <td style="
+                            padding:9px 10px;
+                            border:1px solid #ddd;
+                            text-align:right;
+                            color:#1d1d1f;
+                        ">
+                            ${escapeHTML(
+                                cells[1].textContent.trim()
+                            )}
+                        </td>
+
+                        <td style="
+                            padding:9px 10px;
+                            border:1px solid #ddd;
+                            text-align:right;
+                            font-weight:700;
+                            color:#1d1d1f;
+                        ">
+                            ${escapeHTML(
+                                cells[2].textContent.trim()
+                            )}
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+
+        }
+    );
+
+
+    html += `
+
+            </tbody>
+
+        </table>
+
+    `;
+
+
+    return html;
+
+}
+
 </script>
+
 
 </body>
 
