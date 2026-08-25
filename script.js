@@ -596,102 +596,75 @@ function showStatistics(
 }
 
 
-/* =========================================================
+/* =====================================================
    TOTAL VISITS
-========================================================= */
+===================================================== */
 
 async function loadTotalVisits() {
 
     const element =
-        document.getElementById(
-            "totalVisits"
-        );
-
+        document.getElementById("totalVisits");
 
     if (!element) {
         return;
     }
 
-
-    /*
-     * Put your actual Supabase publishable
-     * key here if you want Total Visits.
-     */
-
-    const SUPABASE_URL =
-        "https://ymwhodckmbybccufzjot.supabase.co";
-
-
-    const SUPABASE_KEY =
-        "তোমার_SUPABASE_PUBLISHABLE_KEY";
-
-
-    if (
-        !SUPABASE_KEY ||
-        SUPABASE_KEY ===
-        "তোমার_SUPABASE_PUBLISHABLE_KEY"
-    ) {
-
-        return;
-
-    }
-
-
     try {
 
         const response =
             await fetch(
-                SUPABASE_URL +
-                "/rest/v1/site_stats?id=eq.1&select=total_visits",
+                "/api/visits",
                 {
+                    method: "POST",
                     headers: {
-                        "apikey":
-                            SUPABASE_KEY,
-
-                        "Authorization":
-                            "Bearer " +
-                            SUPABASE_KEY
+                        "Content-Type":
+                            "application/json"
                     }
                 }
             );
 
-
         if (!response.ok) {
+
+            console.warn(
+                "Visit counter failed:",
+                response.status
+            );
+
             return;
         }
-
 
         const data =
             await response.json();
 
-
         if (
-            Array.isArray(data) &&
-            data.length
+            data &&
+            typeof data.total !== "undefined"
         ) {
 
             element.textContent =
-                num(
-                    data[0].total_visits
-                ).toLocaleString(
-                    "en-US"
-                );
+                Number(
+                    data.total
+                ).toLocaleString("en-US");
 
         }
 
-    }
+    } catch (error) {
 
-    catch (error) {
-
-        console.error(
-            "Total visits:",
+        console.warn(
+            "Total visits error:",
             error
         );
 
     }
-
 }
 
+
+/* Run once when page loads */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    loadTotalVisits
+);
 
 /* =========================================================
    MAIN
