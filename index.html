@@ -4046,7 +4046,6 @@ if (downloadPdfBtn) {
 
 }
 
-
 async function downloadHomeResultPDF() {
 
     if (!window.jspdf) {
@@ -4076,68 +4075,62 @@ async function downloadHomeResultPDF() {
     const originalText =
         downloadPdfBtn.innerHTML;
 
-
     downloadPdfBtn.disabled = true;
 
     downloadPdfBtn.innerHTML =
-        "Generating PDF...";
+        "Generating...";
 
 
     try {
 
-        const { jsPDF } = window.jspdf;
-
-
-        /* =========================================
-           STUDENT INFORMATION
-        ========================================= */
-
         const studentName =
             document.getElementById(
                 "homeResultName"
-            )?.textContent.trim() ||
+            )?.textContent?.trim() ||
             "Unknown Student";
 
 
         const rollText =
             document.getElementById(
                 "homeResultRoll"
-            )?.textContent ||
-            "";
+            )?.textContent || "";
 
 
         const roll =
             rollText.replace(
                 /[^0-9]/g,
                 ""
-            ) || "—";
+            ) || "N/A";
 
 
         const gpa =
             document.getElementById(
                 "homeResultGPA"
-            )?.textContent ||
+            )?.textContent?.trim() ||
             "—";
 
 
         const total =
             document.getElementById(
                 "homeResultTotal"
-            )?.textContent ||
+            )?.textContent?.trim() ||
             "—";
 
 
-        const subjects =
-            Array.from(
-                document.querySelectorAll(
-                    "#homeSubjectList .home-subject-row"
-                )
+        const subjectRows =
+            document.querySelectorAll(
+                "#homeSubjectList .home-subject-row"
             );
 
 
-        /* =========================================
-           A4 PDF
-        ========================================= */
+        /* =================================================
+           CREATE PDF
+        ================================================= */
+
+        const {
+            jsPDF
+        } = window.jspdf;
+
 
         const pdf =
             new jsPDF({
@@ -4156,733 +4149,906 @@ async function downloadHomeResultPDF() {
             pdf.internal.pageSize.getHeight();
 
 
-        const margin = 13;
+        /* =================================================
+           PREMIUM COLORS
+        ================================================= */
+
+        const colors = {
+
+            background: [
+                247,
+                249,
+                252
+            ],
+
+            navy: [
+                15,
+                23,
+                42
+            ],
+
+            blue: [
+                0,
+                113,
+                227
+            ],
+
+            blueLight: [
+                232,
+                242,
+                255
+            ],
+
+            text: [
+                31,
+                41,
+                55
+            ],
+
+            muted: [
+                107,
+                114,
+                128
+            ],
+
+            white: [
+                255,
+                255,
+                255
+            ],
+
+            border: [
+                225,
+                231,
+                239
+            ],
+
+            success: [
+                22,
+                163,
+                74
+            ]
+
+        };
 
 
-        /* =========================================
-           APPLE INSPIRED HEADER
-        ========================================= */
+        /* =================================================
+           BACKGROUND
+        ================================================= */
 
         pdf.setFillColor(
-            248,
-            249,
-            251
+            ...colors.background
+        );
+
+        pdf.rect(
+            0,
+            0,
+            pageWidth,
+            pageHeight,
+            "F"
         );
 
 
+        /* =================================================
+           TOP BRAND AREA
+        ================================================= */
+
+        pdf.setFillColor(
+            ...colors.white
+        );
+
         pdf.roundedRect(
-            margin,
-            12,
-            pageWidth - margin * 2,
-            27,
+            10,
+            9,
+            pageWidth - 20,
+            24,
             5,
             5,
             "F"
         );
 
 
-        /* Logo circle */
+        /* C Logo */
 
         pdf.setFillColor(
-            20,
-            20,
-            22
+            ...colors.blue
         );
 
-
-        pdf.circle(
-            margin + 10,
-            25.5,
-            5,
+        pdf.roundedRect(
+            16,
+            14,
+            14,
+            14,
+            3.5,
+            3.5,
             "F"
         );
 
 
         pdf.setTextColor(
-            255,
-            255,
-            255
+            ...colors.white
         );
-
 
         pdf.setFont(
             "helvetica",
             "bold"
         );
 
-
-        pdf.setFontSize(8);
-
+        pdf.setFontSize(12);
 
         pdf.text(
             "C",
-            margin + 8.2,
-            28.2
-        );
-
-
-        /* Website name */
-
-        pdf.setTextColor(
-            20,
-            20,
-            22
-        );
-
-
-        pdf.setFont(
-            "helvetica",
-            "bold"
-        );
-
-
-        pdf.setFontSize(17);
-
-
-        pdf.text(
-            "CTGBoardRanking",
-            margin + 19,
-            24.5
-        );
-
-
-        pdf.setFont(
-            "helvetica",
-            "normal"
-        );
-
-
-        pdf.setFontSize(7.5);
-
-
-        pdf.setTextColor(
-            110,
-            110,
-            115
-        );
-
-
-        pdf.text(
-            "SSC 2026 · CHATTogram BOARD",
-            margin + 19,
-            31
-        );
-
-
-        /* =========================================
-           STUDENT HEADER
-        ========================================= */
-
-        let y = 50;
-
-
-        pdf.setTextColor(
-            20,
-            20,
-            22
-        );
-
-
-        pdf.setFont(
-            "helvetica",
-            "bold"
-        );
-
-
-        pdf.setFontSize(16);
-
-
-        pdf.text(
-            studentName,
-            margin,
-            y
-        );
-
-
-        y += 7;
-
-
-        pdf.setFont(
-            "helvetica",
-            "normal"
-        );
-
-
-        pdf.setFontSize(9);
-
-
-        pdf.setTextColor(
-            100,
-            100,
-            105
-        );
-
-
-        pdf.text(
-            "Roll: " + roll,
-            margin,
-            y
-        );
-
-
-        /* =========================================
-           SUMMARY CARDS
-        ========================================= */
-
-        const cardY = 65;
-
-        const gap = 5;
-
-        const cardWidth =
-            (
-                pageWidth -
-                margin * 2 -
-                gap * 2
-            ) / 3;
-
-
-        const cardHeight = 25;
-
-
-        const cards = [
-            {
-                x: margin,
-                title: "GPA",
-                value: gpa
-            },
-            {
-                x: margin + cardWidth + gap,
-                title: "TOTAL SCORE",
-                value: total
-            },
-            {
-                x: margin +
-                   (cardWidth + gap) * 2,
-                title: "SUBJECTS",
-                value:
-                    String(
-                        subjects.length
-                    )
-            }
-        ];
-
-
-        cards.forEach(function(card) {
-
-            pdf.setFillColor(
-                248,
-                249,
-                251
-            );
-
-
-            pdf.roundedRect(
-                card.x,
-                cardY,
-                cardWidth,
-                cardHeight,
-                4,
-                4,
-                "F"
-            );
-
-
-            pdf.setTextColor(
-                120,
-                120,
-                125
-            );
-
-
-            pdf.setFont(
-                "helvetica",
-                "bold"
-            );
-
-
-            pdf.setFontSize(6.5);
-
-
-            pdf.text(
-                card.title,
-                card.x + 5,
-                cardY + 8
-            );
-
-
-            pdf.setTextColor(
-                20,
-                20,
-                22
-            );
-
-
-            pdf.setFont(
-                "helvetica",
-                "bold"
-            );
-
-
-            pdf.setFontSize(13);
-
-
-            pdf.text(
-                card.value,
-                card.x + 5,
-                cardY + 18
-            );
-
-        });
-
-
-        /* =========================================
-           SUBJECT TABLE HEADER
-        ========================================= */
-
-        y = 101;
-
-
-        pdf.setTextColor(
-            20,
-            20,
-            22
-        );
-
-
-        pdf.setFont(
-            "helvetica",
-            "bold"
-        );
-
-
-        pdf.setFontSize(11);
-
-
-        pdf.text(
-            "Subject-wise Result",
-            margin,
-            y
-        );
-
-
-        y += 7;
-
-
-        const tableX = margin;
-
-        const tableWidth =
-            pageWidth - margin * 2;
-
-
-        const colSubject = tableX;
-
-        const colCode =
-            tableX + tableWidth * .57;
-
-        const colMark =
-            tableX + tableWidth * .75;
-
-        const colGrade =
-            tableX + tableWidth * .89;
-
-
-        pdf.setFillColor(
-            242,
-            243,
-            245
-        );
-
-
-        pdf.roundedRect(
-            tableX,
-            y,
-            tableWidth,
-            9,
-            2,
-            2,
-            "F"
-        );
-
-
-        pdf.setTextColor(
-            90,
-            90,
-            95
-        );
-
-
-        pdf.setFont(
-            "helvetica",
-            "bold"
-        );
-
-
-        pdf.setFontSize(7);
-
-
-        pdf.text(
-            "SUBJECT",
-            colSubject + 4,
-            y + 6
-        );
-
-
-        pdf.text(
-            "CODE",
-            colCode,
-            y + 6
-        );
-
-
-        pdf.text(
-            "MARK",
-            colMark,
-            y + 6
-        );
-
-
-        pdf.text(
-            "GRADE",
-            colGrade,
-            y + 6
-        );
-
-
-        y += 11;
-
-
-        /* =========================================
-           SUBJECT ROWS
-        ========================================= */
-
-        subjects.forEach(
-            function(row, index) {
-
-                const subject =
-                    row.querySelector(
-                        ".home-subject-name strong"
-                    )?.textContent.trim() ||
-                    "Subject";
-
-
-                const code =
-                    row.querySelector(
-                        ".home-subject-name span"
-                    )?.textContent.trim() ||
-                    "—";
-
-
-                const mark =
-                    row.querySelector(
-                        ".home-subject-mark strong"
-                    )?.textContent.trim() ||
-                    "—";
-
-
-                const grade =
-                    row.querySelector(
-                        ".home-subject-grade strong"
-                    )?.textContent.trim() ||
-                    "—";
-
-
-                const rowHeight = 10;
-
-
-                if (
-                    index % 2 === 0
-                ) {
-
-                    pdf.setFillColor(
-                        250,
-                        250,
-                        251
-                    );
-
-
-                    pdf.rect(
-                        tableX,
-                        y - 6,
-                        tableWidth,
-                        rowHeight,
-                        "F"
-                    );
-
-                }
-
-
-                pdf.setTextColor(
-                    35,
-                    35,
-                    38
-                );
-
-
-                pdf.setFont(
-                    "helvetica",
-                    "normal"
-                );
-
-
-                pdf.setFontSize(7.5);
-
-
-                pdf.text(
-                    subject.substring(
-                        0,
-                        40
-                    ),
-                    colSubject + 4,
-                    y
-                );
-
-
-                pdf.setTextColor(
-                    115,
-                    115,
-                    120
-                );
-
-
-                pdf.setFontSize(7);
-
-
-                pdf.text(
-                    code,
-                    colCode,
-                    y
-                );
-
-
-                pdf.setTextColor(
-                    35,
-                    35,
-                    38
-                );
-
-
-                pdf.setFont(
-                    "helvetica",
-                    "bold"
-                );
-
-
-                pdf.setFontSize(8);
-
-
-                pdf.text(
-                    mark,
-                    colMark,
-                    y
-                );
-
-
-                pdf.text(
-                    grade,
-                    colGrade,
-                    y
-                );
-
-
-                y += rowHeight;
-
-            }
-        );
-
-
-        /* =========================================
-           DIVIDER
-        ========================================= */
-
-        y += 4;
-
-
-        pdf.setDrawColor(
-            225,
-            225,
-            228
-        );
-
-
-        pdf.line(
-            margin,
-            y,
-            pageWidth - margin,
-            y
-        );
-
-
-        /* =========================================
-           GENERATED BY
-        ========================================= */
-
-        y += 8;
-
-
-        pdf.setTextColor(
-            95,
-            95,
-            100
-        );
-
-
-        pdf.setFont(
-            "helvetica",
-            "normal"
-        );
-
-
-        pdf.setFontSize(7);
-
-
-        pdf.text(
-            "Generated by",
-            margin,
-            y
-        );
-
-
-        pdf.setTextColor(
-            25,
-            25,
-            28
-        );
-
-
-        pdf.setFont(
-            "helvetica",
-            "bold"
-        );
-
-
-        pdf.text(
-            "Shadat Fatih",
-            margin + 17,
-            y
-        );
-
-
-        /* =========================================
-           UNOFFICIAL NOTICE
-        ========================================= */
-
-        const noticeY =
-            pageHeight - 28;
-
-
-        pdf.setFillColor(
-            248,
-            248,
-            249
-        );
-
-
-        pdf.roundedRect(
-            margin,
-            noticeY,
-            pageWidth - margin * 2,
-            16,
-            3,
-            3,
-            "F"
-        );
-
-
-        pdf.setTextColor(
-            75,
-            75,
-            80
-        );
-
-
-        pdf.setFont(
-            "helvetica",
-            "bold"
-        );
-
-
-        pdf.setFontSize(6.5);
-
-
-        pdf.text(
-            "UNOFFICIAL NOTICE",
-            margin + 5,
-            noticeY + 6
-        );
-
-
-        pdf.setFont(
-            "helvetica",
-            "normal"
-        );
-
-
-        pdf.setFontSize(5.8);
-
-
-        pdf.setTextColor(
-            115,
-            115,
-            120
-        );
-
-
-        const notice =
-            "This PDF is generated by CTGBoardRanking, " +
-            "an independent unofficial platform. " +
-            "It is not affiliated with or endorsed by " +
-            "the Chattogram Education Board.";
-
-
-        const noticeLines =
-            pdf.splitTextToSize(
-                notice,
-                pageWidth -
-                margin * 2 -
-                10
-            );
-
-
-        pdf.text(
-            noticeLines,
-            margin + 5,
-            noticeY + 10
-        );
-
-
-        /* =========================================
-           FOOTER
-        ========================================= */
-
-        pdf.setTextColor(
-            150,
-            150,
-            155
-        );
-
-
-        pdf.setFont(
-            "helvetica",
-            "normal"
-        );
-
-
-        pdf.setFontSize(5.5);
-
-
-        pdf.text(
-            "CTGBoardRanking · SSC 2026",
-            pageWidth / 2,
-            pageHeight - 7,
+            23,
+            23.5,
             {
                 align: "center"
             }
         );
 
 
-        /* =========================================
-           FILE NAME
-        ========================================= */
+        /* Brand */
+
+        pdf.setTextColor(
+            ...colors.navy
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(16);
+
+        pdf.text(
+            "CTGBoardRanking",
+            35,
+            21
+        );
+
+
+        pdf.setTextColor(
+            ...colors.muted
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        pdf.setFontSize(7.5);
+
+        pdf.text(
+            "SSC 2026 · CHATTogram BOARD",
+            35,
+            26
+        );
+
+
+        /* =================================================
+           GENERATED BY
+        ================================================= */
+
+        pdf.setTextColor(
+            ...colors.muted
+        );
+
+        pdf.setFontSize(7);
+
+        pdf.text(
+            "Generated by",
+            pageWidth - 47,
+            18
+        );
+
+
+        pdf.setTextColor(
+            ...colors.navy
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(8);
+
+        pdf.text(
+            "Shadat Fatih",
+            pageWidth - 47,
+            23
+        );
+
+
+        /* =================================================
+           STUDENT SUMMARY
+        ================================================= */
+
+        const summaryY = 40;
+
+
+        pdf.setFillColor(
+            ...colors.white
+        );
+
+        pdf.setDrawColor(
+            ...colors.border
+        );
+
+        pdf.setLineWidth(.25);
+
+        pdf.roundedRect(
+            10,
+            summaryY,
+            pageWidth - 20,
+            39,
+            6,
+            6,
+            "FD"
+        );
+
+
+        /* Student name */
+
+        pdf.setTextColor(
+            ...colors.muted
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        pdf.setFontSize(7);
+
+        pdf.text(
+            "STUDENT NAME",
+            16,
+            summaryY + 9
+        );
+
+
+        pdf.setTextColor(
+            ...colors.navy
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(14);
+
+        pdf.text(
+            studentName,
+            16,
+            summaryY + 18
+        );
+
+
+        /* Roll */
+
+        pdf.setTextColor(
+            ...colors.muted
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        pdf.setFontSize(7);
+
+        pdf.text(
+            "ROLL",
+            16,
+            summaryY + 29
+        );
+
+
+        pdf.setTextColor(
+            ...colors.text
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(9);
+
+        pdf.text(
+            roll,
+            16,
+            summaryY + 35
+        );
+
+
+        /* =================================================
+           GPA CARD
+        ================================================= */
+
+        const cardWidth = 38;
+
+        const cardHeight = 29;
+
+        const cardY = summaryY + 5;
+
+
+        pdf.setFillColor(
+            ...colors.blueLight
+        );
+
+        pdf.roundedRect(
+            pageWidth - 16 - cardWidth * 2 - 6,
+            cardY,
+            cardWidth,
+            cardHeight,
+            5,
+            5,
+            "F"
+        );
+
+
+        pdf.setFillColor(
+            238,
+            250,
+            243
+        );
+
+        pdf.roundedRect(
+            pageWidth - 16 - cardWidth,
+            cardY,
+            cardWidth,
+            cardHeight,
+            5,
+            5,
+            "F"
+        );
+
+
+        /* GPA */
+
+        pdf.setTextColor(
+            ...colors.blue
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(18);
+
+        pdf.text(
+            gpa,
+            pageWidth - 16 - cardWidth * 2 - 6 + cardWidth / 2,
+            cardY + 14,
+            {
+                align: "center"
+            }
+        );
+
+
+        pdf.setTextColor(
+            ...colors.muted
+        );
+
+        pdf.setFontSize(7);
+
+        pdf.text(
+            "GPA",
+            pageWidth - 16 - cardWidth * 2 - 6 + cardWidth / 2,
+            cardY + 23,
+            {
+                align: "center"
+            }
+        );
+
+
+        /* Total */
+
+        pdf.setTextColor(
+            ...colors.success
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(15);
+
+        pdf.text(
+            total,
+            pageWidth - 16 - cardWidth + cardWidth / 2,
+            cardY + 14,
+            {
+                align: "center"
+            }
+        );
+
+
+        pdf.setTextColor(
+            ...colors.muted
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        pdf.setFontSize(7);
+
+        pdf.text(
+            "TOTAL SCORE",
+            pageWidth - 16 - cardWidth + cardWidth / 2,
+            cardY + 23,
+            {
+                align: "center"
+            }
+        );
+
+
+        /* =================================================
+           SUBJECT SECTION
+        ================================================= */
+
+        const subjectTitleY = 88;
+
+
+        pdf.setTextColor(
+            ...colors.navy
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(12);
+
+        pdf.text(
+            "Subject-wise Result",
+            12,
+            subjectTitleY
+        );
+
+
+        pdf.setTextColor(
+            ...colors.muted
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        pdf.setFontSize(7);
+
+        pdf.text(
+            "MARKS & GRADE",
+            pageWidth - 12,
+            subjectTitleY,
+            {
+                align: "right"
+            }
+        );
+
+
+        /* =================================================
+           TABLE HEADER
+        ================================================= */
+
+        let y = subjectTitleY + 6;
+
+
+        pdf.setFillColor(
+            ...colors.navy
+        );
+
+        pdf.roundedRect(
+            10,
+            y,
+            pageWidth - 20,
+            9,
+            3,
+            3,
+            "F"
+        );
+
+
+        pdf.setTextColor(
+            ...colors.white
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(7);
+
+
+        pdf.text(
+            "SUBJECT",
+            15,
+            y + 5.8
+        );
+
+
+        pdf.text(
+            "CODE",
+            112,
+            y + 5.8,
+            {
+                align: "center"
+            }
+        );
+
+
+        pdf.text(
+            "MARK",
+            151,
+            y + 5.8,
+            {
+                align: "center"
+            }
+        );
+
+
+        pdf.text(
+            "GRADE",
+            187,
+            y + 5.8,
+            {
+                align: "center"
+            }
+        );
+
+
+        y += 12;
+
+
+        /* =================================================
+           SUBJECT ROWS
+        ================================================= */
+
+        subjectRows.forEach(
+            function(row, index) {
+
+                const subjectName =
+                    row.querySelector(
+                        ".home-subject-name strong"
+                    )?.textContent?.trim()
+                    || "Subject";
+
+
+                const code =
+                    row.querySelector(
+                        ".home-subject-name span"
+                    )?.textContent?.trim()
+                    || "—";
+
+
+                const mark =
+                    row.querySelector(
+                        ".home-subject-mark strong"
+                    )?.textContent?.trim()
+                    || "—";
+
+
+                const grade =
+                    row.querySelector(
+                        ".home-subject-grade strong"
+                    )?.textContent?.trim()
+                    || "—";
+
+
+                /* alternating premium background */
+
+                if (index % 2 === 0) {
+
+                    pdf.setFillColor(
+                        255,
+                        255,
+                        255
+                    );
+
+                } else {
+
+                    pdf.setFillColor(
+                        242,
+                        246,
+                        251
+                    );
+
+                }
+
+
+                pdf.setDrawColor(
+                    ...colors.border
+                );
+
+
+                pdf.roundedRect(
+                    10,
+                    y,
+                    pageWidth - 20,
+                    11,
+                    3,
+                    3,
+                    "FD"
+                );
+
+
+                /* Subject */
+
+                pdf.setTextColor(
+                    ...colors.text
+                );
+
+                pdf.setFont(
+                    "helvetica",
+                    "bold"
+                );
+
+                pdf.setFontSize(7.5);
+
+
+                let cleanSubject =
+                    subjectName;
+
+
+                if (
+                    cleanSubject.length > 38
+                ) {
+
+                    cleanSubject =
+                        cleanSubject.substring(
+                            0,
+                            35
+                        ) + "...";
+
+                }
+
+
+                pdf.text(
+                    cleanSubject,
+                    15,
+                    y + 7
+                );
+
+
+                /* Code */
+
+                pdf.setTextColor(
+                    ...colors.muted
+                );
+
+                pdf.setFont(
+                    "helvetica",
+                    "normal"
+                );
+
+                pdf.setFontSize(7);
+
+
+                pdf.text(
+                    code,
+                    112,
+                    y + 7,
+                    {
+                        align: "center"
+                    }
+                );
+
+
+                /* Mark */
+
+                pdf.setTextColor(
+                    ...colors.navy
+                );
+
+                pdf.setFont(
+                    "helvetica",
+                    "bold"
+                );
+
+                pdf.setFontSize(8);
+
+
+                pdf.text(
+                    mark,
+                    151,
+                    y + 7,
+                    {
+                        align: "center"
+                    }
+                );
+
+
+                /* Grade badge */
+
+                pdf.setFillColor(
+                    ...colors.blueLight
+                );
+
+
+                pdf.roundedRect(
+                    177,
+                    y + 2,
+                    20,
+                    7,
+                    3.5,
+                    3.5,
+                    "F"
+                );
+
+
+                pdf.setTextColor(
+                    ...colors.blue
+                );
+
+                pdf.setFont(
+                    "helvetica",
+                    "bold"
+                );
+
+                pdf.setFontSize(7);
+
+
+                pdf.text(
+                    grade,
+                    187,
+                    y + 6.8,
+                    {
+                        align: "center"
+                    }
+                );
+
+
+                /* IMPORTANT:
+                   Fixed row height prevents overlap */
+
+                y += 13;
+
+            }
+        );
+
+
+        /* =================================================
+           UNOFFICIAL NOTICE
+        ================================================= */
+
+        const noticeY =
+            Math.min(
+                y + 7,
+                pageHeight - 38
+            );
+
+
+        pdf.setFillColor(
+            255,
+            248,
+            230
+        );
+
+
+        pdf.setDrawColor(
+            245,
+            210,
+            130
+        );
+
+
+        pdf.roundedRect(
+            10,
+            noticeY,
+            pageWidth - 20,
+            21,
+            5,
+            5,
+            "FD"
+        );
+
+
+        pdf.setTextColor(
+            145,
+            92,
+            0
+        );
+
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(7.5);
+
+
+        pdf.text(
+            "UNOFFICIAL NOTICE",
+            15,
+            noticeY + 7
+        );
+
+
+        pdf.setTextColor(
+            90,
+            90,
+            90
+        );
+
+
+        pdf.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        pdf.setFontSize(6.5);
+
+
+        pdf.text(
+            "This result is generated by CTGBoardRanking for educational,",
+            15,
+            noticeY + 13
+        );
+
+
+        pdf.text(
+            "research and statistical purposes and is not an official board document.",
+            15,
+            noticeY + 17
+        );
+
+
+        /* =================================================
+           FOOTER
+        ================================================= */
+
+        pdf.setTextColor(
+            ...colors.muted
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        pdf.setFontSize(6.5);
+
+
+        pdf.text(
+            "CTGBoardRanking",
+            12,
+            pageHeight - 9
+        );
+
+
+        pdf.text(
+            "Generated by Shadat Fatih",
+            pageWidth / 2,
+            pageHeight - 9,
+            {
+                align: "center"
+            }
+        );
+
+
+        pdf.text(
+            "SSC 2026 · Chattogram Board",
+            pageWidth - 12,
+            pageHeight - 9,
+            {
+                align: "right"
+            }
+        );
+
+
+        /* =================================================
+           SAVE
+        ================================================= */
 
         const safeName =
             studentName
@@ -4899,14 +5065,14 @@ async function downloadHomeResultPDF() {
 
 
         pdf.save(
-            `CTGBoardRanking-SSC-2026-${roll}-${safeName || "result"}.pdf`
+            `SSC-2026-${roll}-${safeName || "result"}.pdf`
         );
 
 
     } catch (error) {
 
         console.error(
-            "Homepage PDF error:",
+            "Premium PDF error:",
             error
         );
 
@@ -4928,7 +5094,8 @@ async function downloadHomeResultPDF() {
     }
 
 }
-      
+
+
 })();
 
 </script>
