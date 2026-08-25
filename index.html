@@ -3461,83 +3461,77 @@ async function loadHomepageData() {
 async function loadTotalVisits() {
 
     const element =
-        document.getElementById(
-            "totalVisits"
-        );
-
+        document.getElementById("totalVisits");
 
     if (!element) {
+        console.warn("totalVisits element not found");
         return;
     }
 
-
-    const SUPABASE_URL =
-        "https://mpnjnyejpqeqguxikvnl.supabase.co";
-
-
-    const SUPABASE_KEY =
-        "sb_publishable_6Pm2-m3BeYB8VDw4kwCccg_WnYe5-IT";
-
-
     try {
 
-        const response =
-            await fetch(
-                SUPABASE_URL +
-                "/rest/v1/site_stats?id=eq.1&select=total_visits",
-                {
-
-                    headers: {
-
-                        "apikey":
-                            SUPABASE_KEY,
-
-                        "Authorization":
-                            "Bearer " +
-                            SUPABASE_KEY
-
-                    }
-
-                }
-            );
-
+        const response = await fetch(
+            "/api/visits",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cache: "no-store"
+            }
+        );
 
         if (!response.ok) {
+
+            console.error(
+                "Visit API failed:",
+                response.status
+            );
+
             return;
         }
-
 
         const data =
             await response.json();
 
-
         if (
-            Array.isArray(data) &&
-            data.length > 0
+            data &&
+            typeof data.total !== "undefined"
         ) {
 
             element.textContent =
-                Number(
-                    data[0].total_visits
-                ).toLocaleString(
-                    "en-US"
-                );
+                Number(data.total)
+                .toLocaleString("en-US");
 
         }
 
-    }
+    } catch (error) {
 
-    catch(error) {
-
-        console.warn(
+        console.error(
             "Total visits error:",
             error
         );
 
     }
-
 }
 
+
+/* =====================================================
+   LOAD TOTAL VISITS
+===================================================== */
+
+if (document.readyState === "loading") {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        loadTotalVisits
+    );
+
+} else {
+
+    loadTotalVisits();
+
+}
 
 /* =====================================================
    START
