@@ -1,434 +1,3515 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  >
+<meta charset="UTF-8">
 
-  <meta
-    name="description"
-    content="SSC 2026 Chattogram Board Individual Result - Shadat Fatih"
-  >
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-  <title>Individual Result | CTG Board Ranking</title>
+<title>Individual Result — CTGBoardRanking</title>
 
-  <link rel="stylesheet" href="individual-results.css">
+<meta name="description"
+      content="SSC 2026 Individual Result — Chattogram Board">
 
-  <!-- jsPDF -->
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"
-    defer
-  ></script>
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
 
-  <!-- html2canvas -->
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
-    defer
-  ></script>
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
 
-  <script src="individual-results.js" defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet">
+
+
+<!-- =====================================================
+     PDF LIBRARIES
+===================================================== -->
+
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js">
+</script>
+
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js">
+</script>
+
+
+<style>
+
+/* =====================================================
+   APPLE INSPIRED DESIGN
+===================================================== */
+
+:root{
+
+    --blue:#0071e3;
+    --blue-dark:#0066cc;
+
+    --bg:#f5f5f7;
+    --card:#ffffff;
+    --soft:#f2f2f7;
+
+    --text:#1d1d1f;
+    --muted:#6e6e73;
+
+    --border:rgba(0,0,0,.08);
+
+    --green:#34c759;
+    --orange:#ff9500;
+    --red:#ff3b30;
+
+    --shadow:
+        0 20px 60px rgba(0,0,0,.08);
+
+    --radius:28px;
+}
+
+
+body.dark{
+
+    --bg:#000000;
+    --card:#1c1c1e;
+    --soft:#2c2c2e;
+
+    --text:#f5f5f7;
+    --muted:#a1a1a6;
+
+    --border:rgba(255,255,255,.10);
+
+    --shadow:
+        0 25px 70px rgba(0,0,0,.45);
+}
+
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    margin:0;
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    background:var(--bg);
+    color:var(--text);
+
+    transition:
+        background .25s ease,
+        color .25s ease;
+}
+
+button,
+input{
+
+    font:inherit;
+}
+
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+.navbar{
+
+    position:sticky;
+    top:0;
+
+    z-index:1000;
+
+    height:64px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 22px;
+
+    background:
+        rgba(255,255,255,.78);
+
+    border-bottom:
+        1px solid var(--border);
+
+    backdrop-filter:
+        blur(22px);
+
+    -webkit-backdrop-filter:
+        blur(22px);
+}
+
+body.dark .navbar{
+
+    background:
+        rgba(0,0,0,.78);
+}
+
+
+.logo{
+
+    display:flex;
+    align-items:center;
+
+    gap:9px;
+
+    color:var(--text);
+
+    text-decoration:none;
+
+    font-size:15px;
+    font-weight:800;
+
+    letter-spacing:-.4px;
+}
+
+
+.logo-mark{
+
+    width:30px;
+    height:30px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:9px;
+
+    background:var(--blue);
+
+    color:#fff;
+
+    font-size:14px;
+    font-weight:800;
+}
+
+
+.nav-actions{
+
+    display:flex;
+    align-items:center;
+
+    gap:8px;
+}
+
+
+.nav-button{
+
+    height:40px;
+
+    padding:0 14px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:13px;
+
+    background:var(--soft);
+
+    color:var(--text);
+
+    text-decoration:none;
+
+    font-size:12px;
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+}
+
+.nav-button:hover{
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.page{
+
+    min-height:
+        calc(100vh - 64px);
+
+    padding:
+        55px 15px 90px;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(0,113,227,.11),
+            transparent 38%
+        );
+}
+
+
+.container{
+
+    width:
+        min(950px,100%);
+
+    margin:auto;
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero{
+
+    text-align:center;
+
+    margin-bottom:34px;
+}
+
+
+.eyebrow{
+
+    display:inline-block;
+
+    color:var(--blue);
+
+    font-size:10px;
+    font-weight:800;
+
+    letter-spacing:.13em;
+
+    text-transform:uppercase;
+}
+
+
+.hero h1{
+
+    margin:
+        13px 0 14px;
+
+    font-size:
+        clamp(38px,8vw,70px);
+
+    line-height:.98;
+
+    letter-spacing:-4px;
+}
+
+
+.hero h1 span{
+
+    color:var(--blue);
+}
+
+
+.hero p{
+
+    max-width:620px;
+
+    margin:auto;
+
+    color:var(--muted);
+
+    font-size:14px;
+
+    line-height:1.7;
+}
+
+
+/* =====================================================
+   SEARCH CARD
+===================================================== */
+
+.search-card{
+
+    padding:26px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:var(--radius);
+
+    background:
+        color-mix(
+            in srgb,
+            var(--card) 90%,
+            transparent
+        );
+
+    box-shadow:var(--shadow);
+
+    backdrop-filter:
+        blur(25px);
+
+    -webkit-backdrop-filter:
+        blur(25px);
+}
+
+
+.search-card h2{
+
+    margin:
+        0 0 7px;
+
+    font-size:22px;
+
+    letter-spacing:-.6px;
+}
+
+
+.search-card p{
+
+    margin:
+        0 0 20px;
+
+    color:var(--muted);
+
+    font-size:13px;
+}
+
+
+.search-form{
+
+    display:flex;
+
+    gap:10px;
+}
+
+
+.search-input{
+
+    flex:1;
+
+    height:52px;
+
+    padding:
+        0 17px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:15px;
+
+    outline:none;
+
+    background:var(--soft);
+
+    color:var(--text);
+
+    font-size:14px;
+
+    transition:.2s ease;
+}
+
+
+.search-input:focus{
+
+    border-color:
+        var(--blue);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(0,113,227,.10);
+}
+
+
+.search-button{
+
+    height:52px;
+
+    padding:
+        0 23px;
+
+    border:0;
+
+    border-radius:15px;
+
+    background:
+        var(--blue);
+
+    color:#fff;
+
+    font-size:13px;
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+}
+
+
+.search-button:hover{
+
+    background:
+        var(--blue-dark);
+
+    transform:
+        translateY(-1px);
+}
+
+
+.search-button:disabled{
+
+    opacity:.6;
+
+    cursor:wait;
+
+}
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+.error{
+
+    display:none;
+
+    margin-top:12px;
+
+    padding:
+        13px 15px;
+
+    border-radius:14px;
+
+    background:
+        rgba(255,59,48,.09);
+
+    color:var(--red);
+
+    font-size:12px;
+    font-weight:600;
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.loading{
+
+    display:none;
+
+    margin-top:20px;
+
+    padding:22px;
+
+    text-align:center;
+
+    color:var(--muted);
+
+    font-size:12px;
+}
+
+
+/* =====================================================
+   RESULT
+===================================================== */
+
+#resultArea{
+
+    display:none;
+
+    margin-top:25px;
+}
+
+
+.result-card{
+
+    overflow:hidden;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:32px;
+
+    background:var(--card);
+
+    box-shadow:var(--shadow);
+}
+
+
+/* =====================================================
+   RESULT HEADER
+===================================================== */
+
+.result-header{
+
+    padding:31px;
+
+    border-bottom:
+        1px solid var(--border);
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(0,113,227,.12),
+            transparent 65%
+        );
+}
+
+
+.result-header-row{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    justify-content:space-between;
+
+    gap:20px;
+}
+
+
+.student-name{
+
+    margin:
+        8px 0 5px;
+
+    font-size:30px;
+
+    line-height:1.15;
+
+    letter-spacing:-1px;
+}
+
+
+.roll-text{
+
+    color:var(--muted);
+
+    font-size:12px;
+}
+
+
+.status{
+
+    flex-shrink:0;
+
+    padding:
+        8px 13px;
+
+    border-radius:50px;
+
+    background:
+        rgba(52,199,89,.13);
+
+    color:#16834b;
+
+    font-size:10px;
+    font-weight:800;
+
+    letter-spacing:.06em;
+}
+
+
+/* =====================================================
+   BASIC INFO
+===================================================== */
+
+.info-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:12px;
+
+    padding:
+        25px 30px;
+}
+
+
+.info{
+
+    padding:17px;
+
+    border-radius:18px;
+
+    background:var(--soft);
+}
+
+
+.info-label{
+
+    display:block;
+
+    margin-bottom:7px;
+
+    color:var(--muted);
+
+    font-size:9px;
+
+    font-weight:800;
+
+    letter-spacing:.09em;
+}
+
+
+.info-value{
+
+    display:block;
+
+    color:var(--text);
+
+    font-size:12px;
+
+    font-weight:700;
+
+    line-height:1.5;
+
+    word-break:break-word;
+}
+
+
+/* =====================================================
+   SCORE CARDS
+===================================================== */
+
+.score-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:12px;
+
+    padding:
+        0 30px 28px;
+}
+
+
+.score{
+
+    position:relative;
+
+    overflow:hidden;
+
+    padding:23px;
+
+    border-radius:21px;
+
+    text-align:center;
+
+    background:var(--soft);
+}
+
+
+.score strong{
+
+    position:relative;
+
+    z-index:1;
+
+    display:block;
+
+    font-size:29px;
+
+    letter-spacing:-1px;
+}
+
+
+.score span{
+
+    position:relative;
+
+    z-index:1;
+
+    display:block;
+
+    margin-top:5px;
+
+    color:var(--muted);
+
+    font-size:9px;
+
+    font-weight:800;
+
+    letter-spacing:.09em;
+}
+
+
+.score.total{
+
+    background:
+        rgba(0,113,227,.10);
+}
+
+
+.score.gpa{
+
+    background:
+        rgba(52,199,89,.10);
+}
+
+
+.score.rank{
+
+    background:
+        rgba(255,149,0,.10);
+}
+
+
+/* =====================================================
+   SUBJECTS
+===================================================== */
+
+.subject-section{
+
+    padding:
+        0 30px 30px;
+}
+
+
+.subject-heading{
+
+    display:flex;
+
+    align-items:end;
+
+    justify-content:space-between;
+
+    margin-bottom:13px;
+}
+
+
+.subject-heading h3{
+
+    margin:0;
+
+    font-size:18px;
+
+    letter-spacing:-.4px;
+}
+
+
+.subject-heading span{
+
+    color:var(--muted);
+
+    font-size:10px;
+}
+
+
+.subject-table{
+
+    overflow:hidden;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:19px;
+}
+
+
+.subject-head,
+.subject-row{
+
+    display:grid;
+
+    grid-template-columns:
+        minmax(0,1fr)
+        100px
+        100px;
+
+    gap:10px;
+
+    align-items:center;
+
+    padding:
+        14px 17px;
+}
+
+
+.subject-head{
+
+    background:var(--soft);
+
+    color:var(--muted);
+
+    font-size:9px;
+
+    font-weight:800;
+
+    letter-spacing:.08em;
+}
+
+
+.subject-row{
+
+    min-height:49px;
+
+    border-top:
+        1px solid var(--border);
+
+    color:var(--text);
+
+    font-size:12px;
+}
+
+
+.subject-row > div:nth-child(2),
+.subject-row > div:nth-child(3){
+
+    text-align:right;
+}
+
+
+.grade{
+
+    font-weight:800;
+}
+
+
+/* =====================================================
+   DOWNLOAD AREA
+===================================================== */
+
+.download-area{
+
+    padding:
+        0 30px 30px;
+}
+
+
+.download-button{
+
+    width:100%;
+
+    min-height:52px;
+
+    border:0;
+
+    border-radius:16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0071e3,
+            #0077ed
+        );
+
+    color:#fff;
+
+    font-size:13px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,113,227,.20);
+
+    transition:.2s ease;
+}
+
+
+.download-button:hover{
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 12px 30px
+        rgba(0,113,227,.28);
+}
+
+
+.download-button:disabled{
+
+    opacity:.6;
+
+    cursor:wait;
+
+    transform:none;
+}
+
+
+/* =====================================================
+   FOOTNOTE
+===================================================== */
+
+.footnote{
+
+    padding:
+        0 30px 30px;
+
+    color:var(--muted);
+
+    font-size:10px;
+
+    line-height:1.7;
+}
+
+
+.footnote strong{
+
+    color:var(--text);
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:700px){
+
+    .navbar{
+
+        padding:
+            0 14px;
+    }
+
+
+    .page{
+
+        padding:
+            45px 12px 70px;
+    }
+
+
+    .hero h1{
+
+        letter-spacing:-3px;
+    }
+
+
+    .search-card{
+
+        padding:20px;
+
+        border-radius:23px;
+    }
+
+
+    .search-form{
+
+        flex-direction:column;
+    }
+
+
+    .search-button{
+
+        width:100%;
+    }
+
+
+    .result-header{
+
+        padding:23px;
+    }
+
+
+    .result-header-row{
+
+        flex-direction:column;
+    }
+
+
+    .student-name{
+
+        font-size:24px;
+    }
+
+
+    .status{
+
+        align-self:flex-start;
+    }
+
+
+    .info-grid{
+
+        grid-template-columns:
+            1fr 1fr;
+
+        padding:
+            20px;
+    }
+
+
+    .score-grid{
+
+        grid-template-columns:
+            1fr;
+
+        padding:
+            0 20px 22px;
+    }
+
+
+    .subject-section{
+
+        padding:
+            0 20px 25px;
+    }
+
+
+    .subject-table{
+
+        overflow-x:auto;
+    }
+
+
+    .subject-head,
+    .subject-row{
+
+        min-width:440px;
+    }
+
+
+    .download-area{
+
+        padding:
+            0 20px 25px;
+    }
+
+
+    .footnote{
+
+        padding:
+            0 20px 25px;
+    }
+
+}
+
+
+@media(max-width:430px){
+
+    .info-grid{
+
+        grid-template-columns:1fr;
+    }
+
+}
+
+
+/* =====================================================
+   PRINT
+===================================================== */
+
+@media print{
+
+    @page{
+
+        size:A4;
+
+        margin:10mm;
+    }
+
+    .navbar,
+    .hero,
+    .search-card,
+    .loading,
+    .download-area{
+
+        display:none !important;
+    }
+
+    body{
+
+        background:#fff !important;
+
+        color:#111 !important;
+    }
+
+    .page{
+
+        padding:0 !important;
+
+        background:#fff !important;
+    }
+
+    #resultArea{
+
+        display:block !important;
+
+        margin:0 !important;
+    }
+
+    .result-card{
+
+        border-radius:0 !important;
+
+        box-shadow:none !important;
+
+        border:1px solid #ddd !important;
+    }
+
+}
+
+
+/* =====================================================
+   HIDDEN PDF CONTAINER
+===================================================== */
+
+#pdfContent{
+
+    display:none;
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-  <!-- Background -->
-  <div class="background-glow glow-one"></div>
-  <div class="background-glow glow-two"></div>
 
-  <main class="page">
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
 
-    <!-- Header -->
-    <header class="topbar">
+<header class="navbar">
 
-      <a href="index.html" class="brand">
-        <div class="brand-icon">
-          <span>CTG</span>
-        </div>
+    <a
+        href="index.html"
+        class="logo">
 
-        <div>
-          <strong>CTG Board Ranking</strong>
-          <small>SSC 2026</small>
-        </div>
-      </a>
+        <span class="logo-mark">
+            C
+        </span>
 
-      <button
-        type="button"
-        class="theme-toggle"
-        id="themeToggle"
-        aria-label="Toggle dark mode"
-      >
-        <span id="themeIcon">☾</span>
-      </button>
+        <span>
+            CTGBoardRanking
+        </span>
 
-    </header>
+    </a>
 
 
-    <!-- Search Hero -->
-    <section class="search-section">
+    <div class="nav-actions">
 
-      <div class="eyebrow">
-        <span class="status-dot"></span>
-        SSC 2026 • Chattogram Board
-      </div>
+        <a
+            href="index.html"
+            class="nav-button">
 
-      <h1>
-        Individual
-        <span>Result</span>
-      </h1>
+            Home
 
-      <p class="hero-description">
-        Enter your roll number to view your SSC 2026 result,
-        total score, GPA and subject-wise marks.
-      </p>
+        </a>
 
-      <form id="resultForm" class="search-box">
 
-        <div class="input-wrapper">
+        <button
+            type="button"
+            id="themeBtn"
+            class="nav-button"
+            aria-label="Toggle dark mode">
 
-          <span class="search-icon">⌕</span>
+            ◐
 
-          <input
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     PAGE
+===================================================== -->
+
+<div class="page">
+
+<main class="container">
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero">
+
+    <span class="eyebrow">
+        SSC 2026 · CHATTAGRAM BOARD
+    </span>
+
+
+    <h1>
+
+        Your result.<br>
+
+        <span>
+            All in one place.
+        </span>
+
+    </h1>
+
+
+    <p>
+
+        Search your roll number to view your
+        SSC 2026 result, subject-wise marks,
+        GPA, total score and student rank.
+
+    </p>
+
+</section>
+
+
+
+<!-- =====================================================
+     SEARCH
+===================================================== -->
+
+<section class="search-card">
+
+    <h2>
+        Find your result
+    </h2>
+
+
+    <p>
+        Enter your SSC 2026 roll number.
+    </p>
+
+
+    <form
+        id="resultSearchForm"
+        class="search-form">
+
+
+        <input
+            id="roll"
+            class="search-input"
             type="text"
-            id="rollInput"
             inputmode="numeric"
             autocomplete="off"
-            maxlength="8"
-            placeholder="Enter roll number"
-            aria-label="Roll number"
-            required
-          >
+            maxlength="6"
+            placeholder="Enter Roll Number"
+            required>
 
-          <button
-            type="button"
-            id="clearBtn"
-            class="clear-btn hidden"
-            aria-label="Clear"
-          >
-            ×
-          </button>
-
-        </div>
 
         <button
-          type="submit"
-          id="searchBtn"
-          class="search-btn"
-        >
-          <span id="searchBtnText">View Result</span>
-          <span id="searchSpinner" class="spinner hidden"></span>
+            id="searchButton"
+            class="search-button"
+            type="submit">
+
+            View Result →
+
         </button>
 
-      </form>
 
-      <div id="errorMessage" class="error-message hidden"></div>
-
-    </section>
+    </form>
 
 
-    <!-- Result -->
-    <section
-      id="resultSection"
-      class="result-section hidden"
-    >
+    <div
+        id="errorMessage"
+        class="error">
+    </div>
 
-      <div class="result-actions">
-
-        <button
-          type="button"
-          id="newSearchBtn"
-          class="secondary-btn"
-        >
-          ← New Search
-        </button>
-
-        <button
-          type="button"
-          id="downloadPdfBtn"
-          class="primary-btn"
-        >
-          <span>↓</span>
-          Download PDF
-        </button>
-
-      </div>
+</section>
 
 
-      <!-- Printable Result -->
-      <div id="resultCard" class="result-card">
 
-        <!-- Official-looking header, clearly marked unofficial -->
-        <div class="result-header">
+<!-- =====================================================
+     LOADING
+===================================================== -->
 
-          <div class="result-brand">
+<div
+    id="loading"
+    class="loading">
 
-            <div class="mini-logo">
-              CTG
-            </div>
+    Loading result…
 
-            <div>
-              <strong>CTG BOARD RANKING</strong>
-              <span>SSC 2026</span>
-            </div>
-
-          </div>
-
-          <div class="unofficial-badge">
-            UNOFFICIAL
-          </div>
-
-        </div>
+</div>
 
 
-        <div class="result-title">
 
-          <div>
-            <p class="result-kicker">SECONDARY SCHOOL CERTIFICATE</p>
+<!-- =====================================================
+     RESULT AREA
+===================================================== -->
 
-            <h2>Individual Result</h2>
-
-            <p>
-              <span id="resultBoard">Chattogram Board</span>
-              <span class="separator">•</span>
-              <span>2026</span>
-            </p>
-          </div>
-
-        </div>
+<section
+    id="resultArea">
 
 
-        <!-- Student Information -->
-        <div class="student-profile">
-
-          <div class="student-main">
-
-            <span class="label">STUDENT NAME</span>
-
-            <h3 id="studentName">
-              —
-            </h3>
-
-            <div class="student-meta">
-
-              <span>
-                Roll
-                <strong id="studentRoll">—</strong>
-              </span>
-
-              <span>
-                Registration
-                <strong id="studentReg">—</strong>
-              </span>
-
-              <span>
-                Group
-                <strong id="studentGroup">—</strong>
-              </span>
-
-            </div>
-
-          </div>
-
-          <div class="student-result-status">
-
-            <span class="label">RESULT</span>
-
-            <strong id="resultStatus">
-              —
-            </strong>
-
-          </div>
-
-        </div>
+<div
+    id="resultCard"
+    class="result-card">
 
 
-        <!-- Score cards -->
-        <div class="score-grid">
 
-          <div class="score-card">
+<!-- =====================================================
+     RESULT HEADER
+===================================================== -->
 
-            <span class="score-label">
-              TOTAL SCORE
+<div class="result-header">
+
+    <div class="result-header-row">
+
+
+        <div>
+
+            <span class="eyebrow">
+
+                SSC 2026 · CHATTAGRAM BOARD
+
             </span>
 
-            <strong id="totalScore">
-              —
-            </strong>
 
-            <small>
-              Total Marks
-            </small>
+            <h2
+                id="studentName"
+                class="student-name">
 
-          </div>
+                —
 
+            </h2>
 
-          <div class="score-card gpa-score">
-
-            <span class="score-label">
-              GPA
-            </span>
-
-            <strong id="gpa">
-              —
-            </strong>
-
-            <small>
-              Grade Point Average
-            </small>
-
-          </div>
-
-        </div>
-
-
-        <!-- Additional information -->
-        <div
-          id="additionalInfo"
-          class="additional-info"
-        >
-
-          <div class="info-item">
-            <span>Institute</span>
-            <strong id="studentInstitute">—</strong>
-          </div>
-
-          <div class="info-item">
-            <span>District</span>
-            <strong id="studentDistrict">—</strong>
-          </div>
-
-          <div class="info-item">
-            <span>Father's Name</span>
-            <strong id="fatherName">—</strong>
-          </div>
-
-          <div class="info-item">
-            <span>Mother's Name</span>
-            <strong id="motherName">—</strong>
-          </div>
-
-        </div>
-
-
-        <!-- Subjects -->
-        <div class="subjects-section">
-
-          <div class="section-heading">
-
-            <div>
-              <span class="section-kicker">
-                ACADEMIC PERFORMANCE
-              </span>
-
-              <h3>
-                Subject-wise Result
-              </h3>
-            </div>
 
             <span
-              id="subjectCount"
-              class="subject-count"
-            >
-              0 Subjects
+                id="resultRoll"
+                class="roll-text">
+
+                Roll: —
+
             </span>
 
-          </div>
+        </div>
 
 
-          <div class="subjects-table-wrapper">
+        <span
+            id="resultStatus"
+            class="status">
 
-            <table class="subjects-table">
+            —
 
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Subject</th>
-                  <th>Code</th>
-                  <th>Mark</th>
-                  <th>Grade</th>
-                </tr>
-              </thead>
+        </span>
 
-              <tbody id="subjectsBody">
-              </tbody>
 
-            </table>
+    </div>
 
-          </div>
+</div>
+
+
+
+<!-- =====================================================
+     INFORMATION
+===================================================== -->
+
+<div class="info-grid">
+
+
+    <div class="info">
+
+        <span class="info-label">
+            ROLL
+        </span>
+
+        <strong
+            id="showRoll"
+            class="info-value">
+
+            —
+
+        </strong>
+
+    </div>
+
+
+
+    <div class="info">
+
+        <span class="info-label">
+            REGISTRATION
+        </span>
+
+        <strong
+            id="showRegistration"
+            class="info-value">
+
+            —
+
+        </strong>
+
+    </div>
+
+
+
+    <div class="info">
+
+        <span class="info-label">
+            YEAR
+        </span>
+
+        <strong
+            id="showYear"
+            class="info-value">
+
+            —
+
+        </strong>
+
+    </div>
+
+
+
+    <div class="info">
+
+        <span class="info-label">
+            GROUP
+        </span>
+
+        <strong
+            id="showGroup"
+            class="info-value">
+
+            —
+
+        </strong>
+
+    </div>
+
+
+
+    <div class="info">
+
+        <span class="info-label">
+            INSTITUTION
+        </span>
+
+        <strong
+            id="showInstitution"
+            class="info-value">
+
+            —
+
+        </strong>
+
+    </div>
+
+
+
+    <div class="info">
+
+        <span class="info-label">
+            DISTRICT
+        </span>
+
+        <strong
+            id="showDistrict"
+            class="info-value">
+
+            —
+
+        </strong>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     SCORE
+===================================================== -->
+
+<div class="score-grid">
+
+
+    <div class="score total">
+
+        <strong
+            id="totalScore">
+
+            —
+
+        </strong>
+
+        <span>
+            TOTAL SCORE
+        </span>
+
+    </div>
+
+
+
+    <div class="score gpa">
+
+        <strong
+            id="gpa">
+
+            —
+
+        </strong>
+
+        <span>
+            GPA
+        </span>
+
+    </div>
+
+
+
+    <div class="score rank">
+
+        <strong
+            id="studentRank">
+
+            —
+
+        </strong>
+
+        <span>
+            STUDENT RANK
+        </span>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     SUBJECT RESULTS
+===================================================== -->
+
+<div class="subject-section">
+
+
+    <div class="subject-heading">
+
+        <h3>
+            Subject-wise Result
+        </h3>
+
+        <span>
+            Marks & Grade
+        </span>
+
+    </div>
+
+
+    <div
+        id="subjectTable"
+        class="subject-table">
+
+
+        <div class="subject-head">
+
+            <div>
+                SUBJECT
+            </div>
+
+            <div>
+                MARKS
+            </div>
+
+            <div>
+                GRADE
+            </div>
 
         </div>
 
 
-        <!-- PDF footer -->
-        <div class="result-footer">
+    </div>
 
-          <div>
-            <strong>Generated by Shadat Fatih</strong>
+</div>
 
-            <span>
-              CTG Board Ranking • SSC 2026
-            </span>
-          </div>
 
-          <div class="footer-unofficial">
-            UNOFFICIAL RESULT
-          </div>
+
+<!-- =====================================================
+     DOWNLOAD PDF
+===================================================== -->
+
+<div class="download-area">
+
+    <button
+        id="downloadPdfBtn"
+        class="download-button"
+        type="button">
+
+        ↓ &nbsp; Download PDF
+
+    </button>
+
+</div>
+
+
+
+<!-- =====================================================
+     FOOTNOTE
+===================================================== -->
+
+<div class="footnote">
+
+    <strong>
+        CTGBoardRanking
+    </strong>
+
+    is an independent, unofficial educational
+    data platform. Result information is provided
+    for educational, research and statistical purposes.
+
+</div>
+
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const form =
+    document.getElementById(
+        "resultSearchForm"
+    );
+
+
+const rollInput =
+    document.getElementById(
+        "roll"
+    );
+
+
+const searchButton =
+    document.getElementById(
+        "searchButton"
+    );
+
+
+const errorMessage =
+    document.getElementById(
+        "errorMessage"
+    );
+
+
+const resultArea =
+    document.getElementById(
+        "resultArea"
+    );
+
+
+const loading =
+    document.getElementById(
+        "loading"
+    );
+
+
+const downloadPdfBtn =
+    document.getElementById(
+        "downloadPdfBtn"
+    );
+
+
+const themeBtn =
+    document.getElementById(
+        "themeBtn"
+    );
+
+
+/* =====================================================
+   STORE CURRENT STUDENT
+===================================================== */
+
+let currentStudent = null;
+
+
+/* =====================================================
+   DARK MODE
+===================================================== */
+
+if(
+    localStorage.getItem(
+        "ctg-theme"
+    ) === "dark"
+){
+
+    document.body.classList.add(
+        "dark"
+    );
+
+}
+
+
+themeBtn.addEventListener(
+    "click",
+    function(){
+
+        document.body.classList.toggle(
+            "dark"
+        );
+
+
+        localStorage.setItem(
+            "ctg-theme",
+
+            document.body.classList.contains(
+                "dark"
+            )
+                ? "dark"
+                : "light"
+        );
+
+    }
+);
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+function showError(message){
+
+    errorMessage.textContent =
+        message;
+
+    errorMessage.style.display =
+        "block";
+}
+
+
+function hideError(){
+
+    errorMessage.textContent =
+        "";
+
+    errorMessage.style.display =
+        "none";
+}
+
+
+/* =====================================================
+   DISPLAY VALUE
+===================================================== */
+
+function displayValue(value){
+
+    if(
+        value === null ||
+        value === undefined ||
+        value === ""
+    ){
+
+        return "—";
+
+    }
+
+    return String(value);
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(
+        value ?? ""
+    )
+
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+
+    .replace(
+        /</g,
+        "&lt;"
+    )
+
+    .replace(
+        />/g,
+        "&gt;"
+    )
+
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+form.addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+        await searchResult();
+
+    }
+);
+
+
+/* =====================================================
+   SEARCH RESULT
+===================================================== */
+
+async function searchResult(){
+
+    const roll =
+        rollInput.value.trim();
+
+
+    hideError();
+
+
+    if(!roll){
+
+        showError(
+            "Please enter your roll number."
+        );
+
+        return;
+    }
+
+
+    if(!/^\d+$/.test(roll)){
+
+        showError(
+            "Roll number must contain numbers only."
+        );
+
+        return;
+    }
+
+
+    searchButton.disabled =
+        true;
+
+    searchButton.textContent =
+        "Searching…";
+
+
+    loading.style.display =
+        "block";
+
+
+    resultArea.style.display =
+        "none";
+
+
+    try{
+
+
+        /* =================================================
+           API
+        ================================================= */
+
+        const response =
+            await fetch(
+                "/api/result?roll=" +
+                encodeURIComponent(roll),
+                {
+                    method:"GET",
+
+                    headers:{
+                        "Accept":
+                            "application/json"
+                    },
+
+                    cache:"no-store"
+                }
+            );
+
+
+        let json;
+
+
+        try{
+
+            json =
+                await response.json();
+
+        }
+
+        catch{
+
+            throw new Error(
+                "Invalid response from result API."
+            );
+
+        }
+
+
+        console.log(
+            "CTGBoardRanking Result API:",
+            json
+        );
+
+
+        if(
+            !response.ok ||
+            !json ||
+            json.success !== true
+        ){
+
+            throw new Error(
+                json?.message ||
+                "Result not found."
+            );
+
+        }
+
+
+        if(
+            !json.student
+        ){
+
+            throw new Error(
+                "Student result data is missing."
+            );
+
+        }
+
+
+        currentStudent =
+            json.student;
+
+
+        displayResult(
+            currentStudent
+        );
+
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Result error:",
+            error
+        );
+
+
+        showError(
+            error.message ||
+            "Unable to load result."
+        );
+
+    }
+
+    finally{
+
+        loading.style.display =
+            "none";
+
+
+        searchButton.disabled =
+            false;
+
+
+        searchButton.textContent =
+            "View Result →";
+
+    }
+
+}
+
+
+/* =====================================================
+   CALCULATE TOTAL FALLBACK
+===================================================== */
+
+function calculateTotal(subjects){
+
+    if(
+        !Array.isArray(subjects) ||
+        subjects.length === 0
+    ){
+
+        return null;
+
+    }
+
+
+    let total = 0;
+
+    let valid = 0;
+
+
+    subjects.forEach(
+        subject => {
+
+            const raw =
+                subject.marks ??
+                subject.mark ??
+                subject.total_marks ??
+                subject.total_mark ??
+                null;
+
+
+            const mark =
+                Number(raw);
+
+
+            if(
+                Number.isFinite(mark)
+            ){
+
+                total += mark;
+
+                valid++;
+
+            }
+
+        }
+    );
+
+
+    return valid > 0
+        ? total
+        : null;
+
+}
+
+
+/* =====================================================
+   DISPLAY RESULT
+===================================================== */
+
+function displayResult(student){
+
+
+    /* =================================================
+       HEADER
+    ================================================= */
+
+    document.getElementById(
+        "studentName"
+    ).textContent =
+        displayValue(
+            student.student_name
+        );
+
+
+    document.getElementById(
+        "resultRoll"
+    ).textContent =
+        "Roll: " +
+        displayValue(
+            student.roll
+        );
+
+
+    document.getElementById(
+        "resultStatus"
+    ).textContent =
+        displayValue(
+            student.result_status
+        ).toUpperCase();
+
+
+
+    /* =================================================
+       BASIC INFORMATION
+    ================================================= */
+
+    document.getElementById(
+        "showRoll"
+    ).textContent =
+        displayValue(
+            student.roll
+        );
+
+
+    document.getElementById(
+        "showRegistration"
+    ).textContent =
+        displayValue(
+            student.registration
+        );
+
+
+    document.getElementById(
+        "showYear"
+    ).textContent =
+        displayValue(
+            student.year
+        );
+
+
+    document.getElementById(
+        "showGroup"
+    ).textContent =
+        displayValue(
+            student.group_name
+        );
+
+
+    document.getElementById(
+        "showInstitution"
+    ).textContent =
+        displayValue(
+            student.institution
+        );
+
+
+    document.getElementById(
+        "showDistrict"
+    ).textContent =
+        displayValue(
+            student.district
+        );
+
+
+
+    /* =================================================
+       TOTAL SCORE
+    ================================================= */
+
+    let totalScore =
+        student.total_score;
+
+
+    if(
+        totalScore === null ||
+        totalScore === undefined ||
+        totalScore === ""
+    ){
+
+        totalScore =
+            calculateTotal(
+                student.subjects
+            );
+
+    }
+
+
+    document.getElementById(
+        "totalScore"
+    ).textContent =
+
+        totalScore !== null &&
+        totalScore !== undefined
+
+            ? Number(totalScore)
+                .toLocaleString(
+                    "en-US"
+                )
+
+            : "—";
+
+
+
+    /* =================================================
+       GPA
+    ================================================= */
+
+    const gpa =
+        student.gpa;
+
+
+    document.getElementById(
+        "gpa"
+    ).textContent =
+
+        gpa !== null &&
+        gpa !== undefined &&
+        gpa !== ""
+
+            ? Number(gpa)
+                .toFixed(2)
+
+            : "—";
+
+
+
+    /* =================================================
+       STUDENT RANK
+    ================================================= */
+
+    const rank =
+        student.student_rank;
+
+
+    document.getElementById(
+        "studentRank"
+    ).textContent =
+
+        rank !== null &&
+        rank !== undefined &&
+        rank !== ""
+
+            ? Number(rank)
+                .toLocaleString(
+                    "en-US"
+                )
+
+            : "—";
+
+
+
+    /* =================================================
+       SUBJECTS
+    ================================================= */
+
+    renderSubjects(
+        student.subjects || []
+    );
+
+
+
+    /* =================================================
+       SHOW
+    ================================================= */
+
+    resultArea.style.display =
+        "block";
+
+
+    setTimeout(
+        function(){
+
+            resultArea.scrollIntoView({
+                behavior:"smooth",
+                block:"start"
+            });
+
+        },
+        100
+    );
+
+}
+
+
+/* =====================================================
+   SUBJECT TABLE
+===================================================== */
+
+function renderSubjects(subjects){
+
+    const table =
+        document.getElementById(
+            "subjectTable"
+        );
+
+
+    table.innerHTML = `
+
+        <div class="subject-head">
+
+            <div>SUBJECT</div>
+
+            <div>MARKS</div>
+
+            <div>GRADE</div>
 
         </div>
 
-
-        <div class="disclaimer">
-
-          This result is provided for informational purposes only.
-          It is not an official document issued by the Board.
-          Please verify all information with the official Board result.
-
-        </div>
-
-      </div>
-
-    </section>
+    `;
 
 
-    <!-- Empty state -->
-    <section
-      id="emptyState"
-      class="empty-state"
-    >
+    if(
+        !Array.isArray(subjects) ||
+        subjects.length === 0
+    ){
 
-      <div class="empty-icon">
-        ✦
-      </div>
+        table.innerHTML += `
 
-      <h2>
-        Find your result
-      </h2>
+            <div class="subject-row">
 
-      <p>
-        Enter an SSC 2026 Chattogram Board roll number
-        above to view the complete result.
-      </p>
+                <div>
+                    Subject details unavailable
+                </div>
 
-    </section>
+                <div>—</div>
+
+                <div class="grade">—</div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
 
 
-    <footer class="site-footer">
+    subjects.forEach(
+        subject => {
 
-      <div>
-        <strong>CTG Board Ranking</strong>
-        <span>SSC 2026</span>
-      </div>
 
-      <p>
-        Generated by <strong>Shadat Fatih</strong>
-      </p>
+            const name =
+                subject.subject_name ??
+                subject.subject ??
+                subject.subject_title ??
+                subject.subject_code ??
+                subject.code ??
+                "—";
 
-    </footer>
 
-  </main>
+            const marks =
+                subject.marks ??
+                subject.mark ??
+                subject.total_marks ??
+                subject.total_mark ??
+                "—";
+
+
+            const grade =
+                subject.grade ??
+                subject.grade_name ??
+                "—";
+
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "subject-row";
+
+
+            row.innerHTML = `
+
+                <div>
+                    ${escapeHTML(name)}
+                </div>
+
+                <div>
+                    ${escapeHTML(marks)}
+                </div>
+
+                <div class="grade">
+                    ${escapeHTML(grade)}
+                </div>
+
+            `;
+
+
+            table.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   PDF DATE
+===================================================== */
+
+function getFormattedDate(){
+
+    const date =
+        new Date();
+
+
+    return date.toLocaleDateString(
+        "en-GB",
+        {
+            day:"2-digit",
+            month:"long",
+            year:"numeric"
+        }
+    );
+
+}
+
+
+/* =====================================================
+   PDF SAFE VALUE
+===================================================== */
+
+function pdfValue(value){
+
+    if(
+        value === null ||
+        value === undefined ||
+        value === ""
+    ){
+
+        return "—";
+
+    }
+
+    return String(value);
+
+}
+
+
+/* =====================================================
+   DOWNLOAD PDF
+===================================================== */
+
+downloadPdfBtn.addEventListener(
+    "click",
+    async function(){
+
+        if(!currentStudent){
+
+            showError(
+                "Please search a result first."
+            );
+
+            return;
+        }
+
+
+        downloadPdfBtn.disabled =
+            true;
+
+
+        downloadPdfBtn.textContent =
+            "Preparing PDF…";
+
+
+        try{
+
+            await generatePDF(
+                currentStudent
+            );
+
+        }
+
+        catch(error){
+
+            console.error(
+                "PDF error:",
+                error
+            );
+
+
+            showError(
+                "Unable to create PDF. Please try again."
+            );
+
+        }
+
+        finally{
+
+            downloadPdfBtn.disabled =
+                false;
+
+
+            downloadPdfBtn.textContent =
+                "↓  Download PDF";
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   GENERATE PDF
+===================================================== */
+
+async function generatePDF(student){
+
+    if(
+        !window.jspdf ||
+        !window.jspdf.jsPDF
+    ){
+
+        throw new Error(
+            "PDF library failed to load."
+        );
+
+    }
+
+
+    const {
+        jsPDF
+    } = window.jspdf;
+
+
+    const doc =
+        new jsPDF({
+            orientation:"portrait",
+            unit:"mm",
+            format:"a4"
+        });
+
+
+    /* =================================================
+       PAGE SIZE
+    ================================================= */
+
+    const pageWidth =
+        doc.internal.pageSize.getWidth();
+
+
+    const pageHeight =
+        doc.internal.pageSize.getHeight();
+
+
+    const margin = 14;
+
+
+
+    /* =================================================
+       COLORS
+    ================================================= */
+
+    const BLUE =
+        [0,113,227];
+
+
+    const DARK =
+        [29,29,31];
+
+
+    const MUTED =
+        [110,110,115];
+
+
+    const LIGHT =
+        [245,245,247];
+
+
+    const GREEN =
+        [52,199,89];
+
+
+    const ORANGE =
+        [255,149,0];
+
+
+
+    /* =================================================
+       HEADER BLUE LINE
+    ================================================= */
+
+    doc.setFillColor(
+        ...BLUE
+    );
+
+
+    doc.roundedRect(
+        margin,
+        10,
+        pageWidth - margin * 2,
+        2,
+        1,
+        1,
+        "F"
+    );
+
+
+
+    /* =================================================
+       HEADER
+    ================================================= */
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+
+    doc.setFontSize(
+        20
+    );
+
+
+    doc.setTextColor(
+        ...DARK
+    );
+
+
+    doc.text(
+        "CTGBoardRanking",
+        margin,
+        23
+    );
+
+
+    /* =================================================
+       GENERATED BY
+    ================================================= */
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+
+    doc.setFontSize(
+        8
+    );
+
+
+    doc.setTextColor(
+        ...DARK
+    );
+
+
+    doc.text(
+        "Generated by Shadat",
+        pageWidth - margin,
+        19,
+        {
+            align:"right"
+        }
+    );
+
+
+    doc.setFont(
+        "helvetica",
+        "normal"
+    );
+
+
+    doc.setFontSize(
+        7.5
+    );
+
+
+    doc.setTextColor(
+        ...MUTED
+    );
+
+
+    doc.text(
+        getFormattedDate(),
+        pageWidth - margin,
+        24,
+        {
+            align:"right"
+        }
+    );
+
+
+
+    /* =================================================
+       TITLE
+    ================================================= */
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+
+    doc.setFontSize(
+        13
+    );
+
+
+    doc.setTextColor(
+        ...BLUE
+    );
+
+
+    doc.text(
+        "SSC 2026 · CHATTAGRAM BOARD",
+        margin,
+        36
+    );
+
+
+
+    /* =================================================
+       STUDENT NAME
+    ================================================= */
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+
+    doc.setFontSize(
+        18
+    );
+
+
+    doc.setTextColor(
+        ...DARK
+    );
+
+
+    doc.text(
+        pdfValue(
+            student.student_name
+        ),
+        margin,
+        46
+    );
+
+
+
+    /* =================================================
+       ROLL
+    ================================================= */
+
+    doc.setFont(
+        "helvetica",
+        "normal"
+    );
+
+
+    doc.setFontSize(
+        9
+    );
+
+
+    doc.setTextColor(
+        ...MUTED
+    );
+
+
+    doc.text(
+        "Roll: " +
+        pdfValue(
+            student.roll
+        ),
+        margin,
+        52
+    );
+
+
+    /* =================================================
+       STATUS
+    ================================================= */
+
+    const status =
+        pdfValue(
+            student.result_status
+        ).toUpperCase();
+
+
+    doc.setFillColor(
+        232,
+        247,
+        239
+    );
+
+
+    doc.roundedRect(
+        pageWidth - margin - 32,
+        42,
+        32,
+        9,
+        4.5,
+        4.5,
+        "F"
+    );
+
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+
+    doc.setFontSize(
+        7
+    );
+
+
+    doc.setTextColor(
+        22,
+        131,
+        75
+    );
+
+
+    doc.text(
+        status,
+        pageWidth - margin - 16,
+        48,
+        {
+            align:"center"
+        }
+    );
+
+
+
+    /* =================================================
+       INFORMATION BOX
+    ================================================= */
+
+    const infoTop = 61;
+
+    const boxWidth =
+        pageWidth - margin * 2;
+
+
+    const infoHeight = 48;
+
+
+    doc.setFillColor(
+        ...LIGHT
+    );
+
+
+    doc.roundedRect(
+        margin,
+        infoTop,
+        boxWidth,
+        infoHeight,
+        5,
+        5,
+        "F"
+    );
+
+
+    const colWidth =
+        boxWidth / 3;
+
+
+    const infoItems = [
+
+        [
+            "YEAR",
+            pdfValue(student.year)
+        ],
+
+        [
+            "INSTITUTION",
+            pdfValue(student.institution)
+        ],
+
+        [
+            "DISTRICT",
+            pdfValue(student.district)
+        ],
+
+        [
+            "REGISTRATION",
+            pdfValue(student.registration)
+        ],
+
+        [
+            "GROUP",
+            pdfValue(student.group_name)
+        ],
+
+        [
+            "ROLL",
+            pdfValue(student.roll)
+        ]
+
+    ];
+
+
+    infoItems.forEach(
+        (item,index) => {
+
+            const column =
+                index % 3;
+
+            const row =
+                Math.floor(
+                    index / 3
+                );
+
+
+            const x =
+                margin +
+                column * colWidth +
+                6;
+
+
+            const y =
+                infoTop +
+                10 +
+                row * 22;
+
+
+            doc.setFont(
+                "helvetica",
+                "bold"
+            );
+
+
+            doc.setFontSize(
+                6.5
+            );
+
+
+            doc.setTextColor(
+                ...MUTED
+            );
+
+
+            doc.text(
+                item[0],
+                x,
+                y
+            );
+
+
+            doc.setFont(
+                "helvetica",
+                "bold"
+            );
+
+
+            doc.setFontSize(
+                8
+            );
+
+
+            doc.setTextColor(
+                ...DARK
+            );
+
+
+            const value =
+                doc.splitTextToSize(
+                    item[1],
+                    colWidth - 10
+                );
+
+
+            doc.text(
+                value.slice(0,2),
+                x,
+                y + 6
+            );
+
+        }
+    );
+
+
+
+    /* =================================================
+       SCORE BOXES
+    ================================================= */
+
+    const scoreTop =
+        infoTop + infoHeight + 8;
+
+
+    const scoreGap = 5;
+
+
+    const scoreWidth =
+        (boxWidth - scoreGap * 2) / 3;
+
+
+    const scoreItems = [
+
+        [
+            "TOTAL SCORE",
+            student.total_score ??
+            calculateTotal(
+                student.subjects
+            ),
+            BLUE
+        ],
+
+        [
+            "GPA",
+            student.gpa !== null &&
+            student.gpa !== undefined &&
+            student.gpa !== ""
+                ? Number(student.gpa).toFixed(2)
+                : "—",
+            GREEN
+        ],
+
+        [
+            "STUDENT RANK",
+            student.student_rank ??
+            "—",
+            ORANGE
+        ]
+
+    ];
+
+
+    scoreItems.forEach(
+        (item,index) => {
+
+            const x =
+                margin +
+                index *
+                (scoreWidth + scoreGap);
+
+
+            let bg =
+                [245,245,247];
+
+
+            if(index === 0){
+
+                bg =
+                    [235,244,253];
+
+            }
+
+            if(index === 1){
+
+                bg =
+                    [235,248,239];
+
+            }
+
+            if(index === 2){
+
+                bg =
+                    [255,246,230];
+
+            }
+
+
+            doc.setFillColor(
+                ...bg
+            );
+
+
+            doc.roundedRect(
+                x,
+                scoreTop,
+                scoreWidth,
+                27,
+                5,
+                5,
+                "F"
+            );
+
+
+            doc.setFont(
+                "helvetica",
+                "bold"
+            );
+
+
+            doc.setFontSize(
+                15
+            );
+
+
+            doc.setTextColor(
+                ...DARK
+            );
+
+
+            const value =
+                item[1] !== null &&
+                item[1] !== undefined &&
+                item[1] !== ""
+                    ? Number(item[1])
+                        .toLocaleString("en-US")
+                    : "—";
+
+
+            doc.text(
+                String(value),
+                x + scoreWidth / 2,
+                scoreTop + 12,
+                {
+                    align:"center"
+                }
+            );
+
+
+            doc.setFontSize(
+                6.5
+            );
+
+
+            doc.setTextColor(
+                ...MUTED
+            );
+
+
+            doc.text(
+                item[0],
+                x + scoreWidth / 2,
+                scoreTop + 20,
+                {
+                    align:"center"
+                }
+            );
+
+        }
+    );
+
+
+
+    /* =================================================
+       SUBJECT TABLE
+    ================================================= */
+
+    const subjects =
+        Array.isArray(
+            student.subjects
+        )
+            ? student.subjects
+            : [];
+
+
+    const tableData =
+        subjects.map(
+            subject => {
+
+                const name =
+                    subject.subject_name ??
+                    subject.subject ??
+                    subject.subject_title ??
+                    subject.subject_code ??
+                    subject.code ??
+                    "—";
+
+
+                const marks =
+                    subject.marks ??
+                    subject.mark ??
+                    subject.total_marks ??
+                    subject.total_mark ??
+                    "—";
+
+
+                const grade =
+                    subject.grade ??
+                    subject.grade_name ??
+                    "—";
+
+
+                return [
+
+                    String(name),
+
+                    String(marks),
+
+                    String(grade)
+
+                ];
+
+            }
+        );
+
+
+    const tableTop =
+        scoreTop + 36;
+
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+
+    doc.setFontSize(
+        11
+    );
+
+
+    doc.setTextColor(
+        ...DARK
+    );
+
+
+    doc.text(
+        "Subject-wise Result",
+        margin,
+        tableTop
+    );
+
+
+    doc.autoTable({
+
+        startY:
+            tableTop + 5,
+
+        margin:{
+            left:margin,
+            right:margin
+        },
+
+        head:[
+            [
+                "SUBJECT",
+                "MARKS",
+                "GRADE"
+            ]
+        ],
+
+        body:
+            tableData.length
+                ? tableData
+                : [
+                    [
+                        "Subject details unavailable",
+                        "—",
+                        "—"
+                    ]
+                ],
+
+        theme:"grid",
+
+        styles:{
+
+            font:"helvetica",
+
+            fontSize:8,
+
+            textColor:DARK,
+
+            lineColor:[
+                225,
+                225,
+                230
+            ],
+
+            lineWidth:.2,
+
+            cellPadding:4
+
+        },
+
+        headStyles:{
+
+            fillColor:[
+                245,
+                245,
+                247
+            ],
+
+            textColor:[
+                110,
+                110,
+                115
+            ],
+
+            fontStyle:"bold",
+
+            fontSize:7
+
+        },
+
+        alternateRowStyles:{
+
+            fillColor:[
+                250,
+                250,
+                252
+            ]
+
+        },
+
+        columnStyles:{
+
+            0:{
+                cellWidth:"auto"
+            },
+
+            1:{
+                cellWidth:30,
+                halign:"right"
+            },
+
+            2:{
+                cellWidth:30,
+                halign:"right"
+            }
+
+        }
+
+    });
+
+
+
+    /* =================================================
+       FOOTER
+    ================================================= */
+
+    let finalY =
+        doc.lastAutoTable &&
+        doc.lastAutoTable.finalY
+            ? doc.lastAutoTable.finalY + 10
+            : pageHeight - 35;
+
+
+    if(
+        finalY >
+        pageHeight - 30
+    ){
+
+        doc.addPage();
+
+        finalY = 20;
+
+    }
+
+
+    doc.setDrawColor(
+        225,
+        225,
+        230
+    );
+
+
+    doc.line(
+        margin,
+        finalY,
+        pageWidth - margin,
+        finalY
+    );
+
+
+    doc.setFont(
+        "helvetica",
+        "bold"
+    );
+
+
+    doc.setFontSize(
+        7
+    );
+
+
+    doc.setTextColor(
+        ...DARK
+    );
+
+
+    doc.text(
+        "CTGBoardRanking",
+        margin,
+        finalY + 7
+    );
+
+
+    doc.setFont(
+        "helvetica",
+        "normal"
+    );
+
+
+    doc.setFontSize(
+        6.5
+    );
+
+
+    doc.setTextColor(
+        ...MUTED
+    );
+
+
+    doc.text(
+        "Unofficial Notice",
+        pageWidth - margin,
+        finalY + 7,
+        {
+            align:"right"
+        }
+    );
+
+
+    doc.text(
+        "This document is unofficial and provided for educational, research and statistical purposes.",
+        margin,
+        finalY + 14
+    );
+
+
+
+    /* =================================================
+       FILE NAME
+    ================================================= */
+
+    const safeRoll =
+        String(
+            student.roll || "student"
+        ).replace(
+            /[^a-zA-Z0-9_-]/g,
+            ""
+        );
+
+
+    const fileName =
+        "CTGBoardRanking_" +
+        safeRoll +
+        "_SSC2026.pdf";
+
+
+    /* =================================================
+       DOWNLOAD
+    ================================================= */
+
+    doc.save(
+        fileName
+    );
+
+}
+
+
+/* =====================================================
+   AUTO LOAD ?roll=123456
+===================================================== */
+
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+
+const urlRoll =
+    params.get(
+        "roll"
+    );
+
+
+if(urlRoll){
+
+    rollInput.value =
+        urlRoll;
+
+
+    setTimeout(
+        function(){
+
+            searchResult();
+
+        },
+        300
+    );
+
+}
+
+</script>
 
 </body>
 </html>
