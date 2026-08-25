@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+
+  <meta
+    name="description"
+    content="SSC 2026 Chattogram Board Individual Result - Shadat Fatih"
+  >
+
+  <title>Individual Result | CTG Board Ranking</title>
+
+  <link rel="stylesheet" href="individual-results.css">
+
+  <!-- jsPDF -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"
+    defer
+  ></script>
+
+  <!-- html2canvas -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+    defer
+  ></script>
+
+  <script src="individual-results.js" defer></script>
+</head>
+
+<body>
+
+  <!-- Background -->
+  <div class="background-glow glow-one"></div>
+  <div class="background-glow glow-two"></div>
+
+  <main class="page">
+
+    <!-- Header -->
+    <header class="topbar">
+
+      <a href="index.html" class="brand">
+        <div class="brand-icon">
+          <span>CTG</span>
+        </div>
+
+        <div>
+          <strong>CTG Board Ranking</strong>
+          <small>SSC 2026</small>
+        </div>
+      </a>
+
+      <button
+        type="button"
+        class="theme-toggle"
+        id="themeToggle"
+        aria-label="Toggle dark mode"
+      >
+        <span id="themeIcon">☾</span>
+      </button>
+
+    </header>
+
+
+    <!-- Search Hero -->
+    <section class="search-section">
+
+      <div class="eyebrow">
+        <span class="status-dot"></span>
+        SSC 2026 • Chattogram Board
+      </div>
+
+      <h1>
+        Individual
+        <span>Result</span>
+      </h1>
+
+      <p class="hero-description">
+        Enter your roll number to view your SSC 2026 result,
+        total score, GPA and subject-wise marks.
+      </p>
+
+      <form id="resultForm" class="search-box">
+
+        <div class="input-wrapper">
+
+          <span class="search-icon">⌕</span>
+
+          <input
+            type="text"
+            id="rollInput"
+            inputmode="numeric"
+            autocomplete="off"
+            maxlength="8"
+            placeholder="Enter roll number"
+            aria-label="Roll number"
+            required
+          >
+
+          <button
+            type="button"
+            id="clearBtn"
+            class="clear-btn hidden"
+            aria-label="Clear"
+          >
+            ×
+          </button>
+
+        </div>
+
+        <button
+          type="submit"
+          id="searchBtn"
+          class="search-btn"
+        >
+          <span id="searchBtnText">View Result</span>
+          <span id="searchSpinner" class="spinner hidden"></span>
+        </button>
+
+      </form>
+
+      <div id="errorMessage" class="error-message hidden"></div>
+
+    </section>
+
+
+    <!-- Result -->
+    <section
+      id="resultSection"
+      class="result-section hidden"
+    >
+
+      <div class="result-actions">
+
+        <button
+          type="button"
+          id="newSearchBtn"
+          class="secondary-btn"
+        >
+          ← New Search
+        </button>
+
+        <button
+          type="button"
+          id="downloadPdfBtn"
+          class="primary-btn"
+        >
+          <span>↓</span>
+          Download PDF
+        </button>
+
+      </div>
+
+
+      <!-- Printable Result -->
+      <div id="resultCard" class="result-card">
+
+        <!-- Official-looking header, clearly marked unofficial -->
+        <div class="result-header">
+
+          <div class="result-brand">
+
+            <div class="mini-logo">
+              CTG
+            </div>
+
+            <div>
+              <strong>CTG BOARD RANKING</strong>
+              <span>SSC 2026</span>
+            </div>
+
+          </div>
+
+          <div class="unofficial-badge">
+            UNOFFICIAL
+          </div>
+
+        </div>
+
+
+        <div class="result-title">
+
+          <div>
+            <p class="result-kicker">SECONDARY SCHOOL CERTIFICATE</p>
+
+            <h2>Individual Result</h2>
+
+            <p>
+              <span id="resultBoard">Chattogram Board</span>
+              <span class="separator">•</span>
+              <span>2026</span>
+            </p>
+          </div>
+
+        </div>
+
+
+        <!-- Student Information -->
+        <div class="student-profile">
+
+          <div class="student-main">
+
+            <span class="label">STUDENT NAME</span>
+
+            <h3 id="studentName">
+              —
+            </h3>
+
+            <div class="student-meta">
+
+              <span>
+                Roll
+                <strong id="studentRoll">—</strong>
+              </span>
+
+              <span>
+                Registration
+                <strong id="studentReg">—</strong>
+              </span>
+
+              <span>
+                Group
+                <strong id="studentGroup">—</strong>
+              </span>
+
+            </div>
+
+          </div>
+
+          <div class="student-result-status">
+
+            <span class="label">RESULT</span>
+
+            <strong id="resultStatus">
+              —
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- Score cards -->
+        <div class="score-grid">
+
+          <div class="score-card">
+
+            <span class="score-label">
+              TOTAL SCORE
+            </span>
+
+            <strong id="totalScore">
+              —
+            </strong>
+
+            <small>
+              Total Marks
+            </small>
+
+          </div>
+
+
+          <div class="score-card gpa-score">
+
+            <span class="score-label">
+              GPA
+            </span>
+
+            <strong id="gpa">
+              —
+            </strong>
+
+            <small>
+              Grade Point Average
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <!-- Additional information -->
+        <div
+          id="additionalInfo"
+          class="additional-info"
+        >
+
+          <div class="info-item">
+            <span>Institute</span>
+            <strong id="studentInstitute">—</strong>
+          </div>
+
+          <div class="info-item">
+            <span>District</span>
+            <strong id="studentDistrict">—</strong>
+          </div>
+
+          <div class="info-item">
+            <span>Father's Name</span>
+            <strong id="fatherName">—</strong>
+          </div>
+
+          <div class="info-item">
+            <span>Mother's Name</span>
+            <strong id="motherName">—</strong>
+          </div>
+
+        </div>
+
+
+        <!-- Subjects -->
+        <div class="subjects-section">
+
+          <div class="section-heading">
+
+            <div>
+              <span class="section-kicker">
+                ACADEMIC PERFORMANCE
+              </span>
+
+              <h3>
+                Subject-wise Result
+              </h3>
+            </div>
+
+            <span
+              id="subjectCount"
+              class="subject-count"
+            >
+              0 Subjects
+            </span>
+
+          </div>
+
+
+          <div class="subjects-table-wrapper">
+
+            <table class="subjects-table">
+
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Subject</th>
+                  <th>Code</th>
+                  <th>Mark</th>
+                  <th>Grade</th>
+                </tr>
+              </thead>
+
+              <tbody id="subjectsBody">
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+
+        <!-- PDF footer -->
+        <div class="result-footer">
+
+          <div>
+            <strong>Generated by Shadat Fatih</strong>
+
+            <span>
+              CTG Board Ranking • SSC 2026
+            </span>
+          </div>
+
+          <div class="footer-unofficial">
+            UNOFFICIAL RESULT
+          </div>
+
+        </div>
+
+
+        <div class="disclaimer">
+
+          This result is provided for informational purposes only.
+          It is not an official document issued by the Board.
+          Please verify all information with the official Board result.
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Empty state -->
+    <section
+      id="emptyState"
+      class="empty-state"
+    >
+
+      <div class="empty-icon">
+        ✦
+      </div>
+
+      <h2>
+        Find your result
+      </h2>
+
+      <p>
+        Enter an SSC 2026 Chattogram Board roll number
+        above to view the complete result.
+      </p>
+
+    </section>
+
+
+    <footer class="site-footer">
+
+      <div>
+        <strong>CTG Board Ranking</strong>
+        <span>SSC 2026</span>
+      </div>
+
+      <p>
+        Generated by <strong>Shadat Fatih</strong>
+      </p>
+
+    </footer>
+
+  </main>
+
+</body>
+</html>
