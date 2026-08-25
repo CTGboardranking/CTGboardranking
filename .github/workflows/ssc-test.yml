@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: ssc-ranking-update
@@ -25,7 +25,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
           ref: main
 
       # =====================================================
@@ -38,21 +38,31 @@ jobs:
           python-version: "3.13"
 
       # =====================================================
-      # CHECK STUDENTS JSON
+      # DEPENDENCIES
       # =====================================================
 
-      - name: Check students JSON
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4 supabase
+
+      # =====================================================
+      # CHECK EXISTING STUDENTS
+      # =====================================================
+
+      - name: Check existing students JSON
         run: |
 
           echo "=============================================="
-          echo "CHECKING STUDENTS JSON"
+          echo "CHECKING EXISTING SSC DATA"
           echo "=============================================="
 
           if [ ! -f scraper/students.json ]; then
 
-            echo "ERROR: scraper/students.json not found."
+            echo "students.json not found."
+            echo "Starting with empty data."
 
-            exit 1
+            exit 0
 
           fi
 
@@ -69,99 +79,58 @@ jobs:
               encoding="utf-8"
           ) as f:
 
-              data = json.load(f)
+              students = json.load(f)
 
-
-          print("")
           print("==============================================")
           print("STUDENTS JSON CHECK")
           print("==============================================")
 
-
           print(
               "students.json total:",
-              len(data)
+              len(students)
           )
 
-
-          rolls = set()
-
-
-          for student in data:
-
-              if not isinstance(
-                  student,
-                  dict
-              ):
-                  continue
-
-              roll = str(
-                  student.get(
-                      "roll",
-                      ""
-                  )
-              ).strip()
-
-              if roll:
-                  rolls.add(roll)
-
+          rolls = {
+              str(student.get("roll")).strip()
+              for student in students
+              if student.get("roll")
+          }
 
           print(
               "unique rolls:",
               len(rolls)
           )
 
-
           if rolls:
 
               print(
                   "first roll:",
-                  min(
-                      rolls,
-                      key=int
-                  )
+                  min(rolls, key=int)
               )
 
               print(
                   "last roll:",
-                  max(
-                      rolls,
-                      key=int
-                  )
+                  max(rolls, key=int)
               )
-
-
-          print("")
-          print("FILE SIZE")
 
           size = os.path.getsize(path)
 
+          print("")
+          print("FILE SIZE")
           print(
               f"{size / 1024 / 1024:.2f} MB"
           )
 
-
-          print("")
-          print("==============================================")
-          print("GROUP COUNTS")
-          print("==============================================")
-
-
           groups = {}
 
+          for student in students:
 
-          for student in data:
-
-              if not isinstance(
-                  student,
-                  dict
-              ):
-                  continue
-
-              group = student.get(
-                  "group",
-                  "Unknown"
-              )
+              group = str(
+                  student.get(
+                      "group",
+                      "Unknown"
+                  )
+              ).strip().upper()
 
               groups[group] = (
                   groups.get(
@@ -170,6 +139,10 @@ jobs:
                   ) + 1
               )
 
+          print("")
+          print("==============================================")
+          print("GROUP COUNTS")
+          print("==============================================")
 
           for group, count in groups.items():
 
@@ -177,10 +150,480 @@ jobs:
                   f"{group}: {count}"
               )
 
-
           print("")
           print("==============================================")
           print("CHECK COMPLETE")
           print("==============================================")
 
           PY
+
+      # =====================================================
+      # SSC COLLECTION
+      # =====================================================
+
+      - name: Run SSC data collection
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_TABLE: students
+        run: |
+
+          echo "=============================================="
+          echo "STARTING SSC COLLECTION"
+          echo "=============================================="
+
+          python scraper/ssc_test.py
+
+      # =====================================================
+      # SHOW COLLECTION RESULT
+      # =====================================================
+
+      - name: Show collection result
+        if: always()
+        run: |
+
+          echo "=============================================="
+          echo "SSC COLLECTION RESULT"
+          echo "=============================================="
+
+          if [ -f scraper/student_collection_summary.json ]; then
+
+            cat scraper/student_collection_summary.json
+
+          else
+
+            echo "Summary file not found."
+
+          fi
+
+          echo ""
+
+          if [ -f scraper/students.json ]; then
+
+            python - <<'PY'
+
+          import json
+          import os
+
+          path = "scraper/students.json"
+
+          with open(
+              path,
+              "r",
+              encoding="utf-8"
+          ) as f:
+
+              students = json.load(f)
+
+          print(
+              "Total students:",
+              len(students)
+          )
+
+          rolls = {
+              str(x.get("roll")).strip()
+              for x in students
+              if x.get("roll")
+          }
+
+          print(
+              "Unique rolls:",
+              len(rolls)
+          )
+
+          if rolls:
+
+              print(
+                  "First roll:",
+                  min(rolls, key=int)
+              )
+
+              print(
+                  "Last roll:",
+                  max(rolls, key=int)
+              )
+
+          size = os.path.getsize(path)
+
+          print(
+              f"students.json size: "
+              f"{size / 1024 / 1024:.2f} MB"
+          )
+
+          PY
+
+          fi
+
+      # =====================================================
+      # INSTITUTION STATISTICS
+      # =====================================================
+
+      - name: Generate institution statistics
+        run: |
+          python scraper/institution_stats.py
+
+      # =====================================================
+      # INSTITUTION CSV
+      # =====================================================
+
+      - name: Convert institution CSV
+        run: |
+          python scraper/csv_to_institutions.py
+
+      # =====================================================
+      # VALIDATION
+      # =====================================================
+
+      - name: Validate institution data
+        run: |
+          python scraper/ranking_validator.py
+
+      # =====================================================
+      # INSTITUTION RANKING
+      # =====================================================
+
+      - name: Calculate institution ranking
+        run: |
+          python scraper/ranking_engine.py
+
+      # =====================================================
+      # DISTRICT RANKING
+      # =====================================================
+
+      - name: Calculate district ranking
+        run: |
+          python scraper/district_ranking.py
+
+      # =====================================================
+      # STUDENT RANKING
+      # =====================================================
+
+      - name: Calculate student ranking
+        run: |
+          python scraper/student_ranking.py
+
+      # =====================================================
+      # YEAR RANKING
+      # =====================================================
+
+      - name: Calculate year-wise ranking
+        run: |
+          python scraper/year_ranking.py
+
+      # =====================================================
+      # BOARD RANKING
+      # =====================================================
+
+      - name: Calculate board ranking
+        run: |
+          python scraper/board_ranking.py
+
+      # =====================================================
+      # VALIDATE JSON
+      # =====================================================
+
+      - name: Validate all JSON files
+        run: |
+
+          python - <<'PY'
+
+          import json
+          import os
+          import sys
+
+          failed = False
+
+          for root, dirs, files in os.walk(
+              "scraper"
+          ):
+
+              for name in files:
+
+                  if not name.endswith(".json"):
+                      continue
+
+                  path = os.path.join(
+                      root,
+                      name
+                  )
+
+                  try:
+
+                      with open(
+                          path,
+                          "r",
+                          encoding="utf-8"
+                      ) as f:
+
+                          json.load(f)
+
+                      size = os.path.getsize(
+                          path
+                      )
+
+                      print(
+                          f"OK: {path} "
+                          f"({size / 1024 / 1024:.2f} MB)"
+                      )
+
+                  except Exception as e:
+
+                      print(
+                          f"ERROR: {path} -> {e}"
+                      )
+
+                      failed = True
+
+          if failed:
+
+              sys.exit(
+                  "JSON validation failed."
+              )
+
+          print("")
+          print(
+              "All JSON files are valid."
+          )
+
+          PY
+
+      # =====================================================
+      # GENERATED FILES
+      # =====================================================
+
+      - name: Show generated files
+        if: always()
+        run: |
+
+          echo "=============================================="
+          echo "GENERATED FILES"
+          echo "=============================================="
+
+          find scraper \
+            -type f \
+            -printf "%p %k KB\n" \
+            | sort
+
+      # =====================================================
+      # COMMIT
+      # =====================================================
+
+      - name: Commit ranking data
+        run: |
+
+          git config user.name \
+            "github-actions[bot]"
+
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          echo "=============================================="
+          echo "PREPARING COMMIT"
+          echo "=============================================="
+
+          git add scraper/
+
+          # -------------------------------------------------
+          # NEVER COMMIT LARGE SOURCE DATA
+          # -------------------------------------------------
+
+          if [ -f scraper/students.json ]; then
+
+            SIZE=$(stat -c%s scraper/students.json)
+
+            LIMIT=$((90 * 1024 * 1024))
+
+            if [ "$SIZE" -gt "$LIMIT" ]; then
+
+              echo ""
+              echo "students.json > 90 MB"
+              echo "Removing students.json from Git commit."
+
+              git restore \
+                --staged \
+                scraper/students.json \
+                2>/dev/null || true
+
+              git restore \
+                scraper/students.json \
+                2>/dev/null || true
+
+            fi
+
+          fi
+
+          # -------------------------------------------------
+          # LARGE RANKING FILE
+          # -------------------------------------------------
+
+          if [ -f scraper/student_ranking.json ]; then
+
+            SIZE=$(stat -c%s scraper/student_ranking.json)
+
+            LIMIT=$((90 * 1024 * 1024))
+
+            if [ "$SIZE" -gt "$LIMIT" ]; then
+
+              echo ""
+              echo "student_ranking.json > 90 MB"
+              echo "Removing from Git commit."
+
+              git restore \
+                --staged \
+                scraper/student_ranking.json \
+                2>/dev/null || true
+
+              git restore \
+                scraper/student_ranking.json \
+                2>/dev/null || true
+
+            fi
+
+          fi
+
+          echo ""
+          echo "STAGED CHANGES"
+
+          git status --short
+
+          if git diff --cached --quiet; then
+
+            echo ""
+            echo "No Git changes detected."
+
+            exit 0
+
+          fi
+
+          git commit \
+            -m "Update SSC ranking data"
+
+      # =====================================================
+      # SYNC MAIN
+      # =====================================================
+
+      - name: Sync latest main
+        run: |
+
+          git fetch origin main
+
+          git rebase origin/main
+
+      # =====================================================
+      # PUSH
+      # =====================================================
+
+      - name: Push changes
+        run: |
+
+          echo "=============================================="
+          echo "PUSHING DATA"
+          echo "=============================================="
+
+          git push origin HEAD:main
+
+          echo ""
+          echo "=============================================="
+          echo "SSC DATA PUSHED SUCCESSFULLY"
+          echo "=============================================="
+
+      # =====================================================
+      # FINAL COUNT
+      # =====================================================
+
+      - name: Final student count
+        if: always()
+        run: |
+
+          echo "=============================================="
+          echo "FINAL STUDENT COUNT"
+          echo "=============================================="
+
+          if [ -f scraper/students.json ]; then
+
+            python - <<'PY'
+
+          import json
+
+          with open(
+              "scraper/students.json",
+              "r",
+              encoding="utf-8"
+          ) as f:
+
+              students = json.load(f)
+
+          print(
+              "Final total:",
+              len(students)
+          )
+
+          rolls = {
+              str(x.get("roll")).strip()
+              for x in students
+              if x.get("roll")
+          }
+
+          print(
+              "Unique rolls:",
+              len(rolls)
+          )
+
+          if rolls:
+
+              print(
+                  "First roll:",
+                  min(rolls, key=int)
+              )
+
+              print(
+                  "Last roll:",
+                  max(rolls, key=int)
+              )
+
+          groups = {}
+
+          for student in students:
+
+              group = str(
+                  student.get(
+                      "group",
+                      "Unknown"
+                  )
+              ).strip().upper()
+
+              groups[group] = (
+                  groups.get(
+                      group,
+                      0
+                  ) + 1
+              )
+
+          print("")
+          print("GROUP COUNTS")
+
+          for group, count in groups.items():
+
+              print(
+                  f"{group}: {count}"
+              )
+
+          PY
+
+          else
+
+            echo "students.json not found"
+
+          fi
+
+      # =====================================================
+      # BACKUP
+      # =====================================================
+
+      - name: Upload SSC data backup
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ssc-data
+          path: scraper/
+          if-no-files-found: warn
