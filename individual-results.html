@@ -1,72 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Individual Result — CTGboardranking</title>
+<title>Individual Result — CTGBoardRanking</title>
 
-<meta name="description"
-      content="SSC 2026 Individual Result — Chattogram Board">
+<meta name="description" content="SSC 2026 Individual Result — Chattogram Board">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet">
-
-<!-- jsPDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- PDF LIBRARY -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
-
-/* =========================================================
-   APPLE INSPIRED DESIGN
-========================================================= */
-
 :root{
     --blue:#0071e3;
     --blue-dark:#0066cc;
-
     --bg:#f5f5f7;
     --card:#ffffff;
-
     --text:#1d1d1f;
     --muted:#6e6e73;
-
     --border:rgba(0,0,0,.08);
-    --soft:#f5f5f7;
-
+    --soft:#f2f2f7;
     --green:#34c759;
     --orange:#ff9500;
     --red:#ff3b30;
-
-    --shadow:
-        0 20px 60px rgba(0,0,0,.08);
-
+    --shadow:0 20px 60px rgba(0,0,0,.08);
     --radius:28px;
 }
-
-body.dark{
-
-    --bg:#000000;
-    --card:#1c1c1e;
-
-    --text:#f5f5f7;
-    --muted:#a1a1a6;
-
-    --border:rgba(255,255,255,.10);
-    --soft:#2c2c2e;
-
-    --shadow:
-        0 25px 70px rgba(0,0,0,.45);
-}
-
-
-/* =========================================================
-   GLOBAL
-========================================================= */
 
 *{
     box-sizing:border-box;
@@ -77,22 +41,10 @@ html{
 }
 
 body{
-
     margin:0;
-
-    font-family:
-        Inter,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
     background:var(--bg);
     color:var(--text);
-
-    transition:
-        background .25s ease,
-        color .25s ease;
 }
 
 button,
@@ -100,57 +52,39 @@ input{
     font:inherit;
 }
 
-
-/* =========================================================
-   NAVBAR
-========================================================= */
-
 .navbar{
-
     position:sticky;
     top:0;
     z-index:1000;
 
     height:64px;
+    padding:0 22px;
 
     display:flex;
     align-items:center;
     justify-content:space-between;
 
-    padding:0 22px;
-
     background:rgba(255,255,255,.78);
-
-    border-bottom:
-        1px solid var(--border);
+    border-bottom:1px solid var(--border);
 
     backdrop-filter:blur(22px);
     -webkit-backdrop-filter:blur(22px);
 }
 
-body.dark .navbar{
-    background:rgba(0,0,0,.75);
-}
-
 .logo{
-
     display:flex;
     align-items:center;
-
     gap:9px;
 
-    text-decoration:none;
-
     color:var(--text);
+    text-decoration:none;
 
     font-size:15px;
     font-weight:800;
-
     letter-spacing:-.4px;
 }
 
 .logo-mark{
-
     width:30px;
     height:30px;
 
@@ -161,35 +95,30 @@ body.dark .navbar{
     border-radius:9px;
 
     background:var(--blue);
-    color:#fff;
+    color:white;
 
     font-size:14px;
     font-weight:800;
 }
 
 .nav-actions{
-
     display:flex;
-    align-items:center;
-
     gap:8px;
 }
 
-.nav-button{
-
+.nav-home,
+.theme-btn{
     height:40px;
-
-    padding:0 14px;
+    min-width:42px;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
+    border:1px solid var(--border);
     border-radius:13px;
 
-    border:1px solid var(--border);
-
-    background:var(--soft);
+    background:rgba(0,0,0,.04);
     color:var(--text);
 
     text-decoration:none;
@@ -198,81 +127,49 @@ body.dark .navbar{
     font-weight:700;
 
     cursor:pointer;
-
-    transition:.2s ease;
 }
 
-.nav-button:hover{
-    transform:translateY(-1px);
+.nav-home{
+    padding:0 14px;
 }
-
-
-/* =========================================================
-   PAGE
-========================================================= */
 
 .page{
-
-    min-height:
-        calc(100vh - 64px);
-
-    padding:
-        55px 15px
-        90px;
+    min-height:calc(100vh - 64px);
+    padding:55px 14px 90px;
 
     background:
-
         radial-gradient(
             circle at 50% 0%,
-            rgba(0,113,227,.11),
-            transparent 38%
+            rgba(0,113,227,.10),
+            transparent 40%
         );
 }
 
 .container{
-
-    width:
-        min(950px,100%);
-
+    width:min(950px,100%);
     margin:auto;
 }
 
-
-/* =========================================================
-   HERO
-========================================================= */
-
 .hero{
-
     text-align:center;
-
-    margin-bottom:34px;
+    margin-bottom:32px;
 }
 
 .eyebrow{
-
-    display:inline-block;
-
     color:var(--blue);
 
     font-size:10px;
     font-weight:800;
 
     letter-spacing:.13em;
-
     text-transform:uppercase;
 }
 
 .hero h1{
+    margin:13px 0;
 
-    margin:
-        13px 0 13px;
-
-    font-size:
-        clamp(40px,8vw,70px);
-
+    font-size:clamp(40px,8vw,70px);
     line-height:.98;
-
     letter-spacing:-4px;
 }
 
@@ -281,128 +178,90 @@ body.dark .navbar{
 }
 
 .hero p{
-
     max-width:620px;
-
     margin:auto;
 
     color:var(--muted);
 
     font-size:14px;
-
     line-height:1.7;
 }
 
-
-/* =========================================================
-   SEARCH CARD
-========================================================= */
-
 .search-card{
+    padding:25px;
 
-    padding:26px;
-
-    border:
-        1px solid var(--border);
-
+    border:1px solid var(--border);
     border-radius:var(--radius);
 
-    background:var(--card);
+    background:rgba(255,255,255,.88);
 
     box-shadow:var(--shadow);
 
-    backdrop-filter:blur(25px);
+    backdrop-filter:blur(20px);
 }
 
 .search-card h2{
-
-    margin:
-        0 0 7px;
+    margin:0 0 7px;
 
     font-size:22px;
-
     letter-spacing:-.6px;
 }
 
 .search-card p{
-
-    margin:
-        0 0 20px;
+    margin:0 0 18px;
 
     color:var(--muted);
-
     font-size:13px;
 }
 
 .search-form{
-
     display:flex;
-
     gap:10px;
 }
 
 .search-input{
-
     flex:1;
-
     height:52px;
 
-    padding:
-        0 17px;
+    padding:0 17px;
 
-    border:
-        1px solid var(--border);
-
+    border:1px solid var(--border);
     border-radius:15px;
 
     outline:none;
 
     background:var(--soft);
-
     color:var(--text);
 
     font-size:14px;
-
-    transition:.2s ease;
 }
 
 .search-input:focus{
-
     border-color:var(--blue);
 
     box-shadow:
-        0 0 0 4px
-        rgba(0,113,227,.10);
+        0 0 0 4px rgba(0,113,227,.10);
 }
 
 .search-button{
-
     height:52px;
 
-    padding:
-        0 23px;
+    padding:0 23px;
 
     border:0;
-
     border-radius:15px;
 
     background:var(--blue);
-
-    color:#fff;
+    color:white;
 
     font-size:13px;
     font-weight:700;
 
     cursor:pointer;
-
-    transition:.2s ease;
 }
 
 .search-button:hover{
-
     background:var(--blue-dark);
-
-    transform:translateY(-1px);
 }
 
 .search-button:disabled{
@@ -410,70 +269,42 @@ body.dark .navbar{
     cursor:wait;
 }
 
-
-/* =========================================================
-   ERROR
-========================================================= */
-
 .error{
-
     display:none;
 
     margin-top:12px;
-
-    padding:
-        13px 15px;
+    padding:13px 15px;
 
     border-radius:14px;
 
-    background:
-        rgba(255,59,48,.09);
-
+    background:rgba(255,59,48,.09);
     color:var(--red);
 
     font-size:12px;
     font-weight:600;
 }
 
-
-/* =========================================================
-   LOADING
-========================================================= */
-
 .loading{
-
     display:none;
 
     margin-top:20px;
-
-    padding:25px;
+    padding:22px;
 
     text-align:center;
 
     color:var(--muted);
-
     font-size:12px;
 }
 
-
-/* =========================================================
-   RESULT
-========================================================= */
-
 #resultArea{
-
     display:none;
-
     margin-top:25px;
 }
 
 .result-card{
-
     overflow:hidden;
 
-    border:
-        1px solid var(--border);
-
+    border:1px solid var(--border);
     border-radius:32px;
 
     background:var(--card);
@@ -481,97 +312,64 @@ body.dark .navbar{
     box-shadow:var(--shadow);
 }
 
-
-/* =========================================================
-   RESULT HEADER
-========================================================= */
-
-.result-header{
-
+.result-top{
     padding:30px;
+
+    border-bottom:1px solid var(--border);
 
     background:
         linear-gradient(
             135deg,
             rgba(0,113,227,.12),
-            transparent 65%
+            rgba(255,255,255,0) 70%
         );
-
-    border-bottom:
-        1px solid var(--border);
 }
 
-.result-header-row{
-
+.result-top-row{
     display:flex;
-
-    justify-content:space-between;
-
     align-items:flex-start;
-
+    justify-content:space-between;
     gap:20px;
 }
 
 .student-name{
-
-    margin:
-        7px 0 6px;
+    margin:8px 0 5px;
 
     font-size:30px;
-
     line-height:1.15;
-
     letter-spacing:-1px;
 }
 
-.roll-text{
-
+.roll-label{
     color:var(--muted);
-
     font-size:12px;
 }
 
 .status{
-
     flex-shrink:0;
 
-    padding:
-        8px 13px;
+    padding:8px 13px;
 
     border-radius:50px;
 
-    background:
-        rgba(52,199,89,.13);
-
+    background:rgba(52,199,89,.13);
     color:#16834b;
 
     font-size:10px;
-
     font-weight:800;
 
     letter-spacing:.06em;
 }
 
-
-/* =========================================================
-   INFORMATION
-========================================================= */
-
 .info-grid{
-
     display:grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
+    grid-template-columns:repeat(3,1fr);
     gap:12px;
 
-    padding:
-        25px 30px;
+    padding:25px 30px;
 }
 
 .info{
-
     padding:17px;
 
     border-radius:18px;
@@ -580,210 +378,145 @@ body.dark .navbar{
 }
 
 .info-label{
-
     display:block;
-
     margin-bottom:7px;
 
     color:var(--muted);
 
     font-size:9px;
-
     font-weight:800;
-
     letter-spacing:.09em;
 }
 
 .info-value{
-
     display:block;
 
     color:var(--text);
 
     font-size:12px;
-
     font-weight:700;
 
     line-height:1.5;
-
     word-break:break-word;
 }
 
-
-/* =========================================================
-   SCORE CARDS
-========================================================= */
-
 .score-grid{
-
     display:grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
+    grid-template-columns:repeat(3,1fr);
     gap:12px;
 
-    padding:
-        0 30px 28px;
+    padding:0 30px 28px;
 }
 
 .score{
-
     position:relative;
-
     overflow:hidden;
 
     padding:23px;
 
     border-radius:21px;
 
-    background:var(--soft);
-
     text-align:center;
+
+    background:var(--soft);
 }
 
 .score strong{
-
-    position:relative;
-    z-index:1;
-
     display:block;
 
     font-size:29px;
-
     letter-spacing:-1px;
 }
 
 .score span{
-
-    position:relative;
-    z-index:1;
-
     display:block;
 
-    margin-top:6px;
+    margin-top:5px;
 
     color:var(--muted);
 
     font-size:9px;
-
     font-weight:800;
-
     letter-spacing:.09em;
 }
 
 .score.total{
-
-    background:
-        rgba(0,113,227,.10);
+    background:rgba(0,113,227,.09);
 }
 
 .score.gpa{
-
-    background:
-        rgba(52,199,89,.10);
+    background:rgba(52,199,89,.09);
 }
 
 .score.rank{
-
-    background:
-        rgba(255,149,0,.11);
+    background:rgba(255,149,0,.10);
 }
 
-
-/* =========================================================
-   SUBJECTS
-========================================================= */
-
 .subject-section{
-
-    padding:
-        0 30px 30px;
+    padding:0 30px 30px;
 }
 
 .subject-heading{
-
     display:flex;
-
-    justify-content:space-between;
-
     align-items:end;
+    justify-content:space-between;
 
     margin-bottom:13px;
 }
 
 .subject-heading h3{
-
     margin:0;
 
     font-size:18px;
-
     letter-spacing:-.4px;
 }
 
 .subject-heading span{
-
     color:var(--muted);
-
     font-size:10px;
 }
 
 .subject-table{
-
     overflow:hidden;
 
-    border:
-        1px solid var(--border);
-
+    border:1px solid var(--border);
     border-radius:19px;
 }
 
 .subject-head,
 .subject-row{
-
     display:grid;
 
-    grid-template-columns:
-        minmax(0,1fr)
-        100px
-        100px;
+    grid-template-columns:minmax(0,1fr) 100px 100px;
 
     gap:10px;
 
     align-items:center;
 
-    padding:
-        14px 17px;
+    padding:14px 17px;
 }
 
 .subject-head{
-
     background:var(--soft);
 
     color:var(--muted);
 
     font-size:9px;
-
     font-weight:800;
 
     letter-spacing:.08em;
 }
 
 .subject-row{
-
     min-height:49px;
 
-    border-top:
-        1px solid var(--border);
-
-    color:var(--text);
+    border-top:1px solid var(--border);
 
     font-size:12px;
 }
 
 .subject-row > div:nth-child(2),
 .subject-row > div:nth-child(3){
-
     text-align:right;
 }
 
@@ -791,85 +524,367 @@ body.dark .navbar{
     font-weight:800;
 }
 
+.actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
 
-/* =========================================================
-   DOWNLOAD AREA
-========================================================= */
+    padding:0 30px 28px;
+}
 
-.download-area{
+.action-button{
+    min-height:46px;
 
-    padding:
-        0 30px 30px;
+    padding:0 18px;
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    border:1px solid var(--border);
+    border-radius:14px;
+
+    background:var(--soft);
+    color:var(--text);
+
+    font-size:12px;
+    font-weight:700;
+
+    cursor:pointer;
+    text-decoration:none;
 }
 
 .download-button{
-
-    width:100%;
-
-    min-height:52px;
-
     border:0;
 
-    border-radius:16px;
-
     background:var(--blue);
+    color:white;
 
-    color:#fff;
-
-    font-size:13px;
-
-    font-weight:800;
-
-    cursor:pointer;
-
-    transition:.2s ease;
+    box-shadow:
+        0 8px 24px rgba(0,113,227,.20);
 }
 
 .download-button:hover{
-
     background:var(--blue-dark);
-
     transform:translateY(-1px);
-
-    box-shadow:
-        0 8px 25px
-        rgba(0,113,227,.25);
 }
 
 .download-button:disabled{
-
-    opacity:.65;
-
+    opacity:.6;
     cursor:wait;
-
-    transform:none;
 }
 
-
-/* =========================================================
-   FOOTNOTE
-========================================================= */
-
 .footnote{
-
-    padding:
-        0 30px 30px;
+    padding:0 30px 30px;
 
     color:var(--muted);
 
     font-size:10px;
-
     line-height:1.7;
 }
 
-.footnote strong{
-    color:var(--text);
+/* =========================================
+   HIDDEN PDF TEMPLATE
+========================================= */
+
+#pdfTemplate{
+    position:absolute;
+    left:-100000px;
+    top:0;
+
+    width:794px;
+
+    background:white;
+    color:#1d1d1f;
 }
 
+.pdf-page{
+    width:794px;
+    min-height:1123px;
 
-/* =========================================================
+    padding:48px 48px 42px;
+
+    background:white;
+
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.pdf-header{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+
+    padding-bottom:22px;
+
+    border-bottom:1px solid #e5e5e7;
+}
+
+.pdf-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.pdf-logo{
+    width:38px;
+    height:38px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:11px;
+
+    background:#0071e3;
+    color:white;
+
+    font-size:18px;
+    font-weight:800;
+}
+
+.pdf-brand-title{
+    font-size:20px;
+    font-weight:800;
+    letter-spacing:-.7px;
+}
+
+.pdf-brand-sub{
+    margin-top:3px;
+
+    color:#6e6e73;
+
+    font-size:9px;
+    font-weight:600;
+}
+
+.pdf-meta{
+    text-align:right;
+}
+
+.pdf-generated{
+    font-size:10px;
+    font-weight:700;
+}
+
+.pdf-date{
+    margin-top:5px;
+
+    color:#6e6e73;
+
+    font-size:9px;
+}
+
+.pdf-title{
+    margin-top:30px;
+    margin-bottom:20px;
+}
+
+.pdf-title small{
+    color:#0071e3;
+
+    font-size:9px;
+    font-weight:800;
+
+    letter-spacing:.12em;
+    text-transform:uppercase;
+}
+
+.pdf-title h1{
+    margin:7px 0 4px;
+
+    font-size:30px;
+    letter-spacing:-1.3px;
+}
+
+.pdf-title p{
+    margin:0;
+
+    color:#6e6e73;
+
+    font-size:10px;
+}
+
+.pdf-status{
+    display:inline-block;
+
+    margin-top:12px;
+    padding:6px 10px;
+
+    border-radius:50px;
+
+    background:#e8f7ef;
+    color:#16834b;
+
+    font-size:8px;
+    font-weight:800;
+}
+
+.pdf-info-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+
+    gap:9px;
+
+    margin-top:22px;
+}
+
+.pdf-info{
+    padding:12px;
+
+    border-radius:12px;
+
+    background:#f5f5f7;
+}
+
+.pdf-info-label{
+    display:block;
+
+    margin-bottom:5px;
+
+    color:#6e6e73;
+
+    font-size:7px;
+    font-weight:800;
+    letter-spacing:.08em;
+}
+
+.pdf-info-value{
+    display:block;
+
+    font-size:9px;
+    font-weight:700;
+
+    line-height:1.35;
+
+    word-break:break-word;
+}
+
+.pdf-score-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+
+    gap:9px;
+
+    margin-top:12px;
+}
+
+.pdf-score{
+    padding:16px 12px;
+
+    border-radius:14px;
+
+    text-align:center;
+}
+
+.pdf-score.total{
+    background:#eaf3ff;
+}
+
+.pdf-score.gpa{
+    background:#eaf8ef;
+}
+
+.pdf-score.rank{
+    background:#fff4df;
+}
+
+.pdf-score-value{
+    font-size:21px;
+    font-weight:800;
+    letter-spacing:-.5px;
+}
+
+.pdf-score-label{
+    margin-top:4px;
+
+    color:#6e6e73;
+
+    font-size:7px;
+    font-weight:800;
+    letter-spacing:.08em;
+}
+
+.pdf-subject-title{
+    margin-top:28px;
+    margin-bottom:10px;
+
+    font-size:14px;
+    font-weight:800;
+    letter-spacing:-.3px;
+}
+
+.pdf-table{
+    width:100%;
+
+    border-collapse:collapse;
+
+    border:1px solid #e5e5e7;
+
+    border-radius:12px;
+    overflow:hidden;
+}
+
+.pdf-table th{
+    padding:10px;
+
+    background:#f5f5f7;
+
+    color:#6e6e73;
+
+    text-align:left;
+
+    font-size:7px;
+    font-weight:800;
+
+    letter-spacing:.08em;
+}
+
+.pdf-table td{
+    padding:9px 10px;
+
+    border-top:1px solid #e5e5e7;
+
+    font-size:8px;
+}
+
+.pdf-table th:nth-child(2),
+.pdf-table th:nth-child(3),
+.pdf-table td:nth-child(2),
+.pdf-table td:nth-child(3){
+    text-align:right;
+}
+
+.pdf-footer{
+    margin-top:34px;
+    padding-top:15px;
+
+    border-top:1px solid #e5e5e7;
+
+    text-align:center;
+}
+
+.pdf-unofficial{
+    color:#6e6e73;
+
+    font-size:8px;
+    font-weight:800;
+
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.pdf-disclaimer{
+    margin-top:6px;
+
+    color:#8e8e93;
+
+    font-size:7px;
+    line-height:1.5;
+}
+
+/* =========================================
    MOBILE
-========================================================= */
+========================================= */
 
 @media(max-width:700px){
 
@@ -878,9 +893,7 @@ body.dark .navbar{
     }
 
     .page{
-        padding:
-            45px 12px
-            70px;
+        padding:42px 12px 70px;
     }
 
     .hero h1{
@@ -900,11 +913,11 @@ body.dark .navbar{
         width:100%;
     }
 
-    .result-header{
+    .result-top{
         padding:23px;
     }
 
-    .result-header-row{
+    .result-top-row{
         flex-direction:column;
     }
 
@@ -912,30 +925,18 @@ body.dark .navbar{
         font-size:24px;
     }
 
-    .status{
-        align-self:flex-start;
-    }
-
     .info-grid{
-
-        grid-template-columns:
-            1fr 1fr;
-
+        grid-template-columns:1fr 1fr;
         padding:20px;
     }
 
     .score-grid{
-
         grid-template-columns:1fr;
-
-        padding:
-            0 20px 22px;
+        padding:0 20px 22px;
     }
 
     .subject-section{
-
-        padding:
-            0 20px 25px;
+        padding:0 20px 25px;
     }
 
     .subject-table{
@@ -947,16 +948,16 @@ body.dark .navbar{
         min-width:440px;
     }
 
-    .download-area{
+    .actions{
+        padding:0 20px 25px;
+    }
 
-        padding:
-            0 20px 25px;
+    .action-button{
+        width:100%;
     }
 
     .footnote{
-
-        padding:
-            0 20px 25px;
+        padding:0 20px 25px;
     }
 }
 
@@ -971,146 +972,53 @@ body.dark .navbar{
     }
 }
 
-
-/* =========================================================
+/* =========================================
    PRINT
-========================================================= */
+========================================= */
 
 @media print{
 
     @page{
         size:A4;
-        margin:12mm;
+        margin:0;
     }
 
     body{
-        background:#fff !important;
-        color:#1d1d1f !important;
+        background:white !important;
     }
 
     .navbar,
     .hero,
     .search-card,
     .loading,
-    .download-area{
+    #resultArea,
+    #pdfTemplate{
         display:none !important;
     }
-
-    .page{
-
-        min-height:auto !important;
-
-        padding:0 !important;
-
-        background:#fff !important;
-    }
-
-    .container{
-
-        width:100% !important;
-
-        max-width:none !important;
-    }
-
-    #resultArea{
-
-        display:block !important;
-
-        margin:0 !important;
-    }
-
-    .result-card{
-
-        border:
-            1px solid #ddd !important;
-
-        border-radius:0 !important;
-
-        box-shadow:none !important;
-
-        background:#fff !important;
-    }
-
-    .result-header{
-
-        background:#f5f8fc !important;
-    }
-
-    .student-name,
-    .info-value,
-    .score strong,
-    .subject-heading h3,
-    .subject-row{
-
-        color:#1d1d1f !important;
-    }
-
-    .info,
-    .score{
-
-        background:#f5f5f7 !important;
-    }
-
-    .subject-table{
-        overflow:visible !important;
-    }
-
-    .subject-head,
-    .subject-row{
-        min-width:0 !important;
-    }
-
-    .subject-row{
-        page-break-inside:avoid;
-    }
-
 }
-
 </style>
 </head>
 
-
 <body>
-
-
-<!-- =======================================================
-     NAVBAR
-======================================================= -->
 
 <header class="navbar">
 
     <a href="index.html" class="logo">
-
-        <span class="logo-mark">
-            C
-        </span>
-
-        <span>
-            CTGboardranking
-        </span>
-
+        <span class="logo-mark">C</span>
+        <span>CTGBoardRanking</span>
     </a>
-
 
     <div class="nav-actions">
 
-        <a
-            href="index.html"
-            class="nav-button">
-
+        <a href="index.html" class="nav-home">
             Home
-
         </a>
 
-
         <button
-            id="themeBtn"
-            class="nav-button"
             type="button"
-            aria-label="Toggle theme">
-
+            id="themeBtn"
+            class="theme-btn">
             ◐
-
         </button>
 
     </div>
@@ -1118,19 +1026,9 @@ body.dark .navbar{
 </header>
 
 
-
-<!-- =======================================================
-     PAGE
-======================================================= -->
-
 <div class="page">
 
 <main class="container">
-
-
-    <!-- ===================================================
-         HERO
-    =================================================== -->
 
     <section class="hero">
 
@@ -1138,45 +1036,27 @@ body.dark .navbar{
             SSC 2026 · CHATTAGRAM BOARD
         </span>
 
-
         <h1>
-
             Your result.<br>
-
-            <span>
-                All in one place.
-            </span>
-
+            <span>All in one place.</span>
         </h1>
 
-
         <p>
-
             Search your roll number to view your
             SSC 2026 result, subject-wise marks,
-            GPA, total score and student rank.
-
+            total score, GPA and student rank.
         </p>
 
     </section>
 
 
-
-    <!-- ===================================================
-         SEARCH
-    =================================================== -->
-
     <section class="search-card">
 
-        <h2>
-            Find your result
-        </h2>
-
+        <h2>Find your result</h2>
 
         <p>
             Enter your SSC 2026 roll number.
         </p>
-
 
         <form
             id="resultSearchForm"
@@ -1190,9 +1070,7 @@ body.dark .navbar{
                 autocomplete="off"
                 maxlength="6"
                 placeholder="Enter Roll Number"
-                required
-            >
-
+                required>
 
             <button
                 id="searchButton"
@@ -1205,7 +1083,6 @@ body.dark .navbar{
 
         </form>
 
-
         <div
             id="errorMessage"
             class="error">
@@ -1214,34 +1091,22 @@ body.dark .navbar{
     </section>
 
 
-
-    <div
-        id="loading"
-        class="loading">
-
+    <div id="loading" class="loading">
         Loading result…
-
     </div>
 
 
-
-    <!-- ===================================================
+    <!-- =========================================
          RESULT
-         NO "OPEN FULL RESULTS"
-    =================================================== -->
+    ========================================== -->
 
     <section id="resultArea">
 
-        <div
-            id="fullResult"
-            class="result-card">
+        <div class="result-card">
 
+            <div class="result-top">
 
-            <!-- RESULT HEADER -->
-
-            <div class="result-header">
-
-                <div class="result-header-row">
+                <div class="result-top-row">
 
                     <div>
 
@@ -1249,208 +1114,94 @@ body.dark .navbar{
                             SSC 2026 · CHATTAGRAM BOARD
                         </span>
 
-
                         <h2
                             id="studentName"
                             class="student-name">
-
                             —
-
                         </h2>
-
 
                         <span
                             id="resultRoll"
-                            class="roll-text">
-
+                            class="roll-label">
                             Roll: —
-
                         </span>
 
                     </div>
 
-
                     <span
                         id="resultStatus"
                         class="status">
-
                         —
-
                     </span>
 
                 </div>
 
             </div>
 
-
-
-            <!-- BASIC INFORMATION -->
 
             <div class="info-grid">
 
-
                 <div class="info">
-
-                    <span class="info-label">
-                        ROLL
-                    </span>
-
-                    <strong
-                        id="showRoll"
-                        class="info-value">
-
-                        —
-
-                    </strong>
-
+                    <span class="info-label">ROLL</span>
+                    <strong id="showRoll" class="info-value">—</strong>
                 </div>
 
-
                 <div class="info">
-
-                    <span class="info-label">
-                        REGISTRATION
-                    </span>
-
-                    <strong
-                        id="showRegistration"
-                        class="info-value">
-
-                        —
-
-                    </strong>
-
+                    <span class="info-label">REGISTRATION</span>
+                    <strong id="showRegistration" class="info-value">—</strong>
                 </div>
 
-
                 <div class="info">
-
-                    <span class="info-label">
-                        YEAR
-                    </span>
-
-                    <strong
-                        id="showYear"
-                        class="info-value">
-
-                        —
-
-                    </strong>
-
+                    <span class="info-label">YEAR</span>
+                    <strong id="showYear" class="info-value">—</strong>
                 </div>
 
-
                 <div class="info">
-
-                    <span class="info-label">
-                        GROUP
-                    </span>
-
-                    <strong
-                        id="showGroup"
-                        class="info-value">
-
-                        —
-
-                    </strong>
-
+                    <span class="info-label">GROUP</span>
+                    <strong id="showGroup" class="info-value">—</strong>
                 </div>
 
-
                 <div class="info">
-
-                    <span class="info-label">
-                        INSTITUTION
-                    </span>
-
-                    <strong
-                        id="showInstitution"
-                        class="info-value">
-
-                        —
-
-                    </strong>
-
+                    <span class="info-label">INSTITUTION</span>
+                    <strong id="showInstitution" class="info-value">—</strong>
                 </div>
 
-
                 <div class="info">
-
-                    <span class="info-label">
-                        DISTRICT
-                    </span>
-
-                    <strong
-                        id="showDistrict"
-                        class="info-value">
-
-                        —
-
-                    </strong>
-
+                    <span class="info-label">DISTRICT</span>
+                    <strong id="showDistrict" class="info-value">—</strong>
                 </div>
 
             </div>
 
-
-
-            <!-- SCORE -->
 
             <div class="score-grid">
 
-
                 <div class="score total">
 
-                    <strong
-                        id="totalScore">
+                    <strong id="totalScore">—</strong>
 
-                        —
-
-                    </strong>
-
-                    <span>
-                        TOTAL SCORE
-                    </span>
+                    <span>TOTAL SCORE</span>
 
                 </div>
-
 
                 <div class="score gpa">
 
-                    <strong
-                        id="gpa">
+                    <strong id="gpa">—</strong>
 
-                        —
-
-                    </strong>
-
-                    <span>
-                        GPA
-                    </span>
+                    <span>GPA</span>
 
                 </div>
 
-
                 <div class="score rank">
 
-                    <strong
-                        id="studentRank">
+                    <strong id="studentRank">—</strong>
 
-                        —
-
-                    </strong>
-
-                    <span>
-                        STUDENT RANK
-                    </span>
+                    <span>STUDENT RANK</span>
 
                 </div>
 
             </div>
 
-
-
-            <!-- SUBJECTS -->
 
             <div class="subject-section">
 
@@ -1466,25 +1217,72 @@ body.dark .navbar{
 
                 </div>
 
-
                 <div
                     id="subjectTable"
                     class="subject-table">
 
-                    <div class="subject-head">
+                </div>
 
-                        <div>
-                            SUBJECT
-                        </div>
+            </div>
 
-                        <div>
-                            MARKS
-                        </div>
 
-                        <div>
-                            GRADE
-                        </div>
+            <!-- ONLY DOWNLOAD PDF BUTTON -->
+            <div class="actions">
 
+                <button
+                    id="downloadPdfBtn"
+                    class="action-button download-button"
+                    type="button">
+
+                    ↓&nbsp; Download PDF
+
+                </button>
+
+            </div>
+
+
+            <div class="footnote">
+
+                <strong>CTGBoardRanking</strong>
+                is an independent, unofficial educational
+                data platform. Result information is provided
+                for educational, research and statistical purposes.
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+</div>
+
+
+<!-- =========================================
+     HIDDEN PDF TEMPLATE
+========================================== -->
+
+<div id="pdfTemplate">
+
+    <div class="pdf-page">
+
+        <div class="pdf-header">
+
+            <div class="pdf-brand">
+
+                <div class="pdf-logo">
+                    C
+                </div>
+
+                <div>
+
+                    <div class="pdf-brand-title">
+                        CTGBoardRanking
+                    </div>
+
+                    <div class="pdf-brand-sub">
+                        SSC 2026 · Chattogram Board
                     </div>
 
                 </div>
@@ -1492,50 +1290,208 @@ body.dark .navbar{
             </div>
 
 
+            <div class="pdf-meta">
 
-            <!-- DOWNLOAD PDF -->
+                <div class="pdf-generated">
+                    Generated by Shadat
+                </div>
 
-            <div class="download-area">
-
-                <button
-                    id="downloadPdfBtn"
-                    class="download-button"
-                    type="button">
-
-                    Download PDF
-
-                </button>
+                <div
+                    id="pdfDate"
+                    class="pdf-date">
+                    —
+                </div>
 
             </div>
-
-
-
-            <!-- FOOTNOTE -->
-
-            <div class="footnote">
-
-                <strong>
-                    CTGboardranking
-                </strong>
-                is an independent and unofficial
-                educational data platform.
-
-                Result information is provided for
-                educational, research and statistical
-                purposes only.
-
-            </div>
-
 
         </div>
 
-    </section>
+
+        <div class="pdf-title">
+
+            <small>
+                INDIVIDUAL RESULT
+            </small>
+
+            <h1 id="pdfStudentName">
+                —
+            </h1>
+
+            <p id="pdfRoll">
+                Roll: —
+            </p>
+
+            <span
+                id="pdfStatus"
+                class="pdf-status">
+                —
+            </span>
+
+        </div>
 
 
-</main>
+        <div class="pdf-info-grid">
+
+            <div class="pdf-info">
+                <span class="pdf-info-label">
+                    ROLL
+                </span>
+                <strong
+                    id="pdfShowRoll"
+                    class="pdf-info-value">
+                    —
+                </strong>
+            </div>
+
+            <div class="pdf-info">
+                <span class="pdf-info-label">
+                    REGISTRATION
+                </span>
+                <strong
+                    id="pdfRegistration"
+                    class="pdf-info-value">
+                    —
+                </strong>
+            </div>
+
+            <div class="pdf-info">
+                <span class="pdf-info-label">
+                    YEAR
+                </span>
+                <strong
+                    id="pdfYear"
+                    class="pdf-info-value">
+                    —
+                </strong>
+            </div>
+
+            <div class="pdf-info">
+                <span class="pdf-info-label">
+                    GROUP
+                </span>
+                <strong
+                    id="pdfGroup"
+                    class="pdf-info-value">
+                    —
+                </strong>
+            </div>
+
+            <div class="pdf-info">
+                <span class="pdf-info-label">
+                    INSTITUTION
+                </span>
+                <strong
+                    id="pdfInstitution"
+                    class="pdf-info-value">
+                    —
+                </strong>
+            </div>
+
+            <div class="pdf-info">
+                <span class="pdf-info-label">
+                    DISTRICT
+                </span>
+                <strong
+                    id="pdfDistrict"
+                    class="pdf-info-value">
+                    —
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="pdf-score-grid">
+
+            <div class="pdf-score total">
+
+                <div
+                    id="pdfTotal"
+                    class="pdf-score-value">
+                    —
+                </div>
+
+                <div class="pdf-score-label">
+                    TOTAL SCORE
+                </div>
+
+            </div>
+
+
+            <div class="pdf-score gpa">
+
+                <div
+                    id="pdfGpa"
+                    class="pdf-score-value">
+                    —
+                </div>
+
+                <div class="pdf-score-label">
+                    GPA
+                </div>
+
+            </div>
+
+
+            <div class="pdf-score rank">
+
+                <div
+                    id="pdfRank"
+                    class="pdf-score-value">
+                    —
+                </div>
+
+                <div class="pdf-score-label">
+                    STUDENT RANK
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="pdf-subject-title">
+            Subject-wise Result
+        </div>
+
+
+        <table class="pdf-table">
+
+            <thead>
+
+                <tr>
+                    <th>SUBJECT</th>
+                    <th>MARKS</th>
+                    <th>GRADE</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="pdfSubjects">
+
+            </tbody>
+
+        </table>
+
+
+        <div class="pdf-footer">
+
+            <div class="pdf-unofficial">
+                Unofficial Notice
+            </div>
+
+            <div class="pdf-disclaimer">
+                This document is generated by CTGBoardRanking
+                for educational, research and statistical purposes.
+                It is not an official document issued by the
+                Chattogram Education Board.
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
-
 
 
 <script>
@@ -1545,84 +1501,52 @@ body.dark .navbar{
 ========================================================= */
 
 const form =
-    document.getElementById(
-        "resultSearchForm"
-    );
+    document.getElementById("resultSearchForm");
 
 const rollInput =
-    document.getElementById(
-        "roll"
-    );
+    document.getElementById("roll");
 
 const searchButton =
-    document.getElementById(
-        "searchButton"
-    );
+    document.getElementById("searchButton");
 
 const errorMessage =
-    document.getElementById(
-        "errorMessage"
-    );
-
-const loading =
-    document.getElementById(
-        "loading"
-    );
+    document.getElementById("errorMessage");
 
 const resultArea =
-    document.getElementById(
-        "resultArea"
-    );
+    document.getElementById("resultArea");
+
+const loading =
+    document.getElementById("loading");
 
 const downloadPdfBtn =
-    document.getElementById(
-        "downloadPdfBtn"
-    );
+    document.getElementById("downloadPdfBtn");
 
 const themeBtn =
-    document.getElementById(
-        "themeBtn"
-    );
+    document.getElementById("themeBtn");
 
 
 /* =========================================================
-   THEME
+   DARK MODE
 ========================================================= */
 
 if(
-    localStorage.getItem(
-        "ctg-theme"
-    ) === "dark"
+    localStorage.getItem("ctg-theme") === "dark"
 ){
-
-    document.body.classList.add(
-        "dark"
-    );
-
+    document.body.classList.add("dark");
 }
 
+themeBtn.addEventListener("click",()=>{
 
-themeBtn.addEventListener(
-    "click",
-    ()=>{
+    document.body.classList.toggle("dark");
 
-        document.body.classList.toggle(
-            "dark"
-        );
+    localStorage.setItem(
+        "ctg-theme",
+        document.body.classList.contains("dark")
+            ? "dark"
+            : "light"
+    );
 
-
-        localStorage.setItem(
-            "ctg-theme",
-
-            document.body.classList.contains(
-                "dark"
-            )
-                ? "dark"
-                : "light"
-        );
-
-    }
-);
+});
 
 
 /* =========================================================
@@ -1638,11 +1562,9 @@ function showError(message){
         "block";
 }
 
-
 function hideError(){
 
-    errorMessage.textContent =
-        "";
+    errorMessage.textContent = "";
 
     errorMessage.style.display =
         "none";
@@ -1660,9 +1582,7 @@ function displayValue(value){
         value === undefined ||
         value === ""
     ){
-
         return "—";
-
     }
 
     return String(value);
@@ -1670,40 +1590,22 @@ function displayValue(value){
 
 
 /* =========================================================
-   HTML ESCAPE
+   ESCAPE HTML
 ========================================================= */
 
 function escapeHTML(value){
 
-    return String(
-        value ?? ""
-    )
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-    .replace(
-        /</g,
-        "&lt;"
-    )
-    .replace(
-        />/g,
-        "&gt;"
-    )
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-    .replace(
-        /'/g,
-        "&#039;"
-    );
-
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 }
 
 
 /* =========================================================
-   SEARCH FORM
+   SEARCH
 ========================================================= */
 
 form.addEventListener(
@@ -1727,9 +1629,7 @@ async function searchResult(){
     const roll =
         rollInput.value.trim();
 
-
     hideError();
-
 
     if(!roll){
 
@@ -1739,7 +1639,6 @@ async function searchResult(){
 
         return;
     }
-
 
     if(!/^\d+$/.test(roll)){
 
@@ -1751,8 +1650,7 @@ async function searchResult(){
     }
 
 
-    searchButton.disabled =
-        true;
+    searchButton.disabled = true;
 
     searchButton.textContent =
         "Searching…";
@@ -1769,42 +1667,24 @@ async function searchResult(){
         const response =
             await fetch(
                 "/api/result?roll=" +
-                encodeURIComponent(
-                    roll
-                ),
+                encodeURIComponent(roll),
                 {
                     method:"GET",
-
                     headers:{
                         "Accept":
                             "application/json"
                     },
-
                     cache:"no-store"
                 }
             );
 
 
-        let json;
-
-
-        try{
-
-            json =
-                await response.json();
-
-        }
-        catch{
-
-            throw new Error(
-                "Invalid response from result API."
-            );
-
-        }
+        const json =
+            await response.json();
 
 
         console.log(
-            "RESULT API:",
+            "RESULT API RESPONSE:",
             json
         );
 
@@ -1823,9 +1703,7 @@ async function searchResult(){
         }
 
 
-        if(
-            !json.student
-        ){
+        if(!json.student){
 
             throw new Error(
                 "Student result data is missing."
@@ -1839,6 +1717,7 @@ async function searchResult(){
         );
 
     }
+
     catch(error){
 
         console.error(
@@ -1846,13 +1725,13 @@ async function searchResult(){
             error
         );
 
-
         showError(
             error.message ||
             "Unable to load result."
         );
 
     }
+
     finally{
 
         loading.style.display =
@@ -1874,10 +1753,6 @@ async function searchResult(){
 ========================================================= */
 
 function displayResult(student){
-
-    /* -----------------------------------------------
-       STUDENT
-    ----------------------------------------------- */
 
     document.getElementById(
         "studentName"
@@ -1903,10 +1778,6 @@ function displayResult(student){
             student.result_status
         ).toUpperCase();
 
-
-    /* -----------------------------------------------
-       INFORMATION
-    ----------------------------------------------- */
 
     document.getElementById(
         "showRoll"
@@ -1956,21 +1827,19 @@ function displayResult(student){
         );
 
 
-    /* -----------------------------------------------
-       TOTAL SCORE
-    ----------------------------------------------- */
+    /* TOTAL */
 
-    let total =
+    let totalScore =
         student.total_score;
 
 
     if(
-        total === null ||
-        total === undefined ||
-        total === ""
+        totalScore === null ||
+        totalScore === undefined ||
+        totalScore === ""
     ){
 
-        total =
+        totalScore =
             calculateTotal(
                 student.subjects
             );
@@ -1981,18 +1850,12 @@ function displayResult(student){
     document.getElementById(
         "totalScore"
     ).textContent =
-        total !== null &&
-        total !== undefined
-            ? Number(total)
-                .toLocaleString(
-                    "en-US"
-                )
+        totalScore !== null
+            ? Number(totalScore).toLocaleString("en-US")
             : "—";
 
 
-    /* -----------------------------------------------
-       GPA
-    ----------------------------------------------- */
+    /* GPA */
 
     const gpa =
         student.gpa;
@@ -2001,20 +1864,14 @@ function displayResult(student){
     document.getElementById(
         "gpa"
     ).textContent =
-
         gpa !== null &&
         gpa !== undefined &&
         gpa !== ""
-
-            ? Number(gpa)
-                .toFixed(2)
-
+            ? Number(gpa).toFixed(2)
             : "—";
 
 
-    /* -----------------------------------------------
-       STUDENT RANK
-    ----------------------------------------------- */
+    /* RANK */
 
     const rank =
         student.student_rank;
@@ -2023,31 +1880,31 @@ function displayResult(student){
     document.getElementById(
         "studentRank"
     ).textContent =
-
         rank !== null &&
         rank !== undefined &&
         rank !== ""
-
-            ? Number(rank)
-                .toLocaleString(
-                    "en-US"
-                )
-
+            ? Number(rank).toLocaleString("en-US")
             : "—";
 
 
-    /* -----------------------------------------------
-       SUBJECTS
-    ----------------------------------------------- */
+    /* SUBJECTS */
 
     renderSubjects(
         student.subjects || []
     );
 
 
-    /* -----------------------------------------------
-       SHOW
-    ----------------------------------------------- */
+    /* PREPARE PDF */
+
+    preparePDF(
+        student,
+        totalScore,
+        gpa,
+        rank
+    );
+
+
+    /* SHOW */
 
     resultArea.style.display =
         "block";
@@ -2066,7 +1923,7 @@ function displayResult(student){
 
 
 /* =========================================================
-   CALCULATE TOTAL FALLBACK
+   TOTAL FALLBACK
 ========================================================= */
 
 function calculateTotal(subjects){
@@ -2075,49 +1932,37 @@ function calculateTotal(subjects){
         !Array.isArray(subjects) ||
         subjects.length === 0
     ){
-
         return null;
-
     }
 
-
     let total = 0;
-
     let valid = 0;
 
+    subjects.forEach(subject=>{
 
-    subjects.forEach(
-        subject=>{
+        const raw =
+            subject.marks ??
+            subject.mark ??
+            subject.total_marks ??
+            subject.total_mark;
 
-            const raw =
-                subject.marks ??
-                subject.mark ??
-                subject.total_marks ??
-                subject.total_mark;
+        const mark =
+            Number(raw);
 
+        if(
+            Number.isFinite(mark)
+        ){
 
-            const mark =
-                Number(raw);
-
-
-            if(
-                Number.isFinite(mark)
-            ){
-
-                total += mark;
-
-                valid++;
-
-            }
+            total += mark;
+            valid++;
 
         }
-    );
 
+    });
 
     return valid > 0
         ? total
         : null;
-
 }
 
 
@@ -2137,17 +1982,9 @@ function renderSubjects(subjects){
 
         <div class="subject-head">
 
-            <div>
-                SUBJECT
-            </div>
-
-            <div>
-                MARKS
-            </div>
-
-            <div>
-                GRADE
-            </div>
+            <div>SUBJECT</div>
+            <div>MARKS</div>
+            <div>GRADE</div>
 
         </div>
 
@@ -2167,88 +2004,300 @@ function renderSubjects(subjects){
                     Subject details unavailable
                 </div>
 
-                <div>
-                    —
-                </div>
+                <div>—</div>
 
-                <div class="grade">
-                    —
-                </div>
+                <div class="grade">—</div>
 
             </div>
 
         `;
 
         return;
-
     }
 
 
-    subjects.forEach(
-        subject=>{
+    subjects.forEach(subject=>{
 
-            const name =
-                subject.subject_name ??
-                subject.subject ??
-                subject.subject_title ??
-                subject.subject_code ??
-                subject.code ??
-                "—";
-
-
-            const marks =
-                subject.marks ??
-                subject.mark ??
-                subject.total_marks ??
-                subject.total_mark ??
-                "—";
+        const name =
+            subject.subject_name ??
+            subject.subject ??
+            subject.subject_title ??
+            subject.subject_code ??
+            subject.code ??
+            "—";
 
 
-            const grade =
-                subject.grade ??
-                subject.grade_name ??
-                "—";
+        const marks =
+            subject.marks ??
+            subject.mark ??
+            subject.total_marks ??
+            subject.total_mark ??
+            "—";
 
 
-            const row =
-                document.createElement(
-                    "div"
-                );
+        const grade =
+            subject.grade ??
+            subject.grade_name ??
+            "—";
 
 
-            row.className =
-                "subject-row";
+        const row =
+            document.createElement("div");
+
+        row.className =
+            "subject-row";
 
 
-            row.innerHTML = `
+        row.innerHTML = `
 
-                <div>
-                    ${escapeHTML(name)}
-                </div>
+            <div>
+                ${escapeHTML(name)}
+            </div>
 
-                <div>
-                    ${escapeHTML(marks)}
-                </div>
+            <div>
+                ${escapeHTML(marks)}
+            </div>
 
-                <div class="grade">
-                    ${escapeHTML(grade)}
-                </div>
+            <div class="grade">
+                ${escapeHTML(grade)}
+            </div>
 
-            `;
+        `;
 
 
-            table.appendChild(
-                row
-            );
+        table.appendChild(row);
 
-        }
-    );
+    });
 
 }
 
 
 /* =========================================================
-   PDF — APPLE INSPIRED
+   PREPARE PDF
+========================================================= */
+
+function preparePDF(
+    student,
+    totalScore,
+    gpa,
+    rank
+){
+
+    const date =
+        new Date();
+
+
+    const formattedDate =
+        date.toLocaleDateString(
+            "en-GB",
+            {
+                day:"2-digit",
+                month:"long",
+                year:"numeric"
+            }
+        );
+
+
+    document.getElementById(
+        "pdfDate"
+    ).textContent =
+        formattedDate;
+
+
+    document.getElementById(
+        "pdfStudentName"
+    ).textContent =
+        displayValue(
+            student.student_name
+        );
+
+
+    document.getElementById(
+        "pdfRoll"
+    ).textContent =
+        "Roll: " +
+        displayValue(
+            student.roll
+        );
+
+
+    document.getElementById(
+        "pdfStatus"
+    ).textContent =
+        displayValue(
+            student.result_status
+        ).toUpperCase();
+
+
+    document.getElementById(
+        "pdfShowRoll"
+    ).textContent =
+        displayValue(
+            student.roll
+        );
+
+
+    document.getElementById(
+        "pdfRegistration"
+    ).textContent =
+        displayValue(
+            student.registration
+        );
+
+
+    document.getElementById(
+        "pdfYear"
+    ).textContent =
+        displayValue(
+            student.year
+        );
+
+
+    document.getElementById(
+        "pdfGroup"
+    ).textContent =
+        displayValue(
+            student.group_name
+        );
+
+
+    document.getElementById(
+        "pdfInstitution"
+    ).textContent =
+        displayValue(
+            student.institution
+        );
+
+
+    document.getElementById(
+        "pdfDistrict"
+    ).textContent =
+        displayValue(
+            student.district
+        );
+
+
+    document.getElementById(
+        "pdfTotal"
+    ).textContent =
+        totalScore !== null &&
+        totalScore !== undefined
+            ? Number(totalScore).toLocaleString("en-US")
+            : "—";
+
+
+    document.getElementById(
+        "pdfGpa"
+    ).textContent =
+        gpa !== null &&
+        gpa !== undefined &&
+        gpa !== ""
+            ? Number(gpa).toFixed(2)
+            : "—";
+
+
+    document.getElementById(
+        "pdfRank"
+    ).textContent =
+        rank !== null &&
+        rank !== undefined &&
+        rank !== ""
+            ? Number(rank).toLocaleString("en-US")
+            : "—";
+
+
+    const tbody =
+        document.getElementById(
+            "pdfSubjects"
+        );
+
+
+    tbody.innerHTML = "";
+
+
+    const subjects =
+        Array.isArray(student.subjects)
+            ? student.subjects
+            : [];
+
+
+    if(subjects.length === 0){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td>
+                    Subject details unavailable
+                </td>
+
+                <td>—</td>
+
+                <td>—</td>
+
+            </tr>
+
+        `;
+
+        return;
+    }
+
+
+    subjects.forEach(subject=>{
+
+        const name =
+            subject.subject_name ??
+            subject.subject ??
+            subject.subject_title ??
+            subject.subject_code ??
+            subject.code ??
+            "—";
+
+
+        const marks =
+            subject.marks ??
+            subject.mark ??
+            subject.total_marks ??
+            subject.total_mark ??
+            "—";
+
+
+        const grade =
+            subject.grade ??
+            subject.grade_name ??
+            "—";
+
+
+        const tr =
+            document.createElement("tr");
+
+
+        tr.innerHTML = `
+
+            <td>
+                ${escapeHTML(name)}
+            </td>
+
+            <td>
+                ${escapeHTML(marks)}
+            </td>
+
+            <td>
+                ${escapeHTML(grade)}
+            </td>
+
+        `;
+
+
+        tbody.appendChild(tr);
+
+    });
+
+}
+
+
+/* =========================================================
+   DOWNLOAD PDF
 ========================================================= */
 
 downloadPdfBtn.addEventListener(
@@ -2256,8 +2305,7 @@ downloadPdfBtn.addEventListener(
     async()=>{
 
         if(
-            resultArea.style.display ===
-            "none"
+            resultArea.style.display === "none"
         ){
 
             showError(
@@ -2265,21 +2313,18 @@ downloadPdfBtn.addEventListener(
             );
 
             return;
-
         }
 
 
         if(
-            !window.jspdf ||
-            !window.jspdf.jsPDF
+            typeof html2pdf === "undefined"
         ){
 
             showError(
-                "PDF library could not be loaded. Please try again."
+                "PDF library could not be loaded. Please check your internet connection and try again."
             );
 
             return;
-
         }
 
 
@@ -2292,29 +2337,144 @@ downloadPdfBtn.addEventListener(
 
         try{
 
-            await generatePDF();
+            const studentName =
+                document.getElementById(
+                    "studentName"
+                ).textContent.trim();
+
+
+            const roll =
+                document.getElementById(
+                    "showRoll"
+                ).textContent.trim();
+
+
+            const safeName =
+                studentName
+                    .replace(/[^\w\s.-]/g,"")
+                    .trim()
+                    .replace(/\s+/g,"_");
+
+
+            const safeRoll =
+                roll
+                    .replace(/[^\w.-]/g,"");
+
+
+            const fileName =
+                `CTGBoardRanking_${safeRoll || "Result"}_${safeName || "Student"}.pdf`;
+
+
+            const element =
+                document.getElementById(
+                    "pdfTemplate"
+                );
+
+
+            /*
+             * Temporarily make PDF template visible
+             * to ensure html2canvas can render it.
+             */
+
+            element.style.position =
+                "fixed";
+
+            element.style.left =
+                "0";
+
+            element.style.top =
+                "0";
+
+            element.style.zIndex =
+                "-9999";
+
+
+            await new Promise(
+                resolve =>
+                    setTimeout(
+                        resolve,
+                        150
+                    )
+            );
+
+
+            const options = {
+
+                margin:0,
+
+                filename:fileName,
+
+                image:{
+                    type:"jpeg",
+                    quality:.98
+                },
+
+                html2canvas:{
+                    scale:2,
+                    useCORS:true,
+                    backgroundColor:"#ffffff",
+                    logging:false
+                },
+
+                jsPDF:{
+                    unit:"px",
+                    format:[794,1123],
+                    orientation:"portrait",
+                    hotfixes:["px_scaling"]
+                },
+
+                pagebreak:{
+                    mode:[
+                        "avoid-all",
+                        "css",
+                        "legacy"
+                    ]
+                }
+
+            };
+
+
+            await html2pdf()
+                .set(options)
+                .from(element)
+                .save();
+
+
+            element.style.position =
+                "absolute";
+
+            element.style.left =
+                "-100000px";
+
+            element.style.top =
+                "0";
+
+            element.style.zIndex =
+                "";
+
 
         }
+
         catch(error){
 
             console.error(
-                "PDF ERROR:",
+                "PDF error:",
                 error
             );
 
-
             showError(
-                "Unable to create PDF. Please try again."
+                "PDF তৈরি করা যায়নি। আবার চেষ্টা করুন।"
             );
 
         }
+
         finally{
 
             downloadPdfBtn.disabled =
                 false;
 
-            downloadPdfBtn.textContent =
-                "Download PDF";
+            downloadPdfBtn.innerHTML =
+                "↓&nbsp; Download PDF";
 
         }
 
@@ -2323,1017 +2483,13 @@ downloadPdfBtn.addEventListener(
 
 
 /* =========================================================
-   GENERATE PDF
-========================================================= */
-
-async function generatePDF(){
-
-    const { jsPDF } =
-        window.jspdf;
-
-
-    const pdf =
-        new jsPDF({
-            orientation:"portrait",
-            unit:"mm",
-            format:"a4"
-        });
-
-
-    const studentName =
-        document.getElementById(
-            "studentName"
-        ).textContent;
-
-
-    const roll =
-        document.getElementById(
-            "showRoll"
-        ).textContent;
-
-
-    const registration =
-        document.getElementById(
-            "showRegistration"
-        ).textContent;
-
-
-    const year =
-        document.getElementById(
-            "showYear"
-        ).textContent;
-
-
-    const group =
-        document.getElementById(
-            "showGroup"
-        ).textContent;
-
-
-    const institution =
-        document.getElementById(
-            "showInstitution"
-        ).textContent;
-
-
-    const district =
-        document.getElementById(
-            "showDistrict"
-        ).textContent;
-
-
-    const totalScore =
-        document.getElementById(
-            "totalScore"
-        ).textContent;
-
-
-    const gpa =
-        document.getElementById(
-            "gpa"
-        ).textContent;
-
-
-    const rank =
-        document.getElementById(
-            "studentRank"
-        ).textContent;
-
-
-    const status =
-        document.getElementById(
-            "resultStatus"
-        ).textContent;
-
-
-    /* =====================================================
-       COLORS
-    ===================================================== */
-
-    const BLUE =
-        [0,113,227];
-
-    const DARK =
-        [29,29,31];
-
-    const MUTED =
-        [110,110,115];
-
-    const LIGHT =
-        [245,245,247];
-
-    const BORDER =
-        [225,225,230];
-
-    const GREEN =
-        [52,199,89];
-
-    const ORANGE =
-        [255,149,0];
-
-
-    const pageWidth =
-        210;
-
-    const pageHeight =
-        297;
-
-
-    const margin =
-        15;
-
-
-    /* =====================================================
-       BACKGROUND
-    ===================================================== */
-
-    pdf.setFillColor(
-        255,
-        255,
-        255
-    );
-
-    pdf.rect(
-        0,
-        0,
-        pageWidth,
-        pageHeight,
-        "F"
-    );
-
-
-    /* =====================================================
-       HEADER
-    ===================================================== */
-
-    pdf.setTextColor(
-        ...BLUE
-    );
-
-    pdf.setFont(
-        "helvetica",
-        "bold"
-    );
-
-    pdf.setFontSize(
-        19
-    );
-
-    pdf.text(
-        "CTGboardranking",
-        margin,
-        18
-    );
-
-
-    pdf.setTextColor(
-        ...DARK
-    );
-
-    pdf.setFont(
-        "helvetica",
-        "bold"
-    );
-
-    pdf.setFontSize(
-        9
-    );
-
-    pdf.text(
-        "Generated by Shadat",
-        pageWidth - margin,
-        15,
-        {
-            align:"right"
-        }
-    );
-
-
-    const now =
-        new Date();
-
-
-    const dateText =
-        now.toLocaleDateString(
-            "en-GB",
-            {
-                day:"2-digit",
-                month:"short",
-                year:"numeric"
-            }
-        );
-
-
-    pdf.setTextColor(
-        ...MUTED
-    );
-
-    pdf.setFont(
-        "helvetica",
-        "normal"
-    );
-
-    pdf.setFontSize(
-        8
-    );
-
-    pdf.text(
-        dateText,
-        pageWidth - margin,
-        21,
-        {
-            align:"right"
-        }
-    );
-
-
-    pdf.setDrawColor(
-        ...BORDER
-    );
-
-    pdf.line(
-        margin,
-        27,
-        pageWidth - margin,
-        27
-    );
-
-
-    /* =====================================================
-       EXAM TITLE
-    ===================================================== */
-
-    pdf.setTextColor(
-        ...DARK
-    );
-
-    pdf.setFont(
-        "helvetica",
-        "bold"
-    );
-
-    pdf.setFontSize(
-        18
-    );
-
-    pdf.text(
-        "SSC 2026 Individual Result",
-        margin,
-        40
-    );
-
-
-    pdf.setTextColor(
-        ...MUTED
-    );
-
-    pdf.setFont(
-        "helvetica",
-        "normal"
-    );
-
-    pdf.setFontSize(
-        9
-    );
-
-    pdf.text(
-        "Chattogram Education Board",
-        margin,
-        47
-    );
-
-
-    /* =====================================================
-       STUDENT CARD
-    ===================================================== */
-
-    let y =
-        58;
-
-
-    pdf.setFillColor(
-        ...LIGHT
-    );
-
-    pdf.roundedRect(
-        margin,
-        y,
-        pageWidth - margin * 2,
-        36,
-        5,
-        5,
-        "F"
-    );
-
-
-    pdf.setTextColor(
-        ...DARK
-    );
-
-    pdf.setFont(
-        "helvetica",
-        "bold"
-    );
-
-    pdf.setFontSize(
-        15
-    );
-
-    pdf.text(
-        studentName,
-        margin + 7,
-        y + 11
-    );
-
-
-    pdf.setTextColor(
-        ...MUTED
-    );
-
-    pdf.setFont(
-        "helvetica",
-        "normal"
-    );
-
-    pdf.setFontSize(
-        8
-    );
-
-    pdf.text(
-        "Roll: " + roll,
-        margin + 7,
-        y + 19
-    );
-
-
-    pdf.text(
-        "Registration: " +
-        registration,
-        margin + 7,
-        y + 26
-    );
-
-
-    /* Status */
-
-    pdf.setFillColor(
-        ...GREEN
-    );
-
-    pdf.roundedRect(
-        pageWidth - margin - 30,
-        y + 8,
-        23,
-        9,
-        4.5,
-        4.5,
-        "F"
-    );
-
-
-    pdf.setTextColor(
-        255,
-        255,
-        255
-    );
-
-    pdf.setFont(
-        "helvetica",
-        "bold"
-    );
-
-    pdf.setFontSize(
-        7
-    );
-
-    pdf.text(
-        status || "RESULT",
-        pageWidth - margin - 18.5,
-        y + 13.7,
-        {
-            align:"center"
-        }
-    );
-
-
-    y += 46;
-
-
-    /* =====================================================
-       INFORMATION SECTION
-    ===================================================== */
-
-    pdf.setTextColor(
-        ...DARK
-    );
-
-    pdf.setFont(
-        "helvetica",
-        "bold"
-    );
-
-    pdf.setFontSize(
-        11
-    );
-
-    pdf.text(
-        "Student Information",
-        margin,
-        y
-    );
-
-
-    y += 7;
-
-
-    const infoItems = [
-
-        ["Year",year],
-
-        ["Group",group],
-
-        ["Institution",institution],
-
-        ["District",district]
-
-    ];
-
-
-    const colWidth =
-        (pageWidth - margin * 2 - 6) / 2;
-
-
-    infoItems.forEach(
-        (item,index)=>{
-
-            const col =
-                index % 2;
-
-            const row =
-                Math.floor(index / 2);
-
-
-            const x =
-                margin +
-                col *
-                (colWidth + 6);
-
-
-            const iy =
-                y +
-                row * 23;
-
-
-            pdf.setFillColor(
-                ...LIGHT
-            );
-
-            pdf.roundedRect(
-                x,
-                iy,
-                colWidth,
-                18,
-                3,
-                3,
-                "F"
-            );
-
-
-            pdf.setTextColor(
-                ...MUTED
-            );
-
-            pdf.setFont(
-                "helvetica",
-                "bold"
-            );
-
-            pdf.setFontSize(
-                6.5
-            );
-
-            pdf.text(
-                item[0].toUpperCase(),
-                x + 5,
-                iy + 6
-            );
-
-
-            pdf.setTextColor(
-                ...DARK
-            );
-
-            pdf.setFont(
-                "helvetica",
-                "normal"
-            );
-
-            pdf.setFontSize(
-                8
-            );
-
-
-            const value =
-                pdf.splitTextToSize(
-                    String(item[1] || "—"),
-                    colWidth - 10
-                );
-
-
-            pdf.text(
-                value.slice(0,2),
-                x + 5,
-                iy + 12
-            );
-
-        }
-    );
-
-
-    y += 53;
-
-
-    /* =====================================================
-       SCORE SECTION
-    ===================================================== */
-
-    pdf.setTextColor(
-        ...DARK
-    );
-
-    pdf.setFont(
-        "helvetica",
-        "bold"
-    );
-
-    pdf.setFontSize(
-        11
-    );
-
-    pdf.text(
-        "Performance",
-        margin,
-        y
-    );
-
-
-    y += 7;
-
-
-    const scoreWidth =
-        (pageWidth - margin * 2 - 8) / 3;
-
-
-    const scores = [
-
-        {
-            title:"TOTAL SCORE",
-            value:totalScore,
-            color:BLUE
-        },
-
-        {
-            title:"GPA",
-            value:gpa,
-            color:GREEN
-        },
-
-        {
-            title:"STUDENT RANK",
-            value:rank,
-            color:ORANGE
-        }
-
-    ];
-
-
-    scores.forEach(
-        (item,index)=>{
-
-            const x =
-                margin +
-                index *
-                (scoreWidth + 4);
-
-
-            pdf.setFillColor(
-                247,
-                248,
-                250
-            );
-
-            pdf.roundedRect(
-                x,
-                y,
-                scoreWidth,
-                28,
-                4,
-                4,
-                "F"
-            );
-
-
-            pdf.setTextColor(
-                ...item.color
-            );
-
-            pdf.setFont(
-                "helvetica",
-                "bold"
-            );
-
-            pdf.setFontSize(
-                16
-            );
-
-            pdf.text(
-                String(item.value || "—"),
-                x + scoreWidth / 2,
-                y + 13,
-                {
-                    align:"center"
-                }
-            );
-
-
-            pdf.setTextColor(
-                ...MUTED
-            );
-
-            pdf.setFont(
-                "helvetica",
-                "bold"
-            );
-
-            pdf.setFontSize(
-                6
-            );
-
-            pdf.text(
-                item.title,
-                x + scoreWidth / 2,
-                y + 21,
-                {
-                    align:"center"
-                }
-            );
-
-        }
-    );
-
-
-    y += 40;
-
-
-    /* =====================================================
-       SUBJECT SECTION
-    ===================================================== */
-
-    pdf.setTextColor(
-        ...DARK
-    );
-
-    pdf.setFont(
-        "helvetica",
-        "bold"
-    );
-
-    pdf.setFontSize(
-        11
-    );
-
-    pdf.text(
-        "Subject-wise Result",
-        margin,
-        y
-    );
-
-
-    y += 7;
-
-
-    /* Table Header */
-
-    pdf.setFillColor(
-        ...LIGHT
-    );
-
-    pdf.roundedRect(
-        margin,
-        y,
-        pageWidth - margin * 2,
-        10,
-        2,
-        2,
-        "F"
-    );
-
-
-    pdf.setTextColor(
-        ...MUTED
-    );
-
-    pdf.setFont(
-        "helvetica",
-        "bold"
-    );
-
-    pdf.setFontSize(
-        6.5
-    );
-
-
-    pdf.text(
-        "SUBJECT",
-        margin + 5,
-        y + 6.5
-    );
-
-
-    pdf.text(
-        "MARKS",
-        pageWidth - 55,
-        y + 6.5,
-        {
-            align:"right"
-        }
-    );
-
-
-    pdf.text(
-        "GRADE",
-        pageWidth - margin - 5,
-        y + 6.5,
-        {
-            align:"right"
-        }
-    );
-
-
-    y += 10;
-
-
-    const rows =
-        document.querySelectorAll(
-            "#subjectTable .subject-row"
-        );
-
-
-    rows.forEach(
-        row=>{
-
-            if(
-                y > 260
-            ){
-
-                addPdfPageFooter(
-                    pdf,
-                    pageWidth,
-                    pageHeight,
-                    margin
-                );
-
-                pdf.addPage();
-
-                y = 20;
-
-            }
-
-
-            const cells =
-                row.children;
-
-
-            const subject =
-                cells[0]
-                    ?.textContent
-                    .trim() || "—";
-
-
-            const marks =
-                cells[1]
-                    ?.textContent
-                    .trim() || "—";
-
-
-            const grade =
-                cells[2]
-                    ?.textContent
-                    .trim() || "—";
-
-
-            pdf.setFillColor(
-                255,
-                255,
-                255
-            );
-
-
-            pdf.rect(
-                margin,
-                y,
-                pageWidth - margin * 2,
-                9,
-                "F"
-            );
-
-
-            pdf.setDrawColor(
-                ...BORDER
-            );
-
-
-            pdf.line(
-                margin,
-                y + 9,
-                pageWidth - margin,
-                y + 9
-            );
-
-
-            pdf.setTextColor(
-                ...DARK
-            );
-
-            pdf.setFont(
-                "helvetica",
-                "normal"
-            );
-
-            pdf.setFontSize(
-                7.5
-            );
-
-
-            const subjectText =
-                pdf.splitTextToSize(
-                    subject,
-                    105
-                );
-
-
-            pdf.text(
-                subjectText[0],
-                margin + 5,
-                y + 6
-            );
-
-
-            pdf.text(
-                marks,
-                pageWidth - 55,
-                y + 6,
-                {
-                    align:"right"
-                }
-            );
-
-
-            pdf.setFont(
-                "helvetica",
-                "bold"
-            );
-
-
-            pdf.text(
-                grade,
-                pageWidth - margin - 5,
-                y + 6,
-                {
-                    align:"right"
-                }
-            );
-
-
-            y += 9;
-
-        }
-    );
-
-
-    /* =====================================================
-       FOOTER
-    ===================================================== */
-
-    addPdfPageFooter(
-        pdf,
-        pageWidth,
-        pageHeight,
-        margin
-    );
-
-
-    /* =====================================================
-       FILE NAME
-    ===================================================== */
-
-    const safeName =
-        String(studentName || "Student")
-            .replace(
-                /[^a-zA-Z0-9\s_-]/g,
-                ""
-            )
-            .trim()
-            .replace(
-                /\s+/g,
-                "_"
-            );
-
-
-    const safeRoll =
-        String(roll)
-            .replace(
-                /[^0-9]/g,
-                ""
-            );
-
-
-    pdf.save(
-        `CTGboardranking_${safeRoll}_${safeName || "Result"}.pdf`
-    );
-
-}
-
-
-/* =========================================================
-   PDF FOOTER
-========================================================= */
-
-function addPdfPageFooter(
-    pdf,
-    pageWidth,
-    pageHeight,
-    margin
-){
-
-    pdf.setDrawColor(
-        225,
-        225,
-        230
-    );
-
-    pdf.line(
-        margin,
-        pageHeight - 19,
-        pageWidth - margin,
-        pageHeight - 19
-    );
-
-
-    pdf.setTextColor(
-        110,
-        110,
-        115
-    );
-
-    pdf.setFont(
-        "helvetica",
-        "normal"
-    );
-
-    pdf.setFontSize(
-        6.5
-    );
-
-
-    pdf.text(
-        "CTGboardranking",
-        margin,
-        pageHeight - 12
-    );
-
-
-    pdf.text(
-        "Unofficial Notice",
-        pageWidth / 2,
-        pageHeight - 12,
-        {
-            align:"center"
-        }
-    );
-
-
-    pdf.text(
-        "Generated by Shadat",
-        pageWidth - margin,
-        pageHeight - 12,
-        {
-            align:"right"
-        }
-    );
-
-}
-
-
-/* =========================================================
-   AUTO LOAD ROLL FROM URL
+   AUTO SEARCH ?roll=123456
 ========================================================= */
 
 const params =
     new URLSearchParams(
         window.location.search
     );
-
 
 const urlRoll =
     params.get("roll");
