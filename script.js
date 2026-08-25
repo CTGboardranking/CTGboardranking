@@ -595,39 +595,44 @@ function showStatistics(
 
 }
 
-
 /* =====================================================
    TOTAL VISITS
 ===================================================== */
 
 async function loadTotalVisits() {
 
-    const element =
-        document.getElementById("totalVisits");
+    const element = document.getElementById("totalVisits");
 
     if (!element) {
+        console.warn("totalVisits element not found");
         return;
     }
 
+    console.log("Loading total visits...");
+
     try {
 
-        const response =
-            await fetch(
-                "/api/visits",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    }
-                }
-            );
+        const response = await fetch("/api/visits", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            cache: "no-store"
+        });
+
+        console.log(
+            "Visit API status:",
+            response.status
+        );
 
         if (!response.ok) {
 
-            console.warn(
-                "Visit counter failed:",
-                response.status
+            const errorText =
+                await response.text();
+
+            console.error(
+                "Visit API error:",
+                errorText
             );
 
             return;
@@ -636,21 +641,25 @@ async function loadTotalVisits() {
         const data =
             await response.json();
 
+        console.log(
+            "Visit API response:",
+            data
+        );
+
         if (
             data &&
             typeof data.total !== "undefined"
         ) {
 
             element.textContent =
-                Number(
-                    data.total
-                ).toLocaleString("en-US");
+                Number(data.total)
+                    .toLocaleString("en-US");
 
         }
 
     } catch (error) {
 
-        console.warn(
+        console.error(
             "Total visits error:",
             error
         );
@@ -659,12 +668,22 @@ async function loadTotalVisits() {
 }
 
 
-/* Run once when page loads */
+/* =====================================================
+   START TOTAL VISITS
+===================================================== */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    loadTotalVisits
-);
+if (document.readyState === "loading") {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        loadTotalVisits
+    );
+
+} else {
+
+    loadTotalVisits();
+
+}
 
 /* =========================================================
    MAIN
