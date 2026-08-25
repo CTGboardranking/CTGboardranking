@@ -8,40 +8,57 @@ export default async function handler(req, res) {
 
     try {
 
+        const url = process.env.SUPABASE_URL;
+        const key = process.env.SUPABASE_KEY;
+
+        if (!url || !key) {
+
+            console.error(
+                "Missing SUPABASE_URL or SUPABASE_KEY"
+            );
+
+            return res.status(500).json({
+                error: "Supabase environment variables are missing"
+            });
+        }
+
         const response = await fetch(
-            `${process.env.SUPABASE_URL}/rest/v1/rpc/increment_total_visits`,
+            `${url}/rest/v1/rpc/increment_total_visits`,
             {
                 method: "POST",
 
                 headers: {
-                    "apikey": process.env.SUPABASE_KEY,
-                    "Authorization":
-                        `Bearer ${process.env.SUPABASE_KEY}`,
+                    "apikey": key,
+                    "Authorization": `Bearer ${key}`,
                     "Content-Type": "application/json"
                 }
             }
         );
 
+        const text = await response.text();
+
+        console.log(
+            "Supabase status:",
+            response.status
+        );
+
+        console.log(
+            "Supabase response:",
+            text
+        );
+
         if (!response.ok) {
 
-            const error =
-                await response.text();
-
-            console.error(
-                "Supabase error:",
-                error
-            );
-
             return res.status(500).json({
-                error: "Failed to update visits"
+                error: "Supabase RPC failed",
+                status: response.status
             });
         }
 
-        const total =
-            await response.json();
+        const total = Number(text);
 
         return res.status(200).json({
-            total: Number(total)
+            total: total
         });
 
     } catch (error) {
