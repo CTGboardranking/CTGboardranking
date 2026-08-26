@@ -6,7 +6,7 @@
 
 
 /* =========================================================
-   DATA PATH — CORRECT PATH
+   DATA PATH
 ========================================================= */
 
 const INSTITUTION_JSON =
@@ -26,7 +26,9 @@ function initDarkMode() {
         localStorage.getItem("ctg-theme");
 
     if (savedTheme === "dark") {
+
         document.body.classList.add("dark");
+
     }
 
     if (themeBtn) {
@@ -60,17 +62,22 @@ function num(value) {
         value === undefined ||
         value === ""
     ) {
+
         return 0;
+
     }
 
-    const n = Number(
-        String(value)
-            .replace(/,/g, "")
-            .replace(/%/g, "")
-            .trim()
-    );
+    const n =
+        Number(
+            String(value)
+                .replace(/,/g, "")
+                .replace(/%/g, "")
+                .trim()
+        );
 
-    return Number.isFinite(n) ? n : 0;
+    return Number.isFinite(n)
+        ? n
+        : 0;
 
 }
 
@@ -119,20 +126,31 @@ async function getInstitutions() {
 
 
     /*
-     * Your JSON is a direct array:
+     * Supported JSON formats:
      *
      * [
-     *   {
-     *     eiin: "...",
-     *     institution_name: "...",
-     *     district: "...",
-     *     appeared: 83,
-     *     passed: 54,
-     *     passing_rate: 65.06,
-     *     gpa5: 2
-     *   }
+     *   {...}
      * ]
+     *
+     * OR
+     *
+     * {
+     *   institutions: [...]
+     * }
+     *
+     * OR
+     *
+     * {
+     *   results: [...]
+     * }
+     *
+     * OR
+     *
+     * {
+     *   data: [...]
+     * }
      */
+
 
     if (Array.isArray(data)) {
 
@@ -179,7 +197,7 @@ async function getInstitutions() {
 
 
 /* =========================================================
-   NORMALIZE
+   NORMALIZE INSTITUTION
 ========================================================= */
 
 function normalize(item) {
@@ -199,6 +217,10 @@ function normalize(item) {
     const gpa5 =
         num(item.gpa5);
 
+
+    /*
+     * Calculate pass rate if missing
+     */
 
     if (
         passRate === 0 &&
@@ -251,12 +273,13 @@ function normalize(item) {
 
 
 /* =========================================================
-   REMOVE DUPLICATES
+   REMOVE DUPLICATE INSTITUTIONS
 ========================================================= */
 
 function uniqueInstitutions(data) {
 
-    const map = new Map();
+    const map =
+        new Map();
 
 
     data.forEach(raw => {
@@ -265,10 +288,21 @@ function uniqueInstitutions(data) {
             normalize(raw);
 
 
+        /*
+         * Ignore records without institution name
+         */
+
         if (!item.name) {
+
             return;
+
         }
 
+
+        /*
+         * Prefer EIIN as unique key.
+         * Otherwise use institution name.
+         */
 
         const key =
             item.eiin ||
@@ -320,19 +354,26 @@ function showTopInstitutions(
 
 
     /*
-     * Ranking:
-     * GPA-5
-     * Pass Rate
-     * Passed
-     * Appeared
+     * Ranking priority:
+     *
+     * 1. GPA-5
+     * 2. Pass Rate
+     * 3. Passed
+     * 4. Appeared
      */
 
     institutions.sort(
         (a, b) => {
 
-            if (b.gpa5 !== a.gpa5) {
+            if (
+                b.gpa5 !==
+                a.gpa5
+            ) {
 
-                return b.gpa5 - a.gpa5;
+                return (
+                    b.gpa5 -
+                    a.gpa5
+                );
 
             }
 
@@ -350,21 +391,33 @@ function showTopInstitutions(
             }
 
 
-            if (b.passed !== a.passed) {
+            if (
+                b.passed !==
+                a.passed
+            ) {
 
-                return b.passed - a.passed;
+                return (
+                    b.passed -
+                    a.passed
+                );
 
             }
 
 
-            return b.appeared - a.appeared;
+            return (
+                b.appeared -
+                a.appeared
+            );
 
         }
     );
 
 
     const top3 =
-        institutions.slice(0, 3);
+        institutions.slice(
+            0,
+            3
+        );
 
 
     console.log(
@@ -381,7 +434,9 @@ function showTopInstitutions(
 
 
             if (!row) {
+
                 return;
+
             }
 
 
@@ -547,18 +602,14 @@ function showStatistics(
 
     /*
      * STUDENT TOTAL
+     *
+     * IMPORTANT:
+     * Student total is NO LONGER calculated
+     * from institution_results.json.
+     *
+     * It is loaded directly from Supabase
+     * using loadStudentTotal().
      */
-
-    let totalStudents = 0;
-
-
-    institutions.forEach(item => {
-
-        totalStudents +=
-            num(item.appeared);
-
-    });
-
 
     const studentElement =
         document.getElementById(
@@ -569,9 +620,7 @@ function showStatistics(
     if (studentElement) {
 
         studentElement.textContent =
-            totalStudents.toLocaleString(
-                "en-US"
-            );
+            "Loading...";
 
     }
 
@@ -587,73 +636,215 @@ function showStatistics(
         districtSet.size
     );
 
-
-    console.log(
-        "Student total:",
-        totalStudents
-    );
-
 }
 
-/* =====================================================
-   TOTAL VISITS
-===================================================== */
 
-async function loadTotalVisits() {
+/* =========================================================
+   LOAD ACTUAL STUDENT TOTAL FROM SUPABASE
+========================================================= */
 
-    const element = document.getElementById("totalVisits");
+async function loadStudentTotal() {
+
+    const element =
+        document.getElementById(
+            "statStudents"
+        );
+
 
     if (!element) {
-        console.warn("totalVisits element not found");
+
+        console.warn(
+            "statStudents element not found"
+        );
+
         return;
+
     }
 
-    console.log("Loading total visits...");
+
+    /*
+     * Make sure Supabase client exists
+     */
+
+    if (
+        typeof supabase ===
+        "undefined"
+    ) {
+
+        console.error(
+            "Supabase client is not available."
+        );
+
+        element.textContent =
+            "Error";
+
+        return;
+
+    }
+
+
+    console.log(
+        "Loading actual student total from Supabase..."
+    );
+
 
     try {
 
-        const response = await fetch("/api/visits", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            cache: "no-store"
-        });
+        /*
+         * IMPORTANT:
+         *
+         * head: true
+         * means we only request the COUNT,
+         * not all student records.
+         *
+         * count: "exact"
+         * gives the exact number of rows.
+         */
+
+        const {
+            count,
+            error
+        } =
+            await supabase
+                .from("students")
+                .select(
+                    "*",
+                    {
+                        count: "exact",
+                        head: true
+                    }
+                );
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        const total =
+            Number(count || 0);
+
+
+        element.textContent =
+            total.toLocaleString(
+                "en-US"
+            );
+
+
+        console.log(
+            "✓ Actual Student Total:",
+            total
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ Student count error:",
+            error
+        );
+
+
+        element.textContent =
+            "Unavailable";
+
+    }
+
+}
+
+
+/* =========================================================
+   TOTAL VISITS
+========================================================= */
+
+async function loadTotalVisits() {
+
+    const element =
+        document.getElementById(
+            "totalVisits"
+        );
+
+
+    if (!element) {
+
+        console.warn(
+            "totalVisits element not found"
+        );
+
+        return;
+
+    }
+
+
+    console.log(
+        "Loading total visits..."
+    );
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/visits",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    cache: "no-store"
+                }
+            );
+
 
         console.log(
             "Visit API status:",
             response.status
         );
 
+
         if (!response.ok) {
 
             const errorText =
                 await response.text();
+
 
             console.error(
                 "Visit API error:",
                 errorText
             );
 
+
             return;
+
         }
+
 
         const data =
             await response.json();
+
 
         console.log(
             "Visit API response:",
             data
         );
 
+
         if (
             data &&
-            typeof data.total !== "undefined"
+            typeof data.total !==
+            "undefined"
         ) {
 
             element.textContent =
                 Number(data.total)
-                    .toLocaleString("en-US");
+                    .toLocaleString(
+                        "en-US"
+                    );
 
         }
 
@@ -665,14 +856,18 @@ async function loadTotalVisits() {
         );
 
     }
+
 }
 
 
-/* =====================================================
-   START TOTAL VISITS
-===================================================== */
+/* =========================================================
+   INITIALIZE TOTAL VISITS
+========================================================= */
 
-if (document.readyState === "loading") {
+if (
+    document.readyState ===
+    "loading"
+) {
 
     document.addEventListener(
         "DOMContentLoaded",
@@ -685,29 +880,54 @@ if (document.readyState === "loading") {
 
 }
 
+
 /* =========================================================
-   MAIN
+   MAIN INITIALIZE
 ========================================================= */
 
 async function initialize() {
 
+    /*
+     * DARK MODE
+     */
+
     initDarkMode();
+
+
+    /*
+     * LOAD ACTUAL STUDENT COUNT
+     *
+     * This is independent of the
+     * institution JSON.
+     */
+
+    loadStudentTotal();
 
 
     try {
 
+        /*
+         * LOAD INSTITUTION JSON
+         */
+
         const raw =
             await getInstitutions();
-
-
-        const institutions =
-            uniqueInstitutions(raw);
 
 
         console.log(
             "✓ JSON records:",
             raw.length
         );
+
+
+        /*
+         * REMOVE DUPLICATES
+         */
+
+        const institutions =
+            uniqueInstitutions(
+                raw
+            );
 
 
         console.log(
@@ -726,7 +946,7 @@ async function initialize() {
 
 
         /*
-         * TOP 3
+         * TOP 3 INSTITUTIONS
          */
 
         showTopInstitutions(
@@ -749,8 +969,8 @@ async function initialize() {
 
 
         /*
-         * Only show error if the JSON
-         * genuinely cannot be loaded.
+         * Only show ranking error
+         * when institution JSON fails.
          */
 
         const rows = [
@@ -773,7 +993,9 @@ async function initialize() {
         rows.forEach(row => {
 
             if (!row) {
+
                 return;
+
             }
 
 
@@ -810,7 +1032,7 @@ async function initialize() {
 
 
     /*
-     * Independent of ranking.
+     * Visit counter is independent.
      */
 
     loadTotalVisits();
