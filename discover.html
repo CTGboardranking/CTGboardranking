@@ -1,0 +1,3943 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Discover — CTGBoardRanking</title>
+
+<meta name="description"
+      content="Find, compare and explore SSC 2026 institutions and education statistics.">
+
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet">
+
+
+<style>
+
+/* =========================================================
+   ROOT
+========================================================= */
+
+:root {
+
+    --bg:#f7f7f8;
+    --white:#ffffff;
+    --text:#111111;
+    --muted:#77777f;
+    --border:#e5e5e8;
+    --blue:#0071e3;
+    --green:#16803c;
+    --red:#d93025;
+    --shadow:0 12px 35px rgba(0,0,0,.06);
+
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+body.dark {
+
+    --bg:#0b0b0d;
+    --white:#151518;
+    --text:#f5f5f7;
+    --muted:#9999a2;
+    --border:#29292e;
+    --shadow:0 15px 40px rgba(0,0,0,.3);
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing:border-box;
+}
+
+
+html {
+    scroll-behavior:smooth;
+}
+
+
+body {
+
+    margin:0;
+
+    background:var(--bg);
+
+    color:var(--text);
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    transition:
+        background .25s,
+        color .25s;
+
+}
+
+
+button,
+input,
+select {
+
+    font:inherit;
+
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar {
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:25px;
+
+    padding:16px 5%;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg) 88%,
+            transparent
+        );
+
+    backdrop-filter:blur(18px);
+
+    -webkit-backdrop-filter:blur(18px);
+
+    border-bottom:
+        1px solid var(--border);
+
+}
+
+
+.logo {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    color:var(--text);
+
+    text-decoration:none;
+
+    font-weight:800;
+
+    letter-spacing:-.5px;
+
+    white-space:nowrap;
+
+}
+
+
+.logo-mark {
+
+    width:31px;
+
+    height:31px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:9px;
+
+    background:var(--text);
+
+    color:var(--bg);
+
+    font-size:16px;
+
+    font-weight:800;
+
+}
+
+
+.nav-links {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:22px;
+
+}
+
+
+.nav-links a {
+
+    color:var(--muted);
+
+    text-decoration:none;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    transition:.2s;
+
+}
+
+
+.nav-links a:hover,
+.nav-links a.active {
+
+    color:var(--text);
+
+}
+
+
+.theme-btn {
+
+    width:38px;
+
+    height:38px;
+
+    border-radius:50%;
+
+    border:1px solid var(--border);
+
+    background:var(--white);
+
+    color:var(--text);
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+
+    max-width:1100px;
+
+    margin:auto;
+
+    padding:90px 20px 55px;
+
+}
+
+
+.back-link {
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    color:var(--muted);
+
+    font-size:14px;
+
+    text-decoration:none;
+
+    margin-bottom:30px;
+
+}
+
+
+.eyebrow {
+
+    display:inline-block;
+
+    color:var(--blue);
+
+    font-size:11px;
+
+    font-weight:800;
+
+    letter-spacing:1.5px;
+
+}
+
+
+.hero h1 {
+
+    font-size:
+        clamp(
+            48px,
+            8vw,
+            82px
+        );
+
+    line-height:.95;
+
+    letter-spacing:-5px;
+
+    margin:12px 0 20px;
+
+}
+
+
+.hero h1 span {
+
+    color:var(--blue);
+
+}
+
+
+.hero p {
+
+    max-width:650px;
+
+    color:var(--muted);
+
+    font-size:17px;
+
+    line-height:1.7;
+
+    margin:0;
+
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.content {
+
+    max-width:1100px;
+
+    margin:auto;
+
+    padding:10px 20px 80px;
+
+}
+
+
+/* =========================================================
+   SEARCH CARD
+========================================================= */
+
+.search-card {
+
+    background:
+        color-mix(
+            in srgb,
+            var(--white) 90%,
+            transparent
+        );
+
+    border:1px solid var(--border);
+
+    border-radius:26px;
+
+    padding:25px;
+
+    box-shadow:var(--shadow);
+
+    margin-bottom:35px;
+
+}
+
+
+.search-title {
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    margin-bottom:18px;
+
+}
+
+
+.search-title h2 {
+
+    margin:0;
+
+    font-size:25px;
+
+    letter-spacing:-1px;
+
+}
+
+
+.search-title p {
+
+    margin:5px 0 0;
+
+    color:var(--muted);
+
+    font-size:12px;
+
+}
+
+
+.search-box {
+
+    position:relative;
+
+}
+
+
+.search-box input {
+
+    width:100%;
+
+    padding:17px 50px 17px 18px;
+
+    border-radius:15px;
+
+    border:1px solid var(--border);
+
+    outline:none;
+
+    background:var(--bg);
+
+    color:var(--text);
+
+    font-size:14px;
+
+}
+
+
+.search-box input:focus {
+
+    border-color:var(--blue);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(0,113,227,.10);
+
+}
+
+
+.search-icon {
+
+    position:absolute;
+
+    right:17px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:var(--muted);
+
+    font-size:19px;
+
+}
+
+
+.search-status {
+
+    min-height:18px;
+
+    margin-top:10px;
+
+    color:var(--muted);
+
+    font-size:11px;
+
+}
+
+
+/* =========================================================
+   SEARCH RESULTS
+========================================================= */
+
+.results {
+
+    display:grid;
+
+    gap:10px;
+
+    margin-top:15px;
+
+}
+
+
+.institution-result {
+
+    width:100%;
+
+    border:1px solid var(--border);
+
+    background:var(--white);
+
+    border-radius:17px;
+
+    padding:16px;
+
+    cursor:pointer;
+
+    text-align:left;
+
+    color:var(--text);
+
+    transition:.2s;
+
+}
+
+
+.institution-result:hover {
+
+    border-color:var(--blue);
+
+    transform:translateY(-1px);
+
+}
+
+
+.result-main {
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+
+.result-name {
+
+    font-size:14px;
+
+    font-weight:800;
+
+    line-height:1.4;
+
+}
+
+
+.result-meta {
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:7px;
+
+    margin-top:6px;
+
+}
+
+
+.badge {
+
+    display:inline-flex;
+
+    align-items:center;
+
+    padding:5px 8px;
+
+    border-radius:7px;
+
+    background:var(--bg);
+
+    color:var(--muted);
+
+    font-size:9px;
+
+    font-weight:700;
+
+}
+
+
+.select-badge {
+
+    color:var(--blue);
+
+    font-size:11px;
+
+    font-weight:800;
+
+    white-space:nowrap;
+
+}
+
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+.section {
+
+    margin-top:45px;
+
+}
+
+
+.section-heading {
+
+    margin-bottom:20px;
+
+}
+
+
+.section-heading h2 {
+
+    margin:5px 0 4px;
+
+    font-size:32px;
+
+    letter-spacing:-1.5px;
+
+}
+
+
+.section-heading p {
+
+    margin:0;
+
+    color:var(--muted);
+
+    font-size:13px;
+
+}
+
+
+/* =========================================================
+   SELECTED INSTITUTIONS
+========================================================= */
+
+.selected-list {
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+    margin-bottom:18px;
+
+}
+
+
+.selected-chip {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    padding:9px 11px;
+
+    background:var(--white);
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
+
+
+.remove-chip {
+
+    width:20px;
+
+    height:20px;
+
+    border:0;
+
+    border-radius:50%;
+
+    background:var(--bg);
+
+    color:var(--muted);
+
+    cursor:pointer;
+
+}
+
+
+.compare-empty {
+
+    background:var(--white);
+
+    border:1px solid var(--border);
+
+    border-radius:22px;
+
+    padding:45px 20px;
+
+    text-align:center;
+
+    color:var(--muted);
+
+}
+
+
+.compare-empty strong {
+
+    display:block;
+
+    color:var(--text);
+
+    font-size:16px;
+
+    margin-bottom:6px;
+
+}
+
+
+/* =========================================================
+   COMPARISON TABLE
+========================================================= */
+
+.compare-wrap {
+
+    width:100%;
+
+    overflow-x:auto;
+
+    background:var(--white);
+
+    border:1px solid var(--border);
+
+    border-radius:22px;
+
+    box-shadow:var(--shadow);
+
+}
+
+
+.compare-table {
+
+    width:100%;
+
+    min-width:700px;
+
+    border-collapse:collapse;
+
+}
+
+
+.compare-table th,
+.compare-table td {
+
+    padding:15px 17px;
+
+    border-bottom:1px solid var(--border);
+
+    text-align:center;
+
+    font-size:12px;
+
+}
+
+
+.compare-table th:first-child,
+.compare-table td:first-child {
+
+    text-align:left;
+
+    font-weight:700;
+
+}
+
+
+.compare-table th {
+
+    background:var(--bg);
+
+    color:var(--muted);
+
+    font-size:10px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.5px;
+
+}
+
+
+.compare-table tr:last-child td {
+
+    border-bottom:0;
+
+}
+
+
+.metric-value {
+
+    font-size:14px;
+
+    font-weight:800;
+
+}
+
+
+.score-value {
+
+    color:var(--blue);
+
+}
+
+
+/* =========================================================
+   STATISTICS GRID
+========================================================= */
+
+.stats-grid {
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:15px;
+
+}
+
+
+.stat-card {
+
+    background:var(--white);
+
+    border:1px solid var(--border);
+
+    border-radius:22px;
+
+    padding:22px;
+
+    box-shadow:var(--shadow);
+
+}
+
+
+.stat-card h3 {
+
+    margin:0 0 4px;
+
+    font-size:15px;
+
+}
+
+
+.stat-card .group-label {
+
+    color:var(--muted);
+
+    font-size:10px;
+
+    font-weight:700;
+
+    margin-bottom:20px;
+
+}
+
+
+.stat-number {
+
+    font-size:30px;
+
+    font-weight:800;
+
+    letter-spacing:-1.5px;
+
+}
+
+
+.stat-label {
+
+    color:var(--muted);
+
+    font-size:10px;
+
+    margin-top:3px;
+
+}
+
+
+.stat-row {
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:end;
+
+    padding-top:13px;
+
+    margin-top:13px;
+
+    border-top:1px solid var(--border);
+
+}
+
+
+.stat-row strong {
+
+    font-size:15px;
+
+}
+
+
+.stat-row span {
+
+    color:var(--muted);
+
+    font-size:9px;
+
+}
+
+
+/* =========================================================
+   DISTRICT TABLE
+========================================================= */
+
+.district-wrap {
+
+    overflow-x:auto;
+
+    background:var(--white);
+
+    border:1px solid var(--border);
+
+    border-radius:22px;
+
+    box-shadow:var(--shadow);
+
+}
+
+
+.district-table {
+
+    width:100%;
+
+    min-width:650px;
+
+    border-collapse:collapse;
+
+}
+
+
+.district-table th,
+.district-table td {
+
+    padding:14px 17px;
+
+    border-bottom:1px solid var(--border);
+
+    font-size:12px;
+
+}
+
+
+.district-table th {
+
+    background:var(--bg);
+
+    color:var(--muted);
+
+    text-align:left;
+
+    font-size:9px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.6px;
+
+}
+
+
+.district-table td:not(:first-child),
+.district-table th:not(:first-child) {
+
+    text-align:center;
+
+}
+
+
+.district-table tr:last-child td {
+
+    border-bottom:0;
+
+}
+
+
+.district-rank {
+
+    font-weight:800;
+
+}
+
+
+.district-score {
+
+    color:var(--blue);
+
+    font-weight:800;
+
+}
+
+
+/* =========================================================
+   LOADING / EMPTY
+========================================================= */
+
+.loading {
+
+    text-align:center;
+
+    padding:40px;
+
+    color:var(--muted);
+
+    font-size:13px;
+
+}
+
+
+.empty {
+
+    text-align:center;
+
+    padding:30px;
+
+    color:var(--muted);
+
+    font-size:12px;
+
+}
+
+
+.error {
+
+    padding:20px;
+
+    border-radius:15px;
+
+    background:
+        rgba(217,48,37,.06);
+
+    color:var(--red);
+
+    font-size:12px;
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+
+    border-top:1px solid var(--border);
+
+    padding:35px 5% 20px;
+
+}
+
+
+.footer-main {
+
+    max-width:1100px;
+
+    margin:auto;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:30px;
+
+}
+
+
+.footer-logo {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    font-weight:800;
+
+}
+
+
+.footer-main p {
+
+    color:var(--muted);
+
+    font-size:12px;
+
+}
+
+
+.footer-links {
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:18px;
+
+}
+
+
+.footer-links a {
+
+    color:var(--muted);
+
+    text-decoration:none;
+
+    font-size:11px;
+
+}
+
+
+.footer-bottom {
+
+    max-width:1100px;
+
+    margin:30px auto 0;
+
+    padding-top:18px;
+
+    border-top:1px solid var(--border);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    color:var(--muted);
+
+    font-size:10px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:850px) {
+
+    .nav-links {
+
+        display:none;
+
+    }
+
+
+    .stats-grid {
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .hero {
+
+        padding-top:65px;
+
+    }
+
+}
+
+
+@media(max-width:600px) {
+
+    .hero {
+
+        padding-left:15px;
+
+        padding-right:15px;
+
+    }
+
+
+    .content {
+
+        padding-left:10px;
+
+        padding-right:10px;
+
+    }
+
+
+    .hero h1 {
+
+        letter-spacing:-3px;
+
+    }
+
+
+    .search-card {
+
+        padding:18px;
+
+        border-radius:21px;
+
+    }
+
+
+    .search-title {
+
+        display:block;
+
+    }
+
+
+    .search-title h2 {
+
+        font-size:22px;
+
+    }
+
+
+    .section-heading h2 {
+
+        font-size:27px;
+
+    }
+
+
+    .footer-main,
+    .footer-bottom {
+
+        display:block;
+
+    }
+
+
+    .footer-links {
+
+        margin-top:20px;
+
+    }
+
+
+    .footer-bottom span {
+
+        display:block;
+
+        margin-top:7px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =======================================================
+     NAVBAR
+======================================================= -->
+
+<header class="navbar">
+
+<a href="index.html" class="logo">
+
+    <span class="logo-mark">
+        C
+    </span>
+
+    <span>
+        CTGBoardRanking
+    </span>
+
+</a>
+
+
+<nav class="nav-links">
+
+<a href="index.html">
+    Home
+</a>
+
+<a href="student-ranking.html">
+    Student Ranking
+</a>
+
+<a href="rankings.html">
+    Institution Ranking
+</a>
+
+<a href="district.html">
+    Districts
+</a>
+
+<a href="discover.html"
+   class="active">
+    Discover
+</a>
+
+</nav>
+
+
+<button
+    class="theme-btn"
+    id="themeBtn"
+    aria-label="Toggle dark mode">
+
+    ◐
+
+</button>
+
+</header>
+
+
+
+<!-- =======================================================
+     HERO
+======================================================= -->
+
+<main>
+
+<section class="hero">
+
+<a href="index.html"
+   class="back-link">
+
+    ← Back to Home
+
+</a>
+
+
+<span class="eyebrow">
+    CHITTAGONG BOARD · SSC 2026
+</span>
+
+
+<h1>
+
+    Discover<br>
+
+    <span>Institutions.</span>
+
+</h1>
+
+
+<p>
+
+    Find institutions by EIIN or name,
+    compare their performance and explore
+    education statistics from SSC 2026 data.
+
+</p>
+
+</section>
+
+
+
+<section class="content">
+
+
+<!-- =====================================================
+     INSTITUTION SEARCH
+===================================================== -->
+
+<section class="search-card">
+
+<div class="search-title">
+
+<div>
+
+<span class="eyebrow">
+    FIND INSTITUTIONS
+</span>
+
+<h2>
+    Search Institution
+</h2>
+
+<p>
+    Search using EIIN or institution name.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="search-box">
+
+<input
+    type="search"
+    id="institutionSearch"
+    placeholder="Search by EIIN or institution name..."
+    autocomplete="off">
+
+<span class="search-icon">
+    ⌕
+</span>
+
+</div>
+
+
+<div
+    id="searchStatus"
+    class="search-status">
+</div>
+
+
+<div
+    id="searchResults"
+    class="results">
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     COMPARE
+===================================================== -->
+
+<section class="section">
+
+<div class="section-heading">
+
+<span class="eyebrow">
+    COMPARE
+</span>
+
+<h2>
+    Compare Institutions
+</h2>
+
+<p>
+    Select two or more institutions to compare their performance.
+</p>
+
+</div>
+
+
+<div
+    id="selectedList"
+    class="selected-list">
+</div>
+
+
+<div
+    id="comparisonContainer">
+
+<div class="compare-empty">
+
+<strong>
+    Select institutions to compare
+</strong>
+
+Search above and select at least two institutions.
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     EDUCATION STATISTICS
+===================================================== -->
+
+<section class="section">
+
+<div class="section-heading">
+
+<span class="eyebrow">
+    EDUCATION STATISTICS
+</span>
+
+<h2>
+    SSC 2026 Overview
+</h2>
+
+<p>
+    Overall performance by academic group.
+</p>
+
+</div>
+
+
+<div
+    id="groupStats"
+    class="stats-grid">
+
+<div class="loading">
+    Loading statistics...
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     DISTRICT STATISTICS
+===================================================== -->
+
+<section class="section">
+
+<div class="section-heading">
+
+<span class="eyebrow">
+    DISTRICT-WISE
+</span>
+
+<h2>
+    District Statistics
+</h2>
+
+<p>
+    Institution and student performance by district.
+</p>
+
+</div>
+
+
+<div class="district-wrap">
+
+<table class="district-table">
+
+<thead>
+
+<tr>
+
+<th>
+    Rank
+</th>
+
+<th>
+    District
+</th>
+
+<th>
+    Students
+</th>
+
+<th>
+    GPA 5
+</th>
+
+<th>
+    Average GPA
+</th>
+
+<th>
+    Average Score
+</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="districtRows">
+
+<tr>
+
+<td
+    colspan="6"
+    class="loading">
+
+    Loading district statistics...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+</section>
+
+</main>
+
+
+
+<!-- =======================================================
+     FOOTER
+======================================================= -->
+
+<footer>
+
+<div class="footer-main">
+
+<div>
+
+<div class="footer-logo">
+
+<span class="logo-mark">
+    C
+</span>
+
+CTGBoardRanking
+
+</div>
+
+<p>
+    Chattogram Board Education Rankings.
+</p>
+
+</div>
+
+
+<div class="footer-links">
+
+<a href="index.html">
+    Home
+</a>
+
+<a href="student-ranking.html">
+    Student Ranking
+</a>
+
+<a href="rankings.html">
+    Institution Ranking
+</a>
+
+<a href="district.html">
+    Districts
+</a>
+
+</div>
+
+</div>
+
+
+<div class="footer-bottom">
+
+<span>
+    © 2026 CTGBoardRanking
+</span>
+
+<span>
+    Education Data & Statistics
+</span>
+
+</div>
+
+</footer>
+
+
+
+<script>
+
+/* =========================================================
+   SUPABASE CONFIG
+========================================================= */
+
+const SUPABASE_URL =
+    "https://mpnjnyejpqeqguxikvnl.supabase.co";
+
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_KLxc2rvrOnfOrq7_Zqp9Vw_9Wnbuzs9";
+
+
+const SUPABASE_TABLE =
+    "students";
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+const SEARCH_LIMIT = 30;
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let selectedInstitutions = [];
+
+let searchTimer = null;
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const institutionSearch =
+    document.getElementById(
+        "institutionSearch"
+    );
+
+
+const searchResults =
+    document.getElementById(
+        "searchResults"
+    );
+
+
+const searchStatus =
+    document.getElementById(
+        "searchStatus"
+    );
+
+
+const selectedList =
+    document.getElementById(
+        "selectedList"
+    );
+
+
+const comparisonContainer =
+    document.getElementById(
+        "comparisonContainer"
+    );
+
+
+const groupStats =
+    document.getElementById(
+        "groupStats"
+    );
+
+
+const districtRows =
+    document.getElementById(
+        "districtRows"
+    );
+
+
+/* =========================================================
+   SUPABASE FETCH
+========================================================= */
+
+async function supabaseRequest(
+    params
+) {
+
+    const url =
+        `${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}?${params}`;
+
+
+    const response =
+        await fetch(
+            url,
+            {
+
+                method:"GET",
+
+                headers:{
+
+                    "apikey":
+                        SUPABASE_PUBLISHABLE_KEY,
+
+                    "Authorization":
+                        `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+
+                    "Content-Type":
+                        "application/json",
+
+                    "Accept":
+                        "application/json"
+
+                },
+
+                cache:"no-store"
+
+            }
+        );
+
+
+    if (!response.ok) {
+
+        let message = "";
+
+        try {
+
+            message =
+                await response.text();
+
+        }
+
+        catch (_) {}
+
+
+        throw new Error(
+
+            `Supabase HTTP ${response.status}` +
+            (
+                message
+                    ? `: ${message}`
+                    : ""
+            )
+
+        );
+
+    }
+
+
+    return response;
+
+}
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   NUMBER
+========================================================= */
+
+function numberValue(value) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        String(value).trim() === ""
+    ) {
+
+        return 0;
+
+    }
+
+
+    const n =
+        Number(value);
+
+
+    return Number.isFinite(n)
+        ? n
+        : 0;
+
+}
+
+
+/* =========================================================
+   GET ROLL
+========================================================= */
+
+function getRoll(student) {
+
+    return (
+
+        student.roll ??
+
+        student.Roll ??
+
+        student.ROLL ??
+
+        ""
+
+    );
+
+}
+
+
+/* =========================================================
+   GET EIIN
+========================================================= */
+
+function getEIIN(student) {
+
+    return (
+
+        student.eiin ??
+
+        student.EIIN ??
+
+        student.eiin_code ??
+
+        student.institution_eiin ??
+
+        ""
+
+    );
+
+}
+
+
+/* =========================================================
+   GET NAME
+========================================================= */
+
+function getStudentName(student) {
+
+    return (
+
+        student.name ??
+
+        student.student_name ??
+
+        "Unknown Student"
+
+    );
+
+}
+
+
+/* =========================================================
+   GET INSTITUTION
+========================================================= */
+
+function getInstitution(student) {
+
+    return (
+
+        student.institute ??
+
+        student.institution ??
+
+        student.school ??
+
+        student.school_name ??
+
+        "Unknown Institution"
+
+    );
+
+}
+
+
+/* =========================================================
+   GET DISTRICT
+========================================================= */
+
+function getDistrict(student) {
+
+    return (
+
+        student.district ??
+
+        student.district_name ??
+
+        "Unknown"
+
+    );
+
+}
+
+
+/* =========================================================
+   GET GPA
+========================================================= */
+
+function getGPA(student) {
+
+    return numberValue(
+
+        student.gpa ??
+
+        student.GPA ??
+
+        student.grade_point ??
+
+        student.gradePoint
+
+    );
+
+}
+
+
+/* =========================================================
+   GET TOTAL SCORE
+========================================================= */
+
+function getTotalScore(student) {
+
+    const values = [
+
+        student.total_score,
+
+        student.totalScore,
+
+        student.total_marks,
+
+        student.totalMarks,
+
+        student.total_mark,
+
+        student.totalMark,
+
+        student.score,
+
+        student.total
+
+    ];
+
+
+    for (
+        const value of values
+    ) {
+
+        if (
+            value !== null &&
+            value !== undefined &&
+            String(value).trim() !== ""
+        ) {
+
+            const n =
+                Number(value);
+
+
+            if (
+                Number.isFinite(n)
+            ) {
+
+                return n;
+
+            }
+
+        }
+
+    }
+
+
+    return 0;
+
+}
+
+
+/* =========================================================
+   GROUP DETECTION
+========================================================= */
+
+function getGroup(student) {
+
+    const roll =
+        Number(getRoll(student));
+
+
+    if (
+        roll >= 100001 &&
+        roll <= 132961
+    ) {
+
+        return "Science";
+
+    }
+
+
+    if (
+        roll >= 700001 &&
+        roll <= 723917
+    ) {
+
+        return "Science Irregular";
+
+    }
+
+
+    if (
+        roll >= 300001 &&
+        roll <= 331193
+    ) {
+
+        return "Humanities";
+
+    }
+
+
+    if (
+        roll >= 500001 &&
+        roll <= 541800
+    ) {
+
+        return "Business Studies";
+
+    }
+
+
+    return "Unknown";
+
+}
+
+
+/* =========================================================
+   FORMAT NUMBER
+========================================================= */
+
+function formatNumber(value) {
+
+    return Number(value || 0)
+        .toLocaleString(
+            "en-US"
+        );
+
+}
+
+
+/* =========================================================
+   FORMAT DECIMAL
+========================================================= */
+
+function formatDecimal(value) {
+
+    const n =
+        numberValue(value);
+
+
+    return n
+        .toFixed(2)
+        .replace(
+            /\.00$/,
+            ""
+        );
+
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+async function searchInstitutions() {
+
+    const search =
+        institutionSearch.value.trim();
+
+
+    searchResults.innerHTML =
+        "";
+
+
+    if (!search) {
+
+        searchStatus.textContent =
+            "Enter an EIIN or institution name.";
+
+        return;
+
+    }
+
+
+    searchStatus.textContent =
+        "Searching...";
+
+
+    try {
+
+        const query =
+            new URLSearchParams();
+
+
+        query.set(
+            "select",
+            "eiin,name,institute,institution,school,school_name,district"
+        );
+
+
+        query.set(
+            "limit",
+            String(SEARCH_LIMIT)
+        );
+
+
+        /*
+         * Search by EIIN or institution
+         * name where supported.
+         */
+
+        const conditions = [
+
+            `eiin.ilike.*${escapePostgREST(search)}*`,
+
+            `name.ilike.*${escapePostgREST(search)}*`,
+
+            `institute.ilike.*${escapePostgREST(search)}*`,
+
+            `institution.ilike.*${escapePostgREST(search)}*`,
+
+            `school.ilike.*${escapePostgREST(search)}*`,
+
+            `school_name.ilike.*${escapePostgREST(search)}*`
+
+        ];
+
+
+        query.set(
+            "or",
+            `(${conditions.join(",")})`
+        );
+
+
+        const response =
+            await supabaseRequest(
+                query.toString()
+            );
+
+
+        const data =
+            await response.json();
+
+
+        /*
+         * Remove duplicate institutions.
+         */
+
+        const institutions =
+            uniqueInstitutions(data);
+
+
+        renderSearchResults(
+            institutions
+        );
+
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "Search error:",
+            error
+        );
+
+
+        searchStatus.textContent =
+            "Search failed.";
+
+
+        searchResults.innerHTML = `
+
+            <div class="error">
+
+                Institution search could not be completed.
+
+                <br><br>
+
+                ${escapeHTML(error.message)}
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   POSTGREST ESCAPE
+========================================================= */
+
+function escapePostgREST(value) {
+
+    return String(value)
+
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+
+        .replace(
+            /,/g,
+            "\\,"
+        )
+
+        .replace(
+            /\(/g,
+            "\\("
+        )
+
+        .replace(
+            /\)/g,
+            "\\)"
+        )
+
+        .replace(
+            /"/g,
+            '\\"'
+        );
+
+}
+
+
+/* =========================================================
+   UNIQUE INSTITUTIONS
+========================================================= */
+
+function uniqueInstitutions(data) {
+
+    const map =
+        new Map();
+
+
+    data.forEach(
+        item => {
+
+            const name =
+                getInstitution(item);
+
+
+            const eiin =
+                getEIIN(item);
+
+
+            const key =
+                `${String(eiin).trim()}|${name.trim().toLowerCase()}`;
+
+
+            if (
+                !map.has(key)
+            ) {
+
+                map.set(
+                    key,
+                    {
+
+                        eiin,
+
+                        name,
+
+                        district:
+                            getDistrict(item)
+
+                    }
+                );
+
+            }
+
+        }
+    );
+
+
+    return Array.from(
+        map.values()
+    );
+
+}
+
+
+/* =========================================================
+   RENDER SEARCH
+========================================================= */
+
+function renderSearchResults(
+    institutions
+) {
+
+    searchResults.innerHTML =
+        "";
+
+
+    if (
+        !institutions.length
+    ) {
+
+        searchStatus.textContent =
+            "No institution found.";
+
+        return;
+
+    }
+
+
+    searchStatus.textContent =
+        `${institutions.length} institution${institutions.length === 1 ? "" : "s"} found.`;
+
+
+    institutions.forEach(
+        institution => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.type =
+                "button";
+
+
+            button.className =
+                "institution-result";
+
+
+            const alreadySelected =
+                selectedInstitutions.some(
+                    item =>
+                        institutionKey(item) ===
+                        institutionKey(institution)
+                );
+
+
+            button.innerHTML = `
+
+                <div class="result-main">
+
+                    <div>
+
+                        <div class="result-name">
+
+                            ${escapeHTML(
+                                institution.name
+                            )}
+
+                        </div>
+
+                        <div class="result-meta">
+
+                            ${
+                                institution.eiin
+                                    ? `
+                                        <span class="badge">
+                                            EIIN ${escapeHTML(
+                                                String(
+                                                    institution.eiin
+                                                )
+                                            )}
+                                        </span>
+                                      `
+                                    : ""
+                            }
+
+                            <span class="badge">
+
+                                ${escapeHTML(
+                                    institution.district
+                                )}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="select-badge">
+
+                        ${
+                            alreadySelected
+                                ? "Selected"
+                                : "+ Compare"
+                        }
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    addInstitution(
+                        institution
+                    );
+
+                }
+            );
+
+
+            searchResults.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   INSTITUTION KEY
+========================================================= */
+
+function institutionKey(
+    institution
+) {
+
+    const eiin =
+        String(
+            institution.eiin ?? ""
+        )
+        .trim();
+
+
+    const name =
+        String(
+            institution.name ?? ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    return (
+        eiin ||
+        name
+    );
+
+}
+
+
+/* =========================================================
+   ADD INSTITUTION
+========================================================= */
+
+function addInstitution(
+    institution
+) {
+
+    const key =
+        institutionKey(
+            institution
+        );
+
+
+    if (
+        selectedInstitutions.some(
+            item =>
+                institutionKey(item) ===
+                key
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    selectedInstitutions.push(
+        institution
+    );
+
+
+    renderSelected();
+
+    updateSearchSelection();
+
+    loadComparison();
+
+}
+
+
+/* =========================================================
+   REMOVE INSTITUTION
+========================================================= */
+
+function removeInstitution(
+    key
+) {
+
+    selectedInstitutions =
+        selectedInstitutions.filter(
+            item =>
+                institutionKey(item) !==
+                key
+        );
+
+
+    renderSelected();
+
+    updateSearchSelection();
+
+    loadComparison();
+
+}
+
+
+/* =========================================================
+   SELECTED CHIPS
+========================================================= */
+
+function renderSelected() {
+
+    selectedList.innerHTML =
+        "";
+
+
+    selectedInstitutions.forEach(
+        institution => {
+
+            const chip =
+                document.createElement(
+                    "div"
+                );
+
+
+            chip.className =
+                "selected-chip";
+
+
+            chip.innerHTML = `
+
+                <span>
+
+                    ${escapeHTML(
+                        institution.name
+                    )}
+
+                </span>
+
+                <button
+                    type="button"
+                    class="remove-chip"
+                    aria-label="Remove">
+
+                    ×
+
+                </button>
+
+            `;
+
+
+            chip.querySelector(
+                ".remove-chip"
+            ).addEventListener(
+                "click",
+                () => {
+
+                    removeInstitution(
+                        institutionKey(
+                            institution
+                        )
+                    );
+
+                }
+            );
+
+
+            selectedList.appendChild(
+                chip
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   UPDATE SEARCH SELECTION
+========================================================= */
+
+function updateSearchSelection() {
+
+    const buttons =
+        searchResults.querySelectorAll(
+            ".institution-result"
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            /*
+             * Search results are rebuilt
+             * after every search, so
+             * simply leave them unchanged.
+             */
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   LOAD COMPARISON
+========================================================= */
+
+async function loadComparison() {
+
+    if (
+        selectedInstitutions.length < 2
+    ) {
+
+        comparisonContainer.innerHTML = `
+
+            <div class="compare-empty">
+
+                <strong>
+                    Select institutions to compare
+                </strong>
+
+                Choose at least two institutions
+                from the search results.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    comparisonContainer.innerHTML = `
+
+        <div class="compare-empty">
+
+            Loading comparison...
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const institutionData = [];
+
+
+        for (
+            const institution
+            of selectedInstitutions
+        ) {
+
+            const data =
+                await fetchInstitutionStudents(
+                    institution
+                );
+
+
+            institutionData.push({
+
+                institution,
+
+                students:
+                    data
+
+            });
+
+        }
+
+
+        renderComparison(
+            institutionData
+        );
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "Comparison error:",
+            error
+        );
+
+
+        comparisonContainer.innerHTML = `
+
+            <div class="error">
+
+                Comparison could not be loaded.
+
+                <br><br>
+
+                ${escapeHTML(
+                    error.message
+                )}
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   FETCH INSTITUTION STUDENTS
+========================================================= */
+
+async function fetchInstitutionStudents(
+    institution
+) {
+
+    /*
+     * We fetch by institution
+     * name first.
+     *
+     * If EIIN exists, EIIN is also
+     * included as a filter candidate.
+     */
+
+    const name =
+        String(
+            institution.name || ""
+        ).trim();
+
+
+    const query =
+        new URLSearchParams();
+
+
+    query.set(
+        "select",
+        "name,roll,gpa,total_score,institute,institution,school,school_name,district,eiin"
+    );
+
+
+    query.set(
+        "limit",
+        "10000"
+    );
+
+
+    const conditions = [];
+
+
+    if (name) {
+
+        conditions.push(
+            `institute.eq.${escapePostgREST(name)}`
+        );
+
+        conditions.push(
+            `institution.eq.${escapePostgREST(name)}`
+        );
+
+        conditions.push(
+            `school.eq.${escapePostgREST(name)}`
+        );
+
+        conditions.push(
+            `school_name.eq.${escapePostgREST(name)}`
+        );
+
+    }
+
+
+    if (
+        institution.eiin
+    ) {
+
+        conditions.push(
+            `eiin.eq.${escapePostgREST(
+                institution.eiin
+            )}`
+        );
+
+    }
+
+
+    if (!conditions.length) {
+
+        return [];
+
+    }
+
+
+    query.set(
+        "or",
+        `(${conditions.join(",")})`
+    );
+
+
+    const response =
+        await supabaseRequest(
+            query.toString()
+        );
+
+
+    return await response.json();
+
+}
+
+
+/* =========================================================
+   INSTITUTION METRICS
+========================================================= */
+
+function calculateMetrics(
+    students
+) {
+
+    const totalStudents =
+        students.length;
+
+
+    const gpa5 =
+        students.filter(
+            student =>
+                getGPA(student) === 5
+        ).length;
+
+
+    const gpas =
+        students
+            .map(
+                getGPA
+            )
+            .filter(
+                value =>
+                    value > 0
+            );
+
+
+    const scores =
+        students
+            .map(
+                getTotalScore
+            )
+            .filter(
+                value =>
+                    value > 0
+            );
+
+
+    const averageGPA =
+        gpas.length
+
+            ? gpas.reduce(
+                (sum,value) =>
+                    sum + value,
+                0
+            ) / gpas.length
+
+            : 0;
+
+
+    const averageScore =
+        scores.length
+
+            ? scores.reduce(
+                (sum,value) =>
+                    sum + value,
+                0
+            ) / scores.length
+
+            : 0;
+
+
+    const totalScore =
+        scores.reduce(
+            (sum,value) =>
+                sum + value,
+            0
+        );
+
+
+    return {
+
+        totalStudents,
+
+        gpa5,
+
+        averageGPA,
+
+        averageScore,
+
+        totalScore
+
+    };
+
+}
+
+
+/* =========================================================
+   RENDER COMPARISON
+========================================================= */
+
+function renderComparison(
+    institutionData
+) {
+
+    const metrics =
+        institutionData.map(
+            item => ({
+
+                institution:
+                    item.institution,
+
+                metrics:
+                    calculateMetrics(
+                        item.students
+                    )
+
+            })
+        );
+
+
+    const html = `
+
+        <div class="compare-wrap">
+
+            <table class="compare-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Metric
+                        </th>
+
+                        ${metrics.map(
+                            item => `
+
+                                <th>
+
+                                    ${escapeHTML(
+                                        item.institution.name
+                                    )}
+
+                                    ${
+                                        item.institution.eiin
+                                            ? `
+                                                <br>
+                                                <small>
+                                                    EIIN ${escapeHTML(
+                                                        String(
+                                                            item.institution.eiin
+                                                        )
+                                                    )}
+                                                </small>
+                                              `
+                                            : ""
+                                    }
+
+                                </th>
+
+                            `
+                        ).join("")}
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    ${comparisonRow(
+                        "Student Count",
+                        metrics,
+                        item =>
+                            formatNumber(
+                                item.totalStudents
+                            )
+                    )}
+
+
+                    ${comparisonRow(
+                        "GPA 5",
+                        metrics,
+                        item =>
+                            formatNumber(
+                                item.gpa5
+                            )
+                    )}
+
+
+                    ${comparisonRow(
+                        "Average GPA",
+                        metrics,
+                        item =>
+                            formatDecimal(
+                                item.averageGPA
+                            )
+                    )}
+
+
+                    ${comparisonRow(
+                        "Average Score",
+                        metrics,
+                        item =>
+                            formatDecimal(
+                                item.averageScore
+                            ),
+                        true
+                    )}
+
+
+                    ${comparisonRow(
+                        "Total Score",
+                        metrics,
+                        item =>
+                            formatNumber(
+                                Math.round(
+                                    item.totalScore
+                                )
+                            ),
+                        true
+                    )}
+
+
+                    <tr>
+
+                        <td>
+                            Ranking Position
+                        </td>
+
+                        ${metrics.map(
+                            () => `
+
+                                <td>
+
+                                    <span
+                                        class="metric-value">
+                                        —
+                                    </span>
+
+                                </td>
+
+                            `
+                        ).join("")}
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    `;
+
+
+    comparisonContainer.innerHTML =
+        html;
+
+}
+
+
+/* =========================================================
+   COMPARISON ROW
+========================================================= */
+
+function comparisonRow(
+    label,
+    metrics,
+    formatter,
+    score = false
+) {
+
+    return `
+
+        <tr>
+
+            <td>
+                ${label}
+            </td>
+
+            ${metrics.map(
+                item => `
+
+                    <td>
+
+                        <span class="metric-value ${
+                            score
+                                ? "score-value"
+                                : ""
+                        }">
+
+                            ${formatter(
+                                item.metrics
+                            )}
+
+                        </span>
+
+                    </td>
+
+                `
+            ).join("")}
+
+        </tr>
+
+    `;
+
+}
+
+
+/* =========================================================
+   LOAD GROUP STATISTICS
+========================================================= */
+
+async function loadGroupStatistics() {
+
+    groupStats.innerHTML = `
+
+        <div class="loading">
+            Loading statistics...
+        </div>
+
+    `;
+
+
+    try {
+
+        const students =
+            await fetchAllStudents();
+
+
+        const groups = {
+
+            "Science":[],
+
+            "Business Studies":[],
+
+            "Humanities":[]
+
+        };
+
+
+        students.forEach(
+            student => {
+
+                const group =
+                    getGroup(student);
+
+
+                if (
+                    groups[group]
+                ) {
+
+                    groups[group].push(
+                        student
+                    );
+
+                }
+
+            }
+        );
+
+
+        renderGroupStatistics(
+            groups
+        );
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "Group statistics error:",
+            error
+        );
+
+
+        groupStats.innerHTML = `
+
+            <div class="error">
+
+                Statistics could not be loaded.
+
+                <br><br>
+
+                ${escapeHTML(
+                    error.message
+                )}
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   FETCH ALL STUDENTS
+========================================================= */
+
+async function fetchAllStudents() {
+
+    const all = [];
+
+    const batchSize =
+        1000;
+
+
+    let offset =
+        0;
+
+
+    while (true) {
+
+        const query =
+            new URLSearchParams();
+
+
+        query.set(
+            "select",
+            "name,roll,gpa,total_score,institute,institution,school,school_name,district,eiin"
+        );
+
+
+        query.set(
+            "limit",
+            String(batchSize)
+        );
+
+
+        query.set(
+            "offset",
+            String(offset)
+        );
+
+
+        const response =
+            await supabaseRequest(
+                query.toString()
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !Array.isArray(data) ||
+            !data.length
+        ) {
+
+            break;
+
+        }
+
+
+        all.push(
+            ...data
+        );
+
+
+        if (
+            data.length <
+            batchSize
+        ) {
+
+            break;
+
+        }
+
+
+        offset +=
+            batchSize;
+
+
+        /*
+         * Safety limit.
+         */
+
+        if (
+            offset > 200000
+        ) {
+
+            break;
+
+        }
+
+    }
+
+
+    return all;
+
+}
+
+
+/* =========================================================
+   RENDER GROUP STATISTICS
+========================================================= */
+
+function renderGroupStatistics(
+    groups
+) {
+
+    const order = [
+
+        "Science",
+
+        "Business Studies",
+
+        "Humanities"
+
+    ];
+
+
+    groupStats.innerHTML =
+        "";
+
+
+    order.forEach(
+        group => {
+
+            const students =
+                groups[group];
+
+
+            const metrics =
+                calculateMetrics(
+                    students
+                );
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "stat-card";
+
+
+            card.innerHTML = `
+
+                <h3>
+                    ${escapeHTML(group)}
+                </h3>
+
+                <div class="group-label">
+                    SSC 2026
+                </div>
+
+
+                <div class="stat-number">
+                    ${formatNumber(
+                        metrics.totalStudents
+                    )}
+                </div>
+
+                <div class="stat-label">
+                    Total Students
+                </div>
+
+
+                <div class="stat-row">
+
+                    <div>
+
+                        <strong>
+                            ${formatNumber(
+                                metrics.gpa5
+                            )}
+                        </strong>
+
+                        <span>
+                            GPA 5
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            ${formatDecimal(
+                                metrics.averageGPA
+                            )}
+                        </strong>
+
+                        <span>
+                            Average GPA
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-row">
+
+                    <div>
+
+                        <strong>
+                            ${formatDecimal(
+                                metrics.averageScore
+                            )}
+                        </strong>
+
+                        <span>
+                            Average Score
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            ${formatNumber(
+                                Math.round(
+                                    metrics.totalScore
+                                )
+                            )}
+                        </strong>
+
+                        <span>
+                            Total Score
+                        </span>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            groupStats.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DISTRICT STATISTICS
+========================================================= */
+
+async function loadDistrictStatistics() {
+
+    districtRows.innerHTML = `
+
+        <tr>
+
+            <td
+                colspan="6"
+                class="loading">
+
+                Loading district statistics...
+
+            </td>
+
+        </tr>
+
+    `;
+
+
+    try {
+
+        const students =
+            await fetchAllStudents();
+
+
+        const districts =
+            new Map();
+
+
+        students.forEach(
+            student => {
+
+                const district =
+                    getDistrict(student);
+
+
+                if (
+                    !districts.has(
+                        district
+                    )
+                ) {
+
+                    districts.set(
+                        district,
+                        []
+                    );
+
+                }
+
+
+                districts
+                    .get(district)
+                    .push(student);
+
+            }
+        );
+
+
+        const rows =
+            Array.from(
+                districts.entries()
+            )
+            .map(
+                (
+                    [
+                        district,
+                        data
+                    ]
+                ) => {
+
+                    return {
+
+                        district,
+
+                        metrics:
+                            calculateMetrics(
+                                data
+                            )
+
+                    };
+
+                }
+            )
+            .sort(
+                (
+                    a,
+                    b
+                ) => {
+
+                    return (
+                        b.metrics.averageScore -
+                        a.metrics.averageScore
+                    );
+
+                }
+            );
+
+
+        renderDistrictStatistics(
+            rows
+        );
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "District error:",
+            error
+        );
+
+
+        districtRows.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="error">
+
+                    District statistics could not be loaded.
+
+                    <br><br>
+
+                    ${escapeHTML(
+                        error.message
+                    )}
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER DISTRICTS
+========================================================= */
+
+function renderDistrictStatistics(
+    rows
+) {
+
+    districtRows.innerHTML =
+        "";
+
+
+    if (
+        !rows.length
+    ) {
+
+        districtRows.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="empty">
+
+                    No district data found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    rows.forEach(
+        (
+            item,
+            index
+        ) => {
+
+            const tr =
+                document.createElement(
+                    "tr"
+                );
+
+
+            tr.innerHTML = `
+
+                <td>
+
+                    <span class="district-rank">
+
+                        ${index + 1}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <strong>
+
+                        ${escapeHTML(
+                            item.district
+                        )}
+
+                    </strong>
+
+                </td>
+
+
+                <td>
+
+                    ${formatNumber(
+                        item.metrics.totalStudents
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    ${formatNumber(
+                        item.metrics.gpa5
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    ${formatDecimal(
+                        item.metrics.averageGPA
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    <span class="district-score">
+
+                        ${formatDecimal(
+                            item.metrics.averageScore
+                        )}
+
+                    </span>
+
+                </td>
+
+            `;
+
+
+            districtRows.appendChild(
+                tr
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SEARCH EVENT
+========================================================= */
+
+institutionSearch.addEventListener(
+    "input",
+    () => {
+
+        clearTimeout(
+            searchTimer
+        );
+
+
+        searchTimer =
+            setTimeout(
+                searchInstitutions,
+                450
+            );
+
+    }
+);
+
+
+/* =========================================================
+   THEME
+========================================================= */
+
+const themeBtn =
+    document.getElementById(
+        "themeBtn"
+    );
+
+
+function applyTheme() {
+
+    const saved =
+        localStorage.getItem(
+            "ctg_theme"
+        );
+
+
+    if (
+        saved === "dark"
+    ) {
+
+        document.body.classList.add(
+            "dark"
+        );
+
+    }
+
+}
+
+
+themeBtn.addEventListener(
+    "click",
+    () => {
+
+        document.body.classList.toggle(
+            "dark"
+        );
+
+
+        localStorage.setItem(
+
+            "ctg_theme",
+
+            document.body.classList.contains(
+                "dark"
+            )
+                ? "dark"
+                : "light"
+
+        );
+
+    }
+);
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+applyTheme();
+
+
+loadGroupStatistics();
+
+
+loadDistrictStatistics();
+
+
+console.log(
+    "CTGBoardRanking Discover loaded."
+);
+
+</script>
+
+
+</body>
+
+</html>
