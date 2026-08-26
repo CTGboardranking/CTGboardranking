@@ -34,6 +34,12 @@ except ImportError:
 # - Duplicate roll protection
 # - Local checkpoint
 # - Retry temporary request errors
+#
+# REQUIRED_SUBJECT_CODES = set()
+#
+# No specific subject code is mandatory.
+# Every subject found in the result must have
+# both mark and grade to be considered complete.
 # ============================================================
 
 
@@ -153,21 +159,16 @@ BOARD = "Chattogram Board"
 # ============================================================
 # REQUIRED SUBJECT CODES
 #
-# These are the subjects that must have both
-# mark and grade.
+# Empty set means:
 #
-# If your result contains additional subjects,
-# they are also checked automatically.
+# - No specific subject is mandatory
+# - Every subject found on the result page is checked
+# - A subject is complete only when it has both
+#   mark and grade
+# - If no subjects are found, student is incomplete
 # ============================================================
 
-REQUIRED_SUBJECT_CODES = {
-
-    "101",   # BANGLA-I
-    "107",   # ENGLISH-I
-    "109",   # MATHEMATICS
-    "127",   # SCIENCE
-
-}
+REQUIRED_SUBJECT_CODES = set()
 
 
 # ============================================================
@@ -247,6 +248,18 @@ print(
 print(
     "Max retries:",
     MAX_RETRIES,
+    flush=True
+)
+
+print(
+    "Required subject codes:",
+    (
+        "NONE - ALL FOUND SUBJECTS CHECKED"
+        if not REQUIRED_SUBJECT_CODES
+        else ", ".join(
+            sorted(REQUIRED_SUBJECT_CODES)
+        )
+    ),
     flush=True
 )
 
@@ -489,7 +502,6 @@ def find_page_gpa(soup):
 
             except Exception:
                 pass
-
 
     for row in soup.find_all("tr"):
 
@@ -943,7 +955,7 @@ def is_subject_complete(subject):
         "mark"
     )
 
-    grade = clean_text(
+    grade = normalize_grade(
         subject.get(
             "grade",
             ""
@@ -951,6 +963,7 @@ def is_subject_complete(subject):
     )
 
 
+    # Mark must exist
     mark_valid = (
 
         mark is not None
@@ -962,6 +975,7 @@ def is_subject_complete(subject):
     )
 
 
+    # Grade must be valid
     grade_valid = bool(
         grade
     )
@@ -998,10 +1012,93 @@ def get_missing_subjects(
         ]
 
 
+    # ========================================================
+    # MODE 1
+    #
+    # If REQUIRED_SUBJECT_CODES contains codes,
+    # only those codes are mandatory.
+    # ========================================================
+
+    if REQUIRED_SUBJECT_CODES:
+
+        missing = []
+
+        found_required = set()
+
+
+        for subject in subjects:
+
+            if not isinstance(
+                subject,
+                dict
+            ):
+
+                continue
+
+
+            code = str(
+                subject.get(
+                    "code",
+                    ""
+                )
+            ).strip()
+
+
+            if code in REQUIRED_SUBJECT_CODES:
+
+                found_required.add(
+                    code
+                )
+
+
+                if not is_subject_complete(
+                    subject
+                ):
+
+                    missing.append(
+                        code
+                    )
+
+
+        # ----------------------------------------------------
+        # Required code completely absent
+        # ----------------------------------------------------
+
+        for code in REQUIRED_SUBJECT_CODES:
+
+            if code not in found_required:
+
+                missing.append(
+                    code
+                )
+
+
+        return sorted(
+            set(missing)
+        )
+
+
+    # ========================================================
+    # MODE 2
+    #
+    # REQUIRED_SUBJECT_CODES = set()
+    #
+    # No particular subject is mandatory.
+    #
+    # BUT:
+    #
+    # Every subject found in the result must contain
+    # both mark and grade.
+    # ========================================================
+
+    if not subjects:
+
+        return [
+            "subjects"
+        ]
+
+
     missing = []
-
-
-    found_required = set()
 
 
     for subject in subjects:
@@ -1022,28 +1119,14 @@ def get_missing_subjects(
         ).strip()
 
 
-        if code in REQUIRED_SUBJECT_CODES:
+        if not code:
 
-            found_required.add(
-                code
-            )
-
-            if not is_subject_complete(
-                subject
-            ):
-
-                missing.append(
-                    code
-                )
+            continue
 
 
-    # --------------------------------------------------------
-    # Required code completely absent
-    # --------------------------------------------------------
-
-    for code in REQUIRED_SUBJECT_CODES:
-
-        if code not in found_required:
+        if not is_subject_complete(
+            subject
+        ):
 
             missing.append(
                 code
