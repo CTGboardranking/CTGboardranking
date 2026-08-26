@@ -8,52 +8,58 @@
         <priority>1.0</priority>
     </url>
 
-    <!-- Results -->
+    <!-- Individual Results -->
     <url>
-        <loc>https://ctgboardranking.vercel.app/results.html</loc>
+        <loc>https://ctgboardranking.vercel.app/individual-results.html</loc>
         <priority>0.9</priority>
     </url>
 
-    <!-- SSC -->
+    <!-- Student Ranking -->
     <url>
-        <loc>https://ctgboardranking.vercel.app/board-ssc.html</loc>
+        <loc>https://ctgboardranking.vercel.app/student-ranking.html</loc>
         <priority>0.9</priority>
     </url>
 
-    <!-- HSC -->
+    <!-- Rankings -->
     <url>
-        <loc>https://ctgboardranking.vercel.app/board-hsc.html</loc>
+        <loc>https://ctgboardranking.vercel.app/rankings.html</loc>
         <priority>0.9</priority>
     </url>
 
-    <!-- Board Result -->
+    <!-- Statistics -->
     <url>
-        <loc>https://ctgboardranking.vercel.app/board-result.html</loc>
+        <loc>https://ctgboardranking.vercel.app/statistics.html</loc>
         <priority>0.8</priority>
     </url>
 
-    <!-- Admission -->
+    <!-- Discover -->
     <url>
-        <loc>https://ctgboardranking.vercel.app/admission.html</loc>
+        <loc>https://ctgboardranking.vercel.app/discover.html</loc>
         <priority>0.8</priority>
     </url>
 
-    <!-- Exam Routine -->
+    <!-- District Student Ranking -->
     <url>
-        <loc>https://ctgboardranking.vercel.app/exam-routine.html</loc>
+        <loc>https://ctgboardranking.vercel.app/district-student-ranking.html</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- District College Ranking -->
+    <url>
+        <loc>https://ctgboardranking.vercel.app/district-college-ranking.html</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Thana Student Ranking -->
+    <url>
+        <loc>https://ctgboardranking.vercel.app/thana-student-ranking.html</loc>
         <priority>0.7</priority>
     </url>
 
-    <!-- National University -->
+    <!-- Thana College Ranking -->
     <url>
-        <loc>https://ctgboardranking.vercel.app/national-university.html</loc>
+        <loc>https://ctgboardranking.vercel.app/thana-college-ranking.html</loc>
         <priority>0.7</priority>
-    </url>
-
-    <!-- Notice -->
-    <url>
-        <loc>https://ctgboardranking.vercel.app/notice.html</loc>
-        <priority>0.8</priority>
     </url>
 
 </urlset>
