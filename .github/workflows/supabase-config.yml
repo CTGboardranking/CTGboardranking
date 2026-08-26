@@ -16,25 +16,38 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-
-      - name: Generate supabase-config.js
+      - name: Generate safe Supabase config
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
         run: |
 
           mkdir -p js
 
           cat > js/supabase-config.js <<EOF
           const SUPABASE_URL = "${SUPABASE_URL}";
-          const SUPABASE_ANON_KEY = "${SUPABASE_ANON_KEY}";
+          const SUPABASE_PUBLISHABLE_KEY = "${SUPABASE_PUBLISHABLE_KEY}";
           EOF
 
-          echo "Supabase frontend config generated."
+          echo "Safe Supabase config generated."
+          echo "Secret key is NOT included."
 
+      - name: Verify config does not contain secret key
+        env:
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
 
-      - name: Commit config
+          if grep -Fq "$SUPABASE_KEY" js/supabase-config.js; then
+            echo "ERROR: Supabase Secret Key detected in frontend config."
+            exit 1
+          fi
+
+          echo "Security check passed."
+
+      - name: Commit and push config
         run: |
 
           git config user.name "github-actions[bot]"
@@ -43,12 +56,8 @@ jobs:
           git add js/supabase-config.js
 
           if git diff --cached --quiet; then
-
             echo "No changes to commit."
-
           else
-
             git commit -m "Generate Supabase frontend config"
             git push
-
           fi
