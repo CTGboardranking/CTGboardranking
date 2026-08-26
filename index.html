@@ -998,6 +998,411 @@ footer,
 
 }
 
+/* =========================================================
+   CTGBOARD RANKING — APPLE INSPIRED IMPORTANCE NOTICE
+========================================================= */
+
+.importance-notice {
+    width: min(1180px, calc(100% - 28px));
+    height: 46px;
+    margin: 12px auto 0;
+
+    display: flex;
+    align-items: stretch;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-radius: 15px;
+
+    background: rgba(255, 255, 255, 0.72);
+
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.03),
+        0 8px 30px rgba(0, 0, 0, 0.055);
+
+    transition:
+        background .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+
+    animation:
+        noticeAppear .55s
+        cubic-bezier(.22, .8, .2, 1);
+}
+
+
+/* ---------------------------------------------------------
+   APPLE-STYLE LABEL
+--------------------------------------------------------- */
+
+.importance-label {
+    position: relative;
+
+    flex: 0 0 auto;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 0 16px;
+
+    color: #1d1d1f;
+
+    background:
+        rgba(245, 245, 247, 0.78);
+
+    border-right:
+        1px solid rgba(0, 0, 0, 0.06);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        "Segoe UI",
+        sans-serif;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: -0.01em;
+
+    white-space: nowrap;
+}
+
+
+/* Small Apple-like status dot */
+
+.importance-label::before {
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    flex: 0 0 7px;
+
+    border-radius: 50%;
+
+    background: #007aff;
+
+    box-shadow:
+        0 0 0 3px rgba(0, 122, 255, 0.10);
+
+    animation:
+        noticePulse 2.4s ease-in-out infinite;
+}
+
+
+/* Remove old icon if previously added */
+
+.importance-icon {
+    display: none !important;
+}
+
+
+/* ---------------------------------------------------------
+   MARQUEE CONTAINER
+--------------------------------------------------------- */
+
+.notice-marquee {
+    position: relative;
+
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    overflow: hidden;
+
+    background:
+        rgba(255, 255, 255, 0.42);
+}
+
+
+/* Soft fade on both edges */
+
+.notice-marquee::before,
+.notice-marquee::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    width: 34px;
+
+    z-index: 2;
+
+    pointer-events: none;
+}
+
+.notice-marquee::before {
+    left: 0;
+
+    background:
+        linear-gradient(
+            to right,
+            rgba(255,255,255,.82),
+            rgba(255,255,255,0)
+        );
+}
+
+.notice-marquee::after {
+    right: 0;
+
+    background:
+        linear-gradient(
+            to left,
+            rgba(255,255,255,.82),
+            rgba(255,255,255,0)
+        );
+}
+
+
+/* ---------------------------------------------------------
+   MOVING NOTICE TEXT
+--------------------------------------------------------- */
+
+.notice-track {
+    display: inline-block;
+
+    padding-left: 100%;
+
+    white-space: nowrap;
+
+    color: #1d1d1f;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Text",
+        "Segoe UI",
+        sans-serif;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    letter-spacing: -0.01em;
+
+    line-height: 46px;
+
+    will-change: transform;
+
+    animation:
+        importanceNoticeMove
+        18s
+        linear
+        infinite;
+}
+
+
+/* ---------------------------------------------------------
+   RIGHT → LEFT ANIMATION
+--------------------------------------------------------- */
+
+@keyframes importanceNoticeMove {
+
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   ENTRY ANIMATION
+--------------------------------------------------------- */
+
+@keyframes noticeAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(-5px) scale(.985);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   BLUE STATUS DOT
+--------------------------------------------------------- */
+
+@keyframes noticePulse {
+
+    0%,
+    100% {
+        opacity: .75;
+        transform: scale(.9);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+body.dark .importance-notice {
+
+    border-color:
+        rgba(255, 255, 255, 0.10);
+
+    background:
+        rgba(28, 28, 30, 0.72);
+
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, .25),
+        0 10px 35px rgba(0, 0, 0, .28);
+}
+
+
+body.dark .importance-label {
+
+    color: #f5f5f7;
+
+    background:
+        rgba(44, 44, 46, 0.72);
+
+    border-right-color:
+        rgba(255, 255, 255, 0.08);
+}
+
+
+body.dark .notice-marquee {
+
+    background:
+        rgba(28, 28, 30, .38);
+}
+
+
+body.dark .notice-track {
+
+    color: #f5f5f7;
+}
+
+
+body.dark .notice-marquee::before {
+
+    background:
+        linear-gradient(
+            to right,
+            rgba(28,28,30,.82),
+            rgba(28,28,30,0)
+        );
+}
+
+
+body.dark .notice-marquee::after {
+
+    background:
+        linear-gradient(
+            to left,
+            rgba(28,28,30,.82),
+            rgba(28,28,30,0)
+        );
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .importance-notice {
+
+        width: calc(100% - 20px);
+
+        height: 43px;
+
+        margin-top: 9px;
+
+        border-radius: 13px;
+    }
+
+
+    .importance-label {
+
+        padding: 0 12px;
+
+        gap: 7px;
+
+        font-size: 10px;
+    }
+
+
+    .importance-label::before {
+
+        width: 6px;
+        height: 6px;
+
+        flex-basis: 6px;
+    }
+
+
+    .notice-track {
+
+        font-size: 11px;
+
+        line-height: 43px;
+
+        animation-duration: 15s;
+    }
+
+
+    .notice-marquee::before,
+    .notice-marquee::after {
+
+        width: 20px;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .notice-track {
+
+        animation: none;
+
+        padding-left: 12px;
+    }
+
+    .importance-label::before {
+
+        animation: none;
+    }
+
+    .importance-notice {
+
+        animation: none;
+    }
+
+}
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -1266,7 +1671,23 @@ by <strong>Shadat Fatih</strong>
 
 </div>
 
+<!-- =====================================================
+     IMPORTANCE NOTICE
+===================================================== -->
+<div class="importance-notice" id="importanceNotice" hidden>
 
+    <div class="importance-label">
+        <span class="importance-icon">!</span>
+        <span>Importance Notice</span>
+    </div>
+
+    <div class="notice-marquee">
+        <div class="notice-track" id="noticeText">
+            Loading notice...
+        </div>
+    </div>
+
+</div>
 
 <main>
 
@@ -5097,6 +5518,69 @@ async function downloadHomeResultPDF() {
 
 
 })();
+
+/* =========================================================
+   LOAD IMPORTANCE NOTICE
+========================================================= */
+
+async function loadImportanceNotice() {
+
+    const noticeBar =
+        document.getElementById("importanceNotice");
+
+    const noticeText =
+        document.getElementById("noticeText");
+
+    if (!noticeBar || !noticeText) return;
+
+    try {
+
+        const { data, error } = await supabase
+            .from("site_notice")
+            .select("notice")
+            .limit(1)
+            .maybeSingle();
+
+        if (error) {
+            console.error(
+                "Notice loading error:",
+                error
+            );
+            return;
+        }
+
+        if (
+            !data ||
+            !data.notice ||
+            !data.notice.trim()
+        ) {
+            noticeBar.hidden = true;
+            return;
+        }
+
+        noticeText.textContent =
+            data.notice.trim();
+
+        noticeBar.hidden = false;
+
+    } catch (error) {
+
+        console.error(
+            "Importance notice error:",
+            error
+        );
+
+        noticeBar.hidden = true;
+    }
+}
+
+
+/* LOAD NOTICE */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    loadImportanceNotice
+);
 
 </script>
 
