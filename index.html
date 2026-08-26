@@ -9,7 +9,7 @@
       content="width=device-width, initial-scale=1.0">
 
 <title>CTGBoardRanking</title>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <meta name="description"
       content="Chattogram Board Education Rankings, Statistics and Institution Performance">
 
@@ -3904,6 +3904,79 @@ async function loadHomepageData() {
 
 }
 
+<script>
+/* =====================================================
+   HOMEPAGE IMPORTANCE NOTICE
+===================================================== */
+
+const NOTICE_SUPABASE_URL =
+    "https://mpnjnyejpqeqguxikvnl.supabase.co";
+
+const NOTICE_SUPABASE_KEY =
+    "sb_publishable_KLxc2rvrOnfOrq7_Zqp9Vw_9Wnbuzs9";
+
+const noticeClient =
+    supabase.createClient(
+        NOTICE_SUPABASE_URL,
+        NOTICE_SUPABASE_KEY
+    );
+
+async function loadImportanceNotice() {
+
+    const noticeBox =
+        document.getElementById("importanceNotice");
+
+    const noticeText =
+        document.getElementById("noticeText");
+
+    if (!noticeBox || !noticeText) {
+        return;
+    }
+
+    try {
+
+        const {
+            data,
+            error
+        } = await noticeClient
+            .from("site_notice")
+            .select("notice")
+            .eq("id", 1)
+            .maybeSingle();
+
+        if (error) {
+            console.error(
+                "Importance Notice Error:",
+                error
+            );
+            return;
+        }
+
+        if (
+            !data ||
+            !data.notice ||
+            !data.notice.trim()
+        ) {
+            noticeBox.hidden = true;
+            return;
+        }
+
+        noticeText.textContent =
+            data.notice.trim();
+
+        noticeBox.hidden = false;
+
+    } catch (error) {
+
+        console.error(
+            "Importance Notice Load Error:",
+            error
+        );
+
+        noticeBox.hidden = true;
+    }
+}
+</script>
 
 /* =====================================================
    TOTAL VISITS
@@ -3987,7 +4060,6 @@ if (document.readyState === "loading") {
 /* =====================================================
    START
 ===================================================== */
-
 document.addEventListener(
     "DOMContentLoaded",
     function() {
@@ -3996,8 +4068,11 @@ document.addEventListener(
 
         loadTotalVisits();
 
+        loadImportanceNotice();
+
     }
 );
+
       
 /* =====================================================
    PREMIUM SCROLL REVEAL
