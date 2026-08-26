@@ -5584,7 +5584,91 @@ document.addEventListener(
 
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+const SUPABASE_URL =
+  "https://mpnjnyejpqeqguxikvnl.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_KLxc2rvrOnfOrq7_Zqp9Vw_9Wnbuzs9";
+
+const db = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+async function loadImportanceNotice() {
+
+  const bar =
+    document.getElementById(
+      "importanceNoticeBar"
+    );
+
+  const text =
+    document.getElementById(
+      "importanceNoticeText"
+    );
+
+  if (!bar || !text) {
+    console.error(
+      "Importance Notice HTML not found."
+    );
+    return;
+  }
+
+  try {
+
+    const { data, error } =
+      await db
+        .from("site_notice")
+        .select("notice")
+        .limit(1)
+        .maybeSingle();
+
+    if (error) {
+      console.error(
+        "Supabase Notice Error:",
+        error
+      );
+      return;
+    }
+
+    if (
+      data &&
+      data.notice &&
+      data.notice.trim()
+    ) {
+
+      text.textContent =
+        data.notice.trim();
+
+      bar.style.display =
+        "flex";
+
+    } else {
+
+      bar.style.display =
+        "none";
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Notice loading failed:",
+      error
+    );
+
+  }
+}
+
+document.addEventListener(
+  "DOMContentLoaded",
+  loadImportanceNotice
+);
+</script>
+      
 </body>
 
 </html>
