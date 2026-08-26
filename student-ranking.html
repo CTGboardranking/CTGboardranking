@@ -75,6 +75,7 @@
     padding:20px;
 }
 
+
 /* =========================================================
    CONTROLS
 ========================================================= */
@@ -116,6 +117,7 @@
     outline:none;
 }
 
+
 /* =========================================================
    TABS
 ========================================================= */
@@ -149,6 +151,7 @@
     background:var(--text);
     color:var(--bg);
 }
+
 
 /* =========================================================
    TITLE
@@ -201,6 +204,7 @@
     cursor:not-allowed;
 }
 
+
 /* =========================================================
    SEARCH
 ========================================================= */
@@ -209,6 +213,7 @@
     margin-bottom:18px;
     background:white;
 }
+
 
 /* =========================================================
    LIST
@@ -225,6 +230,7 @@
 
 .student-header {
     display:grid;
+
     grid-template-columns:
         60px
         minmax(190px,1fr)
@@ -235,17 +241,23 @@
     align-items:center;
     gap:12px;
     padding:16px 22px;
+
     background:rgba(245,245,247,.9);
+
     border-bottom:1px solid var(--border);
+
     color:var(--muted);
+
     font-size:10px;
     font-weight:800;
     letter-spacing:.7px;
+
     text-transform:uppercase;
 }
 
 .student-row {
     display:grid;
+
     grid-template-columns:
         60px
         minmax(190px,1fr)
@@ -254,11 +266,17 @@
         minmax(230px,1.15fr);
 
     align-items:center;
+
     gap:12px;
+
     padding:18px 22px;
+
     border-bottom:1px solid var(--border);
+
     transition:.2s;
+
     min-width:0;
+
     box-sizing:border-box;
 }
 
@@ -296,7 +314,9 @@
     font-size:14px;
     font-weight:700;
     line-height:1.35;
+
     white-space:normal;
+
     overflow-wrap:anywhere;
     word-break:break-word;
 }
@@ -337,7 +357,9 @@
     font-size:12px;
     line-height:1.4;
     font-weight:700;
+
     white-space:normal;
+
     overflow-wrap:anywhere;
 }
 
@@ -367,6 +389,7 @@
     word-break:break-word;
 }
 
+
 /* =========================================================
    PAGINATION
 ========================================================= */
@@ -384,11 +407,15 @@
     border:1px solid var(--border);
     background:var(--white);
     color:var(--text);
+
     padding:10px 18px;
+
     border-radius:12px;
+
     font-family:inherit;
     font-size:13px;
     font-weight:700;
+
     cursor:pointer;
 }
 
@@ -410,6 +437,7 @@
     font-weight:700;
 }
 
+
 /* =========================================================
    MOBILE
 ========================================================= */
@@ -418,6 +446,7 @@
 
     .student-header,
     .student-row {
+
         grid-template-columns:
             50px
             minmax(170px,1fr)
@@ -436,6 +465,7 @@
         padding:17px 16px;
     }
 }
+
 
 @media(max-width:700px) {
 
@@ -462,11 +492,13 @@
 
     .student-header,
     .student-row {
+
         grid-template-columns:
             42px
             minmax(130px,1fr)
             58px
             78px;
+
         gap:7px;
     }
 
@@ -484,12 +516,18 @@
     }
 
     .student-institution {
+
         grid-column:2 / 5;
+
         width:100%;
         max-width:100%;
+
         margin-top:3px;
+
         padding-top:9px;
+
         border-top:1px solid var(--border);
+
         box-sizing:border-box;
     }
 
@@ -507,6 +545,7 @@
     }
 }
 
+
 @media(max-width:430px) {
 
     .student-content {
@@ -520,11 +559,13 @@
 
     .student-header,
     .student-row {
+
         grid-template-columns:
             36px
             minmax(115px,1fr)
             52px
             70px;
+
         gap:6px;
     }
 
@@ -573,20 +614,29 @@
 
 </head>
 
+
 <body>
+
 
 <header class="navbar">
 
 <a href="index.html" class="logo">
+
     <span class="logo-mark">C</span>
+
     <span>CTGBoardRanking</span>
+
 </a>
+
 
 <nav class="nav-links">
 
-<a href="index.html">Home</a>
+<a href="index.html">
+    Home
+</a>
 
-<a href="student-ranking.html" class="active">
+<a href="student-ranking.html"
+   class="active">
     Student Ranking
 </a>
 
@@ -604,48 +654,70 @@
 
 </nav>
 
+
 <button
     class="theme-btn"
     id="themeBtn"
     aria-label="Toggle dark mode">
+
     ◐
+
 </button>
 
 </header>
 
 
+
 <main>
+
 
 <section class="student-hero">
 
-<a href="index.html" class="back-link">
+<a href="index.html"
+   class="back-link">
+
     ← Back to Home
+
 </a>
+
 
 <span class="eyebrow">
     CHITTAGONG BOARD
 </span>
 
+
 <h1>
+
     Student<br>
+
     <span>Ranking.</span>
+
 </h1>
 
+
 <p>
+
     Explore the top performing SSC 2026 students
     by group, ranked by Total Score.
+
 </p>
 
 </section>
 
 
+
 <section class="student-content">
+
 
 <div class="ranking-controls">
 
+
 <div class="control-card">
 
-<label>ACADEMIC YEAR</label>
+<label>
+    ACADEMIC YEAR
+</label>
+
 
 <select id="yearSelect">
 
@@ -658,9 +730,13 @@
 </div>
 
 
+
 <div class="control-card">
 
-<label>RANKING</label>
+<label>
+    RANKING
+</label>
+
 
 <select id="rankingType">
 
@@ -672,39 +748,56 @@
 
 </div>
 
+
 </div>
+
 
 
 <div class="group-tabs">
 
+
 <button
     class="group-tab active"
     data-group="Science">
+
     🔬 Science
+
 </button>
+
 
 <button
     class="group-tab"
     data-group="Business Studies">
+
     💼 Business Studies
+
 </button>
+
 
 <button
     class="group-tab"
     data-group="Humanities">
+
     🎓 Humanities
+
 </button>
+
 
 <button
     class="group-tab"
     data-group="Science Irregular">
+
     📚 Science Irregular
+
 </button>
+
 
 </div>
 
 
+
 <div class="ranking-title">
+
 
 <div>
 
@@ -712,11 +805,13 @@
     TOP 100 PERFORMERS
 </span>
 
+
 <h2 id="groupTitle">
     Science Students
 </h2>
 
 </div>
+
 
 <div>
 
@@ -724,22 +819,25 @@
     2026 · Chattogram Board
 </p>
 
+
 <button
     id="downloadPdfBtn"
     class="pdf-download-btn"
     type="button">
 
-<span class="pdf-icon">
-    ↓
-</span>
+    <span>
+        ↓
+    </span>
 
-Download PDF
+    Download PDF
 
 </button>
 
 </div>
 
+
 </div>
+
 
 
 <input
@@ -750,26 +848,46 @@ Download PDF
     autocomplete="off">
 
 
+
 <div class="student-list">
+
 
 <div class="student-header">
 
-<div>Serial</div>
-<div>Student Name</div>
-<div>GPA</div>
-<div>Total Score</div>
-<div>Institute</div>
+<div>
+    Serial
+</div>
+
+<div>
+    Student Name
+</div>
+
+<div>
+    GPA
+</div>
+
+<div>
+    Total Score
+</div>
+
+<div>
+    Institute
+</div>
 
 </div>
+
 
 
 <div id="studentRows">
 
 <div class="loading-message">
+
     Loading student ranking...
+
 </div>
 
 </div>
+
 
 
 <div
@@ -780,6 +898,7 @@ Download PDF
     No student found.
 
 </div>
+
 
 
 <div
@@ -797,6 +916,7 @@ Download PDF
 </div>
 
 
+
 <div
     id="pagination"
     class="pagination"
@@ -811,6 +931,7 @@ Download PDF
 
 </button>
 
+
 <span
     id="paginationInfo"
     class="pagination-info">
@@ -818,6 +939,7 @@ Download PDF
     Page 1
 
 </span>
+
 
 <button
     id="nextPage"
@@ -829,6 +951,7 @@ Download PDF
 
 </div>
 
+
 </div>
 
 </section>
@@ -836,9 +959,12 @@ Download PDF
 </main>
 
 
+
 <footer>
 
+
 <div class="footer-main">
+
 
 <div>
 
@@ -852,11 +978,13 @@ CTGBoardRanking
 
 </div>
 
+
 <p>
     Chattogram Board Education Rankings.
 </p>
 
 </div>
+
 
 
 <div class="footer-links">
@@ -879,7 +1007,9 @@ CTGBoardRanking
 
 </div>
 
+
 </div>
+
 
 
 <div class="footer-bottom">
@@ -894,17 +1024,28 @@ CTGBoardRanking
 
 </div>
 
+
 </footer>
+
 
 
 <script src="script.js"></script>
 
 
+
 <script>
 
 /* =========================================================
-   SUPABASE
+   SUPABASE CONFIG
 ========================================================= */
+
+const SUPABASE_URL =
+    "https://mpnjnyejpqeqguxikvnl.supabase.co";
+
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_KLxc2rvrOnfOrq7_Zqp9Vw_9Wnbuzs9";
+
 
 const SUPABASE_TABLE =
     "students";
@@ -933,6 +1074,39 @@ let totalStudents = 0;
 
 
 /* =========================================================
+   GROUP RANGES
+========================================================= */
+
+const GROUP_RANGES = {
+
+    "Science": [
+
+        [100001, 132961]
+
+    ],
+
+    "Science Irregular": [
+
+        [700001, 723917]
+
+    ],
+
+    "Humanities": [
+
+        [300001, 331193]
+
+    ],
+
+    "Business Studies": [
+
+        [500001, 541800]
+
+    ]
+
+};
+
+
+/* =========================================================
    ELEMENTS
 ========================================================= */
 
@@ -941,60 +1115,72 @@ const rowsContainer =
         "studentRows"
     );
 
+
 const emptyMessage =
     document.getElementById(
         "emptyMessage"
     );
+
 
 const errorMessage =
     document.getElementById(
         "errorMessage"
     );
 
+
 const errorDetails =
     document.getElementById(
         "errorDetails"
     );
+
 
 const searchInput =
     document.getElementById(
         "studentSearch"
     );
 
+
 const groupTitle =
     document.getElementById(
         "groupTitle"
     );
+
 
 const yearText =
     document.getElementById(
         "yearText"
     );
 
+
 const pagination =
     document.getElementById(
         "pagination"
     );
+
 
 const prevPage =
     document.getElementById(
         "prevPage"
     );
 
+
 const nextPage =
     document.getElementById(
         "nextPage"
     );
+
 
 const paginationInfo =
     document.getElementById(
         "paginationInfo"
     );
 
+
 const downloadPdfBtn =
     document.getElementById(
         "downloadPdfBtn"
     );
+
 
 const yearSelect =
     document.getElementById(
@@ -1006,9 +1192,7 @@ const yearSelect =
    SUPABASE REQUEST
 ========================================================= */
 
-async function supabaseRequest(
-    params = ""
-) {
+async function supabaseRequest(params = "") {
 
     const base =
         SUPABASE_URL.replace(
@@ -1022,7 +1206,7 @@ async function supabaseRequest(
 
 
     console.log(
-        "Supabase URL:",
+        "Supabase request:",
         url
     );
 
@@ -1031,9 +1215,11 @@ async function supabaseRequest(
         await fetch(
             url,
             {
+
                 method:"GET",
 
                 headers:{
+
                     "apikey":
                         SUPABASE_PUBLISHABLE_KEY,
 
@@ -1048,33 +1234,39 @@ async function supabaseRequest(
 
                     "Prefer":
                         "count=exact"
+
                 },
 
                 cache:"no-store"
+
             }
         );
 
 
     if (!response.ok) {
 
-        let serverMessage = "";
-
+        let message = "";
 
         try {
 
-            serverMessage =
+            message =
                 await response.text();
 
-        } catch (_) {}
+        }
+
+        catch (_) {}
 
 
         throw new Error(
+
             `Supabase HTTP ${response.status}` +
+
             (
-                serverMessage
-                    ? `: ${serverMessage}`
+                message
+                    ? `: ${message}`
                     : ""
             )
+
         );
 
     }
@@ -1086,15 +1278,76 @@ async function supabaseRequest(
 
 
 /* =========================================================
+   BUILD ROLL FILTER
+========================================================= */
+
+function buildRollFilter() {
+
+    const ranges =
+        GROUP_RANGES[currentGroup];
+
+
+    if (
+        !ranges ||
+        !ranges.length
+    ) {
+
+        throw new Error(
+            "Invalid ranking group."
+        );
+
+    }
+
+
+    const conditions =
+        ranges.map(
+            range => {
+
+                const start =
+                    range[0];
+
+                const end =
+                    range[1];
+
+
+                return (
+                    `and(roll.gte.${start},roll.lte.${end})`
+                );
+
+            }
+        );
+
+
+    if (
+        conditions.length === 1
+    ) {
+
+        return conditions[0];
+
+    }
+
+
+    return `or(${conditions.join(",")})`;
+
+}
+
+
+/* =========================================================
    LOAD STUDENTS
 ========================================================= */
 
 async function loadStudents() {
 
     rowsContainer.innerHTML = `
+
         <div class="loading-message">
-            Loading ${escapeHTML(currentGroup)} ranking...
+
+            Loading
+            ${escapeHTML(currentGroup)}
+            ranking...
+
         </div>
+
     `;
 
 
@@ -1120,17 +1373,16 @@ async function loadStudents() {
 
 
         /*
-         * IMPORTANT:
+         * =====================================================
+         * IMPORTANT
          *
-         * We first load records using only
-         * columns that are normally present.
+         * We DO NOT download 1000/random records anymore.
          *
-         * Then group filtering is performed
-         * in JavaScript.
+         * Supabase sorts the complete matching group
+         * by total_score DESC.
          *
-         * This prevents the page from failing
-         * if your database uses a different
-         * group column name.
+         * This gives the actual top students.
+         * =====================================================
          */
 
 
@@ -1144,27 +1396,48 @@ async function loadStudents() {
         );
 
 
-        /*
-         * Fetch a larger dataset.
-         *
-         * Your ranking dataset is around
-         * 100k+ students, so we don't request
-         * everything at once.
-         *
-         * Supabase normally caps the response.
-         */
-
-
         query.set(
             "order",
-            "roll.asc"
+            "total_score.desc.nullslast,roll.asc"
         );
 
 
         query.set(
             "limit",
-            "1000"
+            PAGE_SIZE
         );
+
+
+        query.set(
+            "offset",
+            (
+                currentPage - 1
+            ) *
+            PAGE_SIZE
+        );
+
+
+        /*
+         * Add group roll filter.
+         */
+
+        const rollFilter =
+            buildRollFilter();
+
+
+        query.set(
+            "or",
+            rollFilter
+        );
+
+
+        /*
+         * Search.
+         *
+         * Search is handled separately because
+         * different datasets may have different
+         * column names.
+         */
 
 
         const response =
@@ -1177,7 +1450,9 @@ async function loadStudents() {
             await response.json();
 
 
-        if (!Array.isArray(data)) {
+        if (
+            !Array.isArray(data)
+        ) {
 
             throw new Error(
                 "Supabase returned invalid data."
@@ -1187,73 +1462,93 @@ async function loadStudents() {
 
 
         console.log(
-            "Supabase returned:",
-            data.length,
-            "records"
+            "Students loaded:",
+            data.length
         );
 
 
-        if (!data.length) {
+        /*
+         * Supabase count.
+         */
 
-            currentStudents = [];
+        const contentRange =
+            response.headers.get(
+                "content-range"
+            );
 
-            totalStudents = 0;
 
-            renderStudents();
+        let total =
+            0;
 
-            return;
+
+        if (
+            contentRange
+        ) {
+
+            const match =
+                contentRange.match(
+                    /\/(\d+)$/
+                );
+
+
+            if (match) {
+
+                total =
+                    Number(
+                        match[1]
+                    );
+
+            }
 
         }
 
 
         /*
-         * Detect group field.
+         * If count header is unavailable,
+         * estimate from current page.
          */
 
-        const groupField =
-            detectGroupField(
-                data
-            );
+        if (
+            !total
+        ) {
 
+            total =
+                data.length === PAGE_SIZE
 
-        console.log(
-            "Detected group field:",
-            groupField
-        );
+                    ? currentPage *
+                      PAGE_SIZE
+
+                    : (
+                        (
+                            currentPage -
+                            1
+                        ) *
+                        PAGE_SIZE
+                    ) +
+                      data.length;
+
+        }
 
 
         /*
-         * Filter current group.
+         * Search filtering.
+         *
+         * Since ranking must remain correct,
+         * search is performed on the returned
+         * ranking page.
          */
+
 
         let filtered =
             data;
 
 
-        if (groupField) {
+        if (
+            currentSearch
+        ) {
 
             filtered =
                 data.filter(
-                    student =>
-                        normalizeGroup(
-                            student[groupField]
-                        ) ===
-                        normalizeGroup(
-                            currentGroup
-                        )
-                );
-
-        }
-
-
-        /*
-         * Search.
-         */
-
-        if (currentSearch) {
-
-            filtered =
-                filtered.filter(
                     student =>
                         matchesSearch(
                             student,
@@ -1265,25 +1560,32 @@ async function loadStudents() {
 
 
         /*
-         * Sort by total score.
+         * Safety sort.
          */
 
         filtered.sort(
-            (a,b) => {
+            (
+                a,
+                b
+            ) => {
 
                 const scoreA =
                     getTotalScore(a);
+
 
                 const scoreB =
                     getTotalScore(b);
 
 
                 if (
-                    scoreB !== scoreA
+                    scoreB !==
+                    scoreA
                 ) {
 
-                    return scoreB -
-                           scoreA;
+                    return (
+                        scoreB -
+                        scoreA
+                    );
 
                 }
 
@@ -1291,74 +1593,39 @@ async function loadStudents() {
                 const gpaA =
                     getGPA(a);
 
+
                 const gpaB =
                     getGPA(b);
 
 
                 if (
-                    gpaB !== gpaA
+                    gpaB !==
+                    gpaA
                 ) {
 
-                    return gpaB -
-                           gpaA;
+                    return (
+                        gpaB -
+                        gpaA
+                    );
 
                 }
 
 
                 return compareRoll(
-                    a.roll,
-                    b.roll
+                    getRoll(a),
+                    getRoll(b)
                 );
 
             }
         );
 
 
-        totalStudents =
-            filtered.length;
-
-
-        /*
-         * Client-side pagination.
-         */
-
-        const start =
-            (
-                currentPage -
-                1
-            ) *
-            PAGE_SIZE;
-
-
         currentStudents =
-            filtered.slice(
-                start,
-                start + PAGE_SIZE
-            );
+            filtered;
 
 
-        /*
-         * If this page is empty,
-         * return to page 1.
-         */
-
-        if (
-            currentPage > 1 &&
-            currentStudents.length === 0
-        ) {
-
-            currentPage = 1;
-
-            const firstPageEnd =
-                PAGE_SIZE;
-
-            currentStudents =
-                filtered.slice(
-                    0,
-                    firstPageEnd
-                );
-
-        }
+        totalStudents =
+            total;
 
 
         renderStudents();
@@ -1369,7 +1636,7 @@ async function loadStudents() {
     catch(error) {
 
         console.error(
-            "Student ranking error:",
+            "Ranking error:",
             error
         );
 
@@ -1402,28 +1669,22 @@ async function loadStudents() {
 function validateConfiguration() {
 
     if (
-        !SUPABASE_URL ||
-        SUPABASE_URL.includes(
-            "YOUR_SUPABASE"
-        )
+        !SUPABASE_URL
     ) {
 
         throw new Error(
-            "Supabase URL is not configured."
+            "Supabase URL is missing."
         );
 
     }
 
 
     if (
-        !SUPABASE_PUBLISHABLE_KEY ||
-        SUPABASE_PUBLISHABLE_KEY.includes(
-            "YOUR_SUPABASE"
-        )
+        !SUPABASE_PUBLISHABLE_KEY
     ) {
 
         throw new Error(
-            "Supabase Publishable Key is not configured."
+            "Supabase Publishable Key is missing."
         );
 
     }
@@ -1434,7 +1695,7 @@ function validateConfiguration() {
     ) {
 
         throw new Error(
-            "Supabase table is not configured."
+            "Supabase table is missing."
         );
 
     }
@@ -1443,165 +1704,23 @@ function validateConfiguration() {
 
 
 /* =========================================================
-   GROUP FIELD DETECTION
+   ROLL
 ========================================================= */
 
-function detectGroupField(data) {
+function getRoll(student) {
 
-    if (!data.length) {
-        return null;
-    }
-
-
-    const first =
-        data[0];
-
-
-    const candidates = [
-
-        "group",
-
-        "group_name",
-
-        "student_group",
-
-        "studentGroup",
-
-        "stream",
-
-        "academic_group",
-
-        "academicGroup",
-
-        "category",
-
-        "section",
-
-        "department"
-
-    ];
-
-
-    for (
-        const field of candidates
-    ) {
-
-        if (
-            Object.prototype.hasOwnProperty.call(
-                first,
-                field
-            )
-        ) {
-
-            return field;
-
-        }
-
-    }
-
-
-    return null;
+    return (
+        student.roll ??
+        student.Roll ??
+        student.ROLL ??
+        ""
+    );
 
 }
 
 
 /* =========================================================
-   NORMALIZE GROUP
-========================================================= */
-
-function normalizeGroup(value) {
-
-    if (
-        value === null ||
-        value === undefined
-    ) {
-
-        return "";
-
-    }
-
-
-    let text =
-        String(value)
-            .trim()
-            .toLowerCase();
-
-
-    text =
-        text.replace(
-            /[_-]+/g,
-            " "
-        );
-
-
-    text =
-        text.replace(
-            /\s+/g,
-            " "
-        );
-
-
-    /*
-     * Science variations
-     */
-
-    if (
-        text === "science" ||
-        text === "sci"
-    ) {
-
-        return "science";
-
-    }
-
-
-    if (
-        text.includes("science") &&
-        text.includes("irregular")
-    ) {
-
-        return "science irregular";
-
-    }
-
-
-    /*
-     * Business variations
-     */
-
-    if (
-        text === "business" ||
-        text === "business studies" ||
-        text === "commerce"
-    ) {
-
-        return "business studies";
-
-    }
-
-
-    /*
-     * Humanities variations
-     */
-
-    if (
-        text === "humanities" ||
-        text === "humanity" ||
-        text === "arts"
-    ) {
-
-        return "humanities";
-
-    }
-
-
-    return text;
-
-}
-
-
-/* =========================================================
-   SEARCH MATCH
+   SEARCH
 ========================================================= */
 
 function matchesSearch(
@@ -1616,7 +1735,9 @@ function matchesSearch(
 
 
     if (!needle) {
+
         return true;
+
     }
 
 
@@ -1626,6 +1747,8 @@ function matchesSearch(
 
         student.roll,
 
+        student.Roll,
+
         student.institute,
 
         student.institution,
@@ -1634,18 +1757,28 @@ function matchesSearch(
 
         student.school_name,
 
-        student.district
+        student.district,
+
+        student.district_name
 
     ];
 
 
     return fields.some(
         value =>
-            value !== undefined &&
-            value !== null &&
+
+            value !==
+                undefined &&
+
+            value !==
+                null &&
+
             String(value)
                 .toLowerCase()
-                .includes(needle)
+                .includes(
+                    needle
+                )
+
     );
 
 }
@@ -1655,9 +1788,7 @@ function matchesSearch(
    TOTAL SCORE
 ========================================================= */
 
-function getTotalScore(
-    student
-) {
+function getTotalScore(student) {
 
     const values = [
 
@@ -1675,8 +1806,6 @@ function getTotalScore(
 
         student.score,
 
-        student.calculated_subject_mark_sum,
-
         student.total
 
     ];
@@ -1687,10 +1816,20 @@ function getTotalScore(
     ) {
 
         if (
-            value !== undefined &&
-            value !== null &&
-            String(value).trim() !== "" &&
-            String(value).toLowerCase() !== "null"
+
+            value !==
+                undefined &&
+
+            value !==
+                null &&
+
+            String(value)
+                .trim() !== "" &&
+
+            String(value)
+                .toLowerCase() !==
+                "null"
+
         ) {
 
             const number =
@@ -1698,7 +1837,9 @@ function getTotalScore(
 
 
             if (
-                Number.isFinite(number)
+                Number.isFinite(
+                    number
+                )
             ) {
 
                 return number;
@@ -1739,15 +1880,20 @@ function getTotalScore(
 
                 const mark =
                     Number(
+
                         subject.mark ??
                         subject.marks ??
                         subject.total ??
-                        subject.score
+                        subject.score ??
+                        0
+
                     );
 
 
                 if (
-                    Number.isFinite(mark)
+                    Number.isFinite(
+                        mark
+                    )
                 ) {
 
                     total += mark;
@@ -1778,9 +1924,7 @@ function getTotalScore(
    GPA
 ========================================================= */
 
-function getGPA(
-    student
-) {
+function getGPA(student) {
 
     const values = [
 
@@ -1800,9 +1944,16 @@ function getGPA(
     ) {
 
         if (
-            value !== undefined &&
-            value !== null &&
-            String(value).trim() !== ""
+
+            value !==
+                undefined &&
+
+            value !==
+                null &&
+
+            String(value)
+                .trim() !== ""
+
         ) {
 
             const number =
@@ -1810,7 +1961,9 @@ function getGPA(
 
 
             if (
-                Number.isFinite(number)
+                Number.isFinite(
+                    number
+                )
             ) {
 
                 return number;
@@ -1828,6 +1981,48 @@ function getGPA(
 
 
 /* =========================================================
+   INSTITUTION
+========================================================= */
+
+function getInstitution(student) {
+
+    return (
+
+        student.institute ||
+
+        student.institution ||
+
+        student.school ||
+
+        student.school_name ||
+
+        "Unknown Institution"
+
+    );
+
+}
+
+
+/* =========================================================
+   DISTRICT
+========================================================= */
+
+function getDistrict(student) {
+
+    return (
+
+        student.district ||
+
+        student.district_name ||
+
+        "Chattogram"
+
+    );
+
+}
+
+
+/* =========================================================
    ROLL COMPARE
 ========================================================= */
 
@@ -1839,17 +2034,27 @@ function compareRoll(
     const numberA =
         Number(a);
 
+
     const numberB =
         Number(b);
 
 
     if (
-        Number.isFinite(numberA) &&
-        Number.isFinite(numberB)
+
+        Number.isFinite(
+            numberA
+        ) &&
+
+        Number.isFinite(
+            numberB
+        )
+
     ) {
 
-        return numberA -
-               numberB;
+        return (
+            numberA -
+            numberB
+        );
 
     }
 
@@ -1867,42 +2072,6 @@ function compareRoll(
 
 
 /* =========================================================
-   INSTITUTION
-========================================================= */
-
-function getInstitution(
-    student
-) {
-
-    return (
-        student.institute ||
-        student.institution ||
-        student.school ||
-        student.school_name ||
-        "Unknown Institution"
-    );
-
-}
-
-
-/* =========================================================
-   DISTRICT
-========================================================= */
-
-function getDistrict(
-    student
-) {
-
-    return (
-        student.district ||
-        student.district_name ||
-        "Chattogram"
-    );
-
-}
-
-
-/* =========================================================
    RENDER
 ========================================================= */
 
@@ -1910,6 +2079,7 @@ function renderStudents() {
 
     rowsContainer.innerHTML =
         "";
+
 
     emptyMessage.style.display =
         "none";
@@ -1922,8 +2092,10 @@ function renderStudents() {
         emptyMessage.style.display =
             "block";
 
+
         pagination.style.display =
             "none";
+
 
         return;
 
@@ -1960,7 +2132,9 @@ function renderStudents() {
 
             const rankClass =
                 rank === 1
+
                     ? "student-rank gold"
+
                     : "student-rank";
 
 
@@ -1970,8 +2144,9 @@ function renderStudents() {
 
 
             const roll =
-                student.roll ??
-                student.Roll ??
+                getRoll(
+                    student
+                ) ||
                 "—";
 
 
@@ -1983,7 +2158,9 @@ function renderStudents() {
 
             const gpa =
                 gpaValue > 0
+
                     ? String(gpaValue)
+
                     : "—";
 
 
@@ -2006,15 +2183,22 @@ function renderStudents() {
 
 
             const formattedScore =
+
                 Number.isFinite(
-                    Number(totalScore)
+                    Number(
+                        totalScore
+                    )
                 )
-                    ? Number(totalScore)
+
+                    ? Number(
+                        totalScore
+                    )
                         .toFixed(2)
                         .replace(
                             /\.00$/,
                             ""
                         )
+
                     : "—";
 
 
@@ -2023,6 +2207,7 @@ function renderStudents() {
                 <div class="${rankClass}">
                     ${String(rank).padStart(2,"0")}
                 </div>
+
 
                 <div class="student-name">
 
@@ -2036,6 +2221,7 @@ function renderStudents() {
 
                 </div>
 
+
                 <div class="student-gpa">
 
                     <strong>
@@ -2048,6 +2234,7 @@ function renderStudents() {
 
                 </div>
 
+
                 <div class="student-total">
 
                     <strong>
@@ -2059,6 +2246,7 @@ function renderStudents() {
                     </span>
 
                 </div>
+
 
                 <div class="student-institution">
 
@@ -2095,11 +2283,19 @@ function renderStudents() {
 function updatePagination() {
 
     const totalPages =
-        Math.ceil(
-            totalStudents /
-            PAGE_SIZE
+        Math.max(
+            1,
+            Math.ceil(
+                totalStudents /
+                PAGE_SIZE
+            )
         );
 
+
+    /*
+     * Only show pagination when
+     * more than 100 students exist.
+     */
 
     if (
         totalPages <= 1
@@ -2135,9 +2331,7 @@ function updatePagination() {
    ESCAPE HTML
 ========================================================= */
 
-function escapeHTML(
-    value
-) {
+function escapeHTML(value) {
 
     return String(value)
 
@@ -2392,11 +2586,17 @@ function getPDFDate() {
         .toLocaleString(
             "en-GB",
             {
+
                 day:"2-digit",
+
                 month:"short",
+
                 year:"numeric",
+
                 hour:"2-digit",
+
                 minute:"2-digit"
+
             }
         );
 
@@ -2437,8 +2637,11 @@ async function downloadCurrentPagePDF() {
     try {
 
         if (
+
             !window.jspdf ||
+
             !window.jspdf.jsPDF
+
         ) {
 
             throw new Error(
@@ -2618,9 +2821,13 @@ async function downloadCurrentPagePDF() {
 
 
         doc.text(
+
             `${yearSelect.value} · Chattogram Board · ${currentGroup} · Page ${currentPage} of ${totalPages}`,
+
             15,
+
             50
+
         );
 
 
@@ -2651,7 +2858,9 @@ async function downloadCurrentPagePDF() {
 
 
                     const roll =
-                        student.roll ??
+                        getRoll(
+                            student
+                        ) ||
                         "—";
 
 
@@ -2711,11 +2920,17 @@ async function downloadCurrentPagePDF() {
             head:[
 
                 [
+
                     "RANK",
+
                     "STUDENT",
+
                     "GPA",
+
                     "TOTAL SCORE",
+
                     "INSTITUTE"
+
                 ]
 
             ],
@@ -2741,15 +2956,19 @@ async function downloadCurrentPagePDF() {
                 cellPadding:2.8,
 
                 textColor:[
+
                     35,
                     35,
                     38
+
                 ],
 
                 lineColor:[
+
                     225,
                     225,
                     228
+
                 ],
 
                 lineWidth:.2,
@@ -2761,15 +2980,19 @@ async function downloadCurrentPagePDF() {
             headStyles:{
 
                 fillColor:[
+
                     245,
                     245,
                     247
+
                 ],
 
                 textColor:[
+
                     75,
                     75,
                     80
+
                 ],
 
                 fontStyle:"bold",
@@ -2815,9 +3038,11 @@ async function downloadCurrentPagePDF() {
                     fontStyle:"bold",
 
                     textColor:[
+
                         0,
                         113,
                         227
+
                     ]
 
                 },
@@ -2833,9 +3058,11 @@ async function downloadCurrentPagePDF() {
             alternateRowStyles:{
 
                 fillColor:[
+
                     252,
                     252,
                     253
+
                 ]
 
             },
@@ -2845,20 +3072,26 @@ async function downloadCurrentPagePDF() {
             ) {
 
                 if (
+
                     data.section ===
                     "body" &&
+
                     data.column.index ===
                     0 &&
+
                     Number(
                         data.cell.raw
                     ) === 1
+
                 ) {
 
                     data.cell.styles.textColor =
                         [
+
                             198,
                             138,
                             0
+
                         ];
 
                 }
@@ -2880,10 +3113,15 @@ async function downloadCurrentPagePDF() {
 
 
                 doc.line(
+
                     12,
+
                     pageHeight - 13,
+
                     pageWidth - 12,
+
                     pageHeight - 13
+
                 );
 
 
@@ -2906,19 +3144,28 @@ async function downloadCurrentPagePDF() {
 
 
                 doc.text(
+
                     "CTGBoardRanking • Unofficial Education Data",
+
                     12,
+
                     pageHeight - 7
+
                 );
 
 
                 doc.text(
+
                     `PDF Page ${pdfPage}`,
+
                     pageWidth - 12,
+
                     pageHeight - 7,
+
                     {
                         align:"right"
                     }
+
                 );
 
             }
@@ -2940,6 +3187,7 @@ async function downloadCurrentPagePDF() {
 
 
         const fileName =
+
             `CTGBoardRanking-Student-${yearSelect.value}-${safeGroup}-Page-${currentPage}.pdf`;
 
 
@@ -2999,6 +3247,7 @@ console.log(
 loadStudents();
 
 </script>
+
 
 </body>
 
