@@ -33,10 +33,6 @@
 
 <style>
 
-/* =========================================================
-   HERO
-========================================================= */
-
 .student-hero {
     max-width:1100px;
     margin:auto;
@@ -71,21 +67,11 @@
     font-size:17px;
 }
 
-
-/* =========================================================
-   CONTENT
-========================================================= */
-
 .student-content {
     max-width:1100px;
     margin:auto;
     padding:20px;
 }
-
-
-/* =========================================================
-   CONTROLS
-========================================================= */
 
 .ranking-controls {
     display:grid;
@@ -124,11 +110,6 @@
     outline:none;
 }
 
-
-/* =========================================================
-   GROUP TABS
-========================================================= */
-
 .group-tabs {
     display:flex;
     gap:8px;
@@ -154,11 +135,6 @@
     color:var(--bg);
 }
 
-
-/* =========================================================
-   TITLE
-========================================================= */
-
 .ranking-title {
     display:flex;
     justify-content:space-between;
@@ -177,11 +153,6 @@
     color:var(--muted);
     font-size:13px;
 }
-
-
-/* =========================================================
-   PDF BUTTON
-========================================================= */
 
 .pdf-download-btn {
     display:inline-flex;
@@ -225,20 +196,10 @@
     line-height:1;
 }
 
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
 .student-search {
     margin-bottom:18px;
     background:white;
 }
-
-
-/* =========================================================
-   STUDENT LIST
-========================================================= */
 
 .student-list {
     width:100%;
@@ -249,71 +210,40 @@
     box-shadow:var(--shadow);
 }
 
-
-/* =========================================================
-   TABLE HEADER
-========================================================= */
-
 .student-header {
-
     display:grid;
-
     grid-template-columns:
         60px
         minmax(190px,1fr)
         80px
         110px
         minmax(230px,1.15fr);
-
     align-items:center;
-
     gap:12px;
-
     padding:16px 22px;
-
     background:rgba(245,245,247,.9);
-
     border-bottom:1px solid var(--border);
-
     color:var(--muted);
-
     font-size:10px;
-
     font-weight:800;
-
     letter-spacing:.7px;
-
     text-transform:uppercase;
 }
 
-
-/* =========================================================
-   STUDENT ROW
-========================================================= */
-
 .student-row {
-
     display:grid;
-
     grid-template-columns:
         60px
         minmax(190px,1fr)
         80px
         110px
         minmax(230px,1.15fr);
-
     align-items:center;
-
     gap:12px;
-
     padding:18px 22px;
-
     border-bottom:1px solid var(--border);
-
     transition:.2s;
-
     min-width:0;
-
     box-sizing:border-box;
 }
 
@@ -325,11 +255,6 @@
     background:rgba(0,113,227,.035);
 }
 
-
-/* =========================================================
-   RANK
-========================================================= */
-
 .student-rank {
     font-size:17px;
     font-weight:800;
@@ -339,11 +264,6 @@
 .student-rank.gold {
     color:#c68a00;
 }
-
-
-/* =========================================================
-   NAME
-========================================================= */
 
 .student-name {
     min-width:0;
@@ -368,11 +288,6 @@
     line-height:1.3;
 }
 
-
-/* =========================================================
-   GPA
-========================================================= */
-
 .student-gpa {
     min-width:0;
 }
@@ -389,11 +304,6 @@
     font-size:9px;
     margin-top:3px;
 }
-
-
-/* =========================================================
-   TOTAL SCORE
-========================================================= */
 
 .student-total {
     min-width:0;
@@ -412,11 +322,6 @@
     font-size:9px;
     margin-top:3px;
 }
-
-
-/* =========================================================
-   INSTITUTION
-========================================================= */
 
 .student-institution {
     min-width:0;
@@ -442,11 +347,6 @@
     line-height:1.3;
 }
 
-
-/* =========================================================
-   MESSAGES
-========================================================= */
-
 .loading-message,
 .empty-message,
 .error-message {
@@ -458,11 +358,6 @@
 .error-message {
     color:#d93025;
 }
-
-
-/* =========================================================
-   PAGINATION
-========================================================= */
 
 .pagination {
     display:flex;
@@ -504,46 +399,30 @@
     font-weight:700;
 }
 
-
-/* =========================================================
-   TABLET
-========================================================= */
-
 @media(max-width:900px) {
 
     .student-header {
-
         grid-template-columns:
             50px
             minmax(170px,1fr)
             70px
             95px
             minmax(190px,1fr);
-
         gap:9px;
-
         padding:15px 16px;
     }
 
     .student-row {
-
         grid-template-columns:
             50px
             minmax(170px,1fr)
             70px
             95px
             minmax(190px,1fr);
-
         gap:9px;
-
         padding:17px 16px;
     }
 }
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
 
 @media(max-width:700px) {
 
@@ -569,17 +448,13 @@
     }
 
     .student-header {
-
         grid-template-columns:
             42px
             minmax(130px,1fr)
             58px
             78px;
-
         gap:7px;
-
         padding:13px 12px;
-
         font-size:8px;
     }
 
@@ -588,32 +463,22 @@
     }
 
     .student-row {
-
         grid-template-columns:
             42px
             minmax(130px,1fr)
             58px
             78px;
-
         gap:7px;
-
         padding:15px 12px;
     }
 
     .student-institution {
-
         grid-column:2 / 5;
-
         width:100%;
-
         max-width:100%;
-
         margin-top:3px;
-
         padding-top:9px;
-
         border-top:1px solid var(--border);
-
         box-sizing:border-box;
     }
 
@@ -645,9 +510,6 @@
     .student-institution strong {
         font-size:10.5px;
         line-height:1.4;
-        white-space:normal;
-        overflow-wrap:anywhere;
-        word-break:break-word;
     }
 
     .student-institution span {
@@ -655,11 +517,6 @@
         margin-top:3px;
     }
 }
-
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
 
 @media(max-width:430px) {
 
@@ -673,28 +530,22 @@
     }
 
     .student-header {
-
         grid-template-columns:
             36px
             minmax(115px,1fr)
             52px
             70px;
-
         gap:6px;
-
         padding:12px 10px;
     }
 
     .student-row {
-
         grid-template-columns:
             36px
             minmax(115px,1fr)
             52px
             70px;
-
         gap:6px;
-
         padding:14px 10px;
     }
 
@@ -746,11 +597,6 @@
 
 <body>
 
-
-<!-- =========================================================
-     NAVBAR
-========================================================= -->
-
 <header class="navbar">
 
 <a href="index.html" class="logo">
@@ -760,7 +606,6 @@
 <span>CTGBoardRanking</span>
 
 </a>
-
 
 <nav class="nav-links">
 
@@ -787,7 +632,6 @@ Statistics
 
 </nav>
 
-
 <button
     class="theme-btn"
     id="themeBtn"
@@ -800,12 +644,7 @@ Statistics
 </header>
 
 
-<!-- =========================================================
-     MAIN
-========================================================= -->
-
 <main>
-
 
 <section class="student-hero">
 
@@ -816,11 +655,9 @@ Statistics
 
 </a>
 
-
 <span class="eyebrow">
 CHITTAGONG BOARD
 </span>
-
 
 <h1>
 
@@ -829,7 +666,6 @@ Student<br>
 <span>Ranking.</span>
 
 </h1>
-
 
 <p>
 
@@ -844,12 +680,7 @@ by group, ranked by Total Score.
 <section class="student-content">
 
 
-<!-- =====================================================
-     CONTROLS
-===================================================== -->
-
 <div class="ranking-controls">
-
 
 <div class="control-card">
 
@@ -887,12 +718,7 @@ Total Score Ranking
 </div>
 
 
-<!-- =====================================================
-     GROUP TABS
-===================================================== -->
-
 <div class="group-tabs">
-
 
 <button
     class="group-tab active"
@@ -929,13 +755,8 @@ Total Score Ranking
 
 </button>
 
-
 </div>
 
-
-<!-- =====================================================
-     TITLE + PDF
-===================================================== -->
 
 <div class="ranking-title">
 
@@ -977,10 +798,6 @@ Science Students
 </div>
 
 
-<!-- =====================================================
-     SEARCH
-===================================================== -->
-
 <input
     type="search"
     id="studentSearch"
@@ -988,10 +805,6 @@ Science Students
     placeholder="Search student, roll or institution..."
     autocomplete="off">
 
-
-<!-- =====================================================
-     STUDENT LIST
-========================================================= -->
 
 <div class="student-list">
 
@@ -1052,10 +865,6 @@ Student ranking data could not be loaded.
 </div>
 
 
-<!-- =====================================================
-     PAGINATION
-========================================================= -->
-
 <div
     id="pagination"
     class="pagination"
@@ -1097,10 +906,6 @@ Next →
 
 </main>
 
-
-<!-- =========================================================
-     FOOTER
-========================================================= -->
 
 <footer>
 
@@ -1169,12 +974,21 @@ Education Data & Statistics
 <script>
 
 /* =========================================================
-   DATA URL
+   SUPABASE CONFIGURATION
 ========================================================= */
 
-const DATA_URL =
-    "scraper/students.json?v=" +
-    Date.now();
+const SUPABASE_CONFIG_URL =
+    "supabase-config.yml?v=" + Date.now();
+
+
+/* =========================================================
+   SUPABASE VARIABLES
+========================================================= */
+
+let SUPABASE_URL = "";
+let SUPABASE_ANON_KEY = "";
+
+let SUPABASE_TABLE = "students";
 
 
 /* =========================================================
@@ -1258,69 +1072,355 @@ const yearSelect =
 
 
 /* =========================================================
-   LOAD STUDENTS
+   YAML VALUE READER
+========================================================= */
+
+function getYamlValue(
+    yaml,
+    keys
+) {
+
+    const lines =
+        yaml.split(/\r?\n/);
+
+
+    for (
+        const key of keys
+    ) {
+
+        const regex =
+            new RegExp(
+                "^\\s*" +
+                key.replace(
+                    /[.*+?^${}()|[\]\\]/g,
+                    "\\$&"
+                ) +
+                "\\s*:\\s*(.+?)\\s*$",
+                "i"
+            );
+
+
+        for (
+            const line of lines
+        ) {
+
+            const match =
+                line.match(regex);
+
+
+            if (match) {
+
+                return match[1]
+                    .trim()
+                    .replace(
+                        /^["']|["']$/g,
+                        ""
+                    );
+
+            }
+
+        }
+
+    }
+
+
+    return "";
+
+}
+
+
+/* =========================================================
+   LOAD SUPABASE CONFIG
+========================================================= */
+
+async function loadSupabaseConfig() {
+
+    const response =
+        await fetch(
+            SUPABASE_CONFIG_URL,
+            {
+                cache:"no-store"
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "supabase-config.yml could not be loaded. HTTP " +
+            response.status
+        );
+
+    }
+
+
+    const yaml =
+        await response.text();
+
+
+    /*
+       Supports several common names.
+    */
+
+    SUPABASE_URL =
+        getYamlValue(
+            yaml,
+            [
+                "SUPABASE_URL",
+                "supabase_url",
+                "url",
+                "project_url"
+            ]
+        );
+
+
+    SUPABASE_ANON_KEY =
+        getYamlValue(
+            yaml,
+            [
+                "SUPABASE_ANON_KEY",
+                "supabase_anon_key",
+                "SUPABASE_KEY",
+                "supabase_key",
+                "anon_key",
+                "anonKey"
+            ]
+        );
+
+
+    const table =
+        getYamlValue(
+            yaml,
+            [
+                "SUPABASE_TABLE",
+                "supabase_table",
+                "STUDENTS_TABLE",
+                "students_table",
+                "table"
+            ]
+        );
+
+
+    if (table) {
+
+        SUPABASE_TABLE =
+            table;
+
+    }
+
+
+    /*
+       Remove trailing slash.
+    */
+
+    SUPABASE_URL =
+        SUPABASE_URL
+            .replace(
+                /\/+$/,
+                ""
+            );
+
+
+    if (!SUPABASE_URL) {
+
+        throw new Error(
+            "SUPABASE_URL was not found in supabase-config.yml"
+        );
+
+    }
+
+
+    if (!SUPABASE_ANON_KEY) {
+
+        throw new Error(
+            "SUPABASE_ANON_KEY was not found in supabase-config.yml"
+        );
+
+    }
+
+
+    console.log(
+        "Supabase URL loaded:",
+        SUPABASE_URL
+    );
+
+
+    console.log(
+        "Supabase table:",
+        SUPABASE_TABLE
+    );
+
+}
+
+
+/* =========================================================
+   LOAD ALL STUDENTS FROM SUPABASE
 ========================================================= */
 
 async function loadStudents() {
 
     try {
 
-        const response =
-            await fetch(DATA_URL, {
-                cache:"no-store"
-            });
+        await loadSupabaseConfig();
 
 
-        if (!response.ok) {
+        allStudents = [];
 
-            throw new Error(
-                "HTTP " +
-                response.status
+
+        /*
+           Supabase REST API normally limits
+           returned rows.
+
+           So we load 1000 rows per request.
+        */
+
+        const CHUNK_SIZE =
+            1000;
+
+
+        let from =
+            0;
+
+
+        while (true) {
+
+            const to =
+                from +
+                CHUNK_SIZE -
+                1;
+
+
+            const url =
+                SUPABASE_URL +
+                "/rest/v1/" +
+                encodeURIComponent(
+                    SUPABASE_TABLE
+                ) +
+                "?select=*";
+
+
+            const response =
+                await fetch(
+                    url,
+                    {
+                        method:"GET",
+
+                        headers:{
+                            "apikey":
+                                SUPABASE_ANON_KEY,
+
+                            "Authorization":
+                                "Bearer " +
+                                SUPABASE_ANON_KEY,
+
+                            "Range":
+                                `${from}-${to}`,
+
+                            "Range-Unit":
+                                "items",
+
+                            "Prefer":
+                                "count=exact"
+                        },
+
+                        cache:"no-store"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                const errorText =
+                    await response.text();
+
+
+                throw new Error(
+                    "Supabase HTTP " +
+                    response.status +
+                    ": " +
+                    errorText
+                );
+
+            }
+
+
+            const batch =
+                await response.json();
+
+
+            if (
+                !Array.isArray(batch)
+            ) {
+
+                throw new Error(
+                    "Supabase returned invalid data."
+                );
+
+            }
+
+
+            allStudents =
+                allStudents.concat(
+                    batch
+                );
+
+
+            console.log(
+                "Supabase students loaded:",
+                allStudents.length
             );
 
+
+            if (
+                batch.length <
+                CHUNK_SIZE
+            ) {
+
+                break;
+
+            }
+
+
+            from +=
+                CHUNK_SIZE;
+
+
+            /*
+               Safety limit.
+               Your SSC dataset is around
+               100k+ students, so this is enough.
+            */
+
+            if (
+                from > 200000
+            ) {
+
+                break;
+
+            }
+
         }
 
 
-        const data =
-            await response.json();
-
-
-        if (Array.isArray(data)) {
-
-            allStudents =
-                data;
-
-        }
-
-        else if (
-            data &&
-            Array.isArray(
-                data.students
-            )
+        if (
+            !allStudents.length
         ) {
 
-            allStudents =
-                data.students;
-
-        }
-
-        else {
-
             throw new Error(
-                "Invalid students.json format"
+                "No students found in Supabase table."
             );
 
         }
 
 
         console.log(
-            "Students loaded:",
+            "TOTAL STUDENTS:",
             allStudents.length
         );
 
 
         console.log(
-            "First student:",
+            "FIRST STUDENT:",
             allStudents[0]
         );
 
@@ -1336,13 +1436,18 @@ async function loadStudents() {
     catch(error) {
 
         console.error(
-            "Student ranking error:",
+            "Supabase student ranking error:",
             error
         );
 
 
         rowsContainer.innerHTML =
             "";
+
+
+        errorMessage.textContent =
+            "Student ranking data could not be loaded. " +
+            error.message;
 
 
         errorMessage.style.display =
@@ -1369,7 +1474,11 @@ function normalizeGroup(group) {
 
     return String(group)
         .trim()
-        .toLowerCase();
+        .toLowerCase()
+        .replace(
+            /\s+/g,
+            " "
+        );
 
 }
 
@@ -1391,7 +1500,74 @@ function matchesGroup(student) {
         );
 
 
-    return group === selected;
+    /*
+       Exact match first.
+    */
+
+    if (
+        group === selected
+    ) {
+
+        return true;
+
+    }
+
+
+    /*
+       Handle common variations.
+    */
+
+    if (
+        selected ===
+        "science irregular"
+    ) {
+
+        return (
+            group === "science/irregular" ||
+            group === "science irregular" ||
+            group === "science-irregular" ||
+            group === "science irregular student" ||
+            group.includes(
+                "science"
+            ) &&
+            group.includes(
+                "irregular"
+            )
+        );
+
+    }
+
+
+    if (
+        selected ===
+        "business studies"
+    ) {
+
+        return (
+            group === "business" ||
+            group === "business studies" ||
+            group === "business_studies" ||
+            group === "commerce"
+        );
+
+    }
+
+
+    if (
+        selected ===
+        "humanities"
+    ) {
+
+        return (
+            group === "humanities" ||
+            group === "humanity" ||
+            group === "arts"
+        );
+
+    }
+
+
+    return false;
 
 }
 
@@ -1403,7 +1579,9 @@ function matchesGroup(student) {
 function matchesSearch(student) {
 
     if (!currentSearch) {
+
         return true;
+
     }
 
 
@@ -1426,6 +1604,8 @@ function matchesSearch(student) {
         student.calculated_subject_mark_sum,
 
         student.total_score,
+
+        student.totalScore,
 
         student.total_marks,
 
@@ -1453,19 +1633,13 @@ function matchesSearch(student) {
 
 /* =========================================================
    GET TOTAL SCORE
-   IMPORTANT:
-   calculated_subject_mark_sum = MAIN SCORE
 ========================================================= */
 
 function getTotalScore(student) {
 
     const values = [
 
-        /* MAIN FIELD */
-
         student.calculated_subject_mark_sum,
-
-        /* FALLBACK FIELDS */
 
         student.total_score,
 
@@ -1500,7 +1674,9 @@ function getTotalScore(student) {
 
 
             if (
-                Number.isFinite(number)
+                Number.isFinite(
+                    number
+                )
             ) {
 
                 return number;
@@ -1512,7 +1688,9 @@ function getTotalScore(student) {
     }
 
 
-    /* SUBJECT MARK FALLBACK */
+    /*
+       Subject marks fallback.
+    */
 
     if (
         Array.isArray(
@@ -1535,12 +1713,16 @@ function getTotalScore(student) {
 
 
                 if (
-                    Number.isFinite(mark)
+                    Number.isFinite(
+                        mark
+                    )
                 ) {
 
-                    total += mark;
+                    total +=
+                        mark;
 
-                    found = true;
+                    found =
+                        true;
 
                 }
 
@@ -1549,7 +1731,9 @@ function getTotalScore(student) {
 
 
         if (found) {
+
             return total;
+
         }
 
     }
@@ -1574,11 +1758,15 @@ function getGPA(student) {
     ) {
 
         const gpa =
-            Number(student.gpa);
+            Number(
+                student.gpa
+            );
 
 
         if (
-            Number.isFinite(gpa)
+            Number.isFinite(
+                gpa
+            )
         ) {
 
             return gpa;
@@ -1595,24 +1783,12 @@ function getGPA(student) {
 
 /* =========================================================
    SORT STUDENTS
-=========================================================
-
-   FINAL RANKING RULE:
-
-   1. TOTAL SCORE DESCENDING
-   2. GPA DESCENDING
-   3. ROLL ASCENDING
-
 ========================================================= */
 
 function sortStudents(list) {
 
     return [...list].sort(
         (a,b) => {
-
-            /* =========================================
-               1. TOTAL SCORE
-            ========================================= */
 
             const scoreA =
                 getTotalScore(a);
@@ -1633,10 +1809,6 @@ function sortStudents(list) {
             }
 
 
-            /* =========================================
-               2. GPA
-            ========================================= */
-
             const gpaA =
                 getGPA(a);
 
@@ -1655,10 +1827,6 @@ function sortStudents(list) {
 
             }
 
-
-            /* =========================================
-               3. ROLL
-            ========================================= */
 
             const rollA =
                 Number(a.roll) ||
@@ -1690,9 +1858,13 @@ function getFilteredStudents() {
         allStudents.filter(
             student =>
 
-                matchesGroup(student) &&
+                matchesGroup(
+                    student
+                ) &&
 
-                matchesSearch(student)
+                matchesSearch(
+                    student
+                )
         );
 
 
@@ -1866,7 +2038,6 @@ function renderStudents() {
                     ${String(rank).padStart(2,"0")}
                 </div>
 
-
                 <div class="student-name">
 
                     <strong>
@@ -1878,7 +2049,6 @@ function renderStudents() {
                     </span>
 
                 </div>
-
 
                 <div class="student-gpa">
 
@@ -1893,7 +2063,6 @@ function renderStudents() {
                     </span>
 
                 </div>
-
 
                 <div class="student-total">
 
@@ -1910,7 +2079,6 @@ function renderStudents() {
                     </span>
 
                 </div>
-
 
                 <div class="student-institution">
 
@@ -1938,10 +2106,6 @@ function renderStudents() {
         }
     );
 
-
-    /* =====================================================
-       PAGINATION
-    ===================================================== */
 
     if (
         totalPages <= 1
@@ -2144,8 +2308,6 @@ async function downloadCurrentPagePDF() {
             );
 
 
-        /* HEADER */
-
         doc.setFillColor(
             248,
             248,
@@ -2232,8 +2394,6 @@ async function downloadCurrentPagePDF() {
         );
 
 
-        /* TITLE */
-
         doc.setTextColor(
             17,
             17,
@@ -2283,8 +2443,6 @@ async function downloadCurrentPagePDF() {
             50
         );
 
-
-        /* TABLE */
 
         const tableData =
             pageStudents.map(
