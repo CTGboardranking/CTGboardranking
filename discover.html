@@ -1,977 +1,1534 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Discover Institutions | CTG Board Ranking</title>
-    <meta name="description"
-          content="Explore SSC 2026 institution statistics, district performance and institution rankings.">
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg: #f5f5f7;
-            --card: rgba(255,255,255,.78);
-            --card-solid: #ffffff;
-            --text: #1d1d1f;
-            --muted: #6e6e73;
-            --border: rgba(0,0,0,.08);
-            --accent: #0071e3;
-            --accent2: #5856d6;
-            --success: #34c759;
-            --danger: #ff3b30;
-            --shadow: 0 15px 45px rgba(0,0,0,.07);
-            --radius: 24px;
-        }
-
-        body.dark {
-            --bg: #000;
-            --card: rgba(28,28,30,.78);
-            --card-solid: #1c1c1e;
-            --text: #f5f5f7;
-            --muted: #a1a1a6;
-            --border: rgba(255,255,255,.10);
-            --shadow: 0 15px 45px rgba(0,0,0,.35);
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
-                         "SF Pro Text", "Segoe UI", Arial, sans-serif;
-            background:
-                radial-gradient(circle at 10% 0%, rgba(0,113,227,.10), transparent 28%),
-                radial-gradient(circle at 90% 10%, rgba(88,86,214,.10), transparent 28%),
-                var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            transition: background .3s, color .3s;
-        }
-
-        /* NAVBAR */
-
-        .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            background: rgba(255,255,255,.72);
-            border-bottom: 1px solid var(--border);
-        }
-
-        body.dark .navbar {
-            background: rgba(0,0,0,.72);
-        }
-
-        .nav-inner {
-            max-width: 1180px;
-            margin: auto;
-            min-height: 70px;
-            padding: 0 22px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-        }
-
-        .brand {
-            text-decoration: none;
-            color: var(--text);
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: -.5px;
-        }
-
-        .brand span {
-            color: var(--accent);
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .nav-btn {
-            width: 42px;
-            height: 42px;
-            border: 1px solid var(--border);
-            background: var(--card);
-            color: var(--text);
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 18px;
-            transition: .2s;
-        }
-
-        .nav-btn:hover {
-            transform: scale(1.06);
-        }
-
-        /* HERO */
-
-        .hero {
-            max-width: 1180px;
-            margin: auto;
-            padding: 75px 22px 35px;
-            text-align: center;
-        }
-
-        .eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            padding: 8px 14px;
-            border-radius: 999px;
-            background: rgba(0,113,227,.10);
-            color: var(--accent);
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 18px;
-        }
-
-        .hero h1 {
-            font-size: clamp(38px, 7vw, 70px);
-            line-height: 1.02;
-            letter-spacing: -3px;
-            margin-bottom: 18px;
-        }
-
-        .hero h1 span {
-            background: linear-gradient(100deg, #0071e3, #5856d6);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .hero p {
-            max-width: 650px;
-            margin: auto;
-            color: var(--muted);
-            font-size: 17px;
-            line-height: 1.65;
-        }
-
-        /* SEARCH */
-
-        .search-wrap {
-            max-width: 760px;
-            margin: 30px auto 0;
-            position: relative;
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 7px;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(20px);
-        }
-
-        .search-icon {
-            width: 45px;
-            height: 45px;
-            display: grid;
-            place-items: center;
-            color: var(--muted);
-            font-size: 20px;
-        }
-
-        #institutionSearch {
-            flex: 1;
-            border: 0;
-            outline: 0;
-            background: transparent;
-            color: var(--text);
-            font-size: 16px;
-            min-width: 0;
-        }
-
-        #institutionSearch::placeholder {
-            color: var(--muted);
-        }
-
-        .search-btn {
-            border: 0;
-            border-radius: 15px;
-            padding: 13px 20px;
-            background: var(--accent);
-            color: white;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        /* MAIN */
-
-        .container {
-            max-width: 1180px;
-            margin: auto;
-            padding: 15px 22px 70px;
-        }
-
-        .section {
-            margin-top: 30px;
-        }
-
-        .section-heading {
-            display: flex;
-            align-items: end;
-            justify-content: space-between;
-            gap: 20px;
-            margin-bottom: 18px;
-        }
-
-        .section-heading h2 {
-            font-size: 28px;
-            letter-spacing: -1px;
-        }
-
-        .section-heading p {
-            color: var(--muted);
-            margin-top: 5px;
-        }
-
-        /* STAT CARDS */
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-        }
-
-        .stat-card {
-            position: relative;
-            overflow: hidden;
-            padding: 23px;
-            border-radius: var(--radius);
-            background: var(--card);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(20px);
-            transition: transform .25s, box-shadow .25s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-icon {
-            width: 46px;
-            height: 46px;
-            display: grid;
-            place-items: center;
-            border-radius: 14px;
-            background: rgba(0,113,227,.10);
-            color: var(--accent);
-            font-size: 21px;
-            margin-bottom: 18px;
-        }
-
-        .stat-value {
-            font-size: 30px;
-            font-weight: 750;
-            letter-spacing: -1px;
-        }
-
-        .stat-label {
-            color: var(--muted);
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        /* SEARCH RESULT */
-
-        .result-box {
-            display: none;
-            margin-top: 18px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 20px;
-            box-shadow: var(--shadow);
-        }
-
-        .result-box.show {
-            display: block;
-        }
-
-        .result-header {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .result-header h3 {
-            font-size: 20px;
-        }
-
-        .result-count {
-            color: var(--muted);
-            font-size: 13px;
-        }
-
-        .institution-results {
-            display: grid;
-            gap: 10px;
-        }
-
-        .institution-item {
-            padding: 17px;
-            border: 1px solid var(--border);
-            border-radius: 17px;
-            background: var(--card-solid);
-            cursor: pointer;
-            transition: .2s;
-        }
-
-        .institution-item:hover {
-            border-color: rgba(0,113,227,.35);
-            transform: translateX(3px);
-        }
-
-        .institution-name {
-            font-weight: 700;
-            font-size: 16px;
-        }
-
-        .institution-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 7px;
-            margin-top: 9px;
-        }
-
-        .pill {
-            padding: 5px 9px;
-            border-radius: 999px;
-            background: rgba(0,113,227,.08);
-            color: var(--accent);
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        /* FEATURE CARDS */
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-        }
-
-        .feature-card {
-            padding: 26px;
-            min-height: 190px;
-            border-radius: var(--radius);
-            background: var(--card);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(20px);
-            transition: .25s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .feature-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 16px;
-            display: grid;
-            place-items: center;
-            background: linear-gradient(135deg, rgba(0,113,227,.13), rgba(88,86,214,.13));
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .feature-card h3 {
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-
-        .feature-card p {
-            color: var(--muted);
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        /* TABLE */
-
-        .table-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            backdrop-filter: blur(20px);
-        }
-
-        .table-scroll {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 700px;
-        }
-
-        th, td {
-            padding: 16px 18px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-            font-size: 14px;
-        }
-
-        th {
-            color: var(--muted);
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: .5px;
-            font-weight: 700;
-        }
-
-        tbody tr {
-            transition: .15s;
-        }
-
-        tbody tr:hover {
-            background: rgba(0,113,227,.045);
-        }
-
-        .rank {
-            font-weight: 800;
-        }
-
-        .empty {
-            padding: 35px;
-            text-align: center;
-            color: var(--muted);
-        }
-
-        /* STATUS */
-
-        .status {
-            display: none;
-            margin: 15px auto;
-            max-width: 760px;
-            padding: 13px 16px;
-            border-radius: 14px;
-            font-size: 14px;
-        }
-
-        .status.show {
-            display: block;
-        }
-
-        .status.error {
-            background: rgba(255,59,48,.10);
-            color: var(--danger);
-        }
-
-        .status.success {
-            background: rgba(52,199,89,.10);
-            color: var(--success);
-        }
-
-        .loading {
-            text-align: center;
-            padding: 35px;
-            color: var(--muted);
-        }
-
-        /* FOOTER */
-
-        footer {
-            max-width: 1180px;
-            margin: auto;
-            padding: 30px 22px 45px;
-            text-align: center;
-            color: var(--muted);
-            font-size: 13px;
-        }
-
-        /* RESPONSIVE */
-
-        @media (max-width: 900px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .nav-inner {
-                min-height: 62px;
-            }
-
-            .hero {
-                padding-top: 50px;
-            }
-
-            .hero h1 {
-                letter-spacing: -2px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
-            }
-
-            .stat-card {
-                padding: 17px;
-            }
-
-            .stat-value {
-                font-size: 25px;
-            }
-
-            .search-btn {
-                padding: 12px 14px;
-            }
-
-            .section-heading {
-                display: block;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Discover Institutions | CTG Board Ranking</title>
+
+<meta name="description"
+      content="Explore SSC 2026 institution rankings, statistics and performance across Chattogram Board.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+
+:root{
+    --bg:#f5f5f7;
+    --card:rgba(255,255,255,.82);
+    --card-solid:#ffffff;
+    --text:#111111;
+    --muted:#6e6e73;
+    --border:rgba(0,0,0,.08);
+    --shadow:0 12px 40px rgba(0,0,0,.07);
+    --accent:#0071e3;
+    --accent2:#5e5ce6;
+    --success:#34c759;
+    --danger:#ff3b30;
+    --warning:#ff9f0a;
+    --input:#f2f2f7;
+}
+
+.dark{
+    --bg:#000000;
+    --card:rgba(28,28,30,.86);
+    --card-solid:#1c1c1e;
+    --text:#f5f5f7;
+    --muted:#98989f;
+    --border:rgba(255,255,255,.09);
+    --shadow:0 18px 50px rgba(0,0,0,.35);
+    --accent:#2997ff;
+    --accent2:#8e8df0;
+    --input:#2c2c2e;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Display",
+                 "SF Pro Text",Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    transition:.25s ease;
+}
+
+button,
+input,
+select{
+    font-family:inherit;
+}
+
+/* NAVBAR */
+
+.navbar{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    height:68px;
+
+    background:rgba(255,255,255,.72);
+    backdrop-filter:blur(24px) saturate(180%);
+    -webkit-backdrop-filter:blur(24px) saturate(180%);
+
+    border-bottom:1px solid var(--border);
+}
+
+.dark .navbar{
+    background:rgba(0,0,0,.72);
+}
+
+.nav-inner{
+    max-width:1250px;
+    height:100%;
+    margin:auto;
+    padding:0 22px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    text-decoration:none;
+    color:var(--text);
+    font-weight:800;
+    letter-spacing:-.5px;
+}
+
+.brand-icon{
+    width:38px;
+    height:38px;
+    border-radius:12px;
+
+    display:grid;
+    place-items:center;
+
+    background:linear-gradient(135deg,#0071e3,#5e5ce6);
+    color:white;
+
+    box-shadow:0 7px 20px rgba(0,113,227,.25);
+}
+
+.brand-text{
+    font-size:17px;
+}
+
+.nav-actions{
+    display:flex;
+    gap:8px;
+}
+
+.icon-btn{
+    width:42px;
+    height:42px;
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+    border-radius:50%;
+    cursor:pointer;
+    font-size:18px;
+    display:grid;
+    place-items:center;
+    transition:.2s;
+}
+
+.icon-btn:hover{
+    transform:translateY(-2px);
+}
+
+/* HERO */
+
+.hero{
+    max-width:1250px;
+    margin:auto;
+    padding:72px 22px 35px;
+}
+
+.eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+
+    padding:7px 12px;
+    border-radius:30px;
+
+    background:rgba(0,113,227,.09);
+    color:var(--accent);
+
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:18px;
+}
+
+.hero h1{
+    font-size:clamp(38px,6vw,70px);
+    line-height:.98;
+    letter-spacing:-3px;
+    max-width:850px;
+    margin-bottom:20px;
+}
+
+.gradient-text{
+    background:linear-gradient(90deg,#0071e3,#5e5ce6,#bf5af2);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.hero p{
+    max-width:700px;
+    color:var(--muted);
+    font-size:17px;
+    line-height:1.7;
+}
+
+/* FEATURE CARDS */
+
+.features{
+    max-width:1250px;
+    margin:auto;
+    padding:10px 22px 30px;
+
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+}
+
+.feature{
+    position:relative;
+    overflow:hidden;
+
+    padding:22px;
+    min-height:140px;
+
+    border:1px solid var(--border);
+    border-radius:25px;
+
+    background:var(--card);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+
+    box-shadow:var(--shadow);
+    transition:.25s ease;
+}
+
+.feature:hover{
+    transform:translateY(-5px);
+}
+
+.feature-icon{
+    width:44px;
+    height:44px;
+    border-radius:14px;
+
+    display:grid;
+    place-items:center;
+
+    background:rgba(0,113,227,.1);
+    color:var(--accent);
+
+    font-size:21px;
+    margin-bottom:16px;
+}
+
+.feature strong{
+    display:block;
+    font-size:17px;
+    margin-bottom:5px;
+}
+
+.feature span{
+    color:var(--muted);
+    font-size:13px;
+}
+
+/* STATISTICS */
+
+.stats{
+    max-width:1250px;
+    margin:auto;
+    padding:10px 22px 30px;
+
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+}
+
+.stat{
+    padding:24px;
+    border-radius:24px;
+    background:var(--card);
+    border:1px solid var(--border);
+    box-shadow:var(--shadow);
+}
+
+.stat-label{
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.stat-value{
+    font-size:31px;
+    font-weight:800;
+    letter-spacing:-1px;
+}
+
+/* MAIN */
+
+.main{
+    max-width:1250px;
+    margin:auto;
+    padding:10px 22px 70px;
+}
+
+.panel{
+    border:1px solid var(--border);
+    background:var(--card);
+    border-radius:30px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+}
+
+.panel-header{
+    padding:27px 28px 20px;
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+}
+
+.panel-title h2{
+    font-size:25px;
+    letter-spacing:-1px;
+}
+
+.panel-title p{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:5px;
+}
+
+/* CONTROLS */
+
+.controls{
+    padding:20px 28px;
+
+    display:grid;
+    grid-template-columns:1fr 210px 160px;
+    gap:12px;
+
+    border-bottom:1px solid var(--border);
+}
+
+.search{
+    position:relative;
+}
+
+.search input{
+    width:100%;
+    height:48px;
+
+    border:none;
+    outline:none;
+
+    padding:0 16px 0 45px;
+
+    border-radius:15px;
+    background:var(--input);
+    color:var(--text);
+
+    font-size:14px;
+}
+
+.search-icon{
+    position:absolute;
+    left:16px;
+    top:50%;
+    transform:translateY(-50%);
+    color:var(--muted);
+}
+
+select{
+    height:48px;
+    border:none;
+    outline:none;
+
+    padding:0 14px;
+
+    border-radius:15px;
+    background:var(--input);
+    color:var(--text);
+
+    cursor:pointer;
+}
+
+.action-btn{
+    height:48px;
+    border:0;
+    border-radius:15px;
+
+    background:var(--text);
+    color:var(--bg);
+
+    font-weight:700;
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.action-btn:hover{
+    transform:translateY(-2px);
+}
+
+/* TABLE */
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:820px;
+}
+
+thead{
+    background:rgba(127,127,127,.06);
+}
+
+th{
+    padding:15px 18px;
+    text-align:left;
+
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.6px;
+
+    color:var(--muted);
+    white-space:nowrap;
+}
+
+td{
+    padding:17px 18px;
+    border-top:1px solid var(--border);
+    font-size:13px;
+}
+
+tbody tr{
+    cursor:pointer;
+    transition:.18s;
+}
+
+tbody tr:hover{
+    background:rgba(0,113,227,.05);
+}
+
+.rank{
+    font-weight:800;
+}
+
+.institute-name{
+    font-weight:700;
+}
+
+.institute-meta{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:4px;
+}
+
+.badge{
+    display:inline-flex;
+    padding:6px 9px;
+    border-radius:10px;
+
+    background:rgba(52,199,89,.12);
+    color:var(--success);
+
+    font-weight:700;
+    font-size:11px;
+}
+
+.gpa5{
+    font-weight:800;
+}
+
+.score{
+    font-weight:700;
+}
+
+/* EMPTY / LOADING */
+
+.state{
+    padding:70px 25px;
+    text-align:center;
+}
+
+.loader{
+    width:38px;
+    height:38px;
+
+    border:3px solid var(--border);
+    border-top-color:var(--accent);
+
+    border-radius:50%;
+
+    animation:spin .8s linear infinite;
+    margin:0 auto 17px;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+.state-title{
+    font-size:18px;
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+.state-text{
+    max-width:600px;
+    margin:auto;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.6;
+}
+
+.error-box{
+    max-width:700px;
+    margin:20px auto 0;
+    padding:15px;
+
+    border-radius:14px;
+
+    background:rgba(255,59,48,.08);
+    color:#ff3b30;
+
+    font-family:monospace;
+    font-size:11px;
+    text-align:left;
+
+    overflow:auto;
+}
+
+/* MODAL */
+
+.modal{
+    position:fixed;
+    inset:0;
+    z-index:5000;
+
+    display:none;
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    background:rgba(0,0,0,.45);
+    backdrop-filter:blur(15px);
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:min(850px,100%);
+    max-height:90vh;
+    overflow:auto;
+
+    background:var(--card-solid);
+
+    border:1px solid var(--border);
+    border-radius:30px;
+
+    box-shadow:0 30px 100px rgba(0,0,0,.3);
+}
+
+.modal-top{
+    padding:25px 28px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+
+    border-bottom:1px solid var(--border);
+}
+
+.modal-title{
+    font-size:25px;
+    font-weight:800;
+    letter-spacing:-1px;
+}
+
+.modal-subtitle{
+    margin-top:6px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.close{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    border:0;
+    background:var(--input);
+    color:var(--text);
+    cursor:pointer;
+    font-size:18px;
+}
+
+.modal-content{
+    padding:25px 28px;
+}
+
+.detail-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.detail-card{
+    padding:19px;
+    border-radius:19px;
+    background:var(--input);
+}
+
+.detail-card span{
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+    margin-bottom:7px;
+}
+
+.detail-card strong{
+    font-size:20px;
+}
+
+.pdf-btn{
+    margin-top:22px;
+
+    width:100%;
+    height:50px;
+
+    border:0;
+    border-radius:15px;
+
+    background:linear-gradient(135deg,#0071e3,#5e5ce6);
+
+    color:white;
+    font-weight:800;
+
+    cursor:pointer;
+    transition:.2s;
+}
+
+.pdf-btn:hover{
+    transform:translateY(-2px);
+}
+
+/* FOOTER */
+
+footer{
+    max-width:1250px;
+    margin:auto;
+    padding:30px 22px 45px;
+
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+    .features{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .controls{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .navbar{
+        height:62px;
+    }
+
+    .brand-text{
+        font-size:14px;
+    }
+
+    .hero{
+        padding-top:50px;
+    }
+
+    .hero h1{
+        letter-spacing:-2px;
+    }
+
+    .hero p{
+        font-size:15px;
+    }
+
+    .features,
+    .stats{
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
+
+    .feature{
+        padding:17px;
+        min-height:125px;
+    }
+
+    .feature-icon{
+        width:38px;
+        height:38px;
+        font-size:17px;
+        margin-bottom:11px;
+    }
+
+    .feature strong{
+        font-size:14px;
+    }
+
+    .feature span{
+        font-size:11px;
+    }
+
+    .stat{
+        padding:18px;
+    }
+
+    .stat-value{
+        font-size:24px;
+    }
+
+    .panel{
+        border-radius:23px;
+    }
+
+    .panel-header{
+        padding:22px 19px;
+    }
+
+    .panel-title h2{
+        font-size:21px;
+    }
+
+    .controls{
+        padding:16px 19px;
+    }
+
+    .modal{
+        padding:10px;
+    }
+
+    .modal-box{
+        border-radius:23px;
+    }
+
+    .modal-top,
+    .modal-content{
+        padding:20px;
+    }
+
+    .detail-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+}
+
+</style>
 </head>
 
 <body>
 
-<!-- NAVIGATION -->
+<!-- NAVBAR -->
+
 <nav class="navbar">
+
     <div class="nav-inner">
+
         <a href="index.html" class="brand">
-            CTG<span>BoardRanking</span>
+
+            <div class="brand-icon">
+                ✦
+            </div>
+
+            <div class="brand-text">
+                CTG Board Ranking
+            </div>
+
         </a>
 
         <div class="nav-actions">
-            <button class="nav-btn" id="themeToggle" aria-label="Toggle theme">
-                ◐
+
+            <button class="icon-btn"
+                    id="themeBtn"
+                    title="Toggle appearance">
+                ☾
             </button>
+
         </div>
+
     </div>
+
 </nav>
 
 
 <!-- HERO -->
-<header class="hero">
+
+<section class="hero">
 
     <div class="eyebrow">
-        ✦ SSC 2026
+        ✦ SSC 2026 • CHITTAGONG BOARD
     </div>
 
     <h1>
-        Discover <span>Institutions.</span>
+        Discover
+        <span class="gradient-text">
+            Institutions.
+        </span>
     </h1>
 
     <p>
-        Explore institution performance, district statistics and
-        SSC 2026 academic insights from Chattogram Board.
+        Explore institution-wise SSC 2026 performance,
+        rankings, GPA 5 achievements and academic statistics
+        across the Chattogram Education Board.
     </p>
 
-    <!-- SEARCH -->
-    <div class="search-wrap">
+</section>
 
-        <div class="search-box">
 
-            <div class="search-icon">⌕</div>
+<!-- FEATURES -->
 
-            <input
-                type="search"
-                id="institutionSearch"
-                placeholder="Search by institution name or EIIN..."
-                autocomplete="off"
-            >
+<section class="features">
 
-            <button class="search-btn" id="searchButton">
-                Search
+    <div class="feature">
+
+        <div class="feature-icon">
+            🏫
+        </div>
+
+        <strong>
+            Institution Ranking
+        </strong>
+
+        <span>
+            Compare institutions by academic performance.
+        </span>
+
+    </div>
+
+
+    <div class="feature">
+
+        <div class="feature-icon">
+            📊
+        </div>
+
+        <strong>
+            Performance
+        </strong>
+
+        <span>
+            View GPA, scores and student statistics.
+        </span>
+
+    </div>
+
+
+    <div class="feature">
+
+        <div class="feature-icon">
+            🏆
+        </div>
+
+        <strong>
+            GPA 5
+        </strong>
+
+        <span>
+            Discover institutions producing top results.
+        </span>
+
+    </div>
+
+
+    <div class="feature">
+
+        <div class="feature-icon">
+            📄
+        </div>
+
+        <strong>
+            PDF Report
+        </strong>
+
+        <span>
+            Download institution performance reports.
+        </span>
+
+    </div>
+
+</section>
+
+
+<!-- STATISTICS -->
+
+<section class="stats">
+
+    <div class="stat">
+
+        <div class="stat-label">
+            Institutions
+        </div>
+
+        <div class="stat-value"
+             id="totalInstitutions">
+            —
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-label">
+            Students
+        </div>
+
+        <div class="stat-value"
+             id="totalStudents">
+            —
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-label">
+            GPA 5
+        </div>
+
+        <div class="stat-value"
+             id="totalGpa5">
+            —
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-label">
+            Districts
+        </div>
+
+        <div class="stat-value"
+             id="totalDistricts">
+            —
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- MAIN -->
+
+<main class="main">
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <div class="panel-title">
+
+                <h2>
+                    Explore Institutions
+                </h2>
+
+                <p>
+                    Search and compare SSC 2026 institutions.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONTROLS -->
+
+        <div class="controls">
+
+            <div class="search">
+
+                <span class="search-icon">
+                    🔎
+                </span>
+
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Search institution name..."
+                    autocomplete="off">
+
+            </div>
+
+
+            <select id="districtFilter">
+
+                <option value="">
+                    All Districts
+                </option>
+
+            </select>
+
+
+            <button
+                class="action-btn"
+                id="resetBtn">
+
+                Reset
+
             </button>
 
         </div>
 
+
+        <!-- TABLE -->
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Rank
+                        </th>
+
+                        <th>
+                            Institution
+                        </th>
+
+                        <th>
+                            District
+                        </th>
+
+                        <th>
+                            Students
+                        </th>
+
+                        <th>
+                            GPA 5
+                        </th>
+
+                        <th>
+                            Avg GPA
+                        </th>
+
+                        <th>
+                            Avg Score
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="institutionTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- STATE -->
+
+        <div
+            class="state"
+            id="state">
+
+            <div class="loader"></div>
+
+            <div class="state-title">
+                Loading institutions...
+            </div>
+
+            <div class="state-text">
+                Please wait while institution data is being loaded.
+            </div>
+
+        </div>
+
     </div>
-
-    <div id="status" class="status"></div>
-
-    <!-- SEARCH RESULTS -->
-    <div class="result-box" id="resultBox">
-
-        <div class="result-header">
-            <h3>Search Results</h3>
-            <span class="result-count" id="resultCount"></span>
-        </div>
-
-        <div id="institutionResults" class="institution-results"></div>
-
-    </div>
-
-</header>
-
-
-<main class="container">
-
-    <!-- OVERVIEW -->
-    <section class="section">
-
-        <div class="section-heading">
-            <div>
-                <h2>SSC 2026 Overview</h2>
-                <p>Overall performance by academic group.</p>
-            </div>
-        </div>
-
-        <div class="stats-grid">
-
-            <div class="stat-card">
-                <div class="stat-icon">🏫</div>
-                <div class="stat-value" id="totalInstitutions">—</div>
-                <div class="stat-label">Institutions</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">👨‍🎓</div>
-                <div class="stat-value" id="totalStudents">—</div>
-                <div class="stat-label">Students</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">🏆</div>
-                <div class="stat-value" id="totalGPA5">—</div>
-                <div class="stat-label">GPA 5</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">📈</div>
-                <div class="stat-value" id="averageGPA">—</div>
-                <div class="stat-label">Average GPA</div>
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- PREMIUM FEATURES -->
-    <section class="section">
-
-        <div class="section-heading">
-            <div>
-                <h2>Explore Performance</h2>
-                <p>Powerful insights from SSC 2026 data.</p>
-            </div>
-        </div>
-
-        <div class="feature-grid">
-
-            <div class="feature-card">
-                <div class="feature-icon">🏫</div>
-                <h3>Institution Ranking</h3>
-                <p>
-                    Compare institutions based on student performance,
-                    GPA 5 and overall academic results.
-                </p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">📍</div>
-                <h3>District Performance</h3>
-                <p>
-                    Discover how districts performed across SSC 2026
-                    with student and GPA statistics.
-                </p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">🔎</div>
-                <h3>Smart Institution Search</h3>
-                <p>
-                    Search institutions instantly using institution name,
-                    EIIN or other available information.
-                </p>
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- TOP INSTITUTIONS -->
-    <section class="section">
-
-        <div class="section-heading">
-            <div>
-                <h2>Top Institutions</h2>
-                <p>Leading institutions by average score.</p>
-            </div>
-        </div>
-
-        <div class="table-card">
-
-            <div class="table-scroll">
-
-                <table>
-
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Institution</th>
-                            <th>District</th>
-                            <th>Students</th>
-                            <th>GPA 5</th>
-                            <th>Average GPA</th>
-                            <th>Average Score</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="institutionTable">
-
-                        <tr>
-                            <td colspan="7" class="loading">
-                                Loading institution statistics...
-                            </td>
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- DISTRICT -->
-    <section class="section">
-
-        <div class="section-heading">
-            <div>
-                <h2>District Statistics</h2>
-                <p>Institution and student performance by district.</p>
-            </div>
-        </div>
-
-        <div class="table-card">
-
-            <div class="table-scroll">
-
-                <table>
-
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>District</th>
-                            <th>Students</th>
-                            <th>GPA 5</th>
-                            <th>Average GPA</th>
-                            <th>Average Score</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="districtTable">
-
-                        <tr>
-                            <td colspan="6" class="loading">
-                                Loading district statistics...
-                            </td>
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </section>
 
 </main>
 
 
 <footer>
-    © 2026 CTG Board Ranking · SSC 2026
+
+    CTG Board Ranking • SSC 2026
+
 </footer>
+
+
+<!-- MODAL -->
+
+<div
+    class="modal"
+    id="modal">
+
+    <div
+        class="modal-box"
+        id="pdfArea">
+
+        <div class="modal-top">
+
+            <div>
+
+                <div
+                    class="modal-title"
+                    id="modalName">
+                    Institution
+                </div>
+
+                <div
+                    class="modal-subtitle"
+                    id="modalDistrict">
+                    District
+                </div>
+
+            </div>
+
+            <button
+                class="close"
+                id="closeModal">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="modal-content">
+
+            <div class="detail-grid">
+
+                <div class="detail-card">
+
+                    <span>
+                        Ranking
+                    </span>
+
+                    <strong id="modalRank">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-card">
+
+                    <span>
+                        Students
+                    </span>
+
+                    <strong id="modalStudents">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-card">
+
+                    <span>
+                        GPA 5
+                    </span>
+
+                    <strong id="modalGpa5">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-card">
+
+                    <span>
+                        Average GPA
+                    </span>
+
+                    <strong id="modalAvgGpa">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-card">
+
+                    <span>
+                        Average Score
+                    </span>
+
+                    <strong id="modalAvgScore">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-card">
+
+                    <span>
+                        Pass Rate
+                    </span>
+
+                    <strong id="modalPassRate">
+                        —
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="pdf-btn"
+                id="downloadPdf">
+
+                ⬇ Download Institution PDF
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 
 
 <script>
 
-"use strict";
-
 /* =========================================================
-   CONFIGURATION
+   CTG BOARD RANKING
+   DISCOVER INSTITUTIONS
 ========================================================= */
 
-const DATA_FILE = "./institution_results.json";
 
-let institutionData = [];
+/* JSON PATH */
+
+const JSON_PATH =
+    "institution-collector/institution_results.json";
+
+
+/* DATA */
+
+let institutions = [];
+let filteredInstitutions = [];
+let selectedInstitution = null;
+
+
+/* ELEMENTS */
+
+const table =
+    document.getElementById("institutionTable");
+
+const state =
+    document.getElementById("state");
+
+const searchInput =
+    document.getElementById("searchInput");
+
+const districtFilter =
+    document.getElementById("districtFilter");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const modal =
+    document.getElementById("modal");
+
+const closeModal =
+    document.getElementById("closeModal");
+
+const themeBtn =
+    document.getElementById("themeBtn");
 
 
 /* =========================================================
    HELPERS
 ========================================================= */
 
-function getValue(obj, keys, fallback = "") {
+function firstValue(obj, keys, fallback = ""){
 
-    if (!obj || typeof obj !== "object") {
-        return fallback;
-    }
+    for(const key of keys){
 
-    for (const key of keys) {
-
-        if (
-            Object.prototype.hasOwnProperty.call(obj, key) &&
-            obj[key] !== null &&
+        if(
+            obj &&
             obj[key] !== undefined &&
+            obj[key] !== null &&
             obj[key] !== ""
-        ) {
+        ){
+
             return obj[key];
+
         }
 
     }
 
     return fallback;
+
 }
 
 
-function numberValue(value) {
+function numberValue(value){
 
-    if (
+    if(
         value === null ||
         value === undefined ||
         value === ""
-    ) {
+    ){
+
         return 0;
+
     }
 
-    if (typeof value === "number") {
-        return Number.isFinite(value) ? value : 0;
-    }
+    const n =
+        Number(
+            String(value)
+                .replace(/,/g,"")
+                .replace("%","")
+        );
 
-    const cleaned = String(value)
-        .replace(/,/g, "")
-        .replace(/[^\d.-]/g, "");
-
-    const num = Number(cleaned);
-
-    return Number.isFinite(num) ? num : 0;
-}
-
-
-function formatNumber(value) {
-
-    return new Intl.NumberFormat("en-US").format(
-        Math.round(numberValue(value))
-    );
+    return Number.isFinite(n) ? n : 0;
 
 }
 
 
-function average(values) {
+function formatNumber(value){
 
-    const valid = values
-        .map(numberValue)
-        .filter(v => v > 0);
+    return Number(value || 0)
+        .toLocaleString("en-US");
 
-    if (!valid.length) return 0;
+}
 
-    return valid.reduce((a, b) => a + b, 0) / valid.length;
+
+function formatDecimal(value){
+
+    const n = numberValue(value);
+
+    if(!n){
+        return "0.00";
+    }
+
+    return n.toFixed(2);
+
+}
+
+
+function escapeHTML(value){
+
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
 }
 
 
 /* =========================================================
-   NORMALIZE DATA
+   NORMALIZE JSON
 ========================================================= */
 
-function normalizeInstitution(item) {
+function normalizeInstitution(item, index){
 
-    return {
+    const name = firstValue(
+        item,
+        [
+            "institution",
+            "institution_name",
+            "institute",
+            "institute_name",
+            "school",
+            "school_name",
+            "college",
+            "college_name",
+            "name"
+        ],
+        "Unknown Institution"
+    );
 
-        eiin: getValue(item, [
+
+    const district = firstValue(
+        item,
+        [
+            "district",
+            "district_name",
+            "District"
+        ],
+        "Unknown"
+    );
+
+
+    const eiin = firstValue(
+        item,
+        [
             "eiin",
             "EIIN",
-            "institute_code",
-            "institution_code",
-            "code"
-        ]),
+            "institution_eiin"
+        ],
+        ""
+    );
 
-        name: getValue(item, [
-            "institution",
-            "institute",
-            "institution_name",
-            "institute_name",
-            "name",
-            "school",
-            "college"
-        ], "Unknown Institution"),
 
-        district: getValue(item, [
-            "district",
-            "District",
-            "district_name"
-        ], "Unknown"),
-
-        students: numberValue(
-            getValue(item, [
+    const students = numberValue(
+        firstValue(
+            item,
+            [
                 "students",
-                "student_count",
                 "total_students",
-                "total_student",
+                "student_count",
                 "appeared",
-                "candidates"
-            ])
-        ),
+                "total"
+            ],
+            0
+        )
+    );
 
-        gpa5: numberValue(
-            getValue(item, [
+
+    const gpa5 = numberValue(
+        firstValue(
+            item,
+            [
                 "gpa5",
                 "gpa_5",
                 "gpa5_count",
                 "gpa_5_count",
-                "total_gpa5",
-                "gpa_five"
-            ])
-        ),
+                "A_plus",
+                "a_plus"
+            ],
+            0
+        )
+    );
 
-        averageGPA: numberValue(
-            getValue(item, [
+
+    const avgGpa = numberValue(
+        firstValue(
+            item,
+            [
                 "average_gpa",
                 "avg_gpa",
-                "avgGPA",
-                "gpa"
-            ])
-        ),
+                "gpa_average",
+                "mean_gpa"
+            ],
+            0
+        )
+    );
 
-        averageScore: numberValue(
-            getValue(item, [
+
+    const avgScore = numberValue(
+        firstValue(
+            item,
+            [
                 "average_score",
                 "avg_score",
-                "average_marks",
-                "avg_marks",
-                "score"
-            ])
+                "mean_score",
+                "score_average"
+            ],
+            0
         )
+    );
+
+
+    let passRate =
+        firstValue(
+            item,
+            [
+                "pass_rate",
+                "pass_percentage",
+                "pass_percent",
+                "passing_rate"
+            ],
+            0
+        );
+
+
+    passRate =
+        numberValue(passRate);
+
+
+    if(passRate > 0 && passRate <= 1){
+
+        passRate *= 100;
+
+    }
+
+
+    return {
+
+        original:item,
+
+        name:String(name),
+
+        district:String(district),
+
+        eiin:String(eiin),
+
+        students,
+
+        gpa5,
+
+        avgGpa,
+
+        avgScore,
+
+        passRate,
+
+        rank:index + 1
 
     };
 
@@ -982,71 +1539,115 @@ function normalizeInstitution(item) {
    LOAD JSON
 ========================================================= */
 
-async function loadInstitutionData() {
+async function loadInstitutions(){
 
-    showStatus(
-        "Loading institution data...",
-        "success"
-    );
+    showLoading();
 
-    try {
+    try{
 
-        const response = await fetch(
-            DATA_FILE + "?v=" + Date.now(),
-            {
-                cache: "no-store"
-            }
-        );
+        const response =
+            await fetch(
+                JSON_PATH + "?v=" + Date.now()
+            );
 
-        if (!response.ok) {
+        if(!response.ok){
 
             throw new Error(
-                `HTTP ${response.status}`
+                `HTTP ${response.status} — ${response.statusText}`
             );
 
         }
 
-        const raw = await response.json();
+
+        const data =
+            await response.json();
+
 
         /*
-         * Supports:
-         * [
-         *   {...},
-         *   {...}
-         * ]
-         *
-         * and common wrapped formats.
-         */
+           Supports:
 
-        let records = raw;
+           [
+             {...},
+             {...}
+           ]
 
-        if (!Array.isArray(records)) {
+           OR
 
-            records =
-                raw.institutions ||
-                raw.data ||
-                raw.results ||
-                raw.institution_results ||
-                [];
+           {
+              institutions:[...]
+           }
+
+           OR
+
+           {
+              data:[...]
+           }
+        */
+
+
+        let rows = [];
+
+
+        if(Array.isArray(data)){
+
+            rows = data;
 
         }
 
-        if (!Array.isArray(records)) {
+        else if(
+            data &&
+            Array.isArray(data.institutions)
+        ){
 
-            throw new Error(
-                "institution_results.json does not contain an array of institutions."
-            );
+            rows = data.institutions;
 
         }
 
-        institutionData = records
-            .map(normalizeInstitution)
-            .filter(item =>
-                item.name &&
-                item.name !== "Unknown Institution"
-            );
+        else if(
+            data &&
+            Array.isArray(data.data)
+        ){
 
-        if (!institutionData.length) {
+            rows = data.data;
+
+        }
+
+        else if(
+            data &&
+            Array.isArray(data.results)
+        ){
+
+            rows = data.results;
+
+        }
+
+        else{
+
+            /*
+               Sometimes JSON can be an object where
+               institution names are keys.
+            */
+
+            if(
+                data &&
+                typeof data === "object"
+            ){
+
+                rows =
+                    Object.values(data)
+                        .filter(
+                            x =>
+                            x &&
+                            typeof x === "object" &&
+                            !Array.isArray(x)
+                        );
+
+            }
+
+        }
+
+
+        if(!rows.length){
 
             throw new Error(
                 "No institution records were found in institution_results.json."
@@ -1054,41 +1655,77 @@ async function loadInstitutionData() {
 
         }
 
-        updateOverview();
-        renderTopInstitutions();
-        renderDistrictStatistics();
 
-        showStatus(
-            `${formatNumber(institutionData.length)} institutions loaded successfully.`,
-            "success"
+        institutions =
+            rows.map(normalizeInstitution);
+
+
+        /*
+           Sort primarily by average score,
+           then GPA 5,
+           then average GPA.
+        */
+
+        institutions.sort(
+            (a,b) => {
+
+                if(
+                    b.avgScore !== a.avgScore
+                ){
+
+                    return b.avgScore - a.avgScore;
+
+                }
+
+                if(
+                    b.gpa5 !== a.gpa5
+                ){
+
+                    return b.gpa5 - a.gpa5;
+
+                }
+
+                return b.avgGpa - a.avgGpa;
+
+            }
         );
 
-    } catch (error) {
+
+        /*
+           Recalculate rank
+        */
+
+        institutions.forEach(
+            (item,index) => {
+
+                item.rank =
+                    index + 1;
+
+            }
+        );
+
+
+        filteredInstitutions =
+            [...institutions];
+
+
+        updateOverview();
+
+        buildDistrictFilter();
+
+        renderInstitutions();
+
+
+    }
+
+    catch(error){
+
+        showError(error);
 
         console.error(
-            "Institution data loading failed:",
+            "Institution JSON error:",
             error
         );
-
-        showStatus(
-            "Institution data could not be loaded. " +
-            error.message,
-            "error"
-        );
-
-        document.getElementById("institutionTable").innerHTML =
-            `<tr>
-                <td colspan="7" class="empty">
-                    Institution statistics could not be loaded.
-                </td>
-            </tr>`;
-
-        document.getElementById("districtTable").innerHTML =
-            `<tr>
-                <td colspan="6" class="empty">
-                    District statistics could not be loaded.
-                </td>
-            </tr>`;
 
     }
 
@@ -1099,472 +1736,956 @@ async function loadInstitutionData() {
    OVERVIEW
 ========================================================= */
 
-function updateOverview() {
+function updateOverview(){
 
-    const totalInstitutions =
-        institutionData.length;
+    const total =
+        institutions.length;
 
-    const totalStudents =
-        institutionData.reduce(
-            (sum, item) =>
+
+    const students =
+        institutions.reduce(
+            (sum,item) =>
                 sum + item.students,
             0
         );
 
-    const totalGPA5 =
-        institutionData.reduce(
-            (sum, item) =>
+
+    const gpa5 =
+        institutions.reduce(
+            (sum,item) =>
                 sum + item.gpa5,
             0
         );
 
-    const gpas =
-        institutionData
-            .map(item => item.averageGPA)
-            .filter(value => value > 0);
 
-    const avgGPA =
-        average(gpas);
+    const districts =
+        new Set(
+            institutions
+                .map(item => item.district)
+                .filter(Boolean)
+        ).size;
+
 
     document.getElementById(
         "totalInstitutions"
     ).textContent =
-        formatNumber(totalInstitutions);
+        formatNumber(total);
+
 
     document.getElementById(
         "totalStudents"
     ).textContent =
-        formatNumber(totalStudents);
+        formatNumber(students);
+
 
     document.getElementById(
-        "totalGPA5"
+        "totalGpa5"
     ).textContent =
-        formatNumber(totalGPA5);
+        formatNumber(gpa5);
+
 
     document.getElementById(
-        "averageGPA"
+        "totalDistricts"
     ).textContent =
-        avgGPA ? avgGPA.toFixed(2) : "—";
+        formatNumber(districts);
 
 }
 
 
 /* =========================================================
-   TOP INSTITUTIONS
+   DISTRICT FILTER
 ========================================================= */
 
-function renderTopInstitutions() {
+function buildDistrictFilter(){
 
-    const table =
-        document.getElementById(
-            "institutionTable"
+    const districts =
+        [...new Set(
+            institutions
+                .map(item => item.district)
+                .filter(Boolean)
+        )]
+        .sort(
+            (a,b) =>
+                a.localeCompare(b)
         );
 
-    const sorted =
-        [...institutionData]
-            .sort(
-                (a, b) =>
-                    b.averageScore -
-                    a.averageScore
-            )
-            .slice(0, 50);
 
-    if (!sorted.length) {
+    districtFilter.innerHTML = `
+        <option value="">
+            All Districts
+        </option>
+    `;
 
-        table.innerHTML =
-            `<tr>
-                <td colspan="7" class="empty">
-                    No institution data available.
-                </td>
-            </tr>`;
 
-        return;
-    }
+    districts.forEach(
+        district => {
 
-    table.innerHTML =
-        sorted.map((item, index) => {
+            const option =
+                document.createElement("option");
 
-            return `
-                <tr>
+            option.value =
+                district;
 
-                    <td class="rank">
-                        #${index + 1}
-                    </td>
+            option.textContent =
+                district;
 
-                    <td>
-                        <strong>
-                            ${escapeHTML(item.name)}
-                        </strong>
-                    </td>
+            districtFilter.appendChild(
+                option
+            );
 
-                    <td>
-                        ${escapeHTML(item.district)}
-                    </td>
-
-                    <td>
-                        ${formatNumber(item.students)}
-                    </td>
-
-                    <td>
-                        ${formatNumber(item.gpa5)}
-                    </td>
-
-                    <td>
-                        ${
-                            item.averageGPA
-                                ? item.averageGPA.toFixed(2)
-                                : "—"
-                        }
-                    </td>
-
-                    <td>
-                        ${
-                            item.averageScore
-                                ? item.averageScore.toFixed(2)
-                                : "—"
-                        }
-                    </td>
-
-                </tr>
-            `;
-
-        }).join("");
+        }
+    );
 
 }
 
 
 /* =========================================================
-   DISTRICT STATISTICS
+   RENDER
 ========================================================= */
 
-function renderDistrictStatistics() {
+function renderInstitutions(){
 
-    const table =
-        document.getElementById(
-            "districtTable"
-        );
-
-    const districts = {};
-
-    institutionData.forEach(item => {
-
-        const district =
-            item.district || "Unknown";
-
-        if (!districts[district]) {
-
-            districts[district] = {
-
-                district,
-
-                students: 0,
-
-                gpa5: 0,
-
-                institutions: 0,
-
-                gpas: [],
-
-                scores: []
-
-            };
-
-        }
-
-        districts[district].students +=
-            item.students;
-
-        districts[district].gpa5 +=
-            item.gpa5;
-
-        districts[district].institutions++;
-
-        if (item.averageGPA > 0) {
-
-            districts[district].gpas.push(
-                item.averageGPA
-            );
-
-        }
-
-        if (item.averageScore > 0) {
-
-            districts[district].scores.push(
-                item.averageScore
-            );
-
-        }
-
-    });
+    table.innerHTML = "";
 
 
-    const result =
-        Object.values(districts)
-            .map(item => ({
+    if(!filteredInstitutions.length){
 
-                ...item,
+        table.innerHTML = `
+            <tr>
+                <td colspan="7">
 
-                averageGPA:
-                    average(item.gpas),
+                    <div class="state">
 
-                averageScore:
-                    average(item.scores)
+                        <div style="font-size:35px;margin-bottom:12px;">
+                            🔎
+                        </div>
 
-            }))
-            .sort(
-                (a, b) =>
-                    b.averageScore -
-                    a.averageScore
-            );
+                        <div class="state-title">
+                            No institutions found
+                        </div>
 
+                        <div class="state-text">
+                            Try another institution name or district.
+                        </div>
 
-    if (!result.length) {
+                    </div>
 
-        table.innerHTML =
-            `<tr>
-                <td colspan="6" class="empty">
-                    No district data available.
                 </td>
-            </tr>`;
+            </tr>
+        `;
+
+        state.style.display = "none";
 
         return;
+
     }
 
 
-    table.innerHTML =
-        result.map((item, index) => {
+    filteredInstitutions.forEach(
+        institution => {
 
-            return `
-                <tr>
+            const tr =
+                document.createElement("tr");
 
-                    <td class="rank">
-                        #${index + 1}
-                    </td>
 
-                    <td>
-                        <strong>
-                            ${escapeHTML(item.district)}
-                        </strong>
-                    </td>
+            tr.innerHTML = `
 
-                    <td>
-                        ${formatNumber(item.students)}
-                    </td>
+                <td>
 
-                    <td>
-                        ${formatNumber(item.gpa5)}
-                    </td>
+                    <span class="rank">
+                        #${formatNumber(institution.rank)}
+                    </span>
 
-                    <td>
+                </td>
+
+
+                <td>
+
+                    <div class="institute-name">
+
+                        ${escapeHTML(
+                            institution.name
+                        )}
+
+                    </div>
+
+                    ${
+                        institution.eiin
+                        ?
+                        `
+                        <div class="institute-meta">
+                            EIIN ${escapeHTML(
+                                institution.eiin
+                            )}
+                        </div>
+                        `
+                        :
+                        ""
+                    }
+
+                </td>
+
+
+                <td>
+                    ${escapeHTML(
+                        institution.district
+                    )}
+                </td>
+
+
+                <td>
+                    ${formatNumber(
+                        institution.students
+                    )}
+                </td>
+
+
+                <td>
+
+                    <span class="badge">
+
+                        ${formatNumber(
+                            institution.gpa5
+                        )}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <strong class="gpa5">
                         ${
-                            item.averageGPA
-                                ? item.averageGPA.toFixed(2)
-                                : "—"
+                            institution.avgGpa
+                            ?
+                            formatDecimal(
+                                institution.avgGpa
+                            )
+                            :
+                            "—"
                         }
-                    </td>
+                    </strong>
 
-                    <td>
+                </td>
+
+
+                <td>
+
+                    <strong class="score">
                         ${
-                            item.averageScore
-                                ? item.averageScore.toFixed(2)
-                                : "—"
+                            institution.avgScore
+                            ?
+                            formatDecimal(
+                                institution.avgScore
+                            )
+                            :
+                            "—"
                         }
-                    </td>
+                    </strong>
 
-                </tr>
+                </td>
+
             `;
 
-        }).join("");
+
+            tr.addEventListener(
+                "click",
+                () => openInstitution(institution)
+            );
+
+
+            table.appendChild(tr);
+
+        }
+    );
+
+
+    state.style.display =
+        "none";
 
 }
+
+
+/* =========================================================
+   SEARCH / FILTER
+========================================================= */
+
+function applyFilters(){
+
+    const search =
+        searchInput.value
+            .trim()
+            .toLowerCase();
+
+
+    const district =
+        districtFilter.value;
+
+
+    filteredInstitutions =
+        institutions.filter(
+            item => {
+
+                const matchesSearch =
+                    !search ||
+                    item.name
+                        .toLowerCase()
+                        .includes(search) ||
+
+                    item.eiin
+                        .toLowerCase()
+                        .includes(search);
+
+
+                const matchesDistrict =
+                    !district ||
+                    item.district === district;
+
+
+                return (
+                    matchesSearch &&
+                    matchesDistrict
+                );
+
+            }
+        );
+
+
+    renderInstitutions();
+
+}
+
+
+/* =========================================================
+   OPEN MODAL
+========================================================= */
+
+function openInstitution(item){
+
+    selectedInstitution =
+        item;
+
+
+    document.getElementById(
+        "modalName"
+    ).textContent =
+        item.name;
+
+
+    document.getElementById(
+        "modalDistrict"
+    ).textContent =
+        item.eiin
+        ?
+        `${item.district} • EIIN ${item.eiin}`
+        :
+        item.district;
+
+
+    document.getElementById(
+        "modalRank"
+    ).textContent =
+        `#${formatNumber(item.rank)}`;
+
+
+    document.getElementById(
+        "modalStudents"
+    ).textContent =
+        formatNumber(
+            item.students
+        );
+
+
+    document.getElementById(
+        "modalGpa5"
+    ).textContent =
+        formatNumber(
+            item.gpa5
+        );
+
+
+    document.getElementById(
+        "modalAvgGpa"
+    ).textContent =
+        item.avgGpa
+        ?
+        formatDecimal(
+            item.avgGpa
+        )
+        :
+        "—";
+
+
+    document.getElementById(
+        "modalAvgScore"
+    ).textContent =
+        item.avgScore
+        ?
+        formatDecimal(
+            item.avgScore
+        )
+        :
+        "—";
+
+
+    document.getElementById(
+        "modalPassRate"
+    ).textContent =
+        item.passRate
+        ?
+        `${formatDecimal(
+            item.passRate
+        )}%`
+        :
+        "—";
+
+
+    modal.classList.add(
+        "show"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+function closeInstitutionModal(){
+
+    modal.classList.remove(
+        "show"
+    );
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* =========================================================
+   PDF DOWNLOAD
+========================================================= */
+
+async function downloadInstitutionPDF(){
+
+    if(!selectedInstitution){
+
+        return;
+
+    }
+
+
+    const item =
+        selectedInstitution;
+
+
+    const pdfContent =
+        document.createElement("div");
+
+
+    pdfContent.style.padding =
+        "35px";
+
+
+    pdfContent.style.background =
+        "#ffffff";
+
+
+    pdfContent.style.color =
+        "#111111";
+
+
+    pdfContent.style.fontFamily =
+        "Arial, sans-serif";
+
+
+    pdfContent.style.width =
+        "100%";
+
+
+    pdfContent.innerHTML = `
+
+        <div style="
+            text-align:center;
+            margin-bottom:30px;
+        ">
+
+            <div style="
+                font-size:14px;
+                color:#0071e3;
+                font-weight:bold;
+                margin-bottom:8px;
+            ">
+                CTG BOARD RANKING
+            </div>
+
+            <h1 style="
+                font-size:28px;
+                margin:0 0 8px;
+            ">
+                Institution Performance Report
+            </h1>
+
+            <div style="
+                color:#666;
+                font-size:13px;
+            ">
+                SSC 2026 • Chattogram Education Board
+            </div>
+
+        </div>
+
+
+        <div style="
+            border:1px solid #ddd;
+            border-radius:15px;
+            padding:22px;
+            margin-bottom:20px;
+        ">
+
+            <h2 style="
+                margin:0 0 8px;
+                font-size:22px;
+            ">
+                ${escapeHTML(item.name)}
+            </h2>
+
+            <p style="
+                color:#666;
+                margin:0;
+                font-size:13px;
+            ">
+                District: ${escapeHTML(item.district)}
+                ${
+                    item.eiin
+                    ?
+                    ` • EIIN: ${escapeHTML(item.eiin)}`
+                    :
+                    ""
+                }
+            </p>
+
+        </div>
+
+
+        <table style="
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+        ">
+
+            <tr>
+
+                <td style="
+                    border:1px solid #ddd;
+                    padding:15px;
+                    font-weight:bold;
+                ">
+                    Ranking
+                </td>
+
+                <td style="
+                    border:1px solid #ddd;
+                    padding:15px;
+                ">
+                    #${formatNumber(item.rank)}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td style="
+                    border:1px solid #ddd;
+                    padding:15px;
+                    font-weight:bold;
+                ">
+                    Total Students
+                </td>
+
+                <td style="
+                    border:1px solid #ddd;
+                    padding:15px;
+                ">
+                    ${formatNumber(item.students)}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td style="
+                    border:1px solid #ddd;
+                    padding:15px;
+                    font-weight:bold;
+                ">
+                    GPA 5
+                </td>
+
+                <td style="
+                    border:1px solid #ddd;
+                    padding:15px;
+                ">
+                    ${formatNumber(item.gpa5)}
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td style="
+                    border:1px solid #ddd;
+                    padding:15px;
+                    font-weight:bold;
+                ">
+                    Average GPA
+                </td>
+
+                <td style="
+                    border:1px solid #ddd;
+                    padding:15px;
+                ">
+                    ${
+                        item.avgGpa
+                        ?
+                        formatDecimal(item.avgGpa)
+                        :
+                        "—"
+                    }
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td style="
+                    border:1px solid #ddd;
+                    padding:15px;
+                    font-weight:bold;
+                ">
+                    Average Score
+                </td>
+
+                <td style="
+                    border:1px solid #ddd;
+                    padding:15px;
+                ">
+                    ${
+                        item.avgScore
+                        ?
+                        formatDecimal(item.avgScore)
+                        :
+                        "—"
+                    }
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td style="
+                    border:1px solid #ddd;
+                    padding:15px;
+                    font-weight:bold;
+                ">
+                    Pass Rate
+                </td>
+
+                <td style="
+                    border:1px solid #ddd;
+                    padding:15px;
+                ">
+                    ${
+                        item.passRate
+                        ?
+                        formatDecimal(item.passRate) + "%"
+                        :
+                        "—"
+                    }
+                </td>
+
+            </tr>
+
+        </table>
+
+
+        <div style="
+            margin-top:35px;
+            padding-top:15px;
+            border-top:1px solid #ddd;
+            text-align:center;
+            color:#777;
+            font-size:11px;
+        ">
+            Generated by CTG Board Ranking
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        pdfContent
+    );
+
+
+    const filename =
+        item.name
+            .replace(/[^\w\s-]/g,"")
+            .replace(/\s+/g,"_")
+            .substring(0,70)
+        +
+        "_SSC_2026.pdf";
+
+
+    const options = {
+
+        margin:0.25,
+
+        filename,
+
+        image:{
+            type:"jpeg",
+            quality:.98
+        },
+
+        html2canvas:{
+            scale:2,
+            useCORS:true,
+            backgroundColor:"#ffffff"
+        },
+
+        jsPDF:{
+            unit:"in",
+            format:"a4",
+            orientation:"portrait"
+        }
+
+    };
+
+
+    try{
+
+        await html2pdf()
+            .set(options)
+            .from(pdfContent)
+            .save();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "PDF generation error:",
+            error
+        );
+
+        alert(
+            "PDF could not be generated. Please try again."
+        );
+
+    }
+
+    finally{
+
+        pdfContent.remove();
+
+    }
+
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+function showLoading(){
+
+    state.style.display =
+        "block";
+
+    state.innerHTML = `
+
+        <div class="loader"></div>
+
+        <div class="state-title">
+            Loading institutions...
+        </div>
+
+        <div class="state-text">
+            Reading institution_results.json
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+function showError(error){
+
+    table.innerHTML = "";
+
+    state.style.display =
+        "block";
+
+
+    state.innerHTML = `
+
+        <div style="
+            font-size:40px;
+            margin-bottom:12px;
+        ">
+            ⚠️
+        </div>
+
+        <div class="state-title">
+            Institution data could not be loaded.
+        </div>
+
+        <div class="state-text">
+
+            Make sure this file exists:
+
+            <br><br>
+
+            <strong>
+                institution-collector/institution_results.json
+            </strong>
+
+        </div>
+
+        <div class="error-box">
+            ${escapeHTML(
+                error.message
+            )}
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+resetBtn.addEventListener(
+    "click",
+    () => {
+
+        searchInput.value =
+            "";
+
+        districtFilter.value =
+            "";
+
+        filteredInstitutions =
+            [...institutions];
+
+        renderInstitutions();
+
+    }
+);
 
 
 /* =========================================================
    SEARCH
 ========================================================= */
 
-function performSearch() {
-
-    const input =
-        document.getElementById(
-            "institutionSearch"
-        );
-
-    const query =
-        input.value
-            .trim()
-            .toLowerCase();
-
-    const resultBox =
-        document.getElementById(
-            "resultBox"
-        );
-
-    const resultsContainer =
-        document.getElementById(
-            "institutionResults"
-        );
-
-    const resultCount =
-        document.getElementById(
-            "resultCount"
-        );
+searchInput.addEventListener(
+    "input",
+    applyFilters
+);
 
 
-    if (!query) {
-
-        resultBox.classList.remove(
-            "show"
-        );
-
-        return;
-
-    }
-
-
-    const results =
-        institutionData
-            .filter(item => {
-
-                const name =
-                    String(item.name)
-                        .toLowerCase();
-
-                const eiin =
-                    String(item.eiin)
-                        .toLowerCase();
-
-                const district =
-                    String(item.district)
-                        .toLowerCase();
-
-                return (
-                    name.includes(query) ||
-                    eiin.includes(query) ||
-                    district.includes(query)
-                );
-
-            })
-            .slice(0, 50);
-
-
-    resultBox.classList.add("show");
-
-    resultCount.textContent =
-        `${results.length} result${
-            results.length === 1 ? "" : "s"
-        }`;
-
-
-    if (!results.length) {
-
-        resultsContainer.innerHTML =
-            `<div class="empty">
-                No institution found.
-            </div>`;
-
-        return;
-
-    }
-
-
-    resultsContainer.innerHTML =
-        results.map(item => {
-
-            return `
-                <div class="institution-item">
-
-                    <div class="institution-name">
-                        ${escapeHTML(item.name)}
-                    </div>
-
-                    <div class="institution-meta">
-
-                        ${
-                            item.eiin
-                                ? `<span class="pill">
-                                    EIIN ${escapeHTML(item.eiin)}
-                                   </span>`
-                                : ""
-                        }
-
-                        ${
-                            item.district
-                                ? `<span class="pill">
-                                    📍 ${escapeHTML(item.district)}
-                                   </span>`
-                                : ""
-                        }
-
-                        ${
-                            item.students
-                                ? `<span class="pill">
-                                    👨‍🎓 ${formatNumber(item.students)}
-                                   </span>`
-                                : ""
-                        }
-
-                        ${
-                            item.gpa5
-                                ? `<span class="pill">
-                                    GPA 5: ${formatNumber(item.gpa5)}
-                                   </span>`
-                                : ""
-                        }
-
-                    </div>
-
-                </div>
-            `;
-
-        }).join("");
-
-}
+districtFilter.addEventListener(
+    "change",
+    applyFilters
+);
 
 
 /* =========================================================
-   ESCAPE HTML
+   MODAL EVENTS
 ========================================================= */
 
-function escapeHTML(value) {
+closeModal.addEventListener(
+    "click",
+    closeInstitutionModal
+);
 
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
 
-}
+modal.addEventListener(
+    "click",
+    event => {
+
+        if(
+            event.target === modal
+        ){
+
+            closeInstitutionModal();
+
+        }
+
+    }
+);
+
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key === "Escape"
+        ){
+
+            closeInstitutionModal();
+
+        }
+
+    }
+);
 
 
 /* =========================================================
-   STATUS
+   PDF
 ========================================================= */
 
-function showStatus(message, type) {
-
-    const status =
-        document.getElementById(
-            "status"
-        );
-
-    status.textContent = message;
-
-    status.className =
-        "status show " + type;
-
-}
+document.getElementById(
+    "downloadPdf"
+).addEventListener(
+    "click",
+    downloadInstitutionPDF
+);
 
 
 /* =========================================================
    DARK MODE
 ========================================================= */
 
-const themeToggle =
-    document.getElementById(
-        "themeToggle"
-    );
+function updateThemeIcon(){
+
+    themeBtn.textContent =
+        document.body.classList.contains("dark")
+        ?
+        "☀"
+        :
+        "☾";
+
+}
 
 
 const savedTheme =
@@ -1573,7 +2694,7 @@ const savedTheme =
     );
 
 
-if (savedTheme === "dark") {
+if(savedTheme === "dark"){
 
     document.body.classList.add(
         "dark"
@@ -1582,7 +2703,10 @@ if (savedTheme === "dark") {
 }
 
 
-themeToggle.addEventListener(
+updateThemeIcon();
+
+
+themeBtn.addEventListener(
     "click",
     () => {
 
@@ -1590,79 +2714,32 @@ themeToggle.addEventListener(
             "dark"
         );
 
+
+        const mode =
+            document.body.classList.contains("dark")
+            ?
+            "dark"
+            :
+            "light";
+
+
         localStorage.setItem(
             "ctg-theme",
-            document.body.classList.contains(
-                "dark"
-            )
-                ? "dark"
-                : "light"
+            mode
         );
+
+
+        updateThemeIcon();
 
     }
 );
 
 
 /* =========================================================
-   EVENTS
-========================================================= */
-
-document
-    .getElementById("searchButton")
-    .addEventListener(
-        "click",
-        performSearch
-    );
-
-
-document
-    .getElementById("institutionSearch")
-    .addEventListener(
-        "keydown",
-        event => {
-
-            if (event.key === "Enter") {
-                performSearch();
-            }
-
-        }
-    );
-
-
-document
-    .getElementById("institutionSearch")
-    .addEventListener(
-        "input",
-        () => {
-
-            const value =
-                document
-                    .getElementById(
-                        "institutionSearch"
-                    )
-                    .value
-                    .trim();
-
-            if (!value) {
-
-                document
-                    .getElementById(
-                        "resultBox"
-                    )
-                    .classList
-                    .remove("show");
-
-            }
-
-        }
-    );
-
-
-/* =========================================================
    START
 ========================================================= */
 
-loadInstitutionData();
+loadInstitutions();
 
 </script>
 
