@@ -76,6 +76,10 @@
     padding:20px;
 }
 
+/* =========================================================
+   CONTROLS
+========================================================= */
+
 .ranking-controls {
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -113,6 +117,10 @@
     outline:none;
 }
 
+/* =========================================================
+   GROUP TABS
+========================================================= */
+
 .group-tabs {
     display:flex;
     gap:8px;
@@ -131,12 +139,21 @@
     font-weight:600;
     cursor:pointer;
     white-space:nowrap;
+    transition:.2s;
+}
+
+.group-tab:hover {
+    transform:translateY(-1px);
 }
 
 .group-tab.active {
     background:var(--text);
     color:var(--bg);
 }
+
+/* =========================================================
+   TITLE
+========================================================= */
 
 .ranking-title {
     display:flex;
@@ -173,33 +190,34 @@
     cursor:pointer;
     white-space:nowrap;
     box-shadow:0 8px 22px rgba(0,0,0,.12);
-    transition:transform .2s,box-shadow .2s,opacity .2s;
+    transition:.2s;
 }
 
 .pdf-download-btn:hover {
     transform:translateY(-1px);
-    box-shadow:0 12px 28px rgba(0,0,0,.17);
-}
-
-.pdf-download-btn:active {
-    transform:scale(.98);
 }
 
 .pdf-download-btn:disabled {
     opacity:.55;
     cursor:not-allowed;
-    transform:none;
 }
 
 .pdf-icon {
     font-size:16px;
-    line-height:1;
 }
+
+/* =========================================================
+   SEARCH
+========================================================= */
 
 .student-search {
     margin-bottom:18px;
     background:white;
 }
+
+/* =========================================================
+   LIST
+========================================================= */
 
 .student-list {
     width:100%;
@@ -212,7 +230,13 @@
 
 .student-header {
     display:grid;
-    grid-template-columns:60px minmax(190px,1fr) 80px 110px minmax(230px,1.15fr);
+    grid-template-columns:
+        60px
+        minmax(190px,1fr)
+        80px
+        110px
+        minmax(230px,1.15fr);
+
     align-items:center;
     gap:12px;
     padding:16px 22px;
@@ -227,7 +251,13 @@
 
 .student-row {
     display:grid;
-    grid-template-columns:60px minmax(190px,1fr) 80px 110px minmax(230px,1.15fr);
+    grid-template-columns:
+        60px
+        minmax(190px,1fr)
+        80px
+        110px
+        minmax(230px,1.15fr);
+
     align-items:center;
     gap:12px;
     padding:18px 22px;
@@ -255,8 +285,14 @@
     color:#c68a00;
 }
 
-.student-name {
+.student-name,
+.student-gpa,
+.student-total,
+.student-institution {
     min-width:0;
+}
+
+.student-name {
     overflow:hidden;
 }
 
@@ -275,13 +311,6 @@
     color:var(--muted);
     font-size:10px;
     margin-top:4px;
-    line-height:1.3;
-}
-
-.student-gpa,
-.student-total,
-.student-institution {
-    min-width:0;
 }
 
 .student-gpa strong,
@@ -315,7 +344,6 @@
     font-weight:700;
     white-space:normal;
     overflow-wrap:anywhere;
-    word-break:break-word;
 }
 
 .student-institution span {
@@ -323,7 +351,6 @@
     color:var(--muted);
     font-size:10px;
     margin-top:4px;
-    line-height:1.3;
 }
 
 .loading-message,
@@ -337,6 +364,10 @@
 .error-message {
     color:#d93025;
 }
+
+/* =========================================================
+   PAGINATION
+========================================================= */
 
 .pagination {
     display:flex;
@@ -357,7 +388,6 @@
     font-size:13px;
     font-weight:700;
     cursor:pointer;
-    transition:.2s;
 }
 
 .pagination button:hover:not(:disabled) {
@@ -377,6 +407,10 @@
     font-size:13px;
     font-weight:700;
 }
+
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media(max-width:900px) {
 
@@ -462,26 +496,13 @@
         font-size:12px;
     }
 
-    .student-name span {
-        font-size:9px;
-    }
-
     .student-gpa strong,
     .student-total strong {
         font-size:12px;
     }
 
-    .student-gpa span,
-    .student-total span {
-        font-size:8px;
-    }
-
     .student-institution strong {
         font-size:10.5px;
-    }
-
-    .student-institution span {
-        font-size:9px;
     }
 }
 
@@ -519,10 +540,6 @@
         font-size:11.5px;
     }
 
-    .student-name span {
-        font-size:8.5px;
-    }
-
     .student-gpa strong,
     .student-total strong {
         font-size:11px;
@@ -534,10 +551,6 @@
 
     .student-institution strong {
         font-size:10px;
-    }
-
-    .student-institution span {
-        font-size:8.5px;
     }
 
     .pagination {
@@ -565,8 +578,8 @@
 <header class="navbar">
 
 <a href="index.html" class="logo">
-<span class="logo-mark">C</span>
-<span>CTGBoardRanking</span>
+    <span class="logo-mark">C</span>
+    <span>CTGBoardRanking</span>
 </a>
 
 <nav class="nav-links">
@@ -574,19 +587,19 @@
 <a href="index.html">Home</a>
 
 <a href="student-ranking.html" class="active">
-Student Ranking
+    Student Ranking
 </a>
 
 <a href="rankings.html">
-Institution Ranking
+    Institution Ranking
 </a>
 
 <a href="district.html">
-Districts
+    Districts
 </a>
 
 <a href="statistics.html">
-Statistics
+    Statistics
 </a>
 
 </nav>
@@ -600,29 +613,31 @@ Statistics
 
 </header>
 
+
 <main>
 
 <section class="student-hero">
 
 <a href="index.html" class="back-link">
-← Back to Home
+    ← Back to Home
 </a>
 
 <span class="eyebrow">
-CHITTAGONG BOARD
+    CHITTAGONG BOARD
 </span>
 
 <h1>
-Student<br>
-<span>Ranking.</span>
+    Student<br>
+    <span>Ranking.</span>
 </h1>
 
 <p>
-Explore the top performing SSC 2026 students
-by group, ranked by Total Score.
+    Explore the top performing SSC 2026 students
+    by group, ranked by Total Score.
 </p>
 
 </section>
+
 
 <section class="student-content">
 
@@ -631,77 +646,81 @@ by group, ranked by Total Score.
 <div class="control-card">
 
 <label>
-ACADEMIC YEAR
+    ACADEMIC YEAR
 </label>
 
 <select id="yearSelect">
-<option value="2026">2026</option>
+    <option value="2026">2026</option>
 </select>
 
 </div>
+
 
 <div class="control-card">
 
 <label>
-RANKING
+    RANKING
 </label>
 
 <select id="rankingType">
-<option value="score">
-Total Score Ranking
-</option>
+    <option value="score">
+        Total Score Ranking
+    </option>
 </select>
 
 </div>
 
 </div>
+
 
 <div class="group-tabs">
 
 <button
     class="group-tab active"
     data-group="Science">
-🔬 Science
+    🔬 Science
 </button>
 
 <button
     class="group-tab"
     data-group="Business Studies">
-💼 Business Studies
+    💼 Business Studies
 </button>
 
 <button
     class="group-tab"
     data-group="Humanities">
-🎓 Humanities
+    🎓 Humanities
 </button>
 
 <button
     class="group-tab"
     data-group="Science Irregular">
-📚 Science Irregular
+    📚 Science Irregular
 </button>
 
 </div>
+
 
 <div class="ranking-title">
 
 <div>
 
 <span class="eyebrow">
-TOP 100 PERFORMERS
+    TOP 100 PERFORMERS
 </span>
 
 <h2 id="groupTitle">
-Science Students
+    Science Students
 </h2>
 
 </div>
 
+
 <div>
 
 <p id="yearText">
-2026 · Chattogram Board
+    2026 · Chattogram Board
 </p>
 
 <button
@@ -710,7 +729,7 @@ Science Students
     type="button">
 
 <span class="pdf-icon">
-↓
+    ↓
 </span>
 
 Download PDF
@@ -721,12 +740,14 @@ Download PDF
 
 </div>
 
+
 <input
     type="search"
     id="studentSearch"
     class="student-search"
     placeholder="Search student, roll or institution..."
     autocomplete="off">
+
 
 <div class="student-list">
 
@@ -740,43 +761,64 @@ Download PDF
 
 </div>
 
+
 <div id="studentRows">
 
 <div class="loading-message">
-Loading student ranking...
+    Loading student ranking...
 </div>
 
 </div>
+
 
 <div
     id="emptyMessage"
     class="empty-message"
     style="display:none;">
-No student found.
+
+    No student found.
+
 </div>
+
 
 <div
     id="errorMessage"
     class="error-message"
     style="display:none;">
-Student ranking data could not be loaded.
+
+    Student ranking data could not be loaded.
+
 </div>
+
 
 <div
     id="pagination"
     class="pagination"
     style="display:none;">
 
-<button id="prevPage" type="button" disabled>
-← Previous
+<button
+    id="prevPage"
+    type="button"
+    disabled>
+
+    ← Previous
+
 </button>
 
-<span id="paginationInfo" class="pagination-info">
-Page 1
+<span
+    id="paginationInfo"
+    class="pagination-info">
+
+    Page 1
+
 </span>
 
-<button id="nextPage" type="button">
-Next →
+<button
+    id="nextPage"
+    type="button">
+
+    Next →
+
 </button>
 
 </div>
@@ -787,6 +829,7 @@ Next →
 
 </main>
 
+
 <footer>
 
 <div class="footer-main">
@@ -796,7 +839,7 @@ Next →
 <div class="footer-logo">
 
 <span class="logo-mark">
-C
+    C
 </span>
 
 CTGBoardRanking
@@ -804,57 +847,67 @@ CTGBoardRanking
 </div>
 
 <p>
-Chattogram Board Education Rankings.
+    Chattogram Board Education Rankings.
 </p>
 
 </div>
 
+
 <div class="footer-links">
 
 <a href="student-ranking.html">
-Student Ranking
+    Student Ranking
 </a>
 
 <a href="rankings.html">
-Institution Ranking
+    Institution Ranking
 </a>
 
 <a href="district.html">
-Districts
+    Districts
 </a>
 
 <a href="statistics.html">
-Statistics
+    Statistics
 </a>
 
 </div>
 
 </div>
+
 
 <div class="footer-bottom">
 
 <span>
-© 2026 CTGBoardRanking
+    © 2026 CTGBoardRanking
 </span>
 
 <span>
-Education Data & Statistics
+    Education Data & Statistics
 </span>
 
 </div>
 
 </footer>
 
+
 <script src="script.js"></script>
+
 
 <script>
 
 /* =========================================================
-   SUPABASE CONFIG
-   IMPORTANT:
-   Use ONLY the Publishable Key in browser.
-   NEVER put SUPABASE_SECRET_KEY here.
+   SUPABASE CONFIGURATION
 ========================================================= */
+
+/*
+   IMPORTANT:
+
+   Publishable Key is SAFE for browser-side use
+   when your Supabase RLS policies are configured correctly.
+
+   NEVER put SUPABASE_SECRET_KEY / secret key here.
+*/
 
 const SUPABASE_URL =
     "https://mpnjnyejpqeqguxikvnl.supabase.co";
@@ -864,25 +917,34 @@ const SUPABASE_PUBLISHABLE_KEY =
 
 
 /* =========================================================
-   SUPABASE TABLE
+   DATABASE
 ========================================================= */
 
 const SUPABASE_TABLE = "students";
 
 
-/* =========================================================
-   VARIABLES
-========================================================= */
+/*
+   Number of students displayed per page.
 
-let allStudents = [];
+   The page is designed around Top 100 ranking.
+*/
+
+const PAGE_SIZE = 100;
+
+
+/* =========================================================
+   STATE
+========================================================= */
 
 let currentGroup = "Science";
 
-let currentSearch = "";
-
 let currentPage = 1;
 
-const PAGE_SIZE = 100;
+let currentSearch = "";
+
+let currentStudents = [];
+
+let totalStudents = 0;
 
 
 /* =========================================================
@@ -927,93 +989,212 @@ const yearSelect =
 
 
 /* =========================================================
-   LOAD STUDENTS DIRECTLY FROM SUPABASE
+   SUPABASE REQUEST
+========================================================= */
+
+async function supabaseRequest(params = "") {
+
+    const base =
+        SUPABASE_URL.replace(/\/+$/, "");
+
+    const url =
+        `${base}/rest/v1/${SUPABASE_TABLE}?${params}`;
+
+
+    const response =
+        await fetch(url, {
+
+            method:"GET",
+
+            headers:{
+
+                "apikey":
+                    SUPABASE_PUBLISHABLE_KEY,
+
+                "Authorization":
+                    `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+
+                "Content-Type":
+                    "application/json",
+
+                "Accept":
+                    "application/json",
+
+                "Prefer":
+                    "count=exact"
+
+            },
+
+            cache:"no-store"
+
+        });
+
+
+    if (!response.ok) {
+
+        let message =
+            `Supabase HTTP ${response.status}`;
+
+        try {
+
+            const text =
+                await response.text();
+
+            if (text) {
+                message += `: ${text}`;
+            }
+
+        } catch (_) {}
+
+        throw new Error(message);
+
+    }
+
+
+    return response;
+
+}
+
+
+/* =========================================================
+   LOAD STUDENTS
 ========================================================= */
 
 async function loadStudents() {
 
+    rowsContainer.innerHTML = `
+        <div class="loading-message">
+            Loading ${escapeHTML(currentGroup)} ranking...
+        </div>
+    `;
+
+    emptyMessage.style.display =
+        "none";
+
+    errorMessage.style.display =
+        "none";
+
+    pagination.style.display =
+        "none";
+
+
     try {
-
-        rowsContainer.innerHTML = `
-            <div class="loading-message">
-                Loading student ranking...
-            </div>
-        `;
-
-        errorMessage.style.display = "none";
-        emptyMessage.style.display = "none";
-
 
         if (
             !SUPABASE_URL ||
-            SUPABASE_URL === "YOUR_SUPABASE_URL" ||
-            !SUPABASE_PUBLISHABLE_KEY ||
-            SUPABASE_PUBLISHABLE_KEY ===
-                "YOUR_SUPABASE_PUBLISHABLE_KEY"
+            SUPABASE_URL.includes("YOUR_SUPABASE")
         ) {
 
             throw new Error(
-                "Supabase URL or Publishable Key is not configured."
+                "Supabase URL is not configured."
+            );
+
+        }
+
+
+        if (
+            !SUPABASE_PUBLISHABLE_KEY ||
+            SUPABASE_PUBLISHABLE_KEY.includes(
+                "YOUR_SUPABASE"
+            )
+        ) {
+
+            throw new Error(
+                "Supabase Publishable Key is not configured."
             );
 
         }
 
 
         /*
-         * Supabase REST API
+         * Build Supabase query.
          *
-         * No students.json
-         * No GitHub Actions sync
-         * Direct database request
+         * Ranking:
+         *
+         * total_score DESC
+         * gpa DESC
+         * roll ASC
          */
 
-        const url =
-            SUPABASE_URL.replace(/\/+$/, "") +
-            "/rest/v1/" +
-            SUPABASE_TABLE +
-            "?select=*";
+        const query =
+            new URLSearchParams();
 
 
-        const response =
-            await fetch(url, {
-
-                method: "GET",
-
-                headers: {
-
-                    "apikey":
-                        SUPABASE_PUBLISHABLE_KEY,
-
-                    "Authorization":
-                        "Bearer " +
-                        SUPABASE_PUBLISHABLE_KEY,
-
-                    "Content-Type":
-                        "application/json",
-
-                    "Accept":
-                        "application/json"
-
-                },
-
-                cache: "no-store"
-
-            });
+        query.set(
+            "select",
+            "*"
+        );
 
 
-        if (!response.ok) {
+        /*
+         * Group filter
+         */
 
-            const errorText =
-                await response.text();
+        query.set(
+            "group",
+            `eq.${currentGroup}`
+        );
 
-            throw new Error(
-                "Supabase HTTP " +
-                response.status +
-                ": " +
-                errorText
+
+        /*
+         * Ranking order
+         */
+
+        query.set(
+            "order",
+            "total_score.desc.nullslast,gpa.desc.nullslast,roll.asc"
+        );
+
+
+        /*
+         * Search
+         */
+
+        if (currentSearch) {
+
+            const escapedSearch =
+                currentSearch
+                    .replace(/\\/g,"\\\\")
+                    .replace(/"/g,'\\"')
+                    .replace(/,/g,"");
+
+            query.set(
+                "or",
+                `(name.ilike.*${escapedSearch}*,roll.ilike.*${escapedSearch}*,institute.ilike.*${escapedSearch}*,institution.ilike.*${escapedSearch}*)`
             );
 
         }
+
+
+        /*
+         * Database pagination
+         */
+
+        const from =
+            currentPage * PAGE_SIZE -
+            PAGE_SIZE;
+
+        const to =
+            from +
+            PAGE_SIZE -
+            1;
+
+
+        query.set(
+            "offset",
+            String(from)
+        );
+
+        query.set(
+            "limit",
+            String(PAGE_SIZE)
+        );
+
+
+        const response =
+            await supabaseRequest(
+                query.toString()
+            );
 
 
         const data =
@@ -1029,24 +1210,59 @@ async function loadStudents() {
         }
 
 
-        allStudents =
+        currentStudents =
             data;
 
 
-        console.log(
-            "Supabase students loaded:",
-            allStudents.length
-        );
+        /*
+         * Read exact total count
+         */
 
-
-        if (allStudents.length) {
-
-            console.log(
-                "First student:",
-                allStudents[0]
+        const contentRange =
+            response.headers.get(
+                "Content-Range"
             );
 
+
+        totalStudents =
+            parseContentRange(
+                contentRange
+            );
+
+
+        /*
+         * If Content-Range is unavailable,
+         * estimate from returned records.
+         */
+
+        if (
+            !Number.isFinite(totalStudents)
+        ) {
+
+            totalStudents =
+                data.length === PAGE_SIZE
+                ? (
+                    from +
+                    PAGE_SIZE +
+                    1
+                )
+                : (
+                    from +
+                    data.length
+                );
+
         }
+
+
+        console.log(
+            "Supabase ranking:",
+            {
+                group:currentGroup,
+                page:currentPage,
+                students:data.length,
+                total:totalStudents
+            }
+        );
 
 
         renderStudents();
@@ -1056,12 +1272,13 @@ async function loadStudents() {
     catch(error) {
 
         console.error(
-            "Supabase student ranking error:",
+            "Supabase ranking error:",
             error
         );
 
 
-        rowsContainer.innerHTML = "";
+        rowsContainer.innerHTML =
+            "";
 
         errorMessage.textContent =
             "Student ranking data could not be loaded.";
@@ -1078,81 +1295,45 @@ async function loadStudents() {
 
 
 /* =========================================================
-   NORMALIZE GROUP
+   CONTENT RANGE
 ========================================================= */
 
-function normalizeGroup(group) {
+function parseContentRange(value) {
 
-    if (!group) {
-        return "";
-    }
-
-    return String(group)
-        .trim()
-        .toLowerCase();
-
-}
-
-
-/* =========================================================
-   GROUP MATCH
-========================================================= */
-
-function matchesGroup(student) {
-
-    const group =
-        normalizeGroup(
-            student.group
-        );
-
-    const selected =
-        normalizeGroup(
-            currentGroup
-        );
-
-    return group === selected;
-
-}
-
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-function matchesSearch(student) {
-
-    if (!currentSearch) {
-        return true;
+    if (!value) {
+        return NaN;
     }
 
 
-    const text = [
+    /*
+     * Example:
+     *
+     * 0-99/34590
+     */
 
-        student.name,
-        student.roll,
-        student.institute,
-        student.institution,
-        student.district,
-        student.group,
-        student.gpa,
-        student.calculated_subject_mark_sum,
-        student.total_score,
-        student.total_marks,
-        student.totalMarks
-
-    ]
-    .filter(
-        value =>
-            value !== undefined &&
-            value !== null
-    )
-    .join(" ")
-    .toLowerCase();
+    const match =
+        value.match(
+            /\/(\d+|\*)$/
+        );
 
 
-    return text.includes(
-        currentSearch
-    );
+    if (!match) {
+        return NaN;
+    }
+
+
+    if (match[1] === "*") {
+        return NaN;
+    }
+
+
+    const number =
+        Number(match[1]);
+
+
+    return Number.isFinite(number)
+        ? number
+        : NaN;
 
 }
 
@@ -1165,9 +1346,9 @@ function getTotalScore(student) {
 
     const values = [
 
-        student.calculated_subject_mark_sum,
-
         student.total_score,
+
+        student.calculated_subject_mark_sum,
 
         student.totalScore,
 
@@ -1211,6 +1392,11 @@ function getTotalScore(student) {
 
     }
 
+
+    /*
+     * Fallback:
+     * calculate from subjects if available.
+     */
 
     if (
         Array.isArray(
@@ -1259,113 +1445,20 @@ function getTotalScore(student) {
 
 
 /* =========================================================
-   GET GPA
+   GPA
 ========================================================= */
 
 function getGPA(student) {
 
-    if (
-        student.gpa !== undefined &&
-        student.gpa !== null &&
-        String(student.gpa).trim() !== "" &&
-        String(student.gpa).toLowerCase() !== "null"
-    ) {
-
-        const gpa =
-            Number(student.gpa);
-
-
-        if (
-            Number.isFinite(gpa)
-        ) {
-
-            return gpa;
-
-        }
-
-    }
-
-
-    return 0;
-
-}
-
-
-/* =========================================================
-   SORT
-========================================================= */
-
-function sortStudents(list) {
-
-    return [...list].sort(
-        (a,b) => {
-
-            const scoreA =
-                getTotalScore(a);
-
-            const scoreB =
-                getTotalScore(b);
-
-
-            if (
-                scoreB !== scoreA
-            ) {
-
-                return scoreB - scoreA;
-
-            }
-
-
-            const gpaA =
-                getGPA(a);
-
-            const gpaB =
-                getGPA(b);
-
-
-            if (
-                gpaB !== gpaA
-            ) {
-
-                return gpaB - gpaA;
-
-            }
-
-
-            const rollA =
-                Number(a.roll) ||
-                999999999;
-
-            const rollB =
-                Number(b.roll) ||
-                999999999;
-
-
-            return rollA - rollB;
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   FILTER
-========================================================= */
-
-function getFilteredStudents() {
-
-    const filtered =
-        allStudents.filter(
-            student =>
-                matchesGroup(student) &&
-                matchesSearch(student)
+    const value =
+        Number(
+            student.gpa
         );
 
 
-    return sortStudents(
-        filtered
-    );
+    return Number.isFinite(value)
+        ? value
+        : 0;
 
 }
 
@@ -1376,48 +1469,15 @@ function getFilteredStudents() {
 
 function renderStudents() {
 
-    rowsContainer.innerHTML = "";
+    rowsContainer.innerHTML =
+        "";
 
-    const filtered =
-        getFilteredStudents();
-
-    const totalStudents =
-        filtered.length;
-
-    const totalPages =
-        Math.ceil(
-            totalStudents /
-            PAGE_SIZE
-        );
+    emptyMessage.style.display =
+        "none";
 
 
     if (
-        totalPages > 0 &&
-        currentPage > totalPages
-    ) {
-
-        currentPage =
-            totalPages;
-
-    }
-
-
-    const startIndex =
-        (
-            currentPage - 1
-        ) *
-        PAGE_SIZE;
-
-
-    const pageStudents =
-        filtered.slice(
-            startIndex,
-            startIndex + PAGE_SIZE
-        );
-
-
-    if (
-        !pageStudents.length
+        !currentStudents.length
     ) {
 
         emptyMessage.style.display =
@@ -1431,11 +1491,7 @@ function renderStudents() {
     }
 
 
-    emptyMessage.style.display =
-        "none";
-
-
-    pageStudents.forEach(
+    currentStudents.forEach(
         (student,index) => {
 
             const row =
@@ -1449,15 +1505,21 @@ function renderStudents() {
 
 
             const rank =
-                startIndex +
+                (
+                    (
+                        currentPage -
+                        1
+                    ) *
+                    PAGE_SIZE
+                ) +
                 index +
                 1;
 
 
             const rankClass =
                 rank === 1
-                ? "student-rank gold"
-                : "student-rank";
+                    ? "student-rank gold"
+                    : "student-rank";
 
 
             const name =
@@ -1473,14 +1535,15 @@ function renderStudents() {
             const gpa =
                 student.gpa !== undefined &&
                 student.gpa !== null &&
-                String(student.gpa).trim() !== "" &&
-                String(student.gpa).toLowerCase() !== "null"
-                ? student.gpa
-                : "—";
+                String(student.gpa).trim() !== ""
+                    ? String(student.gpa)
+                    : "—";
 
 
             const totalScore =
-                getTotalScore(student);
+                getTotalScore(
+                    student
+                );
 
 
             const institute =
@@ -1498,10 +1561,10 @@ function renderStudents() {
                 Number.isFinite(
                     Number(totalScore)
                 )
-                ? Number(totalScore)
-                    .toFixed(2)
-                    .replace(/\.00$/, "")
-                : "—";
+                    ? Number(totalScore)
+                        .toFixed(2)
+                        .replace(/\.00$/,"")
+                    : "—";
 
 
             row.innerHTML = `
@@ -1571,6 +1634,24 @@ function renderStudents() {
     );
 
 
+    updatePagination();
+
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+function updatePagination() {
+
+    const totalPages =
+        Math.ceil(
+            totalStudents /
+            PAGE_SIZE
+        );
+
+
     if (
         totalPages <= 1
     ) {
@@ -1578,23 +1659,25 @@ function renderStudents() {
         pagination.style.display =
             "none";
 
-    }
-
-    else {
-
-        pagination.style.display =
-            "flex";
-
-        paginationInfo.textContent =
-            `Page ${currentPage} of ${totalPages}`;
-
-        prevPage.disabled =
-            currentPage <= 1;
-
-        nextPage.disabled =
-            currentPage >= totalPages;
+        return;
 
     }
+
+
+    pagination.style.display =
+        "flex";
+
+
+    paginationInfo.textContent =
+        `Page ${currentPage} of ${totalPages}`;
+
+
+    prevPage.disabled =
+        currentPage <= 1;
+
+
+    nextPage.disabled =
+        currentPage >= totalPages;
 
 }
 
@@ -1606,11 +1689,31 @@ function renderStudents() {
 function escapeHTML(value) {
 
     return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -1621,19 +1724,17 @@ function escapeHTML(value) {
 
 function getPDFDate() {
 
-    const now =
-        new Date();
-
-    return now.toLocaleString(
-        "en-GB",
-        {
-            day:"2-digit",
-            month:"short",
-            year:"numeric",
-            hour:"2-digit",
-            minute:"2-digit"
-        }
-    );
+    return new Date()
+        .toLocaleString(
+            "en-GB",
+            {
+                day:"2-digit",
+                month:"short",
+                year:"numeric",
+                hour:"2-digit",
+                minute:"2-digit"
+            }
+        );
 
 }
 
@@ -1644,39 +1745,12 @@ function getPDFDate() {
 
 async function downloadCurrentPagePDF() {
 
-    if (!allStudents.length) {
+    if (
+        !currentStudents.length
+    ) {
 
         alert(
             "Student data is still loading."
-        );
-
-        return;
-
-    }
-
-
-    const filtered =
-        getFilteredStudents();
-
-
-    const startIndex =
-        (
-            currentPage - 1
-        ) *
-        PAGE_SIZE;
-
-
-    const pageStudents =
-        filtered.slice(
-            startIndex,
-            startIndex + PAGE_SIZE
-        );
-
-
-    if (!pageStudents.length) {
-
-        alert(
-            "No students available on this page."
         );
 
         return;
@@ -1703,32 +1777,59 @@ async function downloadCurrentPagePDF() {
 
     try {
 
+        if (
+            !window.jspdf ||
+            !window.jspdf.jsPDF
+        ) {
+
+            throw new Error(
+                "jsPDF library not loaded."
+            );
+
+        }
+
+
         const {
             jsPDF
-        } = window.jspdf;
+        } =
+            window.jspdf;
 
 
         const doc =
             new jsPDF({
+
                 orientation:"portrait",
+
                 unit:"mm",
+
                 format:"a4"
+
             });
 
 
         const pageWidth =
-            doc.internal.pageSize.getWidth();
+            doc.internal
+                .pageSize
+                .getWidth();
+
 
         const pageHeight =
-            doc.internal.pageSize.getHeight();
+            doc.internal
+                .pageSize
+                .getHeight();
+
 
         const generationDate =
             getPDFDate();
 
+
         const totalPages =
-            Math.ceil(
-                filtered.length /
-                PAGE_SIZE
+            Math.max(
+                1,
+                Math.ceil(
+                    totalStudents /
+                    PAGE_SIZE
+                )
             );
 
 
@@ -1738,6 +1839,7 @@ async function downloadCurrentPagePDF() {
             250
         );
 
+
         doc.rect(
             0,
             0,
@@ -1746,20 +1848,24 @@ async function downloadCurrentPagePDF() {
             "F"
         );
 
+
         doc.setTextColor(
             17,
             17,
             17
         );
 
+
         doc.setFont(
             "helvetica",
             "bold"
         );
 
+
         doc.setFontSize(
             19
         );
+
 
         doc.text(
             "CTGBoardRanking",
@@ -1767,14 +1873,17 @@ async function downloadCurrentPagePDF() {
             13
         );
 
+
         doc.setFont(
             "helvetica",
             "normal"
         );
 
+
         doc.setFontSize(
             8.5
         );
+
 
         doc.setTextColor(
             100,
@@ -1782,11 +1891,13 @@ async function downloadCurrentPagePDF() {
             105
         );
 
+
         doc.text(
             "Unofficial • Education Data & Statistics",
             15,
             20
         );
+
 
         doc.text(
             "Generated by Shadat Fatih",
@@ -1797,6 +1908,7 @@ async function downloadCurrentPagePDF() {
             }
         );
 
+
         doc.text(
             generationDate,
             pageWidth - 15,
@@ -1806,20 +1918,24 @@ async function downloadCurrentPagePDF() {
             }
         );
 
+
         doc.setTextColor(
             17,
             17,
             17
         );
 
+
         doc.setFont(
             "helvetica",
             "bold"
         );
 
+
         doc.setFontSize(
             16
         );
+
 
         doc.text(
             "Student Ranking",
@@ -1827,20 +1943,24 @@ async function downloadCurrentPagePDF() {
             43
         );
 
+
         doc.setFont(
             "helvetica",
             "normal"
         );
 
+
         doc.setFontSize(
             9
         );
+
 
         doc.setTextColor(
             90,
             90,
             95
         );
+
 
         doc.text(
             `${yearSelect.value} · Chattogram Board · ${currentGroup} · Page ${currentPage} of ${totalPages}`,
@@ -1849,8 +1969,16 @@ async function downloadCurrentPagePDF() {
         );
 
 
+        const startIndex =
+            (
+                currentPage -
+                1
+            ) *
+            PAGE_SIZE;
+
+
         const tableData =
-            pageStudents.map(
+            currentStudents.map(
                 (student,index) => {
 
                     const rank =
@@ -1858,37 +1986,50 @@ async function downloadCurrentPagePDF() {
                         index +
                         1;
 
+
                     const name =
                         student.name ||
                         "Unknown Student";
+
 
                     const roll =
                         student.roll ||
                         "—";
 
+
                     const gpa =
                         student.gpa !== undefined &&
                         student.gpa !== null &&
                         String(student.gpa).trim() !== ""
-                        ? String(student.gpa)
-                        : "—";
+                            ? String(student.gpa)
+                            : "—";
 
-                    const totalScore =
-                        getTotalScore(student);
+
+                    const score =
+                        getTotalScore(
+                            student
+                        );
+
 
                     const formattedScore =
-                        Number(totalScore)
+                        Number(score)
                             .toFixed(2)
-                            .replace(/\.00$/,"");
+                            .replace(
+                                /\.00$/,
+                                ""
+                            );
+
 
                     const institute =
                         student.institute ||
                         student.institution ||
                         "Unknown Institution";
 
+
                     const district =
                         student.district ||
                         "Chattogram";
+
 
                     return [
 
@@ -1932,20 +2073,49 @@ async function downloadCurrentPagePDF() {
             },
 
             styles:{
+
                 font:"helvetica",
+
                 fontSize:7,
+
                 cellPadding:2.8,
-                textColor:[35,35,38],
-                lineColor:[225,225,228],
+
+                textColor:[
+                    35,
+                    35,
+                    38
+                ],
+
+                lineColor:[
+                    225,
+                    225,
+                    228
+                ],
+
                 lineWidth:.2,
+
                 valign:"middle"
+
             },
 
             headStyles:{
-                fillColor:[245,245,247],
-                textColor:[75,75,80],
+
+                fillColor:[
+                    245,
+                    245,
+                    247
+                ],
+
+                textColor:[
+                    75,
+                    75,
+                    80
+                ],
+
                 fontStyle:"bold",
+
                 fontSize:7
+
             },
 
             columnStyles:{
@@ -1970,7 +2140,11 @@ async function downloadCurrentPagePDF() {
                     cellWidth:25,
                     halign:"center",
                     fontStyle:"bold",
-                    textColor:[0,113,227]
+                    textColor:[
+                        0,
+                        113,
+                        227
+                    ]
                 },
 
                 4:{
@@ -1980,7 +2154,11 @@ async function downloadCurrentPagePDF() {
             },
 
             alternateRowStyles:{
-                fillColor:[252,252,253]
+                fillColor:[
+                    252,
+                    252,
+                    253
+                ]
             },
 
             didParseCell:function(data) {
@@ -1992,7 +2170,11 @@ async function downloadCurrentPagePDF() {
                 ) {
 
                     data.cell.styles.textColor =
-                        [198,138,0];
+                        [
+                            198,
+                            138,
+                            0
+                        ];
 
                 }
 
@@ -2001,13 +2183,16 @@ async function downloadCurrentPagePDF() {
             didDrawPage:function() {
 
                 const pdfPage =
-                    doc.internal.getNumberOfPages();
+                    doc.internal
+                        .getNumberOfPages();
+
 
                 doc.setDrawColor(
                     225,
                     225,
                     228
                 );
+
 
                 doc.line(
                     12,
@@ -2016,14 +2201,17 @@ async function downloadCurrentPagePDF() {
                     pageHeight - 13
                 );
 
+
                 doc.setFont(
                     "helvetica",
                     "normal"
                 );
 
+
                 doc.setFontSize(
                     7.5
                 );
+
 
                 doc.setTextColor(
                     120,
@@ -2031,11 +2219,13 @@ async function downloadCurrentPagePDF() {
                     125
                 );
 
+
                 doc.text(
                     "CTGBoardRanking • Unofficial Education Data",
                     12,
                     pageHeight - 7
                 );
+
 
                 doc.text(
                     `PDF Page ${pdfPage}`,
@@ -2053,14 +2243,17 @@ async function downloadCurrentPagePDF() {
 
         const safeGroup =
             currentGroup
+
                 .replace(
                     /[^a-z0-9]+/gi,
                     "-"
                 )
+
                 .replace(
                     /^-|-$/g,
                     ""
                 )
+
                 .toLowerCase();
 
 
@@ -2081,6 +2274,7 @@ async function downloadCurrentPagePDF() {
             error
         );
 
+
         alert(
             "PDF তৈরি করা যায়নি। আবার চেষ্টা করুন।"
         );
@@ -2091,6 +2285,7 @@ async function downloadCurrentPagePDF() {
 
         downloadPdfBtn.disabled =
             false;
+
 
         downloadPdfBtn.innerHTML =
             originalText;
@@ -2111,7 +2306,7 @@ downloadPdfBtn.addEventListener(
 
 
 /* =========================================================
-   GROUP BUTTONS
+   GROUP TABS
 ========================================================= */
 
 document
@@ -2123,11 +2318,32 @@ document
                 "click",
                 () => {
 
-                    currentGroup =
+                    const group =
                         tab.dataset.group;
+
+
+                    if (
+                        group === currentGroup
+                    ) {
+                        return;
+                    }
+
+
+                    currentGroup =
+                        group;
+
 
                     currentPage =
                         1;
+
+
+                    currentSearch =
+                        "";
+
+
+                    searchInput.value =
+                        "";
+
 
                     document
                         .querySelectorAll(
@@ -2144,11 +2360,12 @@ document
                             }
                         );
 
-                    groupTitle.textContent =
-                        currentGroup +
-                        " Students";
 
-                    renderStudents();
+                    groupTitle.textContent =
+                        `${currentGroup} Students`;
+
+
+                    loadStudents();
 
                 }
             );
@@ -2161,19 +2378,36 @@ document
    SEARCH
 ========================================================= */
 
+let searchTimer = null;
+
+
 searchInput.addEventListener(
     "input",
     () => {
 
         currentSearch =
             searchInput.value
-                .toLowerCase()
                 .trim();
+
 
         currentPage =
             1;
 
-        renderStudents();
+
+        clearTimeout(
+            searchTimer
+        );
+
+
+        searchTimer =
+            setTimeout(
+                () => {
+
+                    loadStudents();
+
+                },
+                350
+            );
 
     }
 );
@@ -2193,13 +2427,19 @@ prevPage.addEventListener(
             return;
         }
 
+
         currentPage--;
 
-        renderStudents();
+
+        loadStudents();
+
 
         window.scrollTo({
+
             top:450,
+
             behavior:"smooth"
+
         });
 
     }
@@ -2214,14 +2454,12 @@ nextPage.addEventListener(
     "click",
     () => {
 
-        const filteredCount =
-            getFilteredStudents().length;
-
         const totalPages =
             Math.ceil(
-                filteredCount /
+                totalStudents /
                 PAGE_SIZE
             );
+
 
         if (
             currentPage >= totalPages
@@ -2229,13 +2467,19 @@ nextPage.addEventListener(
             return;
         }
 
+
         currentPage++;
 
-        renderStudents();
+
+        loadStudents();
+
 
         window.scrollTo({
+
             top:450,
+
             behavior:"smooth"
+
         });
 
     }
@@ -2253,18 +2497,19 @@ yearSelect.addEventListener(
         currentPage =
             1;
 
-        yearText.textContent =
-            yearSelect.value +
-            " · Chattogram Board";
 
-        renderStudents();
+        yearText.textContent =
+            `${yearSelect.value} · Chattogram Board`;
+
+
+        loadStudents();
 
     }
 );
 
 
 /* =========================================================
-   START
+   INITIAL LOAD
 ========================================================= */
 
 loadStudents();
