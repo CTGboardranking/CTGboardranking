@@ -2846,45 +2846,22 @@
     "institution_score": 96.08,
     "grade_distribution": {
       "A+": 795,
-      "A-": 65,
       "A": 183,
+      "A-": 65,
       "B": 21,
       "C": 4
     },
     "subject_statistics": [
       {
-        "code": "109",
-        "subject": "MATHEMATICS",
+        "code": "101",
+        "subject": "BANGLA-I",
         "students_with_marks": 89,
-        "average_mark": 79.35,
+        "average_mark": 153.9,
         "grade_distribution": {
-          "A+": 50,
-          "A-": 16,
-          "A": 15,
-          "B": 7,
-          "C": 1
-        }
-      },
-      {
-        "code": "126",
-        "subject": "HIGHER MATHEMATICS",
-        "students_with_marks": 89,
-        "average_mark": 85.74,
-        "grade_distribution": {
-          "A+": 68,
-          "A": 16,
-          "A-": 4,
-          "B": 1
-        }
-      },
-      {
-        "code": "154",
-        "subject": "Information And Communication Technology",
-        "students_with_marks": 89,
-        "average_mark": 46.09,
-        "grade_distribution": {
-          "A+": 88,
-          "A": 1
+          "A+": 37,
+          "A": 40,
+          "A-": 10,
+          "B": 2
         }
       },
       {
@@ -2897,6 +2874,19 @@
           "A": 34,
           "A-": 14,
           "B": 1,
+          "C": 1
+        }
+      },
+      {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 89,
+        "average_mark": 79.35,
+        "grade_distribution": {
+          "A+": 50,
+          "A-": 16,
+          "A": 15,
+          "B": 7,
           "C": 1
         }
       },
@@ -2914,30 +2904,6 @@
         }
       },
       {
-        "code": "101",
-        "subject": "BANGLA-I",
-        "students_with_marks": 89,
-        "average_mark": 153.9,
-        "grade_distribution": {
-          "A+": 37,
-          "A": 40,
-          "A-": 10,
-          "B": 2
-        }
-      },
-      {
-        "code": "138",
-        "subject": "BIOLOGY",
-        "students_with_marks": 89,
-        "average_mark": 85.16,
-        "grade_distribution": {
-          "A+": 68,
-          "A-": 2,
-          "A": 16,
-          "B": 3
-        }
-      },
-      {
         "code": "111",
         "subject": "ISLAM AND MORAL EDUCATION",
         "students_with_marks": 83,
@@ -2947,6 +2913,18 @@
           "A": 6,
           "A-": 4,
           "B": 1
+        }
+      },
+      {
+        "code": "136",
+        "subject": "PHYSICS",
+        "students_with_marks": 89,
+        "average_mark": 82.97,
+        "grade_distribution": {
+          "A+": 61,
+          "A": 22,
+          "A-": 4,
+          "B": 2
         }
       },
       {
@@ -2962,12 +2940,37 @@
         }
       },
       {
-        "code": "156",
-        "subject": "Career Education",
+        "code": "138",
+        "subject": "BIOLOGY",
         "students_with_marks": 89,
-        "average_mark": 50.0,
+        "average_mark": 85.16,
         "grade_distribution": {
-          "A+": 89
+          "A+": 68,
+          "A-": 2,
+          "A": 16,
+          "B": 3
+        }
+      },
+      {
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 89,
+        "average_mark": 46.09,
+        "grade_distribution": {
+          "A+": 88,
+          "A": 1
+        }
+      },
+      {
+        "code": "126",
+        "subject": "HIGHER MATHEMATICS",
+        "students_with_marks": 89,
+        "average_mark": 85.74,
+        "grade_distribution": {
+          "A+": 68,
+          "A": 16,
+          "A-": 4,
+          "B": 1
         }
       },
       {
@@ -2980,15 +2983,12 @@
         }
       },
       {
-        "code": "136",
-        "subject": "PHYSICS",
+        "code": "156",
+        "subject": "Career Education",
         "students_with_marks": 89,
-        "average_mark": 82.97,
+        "average_mark": 50.0,
         "grade_distribution": {
-          "A+": 61,
-          "A": 22,
-          "A-": 4,
-          "B": 2
+          "A+": 89
         }
       },
       {
@@ -101438,8 +101438,8 @@
     "institution_score": 76.85,
     "grade_distribution": {
       "A+": 322,
-      "A-": 177,
       "A": 143,
+      "A-": 177,
       "B": 178,
       "C": 80,
       "F": 49,
@@ -151263,44 +151263,17 @@
     },
     "subject_statistics": [
       {
-        "code": "109",
-        "subject": "MATHEMATICS",
-        "students_with_marks": 35,
-        "average_mark": 50.57,
+        "code": "101",
+        "subject": "BANGLA-I",
+        "students_with_marks": 54,
+        "average_mark": 123.41,
         "grade_distribution": {
           "A+": 5,
-          "A-": 3,
+          "A": 9,
+          "B": 18,
+          "A-": 15,
           "C": 6,
-          "D": 16,
-          "F": 18,
-          "B": 3,
-          "A": 2,
-          "X": 1
-        }
-      },
-      {
-        "code": "126",
-        "subject": "HIGHER MATHEMATICS",
-        "students_with_marks": 19,
-        "average_mark": 66.42,
-        "grade_distribution": {
-          "A": 6,
-          "A-": 3,
-          "B": 6,
-          "F": 3,
-          "A+": 3,
-          "C": 1
-        }
-      },
-      {
-        "code": "154",
-        "subject": "Information And Communication Technology",
-        "students_with_marks": 54,
-        "average_mark": 40.2,
-        "grade_distribution": {
-          "A+": 28,
-          "A": 22,
-          "A-": 4
+          "D": 1
         }
       },
       {
@@ -151319,6 +151292,22 @@
         }
       },
       {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 35,
+        "average_mark": 50.57,
+        "grade_distribution": {
+          "A+": 5,
+          "A-": 3,
+          "C": 6,
+          "D": 16,
+          "F": 18,
+          "B": 3,
+          "A": 2,
+          "X": 1
+        }
+      },
+      {
         "code": "150",
         "subject": "BANGLADESH AND GLOBAL STUDIES",
         "students_with_marks": 23,
@@ -151328,33 +151317,6 @@
           "B": 3,
           "A-": 3,
           "A": 4
-        }
-      },
-      {
-        "code": "101",
-        "subject": "BANGLA-I",
-        "students_with_marks": 54,
-        "average_mark": 123.41,
-        "grade_distribution": {
-          "A+": 5,
-          "A": 9,
-          "B": 18,
-          "A-": 15,
-          "C": 6,
-          "D": 1
-        }
-      },
-      {
-        "code": "138",
-        "subject": "BIOLOGY",
-        "students_with_marks": 22,
-        "average_mark": 74.09,
-        "grade_distribution": {
-          "A+": 9,
-          "A": 5,
-          "B": 5,
-          "A-": 3,
-          "F": 1
         }
       },
       {
@@ -151372,6 +151334,19 @@
         }
       },
       {
+        "code": "136",
+        "subject": "PHYSICS",
+        "students_with_marks": 23,
+        "average_mark": 64.7,
+        "grade_distribution": {
+          "A": 7,
+          "A-": 6,
+          "B": 8,
+          "A+": 1,
+          "C": 1
+        }
+      },
+      {
         "code": "137",
         "subject": "CHEMISTRY",
         "students_with_marks": 23,
@@ -151384,12 +151359,41 @@
         }
       },
       {
-        "code": "156",
-        "subject": "Career Education",
-        "students_with_marks": 54,
-        "average_mark": 50.0,
+        "code": "138",
+        "subject": "BIOLOGY",
+        "students_with_marks": 22,
+        "average_mark": 74.09,
         "grade_distribution": {
-          "A+": 54
+          "A+": 9,
+          "A": 5,
+          "B": 5,
+          "A-": 3,
+          "F": 1
+        }
+      },
+      {
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 54,
+        "average_mark": 40.2,
+        "grade_distribution": {
+          "A+": 28,
+          "A": 22,
+          "A-": 4
+        }
+      },
+      {
+        "code": "126",
+        "subject": "HIGHER MATHEMATICS",
+        "students_with_marks": 19,
+        "average_mark": 66.42,
+        "grade_distribution": {
+          "A": 6,
+          "A-": 3,
+          "B": 6,
+          "F": 3,
+          "A+": 3,
+          "C": 1
         }
       },
       {
@@ -151402,16 +151406,12 @@
         }
       },
       {
-        "code": "136",
-        "subject": "PHYSICS",
-        "students_with_marks": 23,
-        "average_mark": 64.7,
+        "code": "156",
+        "subject": "Career Education",
+        "students_with_marks": 54,
+        "average_mark": 50.0,
         "grade_distribution": {
-          "A": 7,
-          "A-": 6,
-          "B": 8,
-          "A+": 1,
-          "C": 1
+          "A+": 54
         }
       },
       {
@@ -163081,8 +163081,8 @@
     "average_gpa": 3.601,
     "institution_score": 72.02,
     "grade_distribution": {
-      "A": 212,
       "A+": 422,
+      "A": 212,
       "B": 251,
       "A-": 235,
       "D": 98,
@@ -163091,43 +163091,16 @@
     },
     "subject_statistics": [
       {
-        "code": "109",
-        "subject": "MATHEMATICS",
-        "students_with_marks": 103,
-        "average_mark": 51.61,
-        "grade_distribution": {
-          "A": 11,
-          "A+": 8,
-          "B": 14,
-          "A-": 11,
-          "D": 34,
-          "F": 18,
-          "C": 25
-        }
-      },
-      {
-        "code": "126",
-        "subject": "HIGHER MATHEMATICS",
-        "students_with_marks": 44,
-        "average_mark": 68.43,
-        "grade_distribution": {
-          "A+": 9,
-          "B": 11,
-          "A": 13,
-          "C": 3,
-          "F": 9,
-          "A-": 8
-        }
-      },
-      {
-        "code": "154",
-        "subject": "Information And Communication Technology",
+        "code": "101",
+        "subject": "BANGLA-I",
         "students_with_marks": 121,
-        "average_mark": 39.72,
+        "average_mark": 122.67,
         "grade_distribution": {
-          "A+": 58,
-          "A": 54,
-          "A-": 9
+          "A+": 4,
+          "A": 27,
+          "A-": 38,
+          "B": 37,
+          "C": 15
         }
       },
       {
@@ -163146,6 +163119,21 @@
         }
       },
       {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 103,
+        "average_mark": 51.61,
+        "grade_distribution": {
+          "A": 11,
+          "A+": 8,
+          "B": 14,
+          "A-": 11,
+          "D": 34,
+          "F": 18,
+          "C": 25
+        }
+      },
+      {
         "code": "150",
         "subject": "BANGLADESH AND GLOBAL STUDIES",
         "students_with_marks": 58,
@@ -163156,32 +163144,6 @@
           "A-": 13,
           "B": 3,
           "F": 2
-        }
-      },
-      {
-        "code": "101",
-        "subject": "BANGLA-I",
-        "students_with_marks": 121,
-        "average_mark": 122.67,
-        "grade_distribution": {
-          "A+": 4,
-          "A": 27,
-          "A-": 38,
-          "B": 37,
-          "C": 15
-        }
-      },
-      {
-        "code": "138",
-        "subject": "BIOLOGY",
-        "students_with_marks": 60,
-        "average_mark": 71.1,
-        "grade_distribution": {
-          "A+": 16,
-          "A": 15,
-          "B": 8,
-          "A-": 19,
-          "C": 2
         }
       },
       {
@@ -163199,6 +163161,19 @@
         }
       },
       {
+        "code": "136",
+        "subject": "PHYSICS",
+        "students_with_marks": 59,
+        "average_mark": 67.49,
+        "grade_distribution": {
+          "A": 17,
+          "A+": 10,
+          "A-": 13,
+          "B": 19,
+          "F": 1
+        }
+      },
+      {
         "code": "137",
         "subject": "CHEMISTRY",
         "students_with_marks": 57,
@@ -163213,12 +163188,41 @@
         }
       },
       {
-        "code": "156",
-        "subject": "Career Education",
-        "students_with_marks": 121,
-        "average_mark": 50.0,
+        "code": "138",
+        "subject": "BIOLOGY",
+        "students_with_marks": 60,
+        "average_mark": 71.1,
         "grade_distribution": {
-          "A+": 121
+          "A+": 16,
+          "A": 15,
+          "B": 8,
+          "A-": 19,
+          "C": 2
+        }
+      },
+      {
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 121,
+        "average_mark": 39.72,
+        "grade_distribution": {
+          "A+": 58,
+          "A": 54,
+          "A-": 9
+        }
+      },
+      {
+        "code": "126",
+        "subject": "HIGHER MATHEMATICS",
+        "students_with_marks": 44,
+        "average_mark": 68.43,
+        "grade_distribution": {
+          "A+": 9,
+          "B": 11,
+          "A": 13,
+          "C": 3,
+          "F": 9,
+          "A-": 8
         }
       },
       {
@@ -163231,16 +163235,12 @@
         }
       },
       {
-        "code": "136",
-        "subject": "PHYSICS",
-        "students_with_marks": 59,
-        "average_mark": 67.49,
+        "code": "156",
+        "subject": "Career Education",
+        "students_with_marks": 121,
+        "average_mark": 50.0,
         "grade_distribution": {
-          "A": 17,
-          "A+": 10,
-          "A-": 13,
-          "B": 19,
-          "F": 1
+          "A+": 121
         }
       },
       {
@@ -215070,53 +215070,27 @@
     "average_gpa": 3.3529,
     "institution_score": 67.06,
     "grade_distribution": {
-      "A+": 265,
       "A": 113,
+      "A+": 265,
       "A-": 108,
-      "C": 147,
       "B": 133,
+      "C": 147,
       "D": 107,
       "F": 37,
       "X": 2
     },
     "subject_statistics": [
       {
-        "code": "109",
-        "subject": "MATHEMATICS",
-        "students_with_marks": 67,
-        "average_mark": 45.21,
-        "grade_distribution": {
-          "A+": 3,
-          "A-": 6,
-          "C": 13,
-          "B": 6,
-          "D": 36,
-          "F": 8,
-          "A": 3,
-          "X": 1
-        }
-      },
-      {
-        "code": "126",
-        "subject": "HIGHER MATHEMATICS",
-        "students_with_marks": 13,
-        "average_mark": 78.08,
-        "grade_distribution": {
-          "A": 4,
-          "B": 1,
-          "A+": 7,
-          "A-": 1
-        }
-      },
-      {
-        "code": "154",
-        "subject": "Information And Communication Technology",
+        "code": "101",
+        "subject": "BANGLA-I",
         "students_with_marks": 76,
-        "average_mark": 40.66,
+        "average_mark": 110.78,
         "grade_distribution": {
-          "A+": 45,
-          "A": 23,
-          "A-": 8
+          "A": 8,
+          "A-": 16,
+          "A+": 1,
+          "B": 29,
+          "C": 22
         }
       },
       {
@@ -215132,6 +215106,22 @@
           "D": 23,
           "A+": 2,
           "F": 13,
+          "X": 1
+        }
+      },
+      {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 67,
+        "average_mark": 45.21,
+        "grade_distribution": {
+          "A+": 3,
+          "A-": 6,
+          "C": 13,
+          "B": 6,
+          "D": 36,
+          "F": 8,
+          "A": 3,
           "X": 1
         }
       },
@@ -215162,16 +215152,29 @@
         }
       },
       {
-        "code": "101",
-        "subject": "BANGLA-I",
-        "students_with_marks": 76,
-        "average_mark": 110.78,
+        "code": "136",
+        "subject": "PHYSICS",
+        "students_with_marks": 33,
+        "average_mark": 67.61,
         "grade_distribution": {
-          "A": 8,
-          "A-": 16,
-          "A+": 1,
-          "B": 29,
-          "C": 22
+          "A": 7,
+          "A-": 7,
+          "A+": 7,
+          "B": 11,
+          "C": 1,
+          "F": 1
+        }
+      },
+      {
+        "code": "137",
+        "subject": "CHEMISTRY",
+        "students_with_marks": 34,
+        "average_mark": 71.74,
+        "grade_distribution": {
+          "A+": 7,
+          "A": 13,
+          "A-": 10,
+          "B": 4
         }
       },
       {
@@ -215188,24 +215191,26 @@
         }
       },
       {
-        "code": "137",
-        "subject": "CHEMISTRY",
-        "students_with_marks": 34,
-        "average_mark": 71.74,
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 76,
+        "average_mark": 40.66,
         "grade_distribution": {
-          "A+": 7,
-          "A": 13,
-          "A-": 10,
-          "B": 4
+          "A+": 45,
+          "A": 23,
+          "A-": 8
         }
       },
       {
-        "code": "156",
-        "subject": "Career Education",
-        "students_with_marks": 76,
-        "average_mark": 50.0,
+        "code": "126",
+        "subject": "HIGHER MATHEMATICS",
+        "students_with_marks": 13,
+        "average_mark": 78.08,
         "grade_distribution": {
-          "A+": 76
+          "A": 4,
+          "B": 1,
+          "A+": 7,
+          "A-": 1
         }
       },
       {
@@ -215218,17 +215223,12 @@
         }
       },
       {
-        "code": "136",
-        "subject": "PHYSICS",
-        "students_with_marks": 33,
-        "average_mark": 67.61,
+        "code": "156",
+        "subject": "Career Education",
+        "students_with_marks": 76,
+        "average_mark": 50.0,
         "grade_distribution": {
-          "A": 7,
-          "A-": 7,
-          "A+": 7,
-          "B": 11,
-          "C": 1,
-          "F": 1
+          "A+": 76
         }
       },
       {
@@ -218762,10 +218762,10 @@
     "average_gpa": 3.3331,
     "institution_score": 66.66,
     "grade_distribution": {
+      "A-": 53,
+      "B": 68,
       "C": 67,
       "A+": 88,
-      "B": 68,
-      "A-": 53,
       "A": 35,
       "D": 42,
       "F": 30,
@@ -218773,28 +218773,17 @@
     },
     "subject_statistics": [
       {
-        "code": "109",
-        "subject": "MATHEMATICS",
-        "students_with_marks": 25,
-        "average_mark": 40.76,
-        "grade_distribution": {
-          "C": 5,
-          "A+": 1,
-          "A-": 1,
-          "D": 17,
-          "B": 1,
-          "F": 7
-        }
-      },
-      {
-        "code": "154",
-        "subject": "Information And Communication Technology",
+        "code": "101",
+        "subject": "BANGLA-I",
         "students_with_marks": 32,
-        "average_mark": 37.34,
+        "average_mark": 113.44,
         "grade_distribution": {
-          "A+": 8,
-          "A": 14,
-          "A-": 10
+          "A-": 9,
+          "A+": 1,
+          "A": 4,
+          "B": 11,
+          "D": 1,
+          "C": 6
         }
       },
       {
@@ -218812,6 +218801,20 @@
         }
       },
       {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 25,
+        "average_mark": 40.76,
+        "grade_distribution": {
+          "C": 5,
+          "A+": 1,
+          "A-": 1,
+          "D": 17,
+          "B": 1,
+          "F": 7
+        }
+      },
+      {
         "code": "150",
         "subject": "BANGLADESH AND GLOBAL STUDIES",
         "students_with_marks": 8,
@@ -218820,32 +218823,6 @@
           "A+": 3,
           "A": 4,
           "D": 1
-        }
-      },
-      {
-        "code": "101",
-        "subject": "BANGLA-I",
-        "students_with_marks": 32,
-        "average_mark": 113.44,
-        "grade_distribution": {
-          "A-": 9,
-          "A+": 1,
-          "A": 4,
-          "B": 11,
-          "D": 1,
-          "C": 6
-        }
-      },
-      {
-        "code": "138",
-        "subject": "BIOLOGY",
-        "students_with_marks": 7,
-        "average_mark": 75.0,
-        "grade_distribution": {
-          "A": 5,
-          "A+": 1,
-          "A-": 1,
-          "F": 1
         }
       },
       {
@@ -218862,6 +218839,18 @@
         }
       },
       {
+        "code": "136",
+        "subject": "PHYSICS",
+        "students_with_marks": 7,
+        "average_mark": 68.43,
+        "grade_distribution": {
+          "B": 1,
+          "A+": 1,
+          "A-": 5,
+          "F": 1
+        }
+      },
+      {
         "code": "137",
         "subject": "CHEMISTRY",
         "students_with_marks": 8,
@@ -218871,6 +218860,29 @@
           "A+": 1,
           "A": 1,
           "B": 5
+        }
+      },
+      {
+        "code": "138",
+        "subject": "BIOLOGY",
+        "students_with_marks": 7,
+        "average_mark": 75.0,
+        "grade_distribution": {
+          "A": 5,
+          "A+": 1,
+          "A-": 1,
+          "F": 1
+        }
+      },
+      {
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 32,
+        "average_mark": 37.34,
+        "grade_distribution": {
+          "A+": 8,
+          "A": 14,
+          "A-": 10
         }
       },
       {
@@ -218887,15 +218899,6 @@
         }
       },
       {
-        "code": "156",
-        "subject": "Career Education",
-        "students_with_marks": 32,
-        "average_mark": 46.72,
-        "grade_distribution": {
-          "A+": 32
-        }
-      },
-      {
         "code": "147",
         "subject": "PHYSICAL EDUCATION, HEALTH AND SPORTS",
         "students_with_marks": 32,
@@ -218905,15 +218908,12 @@
         }
       },
       {
-        "code": "136",
-        "subject": "PHYSICS",
-        "students_with_marks": 7,
-        "average_mark": 68.43,
+        "code": "156",
+        "subject": "Career Education",
+        "students_with_marks": 32,
+        "average_mark": 46.72,
         "grade_distribution": {
-          "B": 1,
-          "A+": 1,
-          "A-": 5,
-          "F": 1
+          "A+": 32
         }
       },
       {
@@ -231209,10 +231209,10 @@
     "average_gpa": 3.2586,
     "institution_score": 65.17,
     "grade_distribution": {
-      "A": 86,
       "A+": 195,
-      "B": 155,
+      "A": 86,
       "A-": 116,
+      "B": 155,
       "D": 84,
       "C": 119,
       "F": 45,
@@ -231220,43 +231220,16 @@
     },
     "subject_statistics": [
       {
-        "code": "109",
-        "subject": "MATHEMATICS",
-        "students_with_marks": 48,
-        "average_mark": 44.38,
-        "grade_distribution": {
-          "A": 1,
-          "B": 8,
-          "D": 23,
-          "A+": 3,
-          "F": 19,
-          "C": 13
-        }
-      },
-      {
-        "code": "126",
-        "subject": "HIGHER MATHEMATICS",
-        "students_with_marks": 12,
-        "average_mark": 60.75,
-        "grade_distribution": {
-          "A+": 2,
-          "A-": 2,
-          "C": 3,
-          "A": 1,
-          "B": 4,
-          "F": 9,
-          "X": 1
-        }
-      },
-      {
-        "code": "154",
-        "subject": "Information And Communication Technology",
+        "code": "101",
+        "subject": "BANGLA-I",
         "students_with_marks": 67,
-        "average_mark": 38.34,
+        "average_mark": 120.06,
         "grade_distribution": {
-          "A+": 18,
-          "A": 41,
-          "A-": 8
+          "A+": 5,
+          "A-": 26,
+          "B": 28,
+          "A": 3,
+          "C": 5
         }
       },
       {
@@ -231275,6 +231248,20 @@
         }
       },
       {
+        "code": "109",
+        "subject": "MATHEMATICS",
+        "students_with_marks": 48,
+        "average_mark": 44.38,
+        "grade_distribution": {
+          "A": 1,
+          "B": 8,
+          "D": 23,
+          "A+": 3,
+          "F": 19,
+          "C": 13
+        }
+      },
+      {
         "code": "150",
         "subject": "BANGLADESH AND GLOBAL STUDIES",
         "students_with_marks": 24,
@@ -231285,32 +231272,6 @@
           "A": 6,
           "B": 3,
           "C": 1
-        }
-      },
-      {
-        "code": "101",
-        "subject": "BANGLA-I",
-        "students_with_marks": 67,
-        "average_mark": 120.06,
-        "grade_distribution": {
-          "A+": 5,
-          "A-": 26,
-          "B": 28,
-          "A": 3,
-          "C": 5
-        }
-      },
-      {
-        "code": "138",
-        "subject": "BIOLOGY",
-        "students_with_marks": 23,
-        "average_mark": 67.09,
-        "grade_distribution": {
-          "A+": 5,
-          "A-": 6,
-          "B": 7,
-          "A": 5,
-          "X": 1
         }
       },
       {
@@ -231328,6 +231289,19 @@
         }
       },
       {
+        "code": "136",
+        "subject": "PHYSICS",
+        "students_with_marks": 23,
+        "average_mark": 64.22,
+        "grade_distribution": {
+          "A+": 4,
+          "B": 10,
+          "A-": 7,
+          "A": 2,
+          "X": 1
+        }
+      },
+      {
         "code": "137",
         "subject": "CHEMISTRY",
         "students_with_marks": 23,
@@ -231341,12 +231315,42 @@
         }
       },
       {
-        "code": "156",
-        "subject": "Career Education",
-        "students_with_marks": 67,
-        "average_mark": 49.01,
+        "code": "138",
+        "subject": "BIOLOGY",
+        "students_with_marks": 23,
+        "average_mark": 67.09,
         "grade_distribution": {
-          "A+": 67
+          "A+": 5,
+          "A-": 6,
+          "B": 7,
+          "A": 5,
+          "X": 1
+        }
+      },
+      {
+        "code": "154",
+        "subject": "Information And Communication Technology",
+        "students_with_marks": 67,
+        "average_mark": 38.34,
+        "grade_distribution": {
+          "A+": 18,
+          "A": 41,
+          "A-": 8
+        }
+      },
+      {
+        "code": "126",
+        "subject": "HIGHER MATHEMATICS",
+        "students_with_marks": 12,
+        "average_mark": 60.75,
+        "grade_distribution": {
+          "A+": 2,
+          "A-": 2,
+          "C": 3,
+          "A": 1,
+          "B": 4,
+          "F": 9,
+          "X": 1
         }
       },
       {
@@ -231359,16 +231363,12 @@
         }
       },
       {
-        "code": "136",
-        "subject": "PHYSICS",
-        "students_with_marks": 23,
-        "average_mark": 64.22,
+        "code": "156",
+        "subject": "Career Education",
+        "students_with_marks": 67,
+        "average_mark": 49.01,
         "grade_distribution": {
-          "A+": 4,
-          "B": 10,
-          "A-": 7,
-          "A": 2,
-          "X": 1
+          "A+": 67
         }
       },
       {
