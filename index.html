@@ -1,1380 +1,1470 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<title>Discover Institutions | CTG Board Ranking</title>
 
-<title>CTGBoardRanking</title>
-
-<meta name="description"
-      content="Chattogram Board Education Rankings, Statistics and Institution Performance">
-
-<link rel="preconnect"
-      href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet">
-
-<link rel="stylesheet"
-      href="style.css">
-
+<meta name="theme-color" content="#f5f5f7">
 
 <style>
 
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+:root{
+  --bg:#f5f5f7;
+  --card:rgba(255,255,255,.78);
+  --card-solid:#ffffff;
+  --text:#1d1d1f;
+  --muted:#6e6e73;
+  --border:rgba(0,0,0,.08);
+  --shadow:0 20px 50px rgba(0,0,0,.08);
+
+  --blue:#0071e3;
+  --blue-dark:#005bb5;
+  --green:#16a34a;
+  --orange:#f59e0b;
+  --red:#ef4444;
+}
+
+body.dark{
+
+  --bg:#0b0b0d;
+  --card:rgba(28,28,30,.82);
+  --card-solid:#1c1c1e;
+  --text:#f5f5f7;
+  --muted:#a1a1a6;
+  --border:rgba(255,255,255,.09);
+  --shadow:0 20px 50px rgba(0,0,0,.35);
+
+  --blue:#2997ff;
+  --blue-dark:#147ce5;
+}
+
+body{
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+
+  background:
+    radial-gradient(
+      circle at 15% 0%,
+      rgba(0,113,227,.10),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(88,86,214,.10),
+      transparent 30%
+    ),
+    var(--bg);
+
+  color:var(--text);
+  min-height:100vh;
+
+  transition:
+    background .3s ease,
+    color .3s ease;
+}
+
+body.dark{
+
+  background:
+    radial-gradient(
+      circle at 15% 0%,
+      rgba(41,151,255,.10),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(88,86,214,.12),
+      transparent 30%
+    ),
+    var(--bg);
+}
+
+
 /* =========================================================
    NAVBAR
-   GLASS EFFECT REMOVED FROM NAVIGATION PANEL
 ========================================================= */
 
-.navbar {
+.navbar{
 
-    position:relative;
+  position:sticky;
+  top:0;
+  z-index:1000;
 
-    display:flex;
+  height:70px;
 
-    align-items:center;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 
-    justify-content:space-between;
+  padding:0 5%;
 
-    gap:14px;
+  background:rgba(255,255,255,.72);
 
-    z-index:1000;
+  backdrop-filter:blur(25px);
+  -webkit-backdrop-filter:blur(25px);
 
+  border-bottom:1px solid var(--border);
+}
+
+body.dark .navbar{
+  background:rgba(20,20,22,.72);
+}
+
+.brand{
+
+  display:flex;
+  align-items:center;
+  gap:11px;
+
+  font-size:20px;
+  font-weight:700;
+
+  letter-spacing:-.5px;
+
+  color:var(--text);
+
+  text-decoration:none;
+}
+
+.brand-icon{
+
+  width:38px;
+  height:38px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0071e3,
+      #5856d6
+    );
+
+  color:white;
+
+  box-shadow:
+    0 8px 20px
+    rgba(0,113,227,.25);
+}
+
+.nav-actions{
+
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.nav-btn{
+
+  border:1px solid var(--border);
+
+  background:var(--card);
+
+  color:var(--text);
+
+  width:42px;
+  height:42px;
+
+  border-radius:50%;
+
+  display:grid;
+  place-items:center;
+
+  cursor:pointer;
+
+  font-size:18px;
+
+  transition:.2s;
+}
+
+.nav-btn:hover{
+
+  transform:translateY(-2px);
+
+  box-shadow:var(--shadow);
 }
 
 
 /* =========================================================
-   NAVBAR CONTROL AREA
+   HERO
 ========================================================= */
 
-.navbar-control {
+.hero{
 
-    display:flex;
+  max-width:1200px;
 
-    align-items:center;
+  margin:auto;
 
-    gap:8px;
+  padding:75px 22px 35px;
 
+  text-align:center;
+}
+
+.eyebrow{
+
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+
+  padding:8px 14px;
+
+  border-radius:999px;
+
+  background:rgba(0,113,227,.09);
+
+  color:var(--blue);
+
+  font-size:13px;
+
+  font-weight:700;
+
+  margin-bottom:18px;
+}
+
+.hero h1{
+
+  font-size:
+    clamp(40px,7vw,72px);
+
+  line-height:.98;
+
+  letter-spacing:-4px;
+
+  font-weight:800;
+
+  margin-bottom:20px;
+}
+
+.hero h1 span{
+
+  background:
+    linear-gradient(
+      90deg,
+      #0071e3,
+      #5856d6,
+      #af52de
+    );
+
+  -webkit-background-clip:text;
+  background-clip:text;
+
+  color:transparent;
+}
+
+.hero p{
+
+  max-width:680px;
+
+  margin:auto;
+
+  font-size:18px;
+
+  line-height:1.6;
+
+  color:var(--muted);
 }
 
 
 /* =========================================================
-   NAVBAR BUTTON
+   SEARCH
 ========================================================= */
 
-.nav-toggle-btn {
+.search-area{
 
-    display:inline-flex;
+  max-width:850px;
 
-    align-items:center;
+  margin:25px auto 45px;
 
-    justify-content:center;
+  padding:0 22px;
+}
 
-    gap:8px;
+.search-box{
+  position:relative;
+}
 
-    height:42px;
+.search-box input{
 
-    padding:0 16px;
+  width:100%;
 
-    border:1px solid rgba(127,127,127,.18);
+  height:62px;
 
-    border-radius:14px;
+  border:1px solid var(--border);
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.78),
-            rgba(255,255,255,.40)
-        );
+  border-radius:20px;
 
-    color:var(--text);
+  background:var(--card);
 
-    font-family:inherit;
+  backdrop-filter:blur(20px);
 
-    font-size:13px;
+  color:var(--text);
 
-    font-weight:700;
+  padding:
+    0 55px
+    0 55px;
 
-    cursor:pointer;
+  outline:none;
 
-    box-shadow:
-        0 8px 25px rgba(0,0,0,.07),
-        inset 0 1px 0 rgba(255,255,255,.8);
+  font-size:16px;
 
-    backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:var(--shadow);
 
-    -webkit-backdrop-filter:blur(20px) saturate(180%);
+  transition:.25s;
+}
 
-    transition:
-        transform .25s cubic-bezier(.2,.8,.2,1),
-        box-shadow .25s ease,
-        background .25s ease;
+.search-box input:focus{
 
+  border-color:
+    rgba(0,113,227,.4);
+
+  box-shadow:
+    0 0 0 4px
+    rgba(0,113,227,.10),
+    var(--shadow);
+}
+
+.search-icon{
+
+  position:absolute;
+
+  left:20px;
+  top:50%;
+
+  transform:translateY(-50%);
+
+  font-size:20px;
+
+  color:var(--muted);
+}
+
+.clear-search{
+
+  position:absolute;
+
+  right:17px;
+  top:50%;
+
+  transform:translateY(-50%);
+
+  width:30px;
+  height:30px;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:rgba(0,0,0,.08);
+
+  color:var(--text);
+
+  cursor:pointer;
+
+  display:none;
 }
 
 
-.nav-toggle-btn:hover {
+/* =========================================================
+   FILTERS
+========================================================= */
 
-    transform:translateY(-2px) scale(1.015);
+.filters{
 
-    box-shadow:
-        0 12px 30px rgba(0,0,0,.11),
-        inset 0 1px 0 rgba(255,255,255,.9);
+  max-width:1200px;
 
+  margin:0 auto 30px;
+
+  padding:0 22px;
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:10px;
+}
+
+.filter{
+
+  padding:10px 17px;
+
+  border-radius:999px;
+
+  border:1px solid var(--border);
+
+  background:var(--card);
+
+  color:var(--muted);
+
+  cursor:pointer;
+
+  font-weight:600;
+
+  transition:.2s;
+}
+
+.filter:hover{
+  transform:translateY(-1px);
+}
+
+.filter.active{
+
+  background:var(--text);
+
+  color:var(--bg);
+
+  border-color:var(--text);
 }
 
 
-.nav-toggle-btn:active {
+/* =========================================================
+   STATS
+========================================================= */
 
-    transform:scale(.96);
+.stats{
 
+  max-width:1200px;
+
+  margin:0 auto 35px;
+
+  padding:0 22px;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  gap:15px;
+}
+
+.stat{
+
+  background:var(--card);
+
+  backdrop-filter:blur(20px);
+
+  border:1px solid var(--border);
+
+  border-radius:22px;
+
+  padding:22px;
+
+  box-shadow:
+    0 10px 35px
+    rgba(0,0,0,.04);
+}
+
+.stat-icon{
+
+  width:42px;
+  height:42px;
+
+  border-radius:13px;
+
+  display:grid;
+  place-items:center;
+
+  background:
+    rgba(0,113,227,.10);
+
+  margin-bottom:15px;
+
+  font-size:19px;
+}
+
+.stat strong{
+
+  display:block;
+
+  font-size:28px;
+
+  letter-spacing:-1px;
+
+  margin-bottom:5px;
+}
+
+.stat span{
+
+  color:var(--muted);
+
+  font-size:13px;
 }
 
 
-.nav-toggle-icon {
+/* =========================================================
+   CONTENT
+========================================================= */
 
-    width:18px;
+.content{
 
-    height:18px;
+  max-width:1200px;
 
-    display:flex;
+  margin:auto;
 
-    flex-direction:column;
+  padding:
+    0 22px 70px;
+}
 
-    justify-content:center;
+.section-head{
 
-    gap:4px;
+  display:flex;
 
+  justify-content:space-between;
+
+  align-items:center;
+
+  margin-bottom:18px;
+}
+
+.section-head h2{
+
+  font-size:26px;
+
+  letter-spacing:-1px;
+}
+
+.result-count{
+
+  color:var(--muted);
+
+  font-size:14px;
 }
 
 
-.nav-toggle-icon span {
+/* =========================================================
+   INSTITUTION GRID
+========================================================= */
 
-    display:block;
+.institution-grid{
 
-    width:17px;
+  display:grid;
 
-    height:1.6px;
+  grid-template-columns:
+    repeat(3,1fr);
 
-    border-radius:10px;
+  gap:18px;
+}
 
-    background:currentColor;
+.institution-card{
 
-    transition:
-        transform .35s cubic-bezier(.2,.8,.2,1),
-        opacity .25s ease;
+  background:var(--card);
 
+  backdrop-filter:blur(25px);
+
+  border:1px solid var(--border);
+
+  border-radius:26px;
+
+  padding:23px;
+
+  box-shadow:
+    0 10px 35px
+    rgba(0,0,0,.04);
+
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease,
+    border-color .25s ease;
+
+  animation:fadeIn .35s ease;
+
+  cursor:pointer;
+}
+
+.institution-card:hover{
+
+  transform:translateY(-5px);
+
+  box-shadow:
+    0 22px 55px
+    rgba(0,0,0,.11);
+
+  border-color:
+    rgba(0,113,227,.2);
+}
+
+.card-top{
+
+  display:flex;
+
+  align-items:flex-start;
+
+  justify-content:space-between;
+
+  gap:15px;
+}
+
+.institution-icon{
+
+  width:50px;
+  height:50px;
+
+  flex-shrink:0;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0,113,227,.13),
+      rgba(88,86,214,.14)
+    );
+
+  font-size:23px;
+}
+
+.rank{
+
+  font-size:12px;
+
+  font-weight:700;
+
+  padding:6px 10px;
+
+  border-radius:999px;
+
+  background:rgba(0,0,0,.05);
+
+  color:var(--muted);
+}
+
+body.dark .rank{
+
+  background:
+    rgba(255,255,255,.08);
+}
+
+.institution-name{
+
+  font-size:18px;
+
+  line-height:1.3;
+
+  font-weight:750;
+
+  margin-top:18px;
+
+  letter-spacing:-.3px;
+}
+
+.location{
+
+  margin-top:7px;
+
+  color:var(--muted);
+
+  font-size:13px;
+}
+
+.metrics{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,1fr);
+
+  gap:10px;
+
+  margin-top:20px;
+}
+
+.metric{
+
+  background:
+    rgba(127,127,127,.07);
+
+  border-radius:15px;
+
+  padding:13px;
+}
+
+.metric strong{
+
+  display:block;
+
+  font-size:19px;
+
+  margin-bottom:3px;
+}
+
+.metric span{
+
+  color:var(--muted);
+
+  font-size:11px;
+}
+
+.progress{
+
+  height:6px;
+
+  margin-top:17px;
+
+  border-radius:999px;
+
+  background:
+    rgba(127,127,127,.12);
+
+  overflow:hidden;
+}
+
+.progress-bar{
+
+  height:100%;
+
+  border-radius:inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #0071e3,
+      #5856d6
+    );
+}
+
+.card-bottom{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  margin-top:18px;
+
+  padding-top:15px;
+
+  border-top:1px solid var(--border);
+
+  font-size:12px;
+
+  color:var(--muted);
+}
+
+.gpa5{
+
+  color:var(--green);
+
+  font-weight:700;
 }
 
 
-.nav-toggle-btn.open
-.nav-toggle-icon span:nth-child(1) {
+/* =========================================================
+   LOADING / ERROR / EMPTY
+========================================================= */
 
-    transform:
-        translateY(5.5px)
-        rotate(45deg);
+.loading{
 
+  grid-column:1/-1;
+
+  text-align:center;
+
+  padding:70px 20px;
+
+  color:var(--muted);
+}
+
+.spinner{
+
+  width:35px;
+  height:35px;
+
+  margin:0 auto 15px;
+
+  border-radius:50%;
+
+  border:3px solid
+    rgba(127,127,127,.15);
+
+  border-top-color:var(--blue);
+
+  animation:
+    spin .8s linear infinite;
+}
+
+.error{
+
+  grid-column:1/-1;
+
+  padding:30px;
+
+  border-radius:20px;
+
+  background:
+    rgba(239,68,68,.08);
+
+  border:1px solid
+    rgba(239,68,68,.15);
+
+  color:var(--red);
+
+  text-align:center;
+}
+
+.empty{
+
+  grid-column:1/-1;
+
+  text-align:center;
+
+  padding:70px 20px;
+
+  color:var(--muted);
+}
+
+.empty-icon{
+
+  font-size:45px;
+
+  margin-bottom:15px;
 }
 
 
-.nav-toggle-btn.open
-.nav-toggle-icon span:nth-child(2) {
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.pagination{
+
+  display:flex;
+
+  justify-content:center;
+
+  align-items:center;
+
+  gap:8px;
+
+  margin-top:35px;
+}
+
+.page-btn{
+
+  min-width:40px;
+  height:40px;
+
+  border:1px solid var(--border);
+
+  background:var(--card);
+
+  color:var(--text);
+
+  border-radius:12px;
+
+  cursor:pointer;
+
+  font-weight:600;
+}
+
+.page-btn.active{
+
+  background:var(--text);
+
+  color:var(--bg);
+}
+
+.page-btn:disabled{
+
+  opacity:.4;
+
+  cursor:not-allowed;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+
+  border-top:1px solid var(--border);
+
+  padding:
+    30px 22px 45px;
+
+  text-align:center;
+
+  color:var(--muted);
+
+  font-size:13px;
+}
+
+
+/* =========================================================
+   INSTITUTION DETAIL MODAL
+========================================================= */
+
+.modal-overlay{
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:5000;
+
+  display:none;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:20px;
+
+  background:
+    rgba(0,0,0,.42);
+
+  backdrop-filter:
+    blur(18px);
+
+  -webkit-backdrop-filter:
+    blur(18px);
+
+  opacity:0;
+
+  transition:opacity .25s ease;
+}
+
+.modal-overlay.show{
+
+  display:flex;
+
+  opacity:1;
+}
+
+.institution-modal{
+
+  width:min(760px,100%);
+
+  max-height:
+    calc(100vh - 40px);
+
+  overflow:auto;
+
+  background:
+    rgba(255,255,255,.92);
+
+  color:#1d1d1f;
+
+  border:
+    1px solid
+    rgba(255,255,255,.7);
+
+  border-radius:32px;
+
+  box-shadow:
+    0 35px 100px
+    rgba(0,0,0,.28);
+
+  transform:
+    translateY(20px)
+    scale(.97);
+
+  transition:
+    transform .3s ease;
+
+  scrollbar-width:thin;
+}
+
+body.dark .institution-modal{
+
+  background:
+    rgba(28,28,30,.96);
+
+  color:#f5f5f7;
+
+  border-color:
+    rgba(255,255,255,.1);
+}
+
+.modal-overlay.show
+.institution-modal{
+
+  transform:
+    translateY(0)
+    scale(1);
+}
+
+.modal-header{
+
+  position:sticky;
+
+  top:0;
+
+  z-index:2;
+
+  padding:24px 26px 20px;
+
+  background:
+    rgba(255,255,255,.82);
+
+  backdrop-filter:
+    blur(20px);
+
+  border-bottom:
+    1px solid
+    rgba(0,0,0,.07);
+
+  display:flex;
+
+  align-items:flex-start;
+
+  justify-content:space-between;
+
+  gap:15px;
+}
+
+body.dark .modal-header{
+
+  background:
+    rgba(28,28,30,.86);
+
+  border-color:
+    rgba(255,255,255,.08);
+}
+
+.modal-title-wrap{
+
+  display:flex;
+
+  gap:14px;
+
+  align-items:center;
+
+  min-width:0;
+}
+
+.modal-institution-icon{
+
+  width:54px;
+  height:54px;
+
+  flex-shrink:0;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:17px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0071e3,
+      #5856d6
+    );
+
+  color:white;
+
+  font-size:24px;
+
+  box-shadow:
+    0 10px 25px
+    rgba(0,113,227,.22);
+}
+
+.modal-title{
+
+  font-size:23px;
+
+  line-height:1.2;
+
+  letter-spacing:-.7px;
+
+  font-weight:800;
+}
+
+.modal-subtitle{
+
+  margin-top:5px;
+
+  font-size:13px;
+
+  color:#6e6e73;
+}
+
+body.dark .modal-subtitle{
+  color:#a1a1a6;
+}
+
+.modal-close{
+
+  width:40px;
+  height:40px;
+
+  flex-shrink:0;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:
+    rgba(127,127,127,.12);
+
+  color:inherit;
+
+  font-size:24px;
+
+  line-height:1;
+
+  cursor:pointer;
+
+  display:grid;
+
+  place-items:center;
+
+  transition:.2s;
+}
+
+.modal-close:hover{
+
+  transform:rotate(90deg);
+
+  background:
+    rgba(127,127,127,.2);
+}
+
+.modal-body{
+
+  padding:26px;
+}
+
+.detail-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,1fr);
+
+  gap:13px;
+}
+
+.detail-item{
+
+  padding:18px;
+
+  border-radius:19px;
+
+  background:
+    rgba(127,127,127,.075);
+
+  border:
+    1px solid
+    rgba(127,127,127,.08);
+
+  min-width:0;
+}
+
+.detail-label{
+
+  display:block;
+
+  font-size:11px;
+
+  font-weight:700;
+
+  text-transform:uppercase;
+
+  letter-spacing:.5px;
+
+  color:#6e6e73;
+
+  margin-bottom:7px;
+}
+
+body.dark .detail-label{
+  color:#a1a1a6;
+}
+
+.detail-value{
+
+  display:block;
+
+  font-size:20px;
+
+  font-weight:750;
+
+  line-height:1.3;
+
+  overflow-wrap:anywhere;
+}
+
+.detail-value.small{
+  font-size:16px;
+}
+
+.modal-actions{
+
+  margin-top:24px;
+
+  display:flex;
+
+  gap:11px;
+}
+
+.pdf-btn{
+
+  flex:1;
+
+  min-height:52px;
+
+  border:none;
+
+  border-radius:17px;
+
+  cursor:pointer;
+
+  color:white;
+
+  font-size:15px;
+
+  font-weight:750;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0071e3,
+      #5856d6
+    );
+
+  box-shadow:
+    0 12px 28px
+    rgba(0,113,227,.22);
+
+  transition:
+    transform .2s,
+    box-shadow .2s;
+}
+
+.pdf-btn:hover{
+
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 17px 35px
+    rgba(0,113,227,.3);
+}
+
+.modal-note{
+
+  margin-top:18px;
+
+  padding:14px 16px;
+
+  border-radius:15px;
+
+  background:
+    rgba(0,113,227,.07);
+
+  color:#6e6e73;
+
+  font-size:12px;
+
+  line-height:1.5;
+
+  text-align:center;
+}
+
+body.dark .modal-note{
+  color:#a1a1a6;
+}
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes spin{
+
+  to{
+    transform:rotate(360deg);
+  }
+
+}
+
+@keyframes fadeIn{
+
+  from{
 
     opacity:0;
 
-}
+    transform:
+      translateY(8px);
 
+  }
 
-.nav-toggle-btn.open
-.nav-toggle-icon span:nth-child(3) {
+  to{
+
+    opacity:1;
 
     transform:
-        translateY(-5.5px)
-        rotate(-45deg);
+      translateY(0);
+
+  }
 
 }
 
 
 /* =========================================================
-   FLOATING DARK MODE BUTTON
+   RESPONSIVE
 ========================================================= */
 
-.theme-btn {
+@media(max-width:900px){
 
-    position:relative;
+  .institution-grid{
 
-    width:40px;
+    grid-template-columns:
+      repeat(2,1fr);
+  }
 
-    height:40px;
+  .stats{
 
-    flex-shrink:0;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    border:1px solid rgba(127,127,127,.18);
-
-    border-radius:50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.82),
-            rgba(255,255,255,.42)
-        );
-
-    color:var(--text);
-
-    font-size:18px;
-
-    cursor:pointer;
-
-    box-shadow:
-        0 8px 24px rgba(0,0,0,.08),
-        inset 0 1px 0 rgba(255,255,255,.85);
-
-    backdrop-filter:
-        blur(20px)
-        saturate(180%);
-
-    -webkit-backdrop-filter:
-        blur(20px)
-        saturate(180%);
-
-    transition:
-        transform .3s cubic-bezier(.2,.8,.2,1),
-        box-shadow .3s ease;
+    grid-template-columns:
+      repeat(2,1fr);
+  }
 
 }
 
+@media(max-width:600px){
 
-.theme-btn:hover {
+  .navbar{
 
-    transform:
-        translateY(-3px)
-        rotate(8deg);
+    height:62px;
 
-    box-shadow:
-        0 12px 30px rgba(0,0,0,.13);
+    padding:0 18px;
+  }
 
-}
+  .brand{
 
+    font-size:17px;
+  }
 
-.theme-btn:active {
+  .brand-icon{
 
-    transform:scale(.9);
+    width:34px;
+    height:34px;
+  }
 
-}
+  .hero{
 
+    padding-top:55px;
+  }
 
-/* =========================================================
-   SOLID NAVIGATION PANEL
-   GLASS / BLUR REMOVED
-========================================================= */
+  .hero h1{
 
-.nav-links {
+    font-size:45px;
 
-    position:absolute;
+    letter-spacing:-2.5px;
+  }
 
-    top:calc(100% + 14px);
+  .hero p{
 
-    right:0;
+    font-size:15px;
+  }
 
-    width:min(430px, calc(100vw - 28px));
+  .stats{
+
+    grid-template-columns:
+      repeat(2,1fr);
+
+    padding:0 15px;
+  }
+
+  .stat{
+
+    padding:17px;
+  }
+
+  .stat strong{
+
+    font-size:23px;
+  }
+
+  .content{
+
+    padding-left:15px;
+
+    padding-right:15px;
+  }
+
+  .institution-grid{
+
+    grid-template-columns:1fr;
+  }
+
+  .filters{
+
+    padding:0 15px;
+
+    overflow-x:auto;
+
+    flex-wrap:nowrap;
+  }
+
+  .filter{
+
+    white-space:nowrap;
+  }
+
+  .search-area{
+
+    padding:0 15px;
+  }
+
+  .modal-overlay{
 
     padding:10px;
+  }
 
-    display:flex;
+  .institution-modal{
+
+    max-height:
+      calc(100vh - 20px);
+
+    border-radius:25px;
+  }
+
+  .modal-header{
+
+    padding:20px;
+  }
+
+  .modal-body{
+
+    padding:20px;
+  }
+
+  .modal-title{
+
+    font-size:19px;
+  }
+
+  .detail-grid{
+
+    grid-template-columns:1fr;
+  }
+
+  .modal-actions{
 
     flex-direction:column;
-
-    gap:4px;
-
-    border:1px solid rgba(0,0,0,.08);
-
-    border-radius:24px;
-
-    background:#ffffff;
-
-    box-shadow:
-        0 28px 70px rgba(0,0,0,.16),
-        0 8px 25px rgba(0,0,0,.08);
-
-    opacity:0;
-
-    visibility:hidden;
-
-    pointer-events:none;
-
-    transform:
-        translateY(-12px)
-        scale(.96);
-
-    transform-origin:top right;
-
-    transition:
-        opacity .32s cubic-bezier(.2,.8,.2,1),
-        transform .38s cubic-bezier(.2,.8,.2,1),
-        visibility .32s ease;
-
-}
-
-
-.nav-links.mobile-open {
-
-    opacity:1;
-
-    visibility:visible;
-
-    pointer-events:auto;
-
-    transform:
-        translateY(0)
-        scale(1);
-
-}
-
-
-/* =========================================================
-   NAVIGATION LINKS
-========================================================= */
-
-.nav-links > a,
-.nav-dropdown-btn {
-
-    position:relative;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:flex-start;
-
-    gap:9px;
-
-    width:100%;
-
-    box-sizing:border-box;
-
-    padding:12px 13px;
-
-    border:0;
-
-    border-radius:14px;
-
-    background:transparent;
-
-    color:var(--muted);
-
-    text-decoration:none;
-
-    font-family:inherit;
-
-    font-size:13px;
-
-    font-weight:650;
-
-    cursor:pointer;
-
-    transition:
-        color .22s ease,
-        background .22s ease,
-        transform .22s ease;
-
-}
-
-
-.nav-links > a:hover,
-.nav-dropdown-btn:hover {
-
-    color:var(--text);
-
-    background:
-        rgba(127,127,127,.09);
-
-    transform:translateX(2px);
-
-}
-
-
-.nav-links > a.active {
-
-    color:var(--text);
-
-    background:
-        rgba(127,127,127,.11);
-
-}
-
-
-.nav-links > a.active::before {
-
-    content:"";
-
-    width:4px;
-
-    height:18px;
-
-    border-radius:20px;
-
-    background:#0071e3;
-
-    box-shadow:
-        0 0 12px rgba(0,113,227,.45);
-
-}
-
-
-/* =========================================================
-   DISTRICT
-========================================================= */
-
-.nav-dropdown {
-
-    position:relative;
-
-}
-
-
-.nav-dropdown-btn {
-
-    justify-content:space-between;
-
-}
-
-
-.dropdown-arrow {
-
-    display:inline-block;
-
-    font-size:11px;
-
-    transition:
-        transform .3s cubic-bezier(.2,.8,.2,1);
-
-}
-
-
-.nav-dropdown.open
-.dropdown-arrow {
-
-    transform:rotate(180deg);
-
-}
-
-
-/* =========================================================
-   DISTRICT MENU
-========================================================= */
-
-.nav-dropdown-menu {
-
-    width:100%;
-
-    box-sizing:border-box;
-
-    max-height:0;
-
-    overflow:hidden;
-
-    opacity:0;
-
-    visibility:hidden;
-
-    padding:0 5px;
-
-    border-radius:16px;
-
-    transition:
-        max-height .38s cubic-bezier(.2,.8,.2,1),
-        opacity .25s ease,
-        padding .3s ease,
-        visibility .25s ease;
-
-}
-
-
-.nav-dropdown.open
-.nav-dropdown-menu {
-
-    max-height:420px;
-
-    opacity:1;
-
-    visibility:visible;
-
-    padding:5px;
-
-}
-
-
-.nav-dropdown-menu a {
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    width:100%;
-
-    box-sizing:border-box;
-
-    padding:9px;
-
-    margin:2px 0;
-
-    border-radius:12px;
-
-    color:var(--text);
-
-    text-decoration:none;
-
-    transition:
-        background .2s ease,
-        transform .2s ease;
-
-}
-
-
-.nav-dropdown-menu a:hover {
-
-    background:
-        rgba(0,113,227,.08);
-
-    transform:translateX(3px);
-
-}
-
-
-.dropdown-icon {
-
-    width:30px;
-
-    height:30px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    flex-shrink:0;
-
-    border-radius:9px;
-
-    background:
-        rgba(0,113,227,.08);
-
-    font-size:14px;
-
-}
-
-
-.dropdown-text {
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:2px;
-
-}
-
-
-.dropdown-text strong {
-
-    font-size:11.5px;
-
-    font-weight:700;
-
-}
-
-
-.dropdown-text span {
-
-    font-size:9px;
-
-    color:var(--muted);
-
-}
-
-
-/* =========================================================
-   DARK MODE
-========================================================= */
-
-body.dark
-.nav-toggle-btn,
-body.dark
-.theme-btn {
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(45,45,48,.78),
-            rgba(28,28,30,.55)
-        );
-
-    border-color:
-        rgba(255,255,255,.10);
-
-    box-shadow:
-        0 10px 30px rgba(0,0,0,.30),
-        inset 0 1px 0 rgba(255,255,255,.08);
-
-}
-
-
-/* =========================================================
-   DARK MODE SOLID NAVIGATION
-========================================================= */
-
-body.dark
-.nav-links {
-
-    background:#1c1c1e;
-
-    border-color:
-        rgba(255,255,255,.10);
-
-    box-shadow:
-        0 30px 80px rgba(0,0,0,.48);
-
-}
-
-
-body.dark
-.nav-links > a:hover,
-body.dark
-.nav-dropdown-btn:hover {
-
-    background:
-        rgba(255,255,255,.07);
-
-}
-
-
-body.dark
-.nav-dropdown-menu a:hover {
-
-    background:
-        rgba(255,255,255,.07);
-
-}
-
-
-body.dark
-.dropdown-icon {
-
-    background:
-        rgba(255,255,255,.07);
-
-}
-
-
-/* =========================================================
-   HOMEPAGE APPLE SMOOTH ANIMATION
-========================================================= */
-
-@keyframes appleReveal {
-
-    from {
-
-        opacity:0;
-
-        transform:
-            translateY(22px)
-            scale(.985);
-
-    }
-
-    to {
-
-        opacity:1;
-
-        transform:
-            translateY(0)
-            scale(1);
-
-    }
-
-}
-
-
-.hero {
-
-    animation:
-        appleReveal
-        .8s
-        cubic-bezier(.2,.8,.2,1)
-        both;
-
-}
-
-
-.section,
-.quick-stats,
-.premium-social-section,
-footer,
-.unofficial-notice {
-
-    animation:
-        appleReveal
-        .75s
-        cubic-bezier(.2,.8,.2,1)
-        both;
-
-}
-
-
-.group-card,
-.feature-card,
-.stat-card,
-.ranking-card,
-.discover-card,
-.premium-social-card {
-
-    transition:
-        transform .35s cubic-bezier(.2,.8,.2,1),
-        box-shadow .35s ease,
-        border-color .35s ease;
-
-}
-
-
-.group-card:hover,
-.feature-card:hover,
-.stat-card:hover,
-.ranking-card:hover,
-.discover-card:hover,
-.premium-social-card:hover {
-
-    transform:
-        translateY(-5px);
-
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width:800px) {
-
-    .navbar {
-
-        gap:8px;
-
-    }
-
-
-    .navbar-control {
-
-        gap:6px;
-
-    }
-
-
-    .nav-toggle-btn {
-
-        height:40px;
-
-        padding:0 13px;
-
-        border-radius:13px;
-
-    }
-
-
-    .nav-links {
-
-        top:calc(100% + 10px);
-
-        right:0;
-
-        width:
-            min(
-                380px,
-                calc(100vw - 20px)
-            );
-
-        border-radius:21px;
-
-    }
-
-}
-
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media(max-width:430px) {
-
-    .nav-toggle-btn {
-
-        font-size:12px;
-
-        padding:0 11px;
-
-    }
-
-
-    .theme-btn {
-
-        width:38px;
-
-        height:38px;
-
-    }
-
-
-    .nav-links {
-
-        right:-2px;
-
-        width:
-            calc(100vw - 20px);
-
-    }
-
-}
-
-/* =========================================================
-   PREMIUM SCROLL REVEAL ANIMATION
-   Existing elements / layout untouched
-========================================================= */
-
-@media (prefers-reduced-motion: no-preference) {
-
-    .section,
-    .quick-stats,
-    .premium-social-section,
-    footer,
-    .unofficial-notice,
-    .discover-card,
-    .ranking-card,
-    .feature-card,
-    .group-card,
-    .stat-card,
-    .premium-social-card {
-
-        opacity: 0;
-
-        transform:
-            translateY(35px)
-            scale(.985);
-
-        transition:
-            opacity .75s cubic-bezier(.2,.8,.2,1),
-            transform .75s cubic-bezier(.2,.8,.2,1);
-
-        will-change:
-            opacity,
-            transform;
-
-    }
-
-
-    /* Visible state */
-
-    .scroll-visible {
-
-        opacity: 1 !important;
-
-        transform:
-            translateY(0)
-            scale(1) !important;
-
-    }
-
-
-    /* Cards have slightly smoother motion */
-
-    .group-card,
-    .feature-card,
-    .stat-card,
-    .premium-social-card {
-
-        transition:
-            opacity .65s cubic-bezier(.2,.8,.2,1),
-            transform .65s cubic-bezier(.2,.8,.2,1),
-            box-shadow .35s ease,
-            border-color .35s ease;
-
-    }
-
-
-    /* Stagger effect */
-
-    .section .group-card:nth-child(1),
-    .feature-card:nth-child(1),
-    .premium-social-card:nth-child(1) {
-        transition-delay: .05s;
-    }
-
-    .section .group-card:nth-child(2),
-    .feature-card:nth-child(2),
-    .premium-social-card:nth-child(2) {
-        transition-delay: .12s;
-    }
-
-    .section .group-card:nth-child(3),
-    .feature-card:nth-child(3),
-    .premium-social-card:nth-child(3) {
-        transition-delay: .19s;
-    }
-
-    .section .group-card:nth-child(4),
-    .feature-card:nth-child(4),
-    .premium-social-card:nth-child(4) {
-        transition-delay: .26s;
-    }
-
-
-    /* Quick stats stagger */
-
-    .quick-stats .stat-card:nth-child(1) {
-        transition-delay: .05s;
-    }
-
-    .quick-stats .stat-card:nth-child(2) {
-        transition-delay: .12s;
-    }
-
-    .quick-stats .stat-card:nth-child(3) {
-        transition-delay: .19s;
-    }
-
-    .quick-stats .stat-card:nth-child(4) {
-        transition-delay: .26s;
-    }
-
-}
-
-
-/* =========================================================
-   MOBILE — slightly softer animation
-========================================================= */
-
-@media (max-width: 600px) {
-
-    @media (prefers-reduced-motion: no-preference) {
-
-        .section,
-        .quick-stats,
-        .premium-social-section,
-        footer,
-        .unofficial-notice,
-        .discover-card,
-        .ranking-card,
-        .feature-card,
-        .group-card,
-        .stat-card,
-        .premium-social-card {
-
-            transform:
-                translateY(24px)
-                scale(.99);
-
-            transition-duration:
-                .6s;
-
-        }
-
-    }
-
-}
-
-/* =========================================================
-   CTGBOARD RANKING — APPLE INSPIRED IMPORTANCE NOTICE
-========================================================= */
-
-.importance-notice {
-    width: min(1180px, calc(100% - 28px));
-    height: 46px;
-    margin: 12px auto 0;
-
-    display: flex;
-    align-items: stretch;
-
-    overflow: hidden;
-
-    border: 1px solid rgba(0, 0, 0, 0.07);
-    border-radius: 15px;
-
-    background: rgba(255, 255, 255, 0.72);
-
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-
-    box-shadow:
-        0 1px 2px rgba(0, 0, 0, 0.03),
-        0 8px 30px rgba(0, 0, 0, 0.055);
-
-    transition:
-        background .3s ease,
-        border-color .3s ease,
-        box-shadow .3s ease;
-
-    animation:
-        noticeAppear .55s
-        cubic-bezier(.22, .8, .2, 1);
-}
-
-
-/* ---------------------------------------------------------
-   APPLE-STYLE LABEL
---------------------------------------------------------- */
-
-.importance-label {
-    position: relative;
-
-    flex: 0 0 auto;
-
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    padding: 0 16px;
-
-    color: #1d1d1f;
-
-    background:
-        rgba(245, 245, 247, 0.78);
-
-    border-right:
-        1px solid rgba(0, 0, 0, 0.06);
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Display",
-        "SF Pro Text",
-        "Segoe UI",
-        sans-serif;
-
-    font-size: 12px;
-    font-weight: 700;
-
-    letter-spacing: -0.01em;
-
-    white-space: nowrap;
-}
-
-
-/* Small Apple-like status dot */
-
-.importance-label::before {
-    content: "";
-
-    width: 7px;
-    height: 7px;
-
-    flex: 0 0 7px;
-
-    border-radius: 50%;
-
-    background: #007aff;
-
-    box-shadow:
-        0 0 0 3px rgba(0, 122, 255, 0.10);
-
-    animation:
-        noticePulse 2.4s ease-in-out infinite;
-}
-
-
-/* Remove old icon if previously added */
-
-.importance-icon {
-    display: none !important;
-}
-
-
-/* ---------------------------------------------------------
-   MARQUEE CONTAINER
---------------------------------------------------------- */
-
-.notice-marquee {
-    position: relative;
-
-    flex: 1;
-    min-width: 0;
-
-    display: flex;
-    align-items: center;
-
-    overflow: hidden;
-
-    background:
-        rgba(255, 255, 255, 0.42);
-}
-
-
-/* Soft fade on both edges */
-
-.notice-marquee::before,
-.notice-marquee::after {
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    bottom: 0;
-
-    width: 34px;
-
-    z-index: 2;
-
-    pointer-events: none;
-}
-
-.notice-marquee::before {
-    left: 0;
-
-    background:
-        linear-gradient(
-            to right,
-            rgba(255,255,255,.82),
-            rgba(255,255,255,0)
-        );
-}
-
-.notice-marquee::after {
-    right: 0;
-
-    background:
-        linear-gradient(
-            to left,
-            rgba(255,255,255,.82),
-            rgba(255,255,255,0)
-        );
-}
-
-
-/* ---------------------------------------------------------
-   MOVING NOTICE TEXT
---------------------------------------------------------- */
-
-.notice-track {
-    display: inline-block;
-
-    padding-left: 100%;
-
-    white-space: nowrap;
-
-    color: #1d1d1f;
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "SF Pro Text",
-        "Segoe UI",
-        sans-serif;
-
-    font-size: 13px;
-    font-weight: 500;
-
-    letter-spacing: -0.01em;
-
-    line-height: 46px;
-
-    will-change: transform;
-
-    animation:
-        importanceNoticeMove
-        18s
-        linear
-        infinite;
-}
-
-
-/* ---------------------------------------------------------
-   RIGHT → LEFT ANIMATION
---------------------------------------------------------- */
-
-@keyframes importanceNoticeMove {
-
-    from {
-        transform: translateX(0);
-    }
-
-    to {
-        transform: translateX(-100%);
-    }
-
-}
-
-
-/* ---------------------------------------------------------
-   ENTRY ANIMATION
---------------------------------------------------------- */
-
-@keyframes noticeAppear {
-
-    from {
-        opacity: 0;
-        transform: translateY(-5px) scale(.985);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-
-}
-
-
-/* ---------------------------------------------------------
-   BLUE STATUS DOT
---------------------------------------------------------- */
-
-@keyframes noticePulse {
-
-    0%,
-    100% {
-        opacity: .75;
-        transform: scale(.9);
-    }
-
-    50% {
-        opacity: 1;
-        transform: scale(1);
-    }
-
-}
-
-
-/* =========================================================
-   DARK MODE
-========================================================= */
-
-body.dark .importance-notice {
-
-    border-color:
-        rgba(255, 255, 255, 0.10);
-
-    background:
-        rgba(28, 28, 30, 0.72);
-
-    box-shadow:
-        0 1px 2px rgba(0, 0, 0, .25),
-        0 10px 35px rgba(0, 0, 0, .28);
-}
-
-
-body.dark .importance-label {
-
-    color: #f5f5f7;
-
-    background:
-        rgba(44, 44, 46, 0.72);
-
-    border-right-color:
-        rgba(255, 255, 255, 0.08);
-}
-
-
-body.dark .notice-marquee {
-
-    background:
-        rgba(28, 28, 30, .38);
-}
-
-
-body.dark .notice-track {
-
-    color: #f5f5f7;
-}
-
-
-body.dark .notice-marquee::before {
-
-    background:
-        linear-gradient(
-            to right,
-            rgba(28,28,30,.82),
-            rgba(28,28,30,0)
-        );
-}
-
-
-body.dark .notice-marquee::after {
-
-    background:
-        linear-gradient(
-            to left,
-            rgba(28,28,30,.82),
-            rgba(28,28,30,0)
-        );
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 600px) {
-
-    .importance-notice {
-
-        width: calc(100% - 20px);
-
-        height: 43px;
-
-        margin-top: 9px;
-
-        border-radius: 13px;
-    }
-
-
-    .importance-label {
-
-        padding: 0 12px;
-
-        gap: 7px;
-
-        font-size: 10px;
-    }
-
-
-    .importance-label::before {
-
-        width: 6px;
-        height: 6px;
-
-        flex-basis: 6px;
-    }
-
-
-    .notice-track {
-
-        font-size: 11px;
-
-        line-height: 43px;
-
-        animation-duration: 15s;
-    }
-
-
-    .notice-marquee::before,
-    .notice-marquee::after {
-
-        width: 20px;
-    }
+  }
 
 }
 
@@ -1383,4228 +1473,2439 @@ body.dark .notice-marquee::after {
    REDUCED MOTION
 ========================================================= */
 
-@media (prefers-reduced-motion: reduce) {
+@media(prefers-reduced-motion:reduce){
 
-    .notice-track {
+  *{
 
-        animation: none;
+    animation-duration:.01ms !important;
 
-        padding-left: 12px;
-    }
-
-    .importance-label::before {
-
-        animation: none;
-    }
-
-    .importance-notice {
-
-        animation: none;
-    }
+    transition-duration:.01ms !important;
+  }
 
 }
+
 </style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
 
 <body>
 
 
-<!-- =====================================================
+<!-- =======================================================
      NAVBAR
-===================================================== -->
+======================================================= -->
 
-<header class="navbar">
+<nav class="navbar">
 
-<a href="index.html"
-   class="logo">
+  <a href="index.html" class="brand">
 
-<span class="logo-mark">
-C
-</span>
+    <div class="brand-icon">
+      🎓
+    </div>
 
-<span>
-CTGBoardRanking
-</span>
+    CTG Board Ranking
 
-</a>
+  </a>
 
 
-<!-- =====================================================
-     NAVBAR CONTROL
-===================================================== -->
+  <div class="nav-actions">
 
-<div class="navbar-control">
+    <button
+      class="nav-btn"
+      id="themeBtn"
+      aria-label="Toggle dark mode">
 
-<button
-    class="theme-btn"
-    id="themeBtn"
-    aria-label="Toggle dark mode"
-    type="button">
+      ◐
 
-◐
+    </button>
 
-</button>
-
-
-<button
-    class="nav-toggle-btn"
-    id="navToggleBtn"
-    type="button"
-    aria-label="Open navigation"
-    aria-expanded="false">
-
-<span class="nav-toggle-icon">
-
-<span></span>
-<span></span>
-<span></span>
-
-</span>
-
-<span>
-Navbar
-</span>
-
-</button>
-
-</div>
-
-
-<!-- =====================================================
-     SOLID NAVIGATION
-===================================================== -->
-
-<nav class="nav-links"
-     id="navLinks">
-
-
-<a href="index.html"
-   class="active">
-
-Home
-
-</a>
-
-
-<a href="student-ranking.html">
-
-Student Ranking
-
-</a>
-
-
-<a href="rankings.html">
-
-Institution Ranking
-
-</a>
-
-
-<!-- DISTRICT -->
-
-<div class="nav-dropdown"
-     id="districtDropdown">
-
-
-<button
-    type="button"
-    class="nav-dropdown-btn"
-    id="districtDropdownBtn"
-    aria-expanded="false">
-
-<span>
-District
-</span>
-
-<span class="dropdown-arrow">
-⌄
-</span>
-
-</button>
-
-
-<div class="nav-dropdown-menu">
-
-
-<a href="district-student-ranking.html">
-
-<span class="dropdown-icon">
-🎓
-</span>
-
-<span class="dropdown-text">
-
-<strong>
-District Student Ranking
-</strong>
-
-<span>
-Top students by district
-</span>
-
-</span>
-
-</a>
-
-
-<a href="district-college-ranking.html">
-
-<span class="dropdown-icon">
-🏫
-</span>
-
-<span class="dropdown-text">
-
-<strong>
-District College Ranking
-</strong>
-
-<span>
-Top colleges by district
-</span>
-
-</span>
-
-</a>
-
-
-<a href="thana-student-ranking.html">
-
-<span class="dropdown-icon">
-👨‍🎓
-</span>
-
-<span class="dropdown-text">
-
-<strong>
-Thana Student Ranking
-</strong>
-
-<span>
-Top students by thana
-</span>
-
-</span>
-
-</a>
-
-
-<a href="thana-college-ranking.html">
-
-<span class="dropdown-icon">
-🏛️
-</span>
-
-<span class="dropdown-text">
-
-<strong>
-Thana College Ranking
-</strong>
-
-<span>
-Top colleges by thana
-</span>
-
-</span>
-
-</a>
-
-
-</div>
-
-</div>
-
-
-<a href="statistics.html">
-
-Statistics
-
-</a>
-
+  </div>
 
 </nav>
+
+
+<!-- =======================================================
+     HERO
+======================================================= -->
+
+<header class="hero">
+
+  <div class="eyebrow">
+    ✦ SSC 2026 • Chattogram Board
+  </div>
+
+  <h1>
+
+    Discover
+    <span>Institutions.</span>
+
+  </h1>
+
+  <p>
+
+    Explore SSC 2026 institution performance,
+    GPA 5 achievements, passing rates and
+    student statistics across the Chattogram Board.
+
+  </p>
 
 </header>
 
 
-
-<!-- =====================================================
-     CREATOR CREDIT
-===================================================== -->
-
-<div class="creator-credit">
-
-<a href="https://www.facebook.com/ShadatFatih.Page"
-   target="_blank"
-   rel="noopener noreferrer">
-
-<span class="facebook-premium-icon">
-
-<svg viewBox="0 0 24 24"
-     fill="none"
-     aria-hidden="true">
-
-<circle
-cx="12"
-cy="12"
-r="9.5"
-stroke="currentColor"
-stroke-width="1.7"/>
-
-<path
-d="M13.5 8.2h1.8V5.9c-.3-.1-1.2-.2-2.3-.2-2.3 0-3.9 1.4-3.9 4v2.2H6.8v2.6h2.3v6.3h2.8v-6.3h2.4l.4-2.6h-2.8V10c0-1 .3-1.8 1.6-1.8Z"
-fill="currentColor"/>
-
-</svg>
-
-</span>
-
-<span>
-by <strong>Shadat Fatih</strong>
-</span>
-
-</a>
-
-</div>
-
-<!-- =====================================================
-     IMPORTANCE NOTICE
-===================================================== -->
-<div class="importance-notice" id="importanceNotice" hidden>
-
-    <div class="importance-label">
-        <span class="importance-icon">!</span>
-        <span>Importance Notice</span>
-    </div>
-
-    <div class="notice-marquee">
-        <div class="notice-track" id="noticeText">
-            Loading notice...
-        </div>
-    </div>
-
-</div>
-
-<main>
-
-
-<!-- =====================================================
-     HERO
-===================================================== -->
-
-<section class="hero">
-
-<div class="hero-badge">
-Chattogram Board · Education Rankings
-</div>
-
-
-<h1>
-
-See the rankings.<br>
-
-<span>
-Know the leaders.
-</span>
-
-</h1>
-
-
-<p>
-
-Explore institution, student and district
-rankings from Chattogram Board SSC 2026 data.
-
-</p>
-
-
-<div class="hero-buttons">
-
-<a href="rankings.html"
-   class="primary-btn">
-
-Explore Rankings
-
-</a>
-
-
-<a href="statistics.html"
-   class="secondary-btn">
-
-View Statistics
-
-</a>
-
-</div>
-
-</section>
-
-
-
-<!-- =====================================================
-     STUDENT RANKING
-===================================================== -->
-
-<section
-class="section"
-id="student-ranking">
-
-<div class="section-heading">
-
-<div>
-
-<span class="eyebrow">
-STUDENT RANKING
-</span>
-
-<h2>
-Top Students.
-</h2>
-
-</div>
-
-
-<a href="student-ranking.html"
-   class="text-link">
-
-See all →
-
-</a>
-
-</div>
-
-
-
-<div class="group-grid">
-
-
-<a
-href="student-ranking.html?group=science"
-class="group-card science">
-
-<div class="group-top">
-
-<span class="group-icon">
-🔬
-</span>
-
-<span class="arrow">
-↗
-</span>
-
-</div>
-
-
-<div>
-
-<small>
-STUDENT RANKING
-</small>
-
-<h3 id="studentScienceTitle">
-Science
-</h3>
-
-<p id="studentScienceText">
-Top Science students
-</p>
-
-</div>
-
-</a>
-
-
-
-<a
-href="student-ranking.html?group=business"
-class="group-card business">
-
-<div class="group-top">
-
-<span class="group-icon">
-💼
-</span>
-
-<span class="arrow">
-↗
-</span>
-
-</div>
-
-
-<div>
-
-<small>
-STUDENT RANKING
-</small>
-
-<h3 id="studentBusinessTitle">
-Business Studies
-</h3>
-
-<p id="studentBusinessText">
-Top Business Studies students
-</p>
-
-</div>
-
-</a>
-
-
-
-<a
-href="student-ranking.html?group=humanities"
-class="group-card humanities">
-
-<div class="group-top">
-
-<span class="group-icon">
-🎓
-</span>
-
-<span class="arrow">
-↗
-</span>
-
-</div>
-
-
-<div>
-
-<small>
-STUDENT RANKING
-</small>
-
-<h3 id="studentHumanitiesTitle">
-Humanities
-</h3>
-
-<p id="studentHumanitiesText">
-Top Humanities students
-</p>
-
-</div>
-
-</a>
-
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     INDIVIDUAL RESULT
-===================================================== -->
-
-<section class="section" id="individual-result">
-
-    <div class="section-heading">
-
-        <div>
-
-            <span class="eyebrow">
-                INDIVIDUAL RESULT
-            </span>
-
-            <h2>
-                Check your result.
-            </h2>
-
-            <p>
-                Enter your roll number to view
-                complete SSC 2026 result.
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div class="individual-result-card">
-
-        <div class="result-search-icon">
-            🎓
-        </div>
-
-        <div class="result-search-content">
-
-            <p>
-                Search your result by roll number
-                and view total score, GPA and
-                subject-wise marks & grades.
-            </p>
-
-
-            <form
-                id="homeResultForm"
-                class="home-result-form"
-            >
-
-                <div class="home-result-input-wrap">
-
-                    <input
-                        type="text"
-                        id="homeRollInput"
-                        inputmode="numeric"
-                        autocomplete="off"
-                        maxlength="6"
-                        placeholder="Enter Roll Number"
-                        aria-label="Enter roll number"
-                        required
-                    >
-
-                    <button
-                        type="submit"
-                        id="homeResultBtn"
-                        class="primary-btn"
-                    >
-                        <span id="homeResultBtnText">
-                            View Result →
-                        </span>
-                    </button>
-
-                </div>
-
-                <p
-                    id="homeResultMessage"
-                    class="home-result-message"
-                    aria-live="polite"
-                ></p>
-
-            </form>
-
-        </div>
-
-    </div>
-
-
-    <!-- RESULT PREVIEW -->
-
-    <div
-        id="homeResultBox"
-        class="home-result-box"
-        hidden
+<!-- =======================================================
+     SEARCH
+======================================================= -->
+
+<div class="search-area">
+
+  <div class="search-box">
+
+    <span class="search-icon">
+      ⌕
+    </span>
+
+    <input
+      type="search"
+      id="searchInput"
+      placeholder="Search institution, EIIN, district or thana..."
+      autocomplete="off"
     >
-
-        <div class="home-result-header">
-
-            <div>
-
-                <span class="eyebrow">
-                    SSC 2026 · CHATTogram BOARD
-                </span>
-
-                <h3 id="homeResultName">
-                    —
-                </h3>
-
-                <span id="homeResultRoll">
-                    Roll: —
-                </span>
-
-            </div>
-
-
-            <div class="home-result-summary">
-
-                <div>
-
-                    <strong id="homeResultGPA">
-                        —
-                    </strong>
-
-                    <span>
-                        GPA
-                    </span>
-
-                </div>
-
-
-                <div>
-
-                    <strong id="homeResultTotal">
-                        —
-                    </strong>
-
-                    <span>
-                        Total Score
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="home-subject-heading">
-
-            <h3>
-                Subject-wise Result
-            </h3>
-
-            <span>
-                Marks & Grade
-            </span>
-
-        </div>
-
-
-        <div
-            id="homeSubjectList"
-            class="home-subject-list"
-        ></div>
-
-
-        <div class="home-result-actions">
 
     <button
-        type="button"
-        id="homeDownloadPdfBtn"
-        class="primary-btn"
-    >
-        Download PDF ↓
+      class="clear-search"
+      id="clearSearch">
+
+      ×
+
     </button>
 
+  </div>
+
 </div>
+
+
+<!-- =======================================================
+     FILTERS
+======================================================= -->
+
+<div class="filters">
+
+  <button
+    class="filter active"
+    data-filter="all">
+
+    All Institutions
+
+  </button>
+
+
+  <button
+    class="filter"
+    data-filter="gpa5">
+
+    GPA 5
+
+  </button>
+
+
+  <button
+    class="filter"
+    data-filter="excellent">
+
+    80%+ Pass Rate
+
+  </button>
+
+
+  <button
+    class="filter"
+    data-filter="district">
+
+    Districts
+
+  </button>
+
+</div>
+
+
+<!-- =======================================================
+     STATS
+======================================================= -->
+
+<section class="stats">
+
+  <div class="stat">
+
+    <div class="stat-icon">
+      🏫
+    </div>
+
+    <strong id="totalInstitutions">
+      —
+    </strong>
+
+    <span>
+      Institutions
+    </span>
+
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-icon">
+      👨‍🎓
+    </div>
+
+    <strong id="totalAppeared">
+      —
+    </strong>
+
+    <span>
+      Students Appeared
+    </span>
+
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-icon">
+      🏆
+    </div>
+
+    <strong id="totalGPA5">
+      —
+    </strong>
+
+    <span>
+      GPA 5 Achievements
+    </span>
+
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-icon">
+      📈
+    </div>
+
+    <strong id="overallPassRate">
+      —
+    </strong>
+
+    <span>
+      Overall Pass Rate
+    </span>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     CONTENT
+======================================================= -->
+
+<main class="content">
+
+  <div class="section-head">
+
+    <h2>
+      Institutions
+    </h2>
+
+    <div
+      class="result-count"
+      id="resultCount">
+
+      Loading...
 
     </div>
 
-</section>
+  </div>
 
 
+  <div
+    class="institution-grid"
+    id="institutionGrid">
 
-<!-- =====================================================
-     EXPLORE GROUPS
-===================================================== -->
+    <div class="loading">
 
-<section
-class="section"
-id="rankings">
+      <div class="spinner"></div>
 
-<div class="section-heading">
+      Loading institution data...
 
-<div>
+    </div>
 
-<span class="eyebrow">
-EXPLORE
-</span>
+  </div>
 
-<h2>
-Choose your group.
-</h2>
 
-</div>
-
-<p>
-Explore rankings by academic group.
-</p>
-
-</div>
-
-
-
-<div class="group-grid">
-
-
-<a
-href="rankings.html?group=science"
-class="group-card science">
-
-<div class="group-top">
-
-<span class="group-icon">
-🔬
-</span>
-
-<span class="arrow">
-↗
-</span>
-
-</div>
-
-<div>
-
-<small>
-GROUP
-</small>
-
-<h3>
-Science
-</h3>
-
-<p>
-Explore Science rankings
-</p>
-
-</div>
-
-</a>
-
-
-
-<a
-href="rankings.html?group=business"
-class="group-card business">
-
-<div class="group-top">
-
-<span class="group-icon">
-💼
-</span>
-
-<span class="arrow">
-↗
-</span>
-
-</div>
-
-<div>
-
-<small>
-GROUP
-</small>
-
-<h3>
-Business Studies
-</h3>
-
-<p>
-Explore Business rankings
-</p>
-
-</div>
-
-</a>
-
-
-
-<a
-href="rankings.html?group=humanities"
-class="group-card humanities">
-
-<div class="group-top">
-
-<span class="group-icon">
-🎓
-</span>
-
-<span class="arrow">
-↗
-</span>
-
-</div>
-
-<div>
-
-<small>
-GROUP
-</small>
-
-<h3>
-Humanities
-</h3>
-
-<p>
-Explore Humanities rankings
-</p>
-
-</div>
-
-</a>
-
-
-</div>
-
-</section>
-
-
-
-<!-- =====================================================
-     INSTITUTION RANKING
-===================================================== -->
-
-<section class="section">
-
-<div class="section-heading">
-
-<div>
-
-<span class="eyebrow">
-TOP PERFORMANCE
-</span>
-
-<h2>
-Institution Rankings
-</h2>
-
-</div>
-
-
-<a href="rankings.html"
-   class="text-link">
-
-See all →
-
-</a>
-
-</div>
-
-
-
-<div class="ranking-card">
-
-
-<div class="ranking-header">
-
-<div>
-
-<span class="year-label">
-2026 · Chattogram Board
-</span>
-
-<h3>
-Top Institutions
-</h3>
-
-</div>
-
-
-<span class="live-badge">
-● LIVE DATA
-</span>
-
-</div>
-
-
-
-<div
-class="ranking-row first"
-id="homeRank1">
-
-<div class="rank-number gold">
-01
-</div>
-
-
-<div class="rank-info">
-
-<strong>
-Loading...
-</strong>
-
-<span>
-Loading...
-</span>
-
-</div>
-
-
-<div class="rank-result">
-
-<strong>
-—
-</strong>
-
-<span>
-Pass Rate
-</span>
-
-</div>
-
-
-<div class="rank-score">
-
-<strong>
-—
-</strong>
-
-<span>
-GPA-5
-</span>
-
-</div>
-
-</div>
-
-
-
-<div
-class="ranking-row"
-id="homeRank2">
-
-<div class="rank-number">
-02
-</div>
-
-
-<div class="rank-info">
-
-<strong>
-Loading...
-</strong>
-
-<span>
-Loading...
-</span>
-
-</div>
-
-
-<div class="rank-result">
-
-<strong>
-—
-</strong>
-
-<span>
-Pass Rate
-</span>
-
-</div>
-
-
-<div class="rank-score">
-
-<strong>
-—
-</strong>
-
-<span>
-GPA-5
-</span>
-
-</div>
-
-</div>
-
-
-
-<div
-class="ranking-row"
-id="homeRank3">
-
-<div class="rank-number">
-03
-</div>
-
-
-<div class="rank-info">
-
-<strong>
-Loading...
-</strong>
-
-<span>
-Loading...
-</span>
-
-</div>
-
-
-<div class="rank-result">
-
-<strong>
-—
-</strong>
-
-<span>
-Pass Rate
-</span>
-
-</div>
-
-
-<div class="rank-score">
-
-<strong>
-—
-</strong>
-
-<span>
-GPA-5
-</span>
-
-</div>
-
-</div>
-
-
-</div>
-
-</section>
-
-
-
-<!-- =====================================================
-     DISCOVER INSTITUTIONS
-===================================================== -->
-
-<section
-class="section discover"
-id="institutions">
-
-<div class="discover-card">
-
-<div>
-
-<span class="eyebrow">
-DISCOVER
-</span>
-
-<h2>
-Compare institutions.<br>
-Explore performance.
-</h2>
-
-<p>
-Find institutions, compare their results
-and explore education statistics.
-</p>
-
-
-<a href="discover.html"
-   class="primary-btn">
-
-Explore Institutions
-
-</a>
-
-</div>
-
-
-<div class="discover-icon">
-🏫
-</div>
-
-</div>
-
-</section>
-
-
-
-<!-- =====================================================
-     FEATURES
-===================================================== -->
-
-<section
-class="section"
-id="statistics">
-
-<div class="section-heading">
-
-<div>
-
-<span class="eyebrow">
-PLATFORM
-</span>
-
-<h2>
-Everything in one place.
-</h2>
-
-</div>
-
-</div>
-
-
-
-<div class="feature-grid">
-
-
-<div class="feature-card">
-
-<span>
-🏆
-</span>
-
-<h3>
-Institution Ranking
-</h3>
-
-<p>
-Compare institutions based on
-published performance statistics.
-</p>
-
-</div>
-
-
-
-<div class="feature-card">
-
-<span>
-📍
-</span>
-
-<h3>
-District Ranking
-</h3>
-
-<p>
-Explore district-wise education
-performance.
-</p>
-
-</div>
-
-
-
-<div class="feature-card">
-
-<span>
-📊
-</span>
-
-<h3>
-Statistics
-</h3>
-
-<p>
-View useful education statistics
-in a simple dashboard.
-</p>
-
-</div>
-
-
-
-<div class="feature-card">
-
-<span>
-📅
-</span>
-
-<h3>
-Year-wise Data
-</h3>
-
-<p>
-Compare performance across
-different years.
-</p>
-
-</div>
-
-
-</div>
-
-</section>
+  <div
+    class="pagination"
+    id="pagination">
+  </div>
 
 </main>
 
 
-
-<!-- =====================================================
-     PREMIUM SOCIAL / CONTACT
-===================================================== -->
-
-<section class="premium-social-section">
-
-<div class="premium-social-heading">
-
-<span class="eyebrow">
-CONNECT
-</span>
-
-<h2>
-Stay connected.
-</h2>
-
-<p>
-Follow Shadat Fatih and stay updated with
-CTGBoardRanking.
-</p>
-
-</div>
-
-
-<div class="premium-social-grid">
-
-
-<a
-href="https://www.facebook.com/ShadatFatih.Page"
-target="_blank"
-rel="noopener noreferrer"
-class="premium-social-card facebook-card">
-
-<div class="premium-social-icon">
-
-<svg viewBox="0 0 24 24"
-     fill="none">
-
-<circle
-cx="12"
-cy="12"
-r="9.5"
-stroke="currentColor"
-stroke-width="1.7"/>
-
-<path
-d="M13.5 8.2h1.8V5.9c-.3-.1-1.2-.2-2.3-.2-2.3 0-3.9 1.4-3.9 4v2.2H6.8v2.6h2.3v6.3h2.8v-6.3h2.4l.4-2.6h-2.8V10c0-1 .3-1.8 1.6-1.8Z"
-fill="currentColor"/>
-
-</svg>
-
-</div>
-
-<div class="premium-social-content">
-
-<strong>
-Facebook
-</strong>
-
-<span>
-Shadat Fatih Page
-</span>
-
-</div>
-
-<span class="premium-social-arrow">
-↗
-</span>
-
-</a>
-
-
-
-<a
-href="https://wa.me/8801601800222"
-target="_blank"
-rel="noopener noreferrer"
-class="premium-social-card whatsapp-card">
-
-<div class="premium-social-icon">
-
-<svg viewBox="0 0 24 24"
-     fill="none">
-
-<path
-d="M20.1 3.9A9.9 9.9 0 0 0 4.4 16.1L3 21l5-1.3A9.9 9.9 0 0 0 20.1 3.9Z"
-stroke="currentColor"
-stroke-width="1.7"/>
-
-<path
-d="M8.4 7.4c.2-.4.4-.4.7-.4h.6c.2 0 .4.1.5.4l.8 1.8c.1.2.1.4 0 .6l-.5.7c-.1.2-.1.4 0 .6.5.9 1.2 1.6 2.1 2.1.2.1.4.1.6 0l.7-.5c.2-.1.4-.1.6 0l1.8.8c.3.1.4.3.4.5v.6c0 .3-.1.5-.4.7-.4.3-1 .5-1.5.4-1.2-.2-2.8-1-4.2-2.4s-2.2-3-2.4-4.2c-.1-.5.1-1.1.4-1.5Z"
-fill="currentColor"/>
-
-</svg>
-
-</div>
-
-<div class="premium-social-content">
-
-<strong>
-WhatsApp
-</strong>
-
-<span>
-Chat with us
-</span>
-
-</div>
-
-<span class="premium-social-arrow">
-↗
-</span>
-
-</a>
-
-
-
-<a
-href="https://www.instagram.com/shadatfatih"
-target="_blank"
-rel="noopener noreferrer"
-class="premium-social-card instagram-card">
-
-<div class="premium-social-icon">
-
-<svg viewBox="0 0 24 24"
-     fill="none">
-
-<rect
-x="3.2"
-y="3.2"
-width="17.6"
-height="17.6"
-rx="5"
-stroke="currentColor"
-stroke-width="1.7"/>
-
-<circle
-cx="12"
-cy="12"
-r="4"
-stroke="currentColor"
-stroke-width="1.7"/>
-
-<circle
-cx="17.5"
-cy="6.7"
-r="1"
-fill="currentColor"/>
-
-</svg>
-
-</div>
-
-<div class="premium-social-content">
-
-<strong>
-Instagram
-</strong>
-
-<span>
-@shadatfatih
-</span>
-
-</div>
-
-<span class="premium-social-arrow">
-↗
-</span>
-
-</a>
-
-
-
-<a
-href="mailto:helloshadat@hotmail.com"
-class="premium-social-card email-card">
-
-<div class="premium-social-icon">
-
-<svg viewBox="0 0 24 24"
-     fill="none">
-
-<rect
-x="3"
-y="5"
-width="18"
-height="14"
-rx="2.5"
-stroke="currentColor"
-stroke-width="1.7"/>
-
-<path
-d="m4.5 7 7.5 6 7.5-6"
-stroke="currentColor"
-stroke-width="1.7"
-stroke-linecap="round"
-stroke-linejoin="round"/>
-
-</svg>
-
-</div>
-
-<div class="premium-social-content">
-
-<strong>
-Email
-</strong>
-
-<span>
-helloshadat@hotmail.com
-</span>
-
-</div>
-
-<span class="premium-social-arrow">
-↗
-</span>
-
-</a>
-
-
-
-<div class="premium-social-card visits-card">
-
-<div class="premium-social-icon">
-
-<svg viewBox="0 0 24 24"
-     fill="none">
-
-<path
-d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
-stroke="currentColor"
-stroke-width="1.7"
-stroke-linecap="round"
-stroke-linejoin="round"/>
-
-<circle
-cx="12"
-cy="12"
-r="2.8"
-stroke="currentColor"
-stroke-width="1.7"/>
-
-</svg>
-
-</div>
-
-<div class="premium-social-content">
-
-<strong>
-<span id="totalVisits">
-0
-</span>
-</strong>
-
-<span>
-Total Visits
-</span>
-
-</div>
-
-</div>
-
-
-</div>
-
-</section>
-
-
-
-<!-- =====================================================
+<!-- =======================================================
      FOOTER
-===================================================== -->
+======================================================= -->
 
 <footer>
 
-<div class="footer-main">
-
-<div>
-
-<div class="footer-logo">
-
-<span class="logo-mark">
-C
-</span>
-
-CTGBoardRanking
-
-</div>
-
-<p>
-Chattogram Board Education Rankings.
-</p>
-
-</div>
-
-
-<div class="footer-links">
-
-<a href="rankings.html">
-Rankings
-</a>
-
-<a href="institution.html">
-Institutions
-</a>
-
-<a href="district.html">
-Districts
-</a>
-
-<a href="statistics.html">
-Statistics
-</a>
-
-</div>
-
-</div>
-
-
-<div class="footer-bottom">
-
-<span>
-© 2026 CTGBoardRanking
-</span>
-
-<span>
-Education Data & Statistics
-</span>
-
-</div>
+  © 2026 CTG Board Ranking
+  • SSC 2026 Institution Statistics
 
 </footer>
 
 
+<!-- =======================================================
+     INSTITUTION DETAIL MODAL
+======================================================= -->
 
-<!-- =====================================================
-     UNOFFICIAL NOTICE
-===================================================== -->
+<div
+  class="modal-overlay"
+  id="institutionModal"
+  aria-hidden="true">
 
-<section class="unofficial-notice">
+  <div
+    class="institution-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalInstitutionName">
 
-<div class="unofficial-notice-inner">
 
-<div class="notice-icon">
-⚠
+    <div class="modal-header">
+
+      <div class="modal-title-wrap">
+
+        <div class="modal-institution-icon">
+          🏫
+        </div>
+
+        <div>
+
+          <div
+            class="modal-title"
+            id="modalInstitutionName">
+
+            Institution
+
+          </div>
+
+          <div
+            class="modal-subtitle"
+            id="modalInstitutionLocation">
+
+            Chattogram Board • SSC 2026
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="modal-close"
+        id="modalClose"
+        aria-label="Close">
+
+        ×
+
+      </button>
+
+    </div>
+
+
+    <div class="modal-body">
+
+      <div
+        class="detail-grid"
+        id="detailGrid">
+
+      </div>
+
+
+      <div class="modal-actions">
+
+        <button
+          class="pdf-btn"
+          id="downloadPdfBtn">
+
+          ⬇ Download Premium PDF
+
+        </button>
+
+      </div>
+
+
+      <div class="modal-note">
+
+        Institution statistics are based on
+        SSC 2026 Chattogram Board data.
+        This is an unofficial statistical presentation.
+
+      </div>
+
+    </div>
+
+  </div>
+
 </div>
 
 
-<div class="notice-content">
+<!-- =======================================================
+     PDF LIBRARIES
+======================================================= -->
 
-<h3>
-Unofficial Data Notice
-</h3>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+</script>
 
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js">
+</script>
 
-<p>
-
-This website is an independent, unofficial platform and is
-<strong>
-not affiliated with, endorsed by, or officially connected
-to the Chattogram Education Board.
-</strong>
-
-</p>
-
-
-<p>
-
-Result data is collected programmatically from publicly
-accessible result pages and is used for
-<strong>
-research, educational, statistical analysis,
-and ranking purposes.
-</strong>
-
-</p>
-
-
-<p class="notice-source">
-
-For official results, notices, and information,
-please refer to the official Chattogram Education Board.
-
-</p>
-
-</div>
-
-</div>
-
-</section>
-
-
-
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
 
 <script>
 
-"use strict";
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const JSON_PATH =
+  "institution-collector/institution_results.json";
 
 
-/* =====================================================
-   NAVBAR
-===================================================== */
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
 
-const navToggleBtn =
-    document.getElementById(
-        "navToggleBtn"
-    );
+let institutions = [];
 
-const navLinks =
-    document.getElementById(
-        "navLinks"
-    );
+let filteredInstitutions = [];
 
+let currentFilter = "all";
 
-function closeNavbar() {
+let currentPage = 1;
 
-    if (!navLinks || !navToggleBtn) {
-        return;
-    }
+let selectedInstitution = null;
+
+const ITEMS_PER_PAGE = 24;
 
 
-    navLinks.classList.remove(
-        "mobile-open"
-    );
+/* =========================================================
+   DOM
+========================================================= */
+
+const grid =
+  document.getElementById(
+    "institutionGrid"
+  );
+
+const searchInput =
+  document.getElementById(
+    "searchInput"
+  );
+
+const clearSearch =
+  document.getElementById(
+    "clearSearch"
+  );
+
+const resultCount =
+  document.getElementById(
+    "resultCount"
+  );
+
+const pagination =
+  document.getElementById(
+    "pagination"
+  );
+
+const modal =
+  document.getElementById(
+    "institutionModal"
+  );
+
+const modalClose =
+  document.getElementById(
+    "modalClose"
+  );
+
+const detailGrid =
+  document.getElementById(
+    "detailGrid"
+  );
+
+const downloadPdfBtn =
+  document.getElementById(
+    "downloadPdfBtn"
+  );
 
 
-    navToggleBtn.classList.remove(
-        "open"
-    );
+/* =========================================================
+   FORMAT NUMBER
+========================================================= */
 
+function number(value){
 
-    navToggleBtn.setAttribute(
-        "aria-expanded",
-        "false"
-    );
-
-}
-
-
-if (
-    navToggleBtn &&
-    navLinks
-) {
-
-    navToggleBtn.addEventListener(
-        "click",
-        function(event) {
-
-            event.stopPropagation();
-
-
-            const isOpen =
-                navLinks.classList.toggle(
-                    "mobile-open"
-                );
-
-
-            navToggleBtn.classList.toggle(
-                "open",
-                isOpen
-            );
-
-
-            navToggleBtn.setAttribute(
-                "aria-expanded",
-                String(isOpen)
-            );
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   DISTRICT DROPDOWN
-===================================================== */
-
-const districtDropdown =
-    document.getElementById(
-        "districtDropdown"
-    );
-
-
-const districtDropdownBtn =
-    document.getElementById(
-        "districtDropdownBtn"
-    );
-
-
-if (
-    districtDropdown &&
-    districtDropdownBtn
-) {
-
-    districtDropdownBtn.addEventListener(
-        "click",
-        function(event) {
-
-            event.stopPropagation();
-
-
-            const isOpen =
-                districtDropdown.classList.toggle(
-                    "open"
-                );
-
-
-            districtDropdownBtn.setAttribute(
-                "aria-expanded",
-                String(isOpen)
-            );
-
-        }
-    );
+  return Number(value || 0)
+    .toLocaleString("en-US");
 
 }
 
 
-/* =====================================================
-   CLOSE OUTSIDE
-===================================================== */
-
-document.addEventListener(
-    "click",
-    function(event) {
-
-        if (
-            navLinks &&
-            navToggleBtn &&
-            !navLinks.contains(event.target) &&
-            !navToggleBtn.contains(event.target)
-        ) {
-
-            closeNavbar();
-
-        }
-
-
-        if (
-            districtDropdown &&
-            !districtDropdown.contains(
-                event.target
-            )
-        ) {
-
-            districtDropdown.classList.remove(
-                "open"
-            );
-
-
-            if (districtDropdownBtn) {
-
-                districtDropdownBtn.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
-
-            }
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   CLOSE AFTER NAV LINK
-===================================================== */
-
-if (navLinks) {
-
-    navLinks
-        .querySelectorAll("a")
-        .forEach(
-            function(link) {
-
-                link.addEventListener(
-                    "click",
-                    function() {
-
-                        closeNavbar();
-
-                    }
-                );
-
-            }
-        );
-
-}
-
-
-/* =====================================================
-   DARK MODE
-===================================================== */
-
-const themeBtn =
-    document.getElementById(
-        "themeBtn"
-    );
-
-
-if (
-    localStorage.getItem(
-        "ctg-theme"
-    ) === "dark"
-) {
-
-    document.body.classList.add(
-        "dark"
-    );
-
-}
-
-
-if (themeBtn) {
-
-    themeBtn.addEventListener(
-        "click",
-        function() {
-
-            document.body.classList.toggle(
-                "dark"
-            );
-
-
-            localStorage.setItem(
-                "ctg-theme",
-                document.body.classList.contains(
-                    "dark"
-                )
-                ? "dark"
-                : "light"
-            );
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   JSON FILE
-===================================================== */
-
-const INSTITUTION_JSON =
-    "./institution-collector/institution_results.json";
-
-
-/* =====================================================
+/* =========================================================
    LOAD JSON
-===================================================== */
+========================================================= */
 
-async function loadInstitutionData() {
+async function loadInstitutions(){
+
+  try{
+
+    grid.innerHTML = `
+      <div class="loading">
+
+        <div class="spinner"></div>
+
+        Loading institution data...
+
+      </div>
+    `;
+
 
     const response =
-        await fetch(
-            INSTITUTION_JSON +
-            "?v=" +
-            Date.now(),
-            {
-                cache:"no-store"
-            }
-        );
+      await fetch(
+        JSON_PATH +
+        "?v=" +
+        Date.now()
+      );
 
 
-    if (!response.ok) {
+    if(!response.ok){
 
-        throw new Error(
-            "JSON HTTP Error: " +
-            response.status
-        );
+      throw new Error(
+        `HTTP ${response.status} — ${JSON_PATH}`
+      );
 
     }
 
 
     const data =
-        await response.json();
+      await response.json();
 
 
-    if (Array.isArray(data)) {
+    if(!Array.isArray(data)){
 
-        return data;
-
-    }
-
-
-    if (
-        data &&
-        Array.isArray(
-            data.institutions
-        )
-    ) {
-
-        return data.institutions;
+      throw new Error(
+        "institution_results.json must contain an array."
+      );
 
     }
 
 
-    if (
-        data &&
-        Array.isArray(
-            data.results
-        )
-    ) {
+    institutions =
+      data.map(item => {
 
-        return data.results;
+        return {
 
-    }
-
-
-    if (
-        data &&
-        Array.isArray(
-            data.data
-        )
-    ) {
-
-        return data.data;
-
-    }
-
-
-    throw new Error(
-        "No institution data array found"
-    );
-
-}
-
-
-/* =====================================================
-   NUMBER
-===================================================== */
-
-function toNumber(value) {
-
-    if (
-        value === null ||
-        value === undefined ||
-        value === ""
-    ) {
-
-        return 0;
-
-    }
-
-
-    const n =
-        Number(
-            String(value)
-                .replace(/,/g,"")
-                .replace(/%/g,"")
-                .trim()
-        );
-
-
-    return Number.isFinite(n)
-        ? n
-        : 0;
-
-}
-
-
-/* =====================================================
-   NORMALIZE
-===================================================== */
-
-function normalizeInstitution(item) {
-
-    const appeared =
-        toNumber(
-            item.appeared ??
-            item.total_students ??
-            item.total_appeared
-        );
-
-
-    const passed =
-        toNumber(
-            item.passed ??
-            item.total_passed
-        );
-
-
-    let passingRate =
-        toNumber(
-            item.passing_rate ??
-            item.pass_rate ??
-            item.passingRate
-        );
-
-
-    const gpa5 =
-        toNumber(
-            item.gpa5 ??
-            item.gpa_5 ??
-            item.gpa5_count ??
-            item.gpa_5_count ??
-            item.total_gpa5
-        );
-
-
-    if (
-        passingRate === 0 &&
-        appeared > 0
-    ) {
-
-        passingRate =
-            (passed / appeared) * 100;
-
-    }
-
-
-    return {
-
-        eiin:
+          eiin:
             String(
-                item.eiin ?? ""
-            ).trim(),
+              item.eiin ?? ""
+            ),
 
-        institution:
+          institution_name:
             String(
-                item.institution_name ??
-                item.institution ??
-                item.institute ??
-                item.name ??
-                ""
-            ).trim(),
+              item.institution_name ??
+              "Unknown Institution"
+            ),
 
-        district:
+          district:
             String(
-                item.district ?? ""
-            ).trim(),
+              item.district ??
+              "Unknown"
+            ),
 
-        thana:
+          thana:
             String(
-                item.thana ??
-                item.upazila ??
-                ""
-            ).trim(),
-
-        appeared,
-
-        passed,
-
-        passingRate,
-
-        gpa5
-
-    };
-
-}
-
-
-/* =====================================================
-   UNIQUE
-===================================================== */
-
-function uniqueInstitutions(data) {
-
-    const map =
-        new Map();
-
-
-    for (
-        const raw of data
-    ) {
-
-        const item =
-            normalizeInstitution(raw);
-
-
-        if (
-            !item.institution
-        ) {
-
-            continue;
-
-        }
-
-
-        const key =
-            item.eiin ||
-            item.institution
-                .toLowerCase()
-                .trim();
-
-
-        if (
-            !map.has(key)
-        ) {
-
-            map.set(
-                key,
-                item
-            );
-
-        }
-
-        else {
-
-            const old =
-                map.get(key);
-
-
-            if (
-                item.appeared >
-                old.appeared
-            ) {
-
-                map.set(
-                    key,
-                    item
-                );
-
-            }
-
-        }
-
-    }
-
-
-    return Array.from(
-        map.values()
-    );
-
-}
-
-
-/* =====================================================
-   RANK
-===================================================== */
-
-function rankInstitutions(
-    institutions
-) {
-
-    return institutions.sort(
-        function(a,b) {
-
-            if (
-                b.gpa5 !== a.gpa5
-            ) {
-
-                return b.gpa5 - a.gpa5;
-
-            }
-
-
-            if (
-                b.passingRate !==
-                a.passingRate
-            ) {
-
-                return (
-                    b.passingRate -
-                    a.passingRate
-                );
-
-            }
-
-
-            if (
-                b.passed !== a.passed
-            ) {
-
-                return b.passed - a.passed;
-
-            }
-
-
-            if (
-                b.appeared !== a.appeared
-            ) {
-
-                return (
-                    b.appeared -
-                    a.appeared
-                );
-
-            }
-
-
-            return a.institution.localeCompare(
-                b.institution
-            );
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   TOP 3
-===================================================== */
-
-function displayTop3(
-    institutions
-) {
-
-    const rows = [
-
-        document.getElementById(
-            "homeRank1"
-        ),
-
-        document.getElementById(
-            "homeRank2"
-        ),
-
-        document.getElementById(
-            "homeRank3"
-        )
-
-    ];
-
-
-    rows.forEach(
-        function(row,index) {
-
-            if (!row) {
-                return;
-            }
-
-
-            const item =
-                institutions[index];
-
-
-            const name =
-                row.querySelector(
-                    ".rank-info strong"
-                );
-
-
-            const district =
-                row.querySelector(
-                    ".rank-info span"
-                );
-
-
-            const pass =
-                row.querySelector(
-                    ".rank-result strong"
-                );
-
-
-            const score =
-                row.querySelector(
-                    ".rank-score strong"
-                );
-
-
-            if (!item) {
-
-                if (name)
-                    name.textContent = "—";
-
-                if (district)
-                    district.textContent = "—";
-
-                if (pass)
-                    pass.textContent = "—";
-
-                if (score)
-                    score.textContent = "—";
-
-                return;
-
-            }
-
-
-            if (name)
-                name.textContent =
-                    item.institution;
-
-
-            if (district)
-                district.textContent =
-                    item.district ||
-                    "Chattogram";
-
-
-            if (pass)
-                pass.textContent =
-                    item.passingRate.toFixed(2) +
-                    "%";
-
-
-            if (score)
-                score.textContent =
-                    item.gpa5.toLocaleString(
-                        "en-US"
-                    );
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   QUICK STATS
-===================================================== */
-
-function displayQuickStats(
-    institutions
-) {
-
-    const institutionElement =
-        document.getElementById(
-            "statInstitutions"
-        );
-
-
-    if (institutionElement) {
-
-        institutionElement.textContent =
-            institutions.length.toLocaleString(
-                "en-US"
-            );
-
-    }
-
-
-    const districtSet =
-        new Set();
-
-
-    institutions.forEach(
-        function(item) {
-
-            if (
-                item.district
-            ) {
-
-                districtSet.add(
-                    item.district
-                        .trim()
-                        .toUpperCase()
-                );
-
-            }
-
-        }
-    );
-
-
-    const districtElement =
-        document.getElementById(
-            "statDistricts"
-        );
-
-
-    if (districtElement) {
-
-        districtElement.textContent =
-            districtSet.size.toLocaleString(
-                "en-US"
-            );
-
-    }
-
-
-    let totalStudents = 0;
-
-
-    institutions.forEach(
-        function(item) {
-
-            totalStudents +=
-                item.appeared;
-
-        }
-    );
-
-
-    const studentElement =
-        document.getElementById(
-            "statStudents"
-        );
-
-
-    if (studentElement) {
-
-        studentElement.textContent =
-            totalStudents.toLocaleString(
-                "en-US"
-            );
-
-    }
-
-}
-
-
-/* =====================================================
-   HOMEPAGE DATA
-===================================================== */
-
-async function loadHomepageData() {
-
-    try {
-
-        const data =
-            await loadInstitutionData();
-
-
-        const institutions =
-            uniqueInstitutions(
-                data
-            );
-
-
-        if (
-            institutions.length === 0
-        ) {
-
-            throw new Error(
-                "No valid institution records"
-            );
-
-        }
-
-
-        rankInstitutions(
-            institutions
-        );
-
-
-        displayTop3(
-            institutions.slice(
-                0,
-                3
+              item.thana ??
+              "Unknown"
+            ),
+
+          appeared:
+            Number(
+              item.appeared ?? 0
+            ),
+
+          passed:
+            Number(
+              item.passed ?? 0
+            ),
+
+          passing_rate:
+            Number(
+              item.passing_rate ?? 0
+            ),
+
+          /*
+             IMPORTANT
+
+             gpa5 এবং total_gpa একই data.
+
+             তাই total_gpa আলাদাভাবে যোগ করা হচ্ছে না।
+          */
+
+          gpa5:
+            Number(
+              item.gpa5 ??
+              item.total_gpa ??
+              0
+            ),
+
+          total_gpa:
+            Number(
+              item.total_gpa ??
+              item.gpa5 ??
+              0
+            ),
+
+          year:
+            Number(
+              item.year ?? 2026
+            ),
+
+          board:
+            String(
+              item.board ??
+              "Chattogram Board"
             )
-        );
-
-
-        displayQuickStats(
-            institutions
-        );
-
-
-    }
-
-    catch(error) {
-
-        console.error(
-            "HOMEPAGE DATA ERROR:",
-            error
-        );
-
-
-        [
-            "homeRank1",
-            "homeRank2",
-            "homeRank3"
-        ].forEach(
-            function(id) {
-
-                const row =
-                    document.getElementById(
-                        id
-                    );
-
-
-                if (!row) {
-                    return;
-                }
-
-
-                const name =
-                    row.querySelector(
-                        ".rank-info strong"
-                    );
-
-
-                const district =
-                    row.querySelector(
-                        ".rank-info span"
-                    );
-
-
-                if (name)
-                    name.textContent =
-                        "Data unavailable";
-
-
-                if (district)
-                    district.textContent =
-                        "JSON load failed";
-
-            }
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   TOTAL VISITS
-===================================================== */
-
-async function loadTotalVisits() {
-
-    const element =
-        document.getElementById("totalVisits");
-
-    if (!element) {
-        console.warn("totalVisits element not found");
-        return;
-    }
-
-    try {
-
-        const response = await fetch(
-            "/api/visits",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                cache: "no-store"
-            }
-        );
-
-        if (!response.ok) {
-
-            console.error(
-                "Visit API failed:",
-                response.status
-            );
-
-            return;
-        }
-
-        const data =
-            await response.json();
-
-        if (
-            data &&
-            typeof data.total !== "undefined"
-        ) {
-
-            element.textContent =
-                Number(data.total)
-                .toLocaleString("en-US");
-
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Total visits error:",
-            error
-        );
-
-    }
-}
-
-
-/* =====================================================
-   LOAD TOTAL VISITS
-===================================================== */
-
-if (document.readyState === "loading") {
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        loadTotalVisits
-    );
-
-} else {
-
-    loadTotalVisits();
-
-}
-
-/* =====================================================
-   START
-===================================================== */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function() {
-
-        loadHomepageData();
-
-        loadTotalVisits();
-
-    }
-);
-      
-/* =====================================================
-   PREMIUM SCROLL REVEAL
-   Does not modify existing functionality
-===================================================== */
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    if (
-        window.matchMedia(
-            "(prefers-reduced-motion: reduce)"
-        ).matches
-    ) {
-        return;
-    }
-
-
-    const scrollElements =
-        document.querySelectorAll(
-            ".section, .quick-stats, " +
-            ".premium-social-section, footer, " +
-            ".unofficial-notice, .discover-card, " +
-            ".ranking-card, .feature-card, " +
-            ".group-card, .stat-card, " +
-            ".premium-social-card"
-        );
-
-
-    if (!scrollElements.length) {
-        return;
-    }
-
-
-    const observer =
-        new IntersectionObserver(
-            function (entries, observer) {
-
-                entries.forEach(function (entry) {
-
-                    if (
-                        entry.isIntersecting
-                    ) {
-
-                        entry.target.classList.add(
-                            "scroll-visible"
-                        );
-
-                        observer.unobserve(
-                            entry.target
-                        );
-
-                    }
-
-                });
-
-            },
-            {
-                threshold: 0.12,
-
-                rootMargin:
-                    "0px 0px -50px 0px"
-            }
-        );
-
-
-    scrollElements.forEach(function (element) {
-
-        observer.observe(element);
-
-    });
-
-});
-
-/* =====================================================
-   HOMEPAGE INDIVIDUAL RESULT SEARCH
-===================================================== */
-
-(function () {
-
-    const form =
-        document.getElementById("homeResultForm");
-
-    const input =
-        document.getElementById("homeRollInput");
-
-    const button =
-        document.getElementById("homeResultBtn");
-
-    const buttonText =
-        document.getElementById("homeResultBtnText");
-
-    const message =
-        document.getElementById("homeResultMessage");
-
-    const resultBox =
-        document.getElementById("homeResultBox");
-
-    const nameElement =
-        document.getElementById("homeResultName");
-
-    const rollElement =
-        document.getElementById("homeResultRoll");
-
-    const gpaElement =
-        document.getElementById("homeResultGPA");
-
-    const totalElement =
-        document.getElementById("homeResultTotal");
-
-    const subjectList =
-        document.getElementById("homeSubjectList");
-      
-    const downloadPdfBtn =
-    document.getElementById("homeDownloadPdfBtn");
-
-
-    if (!form || !input) {
-        return;
-    }
-
-
-    form.addEventListener(
-        "submit",
-        async function (event) {
-
-            event.preventDefault();
-
-
-            const roll =
-                input.value.trim();
-
-
-            message.textContent = "";
-            message.className =
-                "home-result-message";
-
-
-            resultBox.hidden = true;
-
-
-            if (!/^\d+$/.test(roll)) {
-
-                message.textContent =
-                    "Please enter a valid roll number.";
-
-                message.classList.add("error");
-
-                input.focus();
-
-                return;
-
-            }
-
-
-            button.disabled = true;
-
-            buttonText.textContent =
-                "Searching...";
-
-
-            try {
-
-                const response =
-                    await fetch(
-                        "/api/result?roll=" +
-                        encodeURIComponent(roll),
-                        {
-                            method: "GET",
-                            cache: "no-store"
-                        }
-                    );
-
-
-                let data = null;
-
-
-                try {
-
-                    data =
-                        await response.json();
-
-                } catch (_) {
-
-                    data = null;
-
-                }
-
-
-                if (
-                    !response.ok ||
-                    !data ||
-                    data.error
-                ) {
-
-                    throw new Error(
-                        data?.error ||
-                        "Result not found."
-                    );
-
-                }
-
-
-                renderHomeResult(
-                    data,
-                    roll
-                );
-
-
-                message.textContent =
-                    "Result found successfully.";
-
-                message.classList.add(
-                    "success"
-                );
-
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    "INDIVIDUAL RESULT ERROR:",
-                    error
-                );
-
-
-                message.textContent =
-                    error.message ||
-                    "Result could not be found.";
-
-                message.classList.add(
-                    "error"
-                );
-
-            }
-
-            finally {
-
-                button.disabled = false;
-
-                buttonText.textContent =
-                    "View Result →";
-
-            }
-
-        }
-    );
-
-
-    function renderHomeResult(
-        data,
-        searchedRoll
-    ) {
-
-        const student =
-            data.result ||
-            data.data ||
-            data.student ||
-            data;
-
-
-        const name =
-            student.name ||
-            "Unknown Student";
-
-
-        const roll =
-            student.roll ||
-            searchedRoll;
-
-
-        const gpa =
-            student.gpa;
-
-
-        const subjects =
-    Array.isArray(student.subjects)
-        ? student.subjects
-        : [];
-
-
-let totalScore =
-    student.total_score ??
-    student.totalScore ??
-    student.total ??
-    null;
-
-
-/* Total score missing হলে subjects থেকে calculate */
-if (
-    (totalScore === null ||
-     totalScore === undefined ||
-     totalScore === "") &&
-    subjects.length
-) {
-
-    const calculatedTotal =
-        subjects.reduce(
-            (sum, subject) => {
-
-                const mark =
-                    Number(subject.mark);
-
-                return Number.isFinite(mark)
-                    ? sum + mark
-                    : sum;
-
-            },
-            0
-        );
-
-    if (calculatedTotal > 0) {
-        totalScore = calculatedTotal;
-    }
-
-}
-
-
-        nameElement.textContent =
-            name;
-
-
-        rollElement.textContent =
-            "Roll: " + roll;
-
-
-        gpaElement.textContent =
-            gpa !== null &&
-            gpa !== undefined &&
-            gpa !== ""
-                ? Number(gpa).toFixed(2)
-                : "—";
-
-
-        totalElement.textContent =
-            totalScore !== null &&
-            totalScore !== undefined
-                ? Number(totalScore)
-                    .toLocaleString("en-US")
-                : "—";
-
-
-        subjectList.innerHTML = "";
-
-
-        if (!subjects.length) {
-
-            subjectList.innerHTML =
-                `<div class="home-subject-row">
-                    <div class="home-subject-name">
-                        <strong>
-                            Subject data unavailable
-                        </strong>
-                    </div>
-                </div>`;
-
-        }
-
-        else {
-
-            subjects.forEach(
-                function (subject) {
-
-                    const row =
-                        document.createElement(
-                            "div"
-                        );
-
-                    row.className =
-                        "home-subject-row";
-
-
-                    row.innerHTML = `
-
-                        <div class="home-subject-name">
-
-                            <strong>
-                                ${escapeHTML(
-                                    subject.subject ||
-                                    "Subject"
-                                )}
-                            </strong>
-
-                            <span>
-                                ${escapeHTML(
-                                    subject.code ||
-                                    ""
-                                )}
-                            </span>
-
-                        </div>
-
-
-                        <div class="home-subject-mark">
-
-                            <strong>
-                                ${subject.mark ?? "—"}
-                            </strong>
-
-                            <span>
-                                Mark
-                            </span>
-
-                        </div>
-
-
-                        <div class="home-subject-grade">
-
-                            <strong>
-                                ${escapeHTML(
-                                    subject.grade ||
-                                    "—"
-                                )}
-                            </strong>
-
-                            <span>
-                                Grade
-                            </span>
-
-                        </div>
-
-                    `;
-
-
-                    subjectList.appendChild(
-                        row
-                    );
-
-                }
-            );
-
-        }
-
-
-
-        resultBox.hidden = false;
-
-
-        resultBox.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-
-    }
-
-
-    function escapeHTML(value) {
-
-        return String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-
-    }
-/* =====================================================
-   HOMEPAGE RESULT PDF DOWNLOAD
-===================================================== */
-
-if (downloadPdfBtn) {
-
-    downloadPdfBtn.addEventListener(
-        "click",
-        downloadHomeResultPDF
-    );
-
-}
-
-async function downloadHomeResultPDF() {
-
-    if (!window.jspdf) {
-
-        message.textContent =
-            "PDF library is still loading. Please try again.";
-
-        message.className =
-            "home-result-message error";
-
-        return;
-    }
-
-
-    if (resultBox.hidden) {
-
-        message.textContent =
-            "Please search for a result first.";
-
-        message.className =
-            "home-result-message error";
-
-        return;
-    }
-
-
-    const originalText =
-        downloadPdfBtn.innerHTML;
-
-    downloadPdfBtn.disabled = true;
-
-    downloadPdfBtn.innerHTML =
-        "Generating...";
-
-
-    try {
-
-        const studentName =
-            document.getElementById(
-                "homeResultName"
-            )?.textContent?.trim() ||
-            "Unknown Student";
-
-
-        const rollText =
-            document.getElementById(
-                "homeResultRoll"
-            )?.textContent || "";
-
-
-        const roll =
-            rollText.replace(
-                /[^0-9]/g,
-                ""
-            ) || "N/A";
-
-
-        const gpa =
-            document.getElementById(
-                "homeResultGPA"
-            )?.textContent?.trim() ||
-            "—";
-
-
-        const total =
-            document.getElementById(
-                "homeResultTotal"
-            )?.textContent?.trim() ||
-            "—";
-
-
-        const subjectRows =
-            document.querySelectorAll(
-                "#homeSubjectList .home-subject-row"
-            );
-
-
-        /* =================================================
-           CREATE PDF
-        ================================================= */
-
-        const {
-            jsPDF
-        } = window.jspdf;
-
-
-        const pdf =
-            new jsPDF({
-                orientation: "portrait",
-                unit: "mm",
-                format: "a4",
-                compress: true
-            });
-
-
-        const pageWidth =
-            pdf.internal.pageSize.getWidth();
-
-
-        const pageHeight =
-            pdf.internal.pageSize.getHeight();
-
-
-        /* =================================================
-           PREMIUM COLORS
-        ================================================= */
-
-        const colors = {
-
-            background: [
-                247,
-                249,
-                252
-            ],
-
-            navy: [
-                15,
-                23,
-                42
-            ],
-
-            blue: [
-                0,
-                113,
-                227
-            ],
-
-            blueLight: [
-                232,
-                242,
-                255
-            ],
-
-            text: [
-                31,
-                41,
-                55
-            ],
-
-            muted: [
-                107,
-                114,
-                128
-            ],
-
-            white: [
-                255,
-                255,
-                255
-            ],
-
-            border: [
-                225,
-                231,
-                239
-            ],
-
-            success: [
-                22,
-                163,
-                74
-            ]
 
         };
 
+      });
 
-        /* =================================================
-           BACKGROUND
-        ================================================= */
 
-        pdf.setFillColor(
-            ...colors.background
-        );
+    updateStatistics();
 
-        pdf.rect(
-            0,
-            0,
-            pageWidth,
-            pageHeight,
-            "F"
-        );
+    applyFilters();
 
 
-        /* =================================================
-           TOP BRAND AREA
-        ================================================= */
+  }catch(error){
 
-        pdf.setFillColor(
-            ...colors.white
-        );
+    console.error(error);
 
-        pdf.roundedRect(
-            10,
-            9,
-            pageWidth - 20,
-            24,
-            5,
-            5,
-            "F"
-        );
 
+    grid.innerHTML = `
 
-        /* C Logo */
+      <div class="error">
 
-        pdf.setFillColor(
-            ...colors.blue
-        );
+        <strong>
+          Institution data could not be loaded.
+        </strong>
 
-        pdf.roundedRect(
-            16,
-            14,
-            14,
-            14,
-            3.5,
-            3.5,
-            "F"
-        );
+        <br><br>
 
+        ${escapeHTML(error.message)}
 
-        pdf.setTextColor(
-            ...colors.white
-        );
+        <br><br>
 
-        pdf.setFont(
-            "helvetica",
-            "bold"
-        );
+        Make sure this file exists:
 
-        pdf.setFontSize(12);
+        <br><br>
 
-        pdf.text(
-            "C",
-            23,
-            23.5,
-            {
-                align: "center"
-            }
-        );
+        <b>
+          institution-collector/institution_results.json
+        </b>
 
+      </div>
 
-        /* Brand */
+    `;
 
-        pdf.setTextColor(
-            ...colors.navy
-        );
 
-        pdf.setFont(
-            "helvetica",
-            "bold"
-        );
+    resultCount.textContent =
+      "Data unavailable";
 
-        pdf.setFontSize(16);
-
-        pdf.text(
-            "CTGBoardRanking",
-            35,
-            21
-        );
-
-
-        pdf.setTextColor(
-            ...colors.muted
-        );
-
-        pdf.setFont(
-            "helvetica",
-            "normal"
-        );
-
-        pdf.setFontSize(7.5);
-
-        pdf.text(
-            "SSC 2026 · CHATTogram BOARD",
-            35,
-            26
-        );
-
-
-        /* =================================================
-           GENERATED BY
-        ================================================= */
-
-        pdf.setTextColor(
-            ...colors.muted
-        );
-
-        pdf.setFontSize(7);
-
-        pdf.text(
-            "Generated by",
-            pageWidth - 47,
-            18
-        );
-
-
-        pdf.setTextColor(
-            ...colors.navy
-        );
-
-        pdf.setFont(
-            "helvetica",
-            "bold"
-        );
-
-        pdf.setFontSize(8);
-
-        pdf.text(
-            "Shadat Fatih",
-            pageWidth - 47,
-            23
-        );
-
-
-        /* =================================================
-           STUDENT SUMMARY
-        ================================================= */
-
-        const summaryY = 40;
-
-
-        pdf.setFillColor(
-            ...colors.white
-        );
-
-        pdf.setDrawColor(
-            ...colors.border
-        );
-
-        pdf.setLineWidth(.25);
-
-        pdf.roundedRect(
-            10,
-            summaryY,
-            pageWidth - 20,
-            39,
-            6,
-            6,
-            "FD"
-        );
-
-
-        /* Student name */
-
-        pdf.setTextColor(
-            ...colors.muted
-        );
-
-        pdf.setFont(
-            "helvetica",
-            "normal"
-        );
-
-        pdf.setFontSize(7);
-
-        pdf.text(
-            "STUDENT NAME",
-            16,
-            summaryY + 9
-        );
-
-
-        pdf.setTextColor(
-            ...colors.navy
-        );
-
-        pdf.setFont(
-            "helvetica",
-            "bold"
-        );
-
-        pdf.setFontSize(14);
-
-        pdf.text(
-            studentName,
-            16,
-            summaryY + 18
-        );
-
-
-        /* Roll */
-
-        pdf.setTextColor(
-            ...colors.muted
-        );
-
-        pdf.setFont(
-            "helvetica",
-            "normal"
-        );
-
-        pdf.setFontSize(7);
-
-        pdf.text(
-            "ROLL",
-            16,
-            summaryY + 29
-        );
-
-
-        pdf.setTextColor(
-            ...colors.text
-        );
-
-        pdf.setFont(
-            "helvetica",
-            "bold"
-        );
-
-        pdf.setFontSize(9);
-
-        pdf.text(
-            roll,
-            16,
-            summaryY + 35
-        );
-
-
-        /* =================================================
-           GPA CARD
-        ================================================= */
-
-        const cardWidth = 38;
-
-        const cardHeight = 29;
-
-        const cardY = summaryY + 5;
-
-
-        pdf.setFillColor(
-            ...colors.blueLight
-        );
-
-        pdf.roundedRect(
-            pageWidth - 16 - cardWidth * 2 - 6,
-            cardY,
-            cardWidth,
-            cardHeight,
-            5,
-            5,
-            "F"
-        );
-
-
-        pdf.setFillColor(
-            238,
-            250,
-            243
-        );
-
-        pdf.roundedRect(
-            pageWidth - 16 - cardWidth,
-            cardY,
-            cardWidth,
-            cardHeight,
-            5,
-            5,
-            "F"
-        );
-
-
-        /* GPA */
-
-        pdf.setTextColor(
-            ...colors.blue
-        );
-
-        pdf.setFont(
-            "helvetica",
-            "bold"
-        );
-
-        pdf.setFontSize(18);
-
-        pdf.text(
-            gpa,
-            pageWidth - 16 - cardWidth * 2 - 6 + cardWidth / 2,
-            cardY + 14,
-            {
-                align: "center"
-            }
-        );
-
-
-        pdf.setTextColor(
-            ...colors.muted
-        );
-
-        pdf.setFontSize(7);
-
-        pdf.text(
-            "GPA",
-            pageWidth - 16 - cardWidth * 2 - 6 + cardWidth / 2,
-            cardY + 23,
-            {
-                align: "center"
-            }
-        );
-
-
-        /* Total */
-
-        pdf.setTextColor(
-            ...colors.success
-        );
-
-        pdf.setFont(
-            "helvetica",
-            "bold"
-        );
-
-        pdf.setFontSize(15);
-
-        pdf.text(
-            total,
-            pageWidth - 16 - cardWidth + cardWidth / 2,
-            cardY + 14,
-            {
-                align: "center"
-            }
-        );
-
-
-        pdf.setTextColor(
-            ...colors.muted
-        );
-
-        pdf.setFont(
-            "helvetica",
-            "normal"
-        );
-
-        pdf.setFontSize(7);
-
-        pdf.text(
-            "TOTAL SCORE",
-            pageWidth - 16 - cardWidth + cardWidth / 2,
-            cardY + 23,
-            {
-                align: "center"
-            }
-        );
-
-
-        /* =================================================
-           SUBJECT SECTION
-        ================================================= */
-
-        const subjectTitleY = 88;
-
-
-        pdf.setTextColor(
-            ...colors.navy
-        );
-
-        pdf.setFont(
-            "helvetica",
-            "bold"
-        );
-
-        pdf.setFontSize(12);
-
-        pdf.text(
-            "Subject-wise Result",
-            12,
-            subjectTitleY
-        );
-
-
-        pdf.setTextColor(
-            ...colors.muted
-        );
-
-        pdf.setFont(
-            "helvetica",
-            "normal"
-        );
-
-        pdf.setFontSize(7);
-
-        pdf.text(
-            "MARKS & GRADE",
-            pageWidth - 12,
-            subjectTitleY,
-            {
-                align: "right"
-            }
-        );
-
-
-        /* =================================================
-           TABLE HEADER
-        ================================================= */
-
-        let y = subjectTitleY + 6;
-
-
-        pdf.setFillColor(
-            ...colors.navy
-        );
-
-        pdf.roundedRect(
-            10,
-            y,
-            pageWidth - 20,
-            9,
-            3,
-            3,
-            "F"
-        );
-
-
-        pdf.setTextColor(
-            ...colors.white
-        );
-
-        pdf.setFont(
-            "helvetica",
-            "bold"
-        );
-
-        pdf.setFontSize(7);
-
-
-        pdf.text(
-            "SUBJECT",
-            15,
-            y + 5.8
-        );
-
-
-        pdf.text(
-            "CODE",
-            112,
-            y + 5.8,
-            {
-                align: "center"
-            }
-        );
-
-
-        pdf.text(
-            "MARK",
-            151,
-            y + 5.8,
-            {
-                align: "center"
-            }
-        );
-
-
-        pdf.text(
-            "GRADE",
-            187,
-            y + 5.8,
-            {
-                align: "center"
-            }
-        );
-
-
-        y += 12;
-
-
-        /* =================================================
-           SUBJECT ROWS
-        ================================================= */
-
-        subjectRows.forEach(
-            function(row, index) {
-
-                const subjectName =
-                    row.querySelector(
-                        ".home-subject-name strong"
-                    )?.textContent?.trim()
-                    || "Subject";
-
-
-                const code =
-                    row.querySelector(
-                        ".home-subject-name span"
-                    )?.textContent?.trim()
-                    || "—";
-
-
-                const mark =
-                    row.querySelector(
-                        ".home-subject-mark strong"
-                    )?.textContent?.trim()
-                    || "—";
-
-
-                const grade =
-                    row.querySelector(
-                        ".home-subject-grade strong"
-                    )?.textContent?.trim()
-                    || "—";
-
-
-                /* alternating premium background */
-
-                if (index % 2 === 0) {
-
-                    pdf.setFillColor(
-                        255,
-                        255,
-                        255
-                    );
-
-                } else {
-
-                    pdf.setFillColor(
-                        242,
-                        246,
-                        251
-                    );
-
-                }
-
-
-                pdf.setDrawColor(
-                    ...colors.border
-                );
-
-
-                pdf.roundedRect(
-                    10,
-                    y,
-                    pageWidth - 20,
-                    11,
-                    3,
-                    3,
-                    "FD"
-                );
-
-
-                /* Subject */
-
-                pdf.setTextColor(
-                    ...colors.text
-                );
-
-                pdf.setFont(
-                    "helvetica",
-                    "bold"
-                );
-
-                pdf.setFontSize(7.5);
-
-
-                let cleanSubject =
-                    subjectName;
-
-
-                if (
-                    cleanSubject.length > 38
-                ) {
-
-                    cleanSubject =
-                        cleanSubject.substring(
-                            0,
-                            35
-                        ) + "...";
-
-                }
-
-
-                pdf.text(
-                    cleanSubject,
-                    15,
-                    y + 7
-                );
-
-
-                /* Code */
-
-                pdf.setTextColor(
-                    ...colors.muted
-                );
-
-                pdf.setFont(
-                    "helvetica",
-                    "normal"
-                );
-
-                pdf.setFontSize(7);
-
-
-                pdf.text(
-                    code,
-                    112,
-                    y + 7,
-                    {
-                        align: "center"
-                    }
-                );
-
-
-                /* Mark */
-
-                pdf.setTextColor(
-                    ...colors.navy
-                );
-
-                pdf.setFont(
-                    "helvetica",
-                    "bold"
-                );
-
-                pdf.setFontSize(8);
-
-
-                pdf.text(
-                    mark,
-                    151,
-                    y + 7,
-                    {
-                        align: "center"
-                    }
-                );
-
-
-                /* Grade badge */
-
-                pdf.setFillColor(
-                    ...colors.blueLight
-                );
-
-
-                pdf.roundedRect(
-                    177,
-                    y + 2,
-                    20,
-                    7,
-                    3.5,
-                    3.5,
-                    "F"
-                );
-
-
-                pdf.setTextColor(
-                    ...colors.blue
-                );
-
-                pdf.setFont(
-                    "helvetica",
-                    "bold"
-                );
-
-                pdf.setFontSize(7);
-
-
-                pdf.text(
-                    grade,
-                    187,
-                    y + 6.8,
-                    {
-                        align: "center"
-                    }
-                );
-
-
-                /* IMPORTANT:
-                   Fixed row height prevents overlap */
-
-                y += 13;
-
-            }
-        );
-
-
-        /* =================================================
-           UNOFFICIAL NOTICE
-        ================================================= */
-
-        const noticeY =
-            Math.min(
-                y + 7,
-                pageHeight - 38
-            );
-
-
-        pdf.setFillColor(
-            255,
-            248,
-            230
-        );
-
-
-        pdf.setDrawColor(
-            245,
-            210,
-            130
-        );
-
-
-        pdf.roundedRect(
-            10,
-            noticeY,
-            pageWidth - 20,
-            21,
-            5,
-            5,
-            "FD"
-        );
-
-
-        pdf.setTextColor(
-            145,
-            92,
-            0
-        );
-
-
-        pdf.setFont(
-            "helvetica",
-            "bold"
-        );
-
-        pdf.setFontSize(7.5);
-
-
-        pdf.text(
-            "UNOFFICIAL NOTICE",
-            15,
-            noticeY + 7
-        );
-
-
-        pdf.setTextColor(
-            90,
-            90,
-            90
-        );
-
-
-        pdf.setFont(
-            "helvetica",
-            "normal"
-        );
-
-        pdf.setFontSize(6.5);
-
-
-        pdf.text(
-            "This result is generated by CTGBoardRanking for educational,",
-            15,
-            noticeY + 13
-        );
-
-
-        pdf.text(
-            "research and statistical purposes and is not an official board document.",
-            15,
-            noticeY + 17
-        );
-
-
-        /* =================================================
-           FOOTER
-        ================================================= */
-
-        pdf.setTextColor(
-            ...colors.muted
-        );
-
-        pdf.setFont(
-            "helvetica",
-            "normal"
-        );
-
-        pdf.setFontSize(6.5);
-
-
-        pdf.text(
-            "CTGBoardRanking",
-            12,
-            pageHeight - 9
-        );
-
-
-        pdf.text(
-            "Generated by Shadat Fatih",
-            pageWidth / 2,
-            pageHeight - 9,
-            {
-                align: "center"
-            }
-        );
-
-
-        pdf.text(
-            "SSC 2026 · Chattogram Board",
-            pageWidth - 12,
-            pageHeight - 9,
-            {
-                align: "right"
-            }
-        );
-
-
-        /* =================================================
-           SAVE
-        ================================================= */
-
-        const safeName =
-            studentName
-                .trim()
-                .replace(
-                    /[^a-z0-9]+/gi,
-                    "-"
-                )
-                .replace(
-                    /^-+|-+$/g,
-                    ""
-                )
-                .toLowerCase();
-
-
-        pdf.save(
-            `SSC-2026-${roll}-${safeName || "result"}.pdf`
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Premium PDF error:",
-            error
-        );
-
-
-        message.textContent =
-            "Unable to generate PDF. Please try again.";
-
-        message.className =
-            "home-result-message error";
-
-
-    } finally {
-
-        downloadPdfBtn.disabled = false;
-
-        downloadPdfBtn.innerHTML =
-            originalText;
-
-    }
+  }
 
 }
 
 
-})();
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+function updateStatistics(){
+
+  const total =
+    institutions.length;
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  const appeared =
+    institutions.reduce(
+      (sum,item) =>
+        sum + item.appeared,
+      0
+    );
 
-<script>
-const SUPABASE_URL =
-  "https://mpnjnyejpqeqguxikvnl.supabase.co";
 
-const SUPABASE_ANON_KEY =
-  "sb_publishable_KLxc2rvrOnfOrq7_Zqp9Vw_9Wnbuzs9";
+  /*
+     GPA5 এবং total_gpa একই।
+     শুধু GPA5 ব্যবহার করছি।
+  */
 
-const db = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
+  const gpa5 =
+    institutions.reduce(
+      (sum,item) =>
+        sum + item.gpa5,
+      0
+    );
+
+
+  const passed =
+    institutions.reduce(
+      (sum,item) =>
+        sum + item.passed,
+      0
+    );
+
+
+  const passRate =
+    appeared > 0
+      ? (passed / appeared) * 100
+      : 0;
+
+
+  document.getElementById(
+    "totalInstitutions"
+  ).textContent =
+    number(total);
+
+
+  document.getElementById(
+    "totalAppeared"
+  ).textContent =
+    number(appeared);
+
+
+  document.getElementById(
+    "totalGPA5"
+  ).textContent =
+    number(gpa5);
+
+
+  document.getElementById(
+    "overallPassRate"
+  ).textContent =
+    passRate.toFixed(2) + "%";
+
+}
+
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+function applyFilters(){
+
+  const query =
+    searchInput.value
+      .trim()
+      .toLowerCase();
+
+
+  filteredInstitutions =
+    institutions.filter(item => {
+
+
+      const matchesSearch =
+        !query ||
+
+        item.institution_name
+          .toLowerCase()
+          .includes(query) ||
+
+        item.eiin
+          .toLowerCase()
+          .includes(query) ||
+
+        item.district
+          .toLowerCase()
+          .includes(query) ||
+
+        item.thana
+          .toLowerCase()
+          .includes(query);
+
+
+      if(!matchesSearch){
+
+        return false;
+
+      }
+
+
+      if(
+        currentFilter ===
+        "gpa5"
+      ){
+
+        return item.gpa5 > 0;
+
+      }
+
+
+      if(
+        currentFilter ===
+        "excellent"
+      ){
+
+        return item.passing_rate >= 80;
+
+      }
+
+
+      return true;
+
+    });
+
+
+  /*
+     IMPORTANT:
+
+     Institution GPA5 highest → lowest
+
+     তারপর passing rate
+     তারপর appeared.
+  */
+
+  filteredInstitutions.sort(
+    (a,b) => {
+
+      if(
+        b.gpa5 !==
+        a.gpa5
+      ){
+
+        return (
+          b.gpa5 -
+          a.gpa5
+        );
+
+      }
+
+
+      if(
+        b.passing_rate !==
+        a.passing_rate
+      ){
+
+        return (
+          b.passing_rate -
+          a.passing_rate
+        );
+
+      }
+
+
+      return (
+        b.appeared -
+        a.appeared
+      );
+
+    }
+  );
+
+
+  currentPage = 1;
+
+  render();
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function render(){
+
+  const total =
+    filteredInstitutions.length;
+
+
+  resultCount.textContent =
+    `${number(total)} institution${
+      total !== 1 ? "s" : ""
+    }`;
+
+
+  if(total === 0){
+
+    grid.innerHTML = `
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          🔎
+        </div>
+
+        <h3>
+          No institutions found
+        </h3>
+
+        <p>
+          Try another institution name,
+          EIIN, district or thana.
+        </p>
+
+      </div>
+
+    `;
+
+
+    pagination.innerHTML = "";
+
+    return;
+
+  }
+
+
+  const start =
+    (currentPage - 1) *
+    ITEMS_PER_PAGE;
+
+
+  const end =
+    start +
+    ITEMS_PER_PAGE;
+
+
+  const pageItems =
+    filteredInstitutions.slice(
+      start,
+      end
+    );
+
+
+  grid.innerHTML =
+    pageItems
+      .map(
+        (item,index) =>
+          createCard(
+            item,
+            start + index + 1
+          )
+      )
+      .join("");
+
+
+  renderPagination();
+
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+function createCard(
+  item,
+  rank
+){
+
+  const passRate =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        item.passing_rate
+      )
+    );
+
+
+  return `
+
+    <article
+      class="institution-card"
+      data-eiin="${escapeHTML(item.eiin)}"
+      onclick="openInstitution('${escapeJS(item.eiin)}')"
+      tabindex="0"
+      role="button"
+      aria-label="View ${escapeHTML(item.institution_name)} details"
+    >
+
+      <div class="card-top">
+
+        <div class="institution-icon">
+          🏫
+        </div>
+
+        <div class="rank">
+          #${rank}
+        </div>
+
+      </div>
+
+
+      <div class="institution-name">
+
+        ${escapeHTML(
+          item.institution_name
+        )}
+
+      </div>
+
+
+      <div class="location">
+
+        📍
+        ${escapeHTML(item.thana)}
+        •
+        ${escapeHTML(item.district)}
+
+      </div>
+
+
+      <div class="metrics">
+
+
+        <div class="metric">
+
+          <strong>
+            ${number(item.appeared)}
+          </strong>
+
+          <span>
+            Appeared
+          </span>
+
+        </div>
+
+
+        <div class="metric">
+
+          <strong>
+            ${number(item.passed)}
+          </strong>
+
+          <span>
+            Passed
+          </span>
+
+        </div>
+
+
+        <div class="metric">
+
+          <strong>
+            ${passRate.toFixed(2)}%
+          </strong>
+
+          <span>
+            Passing Rate
+          </span>
+
+        </div>
+
+
+        <div class="metric">
+
+          <strong>
+            ${number(item.gpa5)}
+          </strong>
+
+          <span>
+            GPA 5
+          </span>
+
+        </div>
+
+
+      </div>
+
+
+      <div class="progress">
+
+        <div
+          class="progress-bar"
+          style="
+            width:${passRate}%;
+          ">
+        </div>
+
+      </div>
+
+
+      <div class="card-bottom">
+
+        <span>
+
+          EIIN:
+
+          <b>
+            ${escapeHTML(item.eiin)}
+          </b>
+
+        </span>
+
+
+        <span class="gpa5">
+
+          ${
+            item.gpa5 > 0
+              ? "GPA 5 ✓"
+              : "No GPA 5"
+          }
+
+        </span>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+/* =========================================================
+   OPEN INSTITUTION
+========================================================= */
+
+function openInstitution(eiin){
+
+  const item =
+    institutions.find(
+      institution =>
+        institution.eiin ===
+        String(eiin)
+    );
+
+
+  if(!item){
+
+    return;
+
+  }
+
+
+  selectedInstitution =
+    item;
+
+
+  document.getElementById(
+    "modalInstitutionName"
+  ).textContent =
+    item.institution_name;
+
+
+  document.getElementById(
+    "modalInstitutionLocation"
+  ).textContent =
+    `${item.thana} • ${item.district} • ${item.board}`;
+
+
+  detailGrid.innerHTML = `
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        Institution Name
+      </span>
+
+      <span class="detail-value small">
+        ${escapeHTML(item.institution_name)}
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        EIIN
+      </span>
+
+      <span class="detail-value">
+        ${escapeHTML(item.eiin)}
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        District
+      </span>
+
+      <span class="detail-value small">
+        ${escapeHTML(item.district)}
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        Thana / Upazila
+      </span>
+
+      <span class="detail-value small">
+        ${escapeHTML(item.thana)}
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        Students Appeared
+      </span>
+
+      <span class="detail-value">
+        ${number(item.appeared)}
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        Students Passed
+      </span>
+
+      <span class="detail-value">
+        ${number(item.passed)}
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        Passing Rate
+      </span>
+
+      <span class="detail-value">
+        ${Number(item.passing_rate).toFixed(2)}%
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        GPA 5
+      </span>
+
+      <span class="detail-value">
+        ${number(item.gpa5)}
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        Total GPA
+      </span>
+
+      <span class="detail-value">
+        ${number(item.gpa5)}
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        Year
+      </span>
+
+      <span class="detail-value">
+        ${item.year}
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        Education Board
+      </span>
+
+      <span class="detail-value small">
+        ${escapeHTML(item.board)}
+      </span>
+
+    </div>
+
+  `;
+
+
+  modal.classList.add("show");
+
+  modal.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+
+  document.body.style.overflow =
+    "hidden";
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+function closeInstitution(){
+
+  modal.classList.remove(
+    "show"
+  );
+
+  modal.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+  document.body.style.overflow =
+    "";
+
+  selectedInstitution =
+    null;
+
+}
+
+
+modalClose.addEventListener(
+  "click",
+  closeInstitution
 );
 
-async function loadImportanceNotice() {
 
-  const bar =
-    document.getElementById(
-      "importanceNoticeBar"
-    );
+modal.addEventListener(
+  "click",
+  event => {
 
-  const text =
-    document.getElementById(
-      "importanceNoticeText"
-    );
+    if(
+      event.target ===
+      modal
+    ){
 
-  if (!bar || !text) {
-    console.error(
-      "Importance Notice HTML not found."
-    );
-    return;
-  }
-
-  try {
-
-    const { data, error } =
-      await db
-        .from("site_notice")
-        .select("notice")
-        .limit(1)
-        .maybeSingle();
-
-    if (error) {
-      console.error(
-        "Supabase Notice Error:",
-        error
-      );
-      return;
-    }
-
-    if (
-      data &&
-      data.notice &&
-      data.notice.trim()
-    ) {
-
-      text.textContent =
-        data.notice.trim();
-
-      bar.style.display =
-        "flex";
-
-    } else {
-
-      bar.style.display =
-        "none";
+      closeInstitution();
 
     }
 
-  } catch (error) {
-
-    console.error(
-      "Notice loading failed:",
-      error
-    );
-
   }
-}
+);
+
 
 document.addEventListener(
-  "DOMContentLoaded",
-  loadImportanceNotice
-);
-</script>
-      
-</body>
+  "keydown",
+  event => {
 
+    if(
+      event.key ===
+      "Escape" &&
+      modal.classList.contains(
+        "show"
+      )
+    ){
+
+      closeInstitution();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   PDF DOWNLOAD
+========================================================= */
+
+downloadPdfBtn.addEventListener(
+  "click",
+  generateInstitutionPDF
+);
+
+
+function generateInstitutionPDF(){
+
+  if(!selectedInstitution){
+
+    return;
+
+  }
+
+
+  if(
+    !window.jspdf ||
+    !window.jspdf.jsPDF
+  ){
+
+    alert(
+      "PDF library could not be loaded. Please check your internet connection and try again."
+    );
+
+    return;
+
+  }
+
+
+  const item =
+    selectedInstitution;
+
+
+  const {
+    jsPDF
+  } = window.jspdf;
+
+
+  /*
+     A4 portrait
+
+     Proper generated PDF.
+     No screenshot.
+  */
+
+  const doc =
+    new jsPDF({
+      orientation:"portrait",
+      unit:"mm",
+      format:"a4",
+      compress:true
+    });
+
+
+  const pageWidth =
+    doc.internal.pageSize.getWidth();
+
+  const pageHeight =
+    doc.internal.pageSize.getHeight();
+
+
+  /*
+     Date + Time
+  */
+
+  const generatedDate =
+    new Date();
+
+
+  const dateText =
+    generatedDate.toLocaleDateString(
+      "en-GB",
+      {
+        day:"2-digit",
+        month:"long",
+        year:"numeric"
+      }
+    );
+
+
+  const timeText =
+    generatedDate.toLocaleTimeString(
+      "en-US",
+      {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
+      }
+    );
+
+
+  /*
+     Premium background/header
+  */
+
+  doc.setFillColor(
+    245,
+    247,
+    250
+  );
+
+  doc.rect(
+    0,
+    0,
+    pageWidth,
+    pageHeight,
+    "F"
+  );
+
+
+  /*
+     Header gradient-like blocks
+  */
+
+  doc.setFillColor(
+    0,
+    113,
+    227
+  );
+
+  doc.rect(
+    0,
+    0,
+    pageWidth,
+    4,
+    "F"
+  );
+
+
+  doc.setFillColor(
+    88,
+    86,
+    214
+  );
+
+  doc.rect(
+    pageWidth * .55,
+    0,
+    pageWidth * .45,
+    4,
+    "F"
+  );
+
+
+  /*
+     Main title
+  */
+
+  doc.setTextColor(
+    29,
+    29,
+    31
+  );
+
+  doc.setFont(
+    "helvetica",
+    "bold"
+  );
+
+  doc.setFontSize(25);
+
+  doc.text(
+    "CTGboardranking",
+    pageWidth / 2,
+    23,
+    {
+      align:"center"
+    }
+  );
+
+
+  /*
+     Generated by
+  */
+
+  doc.setFont(
+    "helvetica",
+    "normal"
+  );
+
+  doc.setFontSize(11);
+
+  doc.setTextColor(
+    90,
+    90,
+    95
+  );
+
+  doc.text(
+    "Generated by Shadat Fatih",
+    pageWidth / 2,
+    31,
+    {
+      align:"center"
+    }
+  );
+
+
+  /*
+     Date
+  */
+
+  doc.setFontSize(9);
+
+  doc.setTextColor(
+    110,
+    110,
+    115
+  );
+
+  doc.text(
+    `${dateText} • ${timeText}`,
+    pageWidth / 2,
+    37,
+    {
+      align:"center"
+    }
+  );
+
+
+  /*
+     Divider
+  */
+
+  doc.setDrawColor(
+    220,
+    222,
+    226
+  );
+
+  doc.setLineWidth(.4);
+
+  doc.line(
+    18,
+    44,
+    pageWidth - 18,
+    44
+  );
+
+
+  /*
+     Institution heading
+  */
+
+  doc.setTextColor(
+    29,
+    29,
+    31
+  );
+
+  doc.setFont(
+    "helvetica",
+    "bold"
+  );
+
+  doc.setFontSize(17);
+
+
+  /*
+     splitTextToSize prevents
+     long institution names
+     from overflowing.
+  */
+
+  const institutionNameLines =
+    doc.splitTextToSize(
+      item.institution_name,
+      pageWidth - 36
+    );
+
+
+  doc.text(
+    institutionNameLines,
+    pageWidth / 2,
+    57,
+    {
+      align:"center"
+    }
+  );
+
+
+  const nameHeight =
+    institutionNameLines.length *
+    7;
+
+
+  doc.setFont(
+    "helvetica",
+    "normal"
+  );
+
+  doc.setFontSize(9);
+
+  doc.setTextColor(
+    100,
+    100,
+    105
+  );
+
+
+  doc.text(
+    `EIIN ${item.eiin} • ${item.board} • SSC ${item.year}`,
+    pageWidth / 2,
+    62 + nameHeight,
+    {
+      align:"center"
+    }
+  );
+
+
+  /*
+     TABLE
+
+     AutoTable automatically:
+     - wraps text
+     - prevents overlap
+     - creates pages
+     - repeats headers
+     - keeps rows together
+  */
+
+  const tableStartY =
+    72 + nameHeight;
+
+
+  const tableRows = [
+
+    [
+      "Institution Name",
+      item.institution_name
+    ],
+
+    [
+      "EIIN",
+      item.eiin
+    ],
+
+    [
+      "District",
+      item.district
+    ],
+
+    [
+      "Thana / Upazila",
+      item.thana
+    ],
+
+    [
+      "Students Appeared",
+      number(item.appeared)
+    ],
+
+    [
+      "Students Passed",
+      number(item.passed)
+    ],
+
+    [
+      "Passing Rate",
+      `${Number(
+        item.passing_rate
+      ).toFixed(2)}%`
+    ],
+
+    [
+      "GPA 5",
+      number(item.gpa5)
+    ],
+
+    [
+      "Total GPA",
+      number(item.gpa5)
+    ],
+
+    [
+      "Year",
+      String(item.year)
+    ],
+
+    [
+      "Board",
+      item.board
+    ]
+
+  ];
+
+
+  doc.autoTable({
+
+    startY:tableStartY,
+
+    head:[
+      [
+        "Performance Information",
+        "Details"
+      ]
+    ],
+
+    body:tableRows,
+
+    theme:"grid",
+
+    margin:{
+      left:18,
+      right:18,
+      bottom:24
+    },
+
+    tableWidth:"auto",
+
+    styles:{
+
+      font:"helvetica",
+
+      fontSize:10,
+
+      textColor:[
+        45,
+        45,
+        48
+      ],
+
+      cellPadding:{
+        top:5,
+        right:6,
+        bottom:5,
+        left:6
+      },
+
+      lineColor:[
+        220,
+        222,
+        226
+      ],
+
+      lineWidth:.25,
+
+      overflow:"linebreak",
+
+      valign:"middle",
+
+      minCellHeight:10
+
+    },
+
+    headStyles:{
+
+      fillColor:[
+        29,
+        29,
+        31
+      ],
+
+      textColor:[
+        255,
+        255,
+        255
+      ],
+
+      fontStyle:"bold",
+
+      halign:"left",
+
+      valign:"middle",
+
+      cellPadding:6
+
+    },
+
+    columnStyles:{
+
+      0:{
+        cellWidth:62,
+        fontStyle:"bold"
+      },
+
+      1:{
+        cellWidth:"auto"
+      }
+
+    },
+
+    alternateRowStyles:{
+
+      fillColor:[
+        249,
+        250,
+        252
+      ]
+
+    },
+
+    didParseCell:function(data){
+
+      /*
+         Long institution names
+         always wrap inside cell.
+      */
+
+      if(
+        data.section === "body" &&
+        data.column.index === 1
+      ){
+
+        data.cell.styles.overflow =
+          "linebreak";
+
+      }
+
+    },
+
+    didDrawPage:function(data){
+
+      /*
+         Footer on EVERY page
+      */
+
+      const pageNumber =
+        doc.internal.getNumberOfPages();
+
+
+      doc.setFont(
+        "helvetica",
+        "normal"
+      );
+
+      doc.setFontSize(8);
+
+      doc.setTextColor(
+        130,
+        130,
+        135
+      );
+
+
+      /*
+         Left footer
+      */
+
+      doc.text(
+        "CTGboardranking",
+        18,
+        pageHeight - 11
+      );
+
+
+      /*
+         Page number
+      */
+
+      doc.text(
+        `Page ${pageNumber}`,
+        pageWidth - 18,
+        pageHeight - 11,
+        {
+          align:"right"
+        }
+      );
+
+
+      /*
+         Unofficial Notice
+      */
+
+      doc.setFont(
+        "helvetica",
+        "bold"
+      );
+
+      doc.setFontSize(8);
+
+      doc.setTextColor(
+        180,
+        60,
+        60
+      );
+
+      doc.text(
+        "Unofficial Notice",
+        pageWidth / 2,
+        pageHeight - 11,
+        {
+          align:"center"
+        }
+      );
+
+    }
+
+  });
+
+
+  /*
+     Save filename
+
+     Remove characters that
+     are unsafe in filenames.
+  */
+
+  const safeName =
+    item.institution_name
+      .replace(
+        /[^a-z0-9]+/gi,
+        "_"
+      )
+      .replace(
+        /^_+|_+$/g,
+        ""
+      )
+      .substring(
+        0,
+        70
+      );
+
+
+  const filename =
+    `CTGboardranking_${safeName}_${item.eiin}_SSC2026.pdf`;
+
+
+  doc.save(filename);
+
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+function renderPagination(){
+
+  const pages =
+    Math.ceil(
+      filteredInstitutions.length /
+      ITEMS_PER_PAGE
+    );
+
+
+  pagination.innerHTML = "";
+
+
+  if(pages <= 1){
+
+    return;
+
+  }
+
+
+  const previous =
+    document.createElement(
+      "button"
+    );
+
+
+  previous.className =
+    "page-btn";
+
+
+  previous.textContent =
+    "‹";
+
+
+  previous.disabled =
+    currentPage === 1;
+
+
+  previous.onclick = () => {
+
+    if(currentPage > 1){
+
+      currentPage--;
+
+      render();
+
+      window.scrollTo({
+        top:500,
+        behavior:"smooth"
+      });
+
+    }
+
+  };
+
+
+  pagination.appendChild(
+    previous
+  );
+
+
+  let start =
+    Math.max(
+      1,
+      currentPage - 2
+    );
+
+
+  let end =
+    Math.min(
+      pages,
+      currentPage + 2
+    );
+
+
+  if(currentPage <= 3){
+
+    end =
+      Math.min(
+        5,
+        pages
+      );
+
+  }
+
+
+  if(
+    currentPage >=
+    pages - 2
+  ){
+
+    start =
+      Math.max(
+        1,
+        pages - 4
+      );
+
+  }
+
+
+  for(
+    let i = start;
+    i <= end;
+    i++
+  ){
+
+    const button =
+      document.createElement(
+        "button"
+      );
+
+
+    button.className =
+      "page-btn" +
+      (
+        i === currentPage
+          ? " active"
+          : ""
+      );
+
+
+    button.textContent =
+      i;
+
+
+    button.onclick = () => {
+
+      currentPage =
+        i;
+
+      render();
+
+      window.scrollTo({
+        top:500,
+        behavior:"smooth"
+      });
+
+    };
+
+
+    pagination.appendChild(
+      button
+    );
+
+  }
+
+
+  const next =
+    document.createElement(
+      "button"
+    );
+
+
+  next.className =
+    "page-btn";
+
+
+  next.textContent =
+    "›";
+
+
+  next.disabled =
+    currentPage === pages;
+
+
+  next.onclick = () => {
+
+    if(
+      currentPage <
+      pages
+    ){
+
+      currentPage++;
+
+      render();
+
+      window.scrollTo({
+        top:500,
+        behavior:"smooth"
+      });
+
+    }
+
+  };
+
+
+  pagination.appendChild(
+    next
+  );
+
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+searchInput.addEventListener(
+  "input",
+  () => {
+
+    clearSearch.style.display =
+      searchInput.value
+        ? "grid"
+        : "none";
+
+
+    applyFilters();
+
+  }
+);
+
+
+clearSearch.addEventListener(
+  "click",
+  () => {
+
+    searchInput.value =
+      "";
+
+    clearSearch.style.display =
+      "none";
+
+    applyFilters();
+
+    searchInput.focus();
+
+  }
+);
+
+
+/* =========================================================
+   FILTER BUTTONS
+========================================================= */
+
+document
+  .querySelectorAll(".filter")
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        document
+          .querySelectorAll(".filter")
+          .forEach(btn =>
+            btn.classList.remove(
+              "active"
+            )
+          );
+
+
+        button.classList.add(
+          "active"
+        );
+
+
+        currentFilter =
+          button.dataset.filter;
+
+
+        applyFilters();
+
+      }
+    );
+
+  });
+
+
+/* =========================================================
+   KEYBOARD SUPPORT FOR CARDS
+========================================================= */
+
+grid.addEventListener(
+  "keydown",
+  event => {
+
+    const card =
+      event.target.closest(
+        ".institution-card"
+      );
+
+
+    if(
+      !card
+    ){
+
+      return;
+
+    }
+
+
+    if(
+      event.key ===
+      "Enter" ||
+      event.key ===
+      " "
+    ){
+
+      event.preventDefault();
+
+      openInstitution(
+        card.dataset.eiin
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+const themeBtn =
+  document.getElementById(
+    "themeBtn"
+  );
+
+
+function setTheme(dark){
+
+  document.body.classList.toggle(
+    "dark",
+    dark
+  );
+
+
+  localStorage.setItem(
+    "ctg-theme",
+    dark
+      ? "dark"
+      : "light"
+  );
+
+
+  themeBtn.textContent =
+    dark
+      ? "☀"
+      : "◐";
+
+}
+
+
+const savedTheme =
+  localStorage.getItem(
+    "ctg-theme"
+  );
+
+
+if(
+  savedTheme ===
+  "dark"
+){
+
+  setTheme(true);
+
+}
+
+
+themeBtn.addEventListener(
+  "click",
+  () => {
+
+    setTheme(
+      !document.body.classList.contains(
+        "dark"
+      )
+    );
+
+  }
+);
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPE JS
+========================================================= */
+
+function escapeJS(value){
+
+  return String(value)
+    .replace(
+      /\\/g,
+      "\\\\"
+    )
+    .replace(
+      /'/g,
+      "\\'"
+    );
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+loadInstitutions();
+
+</script>
+
+</body>
 </html>
