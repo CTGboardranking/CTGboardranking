@@ -931,6 +931,8 @@ let currentPage = 1;
 
 let currentSearch = "";
 
+let allGroupStudents = [];
+
 let currentStudents = [];
 
 let totalStudents = 0;
@@ -1052,10 +1054,7 @@ async function supabaseRequest(
                         "application/json",
 
                     "Accept":
-                        "application/json",
-
-                    "Prefer":
-                        "count=exact"
+                        "application/json"
 
                 },
 
@@ -1104,226 +1103,41 @@ async function supabaseRequest(
 
 
 /* =========================================================
-   BUILD SEARCH FILTER
+   FETCH ALL GROUP STUDENTS
 ========================================================= */
 
-function buildSearchFilter() {
+async function fetchAllGroupStudents(
+    startRoll,
+    endRoll,
+    signal
+) {
 
-    const search =
-        currentSearch.trim();
+    const allData = [];
 
+    const batchSize = 1000;
 
-    if (!search) {
-
-        return "";
-
-    }
-
-
-    /*
-     * Escape PostgREST special characters.
-     */
-
-    const safe =
-        search
-
-            .replace(
-                /\\/g,
-                "\\\\"
-            )
-
-            .replace(
-                /,/g,
-                "\\,"
-            )
-
-            .replace(
-                /\(/g,
-                "\\("
-            )
-
-            .replace(
-                /\)/g,
-                "\\)"
-            )
-
-            .replace(
-                /"/g,
-                '\\"'
-            );
+    let offset = 0;
 
 
-    const conditions = [
-
-        `name.ilike.*${safe}*`,
-
-        `institute.ilike.*${safe}*`,
-
-        `district.ilike.*${safe}*`
-
-    ];
-
-
-    /*
-     * Roll is numeric.
-     *
-     * Therefore use eq for
-     * exact roll searching.
-     */
-
-    if (
-        /^\d+$/.test(search)
-    ) {
-
-        conditions.push(
-            `roll.eq.${search}`
-        );
-
-    }
-
-
-    return (
-        `or(${conditions.join(",")})`
-    );
-
-}
-
-
-/* =========================================================
-   LOAD STUDENTS
-========================================================= */
-
-async function loadStudents() {
-
-    const thisRequest =
-        ++requestNumber;
-
-
-    rowsContainer.innerHTML = `
-
-        <div class="loading-message">
-
-            Loading
-            ${escapeHTML(currentGroup)}
-            ranking...
-
-        </div>
-
-    `;
-
-
-    emptyMessage.style.display =
-        "none";
-
-
-    errorMessage.style.display =
-        "none";
-
-
-    errorDetails.textContent =
-        "";
-
-
-    pagination.style.display =
-        "none";
-
-
-    try {
-
-        validateConfiguration();
-
+    while (true) {
 
         const query =
             new URLSearchParams();
 
 
-        /* =====================================================
-           SELECT
-        ===================================================== */
-
-        query.set(
-            "select",
-            "name,roll,gpa,total_score,institute,district"
-        );
-
-
-        /* =====================================================
-           RANKING ORDER
-        ===================================================== */
-
-        query.set(
-            "order",
-            "total_score.desc.nullslast,gpa.desc.nullslast,roll.asc"
-        );
-
-
-        /* =====================================================
-           PAGINATION
-        ===================================================== */
-
-        query.set(
-            "limit",
-            String(PAGE_SIZE)
-        );
-
-
-        query.set(
-            "offset",
-            String(
-                (
-                    currentPage -
-                    1
-                ) *
-                PAGE_SIZE
-            )
-        );
-
-
-        /* =====================================================
-           GROUP RANGE
-        ===================================================== */
-
-        const ranges =
-            GROUP_RANGES[currentGroup];
-
-
-        if (
-            !ranges ||
-            !ranges.length
-        ) {
-
-            throw new Error(
-                "Invalid ranking group."
-            );
-
-        }
-
-
-        /*
-         * Current groups use one
-         * continuous roll range.
-         */
-
-        const [
-            startRoll,
-            endRoll
-        ] =
-            ranges[0];
-
-
         /*
          * IMPORTANT:
          *
-         * DO NOT use:
-         *
-         * and(roll.gte...,roll.lte...)
-         *
-         * because that was causing
-         * PGRST100 logic-tree error.
-         *
-         * Instead send two independent
-         * filters on the same column.
+         * subjects is included because
+         * Total Score is calculated from
+         * the 12 subject marks.
          */
+
+        query.set(
+            "select",
+            "name,roll,gpa,subjects,total_score,institute,district"
+        );
+
 
         query.append(
             "roll",
@@ -1337,74 +1151,25 @@ async function loadStudents() {
         );
 
 
-        /* =====================================================
-           SEARCH
-        ===================================================== */
-
-        const searchFilter =
-            buildSearchFilter();
-
-
-        if (
-            searchFilter
-        ) {
-
-            query.set(
-                "or",
-                searchFilter
-            );
-
-        }
-
-
-        /* =====================================================
-           DEBUG
-        ===================================================== */
-
-        console.log(
-            "Current Group:",
-            currentGroup
+        query.set(
+            "limit",
+            String(batchSize)
         );
 
 
-        console.log(
-            "Roll Range:",
-            startRoll,
-            "to",
-            endRoll
+        query.set(
+            "offset",
+            String(offset)
         );
 
-
-        console.log(
-            "Search:",
-            currentSearch || "(none)"
-        );
-
-
-        console.log(
-            "Supabase Query:",
-            query.toString()
-        );
-
-
-        /* =====================================================
-           REQUEST
-        ===================================================== */
 
         const response =
             await supabaseRequest(
-                query.toString()
+                query.toString(),
+                {
+                    signal
+                }
             );
-
-
-        if (
-            thisRequest !==
-            requestNumber
-        ) {
-
-            return;
-
-        }
 
 
         const data =
@@ -1416,263 +1181,305 @@ async function loadStudents() {
         ) {
 
             throw new Error(
-                "Supabase returned invalid data."
+                "Supabase returned invalid student data."
             );
 
         }
 
 
-        /* =====================================================
-           EXACT COUNT
-        ===================================================== */
+        allData.push(
+            ...data
+        );
 
-        const contentRange =
-            response.headers.get(
-                "content-range"
+
+        if (
+            data.length < batchSize
+        ) {
+
+            break;
+
+        }
+
+
+        offset +=
+            batchSize;
+
+
+        if (
+            offset > 200000
+        ) {
+
+            break;
+
+        }
+
+    }
+
+
+    return allData;
+
+}
+
+
+/* =========================================================
+   PARSE SUBJECTS
+========================================================= */
+
+function parseSubjects(student) {
+
+    let subjects =
+        student.subjects;
+
+
+    if (
+        typeof subjects === "string"
+    ) {
+
+        try {
+
+            subjects =
+                JSON.parse(subjects);
+
+        }
+
+        catch (_) {
+
+            subjects = [];
+
+        }
+
+    }
+
+
+    if (
+        subjects &&
+        !Array.isArray(subjects) &&
+        typeof subjects === "object"
+    ) {
+
+        if (
+            Array.isArray(subjects.subjects)
+        ) {
+
+            subjects =
+                subjects.subjects;
+
+        }
+
+        else if (
+            Array.isArray(subjects.data)
+        ) {
+
+            subjects =
+                subjects.data;
+
+        }
+
+        else {
+
+            subjects =
+                Object.values(subjects);
+
+        }
+
+    }
+
+
+    if (
+        !Array.isArray(subjects)
+    ) {
+
+        return [];
+
+    }
+
+
+    return subjects;
+
+}
+
+
+/* =========================================================
+   GET SUBJECT MARK
+========================================================= */
+
+function getSubjectMark(subject) {
+
+    if (
+        subject === null ||
+        subject === undefined
+    ) {
+
+        return null;
+
+    }
+
+
+    if (
+        typeof subject === "number"
+    ) {
+
+        return Number.isFinite(subject)
+            ? subject
+            : null;
+
+    }
+
+
+    if (
+        typeof subject === "string"
+    ) {
+
+        const number =
+            Number(
+                subject.trim()
             );
 
 
-        let total = 0;
-
-
-        if (
-            contentRange
-        ) {
-
-            const match =
-                contentRange.match(
-                    /\/(\d+)$/
-                );
-
-
-            if (
-                match
-            ) {
-
-                total =
-                    Number(match[1]);
-
-            }
-
-        }
-
-
-        /*
-         * Fallback.
-         */
-
-        if (
-            !Number.isFinite(total) ||
-            total < 0
-        ) {
-
-            total = 0;
-
-        }
-
-
-        if (
-            total === 0 &&
-            data.length > 0
-        ) {
-
-            total =
-                (
-                    (
-                        currentPage -
-                        1
-                    ) *
-                    PAGE_SIZE
-                ) +
-                data.length;
-
-        }
-
-
-        /* =====================================================
-           CLIENT-SIDE SORT
-        ===================================================== */
-
-        data.sort(
-            (
-                a,
-                b
-            ) => {
-
-                const scoreA =
-                    getTotalScore(a);
-
-
-                const scoreB =
-                    getTotalScore(b);
-
-
-                if (
-                    scoreA !==
-                    scoreB
-                ) {
-
-                    return (
-                        scoreB -
-                        scoreA
-                    );
-
-                }
-
-
-                const gpaA =
-                    getGPA(a);
-
-
-                const gpaB =
-                    getGPA(b);
-
-
-                if (
-                    gpaA !==
-                    gpaB
-                ) {
-
-                    return (
-                        gpaB -
-                        gpaA
-                    );
-
-                }
-
-
-                return compareRoll(
-                    getRoll(a),
-                    getRoll(b)
-                );
-
-            }
-        );
-
-
-        /* =====================================================
-           SAVE STATE
-        ===================================================== */
-
-        currentStudents =
-            data;
-
-
-        totalStudents =
-            total;
-
-
-        /* =====================================================
-           RENDER
-        ===================================================== */
-
-        renderStudents();
+        return Number.isFinite(number)
+            ? number
+            : null;
 
     }
 
 
-    catch(error) {
+    if (
+        typeof subject !== "object"
+    ) {
+
+        return null;
+
+    }
+
+
+    const possibleValues = [
+
+        subject.mark,
+
+        subject.marks,
+
+        subject.total_mark,
+
+        subject.total_marks,
+
+        subject.totalMark,
+
+        subject.totalMarks,
+
+        subject.score
+
+    ];
+
+
+    for (
+        const value of possibleValues
+    ) {
 
         if (
-            thisRequest !==
-            requestNumber
+            value === null ||
+            value === undefined ||
+            String(value).trim() === ""
         ) {
 
-            return;
+            continue;
 
         }
 
 
-        console.error(
-            "Ranking error:",
-            error
-        );
+        const number =
+            Number(value);
 
 
-        rowsContainer.innerHTML =
-            "";
+        if (
+            Number.isFinite(number)
+        ) {
 
+            return number;
 
-        errorMessage.style.display =
-            "block";
-
-
-        errorDetails.textContent =
-            error.message ||
-            "Unknown error";
-
-
-        pagination.style.display =
-            "none";
+        }
 
     }
+
+
+    return null;
 
 }
 
 
 /* =========================================================
-   CONFIG VALIDATION
+   CALCULATE TOTAL SCORE FROM 12 SUBJECTS
 ========================================================= */
 
-function validateConfiguration() {
+function calculateTotalScore(student) {
 
-    if (!SUPABASE_URL) {
+    const subjects =
+        parseSubjects(student);
 
-        throw new Error(
-            "Supabase URL is missing."
-        );
+
+    let total = 0;
+
+    let subjectCount = 0;
+
+
+    /*
+     * Add the marks of the first
+     * 12 valid subjects.
+     */
+
+    for (
+        const subject of subjects
+    ) {
+
+        const mark =
+            getSubjectMark(subject);
+
+
+        if (
+            mark === null
+        ) {
+
+            continue;
+
+        }
+
+
+        total +=
+            mark;
+
+
+        subjectCount++;
+
+
+        if (
+            subjectCount === 12
+        ) {
+
+            break;
+
+        }
 
     }
 
 
-    if (!SUPABASE_PUBLISHABLE_KEY) {
+    /*
+     * Main calculation.
+     */
 
-        throw new Error(
-            "Supabase Publishable Key is missing."
-        );
+    if (
+        subjectCount > 0
+    ) {
 
-    }
-
-
-    if (!SUPABASE_TABLE) {
-
-        throw new Error(
-            "Supabase table is missing."
-        );
+        return total;
 
     }
 
-}
 
+    /*
+     * Fallback only when subjects
+     * are not available.
+     */
 
-/* =========================================================
-   ROLL
-========================================================= */
-
-function getRoll(student) {
-
-    return (
-
-        student.roll ??
-
-        student.Roll ??
-
-        student.ROLL ??
-
-        ""
-
-    );
-
-}
-
-
-/* =========================================================
-   TOTAL SCORE
-========================================================= */
-
-function getTotalScore(student) {
-
-    const values = [
+    const fallbackValues = [
 
         student.total_score,
 
@@ -1694,7 +1501,7 @@ function getTotalScore(student) {
 
 
     for (
-        const value of values
+        const value of fallbackValues
     ) {
 
         if (
@@ -1727,6 +1534,36 @@ function getTotalScore(student) {
 
 
     return 0;
+
+}
+
+
+/* =========================================================
+   TOTAL SCORE
+========================================================= */
+
+function getTotalScore(student) {
+
+    if (
+        student.__calculatedTotalScore !== undefined
+    ) {
+
+        return student.__calculatedTotalScore;
+
+    }
+
+
+    const score =
+        calculateTotalScore(student);
+
+
+    student.__calculatedTotalScore =
+        Number.isFinite(score)
+            ? score
+            : 0;
+
+
+    return student.__calculatedTotalScore;
 
 }
 
@@ -1782,6 +1619,27 @@ function getGPA(student) {
 
 
     return 0;
+
+}
+
+
+/* =========================================================
+   ROLL
+========================================================= */
+
+function getRoll(student) {
+
+    return (
+
+        student.roll ??
+
+        student.Roll ??
+
+        student.ROLL ??
+
+        ""
+
+    );
 
 }
 
@@ -1874,7 +1732,426 @@ function compareRoll(
 
 
 /* =========================================================
-   RENDER
+   GLOBAL TOTAL SCORE RANKING
+========================================================= */
+
+function sortStudents(
+    students
+) {
+
+    students.sort(
+        (
+            a,
+            b
+        ) => {
+
+            /*
+             * 1st priority:
+             * TOTAL SCORE highest first.
+             */
+
+            const scoreA =
+                getTotalScore(a);
+
+
+            const scoreB =
+                getTotalScore(b);
+
+
+            if (
+                scoreA !== scoreB
+            ) {
+
+                return (
+                    scoreB -
+                    scoreA
+                );
+
+            }
+
+
+            /*
+             * 2nd priority:
+             * GPA highest first.
+             */
+
+            const gpaA =
+                getGPA(a);
+
+
+            const gpaB =
+                getGPA(b);
+
+
+            if (
+                gpaA !== gpaB
+            ) {
+
+                return (
+                    gpaB -
+                    gpaA
+                );
+
+            }
+
+
+            /*
+             * 3rd priority:
+             * Roll lowest first.
+             */
+
+            return compareRoll(
+                getRoll(a),
+                getRoll(b)
+            );
+
+        }
+    );
+
+
+    return students;
+
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+function filterStudents(
+    students
+) {
+
+    const search =
+        currentSearch
+            .trim()
+            .toLowerCase();
+
+
+    if (
+        !search
+    ) {
+
+        return students;
+
+    }
+
+
+    return students.filter(
+        student => {
+
+            const name =
+                String(
+                    student.name || ""
+                )
+                .toLowerCase();
+
+
+            const roll =
+                String(
+                    getRoll(student)
+                )
+                .toLowerCase();
+
+
+            const institute =
+                String(
+                    getInstitution(student)
+                )
+                .toLowerCase();
+
+
+            const district =
+                String(
+                    getDistrict(student)
+                )
+                .toLowerCase();
+
+
+            return (
+
+                name.includes(search) ||
+
+                roll.includes(search) ||
+
+                institute.includes(search) ||
+
+                district.includes(search)
+
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   LOAD STUDENTS
+========================================================= */
+
+async function loadStudents() {
+
+    const thisRequest =
+        ++requestNumber;
+
+
+    rowsContainer.innerHTML = `
+
+        <div class="loading-message">
+
+            Loading
+            ${escapeHTML(currentGroup)}
+            ranking...
+
+            <br><br>
+
+            <small>
+                Calculating Total Score from 12 subjects...
+            </small>
+
+        </div>
+
+    `;
+
+
+    emptyMessage.style.display =
+        "none";
+
+
+    errorMessage.style.display =
+        "none";
+
+
+    errorDetails.textContent =
+        "";
+
+
+    pagination.style.display =
+        "none";
+
+
+    try {
+
+        validateConfiguration();
+
+
+        const ranges =
+            GROUP_RANGES[currentGroup];
+
+
+        if (
+            !ranges ||
+            !ranges.length
+        ) {
+
+            throw new Error(
+                "Invalid ranking group."
+            );
+
+        }
+
+
+        const [
+            startRoll,
+            endRoll
+        ] =
+            ranges[0];
+
+
+        /*
+         * FETCH COMPLETE GROUP
+         */
+
+        let data =
+            await fetchAllGroupStudents(
+                startRoll,
+                endRoll
+            );
+
+
+        if (
+            thisRequest !==
+            requestNumber
+        ) {
+
+            return;
+
+        }
+
+
+        /*
+         * CALCULATE TOTAL SCORE
+         * FOR EVERY STUDENT.
+         */
+
+        data.forEach(
+            student => {
+
+                getTotalScore(student);
+
+            }
+        );
+
+
+        /*
+         * SORT COMPLETE GROUP.
+         *
+         * Total Score DESC.
+         */
+
+        sortStudents(data);
+
+
+        /*
+         * SAVE COMPLETE GROUP.
+         */
+
+        allGroupStudents =
+            data;
+
+
+        /*
+         * SEARCH FILTER.
+         */
+
+        const filtered =
+            filterStudents(
+                allGroupStudents
+            );
+
+
+        totalStudents =
+            filtered.length;
+
+
+        /*
+         * Calculate valid page.
+         */
+
+        const totalPages =
+            Math.max(
+                1,
+                Math.ceil(
+                    totalStudents /
+                    PAGE_SIZE
+                )
+            );
+
+
+        if (
+            currentPage >
+            totalPages
+        ) {
+
+            currentPage =
+                totalPages;
+
+        }
+
+
+        /*
+         * Slice only after
+         * global ranking.
+         */
+
+        const startIndex =
+            (
+                currentPage -
+                1
+            ) *
+            PAGE_SIZE;
+
+
+        currentStudents =
+            filtered.slice(
+                startIndex,
+                startIndex +
+                PAGE_SIZE
+            );
+
+
+        renderStudents();
+
+    }
+
+
+    catch(error) {
+
+        if (
+            thisRequest !==
+            requestNumber
+        ) {
+
+            return;
+
+        }
+
+
+        console.error(
+            "Ranking error:",
+            error
+        );
+
+
+        rowsContainer.innerHTML =
+            "";
+
+
+        errorMessage.style.display =
+            "block";
+
+
+        errorDetails.textContent =
+            error.message ||
+            "Unknown error";
+
+
+        pagination.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =========================================================
+   CONFIG VALIDATION
+========================================================= */
+
+function validateConfiguration() {
+
+    if (!SUPABASE_URL) {
+
+        throw new Error(
+            "Supabase URL is missing."
+        );
+
+    }
+
+
+    if (!SUPABASE_PUBLISHABLE_KEY) {
+
+        throw new Error(
+            "Supabase Publishable Key is missing."
+        );
+
+    }
+
+
+    if (!SUPABASE_TABLE) {
+
+        throw new Error(
+            "Supabase table is missing."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER STUDENTS
 ========================================================= */
 
 function renderStudents() {
@@ -1904,6 +2181,17 @@ function renderStudents() {
     }
 
 
+    /*
+     * Get filtered list again so
+     * ranking number remains correct.
+     */
+
+    const filteredStudents =
+        filterStudents(
+            allGroupStudents
+        );
+
+
     currentStudents.forEach(
         (
             student,
@@ -1920,16 +2208,30 @@ function renderStudents() {
                 "student-row";
 
 
+            /*
+             * GLOBAL RANK.
+             */
+
+            const globalIndex =
+                filteredStudents.indexOf(
+                    student
+                );
+
+
             const rank =
-                (
-                    (
-                        currentPage -
-                        1
-                    ) *
-                    PAGE_SIZE
-                ) +
-                index +
-                1;
+                globalIndex >= 0
+
+                    ? globalIndex + 1
+
+                    : (
+                        (
+                            currentPage -
+                            1
+                        ) *
+                        PAGE_SIZE
+                    ) +
+                    index +
+                    1;
 
 
             const rankClass =
@@ -1961,6 +2263,10 @@ function renderStudents() {
 
                     : "—";
 
+
+            /*
+             * CALCULATED TOTAL SCORE.
+             */
 
             const totalScore =
                 getTotalScore(student);
@@ -2181,6 +2487,18 @@ document
                         "";
 
 
+                    allGroupStudents =
+                        [];
+
+
+                    currentStudents =
+                        [];
+
+
+                    totalStudents =
+                        0;
+
+
                     searchInput.value =
                         "";
 
@@ -2242,10 +2560,27 @@ searchInput.addEventListener(
             setTimeout(
                 () => {
 
-                    loadStudents();
+                    const filtered =
+                        filterStudents(
+                            allGroupStudents
+                        );
+
+
+                    totalStudents =
+                        filtered.length;
+
+
+                    currentStudents =
+                        filtered.slice(
+                            0,
+                            PAGE_SIZE
+                        );
+
+
+                    renderStudents();
 
                 },
-                450
+                300
             );
 
     }
@@ -2272,7 +2607,29 @@ prevPage.addEventListener(
         currentPage--;
 
 
-        loadStudents();
+        const filtered =
+            filterStudents(
+                allGroupStudents
+            );
+
+
+        const startIndex =
+            (
+                currentPage -
+                1
+            ) *
+            PAGE_SIZE;
+
+
+        currentStudents =
+            filtered.slice(
+                startIndex,
+                startIndex +
+                PAGE_SIZE
+            );
+
+
+        renderStudents();
 
 
         window.scrollTo({
@@ -2315,7 +2672,29 @@ nextPage.addEventListener(
         currentPage++;
 
 
-        loadStudents();
+        const filtered =
+            filterStudents(
+                allGroupStudents
+            );
+
+
+        const startIndex =
+            (
+                currentPage -
+                1
+            ) *
+            PAGE_SIZE;
+
+
+        currentStudents =
+            filtered.slice(
+                startIndex,
+                startIndex +
+                PAGE_SIZE
+            );
+
+
+        renderStudents();
 
 
         window.scrollTo({
@@ -2340,6 +2719,18 @@ yearSelect.addEventListener(
 
         currentPage =
             1;
+
+
+        allGroupStudents =
+            [];
+
+
+        currentStudents =
+            [];
+
+
+        totalStudents =
+            0;
 
 
         yearText.textContent =
@@ -2603,12 +2994,15 @@ async function downloadCurrentPagePDF() {
         );
 
 
-        const startIndex =
-            (
-                currentPage -
-                1
-            ) *
-            PAGE_SIZE;
+        /*
+         * Current page is already globally
+         * ranked by Total Score.
+         */
+
+        const filteredStudents =
+            filterStudents(
+                allGroupStudents
+            );
 
 
         const tableData =
@@ -2618,10 +3012,26 @@ async function downloadCurrentPagePDF() {
                     index
                 ) => {
 
+                    const actualIndex =
+                        filteredStudents.indexOf(
+                            student
+                        );
+
+
                     const rank =
-                        startIndex +
-                        index +
-                        1;
+                        actualIndex >= 0
+
+                            ? actualIndex + 1
+
+                            : (
+                                (
+                                    currentPage -
+                                    1
+                                ) *
+                                PAGE_SIZE
+                            ) +
+                            index +
+                            1;
 
 
                     const name =
@@ -2637,6 +3047,10 @@ async function downloadCurrentPagePDF() {
                     const gpa =
                         getGPA(student);
 
+
+                    /*
+                     * CALCULATED TOTAL SCORE
+                     */
 
                     const score =
                         getTotalScore(student);
@@ -2943,10 +3357,6 @@ async function downloadCurrentPagePDF() {
         });
 
 
-        /* =====================================================
-           PDF FILE NAME
-        ===================================================== */
-
         const safeGroup =
             currentGroup
 
@@ -3020,6 +3430,11 @@ downloadPdfBtn.addEventListener(
 
 console.log(
     "CTGBoardRanking Student Ranking started."
+);
+
+
+console.log(
+    "Ranking: Total Score DESC → GPA DESC → Roll ASC"
 );
 
 
