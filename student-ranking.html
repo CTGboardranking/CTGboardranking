@@ -579,6 +579,7 @@
 
 </header>
 
+
 <main>
 
 <section class="student-hero">
@@ -604,6 +605,7 @@
 
 </section>
 
+
 <section class="student-content">
 
 <div class="ranking-controls">
@@ -624,6 +626,7 @@
 
 </div>
 
+
 <div class="control-card">
 
 <label>
@@ -642,33 +645,46 @@
 
 </div>
 
+
 <div class="group-tabs">
 
 <button
     class="group-tab active"
     data-group="Science">
+
     🔬 Science
+
 </button>
+
 
 <button
     class="group-tab"
     data-group="Business Studies">
+
     💼 Business Studies
+
 </button>
+
 
 <button
     class="group-tab"
     data-group="Humanities">
+
     🎓 Humanities
+
 </button>
+
 
 <button
     class="group-tab"
     data-group="Science Irregular">
+
     📚 Science Irregular
+
 </button>
 
 </div>
+
 
 <div class="ranking-title">
 
@@ -684,11 +700,13 @@
 
 </div>
 
+
 <div>
 
 <p id="yearText">
     2026 · Chattogram Board
 </p>
+
 
 <button
     id="downloadPdfBtn"
@@ -704,6 +722,7 @@
 
 </div>
 
+
 <input
     type="search"
     id="studentSearch"
@@ -711,21 +730,34 @@
     placeholder="Search student, roll or institution..."
     autocomplete="off">
 
+
 <div class="student-list">
+
 
 <div class="student-header">
 
-<div>Serial</div>
+<div>
+    Serial
+</div>
 
-<div>Student Name</div>
+<div>
+    Student Name
+</div>
 
-<div>GPA</div>
+<div>
+    GPA
+</div>
 
-<div>Total Score</div>
+<div>
+    Total Score
+</div>
 
-<div>Institute</div>
+<div>
+    Institute
+</div>
 
 </div>
+
 
 <div id="studentRows">
 
@@ -735,12 +767,16 @@
 
 </div>
 
+
 <div
     id="emptyMessage"
     class="empty-message"
     style="display:none;">
+
     No student found.
+
 </div>
+
 
 <div
     id="errorMessage"
@@ -756,6 +792,7 @@
 
 </div>
 
+
 <div
     id="pagination"
     class="pagination"
@@ -765,19 +802,27 @@
     id="prevPage"
     type="button"
     disabled>
+
     ← Previous
+
 </button>
+
 
 <span
     id="paginationInfo"
     class="pagination-info">
+
     Page 1
+
 </span>
+
 
 <button
     id="nextPage"
     type="button">
+
     Next →
+
 </button>
 
 </div>
@@ -787,6 +832,7 @@
 </section>
 
 </main>
+
 
 <footer>
 
@@ -810,6 +856,7 @@ CTGBoardRanking
 
 </div>
 
+
 <div class="footer-links">
 
 <a href="student-ranking.html">
@@ -832,6 +879,7 @@ CTGBoardRanking
 
 </div>
 
+
 <div class="footer-bottom">
 
 <span>
@@ -846,7 +894,9 @@ CTGBoardRanking
 
 </footer>
 
+
 <script src="script.js"></script>
+
 
 <script>
 
@@ -961,26 +1011,37 @@ const yearSelect =
    SUPABASE REQUEST
 ========================================================= */
 
-async function supabaseRequest(params = "", options = {}) {
+async function supabaseRequest(
+    params = "",
+    options = {}
+) {
 
     const base =
-        SUPABASE_URL.replace(/\/+$/, "");
+        SUPABASE_URL.replace(
+            /\/+$/,
+            ""
+        );
+
 
     const url =
         `${base}/rest/v1/${SUPABASE_TABLE}?${params}`;
+
 
     console.log(
         "Supabase request:",
         url
     );
 
+
     const response =
         await fetch(
             url,
             {
-                method:"GET",
 
-                headers:{
+                method: "GET",
+
+                headers: {
+
                     "apikey":
                         SUPABASE_PUBLISHABLE_KEY,
 
@@ -995,87 +1056,50 @@ async function supabaseRequest(params = "", options = {}) {
 
                     "Prefer":
                         "count=exact"
+
                 },
 
-                cache:"no-store",
+                cache: "no-store",
 
                 signal:
                     options.signal
+
             }
         );
+
 
     if (!response.ok) {
 
         let message = "";
 
+
         try {
+
             message =
                 await response.text();
+
         }
 
         catch (_) {}
 
+
         throw new Error(
+
             `Supabase HTTP ${response.status}` +
+
             (
                 message
                     ? `: ${message}`
                     : ""
             )
+
         );
+
     }
+
 
     return response;
-}
 
-
-/* =========================================================
-   BUILD GROUP FILTER
-========================================================= */
-
-function buildRollFilter() {
-
-    const ranges =
-        GROUP_RANGES[currentGroup];
-
-    if (
-        !ranges ||
-        !ranges.length
-    ) {
-
-        throw new Error(
-            "Invalid ranking group."
-        );
-    }
-
-    const conditions =
-        ranges.map(
-            range => {
-
-                const start =
-                    Number(range[0]);
-
-                const end =
-                    Number(range[1]);
-
-                return (
-                    `and(roll.gte.${start},roll.lte.${end})`
-                );
-
-            }
-        );
-
-    if (
-        conditions.length === 1
-    ) {
-
-        return conditions[0];
-
-    }
-
-    return (
-        `or(${conditions.join(",")})`
-    );
 }
 
 
@@ -1088,35 +1112,80 @@ function buildSearchFilter() {
     const search =
         currentSearch.trim();
 
+
     if (!search) {
+
         return "";
+
     }
 
+
     /*
-     * PostgREST special characters.
+     * Escape PostgREST special characters.
      */
 
     const safe =
         search
-            .replace(/\\/g, "\\\\")
-            .replace(/,/g, "\\,")
-            .replace(/\(/g, "\\(")
-            .replace(/\)/g, "\\)")
-            .replace(/"/g, '\\"');
+
+            .replace(
+                /\\/g,
+                "\\\\"
+            )
+
+            .replace(
+                /,/g,
+                "\\,"
+            )
+
+            .replace(
+                /\(/g,
+                "\\("
+            )
+
+            .replace(
+                /\)/g,
+                "\\)"
+            )
+
+            .replace(
+                /"/g,
+                '\\"'
+            );
+
+
+    const conditions = [
+
+        `name.ilike.*${safe}*`,
+
+        `institute.ilike.*${safe}*`,
+
+        `district.ilike.*${safe}*`
+
+    ];
+
 
     /*
-     * Search only columns that are
-     * expected in the students table.
+     * Roll is numeric.
+     *
+     * Therefore use eq for
+     * exact roll searching.
      */
 
+    if (
+        /^\d+$/.test(search)
+    ) {
+
+        conditions.push(
+            `roll.eq.${search}`
+        );
+
+    }
+
+
     return (
-        `or(` +
-        `name.ilike.*${safe}*,` +
-        `roll.ilike.*${safe}*,` +
-        `institute.ilike.*${safe}*,` +
-        `district.ilike.*${safe}*` +
-        `)`
+        `or(${conditions.join(",")})`
     );
+
 }
 
 
@@ -1129,40 +1198,48 @@ async function loadStudents() {
     const thisRequest =
         ++requestNumber;
 
+
     rowsContainer.innerHTML = `
 
         <div class="loading-message">
+
             Loading
             ${escapeHTML(currentGroup)}
             ranking...
+
         </div>
 
     `;
 
+
     emptyMessage.style.display =
         "none";
+
 
     errorMessage.style.display =
         "none";
 
+
     errorDetails.textContent =
         "";
 
+
     pagination.style.display =
         "none";
+
 
     try {
 
         validateConfiguration();
 
+
         const query =
             new URLSearchParams();
 
 
-        /*
-         * Only fetch columns actually
-         * required by this page.
-         */
+        /* =====================================================
+           SELECT
+        ===================================================== */
 
         query.set(
             "select",
@@ -1170,13 +1247,9 @@ async function loadStudents() {
         );
 
 
-        /*
-         * Most important ranking rule:
-         *
-         * 1. total_score DESC
-         * 2. GPA DESC
-         * 3. roll ASC
-         */
+        /* =====================================================
+           RANKING ORDER
+        ===================================================== */
 
         query.set(
             "order",
@@ -1184,9 +1257,9 @@ async function loadStudents() {
         );
 
 
-        /*
-         * Always request exactly one page.
-         */
+        /* =====================================================
+           PAGINATION
+        ===================================================== */
 
         query.set(
             "limit",
@@ -1206,63 +1279,123 @@ async function loadStudents() {
         );
 
 
-        /*
-         * Group filter.
-         */
+        /* =====================================================
+           GROUP RANGE
+        ===================================================== */
 
-        query.set(
-            "or",
-            buildRollFilter()
-        );
+        const ranges =
+            GROUP_RANGES[currentGroup];
 
 
-        /*
-         * Search filter.
-         *
-         * This is now performed by Supabase,
-         * NOT only on the current 100 rows.
-         */
+        if (
+            !ranges ||
+            !ranges.length
+        ) {
 
-        const searchFilter =
-            buildSearchFilter();
-
-        if (searchFilter) {
-
-            /*
-             * Both filters must be true.
-             *
-             * We therefore use:
-             *
-             * AND(
-             *   group condition,
-             *   search condition
-             * )
-             */
-
-            query.delete("or");
-
-            query.set(
-                "and",
-                `(` +
-                buildRollFilter() +
-                `,` +
-                searchFilter +
-                `)`
+            throw new Error(
+                "Invalid ranking group."
             );
 
         }
 
+
+        /*
+         * Current groups use one
+         * continuous roll range.
+         */
+
+        const [
+            startRoll,
+            endRoll
+        ] =
+            ranges[0];
+
+
+        /*
+         * IMPORTANT:
+         *
+         * DO NOT use:
+         *
+         * and(roll.gte...,roll.lte...)
+         *
+         * because that was causing
+         * PGRST100 logic-tree error.
+         *
+         * Instead send two independent
+         * filters on the same column.
+         */
+
+        query.append(
+            "roll",
+            `gte.${startRoll}`
+        );
+
+
+        query.append(
+            "roll",
+            `lte.${endRoll}`
+        );
+
+
+        /* =====================================================
+           SEARCH
+        ===================================================== */
+
+        const searchFilter =
+            buildSearchFilter();
+
+
+        if (
+            searchFilter
+        ) {
+
+            query.set(
+                "or",
+                searchFilter
+            );
+
+        }
+
+
+        /* =====================================================
+           DEBUG
+        ===================================================== */
+
+        console.log(
+            "Current Group:",
+            currentGroup
+        );
+
+
+        console.log(
+            "Roll Range:",
+            startRoll,
+            "to",
+            endRoll
+        );
+
+
+        console.log(
+            "Search:",
+            currentSearch || "(none)"
+        );
+
+
+        console.log(
+            "Supabase Query:",
+            query.toString()
+        );
+
+
+        /* =====================================================
+           REQUEST
+        ===================================================== */
 
         const response =
             await supabaseRequest(
                 query.toString()
             );
 
-
-        /*
-         * Ignore old request if user
-         * changed group/search quickly.
-         */
 
         if (
             thisRequest !==
@@ -1289,9 +1422,9 @@ async function loadStudents() {
         }
 
 
-        /*
-         * Get exact count.
-         */
+        /* =====================================================
+           EXACT COUNT
+        ===================================================== */
 
         const contentRange =
             response.headers.get(
@@ -1299,8 +1432,7 @@ async function loadStudents() {
             );
 
 
-        let total =
-            0;
+        let total = 0;
 
 
         if (
@@ -1312,7 +1444,10 @@ async function loadStudents() {
                     /\/(\d+)$/
                 );
 
-            if (match) {
+
+            if (
+                match
+            ) {
 
                 total =
                     Number(match[1]);
@@ -1354,9 +1489,9 @@ async function loadStudents() {
         }
 
 
-        /*
-         * Final client-side safety sort.
-         */
+        /* =====================================================
+           CLIENT-SIDE SORT
+        ===================================================== */
 
         data.sort(
             (
@@ -1367,8 +1502,10 @@ async function loadStudents() {
                 const scoreA =
                     getTotalScore(a);
 
+
                 const scoreB =
                     getTotalScore(b);
+
 
                 if (
                     scoreA !==
@@ -1382,11 +1519,14 @@ async function loadStudents() {
 
                 }
 
+
                 const gpaA =
                     getGPA(a);
 
+
                 const gpaB =
                     getGPA(b);
+
 
                 if (
                     gpaA !==
@@ -1400,6 +1540,7 @@ async function loadStudents() {
 
                 }
 
+
                 return compareRoll(
                     getRoll(a),
                     getRoll(b)
@@ -1409,22 +1550,28 @@ async function loadStudents() {
         );
 
 
+        /* =====================================================
+           SAVE STATE
+        ===================================================== */
+
         currentStudents =
             data;
+
 
         totalStudents =
             total;
 
 
+        /* =====================================================
+           RENDER
+        ===================================================== */
+
         renderStudents();
 
     }
 
-    catch(error) {
 
-        /*
-         * Ignore old request errors.
-         */
+    catch(error) {
 
         if (
             thisRequest !==
@@ -1435,20 +1582,25 @@ async function loadStudents() {
 
         }
 
+
         console.error(
             "Ranking error:",
             error
         );
 
+
         rowsContainer.innerHTML =
             "";
+
 
         errorMessage.style.display =
             "block";
 
+
         errorDetails.textContent =
             error.message ||
             "Unknown error";
+
 
         pagination.style.display =
             "none";
@@ -1472,6 +1624,7 @@ function validateConfiguration() {
 
     }
 
+
     if (!SUPABASE_PUBLISHABLE_KEY) {
 
         throw new Error(
@@ -1479,6 +1632,7 @@ function validateConfiguration() {
         );
 
     }
+
 
     if (!SUPABASE_TABLE) {
 
@@ -1498,10 +1652,15 @@ function validateConfiguration() {
 function getRoll(student) {
 
     return (
+
         student.roll ??
+
         student.Roll ??
+
         student.ROLL ??
+
         ""
+
     );
 
 }
@@ -1533,6 +1692,7 @@ function getTotalScore(student) {
 
     ];
 
+
     for (
         const value of values
     ) {
@@ -1540,14 +1700,18 @@ function getTotalScore(student) {
         if (
 
             value !== undefined &&
+
             value !== null &&
+
             String(value).trim() !== "" &&
+
             String(value).toLowerCase() !== "null"
 
         ) {
 
             const number =
                 Number(value);
+
 
             if (
                 Number.isFinite(number)
@@ -1560,6 +1724,7 @@ function getTotalScore(student) {
         }
 
     }
+
 
     return 0;
 
@@ -1584,6 +1749,7 @@ function getGPA(student) {
 
     ];
 
+
     for (
         const value of values
     ) {
@@ -1591,13 +1757,16 @@ function getGPA(student) {
         if (
 
             value !== undefined &&
+
             value !== null &&
+
             String(value).trim() !== ""
 
         ) {
 
             const number =
                 Number(value);
+
 
             if (
                 Number.isFinite(number)
@@ -1610,6 +1779,7 @@ function getGPA(student) {
         }
 
     }
+
 
     return 0;
 
@@ -1670,12 +1840,15 @@ function compareRoll(
     const numberA =
         Number(a);
 
+
     const numberB =
         Number(b);
+
 
     if (
 
         Number.isFinite(numberA) &&
+
         Number.isFinite(numberB)
 
     ) {
@@ -1687,12 +1860,13 @@ function compareRoll(
 
     }
 
+
     return String(a ?? "")
         .localeCompare(
             String(b ?? ""),
             undefined,
             {
-                numeric:true
+                numeric: true
             }
         );
 
@@ -1708,8 +1882,10 @@ function renderStudents() {
     rowsContainer.innerHTML =
         "";
 
+
     emptyMessage.style.display =
         "none";
+
 
     if (
         !currentStudents.length
@@ -1718,8 +1894,10 @@ function renderStudents() {
         emptyMessage.style.display =
             "block";
 
+
         pagination.style.display =
             "none";
+
 
         return;
 
@@ -1737,16 +1915,10 @@ function renderStudents() {
                     "div"
                 );
 
+
             row.className =
                 "student-row";
 
-
-            /*
-             * IMPORTANT:
-             *
-             * Rank is based on the
-             * actual page offset.
-             */
 
             const rank =
                 (
@@ -1762,7 +1934,9 @@ function renderStudents() {
 
             const rankClass =
                 rank === 1
+
                     ? "student-rank gold"
+
                     : "student-rank";
 
 
@@ -1782,7 +1956,9 @@ function renderStudents() {
 
             const gpa =
                 gpaValue > 0
+
                     ? String(gpaValue)
+
                     : "—";
 
 
@@ -1806,7 +1982,10 @@ function renderStudents() {
 
                     ? Number(totalScore)
                         .toFixed(2)
-                        .replace(/\.00$/, "")
+                        .replace(
+                            /\.00$/,
+                            ""
+                        )
 
                     : "—";
 
@@ -1868,7 +2047,9 @@ function renderStudents() {
             `;
 
 
-            rowsContainer.appendChild(row);
+            rowsContainer.appendChild(
+                row
+            );
 
         }
     );
@@ -1933,15 +2114,30 @@ function escapeHTML(value) {
 
     return String(value)
 
-        .replace(/&/g,"&amp;")
+        .replace(
+            /&/g,
+            "&amp;"
+        )
 
-        .replace(/</g,"&lt;")
+        .replace(
+            /</g,
+            "&lt;"
+        )
 
-        .replace(/>/g,"&gt;")
+        .replace(
+            />/g,
+            "&gt;"
+        )
 
-        .replace(/"/g,"&quot;")
+        .replace(
+            /"/g,
+            "&quot;"
+        )
 
-        .replace(/'/g,"&#039;");
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -1962,6 +2158,7 @@ document
                     const group =
                         tab.dataset.group;
 
+
                     if (
                         group ===
                         currentGroup
@@ -1971,17 +2168,22 @@ document
 
                     }
 
+
                     currentGroup =
                         group;
+
 
                     currentPage =
                         1;
 
+
                     currentSearch =
                         "";
 
+
                     searchInput.value =
                         "";
+
 
                     document
                         .querySelectorAll(
@@ -1998,8 +2200,10 @@ document
                             }
                         );
 
+
                     groupTitle.textContent =
                         `${currentGroup} Students`;
+
 
                     loadStudents();
 
@@ -2016,6 +2220,7 @@ document
 
 let searchTimer = null;
 
+
 searchInput.addEventListener(
     "input",
     () => {
@@ -2023,10 +2228,15 @@ searchInput.addEventListener(
         currentSearch =
             searchInput.value.trim();
 
+
         currentPage =
             1;
 
-        clearTimeout(searchTimer);
+
+        clearTimeout(
+            searchTimer
+        );
+
 
         searchTimer =
             setTimeout(
@@ -2058,15 +2268,18 @@ prevPage.addEventListener(
 
         }
 
+
         currentPage--;
+
 
         loadStudents();
 
+
         window.scrollTo({
 
-            top:450,
+            top: 450,
 
-            behavior:"smooth"
+            behavior: "smooth"
 
         });
 
@@ -2088,6 +2301,7 @@ nextPage.addEventListener(
                 PAGE_SIZE
             );
 
+
         if (
             currentPage >=
             totalPages
@@ -2097,15 +2311,18 @@ nextPage.addEventListener(
 
         }
 
+
         currentPage++;
+
 
         loadStudents();
 
+
         window.scrollTo({
 
-            top:450,
+            top: 450,
 
-            behavior:"smooth"
+            behavior: "smooth"
 
         });
 
@@ -2124,8 +2341,10 @@ yearSelect.addEventListener(
         currentPage =
             1;
 
+
         yearText.textContent =
             `${yearSelect.value} · Chattogram Board`;
+
 
         loadStudents();
 
@@ -2143,11 +2362,17 @@ function getPDFDate() {
         .toLocaleString(
             "en-GB",
             {
-                day:"2-digit",
-                month:"short",
-                year:"numeric",
-                hour:"2-digit",
-                minute:"2-digit"
+
+                day: "2-digit",
+
+                month: "short",
+
+                year: "numeric",
+
+                hour: "2-digit",
+
+                minute: "2-digit"
+
             }
         );
 
@@ -2176,8 +2401,10 @@ async function downloadCurrentPagePDF() {
     const originalText =
         downloadPdfBtn.innerHTML;
 
+
     downloadPdfBtn.disabled =
         true;
+
 
     downloadPdfBtn.innerHTML =
         "Generating PDF...";
@@ -2186,8 +2413,11 @@ async function downloadCurrentPagePDF() {
     try {
 
         if (
+
             !window.jspdf ||
+
             !window.jspdf.jsPDF
+
         ) {
 
             throw new Error(
@@ -2206,11 +2436,11 @@ async function downloadCurrentPagePDF() {
         const doc =
             new jsPDF({
 
-                orientation:"portrait",
+                orientation: "portrait",
 
-                unit:"mm",
+                unit: "mm",
 
-                format:"a4"
+                format: "a4"
 
             });
 
@@ -2252,7 +2482,9 @@ async function downloadCurrentPagePDF() {
         );
 
 
-        doc.setFontSize(19);
+        doc.setFontSize(
+            19
+        );
 
 
         doc.text(
@@ -2268,7 +2500,9 @@ async function downloadCurrentPagePDF() {
         );
 
 
-        doc.setFontSize(8.5);
+        doc.setFontSize(
+            8.5
+        );
 
 
         doc.setTextColor(
@@ -2290,7 +2524,7 @@ async function downloadCurrentPagePDF() {
             pageWidth - 15,
             13,
             {
-                align:"right"
+                align: "right"
             }
         );
 
@@ -2300,7 +2534,7 @@ async function downloadCurrentPagePDF() {
             pageWidth - 15,
             20,
             {
-                align:"right"
+                align: "right"
             }
         );
 
@@ -2318,7 +2552,9 @@ async function downloadCurrentPagePDF() {
         );
 
 
-        doc.setFontSize(16);
+        doc.setFontSize(
+            16
+        );
 
 
         doc.text(
@@ -2334,7 +2570,9 @@ async function downloadCurrentPagePDF() {
         );
 
 
-        doc.setFontSize(9);
+        doc.setFontSize(
+            9
+        );
 
 
         doc.setTextColor(
@@ -2385,25 +2623,32 @@ async function downloadCurrentPagePDF() {
                         index +
                         1;
 
+
                     const name =
                         student.name ||
                         "Unknown Student";
+
 
                     const roll =
                         getRoll(student) ||
                         "—";
 
+
                     const gpa =
                         getGPA(student);
+
 
                     const score =
                         getTotalScore(student);
 
+
                     const institute =
                         getInstitution(student);
 
+
                     const district =
                         getDistrict(student);
+
 
                     return [
 
@@ -2432,121 +2677,171 @@ async function downloadCurrentPagePDF() {
 
         doc.autoTable({
 
-            startY:57,
+            startY: 57,
 
-            head:[
+            head: [
 
                 [
+
                     "RANK",
+
                     "STUDENT",
+
                     "GPA",
+
                     "TOTAL SCORE",
+
                     "INSTITUTE"
+
                 ]
 
             ],
 
-            body:tableData,
+            body: tableData,
 
-            theme:"grid",
+            theme: "grid",
 
-            margin:{
-                left:12,
-                right:12
+            margin: {
+
+                left: 12,
+
+                right: 12
+
             },
 
-            styles:{
+            styles: {
 
-                font:"helvetica",
+                font: "helvetica",
 
-                fontSize:7,
+                fontSize: 7,
 
-                cellPadding:2.8,
+                cellPadding: 2.8,
 
-                textColor:[
+                textColor: [
+
                     35,
+
                     35,
+
                     38
+
                 ],
 
-                lineColor:[
+                lineColor: [
+
                     225,
+
                     225,
+
                     228
+
                 ],
 
-                lineWidth:.2,
+                lineWidth: .2,
 
-                valign:"middle"
+                valign: "middle"
 
             },
 
-            headStyles:{
+            headStyles: {
 
-                fillColor:[
+                fillColor: [
+
                     245,
+
                     245,
+
                     247
+
                 ],
 
-                textColor:[
+                textColor: [
+
                     75,
+
                     75,
+
                     80
+
                 ],
 
-                fontStyle:"bold",
+                fontStyle: "bold",
 
-                fontSize:7
+                fontSize: 7
 
             },
 
-            columnStyles:{
+            columnStyles: {
 
-                0:{
-                    cellWidth:15,
-                    halign:"center",
-                    fontStyle:"bold"
+                0: {
+
+                    cellWidth: 15,
+
+                    halign: "center",
+
+                    fontStyle: "bold"
+
                 },
 
-                1:{
-                    cellWidth:57
+                1: {
+
+                    cellWidth: 57
+
                 },
 
-                2:{
-                    cellWidth:18,
-                    halign:"center",
-                    fontStyle:"bold"
+                2: {
+
+                    cellWidth: 18,
+
+                    halign: "center",
+
+                    fontStyle: "bold"
+
                 },
 
-                3:{
-                    cellWidth:25,
-                    halign:"center",
-                    fontStyle:"bold",
-                    textColor:[
+                3: {
+
+                    cellWidth: 25,
+
+                    halign: "center",
+
+                    fontStyle: "bold",
+
+                    textColor: [
+
                         0,
+
                         113,
+
                         227
+
                     ]
+
                 },
 
-                4:{
-                    cellWidth:"auto"
+                4: {
+
+                    cellWidth: "auto"
+
                 }
 
             },
 
-            alternateRowStyles:{
+            alternateRowStyles: {
 
-                fillColor:[
+                fillColor: [
+
                     252,
+
                     252,
+
                     253
+
                 ]
 
             },
 
-            didParseCell:function(data) {
+            didParseCell: function(data) {
 
                 if (
 
@@ -2560,16 +2855,20 @@ async function downloadCurrentPagePDF() {
 
                     data.cell.styles.textColor =
                         [
+
                             198,
+
                             138,
+
                             0
+
                         ];
 
                 }
 
             },
 
-            didDrawPage:function() {
+            didDrawPage: function() {
 
                 const pdfPage =
                     doc.internal
@@ -2602,7 +2901,9 @@ async function downloadCurrentPagePDF() {
                 );
 
 
-                doc.setFontSize(7.5);
+                doc.setFontSize(
+                    7.5
+                );
 
 
                 doc.setTextColor(
@@ -2632,7 +2933,7 @@ async function downloadCurrentPagePDF() {
                     pageHeight - 7,
 
                     {
-                        align:"right"
+                        align: "right"
                     }
 
                 );
@@ -2642,16 +2943,23 @@ async function downloadCurrentPagePDF() {
         });
 
 
+        /* =====================================================
+           PDF FILE NAME
+        ===================================================== */
+
         const safeGroup =
             currentGroup
+
                 .replace(
                     /[^a-z0-9]+/gi,
                     "-"
                 )
+
                 .replace(
                     /^-|-$/g,
                     ""
                 )
+
                 .toLowerCase();
 
 
@@ -2660,9 +2968,12 @@ async function downloadCurrentPagePDF() {
             `CTGBoardRanking-Student-${yearSelect.value}-${safeGroup}-Page-${currentPage}.pdf`;
 
 
-        doc.save(fileName);
+        doc.save(
+            fileName
+        );
 
     }
+
 
     catch(error) {
 
@@ -2671,16 +2982,19 @@ async function downloadCurrentPagePDF() {
             error
         );
 
+
         alert(
             "PDF তৈরি করা যায়নি। আবার চেষ্টা করুন।"
         );
 
     }
 
+
     finally {
 
         downloadPdfBtn.disabled =
             false;
+
 
         downloadPdfBtn.innerHTML =
             originalText;
@@ -2707,6 +3021,7 @@ downloadPdfBtn.addEventListener(
 console.log(
     "CTGBoardRanking Student Ranking started."
 );
+
 
 loadStudents();
 
