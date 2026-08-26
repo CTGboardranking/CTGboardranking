@@ -1,46 +1,82 @@
-name: Generate Supabase Config
+name: Sync Students from Supabase
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"
 
 permissions:
   contents: write
 
 jobs:
-  generate-config:
+  sync:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Generate Supabase config
+      - name: Fetch students from Supabase
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
-          mkdir -p js
+          mkdir -p scraper
 
-          cat > js/supabase-config.js <<EOF
-          window.SUPABASE_CONFIG = {
-            url: "${SUPABASE_URL}",
-            key: "${SUPABASE_KEY}"
-          };
-          EOF
+          python - <<'PY'
+          import os
+          import json
+          import urllib.request
+          import urllib.parse
 
-      - name: Commit config
+          supabase_url = os.environ["SUPABASE_URL"].rstrip("/")
+          supabase_key = os.environ["SUPABASE_KEY"]
+
+          table = "students"
+
+          params = urllib.parse.urlencode({
+              "select": "*",
+              "order": "total_score.desc,gpa.desc,roll.asc"
+          })
+
+          url = f"{supabase_url}/rest/v1/{table}?{params}"
+
+          headers = {
+              "apikey": supabase_key,
+              "Authorization": f"Bearer {supabase_key}",
+              "Content-Type": "application/json"
+          }
+
+          request = urllib.request.Request(
+              url,
+              headers=headers,
+              method="GET"
+          )
+
+          with urllib.request.urlopen(request, timeout=120) as response:
+              data = json.loads(response.read().decode("utf-8"))
+
+          with open("scraper/students.json", "w", encoding="utf-8") as f:
+              json.dump(
+                  data,
+                  f,
+                  ensure_ascii=False,
+                  separators=(",", ":")
+              )
+
+          print(f"Students fetched: {len(data)}")
+          PY
+
+      - name: Commit updated students.json
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add js/supabase-config.js
+          git add scraper/students.json
 
           if git diff --cached --quiet; then
-            echo "No changes to commit"
+            echo "No changes to commit."
           else
-            git commit -m "Generate Supabase config"
+            git commit -m "Update students data from Supabase"
             git push
           fi
