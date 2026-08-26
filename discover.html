@@ -1,809 +1,1875 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Discover Institutions | CTGBoardRanking</title>
+<title>Discover Institutions | CTG Board Ranking</title>
 
 <meta name="theme-color" content="#f5f5f7">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-<!-- PDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-
 <style>
 
-:root{
-    --bg:#f5f5f7;
-    --card:rgba(255,255,255,.78);
-    --card-solid:#ffffff;
-    --text:#111113;
-    --muted:#6e6e73;
-    --border:rgba(0,0,0,.08);
-    --blue:#0071e3;
-    --blue2:#2997ff;
-    --green:#34c759;
-    --orange:#ff9500;
-    --shadow:
-        0 20px 50px rgba(0,0,0,.07),
-        0 2px 8px rgba(0,0,0,.04);
-}
-
 *{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-html{
-    scroll-behavior:smooth;
+:root{
+  --bg:#f5f5f7;
+  --card:rgba(255,255,255,.78);
+  --card-solid:#ffffff;
+  --text:#1d1d1f;
+  --muted:#6e6e73;
+  --border:rgba(0,0,0,.08);
+  --shadow:0 20px 50px rgba(0,0,0,.08);
+
+  --blue:#0071e3;
+  --blue-dark:#005bb5;
+  --green:#16a34a;
+  --orange:#f59e0b;
+  --red:#ef4444;
+}
+
+body.dark{
+
+  --bg:#0b0b0d;
+  --card:rgba(28,28,30,.82);
+  --card-solid:#1c1c1e;
+  --text:#f5f5f7;
+  --muted:#a1a1a6;
+  --border:rgba(255,255,255,.09);
+  --shadow:0 20px 50px rgba(0,0,0,.35);
+
+  --blue:#2997ff;
+  --blue-dark:#147ce5;
 }
 
 body{
-    font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Display",
-    "SF Pro Text",Arial,sans-serif;
-    background:
-        radial-gradient(circle at 15% 5%,rgba(41,151,255,.10),transparent 28%),
-        radial-gradient(circle at 90% 15%,rgba(175,82,222,.08),transparent 25%),
-        var(--bg);
-    color:var(--text);
-    min-height:100vh;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+
+  background:
+    radial-gradient(
+      circle at 15% 0%,
+      rgba(0,113,227,.10),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(88,86,214,.10),
+      transparent 30%
+    ),
+    var(--bg);
+
+  color:var(--text);
+  min-height:100vh;
+
+  transition:
+    background .3s ease,
+    color .3s ease;
 }
 
-/* ================= HEADER ================= */
+body.dark{
 
-.header{
-    position:sticky;
-    top:0;
-    z-index:100;
-    backdrop-filter:blur(25px) saturate(180%);
-    -webkit-backdrop-filter:blur(25px) saturate(180%);
-    background:rgba(245,245,247,.78);
-    border-bottom:1px solid rgba(0,0,0,.06);
+  background:
+    radial-gradient(
+      circle at 15% 0%,
+      rgba(41,151,255,.10),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(88,86,214,.12),
+      transparent 30%
+    ),
+    var(--bg);
 }
 
-.header-inner{
-    max-width:1200px;
-    margin:auto;
-    min-height:72px;
-    padding:0 22px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:20px;
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+
+  position:sticky;
+  top:0;
+  z-index:1000;
+
+  height:70px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:0 5%;
+
+  background:rgba(255,255,255,.72);
+
+  backdrop-filter:blur(25px);
+  -webkit-backdrop-filter:blur(25px);
+
+  border-bottom:1px solid var(--border);
+}
+
+body.dark .navbar{
+  background:rgba(20,20,22,.72);
 }
 
 .brand{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    text-decoration:none;
-    color:var(--text);
+
+  display:flex;
+  align-items:center;
+  gap:11px;
+
+  font-size:20px;
+  font-weight:700;
+
+  letter-spacing:-.5px;
+
+  color:var(--text);
+
+  text-decoration:none;
 }
 
 .brand-icon{
-    width:40px;
-    height:40px;
-    border-radius:13px;
-    display:grid;
-    place-items:center;
-    color:white;
-    font-weight:800;
-    font-size:19px;
-    background:
-        linear-gradient(145deg,#111,#4b4b4b);
-    box-shadow:
-        inset 0 1px rgba(255,255,255,.3),
-        0 8px 20px rgba(0,0,0,.14);
+
+  width:38px;
+  height:38px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0071e3,
+      #5856d6
+    );
+
+  color:white;
+
+  box-shadow:
+    0 8px 20px
+    rgba(0,113,227,.25);
 }
 
-.brand-name{
-    font-size:18px;
-    font-weight:750;
-    letter-spacing:-.5px;
+.nav-actions{
+
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
-.back-btn{
-    border:1px solid var(--border);
-    background:rgba(255,255,255,.7);
-    color:var(--text);
-    text-decoration:none;
-    padding:10px 16px;
-    border-radius:999px;
-    font-size:14px;
-    font-weight:600;
-    transition:.2s;
+.nav-btn{
+
+  border:1px solid var(--border);
+
+  background:var(--card);
+
+  color:var(--text);
+
+  width:42px;
+  height:42px;
+
+  border-radius:50%;
+
+  display:grid;
+  place-items:center;
+
+  cursor:pointer;
+
+  font-size:18px;
+
+  transition:.2s;
 }
 
-.back-btn:hover{
-    transform:translateY(-1px);
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
+.nav-btn:hover{
+
+  transform:translateY(-2px);
+
+  box-shadow:var(--shadow);
 }
 
-/* ================= HERO ================= */
+
+/* =========================================================
+   HERO
+========================================================= */
 
 .hero{
-    max-width:1000px;
-    margin:auto;
-    padding:70px 22px 35px;
-    text-align:center;
+
+  max-width:1200px;
+
+  margin:auto;
+
+  padding:75px 22px 35px;
+
+  text-align:center;
 }
 
-.hero-label{
-    display:inline-flex;
-    align-items:center;
-    gap:7px;
-    padding:7px 12px;
-    border-radius:999px;
-    background:rgba(0,113,227,.09);
-    color:var(--blue);
-    font-size:12px;
-    font-weight:750;
-    letter-spacing:.6px;
-    text-transform:uppercase;
+.eyebrow{
+
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+
+  padding:8px 14px;
+
+  border-radius:999px;
+
+  background:rgba(0,113,227,.09);
+
+  color:var(--blue);
+
+  font-size:13px;
+
+  font-weight:700;
+
+  margin-bottom:18px;
 }
 
 .hero h1{
-    margin-top:18px;
-    font-size:clamp(38px,7vw,68px);
-    line-height:.98;
-    letter-spacing:-3.5px;
-    font-weight:800;
+
+  font-size:
+    clamp(40px,7vw,72px);
+
+  line-height:.98;
+
+  letter-spacing:-4px;
+
+  font-weight:800;
+
+  margin-bottom:20px;
+}
+
+.hero h1 span{
+
+  background:
+    linear-gradient(
+      90deg,
+      #0071e3,
+      #5856d6,
+      #af52de
+    );
+
+  -webkit-background-clip:text;
+  background-clip:text;
+
+  color:transparent;
 }
 
 .hero p{
-    max-width:650px;
-    margin:20px auto 0;
-    color:var(--muted);
-    font-size:17px;
-    line-height:1.6;
+
+  max-width:680px;
+
+  margin:auto;
+
+  font-size:18px;
+
+  line-height:1.6;
+
+  color:var(--muted);
 }
 
-/* ================= SEARCH ================= */
 
-.search-wrap{
-    max-width:760px;
-    margin:10px auto 0;
-    padding:0 22px 35px;
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-area{
+
+  max-width:850px;
+
+  margin:25px auto 45px;
+
+  padding:0 22px;
 }
 
 .search-box{
-    height:58px;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:0 18px;
-    background:rgba(255,255,255,.84);
-    border:1px solid rgba(0,0,0,.08);
-    border-radius:19px;
-    box-shadow:var(--shadow);
-    transition:.2s;
-}
-
-.search-box:focus-within{
-    border-color:rgba(0,113,227,.35);
-    box-shadow:
-        0 0 0 4px rgba(0,113,227,.08),
-        var(--shadow);
-}
-
-.search-icon{
-    font-size:21px;
-    color:#777;
+  position:relative;
 }
 
 .search-box input{
-    width:100%;
-    border:0;
-    outline:0;
-    background:transparent;
-    font-family:inherit;
-    font-size:15px;
-    color:var(--text);
+
+  width:100%;
+
+  height:62px;
+
+  border:1px solid var(--border);
+
+  border-radius:20px;
+
+  background:var(--card);
+
+  backdrop-filter:blur(20px);
+
+  color:var(--text);
+
+  padding:
+    0 55px
+    0 55px;
+
+  outline:none;
+
+  font-size:16px;
+
+  box-shadow:var(--shadow);
+
+  transition:.25s;
 }
 
-/* ================= CONTENT ================= */
+.search-box input:focus{
 
-.container{
-    max-width:1200px;
-    margin:auto;
-    padding:0 22px 80px;
+  border-color:
+    rgba(0,113,227,.4);
+
+  box-shadow:
+    0 0 0 4px
+    rgba(0,113,227,.10),
+    var(--shadow);
+}
+
+.search-icon{
+
+  position:absolute;
+
+  left:20px;
+  top:50%;
+
+  transform:translateY(-50%);
+
+  font-size:20px;
+
+  color:var(--muted);
+}
+
+.clear-search{
+
+  position:absolute;
+
+  right:17px;
+  top:50%;
+
+  transform:translateY(-50%);
+
+  width:30px;
+  height:30px;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:rgba(0,0,0,.08);
+
+  color:var(--text);
+
+  cursor:pointer;
+
+  display:none;
+}
+
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+.filters{
+
+  max-width:1200px;
+
+  margin:0 auto 30px;
+
+  padding:0 22px;
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:10px;
+}
+
+.filter{
+
+  padding:10px 17px;
+
+  border-radius:999px;
+
+  border:1px solid var(--border);
+
+  background:var(--card);
+
+  color:var(--muted);
+
+  cursor:pointer;
+
+  font-weight:600;
+
+  transition:.2s;
+}
+
+.filter:hover{
+  transform:translateY(-1px);
+}
+
+.filter.active{
+
+  background:var(--text);
+
+  color:var(--bg);
+
+  border-color:var(--text);
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats{
+
+  max-width:1200px;
+
+  margin:0 auto 35px;
+
+  padding:0 22px;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  gap:15px;
+}
+
+.stat{
+
+  background:var(--card);
+
+  backdrop-filter:blur(20px);
+
+  border:1px solid var(--border);
+
+  border-radius:22px;
+
+  padding:22px;
+
+  box-shadow:
+    0 10px 35px
+    rgba(0,0,0,.04);
+}
+
+.stat-icon{
+
+  width:42px;
+  height:42px;
+
+  border-radius:13px;
+
+  display:grid;
+  place-items:center;
+
+  background:
+    rgba(0,113,227,.10);
+
+  margin-bottom:15px;
+
+  font-size:19px;
+}
+
+.stat strong{
+
+  display:block;
+
+  font-size:28px;
+
+  letter-spacing:-1px;
+
+  margin-bottom:5px;
+}
+
+.stat span{
+
+  color:var(--muted);
+
+  font-size:13px;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.content{
+
+  max-width:1200px;
+
+  margin:auto;
+
+  padding:
+    0 22px 70px;
 }
 
 .section-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:end;
-    gap:20px;
-    margin:20px 0 20px;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  margin-bottom:18px;
 }
 
 .section-head h2{
-    font-size:27px;
-    letter-spacing:-1.1px;
+
+  font-size:26px;
+
+  letter-spacing:-1px;
 }
 
 .result-count{
-    color:var(--muted);
-    font-size:13px;
+
+  color:var(--muted);
+
+  font-size:14px;
 }
 
-/* ================= GRID ================= */
+
+/* =========================================================
+   INSTITUTION GRID
+========================================================= */
 
 .institution-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:18px;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:18px;
 }
 
 .institution-card{
-    position:relative;
-    overflow:hidden;
-    cursor:pointer;
-    min-height:235px;
-    padding:23px;
-    border:1px solid rgba(0,0,0,.07);
-    border-radius:25px;
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.92),
-            rgba(247,247,249,.78)
-        );
-    box-shadow:var(--shadow);
-    transition:
-        transform .28s ease,
-        box-shadow .28s ease,
-        border-color .28s ease;
-}
 
-.institution-card::before{
-    content:"";
-    position:absolute;
-    width:180px;
-    height:180px;
-    border-radius:50%;
-    background:rgba(0,113,227,.09);
-    filter:blur(5px);
-    right:-90px;
-    top:-90px;
+  background:var(--card);
+
+  backdrop-filter:blur(25px);
+
+  border:1px solid var(--border);
+
+  border-radius:26px;
+
+  padding:23px;
+
+  box-shadow:
+    0 10px 35px
+    rgba(0,0,0,.04);
+
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease,
+    border-color .25s ease;
+
+  animation:fadeIn .35s ease;
+
+  cursor:pointer;
 }
 
 .institution-card:hover{
-    transform:translateY(-6px);
-    border-color:rgba(0,113,227,.18);
-    box-shadow:
-        0 28px 60px rgba(0,0,0,.11),
-        0 0 0 1px rgba(0,113,227,.03);
+
+  transform:translateY(-5px);
+
+  box-shadow:
+    0 22px 55px
+    rgba(0,0,0,.11);
+
+  border-color:
+    rgba(0,113,227,.2);
 }
 
 .card-top{
-    position:relative;
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:12px;
+
+  display:flex;
+
+  align-items:flex-start;
+
+  justify-content:space-between;
+
+  gap:15px;
 }
 
-.institute-icon{
-    width:48px;
-    height:48px;
-    border-radius:16px;
-    display:grid;
-    place-items:center;
-    background:
-        linear-gradient(145deg,#e8f3ff,#dbeaff);
-    color:var(--blue);
-    font-size:22px;
+.institution-icon{
+
+  width:50px;
+  height:50px;
+
+  flex-shrink:0;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0,113,227,.13),
+      rgba(88,86,214,.14)
+    );
+
+  font-size:23px;
 }
 
-.card-arrow{
-    width:34px;
-    height:34px;
-    display:grid;
-    place-items:center;
-    border-radius:50%;
-    background:rgba(0,0,0,.045);
-    color:#555;
-    transition:.2s;
+.rank{
+
+  font-size:12px;
+
+  font-weight:700;
+
+  padding:6px 10px;
+
+  border-radius:999px;
+
+  background:rgba(0,0,0,.05);
+
+  color:var(--muted);
 }
 
-.institution-card:hover .card-arrow{
-    background:var(--blue);
-    color:#fff;
-    transform:translateX(3px);
+body.dark .rank{
+
+  background:
+    rgba(255,255,255,.08);
 }
 
-.card-name{
-    margin-top:20px;
-    font-size:18px;
-    line-height:1.3;
-    letter-spacing:-.45px;
-    font-weight:720;
+.institution-name{
+
+  font-size:18px;
+
+  line-height:1.3;
+
+  font-weight:750;
+
+  margin-top:18px;
+
+  letter-spacing:-.3px;
 }
 
-.card-location{
-    margin-top:7px;
-    color:var(--muted);
-    font-size:13px;
+.location{
+
+  margin-top:7px;
+
+  color:var(--muted);
+
+  font-size:13px;
 }
 
-.card-stats{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:7px;
-    margin-top:22px;
+.metrics{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,1fr);
+
+  gap:10px;
+
+  margin-top:20px;
 }
 
-.mini-stat{
-    min-width:0;
-    padding:10px 8px;
-    border-radius:13px;
-    background:rgba(0,0,0,.035);
+.metric{
+
+  background:
+    rgba(127,127,127,.07);
+
+  border-radius:15px;
+
+  padding:13px;
 }
 
-.mini-stat strong{
-    display:block;
-    font-size:15px;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
+.metric strong{
+
+  display:block;
+
+  font-size:19px;
+
+  margin-bottom:3px;
 }
 
-.mini-stat span{
-    display:block;
-    margin-top:3px;
-    color:var(--muted);
-    font-size:10px;
+.metric span{
+
+  color:var(--muted);
+
+  font-size:11px;
 }
 
-/* ================= EMPTY / LOADING ================= */
+.progress{
 
-.state{
-    grid-column:1/-1;
-    padding:70px 20px;
-    text-align:center;
-    color:var(--muted);
+  height:6px;
+
+  margin-top:17px;
+
+  border-radius:999px;
+
+  background:
+    rgba(127,127,127,.12);
+
+  overflow:hidden;
 }
 
-.loader{
-    width:32px;
-    height:32px;
-    border:3px solid rgba(0,0,0,.1);
-    border-top-color:var(--blue);
-    border-radius:50%;
-    animation:spin .7s linear infinite;
-    margin:0 auto 15px;
+.progress-bar{
+
+  height:100%;
+
+  border-radius:inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #0071e3,
+      #5856d6
+    );
 }
 
-@keyframes spin{
-    to{transform:rotate(360deg)}
+.card-bottom{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  margin-top:18px;
+
+  padding-top:15px;
+
+  border-top:1px solid var(--border);
+
+  font-size:12px;
+
+  color:var(--muted);
 }
 
-/* ================= MODAL ================= */
+.gpa5{
 
-.modal{
-    position:fixed;
-    inset:0;
-    z-index:500;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    background:rgba(0,0,0,.38);
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
+  color:var(--green);
+
+  font-weight:700;
 }
 
-.modal.show{
-    display:flex;
+
+/* =========================================================
+   LOADING / ERROR / EMPTY
+========================================================= */
+
+.loading{
+
+  grid-column:1/-1;
+
+  text-align:center;
+
+  padding:70px 20px;
+
+  color:var(--muted);
 }
 
-.modal-panel{
-    width:min(760px,100%);
-    max-height:92vh;
-    overflow:auto;
-    background:rgba(255,255,255,.96);
-    border:1px solid rgba(255,255,255,.8);
-    border-radius:30px;
-    box-shadow:
-        0 35px 100px rgba(0,0,0,.25);
-    animation:modalIn .28s ease;
+.spinner{
+
+  width:35px;
+  height:35px;
+
+  margin:0 auto 15px;
+
+  border-radius:50%;
+
+  border:3px solid
+    rgba(127,127,127,.15);
+
+  border-top-color:var(--blue);
+
+  animation:
+    spin .8s linear infinite;
 }
 
-@keyframes modalIn{
-    from{
-        opacity:0;
-        transform:translateY(20px) scale(.97);
-    }
-    to{
-        opacity:1;
-        transform:none;
-    }
+.error{
+
+  grid-column:1/-1;
+
+  padding:30px;
+
+  border-radius:20px;
+
+  background:
+    rgba(239,68,68,.08);
+
+  border:1px solid
+    rgba(239,68,68,.15);
+
+  color:var(--red);
+
+  text-align:center;
 }
 
-.modal-head{
-    position:sticky;
-    top:0;
-    z-index:3;
-    padding:24px 25px 20px;
-    background:rgba(255,255,255,.88);
-    backdrop-filter:blur(20px);
-    border-bottom:1px solid rgba(0,0,0,.06);
+.empty{
+
+  grid-column:1/-1;
+
+  text-align:center;
+
+  padding:70px 20px;
+
+  color:var(--muted);
 }
 
-.modal-head-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:15px;
+.empty-icon{
+
+  font-size:45px;
+
+  margin-bottom:15px;
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.pagination{
+
+  display:flex;
+
+  justify-content:center;
+
+  align-items:center;
+
+  gap:8px;
+
+  margin-top:35px;
+}
+
+.page-btn{
+
+  min-width:40px;
+  height:40px;
+
+  border:1px solid var(--border);
+
+  background:var(--card);
+
+  color:var(--text);
+
+  border-radius:12px;
+
+  cursor:pointer;
+
+  font-weight:600;
+}
+
+.page-btn.active{
+
+  background:var(--text);
+
+  color:var(--bg);
+}
+
+.page-btn:disabled{
+
+  opacity:.4;
+
+  cursor:not-allowed;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+
+  border-top:1px solid var(--border);
+
+  padding:
+    30px 22px 45px;
+
+  text-align:center;
+
+  color:var(--muted);
+
+  font-size:13px;
+}
+
+
+/* =========================================================
+   INSTITUTION DETAIL MODAL
+========================================================= */
+
+.modal-overlay{
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:5000;
+
+  display:none;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:20px;
+
+  background:
+    rgba(0,0,0,.42);
+
+  backdrop-filter:
+    blur(18px);
+
+  -webkit-backdrop-filter:
+    blur(18px);
+
+  opacity:0;
+
+  transition:opacity .25s ease;
+}
+
+.modal-overlay.show{
+
+  display:flex;
+
+  opacity:1;
+}
+
+.institution-modal{
+
+  width:min(760px,100%);
+
+  max-height:
+    calc(100vh - 40px);
+
+  overflow:auto;
+
+  background:
+    rgba(255,255,255,.92);
+
+  color:#1d1d1f;
+
+  border:
+    1px solid
+    rgba(255,255,255,.7);
+
+  border-radius:32px;
+
+  box-shadow:
+    0 35px 100px
+    rgba(0,0,0,.28);
+
+  transform:
+    translateY(20px)
+    scale(.97);
+
+  transition:
+    transform .3s ease;
+
+  scrollbar-width:thin;
+}
+
+body.dark .institution-modal{
+
+  background:
+    rgba(28,28,30,.96);
+
+  color:#f5f5f7;
+
+  border-color:
+    rgba(255,255,255,.1);
+}
+
+.modal-overlay.show
+.institution-modal{
+
+  transform:
+    translateY(0)
+    scale(1);
+}
+
+.modal-header{
+
+  position:sticky;
+
+  top:0;
+
+  z-index:2;
+
+  padding:24px 26px 20px;
+
+  background:
+    rgba(255,255,255,.82);
+
+  backdrop-filter:
+    blur(20px);
+
+  border-bottom:
+    1px solid
+    rgba(0,0,0,.07);
+
+  display:flex;
+
+  align-items:flex-start;
+
+  justify-content:space-between;
+
+  gap:15px;
+}
+
+body.dark .modal-header{
+
+  background:
+    rgba(28,28,30,.86);
+
+  border-color:
+    rgba(255,255,255,.08);
+}
+
+.modal-title-wrap{
+
+  display:flex;
+
+  gap:14px;
+
+  align-items:center;
+
+  min-width:0;
+}
+
+.modal-institution-icon{
+
+  width:54px;
+  height:54px;
+
+  flex-shrink:0;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:17px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0071e3,
+      #5856d6
+    );
+
+  color:white;
+
+  font-size:24px;
+
+  box-shadow:
+    0 10px 25px
+    rgba(0,113,227,.22);
 }
 
 .modal-title{
-    font-size:26px;
-    line-height:1.2;
-    letter-spacing:-1.1px;
+
+  font-size:23px;
+
+  line-height:1.2;
+
+  letter-spacing:-.7px;
+
+  font-weight:800;
 }
 
 .modal-subtitle{
-    margin-top:7px;
-    color:var(--muted);
-    font-size:13px;
-    line-height:1.5;
+
+  margin-top:5px;
+
+  font-size:13px;
+
+  color:#6e6e73;
 }
 
-.close-btn{
-    flex:none;
-    width:38px;
-    height:38px;
-    border:0;
-    border-radius:50%;
-    background:#f0f0f2;
-    cursor:pointer;
-    font-size:20px;
+body.dark .modal-subtitle{
+  color:#a1a1a6;
+}
+
+.modal-close{
+
+  width:40px;
+  height:40px;
+
+  flex-shrink:0;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:
+    rgba(127,127,127,.12);
+
+  color:inherit;
+
+  font-size:24px;
+
+  line-height:1;
+
+  cursor:pointer;
+
+  display:grid;
+
+  place-items:center;
+
+  transition:.2s;
+}
+
+.modal-close:hover{
+
+  transform:rotate(90deg);
+
+  background:
+    rgba(127,127,127,.2);
 }
 
 .modal-body{
-    padding:25px;
-}
 
-.detail-hero{
-    padding:22px;
-    border-radius:22px;
-    background:
-        linear-gradient(135deg,#eef7ff,#f7f2ff);
-    border:1px solid rgba(0,113,227,.08);
+  padding:26px;
 }
 
 .detail-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:12px;
-    margin-top:20px;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,1fr);
+
+  gap:13px;
 }
 
 .detail-item{
-    padding:17px;
-    border:1px solid rgba(0,0,0,.065);
-    border-radius:17px;
-    background:#fff;
+
+  padding:18px;
+
+  border-radius:19px;
+
+  background:
+    rgba(127,127,127,.075);
+
+  border:
+    1px solid
+    rgba(127,127,127,.08);
+
+  min-width:0;
 }
 
-.detail-item span{
-    display:block;
-    color:var(--muted);
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:.5px;
+.detail-label{
+
+  display:block;
+
+  font-size:11px;
+
+  font-weight:700;
+
+  text-transform:uppercase;
+
+  letter-spacing:.5px;
+
+  color:#6e6e73;
+
+  margin-bottom:7px;
 }
 
-.detail-item strong{
-    display:block;
-    margin-top:7px;
-    font-size:19px;
-    line-height:1.25;
-    overflow-wrap:anywhere;
+body.dark .detail-label{
+  color:#a1a1a6;
 }
 
-.detail-item.full{
-    grid-column:1/-1;
+.detail-value{
+
+  display:block;
+
+  font-size:20px;
+
+  font-weight:750;
+
+  line-height:1.3;
+
+  overflow-wrap:anywhere;
+}
+
+.detail-value.small{
+  font-size:16px;
+}
+
+.modal-actions{
+
+  margin-top:24px;
+
+  display:flex;
+
+  gap:11px;
 }
 
 .pdf-btn{
-    width:100%;
-    margin-top:20px;
-    min-height:54px;
-    border:0;
-    border-radius:17px;
-    background:
-        linear-gradient(135deg,#0071e3,#2997ff);
-    color:#fff;
-    font-family:inherit;
-    font-size:15px;
-    font-weight:700;
-    cursor:pointer;
-    box-shadow:
-        0 12px 28px rgba(0,113,227,.23);
-    transition:.2s;
+
+  flex:1;
+
+  min-height:52px;
+
+  border:none;
+
+  border-radius:17px;
+
+  cursor:pointer;
+
+  color:white;
+
+  font-size:15px;
+
+  font-weight:750;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0071e3,
+      #5856d6
+    );
+
+  box-shadow:
+    0 12px 28px
+    rgba(0,113,227,.22);
+
+  transition:
+    transform .2s,
+    box-shadow .2s;
 }
 
 .pdf-btn:hover{
-    transform:translateY(-2px);
-    box-shadow:
-        0 17px 35px rgba(0,113,227,.28);
+
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 17px 35px
+    rgba(0,113,227,.3);
 }
 
-.pdf-btn:disabled{
-    opacity:.6;
-    cursor:wait;
+.modal-note{
+
+  margin-top:18px;
+
+  padding:14px 16px;
+
+  border-radius:15px;
+
+  background:
+    rgba(0,113,227,.07);
+
+  color:#6e6e73;
+
+  font-size:12px;
+
+  line-height:1.5;
+
+  text-align:center;
 }
 
-/* ================= FOOTER ================= */
-
-.footer{
-    text-align:center;
-    padding:35px 20px 50px;
-    color:#8a8a8f;
-    font-size:12px;
+body.dark .modal-note{
+  color:#a1a1a6;
 }
 
-/* ================= RESPONSIVE ================= */
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes spin{
+
+  to{
+    transform:rotate(360deg);
+  }
+
+}
+
+@keyframes fadeIn{
+
+  from{
+
+    opacity:0;
+
+    transform:
+      translateY(8px);
+
+  }
+
+  to{
+
+    opacity:1;
+
+    transform:
+      translateY(0);
+
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
 @media(max-width:900px){
 
-    .institution-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
+  .institution-grid{
+
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+
+  .stats{
+
+    grid-template-columns:
+      repeat(2,1fr);
+  }
 
 }
 
-@media(max-width:620px){
+@media(max-width:600px){
 
-    .header-inner{
-        min-height:64px;
-    }
+  .navbar{
 
-    .brand-name{
-        font-size:16px;
-    }
+    height:62px;
 
-    .brand-icon{
-        width:36px;
-        height:36px;
-    }
+    padding:0 18px;
+  }
 
-    .back-btn{
-        padding:8px 13px;
-        font-size:12px;
-    }
+  .brand{
 
-    .hero{
-        padding-top:48px;
-    }
+    font-size:17px;
+  }
 
-    .hero h1{
-        letter-spacing:-2.2px;
-    }
+  .brand-icon{
 
-    .hero p{
-        font-size:15px;
-    }
+    width:34px;
+    height:34px;
+  }
 
-    .institution-grid{
-        grid-template-columns:1fr;
-    }
+  .hero{
 
-    .detail-grid{
-        grid-template-columns:1fr;
-    }
+    padding-top:55px;
+  }
 
-    .detail-item.full{
-        grid-column:auto;
-    }
+  .hero h1{
 
-    .modal{
-        padding:10px;
-        align-items:flex-end;
-    }
+    font-size:45px;
 
-    .modal-panel{
-        max-height:94vh;
-        border-radius:28px 28px 20px 20px;
-    }
+    letter-spacing:-2.5px;
+  }
 
-    .modal-title{
-        font-size:22px;
-    }
+  .hero p{
+
+    font-size:15px;
+  }
+
+  .stats{
+
+    grid-template-columns:
+      repeat(2,1fr);
+
+    padding:0 15px;
+  }
+
+  .stat{
+
+    padding:17px;
+  }
+
+  .stat strong{
+
+    font-size:23px;
+  }
+
+  .content{
+
+    padding-left:15px;
+
+    padding-right:15px;
+  }
+
+  .institution-grid{
+
+    grid-template-columns:1fr;
+  }
+
+  .filters{
+
+    padding:0 15px;
+
+    overflow-x:auto;
+
+    flex-wrap:nowrap;
+  }
+
+  .filter{
+
+    white-space:nowrap;
+  }
+
+  .search-area{
+
+    padding:0 15px;
+  }
+
+  .modal-overlay{
+
+    padding:10px;
+  }
+
+  .institution-modal{
+
+    max-height:
+      calc(100vh - 20px);
+
+    border-radius:25px;
+  }
+
+  .modal-header{
+
+    padding:20px;
+  }
+
+  .modal-body{
+
+    padding:20px;
+  }
+
+  .modal-title{
+
+    font-size:19px;
+  }
+
+  .detail-grid{
+
+    grid-template-columns:1fr;
+  }
+
+  .modal-actions{
+
+    flex-direction:column;
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+  *{
+
+    animation-duration:.01ms !important;
+
+    transition-duration:.01ms !important;
+  }
 
 }
 
 </style>
+
 </head>
+
 
 <body>
 
-<header class="header">
-    <div class="header-inner">
 
-        <a href="index.html" class="brand">
-            <div class="brand-icon">C</div>
-            <div class="brand-name">CTGBoardRanking</div>
-        </a>
+<!-- =======================================================
+     NAVBAR
+======================================================= -->
 
-        <a href="index.html" class="back-btn">
-            ← Home
-        </a>
+<nav class="navbar">
 
+  <a href="index.html" class="brand">
+
+    <div class="brand-icon">
+      🎓
     </div>
+
+    CTG Board Ranking
+
+  </a>
+
+
+  <div class="nav-actions">
+
+    <button
+      class="nav-btn"
+      id="themeBtn"
+      aria-label="Toggle dark mode">
+
+      ◐
+
+    </button>
+
+  </div>
+
+</nav>
+
+
+<!-- =======================================================
+     HERO
+======================================================= -->
+
+<header class="hero">
+
+  <div class="eyebrow">
+    ✦ SSC 2026 • Chattogram Board
+  </div>
+
+  <h1>
+
+    Discover
+    <span>Institutions.</span>
+
+  </h1>
+
+  <p>
+
+    Explore SSC 2026 institution performance,
+    GPA 5 achievements, passing rates and
+    student statistics across the Chattogram Board.
+
+  </p>
+
 </header>
 
 
-<section class="hero">
+<!-- =======================================================
+     SEARCH
+======================================================= -->
 
-    <div class="hero-label">
-        ✦ Institution Explorer
+<div class="search-area">
+
+  <div class="search-box">
+
+    <span class="search-icon">
+      ⌕
+    </span>
+
+    <input
+      type="search"
+      id="searchInput"
+      placeholder="Search institution, EIIN, district or thana..."
+      autocomplete="off"
+    >
+
+    <button
+      class="clear-search"
+      id="clearSearch">
+
+      ×
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =======================================================
+     FILTERS
+======================================================= -->
+
+<div class="filters">
+
+  <button
+    class="filter active"
+    data-filter="all">
+
+    All Institutions
+
+  </button>
+
+
+  <button
+    class="filter"
+    data-filter="gpa5">
+
+    GPA 5
+
+  </button>
+
+
+  <button
+    class="filter"
+    data-filter="excellent">
+
+    80%+ Pass Rate
+
+  </button>
+
+
+  <button
+    class="filter"
+    data-filter="district">
+
+    Districts
+
+  </button>
+
+</div>
+
+
+<!-- =======================================================
+     STATS
+======================================================= -->
+
+<section class="stats">
+
+  <div class="stat">
+
+    <div class="stat-icon">
+      🏫
     </div>
 
-    <h1>
-        Discover Institutions.
-    </h1>
+    <strong id="totalInstitutions">
+      —
+    </strong>
 
-    <p>
-        Explore SSC 2026 institutional performance,
-        compare results and view detailed academic statistics.
-    </p>
+    <span>
+      Institutions
+    </span>
+
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-icon">
+      👨‍🎓
+    </div>
+
+    <strong id="totalAppeared">
+      —
+    </strong>
+
+    <span>
+      Students Appeared
+    </span>
+
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-icon">
+      🏆
+    </div>
+
+    <strong id="totalGPA5">
+      —
+    </strong>
+
+    <span>
+      GPA 5 Achievements
+    </span>
+
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-icon">
+      📈
+    </div>
+
+    <strong id="overallPassRate">
+      —
+    </strong>
+
+    <span>
+      Overall Pass Rate
+    </span>
+
+  </div>
 
 </section>
 
 
-<div class="search-wrap">
+<!-- =======================================================
+     CONTENT
+======================================================= -->
 
-    <div class="search-box">
+<main class="content">
 
-        <span class="search-icon">⌕</span>
+  <div class="section-head">
 
-        <input
-            id="searchInput"
-            type="search"
-            placeholder="Search institution, EIIN, district or thana..."
-            autocomplete="off"
-        >
-
-    </div>
-
-</div>
-
-
-<main class="container">
-
-    <div class="section-head">
-
-        <h2>Institutions</h2>
-
-        <div class="result-count" id="resultCount">
-            Loading...
-        </div>
-
-    </div>
+    <h2>
+      Institutions
+    </h2>
 
     <div
-        class="institution-grid"
-        id="institutionGrid"
-    >
+      class="result-count"
+      id="resultCount">
 
-        <div class="state">
-            <div class="loader"></div>
-            Loading institutions...
-        </div>
+      Loading...
 
     </div>
+
+  </div>
+
+
+  <div
+    class="institution-grid"
+    id="institutionGrid">
+
+    <div class="loading">
+
+      <div class="spinner"></div>
+
+      Loading institution data...
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="pagination"
+    id="pagination">
+  </div>
 
 </main>
 
 
-<footer class="footer">
-    © 2026 CTGBoardRanking · Generated by Shadat Fatih
+<!-- =======================================================
+     FOOTER
+======================================================= -->
+
+<footer>
+
+  © 2026 CTG Board Ranking
+  • SSC 2026 Institution Statistics
+
 </footer>
 
 
-<!-- ================= INSTITUTION MODAL ================= -->
+<!-- =======================================================
+     INSTITUTION DETAIL MODAL
+======================================================= -->
 
 <div
-    class="modal"
-    id="institutionModal"
->
+  class="modal-overlay"
+  id="institutionModal"
+  aria-hidden="true">
 
-    <div class="modal-panel">
+  <div
+    class="institution-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalInstitutionName">
 
-        <div class="modal-head">
 
-            <div class="modal-head-row">
+    <div class="modal-header">
 
-                <div>
+      <div class="modal-title-wrap">
 
-                    <h2
-                        class="modal-title"
-                        id="modalTitle"
-                    >
-                        Institution
-                    </h2>
+        <div class="modal-institution-icon">
+          🏫
+        </div>
 
-                    <div
-                        class="modal-subtitle"
-                        id="modalSubtitle"
-                    ></div>
+        <div>
 
-                </div>
+          <div
+            class="modal-title"
+            id="modalInstitutionName">
 
-                <button
-                    class="close-btn"
-                    onclick="closeModal()"
-                    aria-label="Close"
-                >
-                    ×
-                </button>
+            Institution
 
-            </div>
+          </div>
+
+          <div
+            class="modal-subtitle"
+            id="modalInstitutionLocation">
+
+            Chattogram Board • SSC 2026
+
+          </div>
 
         </div>
 
-
-        <div class="modal-body">
-
-            <div class="detail-hero">
-
-                <div
-                    style="
-                    color:#0071e3;
-                    font-size:11px;
-                    font-weight:800;
-                    letter-spacing:.8px;
-                    text-transform:uppercase;
-                    "
-                >
-                    SSC 2026
-                </div>
-
-                <div
-                    id="detailInstitutionName"
-                    style="
-                    margin-top:8px;
-                    font-size:23px;
-                    font-weight:800;
-                    line-height:1.25;
-                    letter-spacing:-.7px;
-                    overflow-wrap:anywhere;
-                    "
-                ></div>
-
-            </div>
+      </div>
 
 
-            <div
-                class="detail-grid"
-                id="detailGrid"
-            ></div>
+      <button
+        class="modal-close"
+        id="modalClose"
+        aria-label="Close">
 
+        ×
 
-            <button
-                class="pdf-btn"
-                id="pdfButton"
-                onclick="generatePDF()"
-            >
-                ↓ &nbsp; Download Institution PDF
-            </button>
-
-        </div>
+      </button>
 
     </div>
 
+
+    <div class="modal-body">
+
+      <div
+        class="detail-grid"
+        id="detailGrid">
+
+      </div>
+
+
+      <div class="modal-actions">
+
+        <button
+          class="pdf-btn"
+          id="downloadPdfBtn">
+
+          ⬇ Download Premium PDF
+
+        </button>
+
+      </div>
+
+
+      <div class="modal-note">
+
+        Institution statistics are based on
+        SSC 2026 Chattogram Board data.
+        This is an unofficial statistical presentation.
+
+      </div>
+
+    </div>
+
+  </div>
+
 </div>
+
+
+<!-- =======================================================
+     PDF LIBRARIES
+======================================================= -->
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+</script>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js">
+</script>
 
 
 <script>
@@ -812,17 +1878,25 @@ body{
    CONFIG
 ========================================================= */
 
-const JSON_URL =
-    "institution-collector/institution_results.json";
+const JSON_PATH =
+  "institution-collector/institution_results.json";
 
 
 /* =========================================================
-   STATE
+   GLOBAL STATE
 ========================================================= */
 
 let institutions = [];
+
 let filteredInstitutions = [];
+
+let currentFilter = "all";
+
+let currentPage = 1;
+
 let selectedInstitution = null;
+
+const ITEMS_PER_PAGE = 24;
 
 
 /* =========================================================
@@ -830,31 +1904,61 @@ let selectedInstitution = null;
 ========================================================= */
 
 const grid =
-    document.getElementById("institutionGrid");
+  document.getElementById(
+    "institutionGrid"
+  );
 
 const searchInput =
-    document.getElementById("searchInput");
+  document.getElementById(
+    "searchInput"
+  );
+
+const clearSearch =
+  document.getElementById(
+    "clearSearch"
+  );
 
 const resultCount =
-    document.getElementById("resultCount");
+  document.getElementById(
+    "resultCount"
+  );
+
+const pagination =
+  document.getElementById(
+    "pagination"
+  );
 
 const modal =
-    document.getElementById("institutionModal");
+  document.getElementById(
+    "institutionModal"
+  );
 
-const modalTitle =
-    document.getElementById("modalTitle");
-
-const modalSubtitle =
-    document.getElementById("modalSubtitle");
-
-const detailInstitutionName =
-    document.getElementById("detailInstitutionName");
+const modalClose =
+  document.getElementById(
+    "modalClose"
+  );
 
 const detailGrid =
-    document.getElementById("detailGrid");
+  document.getElementById(
+    "detailGrid"
+  );
 
-const pdfButton =
-    document.getElementById("pdfButton");
+const downloadPdfBtn =
+  document.getElementById(
+    "downloadPdfBtn"
+  );
+
+
+/* =========================================================
+   FORMAT NUMBER
+========================================================= */
+
+function number(value){
+
+  return Number(value || 0)
+    .toLocaleString("en-US");
+
+}
 
 
 /* =========================================================
@@ -863,224 +1967,1697 @@ const pdfButton =
 
 async function loadInstitutions(){
 
-    try{
+  try{
 
-        const response =
-            await fetch(
-                JSON_URL + "?v=" + Date.now(),
-                {
-                    cache:"no-store"
-                }
-            );
+    grid.innerHTML = `
+      <div class="loading">
 
-        if(!response.ok){
+        <div class="spinner"></div>
 
-            throw new Error(
-                `HTTP ${response.status}`
-            );
+        Loading institution data...
 
-        }
+      </div>
+    `;
 
-        const data =
-            await response.json();
 
-        if(!Array.isArray(data)){
+    const response =
+      await fetch(
+        JSON_PATH +
+        "?v=" +
+        Date.now()
+      );
 
-            throw new Error(
-                "Invalid JSON format. Expected an array."
-            );
 
-        }
+    if(!response.ok){
 
-        institutions =
-            data.filter(item =>
-                item &&
-                item.institution_name
-            );
-
-        filteredInstitutions =
-            [...institutions];
-
-        renderInstitutions();
+      throw new Error(
+        `HTTP ${response.status} — ${JSON_PATH}`
+      );
 
     }
-    catch(error){
 
-        console.error(error);
 
-        grid.innerHTML = `
-            <div class="state">
+    const data =
+      await response.json();
 
-                <div style="
-                    font-size:38px;
-                    margin-bottom:12px;
-                ">
-                    ⚠️
-                </div>
 
-                <strong style="
-                    display:block;
-                    color:#111;
-                    margin-bottom:7px;
-                ">
-                    Institution data could not be loaded.
-                </strong>
+    if(!Array.isArray(data)){
 
-                <span>
-                    ${escapeHTML(error.message)}
-                </span>
-
-            </div>
-        `;
-
-        resultCount.textContent =
-            "Data unavailable";
+      throw new Error(
+        "institution_results.json must contain an array."
+      );
 
     }
+
+
+    institutions =
+      data.map(item => {
+
+        return {
+
+          eiin:
+            String(
+              item.eiin ?? ""
+            ),
+
+          institution_name:
+            String(
+              item.institution_name ??
+              "Unknown Institution"
+            ),
+
+          district:
+            String(
+              item.district ??
+              "Unknown"
+            ),
+
+          thana:
+            String(
+              item.thana ??
+              "Unknown"
+            ),
+
+          appeared:
+            Number(
+              item.appeared ?? 0
+            ),
+
+          passed:
+            Number(
+              item.passed ?? 0
+            ),
+
+          passing_rate:
+            Number(
+              item.passing_rate ?? 0
+            ),
+
+          /*
+             IMPORTANT
+
+             gpa5 এবং total_gpa একই data.
+
+             তাই total_gpa আলাদাভাবে যোগ করা হচ্ছে না।
+          */
+
+          gpa5:
+            Number(
+              item.gpa5 ??
+              item.total_gpa ??
+              0
+            ),
+
+          total_gpa:
+            Number(
+              item.total_gpa ??
+              item.gpa5 ??
+              0
+            ),
+
+          year:
+            Number(
+              item.year ?? 2026
+            ),
+
+          board:
+            String(
+              item.board ??
+              "Chattogram Board"
+            )
+
+        };
+
+      });
+
+
+    updateStatistics();
+
+    applyFilters();
+
+
+  }catch(error){
+
+    console.error(error);
+
+
+    grid.innerHTML = `
+
+      <div class="error">
+
+        <strong>
+          Institution data could not be loaded.
+        </strong>
+
+        <br><br>
+
+        ${escapeHTML(error.message)}
+
+        <br><br>
+
+        Make sure this file exists:
+
+        <br><br>
+
+        <b>
+          institution-collector/institution_results.json
+        </b>
+
+      </div>
+
+    `;
+
+
+    resultCount.textContent =
+      "Data unavailable";
+
+  }
 
 }
 
 
 /* =========================================================
-   RENDER CARDS
+   STATISTICS
 ========================================================= */
 
-function renderInstitutions(){
+function updateStatistics(){
 
-    resultCount.textContent =
-        `${filteredInstitutions.length.toLocaleString()} institutions`;
-
-    if(!filteredInstitutions.length){
-
-        grid.innerHTML = `
-            <div class="state">
-
-                <div style="
-                    font-size:35px;
-                    margin-bottom:10px;
-                ">
-                    🔎
-                </div>
-
-                No institutions found.
-
-            </div>
-        `;
-
-        return;
-    }
+  const total =
+    institutions.length;
 
 
-    /*
-       To prevent a huge DOM for very large JSON files,
-       render the first 300 results.
-    */
+  const appeared =
+    institutions.reduce(
+      (sum,item) =>
+        sum + item.appeared,
+      0
+    );
 
-    const visible =
-        filteredInstitutions.slice(0,300);
+
+  /*
+     GPA5 এবং total_gpa একই।
+     শুধু GPA5 ব্যবহার করছি।
+  */
+
+  const gpa5 =
+    institutions.reduce(
+      (sum,item) =>
+        sum + item.gpa5,
+      0
+    );
 
 
-    grid.innerHTML =
-        visible.map(
-            (item,index) =>
-                createInstitutionCard(item,index)
-        ).join("");
+  const passed =
+    institutions.reduce(
+      (sum,item) =>
+        sum + item.passed,
+      0
+    );
+
+
+  const passRate =
+    appeared > 0
+      ? (passed / appeared) * 100
+      : 0;
+
+
+  document.getElementById(
+    "totalInstitutions"
+  ).textContent =
+    number(total);
+
+
+  document.getElementById(
+    "totalAppeared"
+  ).textContent =
+    number(appeared);
+
+
+  document.getElementById(
+    "totalGPA5"
+  ).textContent =
+    number(gpa5);
+
+
+  document.getElementById(
+    "overallPassRate"
+  ).textContent =
+    passRate.toFixed(2) + "%";
 
 }
 
 
-function createInstitutionCard(item,index){
+/* =========================================================
+   FILTERS
+========================================================= */
 
-    const name =
-        safeValue(
-            item.institution_name,
-            "Unknown Institution"
+function applyFilters(){
+
+  const query =
+    searchInput.value
+      .trim()
+      .toLowerCase();
+
+
+  filteredInstitutions =
+    institutions.filter(item => {
+
+
+      const matchesSearch =
+        !query ||
+
+        item.institution_name
+          .toLowerCase()
+          .includes(query) ||
+
+        item.eiin
+          .toLowerCase()
+          .includes(query) ||
+
+        item.district
+          .toLowerCase()
+          .includes(query) ||
+
+        item.thana
+          .toLowerCase()
+          .includes(query);
+
+
+      if(!matchesSearch){
+
+        return false;
+
+      }
+
+
+      if(
+        currentFilter ===
+        "gpa5"
+      ){
+
+        return item.gpa5 > 0;
+
+      }
+
+
+      if(
+        currentFilter ===
+        "excellent"
+      ){
+
+        return item.passing_rate >= 80;
+
+      }
+
+
+      return true;
+
+    });
+
+
+  /*
+     IMPORTANT:
+
+     Institution GPA5 highest → lowest
+
+     তারপর passing rate
+     তারপর appeared.
+  */
+
+  filteredInstitutions.sort(
+    (a,b) => {
+
+      if(
+        b.gpa5 !==
+        a.gpa5
+      ){
+
+        return (
+          b.gpa5 -
+          a.gpa5
         );
 
-    const district =
-        safeValue(
-            item.district,
-            "Unknown District"
+      }
+
+
+      if(
+        b.passing_rate !==
+        a.passing_rate
+      ){
+
+        return (
+          b.passing_rate -
+          a.passing_rate
         );
 
-    const thana =
-        safeValue(
-            item.thana,
-            "—"
-        );
-
-    const appeared =
-        numberValue(item.appeared);
-
-    const passed =
-        numberValue(item.passed);
-
-    const gpa5 =
-        numberValue(item.gpa5);
+      }
 
 
-    return `
+      return (
+        b.appeared -
+        a.appeared
+      );
 
-        <article
-            class="institution-card"
-            onclick="openInstitution(${index})"
-        >
-
-            <div class="card-top">
-
-                <div class="institute-icon">
-                    🏫
-                </div>
-
-                <div class="card-arrow">
-                    →
-                </div>
-
-            </div>
+    }
+  );
 
 
-            <div class="card-name">
-                ${escapeHTML(name)}
-            </div>
+  currentPage = 1;
+
+  render();
+
+}
 
 
-            <div class="card-location">
+/* =========================================================
+   RENDER
+========================================================= */
 
-                ${escapeHTML(district)}
-                ·
-                ${escapeHTML(thana)}
+function render(){
 
-            </div>
+  const total =
+    filteredInstitutions.length;
 
 
-            <div class="card-stats">
+  resultCount.textContent =
+    `${number(total)} institution${
+      total !== 1 ? "s" : ""
+    }`;
 
-                <div class="mini-stat">
-                    <strong>
-                        ${formatNumber(appeared)}
-                    </strong>
-                    <span>Appeared</span>
-                </div>
 
-                <div class="mini-stat">
-                    <strong>
-                        ${formatNumber(passed)}
-                    </strong>
-                    <span>Passed</span>
-                </div>
+  if(total === 0){
 
-                <div class="mini-stat">
-                    <strong>
-                        ${formatNumber(gpa5)}
-                    </strong>
-                    <span>GPA 5</span>
-                </div>
+    grid.innerHTML = `
 
-            </div>
+      <div class="empty">
 
-        </article>
+        <div class="empty-icon">
+          🔎
+        </div>
+
+        <h3>
+          No institutions found
+        </h3>
+
+        <p>
+          Try another institution name,
+          EIIN, district or thana.
+        </p>
+
+      </div>
 
     `;
+
+
+    pagination.innerHTML = "";
+
+    return;
+
+  }
+
+
+  const start =
+    (currentPage - 1) *
+    ITEMS_PER_PAGE;
+
+
+  const end =
+    start +
+    ITEMS_PER_PAGE;
+
+
+  const pageItems =
+    filteredInstitutions.slice(
+      start,
+      end
+    );
+
+
+  grid.innerHTML =
+    pageItems
+      .map(
+        (item,index) =>
+          createCard(
+            item,
+            start + index + 1
+          )
+      )
+      .join("");
+
+
+  renderPagination();
+
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+function createCard(
+  item,
+  rank
+){
+
+  const passRate =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        item.passing_rate
+      )
+    );
+
+
+  return `
+
+    <article
+      class="institution-card"
+      data-eiin="${escapeHTML(item.eiin)}"
+      onclick="openInstitution('${escapeJS(item.eiin)}')"
+      tabindex="0"
+      role="button"
+      aria-label="View ${escapeHTML(item.institution_name)} details"
+    >
+
+      <div class="card-top">
+
+        <div class="institution-icon">
+          🏫
+        </div>
+
+        <div class="rank">
+          #${rank}
+        </div>
+
+      </div>
+
+
+      <div class="institution-name">
+
+        ${escapeHTML(
+          item.institution_name
+        )}
+
+      </div>
+
+
+      <div class="location">
+
+        📍
+        ${escapeHTML(item.thana)}
+        •
+        ${escapeHTML(item.district)}
+
+      </div>
+
+
+      <div class="metrics">
+
+
+        <div class="metric">
+
+          <strong>
+            ${number(item.appeared)}
+          </strong>
+
+          <span>
+            Appeared
+          </span>
+
+        </div>
+
+
+        <div class="metric">
+
+          <strong>
+            ${number(item.passed)}
+          </strong>
+
+          <span>
+            Passed
+          </span>
+
+        </div>
+
+
+        <div class="metric">
+
+          <strong>
+            ${passRate.toFixed(2)}%
+          </strong>
+
+          <span>
+            Passing Rate
+          </span>
+
+        </div>
+
+
+        <div class="metric">
+
+          <strong>
+            ${number(item.gpa5)}
+          </strong>
+
+          <span>
+            GPA 5
+          </span>
+
+        </div>
+
+
+      </div>
+
+
+      <div class="progress">
+
+        <div
+          class="progress-bar"
+          style="
+            width:${passRate}%;
+          ">
+        </div>
+
+      </div>
+
+
+      <div class="card-bottom">
+
+        <span>
+
+          EIIN:
+
+          <b>
+            ${escapeHTML(item.eiin)}
+          </b>
+
+        </span>
+
+
+        <span class="gpa5">
+
+          ${
+            item.gpa5 > 0
+              ? "GPA 5 ✓"
+              : "No GPA 5"
+          }
+
+        </span>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+/* =========================================================
+   OPEN INSTITUTION
+========================================================= */
+
+function openInstitution(eiin){
+
+  const item =
+    institutions.find(
+      institution =>
+        institution.eiin ===
+        String(eiin)
+    );
+
+
+  if(!item){
+
+    return;
+
+  }
+
+
+  selectedInstitution =
+    item;
+
+
+  document.getElementById(
+    "modalInstitutionName"
+  ).textContent =
+    item.institution_name;
+
+
+  document.getElementById(
+    "modalInstitutionLocation"
+  ).textContent =
+    `${item.thana} • ${item.district} • ${item.board}`;
+
+
+  detailGrid.innerHTML = `
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        Institution Name
+      </span>
+
+      <span class="detail-value small">
+        ${escapeHTML(item.institution_name)}
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        EIIN
+      </span>
+
+      <span class="detail-value">
+        ${escapeHTML(item.eiin)}
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        District
+      </span>
+
+      <span class="detail-value small">
+        ${escapeHTML(item.district)}
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        Thana / Upazila
+      </span>
+
+      <span class="detail-value small">
+        ${escapeHTML(item.thana)}
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        Students Appeared
+      </span>
+
+      <span class="detail-value">
+        ${number(item.appeared)}
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        Students Passed
+      </span>
+
+      <span class="detail-value">
+        ${number(item.passed)}
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        Passing Rate
+      </span>
+
+      <span class="detail-value">
+        ${Number(item.passing_rate).toFixed(2)}%
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        GPA 5
+      </span>
+
+      <span class="detail-value">
+        ${number(item.gpa5)}
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        Total GPA
+      </span>
+
+      <span class="detail-value">
+        ${number(item.gpa5)}
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        Year
+      </span>
+
+      <span class="detail-value">
+        ${item.year}
+      </span>
+
+    </div>
+
+
+    <div class="detail-item">
+
+      <span class="detail-label">
+        Education Board
+      </span>
+
+      <span class="detail-value small">
+        ${escapeHTML(item.board)}
+      </span>
+
+    </div>
+
+  `;
+
+
+  modal.classList.add("show");
+
+  modal.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+
+  document.body.style.overflow =
+    "hidden";
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+function closeInstitution(){
+
+  modal.classList.remove(
+    "show"
+  );
+
+  modal.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+  document.body.style.overflow =
+    "";
+
+  selectedInstitution =
+    null;
+
+}
+
+
+modalClose.addEventListener(
+  "click",
+  closeInstitution
+);
+
+
+modal.addEventListener(
+  "click",
+  event => {
+
+    if(
+      event.target ===
+      modal
+    ){
+
+      closeInstitution();
+
+    }
+
+  }
+);
+
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key ===
+      "Escape" &&
+      modal.classList.contains(
+        "show"
+      )
+    ){
+
+      closeInstitution();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   PDF DOWNLOAD
+========================================================= */
+
+downloadPdfBtn.addEventListener(
+  "click",
+  generateInstitutionPDF
+);
+
+
+function generateInstitutionPDF(){
+
+  if(!selectedInstitution){
+
+    return;
+
+  }
+
+
+  if(
+    !window.jspdf ||
+    !window.jspdf.jsPDF
+  ){
+
+    alert(
+      "PDF library could not be loaded. Please check your internet connection and try again."
+    );
+
+    return;
+
+  }
+
+
+  const item =
+    selectedInstitution;
+
+
+  const {
+    jsPDF
+  } = window.jspdf;
+
+
+  /*
+     A4 portrait
+
+     Proper generated PDF.
+     No screenshot.
+  */
+
+  const doc =
+    new jsPDF({
+      orientation:"portrait",
+      unit:"mm",
+      format:"a4",
+      compress:true
+    });
+
+
+  const pageWidth =
+    doc.internal.pageSize.getWidth();
+
+  const pageHeight =
+    doc.internal.pageSize.getHeight();
+
+
+  /*
+     Date + Time
+  */
+
+  const generatedDate =
+    new Date();
+
+
+  const dateText =
+    generatedDate.toLocaleDateString(
+      "en-GB",
+      {
+        day:"2-digit",
+        month:"long",
+        year:"numeric"
+      }
+    );
+
+
+  const timeText =
+    generatedDate.toLocaleTimeString(
+      "en-US",
+      {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
+      }
+    );
+
+
+  /*
+     Premium background/header
+  */
+
+  doc.setFillColor(
+    245,
+    247,
+    250
+  );
+
+  doc.rect(
+    0,
+    0,
+    pageWidth,
+    pageHeight,
+    "F"
+  );
+
+
+  /*
+     Header gradient-like blocks
+  */
+
+  doc.setFillColor(
+    0,
+    113,
+    227
+  );
+
+  doc.rect(
+    0,
+    0,
+    pageWidth,
+    4,
+    "F"
+  );
+
+
+  doc.setFillColor(
+    88,
+    86,
+    214
+  );
+
+  doc.rect(
+    pageWidth * .55,
+    0,
+    pageWidth * .45,
+    4,
+    "F"
+  );
+
+
+  /*
+     Main title
+  */
+
+  doc.setTextColor(
+    29,
+    29,
+    31
+  );
+
+  doc.setFont(
+    "helvetica",
+    "bold"
+  );
+
+  doc.setFontSize(25);
+
+  doc.text(
+    "CTGboardranking",
+    pageWidth / 2,
+    23,
+    {
+      align:"center"
+    }
+  );
+
+
+  /*
+     Generated by
+  */
+
+  doc.setFont(
+    "helvetica",
+    "normal"
+  );
+
+  doc.setFontSize(11);
+
+  doc.setTextColor(
+    90,
+    90,
+    95
+  );
+
+  doc.text(
+    "Generated by Shadat Fatih",
+    pageWidth / 2,
+    31,
+    {
+      align:"center"
+    }
+  );
+
+
+  /*
+     Date
+  */
+
+  doc.setFontSize(9);
+
+  doc.setTextColor(
+    110,
+    110,
+    115
+  );
+
+  doc.text(
+    `${dateText} • ${timeText}`,
+    pageWidth / 2,
+    37,
+    {
+      align:"center"
+    }
+  );
+
+
+  /*
+     Divider
+  */
+
+  doc.setDrawColor(
+    220,
+    222,
+    226
+  );
+
+  doc.setLineWidth(.4);
+
+  doc.line(
+    18,
+    44,
+    pageWidth - 18,
+    44
+  );
+
+
+  /*
+     Institution heading
+  */
+
+  doc.setTextColor(
+    29,
+    29,
+    31
+  );
+
+  doc.setFont(
+    "helvetica",
+    "bold"
+  );
+
+  doc.setFontSize(17);
+
+
+  /*
+     splitTextToSize prevents
+     long institution names
+     from overflowing.
+  */
+
+  const institutionNameLines =
+    doc.splitTextToSize(
+      item.institution_name,
+      pageWidth - 36
+    );
+
+
+  doc.text(
+    institutionNameLines,
+    pageWidth / 2,
+    57,
+    {
+      align:"center"
+    }
+  );
+
+
+  const nameHeight =
+    institutionNameLines.length *
+    7;
+
+
+  doc.setFont(
+    "helvetica",
+    "normal"
+  );
+
+  doc.setFontSize(9);
+
+  doc.setTextColor(
+    100,
+    100,
+    105
+  );
+
+
+  doc.text(
+    `EIIN ${item.eiin} • ${item.board} • SSC ${item.year}`,
+    pageWidth / 2,
+    62 + nameHeight,
+    {
+      align:"center"
+    }
+  );
+
+
+  /*
+     TABLE
+
+     AutoTable automatically:
+     - wraps text
+     - prevents overlap
+     - creates pages
+     - repeats headers
+     - keeps rows together
+  */
+
+  const tableStartY =
+    72 + nameHeight;
+
+
+  const tableRows = [
+
+    [
+      "Institution Name",
+      item.institution_name
+    ],
+
+    [
+      "EIIN",
+      item.eiin
+    ],
+
+    [
+      "District",
+      item.district
+    ],
+
+    [
+      "Thana / Upazila",
+      item.thana
+    ],
+
+    [
+      "Students Appeared",
+      number(item.appeared)
+    ],
+
+    [
+      "Students Passed",
+      number(item.passed)
+    ],
+
+    [
+      "Passing Rate",
+      `${Number(
+        item.passing_rate
+      ).toFixed(2)}%`
+    ],
+
+    [
+      "GPA 5",
+      number(item.gpa5)
+    ],
+
+    [
+      "Total GPA",
+      number(item.gpa5)
+    ],
+
+    [
+      "Year",
+      String(item.year)
+    ],
+
+    [
+      "Board",
+      item.board
+    ]
+
+  ];
+
+
+  doc.autoTable({
+
+    startY:tableStartY,
+
+    head:[
+      [
+        "Performance Information",
+        "Details"
+      ]
+    ],
+
+    body:tableRows,
+
+    theme:"grid",
+
+    margin:{
+      left:18,
+      right:18,
+      bottom:24
+    },
+
+    tableWidth:"auto",
+
+    styles:{
+
+      font:"helvetica",
+
+      fontSize:10,
+
+      textColor:[
+        45,
+        45,
+        48
+      ],
+
+      cellPadding:{
+        top:5,
+        right:6,
+        bottom:5,
+        left:6
+      },
+
+      lineColor:[
+        220,
+        222,
+        226
+      ],
+
+      lineWidth:.25,
+
+      overflow:"linebreak",
+
+      valign:"middle",
+
+      minCellHeight:10
+
+    },
+
+    headStyles:{
+
+      fillColor:[
+        29,
+        29,
+        31
+      ],
+
+      textColor:[
+        255,
+        255,
+        255
+      ],
+
+      fontStyle:"bold",
+
+      halign:"left",
+
+      valign:"middle",
+
+      cellPadding:6
+
+    },
+
+    columnStyles:{
+
+      0:{
+        cellWidth:62,
+        fontStyle:"bold"
+      },
+
+      1:{
+        cellWidth:"auto"
+      }
+
+    },
+
+    alternateRowStyles:{
+
+      fillColor:[
+        249,
+        250,
+        252
+      ]
+
+    },
+
+    didParseCell:function(data){
+
+      /*
+         Long institution names
+         always wrap inside cell.
+      */
+
+      if(
+        data.section === "body" &&
+        data.column.index === 1
+      ){
+
+        data.cell.styles.overflow =
+          "linebreak";
+
+      }
+
+    },
+
+    didDrawPage:function(data){
+
+      /*
+         Footer on EVERY page
+      */
+
+      const pageNumber =
+        doc.internal.getNumberOfPages();
+
+
+      doc.setFont(
+        "helvetica",
+        "normal"
+      );
+
+      doc.setFontSize(8);
+
+      doc.setTextColor(
+        130,
+        130,
+        135
+      );
+
+
+      /*
+         Left footer
+      */
+
+      doc.text(
+        "CTGboardranking",
+        18,
+        pageHeight - 11
+      );
+
+
+      /*
+         Page number
+      */
+
+      doc.text(
+        `Page ${pageNumber}`,
+        pageWidth - 18,
+        pageHeight - 11,
+        {
+          align:"right"
+        }
+      );
+
+
+      /*
+         Unofficial Notice
+      */
+
+      doc.setFont(
+        "helvetica",
+        "bold"
+      );
+
+      doc.setFontSize(8);
+
+      doc.setTextColor(
+        180,
+        60,
+        60
+      );
+
+      doc.text(
+        "Unofficial Notice",
+        pageWidth / 2,
+        pageHeight - 11,
+        {
+          align:"center"
+        }
+      );
+
+    }
+
+  });
+
+
+  /*
+     Save filename
+
+     Remove characters that
+     are unsafe in filenames.
+  */
+
+  const safeName =
+    item.institution_name
+      .replace(
+        /[^a-z0-9]+/gi,
+        "_"
+      )
+      .replace(
+        /^_+|_+$/g,
+        ""
+      )
+      .substring(
+        0,
+        70
+      );
+
+
+  const filename =
+    `CTGboardranking_${safeName}_${item.eiin}_SSC2026.pdf`;
+
+
+  doc.save(filename);
+
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+function renderPagination(){
+
+  const pages =
+    Math.ceil(
+      filteredInstitutions.length /
+      ITEMS_PER_PAGE
+    );
+
+
+  pagination.innerHTML = "";
+
+
+  if(pages <= 1){
+
+    return;
+
+  }
+
+
+  const previous =
+    document.createElement(
+      "button"
+    );
+
+
+  previous.className =
+    "page-btn";
+
+
+  previous.textContent =
+    "‹";
+
+
+  previous.disabled =
+    currentPage === 1;
+
+
+  previous.onclick = () => {
+
+    if(currentPage > 1){
+
+      currentPage--;
+
+      render();
+
+      window.scrollTo({
+        top:500,
+        behavior:"smooth"
+      });
+
+    }
+
+  };
+
+
+  pagination.appendChild(
+    previous
+  );
+
+
+  let start =
+    Math.max(
+      1,
+      currentPage - 2
+    );
+
+
+  let end =
+    Math.min(
+      pages,
+      currentPage + 2
+    );
+
+
+  if(currentPage <= 3){
+
+    end =
+      Math.min(
+        5,
+        pages
+      );
+
+  }
+
+
+  if(
+    currentPage >=
+    pages - 2
+  ){
+
+    start =
+      Math.max(
+        1,
+        pages - 4
+      );
+
+  }
+
+
+  for(
+    let i = start;
+    i <= end;
+    i++
+  ){
+
+    const button =
+      document.createElement(
+        "button"
+      );
+
+
+    button.className =
+      "page-btn" +
+      (
+        i === currentPage
+          ? " active"
+          : ""
+      );
+
+
+    button.textContent =
+      i;
+
+
+    button.onclick = () => {
+
+      currentPage =
+        i;
+
+      render();
+
+      window.scrollTo({
+        top:500,
+        behavior:"smooth"
+      });
+
+    };
+
+
+    pagination.appendChild(
+      button
+    );
+
+  }
+
+
+  const next =
+    document.createElement(
+      "button"
+    );
+
+
+  next.className =
+    "page-btn";
+
+
+  next.textContent =
+    "›";
+
+
+  next.disabled =
+    currentPage === pages;
+
+
+  next.onclick = () => {
+
+    if(
+      currentPage <
+      pages
+    ){
+
+      currentPage++;
+
+      render();
+
+      window.scrollTo({
+        top:500,
+        behavior:"smooth"
+      });
+
+    }
+
+  };
+
+
+  pagination.appendChild(
+    next
+  );
 
 }
 
@@ -1090,871 +3667,234 @@ function createInstitutionCard(item,index){
 ========================================================= */
 
 searchInput.addEventListener(
-    "input",
-    function(){
+  "input",
+  () => {
 
-        const query =
-            this.value
-                .trim()
-                .toLowerCase();
+    clearSearch.style.display =
+      searchInput.value
+        ? "grid"
+        : "none";
 
 
-        if(!query){
+    applyFilters();
 
-            filteredInstitutions =
-                [...institutions];
+  }
+);
 
-        }
-        else{
 
-            filteredInstitutions =
-                institutions.filter(item => {
+clearSearch.addEventListener(
+  "click",
+  () => {
 
-                    const text = [
+    searchInput.value =
+      "";
 
-                        item.institution_name,
-                        item.eiin,
-                        item.district,
-                        item.thana,
-                        item.board,
-                        item.year
+    clearSearch.style.display =
+      "none";
 
-                    ]
-                    .join(" ")
-                    .toLowerCase();
+    applyFilters();
 
-                    return text.includes(query);
+    searchInput.focus();
 
-                });
-
-        }
-
-        renderInstitutions();
-
-    }
+  }
 );
 
 
 /* =========================================================
-   OPEN INSTITUTION
+   FILTER BUTTONS
 ========================================================= */
 
-function openInstitution(index){
+document
+  .querySelectorAll(".filter")
+  .forEach(button => {
 
-    /*
-       Important:
-       filteredInstitutions is the array currently displayed.
-    */
+    button.addEventListener(
+      "click",
+      () => {
 
-    const item =
-        filteredInstitutions[index];
+        document
+          .querySelectorAll(".filter")
+          .forEach(btn =>
+            btn.classList.remove(
+              "active"
+            )
+          );
 
-    if(!item) return;
 
-    selectedInstitution =
-        item;
-
-
-    modalTitle.textContent =
-        safeValue(
-            item.institution_name,
-            "Institution"
+        button.classList.add(
+          "active"
         );
 
 
-    modalSubtitle.textContent =
-        `${safeValue(item.district,"—")} · ${safeValue(item.thana,"—")} · SSC ${safeValue(item.year,"2026")}`;
+        currentFilter =
+          button.dataset.filter;
 
 
-    detailInstitutionName.textContent =
-        safeValue(
-            item.institution_name,
-            "Institution"
-        );
+        applyFilters();
 
+      }
+    );
 
-    renderDetails(item);
-
-
-    modal.classList.add("show");
-
-    document.body.style.overflow =
-        "hidden";
-
-}
-
-
-function renderDetails(item){
-
-    /*
-       GPA5 and total_gpa are intentionally
-       displayed separately but both use the
-       same GPA5 value as requested.
-    */
-
-    const gpa5 =
-        numberValue(item.gpa5);
-
-
-    const totalGpa =
-        gpa5;
-
-
-    const details = [
-
-        ["EIIN", item.eiin],
-
-        ["District", item.district],
-
-        ["Thana / Upazila", item.thana],
-
-        ["Board", item.board],
-
-        ["Year", item.year],
-
-        ["Appeared", item.appeared],
-
-        ["Passed", item.passed],
-
-        ["Passing Rate", formatPercent(item.passing_rate)],
-
-        ["GPA 5", gpa5],
-
-        ["Total GPA", totalGpa]
-
-    ];
-
-
-    detailGrid.innerHTML =
-        details.map(
-            ([label,value]) => `
-
-                <div class="detail-item">
-
-                    <span>
-                        ${escapeHTML(label)}
-                    </span>
-
-                    <strong>
-                        ${escapeHTML(
-                            formatDetailValue(value)
-                        )}
-                    </strong>
-
-                </div>
-
-            `
-        ).join("");
-
-}
-
-
-function closeModal(){
-
-    modal.classList.remove("show");
-
-    document.body.style.overflow =
-        "";
-
-    selectedInstitution =
-        null;
-
-}
-
-
-modal.addEventListener(
-    "click",
-    function(event){
-
-        if(event.target === modal){
-
-            closeModal();
-
-        }
-
-    }
-);
-
-
-document.addEventListener(
-    "keydown",
-    function(event){
-
-        if(
-            event.key === "Escape" &&
-            modal.classList.contains("show")
-        ){
-
-            closeModal();
-
-        }
-
-    }
-);
+  });
 
 
 /* =========================================================
-   PDF GENERATION
+   KEYBOARD SUPPORT FOR CARDS
 ========================================================= */
 
-async function generatePDF(){
+grid.addEventListener(
+  "keydown",
+  event => {
 
-    if(!selectedInstitution){
+    const card =
+      event.target.closest(
+        ".institution-card"
+      );
 
-        return;
+
+    if(
+      !card
+    ){
+
+      return;
 
     }
 
 
     if(
-        !window.jspdf ||
-        !window.jspdf.jsPDF
+      event.key ===
+      "Enter" ||
+      event.key ===
+      " "
     ){
 
-        alert(
-            "PDF library could not be loaded. Please check your internet connection."
-        );
+      event.preventDefault();
 
-        return;
+      openInstitution(
+        card.dataset.eiin
+      );
 
     }
 
+  }
+);
 
-    const originalText =
-        pdfButton.innerHTML;
 
+/* =========================================================
+   DARK MODE
+========================================================= */
 
-    pdfButton.disabled =
-        true;
+const themeBtn =
+  document.getElementById(
+    "themeBtn"
+  );
 
-    pdfButton.innerHTML =
-        "Generating premium PDF…";
 
+function setTheme(dark){
 
-    try{
+  document.body.classList.toggle(
+    "dark",
+    dark
+  );
 
-        const { jsPDF } =
-            window.jspdf;
 
+  localStorage.setItem(
+    "ctg-theme",
+    dark
+      ? "dark"
+      : "light"
+  );
 
-        const doc =
-            new jsPDF({
-                orientation:"portrait",
-                unit:"mm",
-                format:"a4",
-                compress:true
-            });
 
-
-        /*
-           Apple-inspired monochrome + blue design.
-        */
-
-        const pageWidth =
-            doc.internal.pageSize.getWidth();
-
-        const pageHeight =
-            doc.internal.pageSize.getHeight();
-
-        const margin =
-            18;
-
-
-        /* =========================
-           HEADER
-        ========================= */
-
-        doc.setFillColor(
-            248,249,251
-        );
-
-        doc.rect(
-            0,
-            0,
-            pageWidth,
-            42,
-            "F"
-        );
-
-
-        doc.setTextColor(
-            15,15,17
-        );
-
-        doc.setFont(
-            "helvetica",
-            "bold"
-        );
-
-        doc.setFontSize(22);
-
-        doc.text(
-            "CTGboardranking",
-            pageWidth / 2,
-            17,
-            {
-                align:"center"
-            }
-        );
-
-
-        doc.setFont(
-            "helvetica",
-            "normal"
-        );
-
-        doc.setFontSize(9);
-
-        doc.setTextColor(
-            90,90,95
-        );
-
-        doc.text(
-            "Generated by Shadat Fatih",
-            pageWidth / 2,
-            24,
-            {
-                align:"center"
-            }
-        );
-
-
-        const generatedAt =
-            new Date().toLocaleString(
-                "en-BD",
-                {
-                    dateStyle:"long",
-                    timeStyle:"short"
-                }
-            );
-
-
-        doc.text(
-            generatedAt,
-            pageWidth / 2,
-            30,
-            {
-                align:"center"
-            }
-        );
-
-
-        /* =========================
-           INSTITUTION TITLE
-        ========================= */
-
-        let y = 54;
-
-
-        doc.setTextColor(
-            15,15,17
-        );
-
-        doc.setFont(
-            "helvetica",
-            "bold"
-        );
-
-        doc.setFontSize(18);
-
-
-        const institutionName =
-            safeValue(
-                selectedInstitution.institution_name,
-                "Institution"
-            );
-
-
-        const titleLines =
-            doc.splitTextToSize(
-                institutionName,
-                pageWidth - margin * 2
-            );
-
-
-        doc.text(
-            titleLines,
-            margin,
-            y
-        );
-
-
-        y +=
-            titleLines.length * 7 +
-            5;
-
-
-        doc.setFont(
-            "helvetica",
-            "normal"
-        );
-
-        doc.setFontSize(9);
-
-        doc.setTextColor(
-            90,90,95
-        );
-
-
-        const location =
-            `${safeValue(selectedInstitution.district,"—")} · ${safeValue(selectedInstitution.thana,"—")} · ${safeValue(selectedInstitution.board,"—")}`;
-
-
-        doc.text(
-            location,
-            margin,
-            y
-        );
-
-
-        y += 9;
-
-
-        /* =========================
-           DATA TABLE
-        ========================= */
-
-
-        const gpa5 =
-            numberValue(
-                selectedInstitution.gpa5
-            );
-
-
-        /*
-           GPA5 and Total GPA intentionally
-           use exactly the same source value.
-        */
-
-        const rows = [
-
-            [
-                "EIIN",
-                safeValue(
-                    selectedInstitution.eiin,
-                    "—"
-                )
-            ],
-
-            [
-                "Institution",
-                institutionName
-            ],
-
-            [
-                "District",
-                safeValue(
-                    selectedInstitution.district,
-                    "—"
-                )
-            ],
-
-            [
-                "Thana / Upazila",
-                safeValue(
-                    selectedInstitution.thana,
-                    "—"
-                )
-            ],
-
-            [
-                "Board",
-                safeValue(
-                    selectedInstitution.board,
-                    "—"
-                )
-            ],
-
-            [
-                "Year",
-                safeValue(
-                    selectedInstitution.year,
-                    "2026"
-                )
-            ],
-
-            [
-                "Appeared",
-                formatNumber(
-                    numberValue(
-                        selectedInstitution.appeared
-                    )
-                )
-            ],
-
-            [
-                "Passed",
-                formatNumber(
-                    numberValue(
-                        selectedInstitution.passed
-                    )
-                )
-            ],
-
-            [
-                "Passing Rate",
-                formatPercent(
-                    selectedInstitution.passing_rate
-                )
-            ],
-
-            [
-                "GPA 5",
-                formatNumber(gpa5)
-            ],
-
-            [
-                "Total GPA",
-                formatNumber(gpa5)
-            ]
-
-        ];
-
-
-        doc.autoTable({
-
-            startY:y,
-
-            margin:{
-                left:margin,
-                right:margin
-            },
-
-            head:[
-                [
-                    "Performance Metric",
-                    "Value"
-                ]
-            ],
-
-            body:rows,
-
-            theme:"grid",
-
-            styles:{
-                font:"helvetica",
-                fontSize:9,
-                cellPadding:4,
-                lineColor:[225,226,230],
-                lineWidth:.2,
-                textColor:[25,25,28],
-                overflow:"linebreak",
-                valign:"middle"
-            },
-
-            headStyles:{
-                fillColor:[20,20,22],
-                textColor:[255,255,255],
-                fontStyle:"bold",
-                halign:"left"
-            },
-
-            columnStyles:{
-                0:{
-                    cellWidth:55,
-                    fontStyle:"bold"
-                },
-
-                1:{
-                    cellWidth:"auto"
-                }
-            },
-
-            alternateRowStyles:{
-                fillColor:[248,249,251]
-            },
-
-            pageBreak:"auto",
-
-            rowPageBreak:"avoid",
-
-            didParseCell:function(data){
-
-                /*
-                   Prevent text from overflowing.
-                */
-
-                if(data.cell){
-
-                    data.cell.styles.overflow =
-                        "linebreak";
-
-                }
-
-            },
-
-            didDrawPage:function(data){
-
-                drawPDFHeaderFooter(
-                    doc,
-                    pageWidth,
-                    pageHeight
-                );
-
-            }
-
-        });
-
-
-        /* =========================
-           FOOTER
-        ========================= */
-
-        const totalPages =
-            doc.getNumberOfPages();
-
-
-        for(
-            let page = 1;
-            page <= totalPages;
-            page++
-        ){
-
-            doc.setPage(page);
-
-            drawPDFHeaderFooter(
-                doc,
-                pageWidth,
-                pageHeight,
-                page,
-                totalPages
-            );
-
-        }
-
-
-        /* =========================
-           FILE NAME
-        ========================= */
-
-        const safeName =
-            institutionName
-                .replace(
-                    /[^a-z0-9\u0980-\u09FF]+/gi,
-                    "_"
-                )
-                .replace(
-                    /^_+|_+$/g,
-                    ""
-                )
-                .slice(0,80);
-
-
-        doc.save(
-            `CTGBoardRanking_${safeName || "Institution"}_2026.pdf`
-        );
-
-    }
-    catch(error){
-
-        console.error(
-            "PDF generation error:",
-            error
-        );
-
-        alert(
-            "PDF তৈরি করা যায়নি। আবার চেষ্টা করুন।"
-        );
-
-    }
-    finally{
-
-        pdfButton.disabled =
-            false;
-
-        pdfButton.innerHTML =
-            originalText;
-
-    }
+  themeBtn.textContent =
+    dark
+      ? "☀"
+      : "◐";
 
 }
 
 
-/* =========================================================
-   PDF HEADER / FOOTER
-========================================================= */
+const savedTheme =
+  localStorage.getItem(
+    "ctg-theme"
+  );
 
-function drawPDFHeaderFooter(
-    doc,
-    pageWidth,
-    pageHeight,
-    page,
-    totalPages
+
+if(
+  savedTheme ===
+  "dark"
 ){
 
-    /*
-       Footer background line.
-    */
-
-    doc.setDrawColor(
-        225,226,230
-    );
-
-    doc.setLineWidth(.25);
-
-    doc.line(
-        18,
-        pageHeight - 20,
-        pageWidth - 18,
-        pageHeight - 20
-    );
-
-
-    doc.setFont(
-        "helvetica",
-        "normal"
-    );
-
-    doc.setFontSize(7.5);
-
-    doc.setTextColor(
-        115,115,120
-    );
-
-
-    doc.text(
-        "Unofficial Notice",
-        pageWidth / 2,
-        pageHeight - 11,
-        {
-            align:"center"
-        }
-    );
-
-
-    if(
-        page &&
-        totalPages
-    ){
-
-        doc.text(
-            `Page ${page} of ${totalPages}`,
-            pageWidth - 18,
-            pageHeight - 11,
-            {
-                align:"right"
-            }
-        );
-
-    }
+  setTheme(true);
 
 }
+
+
+themeBtn.addEventListener(
+  "click",
+  () => {
+
+    setTheme(
+      !document.body.classList.contains(
+        "dark"
+      )
+    );
+
+  }
+);
 
 
 /* =========================================================
-   HELPERS
+   ESCAPE HTML
 ========================================================= */
-
-function safeValue(
-    value,
-    fallback="—"
-){
-
-    if(
-        value === null ||
-        value === undefined ||
-        value === ""
-    ){
-
-        return fallback;
-
-    }
-
-    return String(value);
-
-}
-
-
-function numberValue(value){
-
-    const n =
-        Number(value);
-
-    return Number.isFinite(n)
-        ? n
-        : 0;
-
-}
-
-
-function formatNumber(value){
-
-    const n =
-        numberValue(value);
-
-    return n.toLocaleString(
-        "en-US"
-    );
-
-}
-
-
-function formatPercent(value){
-
-    const n =
-        Number(value);
-
-    if(!Number.isFinite(n)){
-
-        return "0.00%";
-
-    }
-
-    return `${n.toFixed(2)}%`;
-
-}
-
-
-function formatDetailValue(value){
-
-    if(
-        value === null ||
-        value === undefined ||
-        value === ""
-    ){
-
-        return "—";
-
-    }
-
-    if(
-        typeof value === "number"
-    ){
-
-        return value.toLocaleString(
-            "en-US"
-        );
-
-    }
-
-    return String(value);
-
-}
-
 
 function escapeHTML(value){
 
-    return String(value)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPE JS
+========================================================= */
+
+function escapeJS(value){
+
+  return String(value)
+    .replace(
+      /\\/g,
+      "\\\\"
+    )
+    .replace(
+      /'/g,
+      "\\'"
+    );
 
 }
 
