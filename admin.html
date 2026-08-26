@@ -1,2776 +1,2062 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0">
 
 <title>Admin Panel | CTG Board Ranking</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 :root{
-  --bg:#f5f5f7;
-  --surface:rgba(255,255,255,.78);
-  --solid:#fff;
-  --text:#1d1d1f;
-  --muted:#6e6e73;
-  --border:rgba(0,0,0,.08);
-  --blue:#0071e3;
-  --blue2:#5856d6;
-  --green:#16a34a;
-  --red:#ef4444;
-  --orange:#f59e0b;
-  --shadow:0 20px 60px rgba(0,0,0,.08);
-  --radius:24px;
+
+    --bg:#f5f5f7;
+    --surface:rgba(255,255,255,.78);
+    --solid:#ffffff;
+
+    --text:#1d1d1f;
+    --muted:#6e6e73;
+
+    --border:rgba(0,0,0,.08);
+
+    --blue:#0071e3;
+    --blue-dark:#0066cc;
+
+    --green:#16a34a;
+    --red:#ef4444;
+
+    --shadow:
+        0 20px 60px rgba(0,0,0,.08);
+
 }
 
 body.dark{
-  --bg:#0b0b0d;
-  --surface:rgba(28,28,30,.82);
-  --solid:#1c1c1e;
-  --text:#f5f5f7;
-  --muted:#a1a1a6;
-  --border:rgba(255,255,255,.09);
-  --shadow:0 20px 60px rgba(0,0,0,.35);
+
+    --bg:#0b0b0d;
+
+    --surface:
+        rgba(28,28,30,.82);
+
+    --solid:#1c1c1e;
+
+    --text:#f5f5f7;
+
+    --muted:#a1a1a6;
+
+    --border:
+        rgba(255,255,255,.09);
+
+    --shadow:
+        0 20px 60px rgba(0,0,0,.35);
+
 }
 
 body{
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Display",
-    "SF Pro Text",
-    "Segoe UI",
-    Roboto,
-    Arial,
-    sans-serif;
 
-  background:
-    radial-gradient(circle at 10% 0%,rgba(0,113,227,.10),transparent 30%),
-    radial-gradient(circle at 90% 0%,rgba(88,86,214,.10),transparent 30%),
-    var(--bg);
+    min-height:100vh;
 
-  color:var(--text);
-  min-height:100vh;
-  transition:.3s;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+    color:var(--text);
+
+    background:
+
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(0,113,227,.10),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 90% 0%,
+            rgba(88,86,214,.08),
+            transparent 30%
+        ),
+
+        var(--bg);
+
+    transition:
+        background .3s ease,
+        color .3s ease;
+
 }
 
 button,
-input,
 textarea,
-select{
-  font:inherit;
+input{
+
+    font:inherit;
+
 }
 
-/* =========================
+
+/* =====================================================
    LOGIN
-========================= */
+===================================================== */
 
 .login-screen{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:25px;
+
+    min-height:100vh;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
 }
 
 .login-box{
-  width:100%;
-  max-width:430px;
-  padding:38px;
-  background:var(--surface);
-  backdrop-filter:blur(30px);
-  -webkit-backdrop-filter:blur(30px);
-  border:1px solid var(--border);
-  border-radius:32px;
-  box-shadow:var(--shadow);
+
+    width:100%;
+
+    max-width:420px;
+
+    padding:38px 32px;
+
+    background:var(--surface);
+
+    backdrop-filter:blur(30px);
+
+    -webkit-backdrop-filter:blur(30px);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:30px;
+
+    box-shadow:var(--shadow);
+
 }
 
 .login-logo{
-  width:68px;
-  height:68px;
-  border-radius:21px;
-  display:grid;
-  place-items:center;
-  margin:0 auto 22px;
 
-  color:#fff;
-  font-size:30px;
+    width:68px;
+    height:68px;
 
-  background:
-    linear-gradient(135deg,#0071e3,#5856d6,#af52de);
+    margin:0 auto 22px;
 
-  box-shadow:0 15px 35px rgba(0,113,227,.25);
+    display:grid;
+
+    place-items:center;
+
+    border-radius:21px;
+
+    color:#fff;
+
+    font-size:30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0071e3,
+            #5856d6
+        );
+
+    box-shadow:
+        0 15px 35px
+        rgba(0,113,227,.25);
+
 }
 
 .login-box h1{
-  text-align:center;
-  font-size:32px;
-  letter-spacing:-1.5px;
-  margin-bottom:8px;
+
+    text-align:center;
+
+    font-size:31px;
+
+    letter-spacing:-1.5px;
+
+    margin-bottom:8px;
+
 }
 
-.login-box>p{
-  text-align:center;
-  color:var(--muted);
-  font-size:14px;
-  margin-bottom:30px;
+.login-box > p{
+
+    text-align:center;
+
+    color:var(--muted);
+
+    font-size:14px;
+
+    line-height:1.6;
+
+    margin-bottom:30px;
+
 }
 
 .form-group{
-  margin-bottom:18px;
+
+    margin-bottom:18px;
+
 }
 
 .form-group label{
-  display:block;
-  font-size:13px;
-  font-weight:700;
-  margin-bottom:8px;
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-size:13px;
+
+    font-weight:700;
+
 }
 
 .input,
-.textarea,
-.select{
-  width:100%;
-  border:1px solid var(--border);
-  background:rgba(127,127,127,.07);
-  color:var(--text);
-  outline:none;
-  border-radius:15px;
-  padding:14px 16px;
-  transition:.2s;
+.textarea{
+
+    width:100%;
+
+    border:
+        1px solid var(--border);
+
+    outline:none;
+
+    border-radius:15px;
+
+    background:
+        rgba(127,127,127,.07);
+
+    color:var(--text);
+
+    transition:.2s;
+
 }
 
 .input{
-  height:50px;
+
+    height:50px;
+
+    padding:0 16px;
+
 }
 
 .textarea{
-  min-height:180px;
-  resize:vertical;
-  line-height:1.6;
+
+    min-height:210px;
+
+    padding:15px 16px;
+
+    resize:vertical;
+
+    line-height:1.65;
+
 }
 
 .input:focus,
-.textarea:focus,
-.select:focus{
-  border-color:rgba(0,113,227,.45);
-  box-shadow:0 0 0 4px rgba(0,113,227,.08);
+.textarea:focus{
+
+    border-color:
+        rgba(0,113,227,.45);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(0,113,227,.08);
+
 }
 
 .login-btn,
-.primary-btn{
-  width:100%;
-  border:0;
-  border-radius:15px;
-  height:52px;
-  color:#fff;
-  font-weight:700;
-  cursor:pointer;
+.save-btn{
 
-  background:linear-gradient(135deg,#0071e3,#5856d6);
+    width:100%;
 
-  box-shadow:0 12px 25px rgba(0,113,227,.22);
-  transition:.2s;
+    height:52px;
+
+    border:0;
+
+    border-radius:15px;
+
+    color:#fff;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0071e3,
+            #5856d6
+        );
+
+    box-shadow:
+        0 12px 25px
+        rgba(0,113,227,.22);
+
+    transition:.2s;
+
 }
 
 .login-btn:hover,
-.primary-btn:hover{
-  transform:translateY(-2px);
+.save-btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.login-btn:disabled,
+.save-btn:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
+
+    transform:none;
+
 }
 
 .login-error{
-  display:none;
-  margin-top:15px;
-  padding:13px;
-  border-radius:13px;
-  background:rgba(239,68,68,.09);
-  color:var(--red);
-  font-size:13px;
-  text-align:center;
+
+    display:none;
+
+    margin-top:15px;
+
+    padding:13px;
+
+    border-radius:13px;
+
+    color:var(--red);
+
+    background:
+        rgba(239,68,68,.09);
+
+    font-size:13px;
+
+    text-align:center;
+
 }
 
-/* =========================
+
+/* =====================================================
    APP
-========================= */
+===================================================== */
 
 .app{
-  display:none;
-  min-height:100vh;
+
+    display:none;
+
+    min-height:100vh;
+
 }
 
-/* NAV */
+
+/* =====================================================
+   NAVBAR
+===================================================== */
 
 .navbar{
-  height:72px;
-  position:sticky;
-  top:0;
-  z-index:100;
 
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+    height:72px;
 
-  padding:0 4%;
+    position:sticky;
 
-  background:rgba(255,255,255,.72);
-  backdrop-filter:blur(25px);
-  -webkit-backdrop-filter:blur(25px);
+    top:0;
 
-  border-bottom:1px solid var(--border);
+    z-index:100;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 4%;
+
+    background:
+        rgba(255,255,255,.72);
+
+    backdrop-filter:blur(25px);
+
+    -webkit-backdrop-filter:blur(25px);
+
+    border-bottom:
+        1px solid var(--border);
+
 }
 
 body.dark .navbar{
-  background:rgba(20,20,22,.72);
+
+    background:
+        rgba(20,20,22,.72);
+
 }
 
 .brand{
-  display:flex;
-  align-items:center;
-  gap:11px;
-  text-decoration:none;
-  color:var(--text);
-  font-weight:750;
-  font-size:19px;
-  letter-spacing:-.5px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+
+    color:var(--text);
+
+    text-decoration:none;
+
+    font-size:19px;
+
+    font-weight:750;
+
+    letter-spacing:-.5px;
+
 }
 
 .brand-icon{
-  width:39px;
-  height:39px;
-  display:grid;
-  place-items:center;
-  border-radius:12px;
-  color:#fff;
-  background:linear-gradient(135deg,#0071e3,#5856d6);
+
+    width:39px;
+    height:39px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:12px;
+
+    color:#fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0071e3,
+            #5856d6
+        );
+
 }
 
 .nav-actions{
-  display:flex;
-  gap:9px;
+
+    display:flex;
+
+    gap:9px;
+
 }
 
 .icon-btn{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  border:1px solid var(--border);
-  background:var(--surface);
-  color:var(--text);
-  cursor:pointer;
-  display:grid;
-  place-items:center;
-  transition:.2s;
+
+    width:42px;
+    height:42px;
+
+    border-radius:50%;
+
+    border:
+        1px solid var(--border);
+
+    background:var(--surface);
+
+    color:var(--text);
+
+    cursor:pointer;
+
+    display:grid;
+
+    place-items:center;
+
+    transition:.2s;
+
 }
 
 .icon-btn:hover{
-  transform:translateY(-2px);
-  box-shadow:var(--shadow);
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,0,0,.08);
+
 }
 
-/* =========================
-   CONTAINER
-========================= */
+
+/* =====================================================
+   MAIN
+===================================================== */
 
 .container{
-  max-width:1350px;
-  margin:auto;
-  padding:45px 25px 70px;
+
+    width:100%;
+
+    max-width:900px;
+
+    margin:auto;
+
+    padding:
+        55px 20px 80px;
+
 }
 
 .page-title{
-  margin-bottom:30px;
+
+    margin-bottom:28px;
+
 }
 
-.page-title .eyebrow{
-  display:inline-flex;
-  padding:7px 13px;
-  border-radius:999px;
-  background:rgba(0,113,227,.09);
-  color:var(--blue);
-  font-size:12px;
-  font-weight:750;
-  margin-bottom:13px;
+.eyebrow{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    padding:7px 13px;
+
+    border-radius:999px;
+
+    color:var(--blue);
+
+    background:
+        rgba(0,113,227,.09);
+
+    font-size:11px;
+
+    font-weight:750;
+
+    margin-bottom:13px;
+
 }
 
 .page-title h1{
-  font-size:clamp(34px,5vw,52px);
-  letter-spacing:-3px;
-  line-height:1;
-  margin-bottom:10px;
+
+    font-size:
+        clamp(38px,6vw,58px);
+
+    line-height:1;
+
+    letter-spacing:-3px;
+
+    margin-bottom:12px;
+
+}
+
+.gradient-text{
+
+    background:
+        linear-gradient(
+            90deg,
+            #0071e3,
+            #5856d6,
+            #af52de
+        );
+
+    -webkit-background-clip:text;
+
+    background-clip:text;
+
+    color:transparent;
+
 }
 
 .page-title p{
-  color:var(--muted);
+
+    color:var(--muted);
+
+    font-size:15px;
+
 }
 
-/* =========================
-   DASHBOARD CARDS
-========================= */
 
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:15px;
-  margin-bottom:30px;
+/* =====================================================
+   NOTICE CARD
+===================================================== */
+
+.notice-card{
+
+    border:
+        1px solid var(--border);
+
+    background:var(--surface);
+
+    backdrop-filter:blur(30px);
+
+    -webkit-backdrop-filter:blur(30px);
+
+    border-radius:26px;
+
+    box-shadow:
+        0 15px 45px
+        rgba(0,0,0,.055);
+
+    overflow:hidden;
+
 }
 
-.stat{
-  padding:23px;
-  border:1px solid var(--border);
-  border-radius:22px;
-  background:var(--surface);
-  backdrop-filter:blur(20px);
-  box-shadow:0 10px 35px rgba(0,0,0,.04);
+.notice-card-header{
+
+    padding:
+        22px 24px;
+
+    border-bottom:
+        1px solid var(--border);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
 }
 
-.stat-icon{
-  width:43px;
-  height:43px;
-  border-radius:14px;
-  display:grid;
-  place-items:center;
-  background:rgba(0,113,227,.10);
-  margin-bottom:15px;
+.notice-card-title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
 }
 
-.stat strong{
-  display:block;
-  font-size:29px;
-  letter-spacing:-1px;
+.notice-icon{
+
+    width:43px;
+    height:43px;
+
+    border-radius:14px;
+
+    display:grid;
+
+    place-items:center;
+
+    color:var(--blue);
+
+    background:
+        rgba(0,113,227,.10);
+
+    font-size:20px;
+
 }
 
-.stat span{
-  color:var(--muted);
-  font-size:13px;
+.notice-card-title h2{
+
+    font-size:19px;
+
+    letter-spacing:-.5px;
+
 }
 
-/* =========================
-   WORKSPACE
-========================= */
+.notice-card-title p{
 
-.workspace{
-  display:grid;
-  grid-template-columns:1fr 420px;
-  gap:20px;
-  align-items:start;
+    color:var(--muted);
+
+    font-size:11px;
+
+    margin-top:3px;
+
 }
 
-.panel{
-  border:1px solid var(--border);
-  background:var(--surface);
-  backdrop-filter:blur(25px);
-  border-radius:var(--radius);
-  box-shadow:0 10px 35px rgba(0,0,0,.04);
-  overflow:hidden;
+.status-pill{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    padding:7px 11px;
+
+    border-radius:999px;
+
+    color:var(--green);
+
+    background:
+        rgba(22,163,74,.09);
+
+    font-size:11px;
+
+    font-weight:700;
+
 }
 
-.panel-header{
-  padding:21px 23px;
-  border-bottom:1px solid var(--border);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+.status-dot{
+
+    width:6px;
+    height:6px;
+
+    border-radius:50%;
+
+    background:#16a34a;
+
 }
 
-.panel-header h2{
-  font-size:20px;
-  letter-spacing:-.7px;
+.notice-card-body{
+
+    padding:24px;
+
 }
 
-.panel-body{
-  padding:23px;
+.notice-label{
+
+    display:block;
+
+    margin-bottom:9px;
+
+    font-size:13px;
+
+    font-weight:700;
+
 }
 
-/* =========================
-   EDITOR
-========================= */
+.notice-hint{
 
-.editor-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
+    margin-top:8px;
+
+    color:var(--muted);
+
+    font-size:11px;
+
+    line-height:1.5;
+
 }
 
-.full{
-  grid-column:1/-1;
+.save-area{
+
+    margin-top:20px;
+
+    display:flex;
+
+    justify-content:flex-end;
+
 }
 
-.options{
-  display:flex;
-  gap:15px;
-  flex-wrap:wrap;
-  align-items:center;
-  margin:5px 0 5px;
+.save-btn{
+
+    width:auto;
+
+    min-width:170px;
+
+    padding:0 25px;
+
 }
 
-.check{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  color:var(--muted);
-  font-size:13px;
-  font-weight:600;
+
+/* =====================================================
+   CURRENT NOTICE
+===================================================== */
+
+.current-notice{
+
+    margin-top:20px;
+
+    padding:20px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:20px;
+
+    background:
+        rgba(127,127,127,.045);
+
 }
 
-.check input{
-  width:17px;
-  height:17px;
-  accent-color:var(--blue);
+.current-heading{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:12px;
+
 }
 
-.editor-actions{
-  display:flex;
-  gap:10px;
-  margin-top:22px;
+.current-heading strong{
+
+    font-size:13px;
+
 }
 
-.btn{
-  height:46px;
-  padding:0 19px;
-  border-radius:13px;
-  border:1px solid var(--border);
-  cursor:pointer;
-  font-weight:700;
-  transition:.2s;
+.current-time{
+
+    color:var(--muted);
+
+    font-size:10px;
+
 }
 
-.btn:hover{
-  transform:translateY(-1px);
+.current-text{
+
+    color:var(--text);
+
+    font-size:14px;
+
+    line-height:1.7;
+
+    white-space:pre-wrap;
+
+    overflow-wrap:anywhere;
+
 }
 
-.btn-primary{
-  color:#fff;
-  border:0;
-  background:linear-gradient(135deg,#0071e3,#5856d6);
+.empty-notice{
+
+    color:var(--muted);
+
+    font-size:13px;
+
 }
 
-.btn-secondary{
-  background:rgba(127,127,127,.08);
-  color:var(--text);
-}
 
-.btn-danger{
-  background:rgba(239,68,68,.08);
-  color:var(--red);
-  border-color:rgba(239,68,68,.15);
-}
-
-/* =========================
-   PREVIEW
-========================= */
-
-.preview{
-  min-height:500px;
-  background:var(--solid);
-  border:1px solid var(--border);
-  border-radius:20px;
-  overflow:hidden;
-}
-
-.preview-image{
-  width:100%;
-  height:190px;
-  object-fit:cover;
-  display:none;
-}
-
-.preview-content{
-  padding:25px;
-}
-
-.preview-category{
-  display:inline-flex;
-  padding:6px 11px;
-  border-radius:999px;
-  background:rgba(0,113,227,.09);
-  color:var(--blue);
-  font-size:11px;
-  font-weight:750;
-  margin-bottom:14px;
-}
-
-.preview-title{
-  font-size:27px;
-  line-height:1.15;
-  letter-spacing:-1px;
-  margin-bottom:12px;
-}
-
-.preview-date{
-  font-size:12px;
-  color:var(--muted);
-  margin-bottom:20px;
-}
-
-.preview-body{
-  color:var(--text);
-  line-height:1.75;
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
-  word-break:break-word;
-}
-
-.preview-pdf{
-  margin-top:25px;
-  padding:14px;
-  border-radius:14px;
-  background:rgba(0,113,227,.08);
-  color:var(--blue);
-  font-size:13px;
-  font-weight:700;
-  overflow-wrap:anywhere;
-}
-
-/* =========================
-   NOTICE LIST
-========================= */
-
-.notice-panel{
-  margin-top:20px;
-}
-
-.toolbar{
-  padding:18px 23px;
-  border-bottom:1px solid var(--border);
-  display:flex;
-  gap:10px;
-}
-
-.search{
-  flex:1;
-}
-
-.search input{
-  width:100%;
-  height:46px;
-  border:1px solid var(--border);
-  border-radius:13px;
-  padding:0 15px;
-  outline:none;
-  background:rgba(127,127,127,.07);
-  color:var(--text);
-}
-
-.notice-list{
-  display:flex;
-  flex-direction:column;
-}
-
-.notice-item{
-  padding:20px 23px;
-  border-bottom:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  gap:15px;
-  transition:.2s;
-}
-
-.notice-item:hover{
-  background:rgba(127,127,127,.04);
-}
-
-.notice-item:last-child{
-  border-bottom:0;
-}
-
-.notice-main{
-  min-width:0;
-  flex:1;
-}
-
-.notice-title{
-  font-weight:750;
-  margin-bottom:7px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.notice-meta{
-  color:var(--muted);
-  font-size:12px;
-}
-
-.badge{
-  padding:6px 9px;
-  border-radius:999px;
-  font-size:10px;
-  font-weight:750;
-}
-
-.badge-published{
-  background:rgba(22,163,74,.10);
-  color:var(--green);
-}
-
-.badge-draft{
-  background:rgba(245,158,11,.10);
-  color:var(--orange);
-}
-
-.notice-actions{
-  display:flex;
-  gap:7px;
-}
-
-.small-btn{
-  width:36px;
-  height:36px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:rgba(127,127,127,.06);
-  color:var(--text);
-  cursor:pointer;
-}
-
-.small-btn.delete{
-  color:var(--red);
-}
-
-/* =========================
+/* =====================================================
    TOAST
-========================= */
+===================================================== */
 
 .toast{
-  position:fixed;
-  right:22px;
-  bottom:22px;
-  z-index:9999;
 
-  min-width:260px;
-  max-width:380px;
+    position:fixed;
 
-  padding:15px 17px;
+    right:20px;
 
-  border-radius:16px;
+    bottom:20px;
 
-  background:var(--solid);
-  border:1px solid var(--border);
+    z-index:9999;
 
-  box-shadow:var(--shadow);
+    width:
+        min(380px,calc(100% - 40px));
 
-  transform:translateY(120px);
-  opacity:0;
+    padding:15px 17px;
 
-  transition:.3s;
+    border-radius:17px;
+
+    background:var(--solid);
+
+    border:
+        1px solid var(--border);
+
+    box-shadow:var(--shadow);
+
+    transform:
+        translateY(120px);
+
+    opacity:0;
+
+    transition:.3s;
+
 }
 
 .toast.show{
-  transform:translateY(0);
-  opacity:1;
+
+    transform:
+        translateY(0);
+
+    opacity:1;
+
 }
 
 .toast.success{
-  border-color:rgba(22,163,74,.2);
+
+    border-color:
+        rgba(22,163,74,.20);
+
 }
 
 .toast.error{
-  border-color:rgba(239,68,68,.2);
+
+    border-color:
+        rgba(239,68,68,.20);
+
 }
 
 .toast-title{
-  font-weight:750;
-  margin-bottom:3px;
+
+    font-weight:750;
+
+    margin-bottom:3px;
+
 }
 
 .toast-text{
-  color:var(--muted);
-  font-size:12px;
+
+    color:var(--muted);
+
+    font-size:12px;
+
 }
 
-/* =========================
+
+/* =====================================================
    LOADING
-========================= */
+===================================================== */
 
 .loading{
-  padding:50px;
-  text-align:center;
-  color:var(--muted);
+
+    padding:25px 0;
+
+    text-align:center;
+
+    color:var(--muted);
+
+    font-size:13px;
+
 }
 
 .spinner{
-  width:32px;
-  height:32px;
-  border:3px solid rgba(127,127,127,.15);
-  border-top-color:var(--blue);
-  border-radius:50%;
-  animation:spin .8s linear infinite;
-  margin:0 auto 13px;
+
+    width:28px;
+    height:28px;
+
+    margin:
+        0 auto 10px;
+
+    border:
+        3px solid
+        rgba(127,127,127,.15);
+
+    border-top-color:
+        var(--blue);
+
+    border-radius:50%;
+
+    animation:
+        spin .8s linear infinite;
+
 }
 
 @keyframes spin{
-  to{transform:rotate(360deg)}
+
+    to{
+        transform:rotate(360deg);
+    }
+
 }
 
-/* =========================
+
+/* =====================================================
    RESPONSIVE
-========================= */
-
-@media(max-width:1050px){
-
-  .workspace{
-    grid-template-columns:1fr;
-  }
-
-}
-
-@media(max-width:800px){
-
-  .stats{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-}
+===================================================== */
 
 @media(max-width:600px){
 
-  .navbar{
-    padding:0 16px;
-  }
+    .navbar{
 
-  .brand{
-    font-size:16px;
-  }
+        height:64px;
 
-  .container{
-    padding:30px 15px 50px;
-  }
+        padding:
+            0 15px;
 
-  .page-title h1{
-    letter-spacing:-2px;
-  }
+    }
 
-  .stats{
-    gap:10px;
-  }
+    .brand{
 
-  .stat{
-    padding:17px;
-  }
+        font-size:15px;
 
-  .stat strong{
-    font-size:23px;
-  }
+    }
 
-  .editor-grid{
-    grid-template-columns:1fr;
-  }
+    .brand-icon{
 
-  .full{
-    grid-column:auto;
-  }
+        width:36px;
+        height:36px;
 
-  .panel-body{
-    padding:17px;
-  }
+        border-radius:11px;
 
-  .editor-actions{
-    flex-direction:column;
-  }
+    }
 
-  .btn{
-    width:100%;
-  }
+    .icon-btn{
 
-  .notice-item{
-    align-items:flex-start;
-    padding:17px;
-  }
+        width:38px;
+        height:38px;
 
-  .notice-actions{
-    flex-shrink:0;
-  }
+    }
 
-  .badge{
-    display:none;
-  }
+    .container{
 
-  .login-box{
-    padding:27px 21px;
-  }
+        padding:
+            35px 14px 60px;
+
+    }
+
+    .page-title{
+
+        margin-bottom:22px;
+
+    }
+
+    .page-title h1{
+
+        font-size:40px;
+
+        letter-spacing:-2.5px;
+
+    }
+
+    .notice-card{
+
+        border-radius:21px;
+
+    }
+
+    .notice-card-header{
+
+        padding:
+            18px;
+
+    }
+
+    .notice-card-body{
+
+        padding:
+            18px;
+
+    }
+
+    .status-pill{
+
+        display:none;
+
+    }
+
+    .save-area{
+
+        display:block;
+
+    }
+
+    .save-btn{
+
+        width:100%;
+
+    }
 
 }
+
+
+/* =====================================================
+   DARK MODE
+===================================================== */
+
+body.dark .notice-card{
+
+    box-shadow:
+        0 15px 45px
+        rgba(0,0,0,.25);
+
+}
+
 </style>
+
 </head>
+
 
 <body>
 
-<!-- ======================================================
+
+<!-- =====================================================
      LOGIN
-====================================================== -->
+===================================================== -->
 
-<section class="login-screen" id="loginScreen">
+<section
+    class="login-screen"
+    id="loginScreen">
 
-  <div class="login-box">
+    <div class="login-box">
 
-    <div class="login-logo">
-      🎓
+        <div class="login-logo">
+            📢
+        </div>
+
+        <h1>
+            Admin Access
+        </h1>
+
+        <p>
+            CTG Board Ranking
+            <br>
+            Importance Notice Management
+        </p>
+
+
+        <form id="loginForm">
+
+            <div class="form-group">
+
+                <label>
+                    Email
+                </label>
+
+                <input
+                    class="input"
+                    id="loginEmail"
+                    type="email"
+                    placeholder="admin@example.com"
+                    autocomplete="username"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Password
+                </label>
+
+                <input
+                    class="input"
+                    id="loginPassword"
+                    type="password"
+                    placeholder="••••••••"
+                    autocomplete="current-password"
+                    required>
+
+            </div>
+
+
+            <button
+                class="login-btn"
+                id="loginButton"
+                type="submit">
+
+                Sign In
+
+            </button>
+
+
+            <div
+                class="login-error"
+                id="loginError">
+            </div>
+
+        </form>
+
     </div>
-
-    <h1>Admin Access</h1>
-
-    <p>
-      CTG Board Ranking
-      <br>
-      Secure administration portal
-    </p>
-
-    <form id="loginForm">
-
-      <div class="form-group">
-
-        <label>Email</label>
-
-        <input
-          class="input"
-          id="loginEmail"
-          type="email"
-          placeholder="admin@example.com"
-          autocomplete="username"
-          required>
-
-      </div>
-
-      <div class="form-group">
-
-        <label>Password</label>
-
-        <input
-          class="input"
-          id="loginPassword"
-          type="password"
-          placeholder="••••••••"
-          autocomplete="current-password"
-          required>
-
-      </div>
-
-      <button
-        class="login-btn"
-        id="loginButton"
-        type="submit">
-
-        Sign In
-
-      </button>
-
-      <div
-        class="login-error"
-        id="loginError">
-      </div>
-
-    </form>
-
-  </div>
 
 </section>
 
 
-<!-- ======================================================
+
+<!-- =====================================================
      APP
-====================================================== -->
+===================================================== -->
 
-<div class="app" id="app">
-
-  <!-- NAV -->
-
-  <nav class="navbar">
-
-    <a href="index.html" class="brand">
-
-      <div class="brand-icon">
-        🎓
-      </div>
-
-      CTG Board Ranking
-
-    </a>
-
-    <div class="nav-actions">
-
-      <button
-        class="icon-btn"
-        id="themeBtn"
-        title="Toggle theme">
-
-        ◐
-
-      </button>
-
-      <button
-        class="icon-btn"
-        id="logoutBtn"
-        title="Logout">
-
-        ↪
-
-      </button>
-
-    </div>
-
-  </nav>
+<div
+    class="app"
+    id="app">
 
 
-  <!-- CONTENT -->
+    <!-- NAVBAR -->
 
-  <main class="container">
+    <nav class="navbar">
 
-    <div class="page-title">
+        <a
+            href="index.html"
+            class="brand">
 
-      <div class="eyebrow">
-        ✦ ADMINISTRATION
-      </div>
+            <div class="brand-icon">
+                📢
+            </div>
 
-      <h1>
-        Control
-        <span style="
-          background:linear-gradient(
-            90deg,#0071e3,#5856d6,#af52de
-          );
-          -webkit-background-clip:text;
-          color:transparent;
-        ">
-          Center.
-        </span>
-      </h1>
+            CTG Board Ranking
 
-      <p>
-        Create, manage and publish CTG Board Ranking notices.
-      </p>
-
-    </div>
+        </a>
 
 
-    <!-- STATS -->
+        <div class="nav-actions">
 
-    <section class="stats">
+            <button
+                class="icon-btn"
+                id="themeBtn"
+                title="Toggle theme">
 
-      <div class="stat">
+                ◐
 
-        <div class="stat-icon">
-          📝
-        </div>
-
-        <strong id="statTotal">
-          —
-        </strong>
-
-        <span>
-          Total Notices
-        </span>
-
-      </div>
+            </button>
 
 
-      <div class="stat">
+            <button
+                class="icon-btn"
+                id="logoutBtn"
+                title="Logout">
 
-        <div class="stat-icon">
-          🟢
-        </div>
+                ↪
 
-        <strong id="statPublished">
-          —
-        </strong>
-
-        <span>
-          Published
-        </span>
-
-      </div>
-
-
-      <div class="stat">
-
-        <div class="stat-icon">
-          📝
-        </div>
-
-        <strong id="statDraft">
-          —
-        </strong>
-
-        <span>
-          Drafts
-        </span>
-
-      </div>
-
-
-      <div class="stat">
-
-        <div class="stat-icon">
-          ⭐
-        </div>
-
-        <strong id="statFeatured">
-          —
-        </strong>
-
-        <span>
-          Featured
-        </span>
-
-      </div>
-
-    </section>
-
-
-    <!-- EDITOR + PREVIEW -->
-
-    <section class="workspace">
-
-      <!-- EDITOR -->
-
-      <div class="panel">
-
-        <div class="panel-header">
-
-          <h2 id="editorHeading">
-            Create Notice
-          </h2>
-
-          <button
-            class="btn btn-secondary"
-            id="newNoticeBtn">
-
-            + New
-
-          </button>
+            </button>
 
         </div>
 
-        <div class="panel-body">
+    </nav>
 
-          <form id="noticeForm">
 
-            <div class="editor-grid">
 
-              <div class="form-group full">
+    <!-- MAIN -->
 
-                <label>
-                  Notice Title
+    <main class="container">
+
+
+        <div class="page-title">
+
+            <div class="eyebrow">
+                ✦ ADMINISTRATION
+            </div>
+
+            <h1>
+
+                Importance
+                <span class="gradient-text">
+                    Notice.
+                </span>
+
+            </h1>
+
+            <p>
+                Manage the notice displayed on the CTG Board Ranking homepage.
+            </p>
+
+        </div>
+
+
+
+        <!-- NOTICE CARD -->
+
+        <section class="notice-card">
+
+
+            <div class="notice-card-header">
+
+                <div class="notice-card-title">
+
+                    <div class="notice-icon">
+                        📢
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Homepage Notice
+                        </h2>
+
+                        <p>
+                            Only one notice can be active.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="status-pill">
+
+                    <span class="status-dot"></span>
+
+                    Active System
+
+                </div>
+
+            </div>
+
+
+
+            <div class="notice-card-body">
+
+
+                <label
+                    class="notice-label"
+                    for="noticeInput">
+
+                    Importance Notice
+
                 </label>
 
-                <input
-                  class="input"
-                  id="noticeTitle"
-                  type="text"
-                  placeholder="Enter notice title..."
-                  required>
-
-              </div>
-
-
-              <div class="form-group">
-
-                <label>
-                  Category
-                </label>
-
-                <select
-                  class="select"
-                  id="noticeCategory">
-
-                  <option value="Notice">
-                    Notice
-                  </option>
-
-                  <option value="SSC">
-                    SSC
-                  </option>
-
-                  <option value="HSC">
-                    HSC
-                  </option>
-
-                  <option value="Admission">
-                    Admission
-                  </option>
-
-                  <option value="Exam">
-                    Exam & Routine
-                  </option>
-
-                  <option value="Result">
-                    Result
-                  </option>
-
-                  <option value="National University">
-                    National University
-                  </option>
-
-                  <option value="Education">
-                    Education
-                  </option>
-
-                  <option value="Other">
-                    Other
-                  </option>
-
-                </select>
-
-              </div>
-
-
-              <div class="form-group">
-
-                <label>
-                  Status
-                </label>
-
-                <select
-                  class="select"
-                  id="noticeStatus">
-
-                  <option value="published">
-                    Published
-                  </option>
-
-                  <option value="draft">
-                    Draft
-                  </option>
-
-                </select>
-
-              </div>
-
-
-              <div class="form-group full">
-
-                <label>
-                  Notice Content
-                </label>
 
                 <textarea
-                  class="textarea"
-                  id="noticeContent"
-                  placeholder="Write the complete notice here..."
-                  required></textarea>
-
-              </div>
+                    class="textarea"
+                    id="noticeInput"
+                    placeholder="Write your important notice here..."
+                    maxlength="1000"></textarea>
 
 
-              <div class="form-group">
+                <div class="notice-hint">
 
-                <label>
-                  Image URL
-                </label>
+                    This notice will appear below
+                    <strong>Shadat Fatih</strong>
+                    on the homepage and will move from right to left.
 
-                <input
-                  class="input"
-                  id="noticeImage"
-                  type="url"
-                  placeholder="https://...">
-
-              </div>
+                </div>
 
 
-              <div class="form-group">
+                <div class="save-area">
 
-                <label>
-                  PDF URL
-                </label>
+                    <button
+                        class="save-btn"
+                        id="saveNoticeBtn"
+                        type="button">
 
-                <input
-                  class="input"
-                  id="noticePDF"
-                  type="url"
-                  placeholder="https://...">
+                        Save Notice
 
-              </div>
+                    </button>
+
+                </div>
+
+
+                <!-- CURRENT NOTICE -->
+
+                <div class="current-notice">
+
+                    <div class="current-heading">
+
+                        <strong>
+                            Current Notice
+                        </strong>
+
+                        <span
+                            class="current-time"
+                            id="currentTime">
+
+                            Loading...
+
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        class="current-text"
+                        id="currentNotice">
+
+                        <div class="loading">
+
+                            <div class="spinner"></div>
+
+                            Loading notice...
+
+                        </div>
+
+                    </div>
+
+                </div>
+
 
             </div>
 
+        </section>
 
-            <div class="options">
 
-              <label class="check">
-
-                <input
-                  type="checkbox"
-                  id="noticeFeatured">
-
-                Featured Notice
-
-              </label>
-
-            </div>
-
-
-            <div class="editor-actions">
-
-              <button
-                class="btn btn-primary"
-                id="saveBtn"
-                type="submit">
-
-                Publish Notice
-
-              </button>
-
-              <button
-                class="btn btn-secondary"
-                id="previewBtn"
-                type="button">
-
-                Preview
-
-              </button>
-
-              <button
-                class="btn btn-secondary"
-                id="resetBtn"
-                type="button">
-
-                Clear
-
-              </button>
-
-            </div>
-
-          </form>
-
-        </div>
-
-      </div>
-
-
-      <!-- PREVIEW -->
-
-      <div class="panel">
-
-        <div class="panel-header">
-
-          <h2>
-            Live Preview
-          </h2>
-
-          <span
-            style="
-              font-size:12px;
-              color:var(--muted);
-            ">
-
-            Preview
-
-          </span>
-
-        </div>
-
-        <div class="panel-body">
-
-          <article class="preview">
-
-            <img
-              class="preview-image"
-              id="previewImage">
-
-            <div class="preview-content">
-
-              <div
-                class="preview-category"
-                id="previewCategory">
-
-                Notice
-
-              </div>
-
-              <h2
-                class="preview-title"
-                id="previewTitle">
-
-                Your notice title will appear here
-
-              </h2>
-
-              <div
-                class="preview-date"
-                id="previewDate">
-
-                Preview
-
-              </div>
-
-              <div
-                class="preview-body"
-                id="previewBody">
-
-                Start writing your notice to see the preview.
-
-              </div>
-
-              <div
-                class="preview-pdf"
-                id="previewPDF"
-                style="display:none">
-
-                📄 PDF Attachment
-
-              </div>
-
-            </div>
-
-          </article>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- NOTICE LIST -->
-
-    <section class="panel notice-panel">
-
-      <div class="panel-header">
-
-        <h2>
-          All Notices
-        </h2>
-
-        <span
-          id="noticeCount"
-          style="
-            color:var(--muted);
-            font-size:13px;
-          ">
-
-          Loading...
-
-        </span>
-
-      </div>
-
-
-      <div class="toolbar">
-
-        <div class="search">
-
-          <input
-            id="noticeSearch"
-            type="search"
-            placeholder="Search notices...">
-
-        </div>
-
-      </div>
-
-
-      <div
-        class="notice-list"
-        id="noticeList">
-
-        <div class="loading">
-
-          <div class="spinner"></div>
-
-          Loading notices...
-
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
+    </main>
 
 </div>
 
 
-<!-- TOAST -->
 
-<div class="toast" id="toast">
+<!-- =====================================================
+     TOAST
+===================================================== -->
 
-  <div
-    class="toast-title"
-    id="toastTitle">
+<div
+    class="toast"
+    id="toast">
 
-    Done
+    <div
+        class="toast-title"
+        id="toastTitle">
 
-  </div>
+        Done
 
-  <div
-    class="toast-text"
-    id="toastText">
+    </div>
 
-  </div>
+    <div
+        class="toast-text"
+        id="toastText">
+    </div>
 
 </div>
+
 
 
 <script>
 
-/* ==========================================================
+/* =========================================================
    SUPABASE CONFIGURATION
-========================================================== */
-
-/*
-   IMPORTANT:
-   Replace these two values with your Supabase project values.
-
-   Supabase Dashboard
-   → Project Settings
-   → API
-
-   Project URL:
-   https://xxxxxxxx.supabase.co
-
-   Anon public key:
-   eyJhbGciOi...
-*/
+========================================================= */
 
 const SUPABASE_URL =
-  "https://mpnjnyejpqeqguxikvnl.supabase.co";
+    "https://mpnjnyejpqeqguxikvnl.supabase.co";
 
 const SUPABASE_ANON_KEY =
-  "sb_publishable_KLxc2rvrOnfOrq7_Zqp9Vw_9Wnbuzs9";
+    "sb_publishable_KLxc2rvrOnfOrq7_Zqp9Vw_9Wnbuz9";
 
 
-/* ==========================================================
+/* =========================================================
    SUPABASE CLIENT
-========================================================== */
+========================================================= */
 
 const {
-  createClient
+    createClient
 } = supabase;
 
 const db =
-  createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
+    createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
 
 
-/* ==========================================================
-   STATE
-========================================================== */
+/* =========================================================
+   DOM
+========================================================= */
+
+const loginScreen =
+    document.getElementById(
+        "loginScreen"
+    );
+
+const app =
+    document.getElementById(
+        "app"
+    );
+
+const loginForm =
+    document.getElementById(
+        "loginForm"
+    );
+
+const loginError =
+    document.getElementById(
+        "loginError"
+    );
+
+const loginButton =
+    document.getElementById(
+        "loginButton"
+    );
+
+const noticeInput =
+    document.getElementById(
+        "noticeInput"
+    );
+
+const saveNoticeBtn =
+    document.getElementById(
+        "saveNoticeBtn"
+    );
+
+const currentNotice =
+    document.getElementById(
+        "currentNotice"
+    );
+
+const currentTime =
+    document.getElementById(
+        "currentTime"
+    );
+
 
 let currentUser = null;
 
-let notices = [];
 
-let editingId = null;
+/* =========================================================
+   TOAST
+========================================================= */
 
+function showToast(
+    title,
+    message,
+    type = "success"
+){
 
-/* ==========================================================
-   DOM
-========================================================== */
+    const toast =
+        document.getElementById(
+            "toast"
+        );
 
-const loginScreen =
-  document.getElementById("loginScreen");
+    document.getElementById(
+        "toastTitle"
+    ).textContent =
+        title;
 
-const app =
-  document.getElementById("app");
+    document.getElementById(
+        "toastText"
+    ).textContent =
+        message;
 
-const loginForm =
-  document.getElementById("loginForm");
+    toast.className =
+        "toast show " + type;
 
-const loginError =
-  document.getElementById("loginError");
+    clearTimeout(
+        window.toastTimer
+    );
 
-const loginButton =
-  document.getElementById("loginButton");
+    window.toastTimer =
+        setTimeout(
+            () => {
 
-const noticeForm =
-  document.getElementById("noticeForm");
+                toast.classList.remove(
+                    "show"
+                );
 
-const noticeList =
-  document.getElementById("noticeList");
-
-const noticeSearch =
-  document.getElementById("noticeSearch");
-
-
-/* ==========================================================
-   UTILITIES
-========================================================== */
-
-function escapeHTML(value){
-
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+            },
+            3500
+        );
 
 }
 
+
+/* =========================================================
+   FORMAT DATE
+========================================================= */
 
 function formatDate(date){
 
-  if(!date) return "—";
-
-  return new Date(date).toLocaleString(
-    "en-US",
-    {
-      year:"numeric",
-      month:"short",
-      day:"numeric",
-      hour:"2-digit",
-      minute:"2-digit"
+    if(!date){
+        return "Not available";
     }
-  );
-
-}
-
-
-function showToast(
-  title,
-  message,
-  type="success"
-){
-
-  const toast =
-    document.getElementById("toast");
-
-  document.getElementById(
-    "toastTitle"
-  ).textContent = title;
-
-  document.getElementById(
-    "toastText"
-  ).textContent = message;
-
-  toast.className =
-    "toast show " + type;
-
-  clearTimeout(
-    window.toastTimer
-  );
-
-  window.toastTimer =
-    setTimeout(
-      ()=>{
-        toast.classList.remove("show");
-      },
-      3500
-    );
-
-}
-
-
-/* ==========================================================
-   LOGIN
-========================================================== */
-
-loginForm.addEventListener(
-  "submit",
-  async event => {
-
-    event.preventDefault();
-
-    const email =
-      document.getElementById(
-        "loginEmail"
-      ).value.trim();
-
-    const password =
-      document.getElementById(
-        "loginPassword"
-      ).value;
-
-
-    loginButton.disabled = true;
-
-    loginButton.textContent =
-      "Signing in...";
-
-    loginError.style.display =
-      "none";
-
 
     try{
 
-      const {
-        data,
-        error
-      } =
-      await db.auth.signInWithPassword({
-        email,
-        password
-      });
+        return new Date(date)
+            .toLocaleString(
+                "en-US",
+                {
+                    year:"numeric",
+                    month:"short",
+                    day:"numeric",
+                    hour:"2-digit",
+                    minute:"2-digit"
+                }
+            );
 
+    }catch{
 
-      if(error){
-        throw error;
-      }
-
-
-      currentUser =
-        data.user;
-
-      showApp();
-
-
-    }catch(error){
-
-      console.error(error);
-
-      loginError.textContent =
-        error.message ||
-        "Login failed.";
-
-      loginError.style.display =
-        "block";
-
-    }finally{
-
-      loginButton.disabled =
-        false;
-
-      loginButton.textContent =
-        "Sign In";
+        return "Not available";
 
     }
 
-  }
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+loginForm.addEventListener(
+    "submit",
+    async event => {
+
+        event.preventDefault();
+
+
+        const email =
+            document.getElementById(
+                "loginEmail"
+            ).value.trim();
+
+
+        const password =
+            document.getElementById(
+                "loginPassword"
+            ).value;
+
+
+        loginButton.disabled =
+            true;
+
+        loginButton.textContent =
+            "Signing in...";
+
+        loginError.style.display =
+            "none";
+
+
+        try{
+
+            const {
+                data,
+                error
+            } =
+            await db.auth.signInWithPassword({
+                email,
+                password
+            });
+
+
+            if(error){
+                throw error;
+            }
+
+
+            currentUser =
+                data.user;
+
+
+            showApp();
+
+
+        }catch(error){
+
+            console.error(error);
+
+            loginError.textContent =
+                error.message ||
+                "Login failed.";
+
+            loginError.style.display =
+                "block";
+
+        }finally{
+
+            loginButton.disabled =
+                false;
+
+            loginButton.textContent =
+                "Sign In";
+
+        }
+
+    }
 );
 
 
-/* ==========================================================
-   SESSION CHECK
-========================================================== */
+/* =========================================================
+   SESSION
+========================================================= */
 
 async function checkSession(){
 
-  try{
+    try{
 
-    const {
-      data
-    } =
-    await db.auth.getSession();
+        const {
+            data
+        } =
+        await db.auth.getSession();
 
 
-    if(data.session){
+        if(data.session){
 
-      currentUser =
-        data.session.user;
+            currentUser =
+                data.session.user;
 
-      showApp();
+            showApp();
+
+        }
+
+    }catch(error){
+
+        console.error(
+            "Session error:",
+            error
+        );
 
     }
-
-  }catch(error){
-
-    console.error(error);
-
-  }
 
 }
 
 
 db.auth.onAuthStateChange(
-  (event, session)=>{
+    (event, session) => {
 
-    if(session){
-
-      currentUser =
-        session.user;
-
-    }else{
-
-      currentUser =
-        null;
+        currentUser =
+            session
+                ? session.user
+                : null;
 
     }
-
-  }
 );
 
 
-/* ==========================================================
+/* =========================================================
    SHOW APP
-========================================================== */
+========================================================= */
 
 function showApp(){
 
-  loginScreen.style.display =
-    "none";
-
-  app.style.display =
-    "block";
-
-  loadNotices();
-
-}
-
-
-/* ==========================================================
-   LOGOUT
-========================================================== */
-
-document
-  .getElementById("logoutBtn")
-  .addEventListener(
-    "click",
-    async ()=>{
-
-      await db.auth.signOut();
-
-      app.style.display =
+    loginScreen.style.display =
         "none";
 
-      loginScreen.style.display =
-        "flex";
+    app.style.display =
+        "block";
 
-      noticeForm.reset();
-
-      editingId = null;
-
-    }
-  );
-
-
-/* ==========================================================
-   LOAD NOTICES
-========================================================== */
-
-async function loadNotices(){
-
-  noticeList.innerHTML = `
-    <div class="loading">
-      <div class="spinner"></div>
-      Loading notices...
-    </div>
-  `;
-
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-    await db
-      .from("notices")
-      .select("*")
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      );
-
-
-    if(error){
-      throw error;
-    }
-
-
-    notices =
-      data || [];
-
-
-    updateStats();
-
-    renderNotices();
-
-
-  }catch(error){
-
-    console.error(error);
-
-    noticeList.innerHTML = `
-      <div class="loading">
-
-        <strong>
-          Could not load notices.
-        </strong>
-
-        <br><br>
-
-        ${escapeHTML(
-          error.message
-        )}
-
-      </div>
-    `;
-
-  }
+    loadNotice();
 
 }
 
 
-/* ==========================================================
-   STATISTICS
-========================================================== */
+/* =========================================================
+   LOAD NOTICE
+========================================================= */
 
-function updateStats(){
+async function loadNotice(){
 
-  const total =
-    notices.length;
-
-  const published =
-    notices.filter(
-      n =>
-        n.status === "published"
-    ).length;
-
-  const draft =
-    notices.filter(
-      n =>
-        n.status === "draft"
-    ).length;
-
-  const featured =
-    notices.filter(
-      n =>
-        n.featured === true
-    ).length;
-
-
-  document.getElementById(
-    "statTotal"
-  ).textContent =
-    total.toLocaleString();
-
-
-  document.getElementById(
-    "statPublished"
-  ).textContent =
-    published.toLocaleString();
-
-
-  document.getElementById(
-    "statDraft"
-  ).textContent =
-    draft.toLocaleString();
-
-
-  document.getElementById(
-    "statFeatured"
-  ).textContent =
-    featured.toLocaleString();
-
-}
-
-
-/* ==========================================================
-   RENDER NOTICE LIST
-========================================================== */
-
-function renderNotices(){
-
-  const query =
-    noticeSearch.value
-      .trim()
-      .toLowerCase();
-
-
-  const filtered =
-    notices.filter(
-      notice => {
-
-        if(!query){
-          return true;
-        }
-
-        return (
-
-          String(
-            notice.title || ""
-          )
-          .toLowerCase()
-          .includes(query)
-
-          ||
-
-          String(
-            notice.category || ""
-          )
-          .toLowerCase()
-          .includes(query)
-
-          ||
-
-          String(
-            notice.content || ""
-          )
-          .toLowerCase()
-          .includes(query)
-
-        );
-
-      }
-    );
-
-
-  document.getElementById(
-    "noticeCount"
-  ).textContent =
-    `${filtered.length} notice${
-      filtered.length !== 1
-        ? "s"
-        : ""
-    }`;
-
-
-  if(filtered.length === 0){
-
-    noticeList.innerHTML = `
-      <div class="loading">
-        No notices found.
-      </div>
-    `;
-
-    return;
-
-  }
-
-
-  noticeList.innerHTML =
-    filtered.map(
-      notice => `
-
-      <div class="notice-item">
-
-        <div class="notice-main">
-
-          <div class="notice-title">
-
-            ${escapeHTML(
-              notice.title
-            )}
-
-          </div>
-
-          <div class="notice-meta">
-
-            ${escapeHTML(
-              notice.category || "Notice"
-            )}
-
-            •
-
-            ${formatDate(
-              notice.created_at
-            )}
-
-          </div>
-
+    currentNotice.innerHTML = `
+        <div class="loading">
+            <div class="spinner"></div>
+            Loading notice...
         </div>
-
-
-        <span class="
-          badge
-          ${
-            notice.status === "published"
-              ? "badge-published"
-              : "badge-draft"
-          }
-        ">
-
-          ${
-            notice.status === "published"
-              ? "Published"
-              : "Draft"
-          }
-
-        </span>
-
-
-        <div class="notice-actions">
-
-          <button
-            class="small-btn"
-            title="Preview"
-            onclick="previewNotice('${notice.id}')">
-
-            👁
-
-          </button>
-
-
-          <button
-            class="small-btn"
-            title="Edit"
-            onclick="editNotice('${notice.id}')">
-
-            ✎
-
-          </button>
-
-
-          <button
-            class="small-btn delete"
-            title="Delete"
-            onclick="deleteNotice('${notice.id}')">
-
-            ×
-
-          </button>
-
-        </div>
-
-      </div>
-
-    `
-    )
-    .join("");
-
-}
-
-
-noticeSearch.addEventListener(
-  "input",
-  renderNotices
-);
-
-
-/* ==========================================================
-   EDIT NOTICE
-========================================================== */
-
-window.editNotice =
-function(id){
-
-  const notice =
-    notices.find(
-      n => n.id === id
-    );
-
-
-  if(!notice) return;
-
-
-  editingId =
-    notice.id;
-
-
-  document.getElementById(
-    "editorHeading"
-  ).textContent =
-    "Edit Notice";
-
-
-  document.getElementById(
-    "noticeTitle"
-  ).value =
-    notice.title || "";
-
-
-  document.getElementById(
-    "noticeCategory"
-  ).value =
-    notice.category || "Notice";
-
-
-  document.getElementById(
-    "noticeStatus"
-  ).value =
-    notice.status || "published";
-
-
-  document.getElementById(
-    "noticeContent"
-  ).value =
-    notice.content || "";
-
-
-  document.getElementById(
-    "noticeImage"
-  ).value =
-    notice.image_url || "";
-
-
-  document.getElementById(
-    "noticePDF"
-  ).value =
-    notice.pdf_url || "";
-
-
-  document.getElementById(
-    "noticeFeatured"
-  ).checked =
-    notice.featured === true;
-
-
-  updateSaveButton();
-
-  updatePreview();
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
-
-  showToast(
-    "Editing notice",
-    "The selected notice is ready to edit."
-  );
-
-};
-
-
-/* ==========================================================
-   PREVIEW EXISTING NOTICE
-========================================================== */
-
-window.previewNotice =
-function(id){
-
-  const notice =
-    notices.find(
-      n => n.id === id
-    );
-
-
-  if(!notice) return;
-
-
-  document.getElementById(
-    "previewCategory"
-  ).textContent =
-    notice.category || "Notice";
-
-
-  document.getElementById(
-    "previewTitle"
-  ).textContent =
-    notice.title || "Untitled";
-
-
-  document.getElementById(
-    "previewDate"
-  ).textContent =
-    formatDate(
-      notice.created_at
-    );
-
-
-  document.getElementById(
-    "previewBody"
-  ).textContent =
-    notice.content || "";
-
-
-  const image =
-    document.getElementById(
-      "previewImage"
-    );
-
-
-  if(notice.image_url){
-
-    image.src =
-      notice.image_url;
-
-    image.style.display =
-      "block";
-
-  }else{
-
-    image.removeAttribute("src");
-
-    image.style.display =
-      "none";
-
-  }
-
-
-  const pdf =
-    document.getElementById(
-      "previewPDF"
-    );
-
-
-  if(notice.pdf_url){
-
-    pdf.style.display =
-      "block";
-
-    pdf.textContent =
-      "📄 PDF Attachment";
-
-  }else{
-
-    pdf.style.display =
-      "none";
-
-  }
-
-
-  window.scrollTo({
-    top:300,
-    behavior:"smooth"
-  });
-
-};
-
-
-/* ==========================================================
-   DELETE
-========================================================== */
-
-window.deleteNotice =
-async function(id){
-
-  const notice =
-    notices.find(
-      n => n.id === id
-    );
-
-
-  if(!notice) return;
-
-
-  const confirmed =
-    confirm(
-      `Delete this notice?\n\n${notice.title}`
-    );
-
-
-  if(!confirmed) return;
-
-
-  try{
-
-    const {
-      error
-    } =
-    await db
-      .from("notices")
-      .delete()
-      .eq(
-        "id",
-        id
-      );
-
-
-    if(error){
-      throw error;
-    }
-
-
-    if(editingId === id){
-
-      resetEditor();
-
-    }
-
-
-    await loadNotices();
-
-
-    showToast(
-      "Deleted",
-      "Notice deleted successfully."
-    );
-
-
-  }catch(error){
-
-    console.error(error);
-
-    showToast(
-      "Delete failed",
-      error.message,
-      "error"
-    );
-
-  }
-
-};
-
-
-/* ==========================================================
-   CREATE / UPDATE
-========================================================== */
-
-noticeForm.addEventListener(
-  "submit",
-  async event => {
-
-    event.preventDefault();
-
-
-    const title =
-      document.getElementById(
-        "noticeTitle"
-      ).value.trim();
-
-    const category =
-      document.getElementById(
-        "noticeCategory"
-      ).value;
-
-    const status =
-      document.getElementById(
-        "noticeStatus"
-      ).value;
-
-    const content =
-      document.getElementById(
-        "noticeContent"
-      ).value.trim();
-
-    const image_url =
-      document.getElementById(
-        "noticeImage"
-      ).value.trim() || null;
-
-    const pdf_url =
-      document.getElementById(
-        "noticePDF"
-      ).value.trim() || null;
-
-    const featured =
-      document.getElementById(
-        "noticeFeatured"
-      ).checked;
-
-
-    if(!title || !content){
-
-      showToast(
-        "Missing information",
-        "Title and content are required.",
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    const payload = {
-
-      title,
-
-      category,
-
-      content,
-
-      image_url,
-
-      pdf_url,
-
-      status,
-
-      featured
-
-    };
-
-
-    const saveBtn =
-      document.getElementById(
-        "saveBtn"
-      );
-
-
-    saveBtn.disabled =
-      true;
-
-    saveBtn.textContent =
-      editingId
-        ? "Updating..."
-        : "Publishing...";
+    `;
 
 
     try{
 
-      if(editingId){
-
-        /*
-          UPDATE
-        */
-
         const {
-          error
+            data,
+            error
         } =
         await db
-          .from("notices")
-          .update(payload)
-          .eq(
-            "id",
-            editingId
-          );
+            .from("site_notice")
+            .select(
+                "id, notice, updated_at"
+            )
+            .eq(
+                "id",
+                1
+            )
+            .maybeSingle();
 
 
         if(error){
-          throw error;
+            throw error;
         }
 
 
-        showToast(
-          "Updated",
-          "Notice updated successfully."
-        );
+        if(
+            !data ||
+            !data.notice ||
+            !data.notice.trim()
+        ){
 
+            noticeInput.value =
+                "";
 
-      }else{
+            currentNotice.innerHTML = `
+                <div class="empty-notice">
+                    No importance notice has been published yet.
+                </div>
+            `;
 
-        /*
-          INSERT
-        */
+            currentTime.textContent =
+                "No notice";
 
-        const {
-          error
-        } =
-        await db
-          .from("notices")
-          .insert({
-            ...payload,
-            created_by:
-              currentUser
-                ? currentUser.id
-                : null
-          });
-
-
-        if(error){
-          throw error;
+            return;
         }
 
 
-        showToast(
-          "Created",
-          "Notice created successfully."
-        );
-
-      }
+        noticeInput.value =
+            data.notice;
 
 
-      resetEditor();
+        currentNotice.textContent =
+            data.notice;
 
-      await loadNotices();
+
+        currentTime.textContent =
+            formatDate(
+                data.updated_at
+            );
 
 
     }catch(error){
 
-      console.error(error);
+        console.error(
+            "Load notice error:",
+            error
+        );
 
-      showToast(
-        "Save failed",
-        error.message,
-        "error"
-      );
 
-    }finally{
-
-      saveBtn.disabled =
-        false;
-
-      updateSaveButton();
+        currentNotice.innerHTML = `
+            <div class="empty-notice">
+                Could not load notice.
+                <br><br>
+                ${escapeHTML(
+                    error.message
+                )}
+            </div>
+        `;
 
     }
 
-  }
+}
+
+
+/* =========================================================
+   SAVE NOTICE
+========================================================= */
+
+saveNoticeBtn.addEventListener(
+    "click",
+    saveNotice
 );
 
 
-/* ==========================================================
-   SAVE BUTTON TEXT
-========================================================== */
+async function saveNotice(){
 
-function updateSaveButton(){
-
-  const button =
-    document.getElementById(
-      "saveBtn"
-    );
-
-  const status =
-    document.getElementById(
-      "noticeStatus"
-    ).value;
+    const notice =
+        noticeInput.value.trim();
 
 
-  if(editingId){
+    if(!notice){
 
-    button.textContent =
-      "Update Notice";
+        showToast(
+            "Notice is empty",
+            "Please write a notice first.",
+            "error"
+        );
 
-  }else{
+        noticeInput.focus();
 
-    button.textContent =
-      status === "draft"
-        ? "Save Draft"
-        : "Publish Notice";
+        return;
+    }
 
-  }
+
+    saveNoticeBtn.disabled =
+        true;
+
+    saveNoticeBtn.textContent =
+        "Saving...";
+
+
+    try{
+
+        /*
+         * UPDATE existing row.
+         */
+
+        const {
+            data:updatedData,
+            error:updateError
+        } =
+        await db
+            .from("site_notice")
+            .update({
+                notice:
+                    notice,
+
+                updated_at:
+                    new Date().toISOString()
+            })
+            .eq(
+                "id",
+                1
+            )
+            .select()
+            .maybeSingle();
+
+
+        if(updateError){
+            throw updateError;
+        }
+
+
+        /*
+         * If row ID 1 does not exist,
+         * create it.
+         */
+
+        if(!updatedData){
+
+            const {
+                error:insertError
+            } =
+            await db
+                .from("site_notice")
+                .insert({
+                    id:1,
+                    notice:notice,
+                    updated_at:
+                        new Date().toISOString()
+                });
+
+
+            if(insertError){
+                throw insertError;
+            }
+
+        }
+
+
+        currentNotice.textContent =
+            notice;
+
+
+        currentTime.textContent =
+            formatDate(
+                new Date()
+            );
+
+
+        showToast(
+            "Notice Saved",
+            "Homepage importance notice updated successfully."
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "Save notice error:",
+            error
+        );
+
+
+        showToast(
+            "Save Failed",
+            error.message ||
+            "Could not save notice.",
+            "error"
+        );
+
+    }finally{
+
+        saveNoticeBtn.disabled =
+            false;
+
+        saveNoticeBtn.textContent =
+            "Save Notice";
+
+    }
 
 }
 
 
-document.getElementById(
-  "noticeStatus"
-).addEventListener(
-  "change",
-  updateSaveButton
-);
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
 
+function escapeHTML(value){
 
-/* ==========================================================
-   RESET
-========================================================== */
-
-function resetEditor(){
-
-  editingId =
-    null;
-
-
-  noticeForm.reset();
-
-
-  document.getElementById(
-    "editorHeading"
-  ).textContent =
-    "Create Notice";
-
-
-  document.getElementById(
-    "noticeStatus"
-  ).value =
-    "published";
-
-
-  updateSaveButton();
-
-  updatePreview();
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
 
 }
 
 
-document.getElementById(
-  "resetBtn"
-).addEventListener(
-  "click",
-  resetEditor
-);
+/* =========================================================
+   LOGOUT
+========================================================= */
 
-
-document.getElementById(
-  "newNoticeBtn"
-).addEventListener(
-  "click",
-  resetEditor
-);
-
-
-/* ==========================================================
-   LIVE PREVIEW
-========================================================== */
-
-function updatePreview(){
-
-  const title =
-    document.getElementById(
-      "noticeTitle"
-    ).value.trim();
-
-
-  const category =
-    document.getElementById(
-      "noticeCategory"
-    ).value;
-
-
-  const content =
-    document.getElementById(
-      "noticeContent"
-    ).value;
-
-
-  const imageUrl =
-    document.getElementById(
-      "noticeImage"
-    ).value.trim();
-
-
-  const pdfUrl =
-    document.getElementById(
-      "noticePDF"
-    ).value.trim();
-
-
-  document.getElementById(
-    "previewTitle"
-  ).textContent =
-    title ||
-    "Your notice title will appear here";
-
-
-  document.getElementById(
-    "previewCategory"
-  ).textContent =
-    category ||
-    "Notice";
-
-
-  document.getElementById(
-    "previewBody"
-  ).textContent =
-    content ||
-    "Start writing your notice to see the preview.";
-
-
-  document.getElementById(
-    "previewDate"
-  ).textContent =
-    new Date().toLocaleString();
-
-
-  const image =
-    document.getElementById(
-      "previewImage"
-    );
-
-
-  if(imageUrl){
-
-    image.src =
-      imageUrl;
-
-    image.style.display =
-      "block";
-
-  }else{
-
-    image.style.display =
-      "none";
-
-  }
-
-
-  const pdf =
-    document.getElementById(
-      "previewPDF"
-    );
-
-
-  if(pdfUrl){
-
-    pdf.style.display =
-      "block";
-
-    pdf.textContent =
-      "📄 PDF Attachment";
-
-  }else{
-
-    pdf.style.display =
-      "none";
-
-  }
-
-}
-
-
-[
-  "noticeTitle",
-  "noticeCategory",
-  "noticeContent",
-  "noticeImage",
-  "noticePDF"
-]
-.forEach(id => {
-
-  document.getElementById(id)
+document
+    .getElementById("logoutBtn")
     .addEventListener(
-      "input",
-      updatePreview
+        "click",
+        async () => {
+
+            await db.auth.signOut();
+
+            app.style.display =
+                "none";
+
+            loginScreen.style.display =
+                "flex";
+
+            noticeInput.value =
+                "";
+
+            currentNotice.textContent =
+                "";
+
+        }
     );
 
-});
 
-
-document.getElementById(
-  "noticeCategory"
-).addEventListener(
-  "change",
-  updatePreview
-);
-
-
-document.getElementById(
-  "previewBtn"
-).addEventListener(
-  "click",
-  updatePreview
-);
-
-
-/* ==========================================================
+/* =========================================================
    DARK MODE
-========================================================== */
+========================================================= */
 
 const themeBtn =
-  document.getElementById(
-    "themeBtn"
-  );
+    document.getElementById(
+        "themeBtn"
+    );
 
 
 function setTheme(dark){
 
-  document.body.classList.toggle(
-    "dark",
-    dark
-  );
+    document.body.classList.toggle(
+        "dark",
+        dark
+    );
 
 
-  localStorage.setItem(
-    "ctg-admin-theme",
-    dark
-      ? "dark"
-      : "light"
-  );
+    localStorage.setItem(
+        "ctg-admin-theme",
+        dark
+            ? "dark"
+            : "light"
+    );
 
 
-  themeBtn.textContent =
-    dark
-      ? "☀"
-      : "◐";
+    themeBtn.textContent =
+        dark
+            ? "☀"
+            : "◐";
 
 }
 
 
 const savedTheme =
-  localStorage.getItem(
-    "ctg-admin-theme"
-  );
+    localStorage.getItem(
+        "ctg-admin-theme"
+    );
 
 
 if(savedTheme === "dark"){
 
-  setTheme(true);
+    setTheme(true);
 
 }
 
 
 themeBtn.addEventListener(
-  "click",
-  ()=>{
+    "click",
+    () => {
 
-    setTheme(
-      !document.body.classList.contains(
-        "dark"
-      )
-    );
+        setTheme(
+            !document.body.classList.contains(
+                "dark"
+            )
+        );
 
-  }
+    }
 );
 
 
-/* ==========================================================
+/* =========================================================
    START
-========================================================== */
+========================================================= */
 
 checkSession();
 
 </script>
 
 </body>
+
 </html>
