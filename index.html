@@ -998,16 +998,424 @@ footer,
 
 }
 
+/* =========================================================
+   CTGBOARD RANKING — APPLE INSPIRED IMPORTANCE NOTICE
+========================================================= */
+
+.importance-notice {
+    width: min(1180px, calc(100% - 28px));
+    height: 46px;
+    margin: 12px auto 0;
+
+    display: flex;
+    align-items: stretch;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    border-radius: 15px;
+
+    background: rgba(255, 255, 255, 0.72);
+
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.03),
+        0 8px 30px rgba(0, 0, 0, 0.055);
+
+    transition:
+        background .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+
+    animation:
+        noticeAppear .55s
+        cubic-bezier(.22, .8, .2, 1);
+}
+
+
+/* ---------------------------------------------------------
+   APPLE-STYLE LABEL
+--------------------------------------------------------- */
+
+.importance-label {
+    position: relative;
+
+    flex: 0 0 auto;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 0 16px;
+
+    color: #1d1d1f;
+
+    background:
+        rgba(245, 245, 247, 0.78);
+
+    border-right:
+        1px solid rgba(0, 0, 0, 0.06);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        "Segoe UI",
+        sans-serif;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: -0.01em;
+
+    white-space: nowrap;
+}
+
+
+/* Small Apple-like status dot */
+
+.importance-label::before {
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    flex: 0 0 7px;
+
+    border-radius: 50%;
+
+    background: #007aff;
+
+    box-shadow:
+        0 0 0 3px rgba(0, 122, 255, 0.10);
+
+    animation:
+        noticePulse 2.4s ease-in-out infinite;
+}
+
+
+/* Remove old icon if previously added */
+
+.importance-icon {
+    display: none !important;
+}
+
+
+/* ---------------------------------------------------------
+   MARQUEE CONTAINER
+--------------------------------------------------------- */
+
+.notice-marquee {
+    position: relative;
+
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    overflow: hidden;
+
+    background:
+        rgba(255, 255, 255, 0.42);
+}
+
+
+/* Soft fade on both edges */
+
+.notice-marquee::before,
+.notice-marquee::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    width: 34px;
+
+    z-index: 2;
+
+    pointer-events: none;
+}
+
+.notice-marquee::before {
+    left: 0;
+
+    background:
+        linear-gradient(
+            to right,
+            rgba(255,255,255,.82),
+            rgba(255,255,255,0)
+        );
+}
+
+.notice-marquee::after {
+    right: 0;
+
+    background:
+        linear-gradient(
+            to left,
+            rgba(255,255,255,.82),
+            rgba(255,255,255,0)
+        );
+}
+
+
+/* ---------------------------------------------------------
+   MOVING NOTICE TEXT
+--------------------------------------------------------- */
+
+.notice-track {
+    display: inline-block;
+
+    padding-left: 100%;
+
+    white-space: nowrap;
+
+    color: #1d1d1f;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Text",
+        "Segoe UI",
+        sans-serif;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    letter-spacing: -0.01em;
+
+    line-height: 46px;
+
+    will-change: transform;
+
+    animation:
+        importanceNoticeMove
+        18s
+        linear
+        infinite;
+}
+
+
+/* ---------------------------------------------------------
+   RIGHT → LEFT ANIMATION
+--------------------------------------------------------- */
+
+@keyframes importanceNoticeMove {
+
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   ENTRY ANIMATION
+--------------------------------------------------------- */
+
+@keyframes noticeAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(-5px) scale(.985);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   BLUE STATUS DOT
+--------------------------------------------------------- */
+
+@keyframes noticePulse {
+
+    0%,
+    100% {
+        opacity: .75;
+        transform: scale(.9);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+body.dark .importance-notice {
+
+    border-color:
+        rgba(255, 255, 255, 0.10);
+
+    background:
+        rgba(28, 28, 30, 0.72);
+
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, .25),
+        0 10px 35px rgba(0, 0, 0, .28);
+}
+
+
+body.dark .importance-label {
+
+    color: #f5f5f7;
+
+    background:
+        rgba(44, 44, 46, 0.72);
+
+    border-right-color:
+        rgba(255, 255, 255, 0.08);
+}
+
+
+body.dark .notice-marquee {
+
+    background:
+        rgba(28, 28, 30, .38);
+}
+
+
+body.dark .notice-track {
+
+    color: #f5f5f7;
+}
+
+
+body.dark .notice-marquee::before {
+
+    background:
+        linear-gradient(
+            to right,
+            rgba(28,28,30,.82),
+            rgba(28,28,30,0)
+        );
+}
+
+
+body.dark .notice-marquee::after {
+
+    background:
+        linear-gradient(
+            to left,
+            rgba(28,28,30,.82),
+            rgba(28,28,30,0)
+        );
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .importance-notice {
+
+        width: calc(100% - 20px);
+
+        height: 43px;
+
+        margin-top: 9px;
+
+        border-radius: 13px;
+    }
+
+
+    .importance-label {
+
+        padding: 0 12px;
+
+        gap: 7px;
+
+        font-size: 10px;
+    }
+
+
+    .importance-label::before {
+
+        width: 6px;
+        height: 6px;
+
+        flex-basis: 6px;
+    }
+
+
+    .notice-track {
+
+        font-size: 11px;
+
+        line-height: 43px;
+
+        animation-duration: 15s;
+    }
+
+
+    .notice-marquee::before,
+    .notice-marquee::after {
+
+        width: 20px;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .notice-track {
+
+        animation: none;
+
+        padding-left: 12px;
+    }
+
+    .importance-label::before {
+
+        animation: none;
+    }
+
+    .importance-notice {
+
+        animation: none;
+    }
+
+}
 </style>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
+
 
 <body>
 
 
-<!-- ===================================================== -->
-<!-- HEADER -->
-<!-- ===================================================== -->
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
 
 <header class="navbar">
 
@@ -1015,27 +1423,72 @@ footer,
    class="logo">
 
 <span class="logo-mark">
-◈
+C
 </span>
 
+<span>
 CTGBoardRanking
+</span>
 
 </a>
 
 
-<nav class="nav-links">
+<!-- =====================================================
+     NAVBAR CONTROL
+===================================================== -->
 
-<a href="rankings.html">
+<div class="navbar-control">
 
-Rankings
+<button
+    class="theme-btn"
+    id="themeBtn"
+    aria-label="Toggle dark mode"
+    type="button">
+
+◐
+
+</button>
+
+
+<button
+    class="nav-toggle-btn"
+    id="navToggleBtn"
+    type="button"
+    aria-label="Open navigation"
+    aria-expanded="false">
+
+<span class="nav-toggle-icon">
+
+<span></span>
+<span></span>
+<span></span>
+
+</span>
+
+<span>
+Navbar
+</span>
+
+</button>
+
+</div>
+
+
+<!-- =====================================================
+     SOLID NAVIGATION
+===================================================== -->
+
+<nav class="nav-links"
+     id="navLinks">
+
+
+<a href="index.html"
+   class="active">
+
+Home
 
 </a>
 
-<a href="statistics.html">
-
-Statistics
-
-</a>
 
 <a href="student-ranking.html">
 
@@ -1043,196 +1496,135 @@ Student Ranking
 
 </a>
 
-<a href="discover.html">
 
-Discover
+<a href="rankings.html">
+
+Institution Ranking
 
 </a>
 
 
-<div class="nav-dropdown">
+<!-- DISTRICT -->
 
-<button class="nav-dropdown-btn">
+<div class="nav-dropdown"
+     id="districtDropdown">
 
-Districts
+
+<button
+    type="button"
+    class="nav-dropdown-btn"
+    id="districtDropdownBtn"
+    aria-expanded="false">
+
+<span>
+District
+</span>
 
 <span class="dropdown-arrow">
-▼
+⌄
 </span>
 
 </button>
 
+
 <div class="nav-dropdown-menu">
 
-<a href="rankings.html?district=dhaka">
+
+<a href="district-student-ranking.html">
 
 <span class="dropdown-icon">
-📍
+🎓
 </span>
 
 <span class="dropdown-text">
 
 <strong>
-Dhaka
+District Student Ranking
 </strong>
 
 <span>
-Top institutions
+Top students by district
 </span>
 
 </span>
 
 </a>
 
-<a href="rankings.html?district=chattogram">
+
+<a href="district-college-ranking.html">
 
 <span class="dropdown-icon">
-📍
+🏫
 </span>
 
 <span class="dropdown-text">
 
 <strong>
-Chattogram
+District College Ranking
 </strong>
 
 <span>
-Top institutions
+Top colleges by district
 </span>
 
 </span>
 
 </a>
 
-<a href="rankings.html?district=khulna">
+
+<a href="thana-student-ranking.html">
 
 <span class="dropdown-icon">
-📍
+👨‍🎓
 </span>
 
 <span class="dropdown-text">
 
 <strong>
-Khulna
+Thana Student Ranking
 </strong>
 
 <span>
-Top institutions
+Top students by thana
 </span>
 
 </span>
 
 </a>
 
-<a href="rankings.html?district=rajshahi">
+
+<a href="thana-college-ranking.html">
 
 <span class="dropdown-icon">
-📍
+🏛️
 </span>
 
 <span class="dropdown-text">
 
 <strong>
-Rajshahi
+Thana College Ranking
 </strong>
 
 <span>
-Top institutions
+Top colleges by thana
 </span>
 
 </span>
 
 </a>
 
-<a href="rankings.html?district=sylhet">
-
-<span class="dropdown-icon">
-📍
-</span>
-
-<span class="dropdown-text">
-
-<strong>
-Sylhet
-</strong>
-
-<span>
-Top institutions
-</span>
-
-</span>
-
-</a>
-
-<a href="rankings.html?district=barisal">
-
-<span class="dropdown-icon">
-📍
-</span>
-
-<span class="dropdown-text">
-
-<strong>
-Barisal
-</strong>
-
-<span>
-Top institutions
-</span>
-
-</span>
-
-</a>
-
-<a href="rankings.html?district=rangpur">
-
-<span class="dropdown-icon">
-📍
-</span>
-
-<span class="dropdown-text">
-
-<strong>
-Rangpur
-</strong>
-
-<span>
-Top institutions
-</span>
-
-</span>
-
-</a>
-
-<a href="rankings.html?district=mymensingh">
-
-<span class="dropdown-icon">
-📍
-</span>
-
-<span class="dropdown-text">
-
-<strong>
-Mymensingh
-</strong>
-
-<span>
-Top institutions
-</span>
-
-</span>
-
-</a>
 
 </div>
 
 </div>
+
 
 <a href="statistics.html">
 
 Statistics
 
 </a>
+
 
 </nav>
 
@@ -1282,7 +1674,7 @@ by <strong>Shadat Fatih</strong>
 <!-- =====================================================
      IMPORTANCE NOTICE
 ===================================================== -->
-<div class="importance-notice" id="importanceNotice" style="display:none;">
+<div class="importance-notice" id="importanceNotice" hidden>
 
     <div class="importance-label">
         <span class="importance-icon">!</span>
@@ -1413,17 +1805,18 @@ class="group-card science">
 STUDENT RANKING
 </small>
 
-<h3>
-Science Group
+<h3 id="studentScienceTitle">
+Science
 </h3>
 
-<p>
-Top scoring students in science
+<p id="studentScienceText">
+Top Science students
 </p>
 
 </div>
 
 </a>
+
 
 
 <a
@@ -1449,17 +1842,18 @@ class="group-card business">
 STUDENT RANKING
 </small>
 
-<h3>
-Business Group
+<h3 id="studentBusinessTitle">
+Business Studies
 </h3>
 
-<p>
-Top scoring students in business
+<p id="studentBusinessText">
+Top Business Studies students
 </p>
 
 </div>
 
 </a>
+
 
 
 <a
@@ -1469,7 +1863,7 @@ class="group-card humanities">
 <div class="group-top">
 
 <span class="group-icon">
-📚
+🎓
 </span>
 
 <span class="arrow">
@@ -1485,57 +1879,242 @@ class="group-card humanities">
 STUDENT RANKING
 </small>
 
-<h3>
-Humanities Group
+<h3 id="studentHumanitiesTitle">
+Humanities
 </h3>
 
-<p>
-Top scoring students in humanities
+<p id="studentHumanitiesText">
+Top Humanities students
 </p>
 
 </div>
 
 </a>
 
+
 </div>
+
+</section>
+
+
+<!-- =====================================================
+     INDIVIDUAL RESULT
+===================================================== -->
+
+<section class="section" id="individual-result">
+
+    <div class="section-heading">
+
+        <div>
+
+            <span class="eyebrow">
+                INDIVIDUAL RESULT
+            </span>
+
+            <h2>
+                Check your result.
+            </h2>
+
+            <p>
+                Enter your roll number to view
+                complete SSC 2026 result.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="individual-result-card">
+
+        <div class="result-search-icon">
+            🎓
+        </div>
+
+        <div class="result-search-content">
+
+            <p>
+                Search your result by roll number
+                and view total score, GPA and
+                subject-wise marks & grades.
+            </p>
+
+
+            <form
+                id="homeResultForm"
+                class="home-result-form"
+            >
+
+                <div class="home-result-input-wrap">
+
+                    <input
+                        type="text"
+                        id="homeRollInput"
+                        inputmode="numeric"
+                        autocomplete="off"
+                        maxlength="6"
+                        placeholder="Enter Roll Number"
+                        aria-label="Enter roll number"
+                        required
+                    >
+
+                    <button
+                        type="submit"
+                        id="homeResultBtn"
+                        class="primary-btn"
+                    >
+                        <span id="homeResultBtnText">
+                            View Result →
+                        </span>
+                    </button>
+
+                </div>
+
+                <p
+                    id="homeResultMessage"
+                    class="home-result-message"
+                    aria-live="polite"
+                ></p>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- RESULT PREVIEW -->
+
+    <div
+        id="homeResultBox"
+        class="home-result-box"
+        hidden
+    >
+
+        <div class="home-result-header">
+
+            <div>
+
+                <span class="eyebrow">
+                    SSC 2026 · CHATTogram BOARD
+                </span>
+
+                <h3 id="homeResultName">
+                    —
+                </h3>
+
+                <span id="homeResultRoll">
+                    Roll: —
+                </span>
+
+            </div>
+
+
+            <div class="home-result-summary">
+
+                <div>
+
+                    <strong id="homeResultGPA">
+                        —
+                    </strong>
+
+                    <span>
+                        GPA
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong id="homeResultTotal">
+                        —
+                    </strong>
+
+                    <span>
+                        Total Score
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="home-subject-heading">
+
+            <h3>
+                Subject-wise Result
+            </h3>
+
+            <span>
+                Marks & Grade
+            </span>
+
+        </div>
+
+
+        <div
+            id="homeSubjectList"
+            class="home-subject-list"
+        ></div>
+
+
+        <div class="home-result-actions">
+
+    <button
+        type="button"
+        id="homeDownloadPdfBtn"
+        class="primary-btn"
+    >
+        Download PDF ↓
+    </button>
+
+</div>
+
+    </div>
 
 </section>
 
 
 
 <!-- =====================================================
-     INSTITUTION RANKING
+     EXPLORE GROUPS
 ===================================================== -->
 
-<section class="section" id="institution-ranking">
+<section
+class="section"
+id="rankings">
 
 <div class="section-heading">
 
 <div>
 
 <span class="eyebrow">
-INSTITUTION RANKING
+EXPLORE
 </span>
 
 <h2>
-Best Schools & Colleges.
+Choose your group.
 </h2>
 
 </div>
 
-<a href="rankings.html"
-   class="text-link">
-
-See all →
-
-</a>
+<p>
+Explore rankings by academic group.
+</p>
 
 </div>
 
+
+
 <div class="group-grid">
 
-<a href="rankings.html?group=science"
-   class="group-card science">
+
+<a
+href="rankings.html?group=science"
+class="group-card science">
 
 <div class="group-top">
 
@@ -1552,23 +2131,26 @@ See all →
 <div>
 
 <small>
-INSTITUTION RANKING
+GROUP
 </small>
 
 <h3>
-Science Group
+Science
 </h3>
 
 <p>
-Top schools & colleges (science)
+Explore Science rankings
 </p>
 
 </div>
 
 </a>
 
-<a href="rankings.html?group=business"
-   class="group-card business">
+
+
+<a
+href="rankings.html?group=business"
+class="group-card business">
 
 <div class="group-top">
 
@@ -1585,28 +2167,31 @@ Top schools & colleges (science)
 <div>
 
 <small>
-INSTITUTION RANKING
+GROUP
 </small>
 
 <h3>
-Business Group
+Business Studies
 </h3>
 
 <p>
-Top schools & colleges (business)
+Explore Business rankings
 </p>
 
 </div>
 
 </a>
 
-<a href="rankings.html?group=humanities"
-   class="group-card humanities">
+
+
+<a
+href="rankings.html?group=humanities"
+class="group-card humanities">
 
 <div class="group-top">
 
 <span class="group-icon">
-📚
+🎓
 </span>
 
 <span class="arrow">
@@ -1618,78 +2203,21 @@ Top schools & colleges (business)
 <div>
 
 <small>
-INSTITUTION RANKING
+GROUP
 </small>
 
 <h3>
-Humanities Group
+Humanities
 </h3>
 
 <p>
-Top schools & colleges (humanities)
+Explore Humanities rankings
 </p>
 
 </div>
 
 </a>
 
-</div>
-
-</section>
-
-
-
-<!-- =====================================================
-     QUICK STATISTICS
-===================================================== -->
-
-<section class="quick-stats">
-
-<div class="stat-card">
-
-<div class="stat-icon"></div>
-
-<strong>Total Schools</strong>
-
-<small id="totalSchools">
-Loading...
-</small>
-
-</div>
-
-<div class="stat-card">
-
-<div class="stat-icon"></div>
-
-<strong>Total Students</strong>
-
-<small id="totalStudents">
-Loading...
-</small>
-
-</div>
-
-<div class="stat-card">
-
-<div class="stat-icon"></div>
-
-<strong>Average GPA</strong>
-
-<small id="avgGPA">
-Loading...
-</small>
-
-</div>
-
-<div class="stat-card">
-
-<div class="stat-icon"></div>
-
-<strong>Pass Rate</strong>
-
-<small id="passRate">
-Loading...
-</small>
 
 </div>
 
@@ -1698,33 +2226,263 @@ Loading...
 
 
 <!-- =====================================================
-     DISCOVER
+     INSTITUTION RANKING
 ===================================================== -->
 
-<section class="discover-card">
+<section class="section">
+
+<div class="section-heading">
 
 <div>
 
 <span class="eyebrow">
-NEW FEATURE
+TOP PERFORMANCE
 </span>
 
 <h2>
-Discover by Thana
+Institution Rankings
 </h2>
 
-<p>
-Explore institution performance at
-thana-level with detailed analytics.
-</p>
+</div>
 
-<a href="discover.html" class="primary-btn">
-Learn More
+
+<a href="rankings.html"
+   class="text-link">
+
+See all →
+
 </a>
 
 </div>
 
-<span class="discover-icon"></span>
+
+
+<div class="ranking-card">
+
+
+<div class="ranking-header">
+
+<div>
+
+<span class="year-label">
+2026 · Chattogram Board
+</span>
+
+<h3>
+Top Institutions
+</h3>
+
+</div>
+
+
+<span class="live-badge">
+● LIVE DATA
+</span>
+
+</div>
+
+
+
+<div
+class="ranking-row first"
+id="homeRank1">
+
+<div class="rank-number gold">
+01
+</div>
+
+
+<div class="rank-info">
+
+<strong>
+Loading...
+</strong>
+
+<span>
+Loading...
+</span>
+
+</div>
+
+
+<div class="rank-result">
+
+<strong>
+—
+</strong>
+
+<span>
+Pass Rate
+</span>
+
+</div>
+
+
+<div class="rank-score">
+
+<strong>
+—
+</strong>
+
+<span>
+GPA-5
+</span>
+
+</div>
+
+</div>
+
+
+
+<div
+class="ranking-row"
+id="homeRank2">
+
+<div class="rank-number">
+02
+</div>
+
+
+<div class="rank-info">
+
+<strong>
+Loading...
+</strong>
+
+<span>
+Loading...
+</span>
+
+</div>
+
+
+<div class="rank-result">
+
+<strong>
+—
+</strong>
+
+<span>
+Pass Rate
+</span>
+
+</div>
+
+
+<div class="rank-score">
+
+<strong>
+—
+</strong>
+
+<span>
+GPA-5
+</span>
+
+</div>
+
+</div>
+
+
+
+<div
+class="ranking-row"
+id="homeRank3">
+
+<div class="rank-number">
+03
+</div>
+
+
+<div class="rank-info">
+
+<strong>
+Loading...
+</strong>
+
+<span>
+Loading...
+</span>
+
+</div>
+
+
+<div class="rank-result">
+
+<strong>
+—
+</strong>
+
+<span>
+Pass Rate
+</span>
+
+</div>
+
+
+<div class="rank-score">
+
+<strong>
+—
+</strong>
+
+<span>
+GPA-5
+</span>
+
+</div>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     DISCOVER INSTITUTIONS
+===================================================== -->
+
+<section
+class="section discover"
+id="institutions">
+
+<div class="discover-card">
+
+<div>
+
+<span class="eyebrow">
+DISCOVER
+</span>
+
+<h2>
+Compare institutions.<br>
+Explore performance.
+</h2>
+
+<p>
+Find institutions, compare their results
+and explore education statistics.
+</p>
+
+
+<a href="discover.html"
+   class="primary-btn">
+
+Explore Institutions
+
+</a>
+
+</div>
+
+
+<div class="discover-icon">
+🏫
+</div>
+
+</div>
 
 </section>
 
@@ -1734,192 +2492,384 @@ Learn More
      FEATURES
 ===================================================== -->
 
-<section class="section">
+<section
+class="section"
+id="statistics">
 
 <div class="section-heading">
 
+<div>
+
 <span class="eyebrow">
-WHY CHOOSE US
+PLATFORM
 </span>
 
 <h2>
-Features That Matter.
+Everything in one place.
 </h2>
 
 </div>
 
-<div class="group-grid">
+</div>
+
+
+
+<div class="feature-grid">
+
 
 <div class="feature-card">
 
-<span class="feature-icon">
-🎯
+<span>
+🏆
 </span>
 
 <h3>
-Accurate Rankings
+Institution Ranking
 </h3>
 
 <p>
-Built on official SSC 2026 data from
-Chattogram Board.
+Compare institutions based on
+published performance statistics.
 </p>
 
 </div>
 
+
+
 <div class="feature-card">
 
-<span class="feature-icon">
+<span>
+📍
+</span>
+
+<h3>
+District Ranking
+</h3>
+
+<p>
+Explore district-wise education
+performance.
+</p>
+
+</div>
+
+
+
+<div class="feature-card">
+
+<span>
 📊
 </span>
 
 <h3>
-Detailed Analytics
+Statistics
 </h3>
 
 <p>
-Get insights into student performance and
-institution trends.
+View useful education statistics
+in a simple dashboard.
 </p>
 
 </div>
+
+
 
 <div class="feature-card">
 
-<span class="feature-icon">
-⚡
+<span>
+📅
 </span>
 
 <h3>
-Fast & Responsive
+Year-wise Data
 </h3>
 
 <p>
-Lightning-fast load times and smooth
-navigation.
+Compare performance across
+different years.
 </p>
 
 </div>
 
-<div class="feature-card">
-
-<span class="feature-icon">
-🔒
-</span>
-
-<h3>
-Privacy First
-</h3>
-
-<p>
-Your data is safe. We don't store personal
-information.
-</p>
-
-</div>
 
 </div>
 
 </section>
 
+</main>
+
 
 
 <!-- =====================================================
-     PREMIUM SOCIAL
+     PREMIUM SOCIAL / CONTACT
 ===================================================== -->
 
 <section class="premium-social-section">
 
-<div class="section-heading">
+<div class="premium-social-heading">
 
 <span class="eyebrow">
-STAY CONNECTED
+CONNECT
 </span>
 
 <h2>
-Follow Us.
+Stay connected.
 </h2>
 
+<p>
+Follow Shadat Fatih and stay updated with
+CTGBoardRanking.
+</p>
+
 </div>
 
-<div class="group-grid">
 
-<a href="https://www.facebook.com/CTGBoardRanking"
-   target="_blank"
-   rel="noopener noreferrer"
-   class="premium-social-card facebook">
+<div class="premium-social-grid">
 
-<div class="social-icon">
-f
+
+<a
+href="https://www.facebook.com/ShadatFatih.Page"
+target="_blank"
+rel="noopener noreferrer"
+class="premium-social-card facebook-card">
+
+<div class="premium-social-icon">
+
+<svg viewBox="0 0 24 24"
+     fill="none">
+
+<circle
+cx="12"
+cy="12"
+r="9.5"
+stroke="currentColor"
+stroke-width="1.7"/>
+
+<path
+d="M13.5 8.2h1.8V5.9c-.3-.1-1.2-.2-2.3-.2-2.3 0-3.9 1.4-3.9 4v2.2H6.8v2.6h2.3v6.3h2.8v-6.3h2.4l.4-2.6h-2.8V10c0-1 .3-1.8 1.6-1.8Z"
+fill="currentColor"/>
+
+</svg>
+
 </div>
 
-<h3>
+<div class="premium-social-content">
+
+<strong>
 Facebook
-</h3>
+</strong>
 
-<p>
-Latest updates and announcements
-</p>
+<span>
+Shadat Fatih Page
+</span>
+
+</div>
+
+<span class="premium-social-arrow">
+↗
+</span>
 
 </a>
 
-<a href="https://www.instagram.com/ctgboardranking"
-   target="_blank"
-   rel="noopener noreferrer"
-   class="premium-social-card instagram">
 
-<div class="social-icon">
-📷
+
+<a
+href="https://wa.me/8801601800222"
+target="_blank"
+rel="noopener noreferrer"
+class="premium-social-card whatsapp-card">
+
+<div class="premium-social-icon">
+
+<svg viewBox="0 0 24 24"
+     fill="none">
+
+<path
+d="M20.1 3.9A9.9 9.9 0 0 0 4.4 16.1L3 21l5-1.3A9.9 9.9 0 0 0 20.1 3.9Z"
+stroke="currentColor"
+stroke-width="1.7"/>
+
+<path
+d="M8.4 7.4c.2-.4.4-.4.7-.4h.6c.2 0 .4.1.5.4l.8 1.8c.1.2.1.4 0 .6l-.5.7c-.1.2-.1.4 0 .6.5.9 1.2 1.6 2.1 2.1.2.1.4.1.6 0l.7-.5c.2-.1.4-.1.6 0l1.8.8c.3.1.4.3.4.5v.6c0 .3-.1.5-.4.7-.4.3-1 .5-1.5.4-1.2-.2-2.8-1-4.2-2.4s-2.2-3-2.4-4.2c-.1-.5.1-1.1.4-1.5Z"
+fill="currentColor"/>
+
+</svg>
+
 </div>
 
-<h3>
+<div class="premium-social-content">
+
+<strong>
+WhatsApp
+</strong>
+
+<span>
+Chat with us
+</span>
+
+</div>
+
+<span class="premium-social-arrow">
+↗
+</span>
+
+</a>
+
+
+
+<a
+href="https://www.instagram.com/shadatfatih"
+target="_blank"
+rel="noopener noreferrer"
+class="premium-social-card instagram-card">
+
+<div class="premium-social-icon">
+
+<svg viewBox="0 0 24 24"
+     fill="none">
+
+<rect
+x="3.2"
+y="3.2"
+width="17.6"
+height="17.6"
+rx="5"
+stroke="currentColor"
+stroke-width="1.7"/>
+
+<circle
+cx="12"
+cy="12"
+r="4"
+stroke="currentColor"
+stroke-width="1.7"/>
+
+<circle
+cx="17.5"
+cy="6.7"
+r="1"
+fill="currentColor"/>
+
+</svg>
+
+</div>
+
+<div class="premium-social-content">
+
+<strong>
 Instagram
-</h3>
+</strong>
 
-<p>
-Visual insights and tips
-</p>
+<span>
+@shadatfatih
+</span>
 
-</a>
-
-<a href="mailto:contact@ctgboardranking.com"
-   class="premium-social-card email">
-
-<div class="social-icon">
-✉
 </div>
 
-<h3>
-Email Us
-</h3>
-
-<p>
-Get in touch with our team
-</p>
+<span class="premium-social-arrow">
+↗
+</span>
 
 </a>
+
+
+
+<a
+href="mailto:helloshadat@hotmail.com"
+class="premium-social-card email-card">
+
+<div class="premium-social-icon">
+
+<svg viewBox="0 0 24 24"
+     fill="none">
+
+<rect
+x="3"
+y="5"
+width="18"
+height="14"
+rx="2.5"
+stroke="currentColor"
+stroke-width="1.7"/>
+
+<path
+d="m4.5 7 7.5 6 7.5-6"
+stroke="currentColor"
+stroke-width="1.7"
+stroke-linecap="round"
+stroke-linejoin="round"/>
+
+</svg>
+
+</div>
+
+<div class="premium-social-content">
+
+<strong>
+Email
+</strong>
+
+<span>
+helloshadat@hotmail.com
+</span>
+
+</div>
+
+<span class="premium-social-arrow">
+↗
+</span>
+
+</a>
+
+
+
+<div class="premium-social-card visits-card">
+
+<div class="premium-social-icon">
+
+<svg viewBox="0 0 24 24"
+     fill="none">
+
+<path
+d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
+stroke="currentColor"
+stroke-width="1.7"
+stroke-linecap="round"
+stroke-linejoin="round"/>
+
+<circle
+cx="12"
+cy="12"
+r="2.8"
+stroke="currentColor"
+stroke-width="1.7"/>
+
+</svg>
+
+</div>
+
+<div class="premium-social-content">
+
+<strong>
+<span id="totalVisits">
+0
+</span>
+</strong>
+
+<span>
+Total Visits
+</span>
+
+</div>
+
+</div>
+
 
 </div>
 
 </section>
 
 
-
-<!-- =====================================================
-     UNOFFICIAL NOTICE
-===================================================== -->
-
-<div class="unofficial-notice">
-
-<strong>⚠ Unofficial Database</strong><br>
-
-This is an unofficial website. All data is
-from public sources and is provided for
-educational and reference purposes only.
-
-</div>
-
-</main>
 
 <!-- =====================================================
      FOOTER
@@ -1927,47 +2877,2647 @@ educational and reference purposes only.
 
 <footer>
 
+<div class="footer-main">
+
+<div>
+
+<div class="footer-logo">
+
+<span class="logo-mark">
+C
+</span>
+
+CTGBoardRanking
+
+</div>
+
 <p>
-© 2026 CTGBoardRanking. All rights reserved.
+Chattogram Board Education Rankings.
 </p>
 
-<p>
-<a href="https://www.facebook.com/ShadatFatih.Page"
-   target="_blank"
-   rel="noopener noreferrer">
+</div>
 
-Created by Shadat Fatih
 
+<div class="footer-links">
+
+<a href="rankings.html">
+Rankings
 </a>
-</p>
+
+<a href="institution.html">
+Institutions
+</a>
+
+<a href="district.html">
+Districts
+</a>
+
+<a href="statistics.html">
+Statistics
+</a>
+
+</div>
+
+</div>
+
+
+<div class="footer-bottom">
+
+<span>
+© 2026 CTGBoardRanking
+</span>
+
+<span>
+Education Data & Statistics
+</span>
+
+</div>
 
 </footer>
 
 
+
 <!-- =====================================================
-     SCRIPTS
+     UNOFFICIAL NOTICE
 ===================================================== -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<section class="unofficial-notice">
+
+<div class="unofficial-notice-inner">
+
+<div class="notice-icon">
+⚠
+</div>
+
+
+<div class="notice-content">
+
+<h3>
+Unofficial Data Notice
+</h3>
+
+
+<p>
+
+This website is an independent, unofficial platform and is
+<strong>
+not affiliated with, endorsed by, or officially connected
+to the Chattogram Education Board.
+</strong>
+
+</p>
+
+
+<p>
+
+Result data is collected programmatically from publicly
+accessible result pages and is used for
+<strong>
+research, educational, statistical analysis,
+and ranking purposes.
+</strong>
+
+</p>
+
+
+<p class="notice-source">
+
+For official results, notices, and information,
+please refer to the official Chattogram Education Board.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
 
 <script>
 
-const supabase = window.supabase.createClient(
-    "https://cflnqhwlhdxmvuwyglat.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmbG5xaHdsaGR4bXZ1d3lnbGF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc4NjEzNTYsImV4cCI6MjA1MzQzNzM1Nn0.Ct35LqSO7FqKGnqvqS6ynEGsQQGYVqWp70VPZJ3J7JI"
+"use strict";
+
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+const navToggleBtn =
+    document.getElementById(
+        "navToggleBtn"
+    );
+
+const navLinks =
+    document.getElementById(
+        "navLinks"
+    );
+
+
+function closeNavbar() {
+
+    if (!navLinks || !navToggleBtn) {
+        return;
+    }
+
+
+    navLinks.classList.remove(
+        "mobile-open"
+    );
+
+
+    navToggleBtn.classList.remove(
+        "open"
+    );
+
+
+    navToggleBtn.setAttribute(
+        "aria-expanded",
+        "false"
+    );
+
+}
+
+
+if (
+    navToggleBtn &&
+    navLinks
+) {
+
+    navToggleBtn.addEventListener(
+        "click",
+        function(event) {
+
+            event.stopPropagation();
+
+
+            const isOpen =
+                navLinks.classList.toggle(
+                    "mobile-open"
+                );
+
+
+            navToggleBtn.classList.toggle(
+                "open",
+                isOpen
+            );
+
+
+            navToggleBtn.setAttribute(
+                "aria-expanded",
+                String(isOpen)
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   DISTRICT DROPDOWN
+===================================================== */
+
+const districtDropdown =
+    document.getElementById(
+        "districtDropdown"
+    );
+
+
+const districtDropdownBtn =
+    document.getElementById(
+        "districtDropdownBtn"
+    );
+
+
+if (
+    districtDropdown &&
+    districtDropdownBtn
+) {
+
+    districtDropdownBtn.addEventListener(
+        "click",
+        function(event) {
+
+            event.stopPropagation();
+
+
+            const isOpen =
+                districtDropdown.classList.toggle(
+                    "open"
+                );
+
+
+            districtDropdownBtn.setAttribute(
+                "aria-expanded",
+                String(isOpen)
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CLOSE OUTSIDE
+===================================================== */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            navLinks &&
+            navToggleBtn &&
+            !navLinks.contains(event.target) &&
+            !navToggleBtn.contains(event.target)
+        ) {
+
+            closeNavbar();
+
+        }
+
+
+        if (
+            districtDropdown &&
+            !districtDropdown.contains(
+                event.target
+            )
+        ) {
+
+            districtDropdown.classList.remove(
+                "open"
+            );
+
+
+            if (districtDropdownBtn) {
+
+                districtDropdownBtn.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+            }
+
+        }
+
+    }
 );
 
-</script>
 
-<script src="theme-toggle.js"></script>
+/* =====================================================
+   CLOSE AFTER NAV LINK
+===================================================== */
 
-<script src="mobile-nav.js"></script>
+if (navLinks) {
 
-<script src="stats.js"></script>
+    navLinks
+        .querySelectorAll("a")
+        .forEach(
+            function(link) {
 
-<script src="scroll-reveal.js"></script>
+                link.addEventListener(
+                    "click",
+                    function() {
 
-<script>
+                        closeNavbar();
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   DARK MODE
+===================================================== */
+
+const themeBtn =
+    document.getElementById(
+        "themeBtn"
+    );
+
+
+if (
+    localStorage.getItem(
+        "ctg-theme"
+    ) === "dark"
+) {
+
+    document.body.classList.add(
+        "dark"
+    );
+
+}
+
+
+if (themeBtn) {
+
+    themeBtn.addEventListener(
+        "click",
+        function() {
+
+            document.body.classList.toggle(
+                "dark"
+            );
+
+
+            localStorage.setItem(
+                "ctg-theme",
+                document.body.classList.contains(
+                    "dark"
+                )
+                ? "dark"
+                : "light"
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   JSON FILE
+===================================================== */
+
+const INSTITUTION_JSON =
+    "./institution-collector/institution_results.json";
+
+
+/* =====================================================
+   LOAD JSON
+===================================================== */
+
+async function loadInstitutionData() {
+
+    const response =
+        await fetch(
+            INSTITUTION_JSON +
+            "?v=" +
+            Date.now(),
+            {
+                cache:"no-store"
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "JSON HTTP Error: " +
+            response.status
+        );
+
+    }
+
+
+    const data =
+        await response.json();
+
+
+    if (Array.isArray(data)) {
+
+        return data;
+
+    }
+
+
+    if (
+        data &&
+        Array.isArray(
+            data.institutions
+        )
+    ) {
+
+        return data.institutions;
+
+    }
+
+
+    if (
+        data &&
+        Array.isArray(
+            data.results
+        )
+    ) {
+
+        return data.results;
+
+    }
+
+
+    if (
+        data &&
+        Array.isArray(
+            data.data
+        )
+    ) {
+
+        return data.data;
+
+    }
+
+
+    throw new Error(
+        "No institution data array found"
+    );
+
+}
+
+
+/* =====================================================
+   NUMBER
+===================================================== */
+
+function toNumber(value) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        value === ""
+    ) {
+
+        return 0;
+
+    }
+
+
+    const n =
+        Number(
+            String(value)
+                .replace(/,/g,"")
+                .replace(/%/g,"")
+                .trim()
+        );
+
+
+    return Number.isFinite(n)
+        ? n
+        : 0;
+
+}
+
+
+/* =====================================================
+   NORMALIZE
+===================================================== */
+
+function normalizeInstitution(item) {
+
+    const appeared =
+        toNumber(
+            item.appeared ??
+            item.total_students ??
+            item.total_appeared
+        );
+
+
+    const passed =
+        toNumber(
+            item.passed ??
+            item.total_passed
+        );
+
+
+    let passingRate =
+        toNumber(
+            item.passing_rate ??
+            item.pass_rate ??
+            item.passingRate
+        );
+
+
+    const gpa5 =
+        toNumber(
+            item.gpa5 ??
+            item.gpa_5 ??
+            item.gpa5_count ??
+            item.gpa_5_count ??
+            item.total_gpa5
+        );
+
+
+    if (
+        passingRate === 0 &&
+        appeared > 0
+    ) {
+
+        passingRate =
+            (passed / appeared) * 100;
+
+    }
+
+
+    return {
+
+        eiin:
+            String(
+                item.eiin ?? ""
+            ).trim(),
+
+        institution:
+            String(
+                item.institution_name ??
+                item.institution ??
+                item.institute ??
+                item.name ??
+                ""
+            ).trim(),
+
+        district:
+            String(
+                item.district ?? ""
+            ).trim(),
+
+        thana:
+            String(
+                item.thana ??
+                item.upazila ??
+                ""
+            ).trim(),
+
+        appeared,
+
+        passed,
+
+        passingRate,
+
+        gpa5
+
+    };
+
+}
+
+
+/* =====================================================
+   UNIQUE
+===================================================== */
+
+function uniqueInstitutions(data) {
+
+    const map =
+        new Map();
+
+
+    for (
+        const raw of data
+    ) {
+
+        const item =
+            normalizeInstitution(raw);
+
+
+        if (
+            !item.institution
+        ) {
+
+            continue;
+
+        }
+
+
+        const key =
+            item.eiin ||
+            item.institution
+                .toLowerCase()
+                .trim();
+
+
+        if (
+            !map.has(key)
+        ) {
+
+            map.set(
+                key,
+                item
+            );
+
+        }
+
+        else {
+
+            const old =
+                map.get(key);
+
+
+            if (
+                item.appeared >
+                old.appeared
+            ) {
+
+                map.set(
+                    key,
+                    item
+                );
+
+            }
+
+        }
+
+    }
+
+
+    return Array.from(
+        map.values()
+    );
+
+}
+
+
+/* =====================================================
+   RANK
+===================================================== */
+
+function rankInstitutions(
+    institutions
+) {
+
+    return institutions.sort(
+        function(a,b) {
+
+            if (
+                b.gpa5 !== a.gpa5
+            ) {
+
+                return b.gpa5 - a.gpa5;
+
+            }
+
+
+            if (
+                b.passingRate !==
+                a.passingRate
+            ) {
+
+                return (
+                    b.passingRate -
+                    a.passingRate
+                );
+
+            }
+
+
+            if (
+                b.passed !== a.passed
+            ) {
+
+                return b.passed - a.passed;
+
+            }
+
+
+            if (
+                b.appeared !== a.appeared
+            ) {
+
+                return (
+                    b.appeared -
+                    a.appeared
+                );
+
+            }
+
+
+            return a.institution.localeCompare(
+                b.institution
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   TOP 3
+===================================================== */
+
+function displayTop3(
+    institutions
+) {
+
+    const rows = [
+
+        document.getElementById(
+            "homeRank1"
+        ),
+
+        document.getElementById(
+            "homeRank2"
+        ),
+
+        document.getElementById(
+            "homeRank3"
+        )
+
+    ];
+
+
+    rows.forEach(
+        function(row,index) {
+
+            if (!row) {
+                return;
+            }
+
+
+            const item =
+                institutions[index];
+
+
+            const name =
+                row.querySelector(
+                    ".rank-info strong"
+                );
+
+
+            const district =
+                row.querySelector(
+                    ".rank-info span"
+                );
+
+
+            const pass =
+                row.querySelector(
+                    ".rank-result strong"
+                );
+
+
+            const score =
+                row.querySelector(
+                    ".rank-score strong"
+                );
+
+
+            if (!item) {
+
+                if (name)
+                    name.textContent = "—";
+
+                if (district)
+                    district.textContent = "—";
+
+                if (pass)
+                    pass.textContent = "—";
+
+                if (score)
+                    score.textContent = "—";
+
+                return;
+
+            }
+
+
+            if (name)
+                name.textContent =
+                    item.institution;
+
+
+            if (district)
+                district.textContent =
+                    item.district ||
+                    "Chattogram";
+
+
+            if (pass)
+                pass.textContent =
+                    item.passingRate.toFixed(2) +
+                    "%";
+
+
+            if (score)
+                score.textContent =
+                    item.gpa5.toLocaleString(
+                        "en-US"
+                    );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   QUICK STATS
+===================================================== */
+
+function displayQuickStats(
+    institutions
+) {
+
+    const institutionElement =
+        document.getElementById(
+            "statInstitutions"
+        );
+
+
+    if (institutionElement) {
+
+        institutionElement.textContent =
+            institutions.length.toLocaleString(
+                "en-US"
+            );
+
+    }
+
+
+    const districtSet =
+        new Set();
+
+
+    institutions.forEach(
+        function(item) {
+
+            if (
+                item.district
+            ) {
+
+                districtSet.add(
+                    item.district
+                        .trim()
+                        .toUpperCase()
+                );
+
+            }
+
+        }
+    );
+
+
+    const districtElement =
+        document.getElementById(
+            "statDistricts"
+        );
+
+
+    if (districtElement) {
+
+        districtElement.textContent =
+            districtSet.size.toLocaleString(
+                "en-US"
+            );
+
+    }
+
+
+    let totalStudents = 0;
+
+
+    institutions.forEach(
+        function(item) {
+
+            totalStudents +=
+                item.appeared;
+
+        }
+    );
+
+
+    const studentElement =
+        document.getElementById(
+            "statStudents"
+        );
+
+
+    if (studentElement) {
+
+        studentElement.textContent =
+            totalStudents.toLocaleString(
+                "en-US"
+            );
+
+    }
+
+}
+
+
+/* =====================================================
+   HOMEPAGE DATA
+===================================================== */
+
+async function loadHomepageData() {
+
+    try {
+
+        const data =
+            await loadInstitutionData();
+
+
+        const institutions =
+            uniqueInstitutions(
+                data
+            );
+
+
+        if (
+            institutions.length === 0
+        ) {
+
+            throw new Error(
+                "No valid institution records"
+            );
+
+        }
+
+
+        rankInstitutions(
+            institutions
+        );
+
+
+        displayTop3(
+            institutions.slice(
+                0,
+                3
+            )
+        );
+
+
+        displayQuickStats(
+            institutions
+        );
+
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "HOMEPAGE DATA ERROR:",
+            error
+        );
+
+
+        [
+            "homeRank1",
+            "homeRank2",
+            "homeRank3"
+        ].forEach(
+            function(id) {
+
+                const row =
+                    document.getElementById(
+                        id
+                    );
+
+
+                if (!row) {
+                    return;
+                }
+
+
+                const name =
+                    row.querySelector(
+                        ".rank-info strong"
+                    );
+
+
+                const district =
+                    row.querySelector(
+                        ".rank-info span"
+                    );
+
+
+                if (name)
+                    name.textContent =
+                        "Data unavailable";
+
+
+                if (district)
+                    district.textContent =
+                        "JSON load failed";
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   TOTAL VISITS
+===================================================== */
+
+async function loadTotalVisits() {
+
+    const element =
+        document.getElementById("totalVisits");
+
+    if (!element) {
+        console.warn("totalVisits element not found");
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            "/api/visits",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+
+            console.error(
+                "Visit API failed:",
+                response.status
+            );
+
+            return;
+        }
+
+        const data =
+            await response.json();
+
+        if (
+            data &&
+            typeof data.total !== "undefined"
+        ) {
+
+            element.textContent =
+                Number(data.total)
+                .toLocaleString("en-US");
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Total visits error:",
+            error
+        );
+
+    }
+}
+
+
+/* =====================================================
+   LOAD TOTAL VISITS
+===================================================== */
+
+if (document.readyState === "loading") {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        loadTotalVisits
+    );
+
+} else {
+
+    loadTotalVisits();
+
+}
+
+/* =====================================================
+   START
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        loadHomepageData();
+
+        loadTotalVisits();
+
+    }
+);
+      
+/* =====================================================
+   PREMIUM SCROLL REVEAL
+   Does not modify existing functionality
+===================================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    if (
+        window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        ).matches
+    ) {
+        return;
+    }
+
+
+    const scrollElements =
+        document.querySelectorAll(
+            ".section, .quick-stats, " +
+            ".premium-social-section, footer, " +
+            ".unofficial-notice, .discover-card, " +
+            ".ranking-card, .feature-card, " +
+            ".group-card, .stat-card, " +
+            ".premium-social-card"
+        );
+
+
+    if (!scrollElements.length) {
+        return;
+    }
+
+
+    const observer =
+        new IntersectionObserver(
+            function (entries, observer) {
+
+                entries.forEach(function (entry) {
+
+                    if (
+                        entry.isIntersecting
+                    ) {
+
+                        entry.target.classList.add(
+                            "scroll-visible"
+                        );
+
+                        observer.unobserve(
+                            entry.target
+                        );
+
+                    }
+
+                });
+
+            },
+            {
+                threshold: 0.12,
+
+                rootMargin:
+                    "0px 0px -50px 0px"
+            }
+        );
+
+
+    scrollElements.forEach(function (element) {
+
+        observer.observe(element);
+
+    });
+
+});
+
+/* =====================================================
+   HOMEPAGE INDIVIDUAL RESULT SEARCH
+===================================================== */
+
+(function () {
+
+    const form =
+        document.getElementById("homeResultForm");
+
+    const input =
+        document.getElementById("homeRollInput");
+
+    const button =
+        document.getElementById("homeResultBtn");
+
+    const buttonText =
+        document.getElementById("homeResultBtnText");
+
+    const message =
+        document.getElementById("homeResultMessage");
+
+    const resultBox =
+        document.getElementById("homeResultBox");
+
+    const nameElement =
+        document.getElementById("homeResultName");
+
+    const rollElement =
+        document.getElementById("homeResultRoll");
+
+    const gpaElement =
+        document.getElementById("homeResultGPA");
+
+    const totalElement =
+        document.getElementById("homeResultTotal");
+
+    const subjectList =
+        document.getElementById("homeSubjectList");
+      
+    const downloadPdfBtn =
+    document.getElementById("homeDownloadPdfBtn");
+
+
+    if (!form || !input) {
+        return;
+    }
+
+
+    form.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            const roll =
+                input.value.trim();
+
+
+            message.textContent = "";
+            message.className =
+                "home-result-message";
+
+
+            resultBox.hidden = true;
+
+
+            if (!/^\d+$/.test(roll)) {
+
+                message.textContent =
+                    "Please enter a valid roll number.";
+
+                message.classList.add("error");
+
+                input.focus();
+
+                return;
+
+            }
+
+
+            button.disabled = true;
+
+            buttonText.textContent =
+                "Searching...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/result?roll=" +
+                        encodeURIComponent(roll),
+                        {
+                            method: "GET",
+                            cache: "no-store"
+                        }
+                    );
+
+
+                let data = null;
+
+
+                try {
+
+                    data =
+                        await response.json();
+
+                } catch (_) {
+
+                    data = null;
+
+                }
+
+
+                if (
+                    !response.ok ||
+                    !data ||
+                    data.error
+                ) {
+
+                    throw new Error(
+                        data?.error ||
+                        "Result not found."
+                    );
+
+                }
+
+
+                renderHomeResult(
+                    data,
+                    roll
+                );
+
+
+                message.textContent =
+                    "Result found successfully.";
+
+                message.classList.add(
+                    "success"
+                );
+
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "INDIVIDUAL RESULT ERROR:",
+                    error
+                );
+
+
+                message.textContent =
+                    error.message ||
+                    "Result could not be found.";
+
+                message.classList.add(
+                    "error"
+                );
+
+            }
+
+            finally {
+
+                button.disabled = false;
+
+                buttonText.textContent =
+                    "View Result →";
+
+            }
+
+        }
+    );
+
+
+    function renderHomeResult(
+        data,
+        searchedRoll
+    ) {
+
+        const student =
+            data.result ||
+            data.data ||
+            data.student ||
+            data;
+
+
+        const name =
+            student.name ||
+            "Unknown Student";
+
+
+        const roll =
+            student.roll ||
+            searchedRoll;
+
+
+        const gpa =
+            student.gpa;
+
+
+        const subjects =
+    Array.isArray(student.subjects)
+        ? student.subjects
+        : [];
+
+
+let totalScore =
+    student.total_score ??
+    student.totalScore ??
+    student.total ??
+    null;
+
+
+/* Total score missing হলে subjects থেকে calculate */
+if (
+    (totalScore === null ||
+     totalScore === undefined ||
+     totalScore === "") &&
+    subjects.length
+) {
+
+    const calculatedTotal =
+        subjects.reduce(
+            (sum, subject) => {
+
+                const mark =
+                    Number(subject.mark);
+
+                return Number.isFinite(mark)
+                    ? sum + mark
+                    : sum;
+
+            },
+            0
+        );
+
+    if (calculatedTotal > 0) {
+        totalScore = calculatedTotal;
+    }
+
+}
+
+
+        nameElement.textContent =
+            name;
+
+
+        rollElement.textContent =
+            "Roll: " + roll;
+
+
+        gpaElement.textContent =
+            gpa !== null &&
+            gpa !== undefined &&
+            gpa !== ""
+                ? Number(gpa).toFixed(2)
+                : "—";
+
+
+        totalElement.textContent =
+            totalScore !== null &&
+            totalScore !== undefined
+                ? Number(totalScore)
+                    .toLocaleString("en-US")
+                : "—";
+
+
+        subjectList.innerHTML = "";
+
+
+        if (!subjects.length) {
+
+            subjectList.innerHTML =
+                `<div class="home-subject-row">
+                    <div class="home-subject-name">
+                        <strong>
+                            Subject data unavailable
+                        </strong>
+                    </div>
+                </div>`;
+
+        }
+
+        else {
+
+            subjects.forEach(
+                function (subject) {
+
+                    const row =
+                        document.createElement(
+                            "div"
+                        );
+
+                    row.className =
+                        "home-subject-row";
+
+
+                    row.innerHTML = `
+
+                        <div class="home-subject-name">
+
+                            <strong>
+                                ${escapeHTML(
+                                    subject.subject ||
+                                    "Subject"
+                                )}
+                            </strong>
+
+                            <span>
+                                ${escapeHTML(
+                                    subject.code ||
+                                    ""
+                                )}
+                            </span>
+
+                        </div>
+
+
+                        <div class="home-subject-mark">
+
+                            <strong>
+                                ${subject.mark ?? "—"}
+                            </strong>
+
+                            <span>
+                                Mark
+                            </span>
+
+                        </div>
+
+
+                        <div class="home-subject-grade">
+
+                            <strong>
+                                ${escapeHTML(
+                                    subject.grade ||
+                                    "—"
+                                )}
+                            </strong>
+
+                            <span>
+                                Grade
+                            </span>
+
+                        </div>
+
+                    `;
+
+
+                    subjectList.appendChild(
+                        row
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        resultBox.hidden = false;
+
+
+        resultBox.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+
+    function escapeHTML(value) {
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+/* =====================================================
+   HOMEPAGE RESULT PDF DOWNLOAD
+===================================================== */
+
+if (downloadPdfBtn) {
+
+    downloadPdfBtn.addEventListener(
+        "click",
+        downloadHomeResultPDF
+    );
+
+}
+
+async function downloadHomeResultPDF() {
+
+    if (!window.jspdf) {
+
+        message.textContent =
+            "PDF library is still loading. Please try again.";
+
+        message.className =
+            "home-result-message error";
+
+        return;
+    }
+
+
+    if (resultBox.hidden) {
+
+        message.textContent =
+            "Please search for a result first.";
+
+        message.className =
+            "home-result-message error";
+
+        return;
+    }
+
+
+    const originalText =
+        downloadPdfBtn.innerHTML;
+
+    downloadPdfBtn.disabled = true;
+
+    downloadPdfBtn.innerHTML =
+        "Generating...";
+
+
+    try {
+
+        const studentName =
+            document.getElementById(
+                "homeResultName"
+            )?.textContent?.trim() ||
+            "Unknown Student";
+
+
+        const rollText =
+            document.getElementById(
+                "homeResultRoll"
+            )?.textContent || "";
+
+
+        const roll =
+            rollText.replace(
+                /[^0-9]/g,
+                ""
+            ) || "N/A";
+
+
+        const gpa =
+            document.getElementById(
+                "homeResultGPA"
+            )?.textContent?.trim() ||
+            "—";
+
+
+        const total =
+            document.getElementById(
+                "homeResultTotal"
+            )?.textContent?.trim() ||
+            "—";
+
+
+        const subjectRows =
+            document.querySelectorAll(
+                "#homeSubjectList .home-subject-row"
+            );
+
+
+        /* =================================================
+           CREATE PDF
+        ================================================= */
+
+        const {
+            jsPDF
+        } = window.jspdf;
+
+
+        const pdf =
+            new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: "a4",
+                compress: true
+            });
+
+
+        const pageWidth =
+            pdf.internal.pageSize.getWidth();
+
+
+        const pageHeight =
+            pdf.internal.pageSize.getHeight();
+
+
+        /* =================================================
+           PREMIUM COLORS
+        ================================================= */
+
+        const colors = {
+
+            background: [
+                247,
+                249,
+                252
+            ],
+
+            navy: [
+                15,
+                23,
+                42
+            ],
+
+            blue: [
+                0,
+                113,
+                227
+            ],
+
+            blueLight: [
+                232,
+                242,
+                255
+            ],
+
+            text: [
+                31,
+                41,
+                55
+            ],
+
+            muted: [
+                107,
+                114,
+                128
+            ],
+
+            white: [
+                255,
+                255,
+                255
+            ],
+
+            border: [
+                225,
+                231,
+                239
+            ],
+
+            success: [
+                22,
+                163,
+                74
+            ]
+
+        };
+
+
+        /* =================================================
+           BACKGROUND
+        ================================================= */
+
+        pdf.setFillColor(
+            ...colors.background
+        );
+
+        pdf.rect(
+            0,
+            0,
+            pageWidth,
+            pageHeight,
+            "F"
+        );
+
+
+        /* =================================================
+           TOP BRAND AREA
+        ================================================= */
+
+        pdf.setFillColor(
+            ...colors.white
+        );
+
+        pdf.roundedRect(
+            10,
+            9,
+            pageWidth - 20,
+            24,
+            5,
+            5,
+            "F"
+        );
+
+
+        /* C Logo */
+
+        pdf.setFillColor(
+            ...colors.blue
+        );
+
+        pdf.roundedRect(
+            16,
+            14,
+            14,
+            14,
+            3.5,
+            3.5,
+            "F"
+        );
+
+
+        pdf.setTextColor(
+            ...colors.white
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(12);
+
+        pdf.text(
+            "C",
+            23,
+            23.5,
+            {
+                align: "center"
+            }
+        );
+
+
+        /* Brand */
+
+        pdf.setTextColor(
+            ...colors.navy
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(16);
+
+        pdf.text(
+            "CTGBoardRanking",
+            35,
+            21
+        );
+
+
+        pdf.setTextColor(
+            ...colors.muted
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        pdf.setFontSize(7.5);
+
+        pdf.text(
+            "SSC 2026 · CHATTogram BOARD",
+            35,
+            26
+        );
+
+
+        /* =================================================
+           GENERATED BY
+        ================================================= */
+
+        pdf.setTextColor(
+            ...colors.muted
+        );
+
+        pdf.setFontSize(7);
+
+        pdf.text(
+            "Generated by",
+            pageWidth - 47,
+            18
+        );
+
+
+        pdf.setTextColor(
+            ...colors.navy
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(8);
+
+        pdf.text(
+            "Shadat Fatih",
+            pageWidth - 47,
+            23
+        );
+
+
+        /* =================================================
+           STUDENT SUMMARY
+        ================================================= */
+
+        const summaryY = 40;
+
+
+        pdf.setFillColor(
+            ...colors.white
+        );
+
+        pdf.setDrawColor(
+            ...colors.border
+        );
+
+        pdf.setLineWidth(.25);
+
+        pdf.roundedRect(
+            10,
+            summaryY,
+            pageWidth - 20,
+            39,
+            6,
+            6,
+            "FD"
+        );
+
+
+        /* Student name */
+
+        pdf.setTextColor(
+            ...colors.muted
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        pdf.setFontSize(7);
+
+        pdf.text(
+            "STUDENT NAME",
+            16,
+            summaryY + 9
+        );
+
+
+        pdf.setTextColor(
+            ...colors.navy
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(14);
+
+        pdf.text(
+            studentName,
+            16,
+            summaryY + 18
+        );
+
+
+        /* Roll */
+
+        pdf.setTextColor(
+            ...colors.muted
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        pdf.setFontSize(7);
+
+        pdf.text(
+            "ROLL",
+            16,
+            summaryY + 29
+        );
+
+
+        pdf.setTextColor(
+            ...colors.text
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(9);
+
+        pdf.text(
+            roll,
+            16,
+            summaryY + 35
+        );
+
+
+        /* =================================================
+           GPA CARD
+        ================================================= */
+
+        const cardWidth = 38;
+
+        const cardHeight = 29;
+
+        const cardY = summaryY + 5;
+
+
+        pdf.setFillColor(
+            ...colors.blueLight
+        );
+
+        pdf.roundedRect(
+            pageWidth - 16 - cardWidth * 2 - 6,
+            cardY,
+            cardWidth,
+            cardHeight,
+            5,
+            5,
+            "F"
+        );
+
+
+        pdf.setFillColor(
+            238,
+            250,
+            243
+        );
+
+        pdf.roundedRect(
+            pageWidth - 16 - cardWidth,
+            cardY,
+            cardWidth,
+            cardHeight,
+            5,
+            5,
+            "F"
+        );
+
+
+        /* GPA */
+
+        pdf.setTextColor(
+            ...colors.blue
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(18);
+
+        pdf.text(
+            gpa,
+            pageWidth - 16 - cardWidth * 2 - 6 + cardWidth / 2,
+            cardY + 14,
+            {
+                align: "center"
+            }
+        );
+
+
+        pdf.setTextColor(
+            ...colors.muted
+        );
+
+        pdf.setFontSize(7);
+
+        pdf.text(
+            "GPA",
+            pageWidth - 16 - cardWidth * 2 - 6 + cardWidth / 2,
+            cardY + 23,
+            {
+                align: "center"
+            }
+        );
+
+
+        /* Total */
+
+        pdf.setTextColor(
+            ...colors.success
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(15);
+
+        pdf.text(
+            total,
+            pageWidth - 16 - cardWidth + cardWidth / 2,
+            cardY + 14,
+            {
+                align: "center"
+            }
+        );
+
+
+        pdf.setTextColor(
+            ...colors.muted
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        pdf.setFontSize(7);
+
+        pdf.text(
+            "TOTAL SCORE",
+            pageWidth - 16 - cardWidth + cardWidth / 2,
+            cardY + 23,
+            {
+                align: "center"
+            }
+        );
+
+
+        /* =================================================
+           SUBJECT SECTION
+        ================================================= */
+
+        const subjectTitleY = 88;
+
+
+        pdf.setTextColor(
+            ...colors.navy
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(12);
+
+        pdf.text(
+            "Subject-wise Result",
+            12,
+            subjectTitleY
+        );
+
+
+        pdf.setTextColor(
+            ...colors.muted
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        pdf.setFontSize(7);
+
+        pdf.text(
+            "MARKS & GRADE",
+            pageWidth - 12,
+            subjectTitleY,
+            {
+                align: "right"
+            }
+        );
+
+
+        /* =================================================
+           TABLE HEADER
+        ================================================= */
+
+        let y = subjectTitleY + 6;
+
+
+        pdf.setFillColor(
+            ...colors.navy
+        );
+
+        pdf.roundedRect(
+            10,
+            y,
+            pageWidth - 20,
+            9,
+            3,
+            3,
+            "F"
+        );
+
+
+        pdf.setTextColor(
+            ...colors.white
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(7);
+
+
+        pdf.text(
+            "SUBJECT",
+            15,
+            y + 5.8
+        );
+
+
+        pdf.text(
+            "CODE",
+            112,
+            y + 5.8,
+            {
+                align: "center"
+            }
+        );
+
+
+        pdf.text(
+            "MARK",
+            151,
+            y + 5.8,
+            {
+                align: "center"
+            }
+        );
+
+
+        pdf.text(
+            "GRADE",
+            187,
+            y + 5.8,
+            {
+                align: "center"
+            }
+        );
+
+
+        y += 12;
+
+
+        /* =================================================
+           SUBJECT ROWS
+        ================================================= */
+
+        subjectRows.forEach(
+            function(row, index) {
+
+                const subjectName =
+                    row.querySelector(
+                        ".home-subject-name strong"
+                    )?.textContent?.trim()
+                    || "Subject";
+
+
+                const code =
+                    row.querySelector(
+                        ".home-subject-name span"
+                    )?.textContent?.trim()
+                    || "—";
+
+
+                const mark =
+                    row.querySelector(
+                        ".home-subject-mark strong"
+                    )?.textContent?.trim()
+                    || "—";
+
+
+                const grade =
+                    row.querySelector(
+                        ".home-subject-grade strong"
+                    )?.textContent?.trim()
+                    || "—";
+
+
+                /* alternating premium background */
+
+                if (index % 2 === 0) {
+
+                    pdf.setFillColor(
+                        255,
+                        255,
+                        255
+                    );
+
+                } else {
+
+                    pdf.setFillColor(
+                        242,
+                        246,
+                        251
+                    );
+
+                }
+
+
+                pdf.setDrawColor(
+                    ...colors.border
+                );
+
+
+                pdf.roundedRect(
+                    10,
+                    y,
+                    pageWidth - 20,
+                    11,
+                    3,
+                    3,
+                    "FD"
+                );
+
+
+                /* Subject */
+
+                pdf.setTextColor(
+                    ...colors.text
+                );
+
+                pdf.setFont(
+                    "helvetica",
+                    "bold"
+                );
+
+                pdf.setFontSize(7.5);
+
+
+                let cleanSubject =
+                    subjectName;
+
+
+                if (
+                    cleanSubject.length > 38
+                ) {
+
+                    cleanSubject =
+                        cleanSubject.substring(
+                            0,
+                            35
+                        ) + "...";
+
+                }
+
+
+                pdf.text(
+                    cleanSubject,
+                    15,
+                    y + 7
+                );
+
+
+                /* Code */
+
+                pdf.setTextColor(
+                    ...colors.muted
+                );
+
+                pdf.setFont(
+                    "helvetica",
+                    "normal"
+                );
+
+                pdf.setFontSize(7);
+
+
+                pdf.text(
+                    code,
+                    112,
+                    y + 7,
+                    {
+                        align: "center"
+                    }
+                );
+
+
+                /* Mark */
+
+                pdf.setTextColor(
+                    ...colors.navy
+                );
+
+                pdf.setFont(
+                    "helvetica",
+                    "bold"
+                );
+
+                pdf.setFontSize(8);
+
+
+                pdf.text(
+                    mark,
+                    151,
+                    y + 7,
+                    {
+                        align: "center"
+                    }
+                );
+
+
+                /* Grade badge */
+
+                pdf.setFillColor(
+                    ...colors.blueLight
+                );
+
+
+                pdf.roundedRect(
+                    177,
+                    y + 2,
+                    20,
+                    7,
+                    3.5,
+                    3.5,
+                    "F"
+                );
+
+
+                pdf.setTextColor(
+                    ...colors.blue
+                );
+
+                pdf.setFont(
+                    "helvetica",
+                    "bold"
+                );
+
+                pdf.setFontSize(7);
+
+
+                pdf.text(
+                    grade,
+                    187,
+                    y + 6.8,
+                    {
+                        align: "center"
+                    }
+                );
+
+
+                /* IMPORTANT:
+                   Fixed row height prevents overlap */
+
+                y += 13;
+
+            }
+        );
+
+
+        /* =================================================
+           UNOFFICIAL NOTICE
+        ================================================= */
+
+        const noticeY =
+            Math.min(
+                y + 7,
+                pageHeight - 38
+            );
+
+
+        pdf.setFillColor(
+            255,
+            248,
+            230
+        );
+
+
+        pdf.setDrawColor(
+            245,
+            210,
+            130
+        );
+
+
+        pdf.roundedRect(
+            10,
+            noticeY,
+            pageWidth - 20,
+            21,
+            5,
+            5,
+            "FD"
+        );
+
+
+        pdf.setTextColor(
+            145,
+            92,
+            0
+        );
+
+
+        pdf.setFont(
+            "helvetica",
+            "bold"
+        );
+
+        pdf.setFontSize(7.5);
+
+
+        pdf.text(
+            "UNOFFICIAL NOTICE",
+            15,
+            noticeY + 7
+        );
+
+
+        pdf.setTextColor(
+            90,
+            90,
+            90
+        );
+
+
+        pdf.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        pdf.setFontSize(6.5);
+
+
+        pdf.text(
+            "This result is generated by CTGBoardRanking for educational,",
+            15,
+            noticeY + 13
+        );
+
+
+        pdf.text(
+            "research and statistical purposes and is not an official board document.",
+            15,
+            noticeY + 17
+        );
+
+
+        /* =================================================
+           FOOTER
+        ================================================= */
+
+        pdf.setTextColor(
+            ...colors.muted
+        );
+
+        pdf.setFont(
+            "helvetica",
+            "normal"
+        );
+
+        pdf.setFontSize(6.5);
+
+
+        pdf.text(
+            "CTGBoardRanking",
+            12,
+            pageHeight - 9
+        );
+
+
+        pdf.text(
+            "Generated by Shadat Fatih",
+            pageWidth / 2,
+            pageHeight - 9,
+            {
+                align: "center"
+            }
+        );
+
+
+        pdf.text(
+            "SSC 2026 · Chattogram Board",
+            pageWidth - 12,
+            pageHeight - 9,
+            {
+                align: "right"
+            }
+        );
+
+
+        /* =================================================
+           SAVE
+        ================================================= */
+
+        const safeName =
+            studentName
+                .trim()
+                .replace(
+                    /[^a-z0-9]+/gi,
+                    "-"
+                )
+                .replace(
+                    /^-+|-+$/g,
+                    ""
+                )
+                .toLowerCase();
+
+
+        pdf.save(
+            `SSC-2026-${roll}-${safeName || "result"}.pdf`
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Premium PDF error:",
+            error
+        );
+
+
+        message.textContent =
+            "Unable to generate PDF. Please try again.";
+
+        message.className =
+            "home-result-message error";
+
+
+    } finally {
+
+        downloadPdfBtn.disabled = false;
+
+        downloadPdfBtn.innerHTML =
+            originalText;
+
+    }
+
+}
+
+
+})();
 
 /* =========================================================
    LOAD IMPORTANCE NOTICE
@@ -2004,14 +5554,14 @@ async function loadImportanceNotice() {
             !data.notice ||
             !data.notice.trim()
         ) {
-            noticeBar.style.display = "none";
+            noticeBar.hidden = true;
             return;
         }
 
         noticeText.textContent =
             data.notice.trim();
 
-        noticeBar.style.display = "block";
+        noticeBar.hidden = false;
 
     } catch (error) {
 
@@ -2020,7 +5570,7 @@ async function loadImportanceNotice() {
             error
         );
 
-        noticeBar.style.display = "none";
+        noticeBar.hidden = true;
     }
 }
 
