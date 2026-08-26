@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ctgboardranking.vercel.app/sitemap.xml
