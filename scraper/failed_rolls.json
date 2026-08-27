@@ -729,5 +729,65 @@
     "roll": "700940",
     "group": "Science Irregular",
     "reason": "No valid result"
+  },
+  {
+    "roll": "101485",
+    "group": "Science",
+    "reason": "No valid result",
+    "timestamp": "2026-08-27 07:05:08"
+  },
+  {
+    "roll": "105662",
+    "group": "Science",
+    "reason": "No valid result",
+    "timestamp": "2026-08-27 07:17:37"
+  },
+  {
+    "roll": "112174",
+    "group": "Science",
+    "reason": "No valid result",
+    "timestamp": "2026-08-27 07:35:59"
+  },
+  {
+    "roll": "114547",
+    "group": "Science",
+    "reason": "No valid result",
+    "timestamp": "2026-08-27 07:36:29"
+  },
+  {
+    "roll": "114549",
+    "group": "Science",
+    "reason": "No valid result",
+    "timestamp": "2026-08-27 07:36:29"
+  },
+  {
+    "roll": "116177",
+    "group": "Science",
+    "reason": "No valid result",
+    "timestamp": "2026-08-27 07:41:08"
+  },
+  {
+    "roll": "120703",
+    "group": "Science",
+    "reason": "No valid result",
+    "timestamp": "2026-08-27 07:51:35"
+  },
+  {
+    "roll": "120726",
+    "group": "Science",
+    "reason": "No valid result",
+    "timestamp": "2026-08-27 07:51:46"
+  },
+  {
+    "roll": "124486",
+    "group": "Science",
+    "reason": "No valid result",
+    "timestamp": "2026-08-27 08:15:54"
+  },
+  {
+    "roll": "125062",
+    "group": "Science",
+    "reason": "No valid result",
+    "timestamp": "2026-08-27 08:18:06"
   }
 ]
