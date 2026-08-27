@@ -789,5 +789,53 @@
     "group": "Science",
     "reason": "No valid result",
     "timestamp": "2026-08-27 08:18:06"
+  },
+  {
+    "roll": "101485",
+    "group": "Science",
+    "reason": "result_not_found",
+    "timestamp": "2026-08-27 22:02:44"
+  },
+  {
+    "roll": "105662",
+    "group": "Science",
+    "reason": "result_not_found",
+    "timestamp": "2026-08-27 22:08:28"
+  },
+  {
+    "roll": "112174",
+    "group": "Science",
+    "reason": "result_not_found",
+    "timestamp": "2026-08-27 22:18:39"
+  },
+  {
+    "roll": "114547",
+    "group": "Science",
+    "reason": "result_not_found",
+    "timestamp": "2026-08-27 22:29:57"
+  },
+  {
+    "roll": "114549",
+    "group": "Science",
+    "reason": "result_not_found",
+    "timestamp": "2026-08-27 22:29:57"
+  },
+  {
+    "roll": "116177",
+    "group": "Science",
+    "reason": "result_not_found",
+    "timestamp": "2026-08-27 22:34:52"
+  },
+  {
+    "roll": "120703",
+    "group": "Science",
+    "reason": "result_not_found",
+    "timestamp": "2026-08-27 22:41:23"
+  },
+  {
+    "roll": "120726",
+    "group": "Science",
+    "reason": "result_not_found",
+    "timestamp": "2026-08-27 22:41:29"
   }
 ]
