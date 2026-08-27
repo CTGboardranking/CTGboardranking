@@ -24,18 +24,15 @@ except ImportError:
 #
 # VERSION:
 #
-# - New students are collected
-# - Existing COMPLETE students are skipped
-# - Existing INCOMPLETE students are recollected
-# - Missing marks/grades are repaired
-# - Complete new data replaces incomplete old data
-# - Incomplete new data does NOT destroy better old data
-# - REQUIRED_SUBJECT_CODES = set()
-# - All FOUND subjects are automatically checked
-# - F grade without mark is considered complete
-# - Supports combined values such as 184(A+)
+# - New students collected
+# - Complete students skipped
+# - Incomplete students repaired
+# - Partial data safely merged
+# - No repeated 10,000 batch problem
+# - Persistent roll cursor
+# - Resume after GitHub Actions restart
+# - Full-cycle incomplete recheck
 # - Supabase pagination
-# - Duplicate roll protection
 # - Local checkpoint
 # - Retry temporary request errors
 # ============================================================
@@ -79,6 +76,13 @@ FAILED_FILE = os.path.join(
 ATTEMPTED_FILE = os.path.join(
     OUTPUT_DIR,
     "attempted_rolls.json"
+)
+
+# IMPORTANT:
+# This file remembers where the previous run stopped.
+CURSOR_FILE = os.path.join(
+    OUTPUT_DIR,
+    "collection_cursor.json"
 )
 
 
@@ -157,20 +161,7 @@ BOARD = "Chattogram Board"
 # ============================================================
 # REQUIRED SUBJECT CODES
 #
-# IMPORTANT:
-#
-# Empty set means:
-#
-# NO fixed subject is mandatory.
-#
-# Every subject actually found on the result page
-# is automatically checked.
-#
-# Example:
-#
-# 101, 107, 109, 150, 111, etc.
-#
-# are all checked automatically.
+# Empty = automatically check every subject found.
 # ============================================================
 
 REQUIRED_SUBJECT_CODES = set()
@@ -221,7 +212,7 @@ print(
 )
 
 print(
-    "INCOMPLETE DATA RE-COLLECTION VERSION",
+    "PERSISTENT CURSOR + REPAIR VERSION",
     flush=True
 )
 
@@ -257,8 +248,12 @@ print(
 )
 
 print(
-    "Required subject codes: "
-    "NONE - AUTO CHECK ALL FOUND SUBJECTS",
+    "Required subject codes: NONE",
+    flush=True
+)
+
+print(
+    "Auto check all found subjects: YES",
     flush=True
 )
 
@@ -403,6 +398,90 @@ def load_json(filename, default):
         )
 
         return default
+
+
+# ============================================================
+# CURSOR
+# ============================================================
+
+def load_cursor():
+
+    data = load_json(
+        "collection_cursor.json",
+        {}
+    )
+
+    if not isinstance(
+        data,
+        dict
+    ):
+
+        return {
+            "last_processed_roll": 0,
+            "cycle": 1
+        }
+
+    try:
+
+        last_roll = int(
+            data.get(
+                "last_processed_roll",
+                0
+            )
+        )
+
+    except Exception:
+
+        last_roll = 0
+
+
+    try:
+
+        cycle = int(
+            data.get(
+                "cycle",
+                1
+            )
+        )
+
+    except Exception:
+
+        cycle = 1
+
+
+    return {
+
+        "last_processed_roll":
+            last_roll,
+
+        "cycle":
+            cycle,
+
+    }
+
+
+def save_cursor(
+    last_processed_roll,
+    cycle
+):
+
+    save_json(
+        "collection_cursor.json",
+        {
+
+            "last_processed_roll":
+                int(last_processed_roll),
+
+            "cycle":
+                int(cycle),
+
+            "updated_at":
+                time.strftime(
+                    "%Y-%m-%d %H:%M:%S"
+                ),
+
+        }
+    )
 
 
 # ============================================================
@@ -705,15 +784,8 @@ def parse_subject_values(values):
             ""
         )
 
-
         # ----------------------------------------------------
         # 184(A+)
-        #
-        # IMPORTANT:
-        # SSC result pages can contain marks above 100
-        # because some subjects have combined/full marks.
-        #
-        # Accept up to 300 here.
         # ----------------------------------------------------
 
         match = re.fullmatch(
@@ -737,7 +809,6 @@ def parse_subject_values(values):
                     number,
                     match.group(2).upper()
                 )
-
 
         # ----------------------------------------------------
         # 184A+
@@ -763,7 +834,6 @@ def parse_subject_values(values):
                     match.group(2).upper()
                 )
 
-
         # ----------------------------------------------------
         # Grade only
         # ----------------------------------------------------
@@ -777,7 +847,6 @@ def parse_subject_values(values):
             grade = grade_only
 
             continue
-
 
         # ----------------------------------------------------
         # (A+)
@@ -797,7 +866,6 @@ def parse_subject_values(values):
 
             continue
 
-
         # ----------------------------------------------------
         # Mark only
         # ----------------------------------------------------
@@ -814,7 +882,6 @@ def parse_subject_values(values):
             if 0 <= number <= 300:
 
                 mark = number
-
 
     return (
         mark,
@@ -860,9 +927,7 @@ def parse_subjects(soup):
             if len(values) < 2:
                 continue
 
-
             code = values[0]
-
 
             if not re.fullmatch(
                 r"\d{3,5}",
@@ -871,26 +936,20 @@ def parse_subjects(soup):
 
                 continue
 
-
             subject_name = values[1]
-
 
             if not subject_name:
                 continue
-
 
             key = (
                 code,
                 subject_name
             )
 
-
             if key in seen:
                 continue
 
-
             seen.add(key)
-
 
             mark, grade = (
                 parse_subject_values(
@@ -898,11 +957,9 @@ def parse_subjects(soup):
                 )
             )
 
-
             combined = " ".join(
                 values
             ).upper()
-
 
             optional = (
 
@@ -917,7 +974,6 @@ def parse_subjects(soup):
                 "FOURTH SUBJECT" in combined
 
             )
-
 
             subjects.append({
 
@@ -938,7 +994,6 @@ def parse_subjects(soup):
 
             })
 
-
     return subjects
 
 
@@ -955,7 +1010,6 @@ def is_subject_complete(subject):
 
         return False
 
-
     mark = subject.get(
         "mark"
     )
@@ -967,13 +1021,7 @@ def is_subject_complete(subject):
         )
     )
 
-
-    # --------------------------------------------------------
-    # NORMAL SUBJECT
-    #
-    # Mark + Grade required
-    # --------------------------------------------------------
-
+    # Normal subject
     if grade and grade != "F":
 
         mark_valid = (
@@ -986,34 +1034,16 @@ def is_subject_complete(subject):
 
         )
 
-
         return (
             mark_valid
             and
             bool(grade)
         )
 
-
-    # --------------------------------------------------------
-    # FAILED SUBJECT
-    #
-    # If the official result says F, mark may legitimately
-    # be unavailable on the page.
-    #
-    # Therefore:
-    #
-    # F + no mark = COMPLETE
-    # F + mark = COMPLETE
-    # --------------------------------------------------------
-
+    # F is valid even without mark
     if grade == "F":
 
         return True
-
-
-    # --------------------------------------------------------
-    # No grade
-    # --------------------------------------------------------
 
     return False
 
@@ -1031,7 +1061,6 @@ def get_missing_subjects(
         []
     )
 
-
     if not isinstance(
         subjects,
         list
@@ -1041,20 +1070,15 @@ def get_missing_subjects(
             "subjects"
         ]
 
-
-    # ========================================================
-    # REQUIRED SUBJECT MODE
-    #
-    # This block is only used if specific codes are supplied.
-    # Currently REQUIRED_SUBJECT_CODES = set()
-    # ========================================================
+    # --------------------------------------------------------
+    # Required subject mode
+    # --------------------------------------------------------
 
     if REQUIRED_SUBJECT_CODES:
 
         missing = []
 
         found_required = set()
-
 
         for subject in subjects:
 
@@ -1065,14 +1089,12 @@ def get_missing_subjects(
 
                 continue
 
-
             code = str(
                 subject.get(
                     "code",
                     ""
                 )
             ).strip()
-
 
             if code in REQUIRED_SUBJECT_CODES:
 
@@ -1088,7 +1110,6 @@ def get_missing_subjects(
                         code
                     )
 
-
         for code in REQUIRED_SUBJECT_CODES:
 
             if code not in found_required:
@@ -1097,21 +1118,13 @@ def get_missing_subjects(
                     code
                 )
 
-
         return sorted(
             set(missing)
         )
 
-
-    # ========================================================
-    # AUTO SUBJECT MODE
-    #
-    # REQUIRED_SUBJECT_CODES = set()
-    #
-    # Every subject found on the result is checked.
-    #
-    # No subjects at all = incomplete.
-    # ========================================================
+    # --------------------------------------------------------
+    # Auto mode
+    # --------------------------------------------------------
 
     if not subjects:
 
@@ -1119,9 +1132,7 @@ def get_missing_subjects(
             "subjects"
         ]
 
-
     missing = []
-
 
     for subject in subjects:
 
@@ -1136,14 +1147,12 @@ def get_missing_subjects(
 
             continue
 
-
         code = str(
             subject.get(
                 "code",
                 ""
             )
         ).strip()
-
 
         if not code:
 
@@ -1153,7 +1162,6 @@ def get_missing_subjects(
 
             continue
 
-
         if not is_subject_complete(
             subject
         ):
@@ -1161,7 +1169,6 @@ def get_missing_subjects(
             missing.append(
                 code
             )
-
 
     return sorted(
         set(missing)
@@ -1172,11 +1179,11 @@ def is_student_complete(
     student
 ):
 
-    missing = get_missing_subjects(
-        student
-    )
-
-    return len(missing) == 0
+    return len(
+        get_missing_subjects(
+            student
+        )
+    ) == 0
 
 
 # ============================================================
@@ -1200,11 +1207,9 @@ def calculate_total_score(
 
             continue
 
-
         mark = subject.get(
             "mark"
         )
-
 
         if isinstance(
             mark,
@@ -1214,7 +1219,6 @@ def calculate_total_score(
             total += mark
 
             found = True
-
 
     if found:
 
@@ -1263,7 +1267,6 @@ def detect_result(
                 match.group(1).upper()
             )
 
-
     for row in soup.find_all(
         "tr"
     ):
@@ -1286,11 +1289,9 @@ def detect_result(
         if not values:
             continue
 
-
         joined = " ".join(
             values
         ).upper()
-
 
         if "RESULT" in joined:
 
@@ -1301,14 +1302,12 @@ def detect_result(
 
                 return "PASS"
 
-
             if re.search(
                 r"\bFAIL\b",
                 joined
             ):
 
                 return "FAIL"
-
 
     for subject in subjects:
 
@@ -1319,11 +1318,9 @@ def detect_result(
             )
         ).upper()
 
-
         if grade == "F":
 
             return "FAIL"
-
 
     return ""
 
@@ -1342,7 +1339,6 @@ def parse_result(
         html,
         "html.parser"
     )
-
 
     result = {
 
@@ -1393,7 +1389,6 @@ def parse_result(
 
     }
 
-
     # ========================================================
     # BASIC INFORMATION
     # ========================================================
@@ -1405,7 +1400,6 @@ def parse_result(
         cells = row.find_all(
             ["th", "td"]
         )
-
 
         values = [
 
@@ -1420,10 +1414,8 @@ def parse_result(
 
         ]
 
-
         if not values:
             continue
-
 
         fields = [
 
@@ -1461,7 +1453,6 @@ def parse_result(
 
         ]
 
-
         for label, key in fields:
 
             value = find_value_after_label(
@@ -1469,11 +1460,9 @@ def parse_result(
                 label
             )
 
-
             if value:
 
                 result[key] = value
-
 
         result_value = (
             find_value_after_label(
@@ -1482,13 +1471,11 @@ def parse_result(
             )
         )
 
-
         if result_value:
 
             result_value = clean_text(
                 result_value
             ).upper()
-
 
             if result_value in (
                 "PASS",
@@ -1498,7 +1485,6 @@ def parse_result(
                 result["result"] = (
                     result_value
                 )
-
 
     # ========================================================
     # FALLBACK RESULT
@@ -1511,7 +1497,6 @@ def parse_result(
         )
     )
 
-
     if not result["result"]:
 
         match = re.search(
@@ -1521,13 +1506,11 @@ def parse_result(
             re.I
         )
 
-
         if match:
 
             result["result"] = (
                 match.group(1).upper()
             )
-
 
     # ========================================================
     # GPA
@@ -1537,7 +1520,6 @@ def parse_result(
         soup
     )
 
-
     # ========================================================
     # SUBJECTS
     # ========================================================
@@ -1545,7 +1527,6 @@ def parse_result(
     result["subjects"] = parse_subjects(
         soup
     )
-
 
     # ========================================================
     # RESULT FALLBACK
@@ -1558,7 +1539,6 @@ def parse_result(
             result["subjects"]
         )
 
-
     # ========================================================
     # TOTAL SCORE
     # ========================================================
@@ -1568,7 +1548,6 @@ def parse_result(
             result["subjects"]
         )
     )
-
 
     # ========================================================
     # DISTRICT
@@ -1581,7 +1560,6 @@ def parse_result(
                 result["institute"]
             )
         )
-
 
     # ========================================================
     # VALID RESULT
@@ -1607,11 +1585,9 @@ def parse_result(
 
     )
 
-
     if not has_data:
 
         return None
-
 
     # ========================================================
     # CLEAN STRINGS
@@ -1634,22 +1610,22 @@ def parse_result(
 
     ]
 
-
     for key in string_fields:
 
         result[key] = clean_text(
             result[key]
         )
 
-
     return result
 
 
 # ============================================================
-# GENERATE ROLLS
+# GENERATE ALL ROLLS
 # ============================================================
 
-def generate_rolls():
+def generate_all_rolls():
+
+    rolls = []
 
     for group_name, (
         start,
@@ -1661,10 +1637,39 @@ def generate_rolls():
             end + 1
         ):
 
-            yield (
-                group_name,
-                roll
+            rolls.append(
+                (
+                    group_name,
+                    roll
+                )
             )
+
+    return rolls
+
+
+ALL_ROLLS = generate_all_rolls()
+
+
+# ============================================================
+# GROUP LOOKUP
+# ============================================================
+
+def get_group_for_roll(
+    roll
+):
+
+    roll = int(roll)
+
+    for group_name, (
+        start,
+        end
+    ) in ROLL_RANGES.items():
+
+        if start <= roll <= end:
+
+            return group_name
+
+    return ""
 
 
 # ============================================================
@@ -1726,7 +1731,6 @@ for student in students:
 
         continue
 
-
     roll = str(
         student.get(
             "roll",
@@ -1734,14 +1738,13 @@ for student in students:
         )
     ).strip()
 
-
     if roll:
 
         local_students[roll] = student
 
 
 # ============================================================
-# SUPABASE STUDENT MAP
+# SUPABASE LOAD
 # ============================================================
 
 def load_supabase_students():
@@ -1756,11 +1759,9 @@ def load_supabase_students():
         flush=True
     )
 
-
     result = {}
 
     offset = 0
-
 
     while True:
 
@@ -1789,7 +1790,6 @@ def load_supabase_students():
 
             )
 
-
         except Exception as e:
 
             print(
@@ -1802,14 +1802,11 @@ def load_supabase_students():
                 "Could not load Supabase students."
             )
 
-
         rows = response.data or []
-
 
         if not rows:
 
             break
-
 
         for row in rows:
 
@@ -1820,7 +1817,6 @@ def load_supabase_students():
 
                 continue
 
-
             roll = str(
                 row.get(
                     "roll",
@@ -1828,11 +1824,9 @@ def load_supabase_students():
                 )
             ).strip()
 
-
             if roll:
 
                 result[roll] = row
-
 
         print(
             "Loaded Supabase rows:",
@@ -1840,14 +1834,11 @@ def load_supabase_students():
             flush=True
         )
 
-
         if len(rows) < SUPABASE_PAGE_SIZE:
 
             break
 
-
         offset += SUPABASE_PAGE_SIZE
-
 
     print(
         "",
@@ -1860,7 +1851,6 @@ def load_supabase_students():
         flush=True
     )
 
-
     return result
 
 
@@ -1870,7 +1860,29 @@ supabase_students = (
 
 
 # ============================================================
-# FIND INCOMPLETE SUPABASE STUDENTS
+# BEFORE COUNTS
+# ============================================================
+
+total_supabase_before = len(
+    supabase_students
+)
+
+incomplete_before = sum(
+
+    1
+
+    for student
+    in supabase_students.values()
+
+    if not is_student_complete(
+        student
+    )
+
+)
+
+
+# ============================================================
+# FIND INCOMPLETE
 # ============================================================
 
 incomplete_supabase = {}
@@ -1911,8 +1923,8 @@ print(
 )
 
 print(
-    "Total Supabase:",
-    len(supabase_students),
+    "Total:",
+    total_supabase_before,
     flush=True
 )
 
@@ -1948,7 +1960,6 @@ print(
     flush=True
 )
 
-
 for index, (
     roll,
     student
@@ -1959,11 +1970,9 @@ for index, (
     if index >= 20:
         break
 
-
     missing = get_missing_subjects(
         student
     )
-
 
     print(
         roll,
@@ -2004,7 +2013,6 @@ for item in failed_rolls:
             item
         ).strip()
 
-
     if roll:
 
         failed_set.add(
@@ -2013,63 +2021,195 @@ for item in failed_rolls:
 
 
 # ============================================================
-# TARGET ROLLS
+# CURSOR
+# ============================================================
+
+cursor = load_cursor()
+
+last_processed_roll = int(
+    cursor.get(
+        "last_processed_roll",
+        0
+    )
+)
+
+cycle = int(
+    cursor.get(
+        "cycle",
+        1
+    )
+)
+
+
+print(
+    "",
+    flush=True
+)
+
+print(
+    "=" * 70,
+    flush=True
+)
+
+print(
+    "PERSISTENT COLLECTION CURSOR",
+    flush=True
+)
+
+print(
+    "=" * 70,
+    flush=True
+)
+
+print(
+    "Previous last processed roll:",
+    last_processed_roll,
+    flush=True
+)
+
+print(
+    "Current cycle:",
+    cycle,
+    flush=True
+)
+
+print(
+    "=" * 70,
+    flush=True
+)
+
+
+# ============================================================
+# BUILD TARGET ROLLS
 #
-# 1. Existing incomplete students
-# 2. New students not in Supabase
+# IMPORTANT FIX:
 #
-# Complete existing students are skipped.
+# Old code:
+#
+# target_rolls[:10000]
+#
+# caused the SAME first 10,000 targets to repeat.
+#
+# New logic:
+#
+# 1. Build all incomplete + new targets
+# 2. Start AFTER last_processed_roll
+# 3. Process next BATCH_SIZE
+# 4. Save last processed roll
+# 5. Next GitHub Action continues from there
 # ============================================================
 
 target_rolls = []
 
-
-for group_name, roll_number in generate_rolls():
+for group_name, roll_number in ALL_ROLLS:
 
     roll = str(
         roll_number
     )
 
-
-    if roll in incomplete_supabase:
-
-        target_rolls.append(
-            (
-                group_name,
-                roll
-            )
-        )
-
-        continue
-
-
-    if roll not in supabase_students:
+    # Existing incomplete OR new student
+    if (
+        roll in incomplete_supabase
+        or
+        roll not in supabase_students
+    ):
 
         target_rolls.append(
             (
                 group_name,
                 roll
             )
-
         )
 
 
 # ============================================================
-# TARGET LIMIT
+# SORT BY ROLL
+# ============================================================
+
+target_rolls.sort(
+    key=lambda x: int(x[1])
+)
+
+
+# ============================================================
+# SELECT NEXT BATCH
+# ============================================================
+
+run_targets = [
+
+    item
+
+    for item in target_rolls
+
+    if int(item[1])
+    >
+    last_processed_roll
+
+][
+    :BATCH_SIZE
+]
+
+
+# ============================================================
+# FULL CYCLE WRAP
+#
+# If there are no targets after the cursor,
+# start from beginning again.
+# ============================================================
+
+wrapped_cycle = False
+
+
+if not run_targets and target_rolls:
+
+    cycle += 1
+
+    wrapped_cycle = True
+
+    print(
+        "",
+        flush=True
+    )
+
+    print(
+        "FULL TARGET CYCLE COMPLETED.",
+        flush=True
+    )
+
+    print(
+        "Starting a new repair cycle...",
+        flush=True
+    )
+
+    run_targets = target_rolls[
+        :BATCH_SIZE
+    ]
+
+    # Important:
+    # Don't save 0 immediately.
+    # Save after processing actual records.
+
+
+# ============================================================
+# TARGET INFO
 # ============================================================
 
 total_targets = len(
     target_rolls
 )
 
-run_targets = target_rolls[
-    :BATCH_SIZE
-]
+targets_after_cursor = sum(
 
+    1
 
-# ============================================================
-# TARGET INFO
-# ============================================================
+    for group, roll
+    in target_rolls
+
+    if int(roll)
+    >
+    last_processed_roll
+)
+
 
 print(
     "",
@@ -2101,7 +2241,8 @@ print(
     "New students:",
     sum(
         1
-        for group, roll in target_rolls
+        for group, roll
+        in target_rolls
         if roll not in supabase_students
     ),
     flush=True
@@ -2114,18 +2255,40 @@ print(
 )
 
 print(
+    "Targets after cursor:",
+    targets_after_cursor,
+    flush=True
+)
+
+print(
     "This run:",
     len(run_targets),
     flush=True
 )
 
 print(
-    "Remaining after this batch:",
-    max(
-        total_targets -
-        len(run_targets),
-        0
-    ),
+    "Previous cursor:",
+    last_processed_roll,
+    flush=True
+)
+
+if run_targets:
+
+    print(
+        "This batch first roll:",
+        run_targets[0][1],
+        flush=True
+    )
+
+    print(
+        "This batch last roll:",
+        run_targets[-1][1],
+        flush=True
+    )
+
+print(
+    "Cycle:",
+    cycle,
     flush=True
 )
 
@@ -2136,6 +2299,45 @@ print(
 
 
 # ============================================================
+# NOTHING TO PROCESS
+# ============================================================
+
+if not run_targets:
+
+    print(
+        "",
+        flush=True
+    )
+
+    print(
+        "=" * 70,
+        flush=True
+    )
+
+    print(
+        "NO TARGETS FOUND.",
+        flush=True
+    )
+
+    print(
+        "All currently known students are complete.",
+        flush=True
+    )
+
+    print(
+        "=" * 70,
+        flush=True
+    )
+
+    save_cursor(
+        last_processed_roll,
+        cycle
+    )
+
+    raise SystemExit(0)
+
+
+# ============================================================
 # OPEN RESULT PAGE
 # ============================================================
 
@@ -2143,7 +2345,6 @@ print(
     "Opening SSC result page...",
     flush=True
 )
-
 
 try:
 
@@ -2164,7 +2365,6 @@ try:
     )
 
     page.raise_for_status()
-
 
 except Exception as e:
 
@@ -2198,7 +2398,6 @@ soup = BeautifulSoup(
 form = soup.find(
     "form"
 )
-
 
 if not form:
 
@@ -2248,7 +2447,6 @@ print(
 
 base_form_data = {}
 
-
 for inp in form.find_all(
     "input"
 ):
@@ -2257,16 +2455,13 @@ for inp in form.find_all(
         "name"
     )
 
-
     if not name:
         continue
-
 
     input_type = inp.get(
         "type",
         "text"
     ).lower()
-
 
     if input_type in [
 
@@ -2278,7 +2473,6 @@ for inp in form.find_all(
     ]:
 
         continue
-
 
     if input_type in [
 
@@ -2292,7 +2486,6 @@ for inp in form.find_all(
         ):
 
             continue
-
 
     base_form_data[name] = inp.get(
         "value",
@@ -2312,23 +2505,19 @@ for select in form.find_all(
         "name"
     )
 
-
     if not name:
         continue
-
 
     selected = select.find(
         "option",
         selected=True
     )
 
-
     if not selected:
 
         selected = select.find(
             "option"
         )
-
 
     if selected:
 
@@ -2348,7 +2537,6 @@ for select in form.find_all(
 
 submit_fields = {}
 
-
 for element in form.find_all(
     ["input", "button"]
 ):
@@ -2358,11 +2546,9 @@ for element in form.find_all(
         ""
     ).lower()
 
-
     name = element.get(
         "name"
     )
-
 
     if (
         element_type == "submit"
@@ -2421,6 +2607,15 @@ supabase_errors = 0
 
 
 # ============================================================
+# RUN PROCESSED ROLLS
+#
+# Prevent duplicate processing inside one run.
+# ============================================================
+
+run_processed_rolls = set()
+
+
+# ============================================================
 # MERGE SUBJECTS
 # ============================================================
 
@@ -2433,7 +2628,6 @@ def merge_subjects(
 
     new_map = {}
 
-
     for subject in old_subjects or []:
 
         if not isinstance(
@@ -2443,14 +2637,12 @@ def merge_subjects(
 
             continue
 
-
         code = str(
             subject.get(
                 "code",
                 ""
             )
         ).strip()
-
 
         if code:
 
@@ -2466,7 +2658,6 @@ def merge_subjects(
 
             continue
 
-
         code = str(
             subject.get(
                 "code",
@@ -2474,14 +2665,12 @@ def merge_subjects(
             )
         ).strip()
 
-
         if code:
 
             new_map[code] = subject
 
 
     merged = {}
-
 
     all_codes = (
         set(old_map)
@@ -2528,27 +2717,21 @@ def merge_subjects(
         )
 
 
+        # New complete data wins
         if new_complete:
 
             merged[code] = new
 
+        # Existing complete data protected
         elif old_complete:
 
             merged[code] = old
 
         else:
 
-            # ------------------------------------------------
-            # Merge partial information.
-            #
-            # If old has mark and new has grade,
-            # keep both.
-            # ------------------------------------------------
-
             merged_subject = dict(
                 old
             )
-
 
             old_mark = old.get(
                 "mark"
@@ -2608,9 +2791,13 @@ def merge_subjects(
 
 
             if (
-                "optional" not in merged_subject
+                "optional"
+                not in
+                merged_subject
                 and
-                "optional" in new
+                "optional"
+                in
+                new
             ):
 
                 merged_subject["optional"] = (
@@ -2642,7 +2829,6 @@ def supabase_upsert_student(
                 ""
             )
         ).strip()
-
 
         if not roll:
 
@@ -2773,10 +2959,75 @@ def supabase_upsert_student(
 
 
 # ============================================================
+# UPDATE LOCAL STUDENTS JSON
+# ============================================================
+
+def update_local_student(
+    student
+):
+
+    roll = str(
+        student.get(
+            "roll",
+            ""
+        )
+    ).strip()
+
+    if not roll:
+
+        return
+
+
+    local_students[roll] = student
+
+
+    found = False
+
+
+    for index, existing in enumerate(
+        students
+    ):
+
+        if str(
+            existing.get(
+                "roll",
+                ""
+            )
+        ).strip() == roll:
+
+            students[index] = student
+
+            found = True
+
+            break
+
+
+    if not found:
+
+        students.append(
+            student
+        )
+
+
+# ============================================================
 # COLLECTION LOOP
 # ============================================================
 
 for group_name, roll in run_targets:
+
+    # --------------------------------------------------------
+    # Duplicate protection
+    # --------------------------------------------------------
+
+    if roll in run_processed_rolls:
+
+        continue
+
+
+    run_processed_rolls.add(
+        roll
+    )
+
 
     processed += 1
 
@@ -2789,11 +3040,15 @@ for group_name, roll in run_targets:
 
 
     is_repair = (
+
         old_student is not None
+
         and
+
         not is_student_complete(
             old_student
         )
+
     )
 
 
@@ -2819,7 +3074,6 @@ for group_name, roll in run_targets:
         missing = get_missing_subjects(
             old_student
         )
-
 
         print(
             "MODE: REPAIR",
@@ -2852,7 +3106,6 @@ for group_name, roll in run_targets:
     form_data = dict(
         base_form_data
     )
-
 
     form_data["roll"] = roll
 
@@ -2951,13 +3204,11 @@ for group_name, roll in run_targets:
                 2.0
             )
 
-
             print(
                 f"Retrying in "
                 f"{retry_delay:.1f}s...",
                 flush=True
             )
-
 
             time.sleep(
                 retry_delay
@@ -2979,6 +3230,9 @@ for group_name, roll in run_targets:
             flush=True
         )
 
+        # Do not permanently skip.
+        # Cursor will move, but failed roll remains
+        # eligible on the next cycle.
         continue
 
 
@@ -2997,7 +3251,6 @@ for group_name, roll in run_targets:
             group_name
 
         )
-
 
     except Exception as e:
 
@@ -3036,13 +3289,16 @@ for group_name, roll in run_targets:
             "reason":
                 "No valid result",
 
-        })
+            "timestamp":
+                time.strftime(
+                    "%Y-%m-%d %H:%M:%S"
+                ),
 
+        })
 
         failed_set.add(
             roll
         )
-
 
         continue
 
@@ -3073,7 +3329,7 @@ for group_name, roll in run_targets:
 
 
         # ----------------------------------------------------
-        # Preserve old values if new page omitted them
+        # Preserve existing values
         # ----------------------------------------------------
 
         for key in [
@@ -3248,16 +3504,61 @@ for group_name, roll in run_targets:
 
 
             improvement = (
+
                 len(missing)
+
                 <
+
                 len(old_missing)
+
             )
 
 
-            if improvement:
+            # Also allow improvement when the number of
+            # missing fields is the same but actual data
+            # becomes better.
+            old_subject_count = len(
+                old_student.get(
+                    "subjects",
+                    []
+                )
+                if isinstance(
+                    old_student.get(
+                        "subjects",
+                        []
+                    ),
+                    list
+                )
+                else []
+            )
+
+            new_subject_count = len(
+                parsed.get(
+                    "subjects",
+                    []
+                )
+            )
+
+
+            subject_improved = (
+                new_subject_count
+                >
+                old_subject_count
+            )
+
+
+            if (
+                improvement
+                or
+                subject_improved
+            ):
 
                 print(
-                    "Improved incomplete record. "
+                    "Improved incomplete record.",
+                    flush=True
+                )
+
+                print(
                     "Saving partial repair.",
                     flush=True
                 )
@@ -3280,6 +3581,10 @@ for group_name, roll in run_targets:
                         parsed
                     )
 
+                    update_local_student(
+                        parsed
+                    )
+
                 else:
 
                     supabase_errors += 1
@@ -3294,7 +3599,11 @@ for group_name, roll in run_targets:
             else:
 
                 print(
-                    "No improvement. "
+                    "No improvement.",
+                    flush=True
+                )
+
+                print(
                     "Keeping existing record.",
                     flush=True
                 )
@@ -3307,7 +3616,11 @@ for group_name, roll in run_targets:
         else:
 
             print(
-                "New record is incomplete. "
+                "New record is incomplete.",
+                flush=True
+            )
+
+            print(
                 "Saving for future repair.",
                 flush=True
             )
@@ -3330,6 +3643,10 @@ for group_name, roll in run_targets:
                     parsed
                 )
 
+                update_local_student(
+                    parsed
+                )
+
             else:
 
                 supabase_errors += 1
@@ -3339,6 +3656,78 @@ for group_name, roll in run_targets:
                     message,
                     flush=True
                 )
+
+
+        # ----------------------------------------------------
+        # SAVE CURSOR AFTER EACH TARGET
+        #
+        # This is very important for GitHub Actions.
+        #
+        # Even if the workflow stops later,
+        # previous rolls won't repeat.
+        # ----------------------------------------------------
+
+        try:
+
+            save_cursor(
+                int(roll),
+                cycle
+            )
+
+            last_processed_roll = int(
+                roll
+            )
+
+        except Exception as e:
+
+            print(
+                "Cursor save error:",
+                e,
+                flush=True
+            )
+
+
+        # ----------------------------------------------------
+        # CHECKPOINT
+        # ----------------------------------------------------
+
+        if (
+            processed % SAVE_EVERY == 0
+        ):
+
+            print(
+                "",
+                flush=True
+            )
+
+            print(
+                "Saving checkpoint...",
+                flush=True
+            )
+
+
+            save_json(
+                "students.json",
+                students
+            )
+
+
+            save_json(
+                "failed_rolls.json",
+                failed_rolls
+            )
+
+
+            save_json(
+                "attempted_rolls.json",
+                attempted_rolls
+            )
+
+
+            print(
+                "Checkpoint saved.",
+                flush=True
+            )
 
 
         time.sleep(
@@ -3388,6 +3777,23 @@ for group_name, roll in run_targets:
             flush=True
         )
 
+        # Still move cursor because this roll will
+        # be reconsidered in a later cycle.
+        try:
+
+            save_cursor(
+                int(roll),
+                cycle
+            )
+
+            last_processed_roll = int(
+                roll
+            )
+
+        except Exception:
+            pass
+
+
         time.sleep(
             random.uniform(
                 MIN_DELAY,
@@ -3428,40 +3834,34 @@ for group_name, roll in run_targets:
     # UPDATE LOCAL MAP
     # ========================================================
 
-    local_students[roll] = parsed
-
     supabase_students[roll] = parsed
 
+    update_local_student(
+        parsed
+    )
+
 
     # ========================================================
-    # UPDATE STUDENTS JSON
+    # UPDATE CURSOR
     # ========================================================
 
-    found_local = False
+    try:
 
+        save_cursor(
+            int(roll),
+            cycle
+        )
 
-    for index, student in enumerate(
-        students
-    ):
+        last_processed_roll = int(
+            roll
+        )
 
-        if str(
-            student.get(
-                "roll",
-                ""
-            )
-        ).strip() == roll:
+    except Exception as e:
 
-            students[index] = parsed
-
-            found_local = True
-
-            break
-
-
-    if not found_local:
-
-        students.append(
-            parsed
+        print(
+            "Cursor save error:",
+            e,
+            flush=True
         )
 
 
@@ -3499,6 +3899,12 @@ for group_name, roll in run_targets:
         save_json(
             "attempted_rolls.json",
             attempted_rolls
+        )
+
+
+        save_cursor(
+            last_processed_roll,
+            cycle
         )
 
 
@@ -3554,6 +3960,28 @@ save_json(
 
 
 # ============================================================
+# FINAL CURSOR
+# ============================================================
+
+if run_targets:
+
+    final_batch_last_roll = int(
+        run_targets[-1][1]
+    )
+
+    # We intentionally save the actual final target,
+    # not an arbitrary number.
+    save_cursor(
+        final_batch_last_roll,
+        cycle
+    )
+
+    last_processed_roll = (
+        final_batch_last_roll
+    )
+
+
+# ============================================================
 # FINAL COUNTS
 # ============================================================
 
@@ -3577,6 +4005,33 @@ remaining_incomplete = sum(
 
 
 # ============================================================
+# REMAINING TARGETS
+# ============================================================
+
+remaining_targets = 0
+
+for group_name, roll_number in ALL_ROLLS:
+
+    roll = str(
+        roll_number
+    )
+
+    if (
+        roll in supabase_students
+        and
+        not is_student_complete(
+            supabase_students[roll]
+        )
+    ):
+
+        remaining_targets += 1
+
+    elif roll not in supabase_students:
+
+        remaining_targets += 1
+
+
+# ============================================================
 # SUMMARY
 # ============================================================
 
@@ -3589,10 +4044,10 @@ summary = {
         BOARD,
 
     "total_supabase_before":
-        len(supabase_students),
+        total_supabase_before,
 
     "incomplete_before":
-        len(incomplete_supabase),
+        incomplete_before,
 
     "target_total":
         total_targets,
@@ -3633,6 +4088,9 @@ summary = {
     "remaining_incomplete":
         remaining_incomplete,
 
+    "remaining_targets":
+        remaining_targets,
+
     "batch_size":
         BATCH_SIZE,
 
@@ -3645,6 +4103,12 @@ summary = {
         not bool(
             REQUIRED_SUBJECT_CODES
         ),
+
+    "last_processed_roll":
+        last_processed_roll,
+
+    "cycle":
+        cycle,
 
     "roll_ranges":
         ROLL_RANGES,
@@ -3745,6 +4209,24 @@ print(
 print(
     "Remaining incomplete:",
     remaining_incomplete,
+    flush=True
+)
+
+print(
+    "Remaining targets:",
+    remaining_targets,
+    flush=True
+)
+
+print(
+    "Last processed roll:",
+    last_processed_roll,
+    flush=True
+)
+
+print(
+    "Current cycle:",
+    cycle,
     flush=True
 )
 
