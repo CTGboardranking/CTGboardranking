@@ -75,11 +75,6 @@ REQUEST_TIMEOUT = (7, 20)
 
 SUPABASE_PAGE_SIZE = 1000
 
-
-# ============================================================
-# EXPECTED SUBJECT COUNT
-# ============================================================
-
 EXPECTED_SUBJECTS = 12
 
 
@@ -146,7 +141,7 @@ os.makedirs(
 
 print("=" * 70)
 print("SSC 2026 FULL SUBJECT-WISE COLLECTOR")
-print("COMPLETE / F-VALID / GPA-AWARE / RECOVERY VERSION")
+print("SUPABASE <-> STUDENTS.JSON SYNC VERSION")
 print("=" * 70)
 
 print("Expected subjects:", EXPECTED_SUBJECTS)
@@ -157,22 +152,25 @@ print("Max retries:", MAX_RETRIES)
 
 print("")
 print("FINAL RULES:")
-print("- Mark + Grade = VALID")
+print("- Normal Mark + Grade = VALID")
 print("- F + Mark=None = VALID")
-print("- F + Mark exists = VALID")
+print("- F + Mark=None + GPA=None = COMPLETE")
+print("- F + available marks = VALID")
+print("- F + other subject marks = Total Score includes available marks")
 print("- Missing Mark + Missing Grade = INCOMPLETE")
 print("- Mark exists + Missing Grade = INCOMPLETE")
 print("- Missing Mark + Non-F Grade = INCOMPLETE")
 print("- 12 valid subjects + GPA = COMPLETE")
 print("- 12 valid subjects + F + GPA=None = COMPLETE")
 print("- 12 valid subjects + GPA=None + NO F = INCOMPLETE")
-print("- GPA is NOT required when F exists")
-print("- Total Score = sum of available numeric marks")
-print("- Complete Supabase records = SKIP")
-print("- Incomplete Supabase records = RECOVERY")
-print("- Recovery replaces old record only when new data is better")
+print("- Existing COMPLETE = SKIP")
+print("- Existing F-valid COMPLETE = SKIP")
+print("- Existing INCOMPLETE = RECOVERY")
+print("- Incomplete records can be retried on future runs")
 print("- Old incomplete subjects are NEVER merged")
+print("- Better new result replaces old result")
 print("- Same data is NEVER saved repeatedly")
+print("- students.json is synchronized with Supabase")
 print("=" * 70)
 
 
@@ -216,7 +214,7 @@ session.headers.update(HEADERS)
 
 
 # ============================================================
-# JSON HELPERS
+# JSON
 # ============================================================
 
 def save_json(path, data):
@@ -299,6 +297,9 @@ VALID_GRADES = {
 
 def normalize_grade(value):
 
+    if value is None:
+        return ""
+
     value = clean_text(value)
 
     if not value:
@@ -336,11 +337,8 @@ def normalize_mark(value):
         return None
 
     try:
-
         number = int(value)
-
     except Exception:
-
         return None
 
     if 0 <= number <= 300:
@@ -371,10 +369,7 @@ def parse_subject_values(values):
             .upper()
         )
 
-        # ----------------------------------------------------
         # 184(A+)
-        # ----------------------------------------------------
-
         match = re.fullmatch(
             r"(\d{1,3})"
             r"\("
@@ -390,10 +385,7 @@ def parse_subject_values(values):
                 match.group(2)
             )
 
-        # ----------------------------------------------------
         # 184A+
-        # ----------------------------------------------------
-
         match = re.fullmatch(
             r"(\d{1,3})"
             r"(A\+|A-|A|B|C|D|F)",
@@ -407,10 +399,7 @@ def parse_subject_values(values):
                 match.group(2)
             )
 
-        # ----------------------------------------------------
-        # F / Grade only
-        # ----------------------------------------------------
-
+        # Grade only
         grade_only = normalize_grade(
             normalized
         )
@@ -420,10 +409,7 @@ def parse_subject_values(values):
             grade = grade_only
             continue
 
-        # ----------------------------------------------------
         # (A+)
-        # ----------------------------------------------------
-
         match = re.fullmatch(
             r"\("
             r"(A\+|A-|A|B|C|D|F)"
@@ -436,16 +422,12 @@ def parse_subject_values(values):
             grade = match.group(1)
             continue
 
-        # ----------------------------------------------------
         # Mark only
-        # ----------------------------------------------------
-
         parsed_mark = normalize_mark(
             normalized
         )
 
         if parsed_mark is not None:
-
             mark = parsed_mark
 
     return (
@@ -541,12 +523,6 @@ def parse_subjects(soup):
 
 # ============================================================
 # SUBJECT VALIDATION
-#
-# IMPORTANT:
-#
-# F + None = VALID
-#
-# This is the most important change.
 # ============================================================
 
 def subject_complete(subject):
@@ -566,40 +542,39 @@ def subject_complete(subject):
     )
 
     # --------------------------------------------------------
-    # F grade with no mark is NORMAL for failed subject.
+    # IMPORTANT:
+    #
+    # F + Mark=None = VALID
     # --------------------------------------------------------
 
     if grade == "F":
-
         return True
 
     # --------------------------------------------------------
-    # All other grades require Mark + Grade.
+    # Non-F requires both
     # --------------------------------------------------------
 
     if mark is not None and grade:
-
         return True
 
     return False
 
 
 # ============================================================
-# CHECK WHETHER STUDENT HAS F
+# F CHECK
 # ============================================================
 
 def student_has_f(student):
 
-    subjects = (
-        student.get(
-            "subjects",
-            []
-        )
-        if isinstance(
-            student,
-            dict
-        )
-        else []
+    if not isinstance(
+        student,
+        dict
+    ):
+        return False
+
+    subjects = student.get(
+        "subjects",
+        []
     )
 
     if not isinstance(
@@ -616,11 +591,10 @@ def student_has_f(student):
         ):
             continue
 
-        grade = normalize_grade(
+        if normalize_grade(
             subject.get("grade")
-        )
+        ) == "F":
 
-        if grade == "F":
             return True
 
     return False
@@ -642,19 +616,17 @@ def normalize_gpa(value):
 
         try:
 
-            value = float(value)
+            number = float(value)
 
-            if 0 <= value <= 5:
-                return value
+            if 0 <= number <= 5:
+                return number
 
         except Exception:
             return None
 
         return None
 
-    value = clean_text(
-        value
-    )
+    value = clean_text(value)
 
     if not value:
         return None
@@ -674,15 +646,6 @@ def normalize_gpa(value):
 
 # ============================================================
 # STUDENT COMPLETE
-#
-# Rules:
-#
-# 1. Exactly 12 subjects
-# 2. Every subject valid
-# 3. If GPA exists -> COMPLETE
-# 4. If GPA None:
-#       - F exists -> COMPLETE
-#       - no F -> INCOMPLETE
 # ============================================================
 
 def student_complete(student):
@@ -704,10 +667,7 @@ def student_complete(student):
     ):
         return False
 
-    # --------------------------------------------------------
-    # Exactly 12 subjects
-    # --------------------------------------------------------
-
+    # Must have exactly 12 subjects
     if len(subjects) != EXPECTED_SUBJECTS:
         return False
 
@@ -732,16 +692,9 @@ def student_complete(student):
 
         codes.append(code)
 
-    # --------------------------------------------------------
-    # Duplicate code = invalid
-    # --------------------------------------------------------
-
+    # Duplicate subject
     if len(set(codes)) != EXPECTED_SUBJECTS:
         return False
-
-    # --------------------------------------------------------
-    # GPA
-    # --------------------------------------------------------
 
     gpa = normalize_gpa(
         student.get("gpa")
@@ -751,17 +704,11 @@ def student_complete(student):
     if gpa is not None:
         return True
 
-    # --------------------------------------------------------
-    # GPA None
-    #
-    # F exists -> normal failed result -> COMPLETE
-    # No F -> abnormal -> INCOMPLETE
-    # --------------------------------------------------------
-
+    # GPA None + F -> COMPLETE
     if student_has_f(student):
-
         return True
 
+    # GPA None + no F -> INCOMPLETE
     return False
 
 
@@ -775,9 +722,7 @@ def get_missing_subjects(student):
         student,
         dict
     ):
-        return [
-            "invalid_student"
-        ]
+        return ["invalid_student"]
 
     subjects = student.get(
         "subjects",
@@ -788,15 +733,9 @@ def get_missing_subjects(student):
         subjects,
         list
     ):
-        return [
-            "subjects"
-        ]
+        return ["subjects"]
 
     missing = []
-
-    # --------------------------------------------------------
-    # Subject count
-    # --------------------------------------------------------
 
     if len(subjects) != EXPECTED_SUBJECTS:
 
@@ -804,19 +743,13 @@ def get_missing_subjects(student):
             f"SUBJECT_COUNT={len(subjects)}/{EXPECTED_SUBJECTS}"
         )
 
-    # --------------------------------------------------------
-    # Individual subjects
-    # --------------------------------------------------------
-
     for subject in subjects:
 
         if not isinstance(
             subject,
             dict
         ):
-            missing.append(
-                "invalid"
-            )
+            missing.append("invalid")
             continue
 
         code = str(
@@ -834,16 +767,7 @@ def get_missing_subjects(student):
                 code or "unknown"
             )
 
-    # --------------------------------------------------------
-    # GPA problem
-    #
-    # 12 valid subjects
-    # no F
-    # GPA None
-    #
-    # This is incomplete even though subjects are valid.
-    # --------------------------------------------------------
-
+    # GPA issue
     if (
         len(subjects) == EXPECTED_SUBJECTS
         and
@@ -859,13 +783,7 @@ def get_missing_subjects(student):
         not student_has_f(student)
     ):
 
-        missing.append(
-            "GPA"
-        )
-
-    if not missing:
-
-        return []
+        missing.append("GPA")
 
     return sorted(
         set(missing)
@@ -959,7 +877,6 @@ def find_result(
         if match:
             return match.group(1)
 
-    # F anywhere -> FAIL
     for subject in subjects:
 
         if normalize_grade(
@@ -972,7 +889,7 @@ def find_result(
 
 
 # ============================================================
-# FIELD AFTER LABEL
+# FIELD
 # ============================================================
 
 def field_after_label(
@@ -1080,51 +997,35 @@ def parse_result(
 
     student = {
 
-        "roll":
-            str(roll),
+        "roll": str(roll),
 
-        "name":
-            "",
+        "name": "",
 
-        "board":
-            BOARD,
+        "board": BOARD,
 
-        "group":
-            group,
+        "group": group,
 
-        "father_name":
-            "",
+        "father_name": "",
 
-        "mother_name":
-            "",
+        "mother_name": "",
 
-        "session":
-            "",
+        "session": "",
 
-        "reg_no":
-            "",
+        "reg_no": "",
 
-        "type":
-            "",
+        "type": "",
 
-        "institute":
-            "",
+        "institute": "",
 
-        "district":
-            "",
+        "district": "",
 
-        "result":
-            "",
+        "result": "",
 
-        "gpa":
-            None,
+        "gpa": None,
 
-        "total_score":
-            None,
+        "total_score": None,
 
-        "subjects":
-            [],
-
+        "subjects": [],
     }
 
     # ========================================================
@@ -1205,7 +1106,6 @@ def parse_result(
                 ["Institute"],
                 "institute"
             ),
-
         ]
 
         for labels, key in mappings:
@@ -1262,10 +1162,15 @@ def parse_result(
     # ========================================================
     # TOTAL SCORE
     #
-    # Sum every numeric mark.
+    # IMPORTANT:
     #
-    # F + None is simply ignored.
-    # Other marks are still counted.
+    # Every numeric mark is counted.
+    #
+    # F + Mark=None:
+    # nothing to add.
+    #
+    # Other subjects' marks:
+    # ALWAYS added.
     # ========================================================
 
     total = 0
@@ -1319,7 +1224,7 @@ def parse_result(
 
 
 # ============================================================
-# ROLLS
+# ALL ROLLS
 # ============================================================
 
 def generate_all_rolls():
@@ -1347,26 +1252,6 @@ def generate_all_rolls():
 
 
 ALL_ROLLS = generate_all_rolls()
-
-
-# ============================================================
-# GROUP FROM ROLL
-# ============================================================
-
-def group_for_roll(roll):
-
-    roll = int(roll)
-
-    for group, (
-        start,
-        end
-    ) in ROLL_RANGES.items():
-
-        if start <= roll <= end:
-
-            return group
-
-    return ""
 
 
 # ============================================================
@@ -1459,7 +1344,104 @@ supabase_students = (
 
 
 # ============================================================
-# CLASSIFY EXISTING DATA
+# JSON <-> SUPABASE SYNC
+#
+# IMPORTANT:
+#
+# JSON is initialized FROM SUPABASE.
+#
+# This fixes the previous problem where:
+#
+# Supabase = 81066
+# students.json = 62164
+#
+# After this step JSON contains the Supabase records too.
+# ============================================================
+
+print("")
+print("=" * 70)
+print("SYNCING STUDENTS.JSON WITH SUPABASE")
+print("=" * 70)
+
+existing_json = load_json(
+    STUDENTS_FILE,
+    []
+)
+
+if not isinstance(
+    existing_json,
+    list
+):
+    existing_json = []
+
+
+local_map = {}
+
+for student in existing_json:
+
+    if not isinstance(
+        student,
+        dict
+    ):
+        continue
+
+    roll = str(
+        student.get(
+            "roll",
+            ""
+        )
+    ).strip()
+
+    if roll:
+
+        local_map[roll] = student
+
+
+print(
+    "Existing JSON records:",
+    len(local_map)
+)
+
+print(
+    "Supabase records:",
+    len(supabase_students)
+)
+
+
+# ------------------------------------------------------------
+# SUPABASE IS AUTHORITATIVE
+#
+# Every Supabase row is copied to JSON.
+# ------------------------------------------------------------
+
+for roll, student in (
+    supabase_students.items()
+):
+
+    local_map[roll] = student
+
+
+# ------------------------------------------------------------
+# SAVE INITIAL SYNC
+# ------------------------------------------------------------
+
+save_json(
+    STUDENTS_FILE,
+    list(
+        local_map.values()
+    )
+)
+
+print(
+    "JSON records after Supabase sync:",
+    len(local_map)
+)
+
+print("=" * 70)
+
+
+# ============================================================
+# CLASSIFY SUPABASE
 # ============================================================
 
 complete_students = {}
@@ -1502,48 +1484,10 @@ print("=" * 70)
 
 
 # ============================================================
-# SHOW INCOMPLETE EXAMPLES
+# CURSOR
 # ============================================================
 
-if incomplete_students:
-
-    print("")
-    print("Incomplete examples:")
-
-    shown = 0
-
-    for roll, student in (
-        incomplete_students.items()
-    ):
-
-        print(
-            roll,
-            "|",
-            student.get(
-                "name",
-                ""
-            ),
-            "| Missing:",
-            ", ".join(
-                get_missing_subjects(
-                    student
-                )
-            )
-        )
-
-        shown += 1
-
-        if shown >= 20:
-            break
-
-
-# ============================================================
-# CURSOR HELPERS
-# ============================================================
-
-def load_number_cursor(
-    path
-):
+def load_number_cursor(path):
 
     data = load_json(
         path,
@@ -1593,7 +1537,7 @@ repair_cursor = load_number_cursor(
 
 
 # ============================================================
-# BUILD TARGET QUEUES
+# TARGET QUEUES
 # ============================================================
 
 repair_targets = []
@@ -1604,7 +1548,7 @@ for group, roll_number in ALL_ROLLS:
 
     roll = str(roll_number)
 
-    # Existing but incomplete
+    # Existing incomplete
     if roll in incomplete_students:
 
         repair_targets.append(
@@ -1637,11 +1581,12 @@ new_targets.sort(
 # ============================================================
 # REPAIR QUEUE
 #
-# IMPORTANT:
-# Every incomplete record is eligible for recovery.
+# Important:
 #
-# Cursor is only used to continue progress.
-# If cursor reaches end, a new repair cycle begins.
+# Incomplete records MUST remain eligible
+# for future runs.
+#
+# Cursor cycles automatically.
 # ============================================================
 
 repair_after_cursor = [
@@ -1664,7 +1609,7 @@ if not repair_after_cursor:
         )
 
         print(
-            "Starting new repair cycle."
+            "Starting a NEW repair cycle."
         )
 
         repair_cursor = 0
@@ -1694,7 +1639,7 @@ new_after_cursor = [
 
 
 # ============================================================
-# SELECT CURRENT BATCH
+# BUILD BATCH
 #
 # REPAIR FIRST
 # NEW SECOND
@@ -1706,10 +1651,6 @@ repair_count = 0
 new_count = 0
 
 
-# ------------------------------------------------------------
-# REPAIR FIRST
-# ------------------------------------------------------------
-
 for item in repair_after_cursor:
 
     if len(run_targets) >= BATCH_SIZE:
@@ -1719,10 +1660,6 @@ for item in repair_after_cursor:
 
     repair_count += 1
 
-
-# ------------------------------------------------------------
-# NEW SECOND
-# ------------------------------------------------------------
 
 if len(run_targets) < BATCH_SIZE:
 
@@ -1742,7 +1679,7 @@ if len(run_targets) < BATCH_SIZE:
 
 
 # ============================================================
-# TARGET INFO
+# TARGET STATUS
 # ============================================================
 
 print("")
@@ -1781,12 +1718,12 @@ print(
 )
 
 print(
-    "Repair in this run:",
+    "Repair this run:",
     repair_count
 )
 
 print(
-    "New in this run:",
+    "New this run:",
     new_count
 )
 
@@ -1798,12 +1735,12 @@ print(
 if run_targets:
 
     print(
-        "Batch first roll:",
+        "First roll:",
         run_targets[0][1]
     )
 
     print(
-        "Batch last roll:",
+        "Last roll:",
         run_targets[-1][1]
     )
 
@@ -1817,11 +1754,19 @@ if not run_targets:
         "NO TARGETS FOUND."
     )
 
+    # JSON already synchronized with Supabase.
+    save_json(
+        STUDENTS_FILE,
+        list(
+            local_map.values()
+        )
+    )
+
     raise SystemExit(0)
 
 
 # ============================================================
-# RESULT PAGE
+# OPEN RESULT PAGE
 # ============================================================
 
 print("")
@@ -1891,6 +1836,7 @@ form_url = urljoin(
 
 
 base_form_data = {}
+
 
 for inp in form.find_all(
     "input"
@@ -2041,15 +1987,6 @@ if not isinstance(
 
 # ============================================================
 # DATA QUALITY
-#
-# Higher number = better record.
-#
-# Priority:
-#
-# 1. Valid subjects
-# 2. GPA
-# 3. Total score
-# 4. Identity
 # ============================================================
 
 def data_quality(student):
@@ -2092,14 +2029,13 @@ def data_quality(student):
         else 0
     )
 
-    total_score = (
-        1
-        if normalize_mark(
-            student.get(
-                "total_score"
-            )
-        ) is not None
-        else 0
+    total = student.get(
+        "total_score"
+    )
+
+    total_score_available = (
+        normalize_mark(total)
+        is not None
     )
 
     identity_score = sum(
@@ -2122,14 +2058,14 @@ def data_quality(student):
         +
         gpa_score * 10
         +
-        total_score
+        int(total_score_available)
         +
         identity_score
     )
 
 
 # ============================================================
-# NORMALIZED STUDENT COMPARISON
+# COMPARISON
 # ============================================================
 
 def comparable_student(student):
@@ -2174,7 +2110,8 @@ def comparable_student(student):
             "mark":
                 normalize_mark(
                     subject.get(
-                        "mark")
+                        "mark"
+                    )
                 ),
 
             "grade":
@@ -2303,10 +2240,8 @@ def comparable_student(student):
             ),
 
         "total_score":
-            normalize_mark(
-                student.get(
-                    "total_score"
-                )
+            student.get(
+                "total_score"
             ),
 
         "subjects":
@@ -2331,12 +2266,12 @@ def same_student_data(
 
 
 # ============================================================
-# UPSERT
+# SUPABASE PAYLOAD
 # ============================================================
 
-def upsert_student(student):
+def student_payload(student):
 
-    payload = {
+    return {
 
         "roll":
             str(
@@ -2429,6 +2364,17 @@ def upsert_student(student):
             ),
     }
 
+
+# ============================================================
+# UPSERT
+# ============================================================
+
+def upsert_student(student):
+
+    payload = student_payload(
+        student
+    )
+
     try:
 
         (
@@ -2449,43 +2395,8 @@ def upsert_student(student):
 
 
 # ============================================================
-# LOCAL DATA
+# LOCAL UPDATE
 # ============================================================
-
-students_local = load_json(
-    STUDENTS_FILE,
-    []
-)
-
-if not isinstance(
-    students_local,
-    list
-):
-
-    students_local = []
-
-
-local_map = {}
-
-for student in students_local:
-
-    if not isinstance(
-        student,
-        dict
-    ):
-        continue
-
-    roll = str(
-        student.get(
-            "roll",
-            ""
-        )
-    ).strip()
-
-    if roll:
-
-        local_map[roll] = student
-
 
 def update_local(student):
 
@@ -2727,7 +2638,7 @@ for group, roll in run_targets:
         continue
 
     # ========================================================
-    # DISPLAY RESULT
+    # DISPLAY
     # ========================================================
 
     subjects = student.get(
@@ -2785,10 +2696,6 @@ for group, roll in run_targets:
             )
         )
 
-        # ----------------------------------------------------
-        # F + None = VALID
-        # ----------------------------------------------------
-
         if grade == "F":
 
             status = (
@@ -2829,7 +2736,7 @@ for group, roll in run_targets:
         )
 
     # ========================================================
-    # NEW COMPLETENESS
+    # QUALITY
     # ========================================================
 
     complete = student_complete(
@@ -2849,7 +2756,7 @@ for group, roll in run_targets:
     )
 
     # ========================================================
-    # COMPLETE RESULT
+    # COMPLETE
     # ========================================================
 
     if complete:
@@ -2861,16 +2768,16 @@ for group, roll in run_targets:
 
         if student_has_f(student):
 
+            print(
+                "✓ F detected"
+            )
+
             if student.get(
                 "gpa"
             ) is None:
 
                 print(
-                    "✓ F detected + GPA None"
-                )
-
-                print(
-                    "This is NORMAL and VALID."
+                    "✓ GPA=None is NORMAL for F result"
                 )
 
         else:
@@ -2890,66 +2797,31 @@ for group, roll in run_targets:
         )
 
         # ----------------------------------------------------
-        # Existing COMPLETE:
-        # never save again.
+        # Existing complete should never have reached
+        # the queue, but keep protection here.
         # ----------------------------------------------------
 
-        if old_student and student_complete(
+        if (
             old_student
+            and
+            student_complete(
+                old_student
+            )
         ):
 
-            if same_student_data(
-                old_student,
-                student
-            ):
+            same_data += 1
 
-                same_data += 1
+            print(
+                "✓ EXISTING COMPLETE RECORD"
+            )
 
-                print(
-                    "✓ EXISTING COMPLETE DATA"
-                )
+            print(
+                "↻ SKIP - Supabase data preserved."
+            )
 
-                print(
-                    "↻ SKIP - no collection needed."
-                )
-
-            else:
-
-                # Existing complete should normally
-                # not be requested, but if it reaches here,
-                # do not overwrite it automatically.
-                same_data += 1
-
-                print(
-                    "✓ EXISTING COMPLETE RECORD"
-                )
-
-                print(
-                    "↻ SKIP - existing complete data preserved."
-                )
-
-            # Cursor update
-            if is_repair:
-
-                save_number_cursor(
-                    REPAIR_CURSOR_FILE,
-                    int(roll)
-                )
-
-                repair_cursor = int(roll)
-
-            else:
-
-                save_number_cursor(
-                    CURSOR_FILE,
-                    int(roll)
-                )
-
-                new_cursor = int(roll)
-
-        # ----------------------------------------------------
-        # New complete result
-        # ----------------------------------------------------
+            update_local(
+                old_student
+            )
 
         else:
 
@@ -2971,6 +2843,23 @@ for group, roll in run_targets:
             supabase_saved += 1
             successful += 1
 
+            supabase_students[roll] = (
+                student
+            )
+
+            complete_students[roll] = (
+                student
+            )
+
+            incomplete_students.pop(
+                roll,
+                None
+            )
+
+            update_local(
+                student
+            )
+
             if is_repair:
 
                 repaired += 1
@@ -2991,25 +2880,10 @@ for group, roll in run_targets:
                     "✓ NEW STUDENT SAVED"
                 )
 
-            # Update memory
-            supabase_students[roll] = (
-                student
-            )
+            # ------------------------------------------------
+            # Update appropriate cursor
+            # ------------------------------------------------
 
-            complete_students[roll] = (
-                student
-            )
-
-            incomplete_students.pop(
-                roll,
-                None
-            )
-
-            update_local(
-                student
-            )
-
-            # Cursor
             if is_repair:
 
                 save_number_cursor(
@@ -3029,7 +2903,7 @@ for group, roll in run_targets:
                 new_cursor = int(roll)
 
     # ========================================================
-    # INCOMPLETE RESULT
+    # INCOMPLETE
     # ========================================================
 
     else:
@@ -3062,9 +2936,6 @@ for group, roll in run_targets:
 
         # ----------------------------------------------------
         # NEW STUDENT
-        #
-        # Save even if incomplete because the student
-        # exists and can be recovered in a future run.
         # ----------------------------------------------------
 
         if not old_student:
@@ -3105,12 +2976,6 @@ for group, roll in run_targets:
 
         # ----------------------------------------------------
         # EXISTING INCOMPLETE
-        #
-        # Compare old vs new.
-        #
-        # Better new data -> REPLACE
-        # Same data -> DO NOT SAVE
-        # Worse data -> KEEP OLD
         # ----------------------------------------------------
 
         else:
@@ -3127,7 +2992,12 @@ for group, roll in run_targets:
                 )
 
                 print(
-                    "This result remains incomplete."
+                    "This incomplete record remains in Supabase."
+                )
+
+                # Keep local JSON synchronized
+                update_local(
+                    old_student
                 )
 
             elif new_quality > old_quality:
@@ -3139,7 +3009,6 @@ for group, roll in run_targets:
                 if ok:
 
                     supabase_saved += 1
-
                     repaired += 1
 
                     supabase_students[roll] = (
@@ -3181,13 +3050,17 @@ for group, roll in run_targets:
                     "OLD RECORD PRESERVED."
                 )
 
+                update_local(
+                    old_student
+                )
+
         # ----------------------------------------------------
         # IMPORTANT:
         #
-        # Do NOT advance repair cursor for an incomplete
-        # record that was not improved.
+        # Cursor advances only for this run.
         #
-        # This allows future runs to retry incomplete data.
+        # Next complete cycle will retry all
+        # remaining incomplete records.
         # ----------------------------------------------------
 
         if is_repair:
@@ -3219,6 +3092,8 @@ for group, roll in run_targets:
             "Saving checkpoint..."
         )
 
+        # JSON is always built from current
+        # Supabase memory + local changes.
         save_json(
             STUDENTS_FILE,
             list(
@@ -3254,8 +3129,23 @@ for group, roll in run_targets:
 
 
 # ============================================================
-# FINAL SAVE
+# FINAL SUPABASE -> JSON SYNC
 # ============================================================
+
+print("")
+print("=" * 70)
+print("FINAL SUPABASE -> STUDENTS.JSON SYNC")
+print("=" * 70)
+
+# Make absolutely sure all current Supabase
+# records are represented in JSON.
+
+for roll, student in (
+    supabase_students.items()
+):
+
+    local_map[roll] = student
+
 
 save_json(
     STUDENTS_FILE,
@@ -3268,6 +3158,13 @@ save_json(
     FAILED_FILE,
     failed_rolls
 )
+
+print(
+    "students.json records:",
+    len(local_map)
+)
+
+print("=" * 70)
 
 
 # ============================================================
@@ -3316,6 +3213,10 @@ for group, roll_number in ALL_ROLLS:
 
         remaining_new += 1
 
+
+# ============================================================
+# SUMMARY
+# ============================================================
 
 summary = {
 
@@ -3383,6 +3284,12 @@ summary = {
     "new_cursor":
         new_cursor,
 
+    "students_json_total":
+        len(local_map),
+
+    "students_json_supabase_synced":
+        True,
+
     "batch_size":
         BATCH_SIZE,
 
@@ -3391,28 +3298,40 @@ summary = {
         "expected_subjects":
             EXPECTED_SUBJECTS,
 
-        "f_grade_with_none_mark":
+        "f_grade_mark_none":
             "VALID",
 
-        "f_grade_gpa_none":
-            "VALID_COMPLETE",
+        "f_grade_mark_none_gpa_none":
+            "COMPLETE_SKIP",
+
+        "f_grade_available_marks":
+            "VALID",
+
+        "total_score":
+            "SUM_ALL_AVAILABLE_NUMERIC_MARKS",
 
         "gpa_none_without_f":
             "INCOMPLETE",
 
-        "mark_required_for_non_f":
-            True,
+        "twelve_valid_subjects_gpa_exists":
+            "COMPLETE",
 
-        "grade_required_for_non_f":
-            True,
+        "twelve_valid_subjects_f_gpa_none":
+            "COMPLETE",
 
-        "total_score_from_available_marks":
-            True,
+        "twelve_valid_subjects_no_f_gpa_none":
+            "INCOMPLETE",
 
         "skip_existing_complete":
             True,
 
+        "skip_existing_f_valid":
+            True,
+
         "recover_existing_incomplete":
+            True,
+
+        "retry_incomplete_future_runs":
             True,
 
         "replace_only_if_new_data_better":
@@ -3425,6 +3344,9 @@ summary = {
             False,
 
         "repair_first":
+            True,
+
+        "students_json_sync_with_supabase":
             True,
 
     },
@@ -3447,11 +3369,26 @@ save_json(
 
 print("")
 print("=" * 70)
-print("SSC COLLECTION COMPLETE")
+print("SSC COLLECTION RESULT")
 print("=" * 70)
 
 print(
-    "Processed:",
+    "Supabase total:",
+    final_total
+)
+
+print(
+    "Complete:",
+    final_complete
+)
+
+print(
+    "Incomplete:",
+    final_incomplete
+)
+
+print(
+    "Processed this run:",
     processed
 )
 
@@ -3500,22 +3437,6 @@ print(
     supabase_errors
 )
 
-print("")
-print(
-    "Supabase total:",
-    final_total
-)
-
-print(
-    "Complete:",
-    final_complete
-)
-
-print(
-    "Incomplete:",
-    final_incomplete
-)
-
 print(
     "Remaining repair:",
     remaining_repair
@@ -3540,6 +3461,11 @@ print(
 print(
     "New cursor:",
     new_cursor
+)
+
+print(
+    "students.json total:",
+    len(local_map)
 )
 
 print("=" * 70)
