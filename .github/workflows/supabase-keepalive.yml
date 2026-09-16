@@ -1,0 +1,45 @@
+name: Supabase Keep Alive
+
+on:
+  schedule:
+    # প্রতিদিন বাংলাদেশ সময় সকাল 6:30
+    # 00:30 UTC = 06:30 Bangladesh Time
+    - cron: "30 0 * * *"
+
+  workflow_dispatch:
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send small Supabase request
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+
+        run: |
+          set -e
+
+          echo "Sending small request to Supabase..."
+
+          HTTP_STATUS=$(curl \
+            --silent \
+            --show-error \
+            --output /dev/null \
+            --write-out "%{http_code}" \
+            --get \
+            "${SUPABASE_URL}/rest/v1/students" \
+            --data-urlencode "select=roll" \
+            --data-urlencode "limit=1" \
+            -H "apikey: ${SUPABASE_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_KEY}")
+
+          echo "Supabase HTTP status: ${HTTP_STATUS}"
+
+          if [ "${HTTP_STATUS}" -ge 200 ] && [ "${HTTP_STATUS}" -lt 300 ]; then
+            echo "Supabase request successful."
+          else
+            echo "Supabase request failed."
+            exit 1
+          fi
