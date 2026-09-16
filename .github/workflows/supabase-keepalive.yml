@@ -2,10 +2,11 @@ name: Supabase Keep Alive
 
 on:
   schedule:
-    # প্রতিদিন বাংলাদেশ সময় সকাল 6:30
+    # প্রতিদিন বাংলাদেশ সময় সকাল ৬:৩০
     # 00:30 UTC = 06:30 Bangladesh Time
     - cron: "30 0 * * *"
 
+  # GitHub Actions থেকে manually চালানোর জন্য
   workflow_dispatch:
 
 jobs:
@@ -21,7 +22,9 @@ jobs:
         run: |
           set -e
 
-          echo "Sending small request to Supabase..."
+          echo "======================================"
+          echo "CTGboardranking Supabase Keep Alive"
+          echo "======================================"
 
           HTTP_STATUS=$(curl \
             --silent \
@@ -35,11 +38,13 @@ jobs:
             -H "apikey: ${SUPABASE_KEY}" \
             -H "Authorization: Bearer ${SUPABASE_KEY}")
 
-          echo "Supabase HTTP status: ${HTTP_STATUS}"
+          echo "Supabase HTTP Status: ${HTTP_STATUS}"
 
           if [ "${HTTP_STATUS}" -ge 200 ] && [ "${HTTP_STATUS}" -lt 300 ]; then
-            echo "Supabase request successful."
+            echo "✅ Supabase request successful."
+            echo "✅ CTGboardranking project is responding normally."
           else
-            echo "Supabase request failed."
+            echo "❌ Supabase request failed."
+            echo "HTTP Status: ${HTTP_STATUS}"
             exit 1
           fi
