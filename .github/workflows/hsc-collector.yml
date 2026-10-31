@@ -40,10 +40,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4
 
+      - name: Check HSC Files
+        run: |
+          echo "Checking HSC collector files..."
+          ls -la hsc-collector/
+          test -f hsc-collector/hsc_github_collector.py
+          test -f hsc-collector/hsc_parser.py
+          test -f hsc-collector/hsc_groups.py
+
       - name: Run HSC Collector
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          HSC_BATCH_SIZE: ${{ inputs.batch_size }}
         run: |
-          python hsc_github_collector.py --limit "$HSC_BATCH_SIZE"
+          python hsc-collector/hsc_github_collector.py --limit "${{ inputs.batch_size }}"
