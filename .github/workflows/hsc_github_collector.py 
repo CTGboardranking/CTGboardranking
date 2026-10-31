@@ -1,0 +1,302 @@
+
+import os
+import sys
+import time
+import argparse
+import requests
+
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
+
+from hsc_parser import parse_hsc_result
+from hsc_groups import ROLL_RANGES, get_student_group
+
+
+EXAM_YEAR = 2026
+BOARD = "chattogram"
+TABLE_NAME = "hsc_students"
+RESULT_URL = (
+    "https://hscresult.bise-ctg.gov.bd/"
+    "h22_31_x1_26/individual/index.php"
+)
+
+SUPABASE_URL = os.environ["SUPABASE_URL"].rstrip("/")
+SUPABASE_KEY = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
+
+REQUEST_TIMEOUT = 30
+MAX_RETRIES = 3
+REQUEST_DELAY = 2
+
+HEADERS = {
+    "apikey": SUPABASE_KEY,
+    "Authorization": f"Bearer {SUPABASE_KEY}",
+    "Content-Type": "application/json",
+}
+
+session = requests.Session()
+session.headers.update({
+    "User-Agent": "Mozilla/5.0",
+    "Referer": RESULT_URL,
+})
+
+
+def build_roll_list():
+    rolls = []
+
+    for group, ranges in ROLL_RANGES.items():
+        for start, end in ranges:
+            rolls.extend(range(start, end + 1))
+
+    return sorted(set(rolls))
+
+
+def supabase_request(method, table, **kwargs):
+    url = f"{SUPABASE_URL}/rest/v1/{table}"
+
+    response = requests.request(
+        method,
+        url,
+        headers=HEADERS,
+        timeout=REQUEST_TIMEOUT,
+        **kwargs
+    )
+
+    if response.status_code >= 400:
+        raise RuntimeError(
+            f"Supabase HTTP {response.status_code}: "
+            f"{response.text[:500]}"
+        )
+
+    return response
+
+
+def get_progress():
+    response = supabase_request(
+        "GET",
+        "hsc_collection_state",
+        params={
+            "id": "eq.main",
+            "select": "next_roll_index"
+        }
+    )
+
+    rows = response.json()
+
+    if not rows:
+        supabase_request(
+            "POST",
+            "hsc_collection_state",
+            json={
+                "id": "main",
+                "next_roll_index": 0
+            },
+            headers={
+                **HEADERS,
+                "Prefer": "resolution=merge-duplicates"
+            }
+        )
+        return 0
+
+    return int(rows[0]["next_roll_index"])
+
+
+def save_progress(index):
+    supabase_request(
+        "PATCH",
+        "hsc_collection_state",
+        params={"id": "eq.main"},
+        json={
+            "next_roll_index": index,
+            "updated_at": "now()"
+        }
+    )
+
+
+def fetch_result(roll):
+    page = session.get(
+        RESULT_URL,
+        timeout=REQUEST_TIMEOUT
+    )
+    page.raise_for_status()
+
+    soup = BeautifulSoup(page.text, "html.parser")
+    form = soup.find("form")
+
+    if not form:
+        raise RuntimeError("Result form not found")
+
+    action = form.get("action") or "result_mark_details.php"
+    post_url = urljoin(RESULT_URL, action)
+
+    response = session.post(
+        post_url,
+        data={
+            "roll": str(roll),
+            "button2": ""
+        },
+        timeout=REQUEST_TIMEOUT
+    )
+    response.raise_for_status()
+
+    return response.text
+
+
+def parse_and_validate(html, roll):
+    data = parse_hsc_result(html, requested_roll=roll)
+
+    if not data:
+        raise RuntimeError("Parser returned empty data")
+
+    if int(data.get("roll", 0)) != roll:
+        raise RuntimeError("Roll mismatch")
+
+    required = [
+        "name",
+        "student_group",
+        "result",
+        "gpa"
+    ]
+
+    for field in required:
+        if data.get(field) in (None, ""):
+            raise RuntimeError(f"Missing field: {field}")
+
+    subjects = data.get("subjects") or []
+
+    if not isinstance(subjects, list):
+        raise RuntimeError("Invalid subjects data")
+
+    # Keep the full subject-wise data as JSONB.
+    clean_subjects = []
+
+    for subject in subjects:
+        clean_subjects.append({
+            "subject_name": subject.get("subject_name"),
+            "subject_code": subject.get("subject_code"),
+            "grade": subject.get("grade"),
+            "marks": subject.get("marks"),
+        })
+
+    return {
+        "exam_year": EXAM_YEAR,
+        "roll": roll,
+        "name": data["name"],
+        "board": BOARD,
+        "student_group": get_student_group(roll),
+        "session": data.get("session"),
+        "exam_type": data.get("exam_type"),
+        "institution": data.get("institution"),
+        "result": data["result"],
+        "gpa": data["gpa"],
+        "subjects": clean_subjects,
+    }
+
+
+def save_students(records):
+    if not records:
+        return
+
+    supabase_request(
+        "POST",
+        TABLE_NAME,
+        params={"on_conflict": "exam_year,board,roll"},
+        json=records,
+        headers={
+            **HEADERS,
+            "Prefer": "resolution=merge-duplicates,return=minimal"
+        }
+    )
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--limit", type=int, default=10)
+    args = parser.parse_args()
+
+    rolls = build_roll_list()
+    total = len(rolls)
+
+    start_index = get_progress()
+    end_index = min(start_index + args.limit, total)
+
+    print("HSC 2026 CHATTAGRAM BOARD COLLECTOR")
+    print("Total rolls:", total)
+    print("Starting index:", start_index)
+    print("Ending index:", end_index)
+    print("Batch size:", args.limit)
+
+    if start_index >= total:
+        print("All roll numbers have been processed.")
+        return
+
+    saved = 0
+    failed = 0
+
+    for index in range(start_index, end_index):
+        roll = rolls[index]
+        record = None
+
+        for attempt in range(1, MAX_RETRIES + 1):
+            try:
+                html = fetch_result(roll)
+                record = parse_and_validate(html, roll)
+                break
+
+            except Exception as error:
+                print(
+                    f"{roll} | Attempt {attempt}/"
+                    f"{MAX_RETRIES} failed: {error}"
+                )
+
+                if attempt < MAX_RETRIES:
+                    time.sleep(REQUEST_DELAY * attempt)
+
+        if record:
+            try:
+                save_students([record])
+                saved += 1
+
+                print(
+                    f"\nSAVED {roll} | "
+                    f"{record['name']} | "
+                    f"{record['student_group']} | "
+                    f"GPA {record['gpa']} | "
+                    f"Subjects {len(record['subjects'])}"
+                )
+
+                for subject in record["subjects"]:
+                    print(
+                        "  ",
+                        subject["subject_name"],
+                        "| Code:", subject["subject_code"],
+                        "| Grade:", subject["grade"],
+                        "| Marks:", subject["marks"]
+                    )
+
+            except Exception as error:
+                failed += 1
+                print(f"SUPABASE SAVE FAILED {roll}: {error}")
+
+                # Do not move the checkpoint past an unsaved record.
+                save_progress(index)
+                raise
+
+        else:
+            failed += 1
+            print(f"SKIPPED {roll}: result unavailable or incomplete")
+
+        # Move forward after this roll has been attempted.
+        save_progress(index + 1)
+
+        time.sleep(REQUEST_DELAY)
+
+    print("\n========== SUMMARY ==========")
+    print("Attempted:", end_index - start_index)
+    print("Saved:", saved)
+    print("Failed/skipped:", failed)
+    print("Next index:", end_index)
+    print("Total rolls:", total)
+
+
+if __name__ == "__main__":
+    main()
