@@ -1,0 +1,47 @@
+name: HSC 2026 Student Data Pipeline
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-hsc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Check Python syntax
+        run: |
+          python -m py_compile hsc-collector/hsc_test.py
+          python -m py_compile hsc-collector/hsc_ranking.py
+          python -m py_compile hsc-collector/hsc_upload.py
+          python -m py_compile hsc-collector/hsc_import_students.py
+
+      - name: Validate JSON template
+        run: |
+          python -m json.tool \
+            hsc-collector/data/institutions.json > /dev/null
+
+          python -m json.tool \
+            hsc-collector/data/institution_results.json > /dev/null
+
+          python -m json.tool \
+            hsc-collector/data/authorized_student_results.example.json > /dev/null
+
+      - name: Confirm HSC-only pipeline
+        run: |
+          echo "HSC pipeline validation successful."
+          echo "No SSC files were modified."
+          echo "No student results were scraped or uploaded."

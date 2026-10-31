@@ -1,0 +1,24 @@
+{
+  "source": "AUTHORIZED_OFFICIAL_HSC_2026_DATASET",
+  "year": 2026,
+  "board": "Chattogram Board",
+  "students": [
+    {
+      "roll": "000000",
+      "registration": null,
+      "student_name": "EXAMPLE ONLY",
+      "eiin": "000000",
+      "gpa": null,
+      "result_status": null,
+      "subjects": [
+        {
+          "subject_code": "101",
+          "subject_name": "Bangla",
+          "marks": null,
+          "letter_grade": null,
+          "grade_point": null
+        }
+      ]
+    }
+  ]
+}
