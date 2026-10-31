@@ -1,0 +1,90 @@
+
+name: HSC 2026 Source Inspection
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Requests
+        run: pip install requests beautifulsoup4
+
+      - name: Inspect HSC Website
+        run: |
+          python - <<'PY'
+          import os
+          import requests
+          from bs4 import BeautifulSoup
+
+          urls = {
+              "individual_501661":
+                  "https://boardexamrankings.vercel.app/hsc/2026/individual/501661/",
+              "science":
+                  "https://boardexamrankings.vercel.app/hsc/2026/science/?page=1",
+              "commerce":
+                  "https://boardexamrankings.vercel.app/hsc/2026/business_studies/?page=1",
+              "humanities":
+                  "https://boardexamrankings.vercel.app/hsc/2026/humanities/?page=1",
+          }
+
+          os.makedirs("probe", exist_ok=True)
+
+          session = requests.Session()
+          session.headers.update({
+              "User-Agent": "Mozilla/5.0 (compatible; HSCDataInspector/1.0)"
+          })
+
+          for name, url in urls.items():
+              print("\n==========", name, "==========")
+
+              try:
+                  response = session.get(url, timeout=30)
+                  print("HTTP:", response.status_code)
+                  print("FINAL URL:", response.url)
+
+                  response.raise_for_status()
+
+                  with open(f"probe/{name}.html", "w", encoding="utf-8") as f:
+                      f.write(response.text)
+
+                  soup = BeautifulSoup(response.text, "html.parser")
+
+                  print("TITLE:", soup.title.get_text(" ", strip=True) if soup.title else "Not found")
+                  print("TABLES:", len(soup.find_all("table")))
+
+                  for i, table in enumerate(soup.find_all("table")[:5]):
+                      headers = [
+                          cell.get_text(" ", strip=True)
+                          for cell in table.find_all(["th"])
+                      ]
+                      rows = table.find_all("tr")
+                      print("TABLE", i + 1, "HEADERS:", headers)
+                      print("TABLE", i + 1, "ROWS:", len(rows))
+
+                  print("HAS ROLL 501661:", "501661" in response.text)
+
+              except Exception as e:
+                  print("ERROR:", str(e))
+
+          print("\nINSPECTION FINISHED")
+          PY
+
+      - name: Upload Inspection Files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hsc-source-inspection
+          path: probe/
+          if-no-files-found: warn
