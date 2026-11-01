@@ -294,34 +294,147 @@ body.dark-mode .student-header{background:var(--surface-2)}
  function downloadPDF() {
   const pageRows=filteredStudents.slice((currentPage-1)*PAGE_SIZE,currentPage*PAGE_SIZE);
   if(!pageRows.length) return;
+
   if(!window.jspdf || !window.jspdf.jsPDF) {
    alert("PDF library could not be loaded. Please try again.");
    return;
   }
+
   const {jsPDF}=window.jspdf;
   const doc=new jsPDF({orientation:"landscape",unit:"pt",format:"a4"});
-  doc.setFont("helvetica","bold");doc.setFontSize(18);
-  doc.text("HSC 2026 Student Ranking",40,38);
-  doc.setFont("helvetica","normal");doc.setFontSize(10);
-  doc.text(GROUPS[activeGroup].title+" · Chattogram Board",40,56);
-  doc.text("Page "+currentPage+" · "+pageRows.length+" students",40,72);
+  const pageWidth=doc.internal.pageSize.getWidth();
+  const pageHeight=doc.internal.pageSize.getHeight();
+  const margin={left:38,right:38,top:116,bottom:66};
+  const groupName=GROUPS[activeGroup].title;
+
+  const generatedAt=new Date().toLocaleString("en-GB",{
+   day:"2-digit",month:"short",year:"numeric",
+   hour:"2-digit",minute:"2-digit"
+  });
+
+  // Premium Apple-inspired header
+  doc.setFillColor(247,249,252);
+  doc.rect(0,0,pageWidth,98,"F");
+
+  doc.setFillColor(0,113,227);
+  doc.roundedRect(margin.left,27,5,43,2,2,"F");
+
+  doc.setTextColor(105,115,130);
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(8);
+  doc.text("CTGBOARD RANKING  /  CHITTAGONG BOARD",margin.left+17,32);
+
+  doc.setTextColor(20,27,38);
+  doc.setFontSize(21);
+  doc.text("HSC 2026 Student Ranking",margin.left+17,57);
+
+  doc.setTextColor(90,101,116);
+  doc.setFont("helvetica","normal");
+  doc.setFontSize(9);
+  doc.text(groupName+"  |  Academic Year 2026",margin.left+17,75);
+
+  doc.setTextColor(75,87,103);
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(8);
+  doc.text("STUDENT PERFORMANCE LIST",pageWidth-margin.right,35,{align:"right"});
+
+  doc.setFont("helvetica","normal");
+  doc.text("Generated: "+generatedAt,pageWidth-margin.right,51,{align:"right"});
+  doc.text("Page "+currentPage+"  |  "+pageRows.length+" students",pageWidth-margin.right,67,{align:"right"});
+
+  doc.setDrawColor(225,230,237);
+  doc.setLineWidth(.7);
+  doc.line(margin.left,98,pageWidth-margin.right,98);
+
   const body=pageRows.map(s=>[
-   s.display_rank,
+   String(s.display_rank ?? "—"),
    s.name||s.student_name||"—",
-   s.roll,
+   String(s.roll ?? "—"),
    numeric(s.gpa)===null?"—":numeric(s.gpa).toFixed(2),
    numeric(s.total_marks)===null?"—":String(numeric(s.total_marks)),
    s.institute||s.institution||s.institution_name||"—"
   ]);
+
   doc.autoTable({
-   startY:88,
-   head:[["Rank","Student Name","Roll","GPA","Total Marks","Institution"]],
+   startY:margin.top,
+   margin:{
+    left:margin.left,
+    right:margin.right,
+    top:margin.top,
+    bottom:margin.bottom
+   },
+   head:[["RANK","STUDENT NAME","ROLL","GPA","TOTAL MARKS","INSTITUTION"]],
    body,
-   theme:"grid",
-   styles:{font:"helvetica",fontSize:8,cellPadding:5,overflow:"linebreak"},
-   headStyles:{fillColor:[25,35,50]},
-   columnStyles:{0:{cellWidth:42},2:{cellWidth:58},3:{cellWidth:48},4:{cellWidth:65}}
+   theme:"striped",
+   showHead:"everyPage",
+
+   styles:{
+    font:"helvetica",
+    fontSize:8,
+    textColor:[42,51,64],
+    cellPadding:{top:6,bottom:6,left:7,right:7},
+    lineColor:[232,236,242],
+    lineWidth:.35,
+    overflow:"linebreak",
+    valign:"middle"
+   },
+
+   headStyles:{
+    fillColor:[27,38,54],
+    textColor:[255,255,255],
+    fontStyle:"bold",
+    fontSize:7.5,
+    cellPadding:{top:9,bottom:9,left:7,right:7}
+   },
+
+   alternateRowStyles:{
+    fillColor:[247,249,252]
+   },
+
+   columnStyles:{
+    0:{cellWidth:43,halign:"center",fontStyle:"bold"},
+    1:{cellWidth:178,fontStyle:"bold"},
+    2:{cellWidth:68,halign:"center"},
+    3:{cellWidth:55,halign:"center"},
+    4:{cellWidth:76,halign:"center",fontStyle:"bold"},
+    5:{cellWidth:"auto"}
+   },
+
+   didDrawPage:function(){
+    const y=pageHeight-43;
+
+    doc.setDrawColor(225,230,237);
+    doc.setLineWidth(.7);
+    doc.line(margin.left,y-10,pageWidth-margin.right,y-10);
+
+    doc.setTextColor(177,65,53);
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(7);
+    doc.text("UNOFFICIAL NOTE",margin.left,y+3);
+
+    doc.setTextColor(105,115,128);
+    doc.setFont("helvetica","normal");
+    doc.setFontSize(7);
+    doc.text(
+     "Prepared for reference only. Not an official board-issued ranking.",
+     margin.left+83,y+3
+    );
+
+    doc.setTextColor(45,55,70);
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(7);
+    doc.text("Database by Shadat Fatih",pageWidth/2,y+20,{align:"center"});
+
+    doc.setTextColor(105,115,128);
+    doc.setFont("helvetica","normal");
+    doc.setFontSize(7);
+    doc.text(
+     "CTGBoardRanking  |  Page "+doc.internal.getCurrentPageInfo().pageNumber,
+     pageWidth-margin.right,y+20,{align:"right"}
+    );
+   }
   });
+
   doc.save(`HSC-2026-${activeGroup}-page-${currentPage}.pdf`);
  }
 
