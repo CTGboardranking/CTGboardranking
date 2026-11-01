@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSC 2026 Student Ranking — CTGBoardRanking</title>
+<meta name="description" content="Explore Chattogram Board HSC 2026 student rankings by Science, Business Studies and Humanities.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://ctgboardranking.vercel.app/hsc-student-ranking.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
+<style>
+.student-hero{max-width:1100px;margin:auto;padding:82px 20px 42px}
+.back-link{display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:14px;margin-bottom:28px}
+.student-hero h1{font-size:clamp(43px,7vw,76px);line-height:.98;letter-spacing:-4px;margin-top:12px}
+.student-hero h1 span{color:var(--primary)}
+.student-hero p{color:var(--muted);max-width:680px;margin-top:20px;font-size:16px;line-height:1.7}
+.student-content{max-width:1160px;margin:auto;padding:18px 20px 75px}
+.ranking-controls{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:26px}
+.control-card{background:rgba(255,255,255,.82);border:1px solid var(--border);border-radius:20px;padding:16px;box-shadow:var(--shadow)}
+.control-card label{display:block;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:1px;margin-bottom:8px}
+.control-card select,.student-search{width:100%;box-sizing:border-box;padding:13px;border-radius:13px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:inherit;outline:none}
+.group-tabs{display:flex;gap:8px;margin:10px 0 30px;overflow-x:auto;padding:2px 1px 8px}
+.group-tab{border:1px solid var(--border);background:var(--surface);color:var(--muted);padding:11px 17px;border-radius:50px;font:600 13px Inter,Arial,sans-serif;cursor:pointer;white-space:nowrap;transition:.2s}
+.group-tab.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+.ranking-title{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:18px}
+.ranking-title h2{font-size:clamp(25px,4vw,34px);letter-spacing:-1.4px;margin:5px 0 0}
+.ranking-title p{color:var(--muted);font-size:13px;margin-top:5px}
+.pdf-download-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;background:#111;color:#fff;padding:12px 17px;border-radius:13px;font:700 13px Inter,Arial,sans-serif;cursor:pointer;white-space:nowrap;box-shadow:0 8px 22px rgba(0,0,0,.12)}
+.pdf-download-btn:disabled{opacity:.5;cursor:not-allowed}
+.student-search{margin:0 0 17px;background:var(--surface)}
+.student-list{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:22px;overflow:hidden;box-shadow:var(--shadow)}
+.student-header,.student-row{display:grid;grid-template-columns:65px minmax(180px,1fr) 80px 115px minmax(220px,1.1fr);align-items:center;gap:12px}
+.student-header{padding:15px 20px;background:var(--surface-2);border-bottom:1px solid var(--border);color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.7px;text-transform:uppercase}
+.student-row{padding:17px 20px;border-bottom:1px solid var(--border);transition:.18s;min-width:0}
+.student-row:last-child{border-bottom:0}
+.student-row:hover{background:rgba(22,119,255,.035)}
+.student-rank{font-size:16px;font-weight:800;color:var(--muted)}
+.student-rank.gold{color:#c68a00}
+.student-name,.student-gpa,.student-total,.student-institution{min-width:0}
+.student-name strong,.student-institution strong{display:block;overflow-wrap:anywhere;word-break:break-word}
+.student-name strong{font-size:13px;line-height:1.4}
+.student-name span,.student-gpa span,.student-total span,.student-institution span{display:block;color:var(--muted);font-size:10px;margin-top:4px}
+.student-gpa strong,.student-total strong{font-size:15px;font-weight:800}
+.student-total strong{color:var(--primary)}
+.student-institution strong{font-size:11px;line-height:1.45}
+.student-name a{color:inherit}
+.student-name a:hover{color:var(--primary)}
+.loading-message,.empty-message,.error-message{text-align:center;padding:55px 18px;color:var(--muted)}
+.error-message{color:#d93025}
+.error-details{margin-top:9px;font-size:11px;color:var(--muted);overflow-wrap:anywhere}
+.pagination{display:flex;justify-content:center;align-items:center;gap:12px;padding:22px 12px;border-top:1px solid var(--border)}
+.pagination button{border:1px solid var(--border);background:var(--surface);color:var(--text);padding:10px 16px;border-radius:12px;font:700 12px Inter,Arial,sans-serif;cursor:pointer}
+.pagination button:hover:not(:disabled){background:var(--text);color:var(--bg)}
+.pagination button:disabled{opacity:.38;cursor:not-allowed}
+.pagination-info{min-width:115px;text-align:center;color:var(--muted);font-size:12px;font-weight:700}
+.result-count{font-size:12px;color:var(--muted);margin:0 0 12px}
+@media(max-width:760px){
+ .student-hero{padding:60px 16px 35px}.ranking-controls{grid-template-columns:1fr}
+ .ranking-title{display:block}.pdf-download-btn{width:100%;margin-top:14px}
+ .student-header,.student-row{grid-template-columns:42px minmax(115px,1fr) 55px 72px;gap:7px}
+ .student-header{padding:13px 11px;font-size:8px}.student-row{padding:14px 11px}
+ .student-header div:nth-child(5){display:none}
+ .student-institution{grid-column:2/5;width:100%;margin-top:3px;padding-top:9px;border-top:1px solid var(--border)}
+ .student-name strong{font-size:11px}.student-gpa strong,.student-total strong{font-size:11px}
+ .student-institution strong{font-size:10px}
+}
+@media(max-width:430px){
+ .student-content{padding:14px 9px 55px}.student-hero h1{letter-spacing:-2.5px}
+ .student-header,.student-row{grid-template-columns:34px minmax(105px,1fr) 49px 65px;gap:5px}
+ .student-header{padding:12px 8px}.student-row{padding:13px 8px}
+ .student-name strong{font-size:10.5px}.student-gpa strong,.student-total strong{font-size:10.5px}
+ .pagination{gap:6px;padding:18px 5px}.pagination button{padding:9px 9px;font-size:10px}.pagination-info{min-width:80px;font-size:10px}
+}
+body.dark-mode .control-card,body.dark-mode .student-list{background:var(--surface)}
+body.dark-mode .student-search,body.dark-mode .control-card select{background:var(--surface-2);color:var(--text)}
+body.dark-mode .student-header{background:var(--surface-2)}
+</style>
+</head>
+<body>
+<header class="navbar">
+ <a href="index.html" class="logo"><span class="logo-mark">C</span><span>CTGBoardRanking</span></a>
+ <nav class="nav-links">
+  <a href="index.html">Home</a>
+  <a href="student-ranking.html">SSC Ranking</a>
+  <a href="hsc-student-ranking.html" class="active">HSC Ranking</a>
+  <a href="rankings.html">Institution Ranking</a>
+  <a href="district.html">Districts</a>
+  <a href="statistics.html">Statistics</a>
+ </nav>
+ <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode">◐</button>
+</header>
+
+<main>
+<section class="student-hero">
+ <a href="index.html" class="back-link">← Back to Home</a>
+ <span class="eyebrow">CHITTAGONG BOARD · HSC 2026</span>
+ <h1>HSC Student<br><span>Ranking.</span></h1>
+ <p>Explore HSC 2026 student rankings across Science, Business Studies and Humanities. Each page displays 100 students with continuous ranking.</p>
+</section>
+
+<section class="student-content">
+ <div class="ranking-controls">
+  <div class="control-card"><label for="yearSelect">ACADEMIC YEAR</label><select id="yearSelect"><option value="2026">2026</option></select></div>
+  <div class="control-card"><label for="rankingType">RANKING METHOD</label><select id="rankingType"><option value="marks">Total Marks · GPA · Roll</option></select></div>
+ </div>
+
+ <div class="group-tabs" role="tablist" aria-label="Student group">
+  <button class="group-tab active" data-group="science" type="button">🔬 Science</button>
+  <button class="group-tab" data-group="business_studies" type="button">💼 Business Studies</button>
+  <button class="group-tab" data-group="humanities" type="button">🎓 Humanities</button>
+ </div>
+
+ <div class="ranking-title">
+  <div><span class="eyebrow">TOP PERFORMERS</span><h2 id="groupTitle">Science Students</h2><p id="yearText">2026 · Chattogram Board</p></div>
+  <button id="downloadPdfBtn" class="pdf-download-btn" type="button">↓ Download Current Page PDF</button>
+ </div>
+ <input type="search" id="studentSearch" class="student-search" placeholder="Search student name, roll or institution..." autocomplete="off" aria-label="Search students">
+ <div id="resultCount" class="result-count">Loading HSC ranking data…</div>
+
+ <div class="student-list">
+  <div class="student-header"><div>Rank</div><div>Student Name</div><div>GPA</div><div>Total Marks</div><div>Institution</div></div>
+  <div id="studentRows"><div class="loading-message">Loading student ranking…</div></div>
+  <div id="emptyMessage" class="empty-message" style="display:none">No student found.</div>
+  <div id="errorMessage" class="error-message" style="display:none">Student ranking data could not be loaded.<div id="errorDetails" class="error-details"></div></div>
+  <div id="pagination" class="pagination" style="display:none">
+   <button id="prevPage" type="button" disabled>← Previous</button>
+   <span id="paginationInfo" class="pagination-info">Page 1 of 1</span>
+   <button id="nextPage" type="button">Next →</button>
+  </div>
+ </div>
+</section>
+</main>
+
+<footer>
+ <div class="footer-main">
+  <div><div class="footer-logo"><span class="logo-mark">C</span> CTGBoardRanking</div><p>Chattogram Board academic results, rankings and statistics.</p></div>
+ </div>
+ <div class="footer-bottom"><p>© 2026 CTGBoardRanking. All rights reserved.</p></div>
+</footer>
+
+<script src="js/supabase-config.js"></script>
+<script>
+(() => {
+ "use strict";
+ const PAGE_SIZE = 100;
+ const FETCH_SIZE = 1000;
+ const GROUPS = {
+  science: {title:"Science Students",emoji:"🔬"},
+  business_studies:{title:"Business Studies Students",emoji:"💼"},
+  humanities:{title:"Humanities Students",emoji:"🎓"}
+ };
+ const cache = new Map();
+ let activeGroup = "science";
+ let currentPage = 1;
+ let allStudents = [];
+ let filteredStudents = [];
+
+ const $ = id => document.getElementById(id);
+ const rowsEl = $("studentRows");
+ const searchEl = $("studentSearch");
+ const countEl = $("resultCount");
+ const paginationEl = $("pagination");
+ const errorEl = $("errorMessage");
+ const emptyEl = $("emptyMessage");
+ const pdfBtn = $("downloadPdfBtn");
+
+ function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ }
+ function numeric(value) {
+  if (value === null || value === undefined || value === "") return null;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
+ }
+ function compareNullableDesc(a,b) {
+  const x=numeric(a), y=numeric(b);
+  if(x===null && y===null) return 0;
+  if(x===null) return 1;
+  if(y===null) return -1;
+  return y-x;
+ }
+ function sortAndRank(data) {
+  data.sort((a,b) =>
+   compareNullableDesc(a.total_marks,b.total_marks) ||
+   compareNullableDesc(a.gpa,b.gpa) ||
+   (Number(a.roll)||0)-(Number(b.roll)||0)
+  );
+  data.forEach((s,i)=>s.display_rank=i+1);
+  return data;
+ }
+ async function fetchGroup(group) {
+  if(cache.has(group)) return cache.get(group);
+  if(typeof SUPABASE_URL === "undefined" || typeof SUPABASE_PUBLISHABLE_KEY === "undefined") {
+   throw new Error("Supabase configuration was not found. Check js/supabase-config.js.");
+  }
+  const collected=[];
+  for(let offset=0;;offset+=FETCH_SIZE) {
+   const url=new URL(SUPABASE_URL+"/rest/v1/hsc_students");
+   url.searchParams.set("select","roll,name,student_name,gpa,total_marks,institute,institution,institution_name,student_group,individual_url,result_status,year,exam_year");
+   url.searchParams.set("year","eq.2026");
+   url.searchParams.set("student_group","eq."+group);
+   url.searchParams.set("order","total_marks.desc.nullslast,gpa.desc.nullslast,roll.asc");
+   url.searchParams.set("limit",String(FETCH_SIZE));
+   url.searchParams.set("offset",String(offset));
+   const response=await fetch(url.toString(),{
+    headers:{
+     "apikey":SUPABASE_PUBLISHABLE_KEY,
+     "Authorization":"Bearer "+SUPABASE_PUBLISHABLE_KEY,
+     "Accept":"application/json"
+    }
+   });
+   if(!response.ok) {
+    const detail=await response.text();
+    throw new Error("Supabase HTTP "+response.status+": "+detail.slice(0,450));
+   }
+   const batch=await response.json();
+   if(!Array.isArray(batch)) throw new Error("Unexpected response from Supabase.");
+   collected.push(...batch);
+   countEl.textContent="Loading "+GROUPS[group].title+": "+collected.length.toLocaleString()+" students…";
+   if(batch.length<FETCH_SIZE) break;
+  }
+  const ranked=sortAndRank(collected);
+  cache.set(group,ranked);
+  return ranked;
+ }
+ function showState(state,message="") {
+  rowsEl.innerHTML="";
+  emptyEl.style.display=state==="empty"?"block":"none";
+  errorEl.style.display=state==="error"?"block":"none";
+  paginationEl.style.display="none";
+  if(state==="loading") rowsEl.innerHTML='<div class="loading-message">Loading HSC 2026 ranking data…</div>';
+  if(state==="error") $("errorDetails").textContent=message;
+ }
+ function studentHTML(s) {
+  const name=s.name || s.student_name || "Name unavailable";
+  const institute=s.institute || s.institution || s.institution_name || "Institution not available";
+  const roll=String(s.roll ?? "");
+  const gpa=numeric(s.gpa);
+  const marks=numeric(s.total_marks);
+  const rankClass=s.display_rank===1?"gold":"";
+  const detailURL=(s.individual_url && /^https:\/\/boardexamrankings\.vercel\.app\//i.test(s.individual_url))
+   ?s.individual_url
+   :"https://boardexamrankings.vercel.app/hsc/2026/individual/"+encodeURIComponent(roll)+"/";
+  return `<div class="student-row">
+   <div class="student-rank ${rankClass}">${s.display_rank.toLocaleString()}</div>
+   <div class="student-name"><strong><a href="${escapeHTML(detailURL)}" target="_blank" rel="noopener">${escapeHTML(name)}</a></strong><span>Roll: ${escapeHTML(roll)}${s.result_status?" · "+escapeHTML(s.result_status):""}</span></div>
+   <div class="student-gpa"><strong>${gpa===null?"—":gpa.toFixed(2)}</strong><span>GPA</span></div>
+   <div class="student-total"><strong>${marks===null?"—":marks.toLocaleString()}</strong><span>Marks</span></div>
+   <div class="student-institution"><strong>${escapeHTML(institute)}</strong><span>Chattogram Board</span></div>
+  </div>`;
+ }
+ function render() {
+  const query=searchEl.value.trim().toLocaleLowerCase();
+  filteredStudents=query ? allStudents.filter(s=>{
+   const hay=[s.name,s.student_name,s.roll,s.institute,s.institution,s.institution_name].join(" ").toLocaleLowerCase();
+   return hay.includes(query);
+  }) : allStudents;
+  const totalPages=Math.max(1,Math.ceil(filteredStudents.length/PAGE_SIZE));
+  if(currentPage>totalPages) currentPage=totalPages;
+  const start=(currentPage-1)*PAGE_SIZE;
+  const pageRows=filteredStudents.slice(start,start+PAGE_SIZE);
+  rowsEl.innerHTML=pageRows.map(studentHTML).join("");
+  emptyEl.style.display=filteredStudents.length?"none":"block";
+  errorEl.style.display="none";
+  paginationEl.style.display=filteredStudents.length>0?"flex":"none";
+  $("prevPage").disabled=currentPage<=1;
+  $("nextPage").disabled=currentPage>=totalPages;
+  $("paginationInfo").textContent=`Page ${currentPage} of ${totalPages}`;
+  countEl.textContent=`Showing ${filteredStudents.length?start+1:0}–${Math.min(start+PAGE_ROWS(),filteredStudents.length)} of ${filteredStudents.length.toLocaleString()} ${GROUPS[activeGroup].title.toLowerCase()}${query?" matching results":""} · 100 per page`;
+  pdfBtn.disabled=pageRows.length===0;
+ }
+ function PAGE_ROWS(){return PAGE_SIZE;}
+ async function loadGroup(group) {
+  activeGroup=group;
+  currentPage=1;
+  $("groupTitle").textContent=GROUPS[group].title;
+  document.querySelectorAll(".group-tab").forEach(btn=>btn.classList.toggle("active",btn.dataset.group===group));
+  showState("loading");
+  pdfBtn.disabled=true;
+  try {
+   allStudents=await fetchGroup(group);
+   render();
+  } catch(err) {
+   allStudents=[];
+   showState("error",err.message || String(err));
+   countEl.textContent="Unable to load ranking data.";
+  }
+ }
+ function downloadPDF() {
+  const pageRows=filteredStudents.slice((currentPage-1)*PAGE_SIZE,currentPage*PAGE_SIZE);
+  if(!pageRows.length) return;
+  if(!window.jspdf || !window.jspdf.jsPDF) {
+   alert("PDF library could not be loaded. Please try again.");
+   return;
+  }
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:"landscape",unit:"pt",format:"a4"});
+  doc.setFont("helvetica","bold");doc.setFontSize(18);
+  doc.text("HSC 2026 Student Ranking",40,38);
+  doc.setFont("helvetica","normal");doc.setFontSize(10);
+  doc.text(GROUPS[activeGroup].title+" · Chattogram Board",40,56);
+  doc.text("Page "+currentPage+" · "+pageRows.length+" students",40,72);
+  const body=pageRows.map(s=>[
+   s.display_rank,
+   s.name||s.student_name||"—",
+   s.roll,
+   numeric(s.gpa)===null?"—":numeric(s.gpa).toFixed(2),
+   numeric(s.total_marks)===null?"—":String(numeric(s.total_marks)),
+   s.institute||s.institution||s.institution_name||"—"
+  ]);
+  doc.autoTable({
+   startY:88,
+   head:[["Rank","Student Name","Roll","GPA","Total Marks","Institution"]],
+   body,
+   theme:"grid",
+   styles:{font:"helvetica",fontSize:8,cellPadding:5,overflow:"linebreak"},
+   headStyles:{fillColor:[25,35,50]},
+   columnStyles:{0:{cellWidth:42},2:{cellWidth:58},3:{cellWidth:48},4:{cellWidth:65}}
+  });
+  doc.save(`HSC-2026-${activeGroup}-page-${currentPage}.pdf`);
+ }
+
+ $("prevPage").addEventListener("click",()=>{if(currentPage>1){currentPage--;render();window.scrollTo({top:$("groupTitle").getBoundingClientRect().top+window.scrollY-90,behavior:"smooth"});}});
+ $("nextPage").addEventListener("click",()=>{const pages=Math.max(1,Math.ceil(filteredStudents.length/PAGE_SIZE));if(currentPage<pages){currentPage++;render();window.scrollTo({top:$("groupTitle").getBoundingClientRect().top+window.scrollY-90,behavior:"smooth"});}});
+ searchEl.addEventListener("input",()=>{currentPage=1;render();});
+ document.querySelectorAll(".group-tab").forEach(btn=>btn.addEventListener("click",()=>{searchEl.value="";loadGroup(btn.dataset.group);}));
+ pdfBtn.addEventListener("click",downloadPDF);
+ $("themeBtn").addEventListener("click",()=>{
+  document.body.classList.toggle("dark-mode");
+  const dark=document.body.classList.contains("dark-mode");
+  $("themeBtn").textContent=dark?"☀":"◐";
+ });
+ loadGroup(activeGroup);
+})();
+</script>
+</body>
+</html>
