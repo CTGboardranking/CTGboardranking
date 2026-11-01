@@ -15,7 +15,7 @@ h1{font-size:clamp(40px,7vw,64px);letter-spacing:-3px;line-height:1.02;margin:15
 <header><a class="logo" href="index.html">◧ CTGBoardRanking</a><nav class="nav"><a href="index.html">Home</a><a href="hsc-student-ranking.html">HSC Ranking</a><a href="hsc-institution-ranking.html">Institutions</a></nav></header>
 <section class="hero"><span class="eyebrow">CHATTOGRAM BOARD · HSC 2026</span><h1>Individual<br><span>Result.</span></h1><p>Enter an HSC 2026 roll number to view the available student result and subject-wise marks or grades.</p></section>
 <main class="main"><section class="card"><div class="searchrow"><input id="roll" class="search" inputmode="numeric" maxlength="12" placeholder="Enter HSC roll number"><button id="search" class="btn">Search Result</button></div><div class="hint">Search by roll number · Chattogram Board · 2026</div><div id="status" class="status">Enter a roll number to search.</div>
-<div id="profile" class="profile"><div class="head"><span class="eyebrow">HSC 2026 · INDIVIDUAL RESULT</span><h2 id="name">—</h2><p id="info">—</p></div><div class="metrics"><div class="metric"><small>GPA</small><strong id="gpa">—</strong></div><div class="metric"><small>RESULT</small><strong id="result">—</strong></div><div class="metric"><small>RANK</small><strong id="rank">—</strong></div></div><h3 class="subjecttitle">Subject-wise Result</h3><div class="tablewrap"><table><thead><tr><th>SUBJECT</th><th>CODE</th><th>MARKS</th><th>GRADE</th><th>GRADE POINT</th></tr></thead><tbody id="subjects"></tbody></table></div><div class="pdfrow"><button id="pdf" class="btn">↓ Download Result PDF</button></div><div class="notice">UNOFFICIAL NOTE: This is an independent data presentation, not an official board-issued marksheet. Subject details are shown only when available in the database.</div></div>
+<div id="profile" class="profile"><div class="head"><span class="eyebrow">HSC 2026 · INDIVIDUAL RESULT</span><h2 id="name">—</h2><p id="info">—</p></div><div class="metrics"><div class="metric"><small>GPA</small><strong id="gpa">—</strong></div><div class="metric"><small>RESULT</small><strong id="result">—</strong></div><div class="metric"><small>REGISTRATION</small><strong id="rank">—</strong></div></div><h3 class="subjecttitle">Subject-wise Result</h3><div class="tablewrap"><table><thead><tr><th>SUBJECT</th><th>CODE</th><th>MARKS</th><th>GRADE</th><th>GRADE POINT</th></tr></thead><tbody id="subjects"></tbody></table></div><div class="pdfrow"><button id="pdf" class="btn">↓ Download Result PDF</button></div><div class="notice">UNOFFICIAL NOTE: This is an independent data presentation, not an official board-issued marksheet. Subject details are shown only when available in the database.</div></div>
 </section></main><footer>© 2026 CTGBoardRanking · Database by Shadat Fatih</footer>
 <script src="js/supabase-config.js"></script><script>
 (()=>{"use strict";const $=id=>document.getElementById(id);let student=null,subjectRows=[];
@@ -23,7 +23,67 @@ const pick=(o,keys)=>{for(const k of keys)if(o&&o[k]!==undefined&&o[k]!==null&&o
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function normalize(raw){if(Array.isArray(raw))return raw;if(raw&&typeof raw==="object")return Object.entries(raw).map(([k,v])=>v&&typeof v==="object"?{subject_code:k,...v}:{subject_code:k,marks:v});return[]}
 function showSubjects(rows){subjectRows=rows.map(x=>({name:pick(x,["subject_name","name","subject","title"])||"Subject",code:pick(x,["subject_code","code"])||"—",marks:pick(x,["marks","mark","total_marks"]),grade:pick(x,["letter_grade","grade","grade_letter"]),point:pick(x,["grade_point","gradePoint","gp"])}));$("subjects").innerHTML=subjectRows.length?subjectRows.map(x=>`<tr><td><strong>${esc(x.name)}</strong></td><td>${esc(x.code)}</td><td>${esc(x.marks??"—")}</td><td>${esc(x.grade??"—")}</td><td>${esc(x.point??"—")}</td></tr>`).join(""):'<tr><td colspan="5" style="text-align:center">Subject details are not available for this roll.</td></tr>'}
-async function search(){const roll=$("roll").value.trim();if(!/^\d{4,12}$/.test(roll)){$("status").textContent="Enter a valid roll number.";return}$("profile").style.display="none";$("status").style.display="block";$("status").textContent="Searching…";try{const u=new URL(SUPABASE_URL+"/rest/v1/hsc_students");u.searchParams.set("select","id,roll,registration,student_name,eiin,institution_name,gpa,result_status,rank,total_marks,institute,subjects,year,exam_year");u.searchParams.set("roll","eq."+roll);u.searchParams.set("year","eq.2026");u.searchParams.set("limit","1");const r=await fetch(u,{headers:{apikey:SUPABASE_PUBLISHABLE_KEY,Authorization:"Bearer "+SUPABASE_PUBLISHABLE_KEY}});if(!r.ok)throw Error("Supabase HTTP "+r.status+" "+(await r.text()).slice(0,180));const list=await r.json();if(!list.length){$("status").textContent="No HSC 2026 result found for roll "+roll+".";return}student=list[0];$("name").textContent=student.name||student.student_name||"Name unavailable";$("info").textContent="Roll: "+student.roll+" · "+(student.institute||student.institution||student.institution_name||"Institution unavailable")+" · "+(student.district||"Chattogram");$("gpa").textContent=student.gpa??"—";$("result").textContent=student.result_status||student.result||"—";$("rank").textContent=student.rank??"—";let rows=normalize(student.subjects);if(!rows.length&&student.id){const su=new URL(SUPABASE_URL+"/rest/v1/hsc_subject_results");su.searchParams.set("select","subject_code,subject_name,marks,letter_grade,grade_point");su.searchParams.set("student_id","eq."+student.id);su.searchParams.set("year","eq.2026");su.searchParams.set("order","subject_code.asc");const sr=await fetch(su,{headers:{apikey:SUPABASE_PUBLISHABLE_KEY,Authorization:"Bearer "+SUPABASE_PUBLISHABLE_KEY}});if(sr.ok)rows=await sr.json()}showSubjects(rows);$("status").style.display="none";$("profile").style.display="block";history.replaceState(null,"","?roll="+encodeURIComponent(roll));}catch(e){$("status").textContent="Could not load result: "+e.message}}
+async function search(){
+const roll=$("roll").value.trim();
+if(!/^\d{4,12}$/.test(roll)){
+$("status").textContent="Enter a valid roll number.";
+return;
+}
+$("profile").style.display="none";
+$("status").style.display="block";
+$("status").textContent="Searching…";
+
+try{
+const headers={
+apikey:SUPABASE_PUBLISHABLE_KEY,
+Authorization:"Bearer "+SUPABASE_PUBLISHABLE_KEY
+};
+
+const u=new URL(SUPABASE_URL+"/rest/v1/hsc_students");
+u.searchParams.set("select","id,roll,registration,student_name,eiin,institution_name,district,thana,gpa,result_status,year");
+u.searchParams.set("roll","eq."+roll);
+u.searchParams.set("year","eq.2026");
+u.searchParams.set("limit","1");
+
+const r=await fetch(u,{headers});
+if(!r.ok)throw Error("Student lookup failed: HTTP "+r.status+" "+(await r.text()).slice(0,180));
+
+const list=await r.json();
+if(!list.length){
+$("status").textContent="No HSC 2026 result found for roll "+roll+".";
+return;
+}
+
+student=list[0];
+$("name").textContent=student.student_name||"Name unavailable";
+$("info").textContent="Roll: "+student.roll+" · "+
+(student.institution_name||"Institution unavailable")+" · "+
+(student.district||"District unavailable");
+
+$("gpa").textContent=student.gpa??"—";
+$("result").textContent=student.result_status||"—";
+$("rank").textContent=student.registration||"—";
+
+const su=new URL(SUPABASE_URL+"/rest/v1/hsc_subject_results");
+su.searchParams.set("select","subject_code,subject_name,marks,letter_grade,grade_point");
+su.searchParams.set("student_id","eq."+student.id);
+su.searchParams.set("year","eq.2026");
+su.searchParams.set("order","subject_code.asc");
+
+const sr=await fetch(su,{headers});
+if(!sr.ok)throw Error("Subject lookup failed: HTTP "+sr.status+" "+(await sr.text()).slice(0,180));
+
+const rows=await sr.json();
+showSubjects(rows);
+
+$("status").style.display="none";
+$("profile").style.display="block";
+history.replaceState(null,"","?roll="+encodeURIComponent(roll));
+
+}catch(e){
+$("status").textContent="Could not load result: "+e.message;
+}
+}
 $("search").onclick=search;$("roll").addEventListener("keydown",e=>{if(e.key==="Enter")search()});
 $("pdf").onclick=()=>{if(!student||!window.jspdf?.jsPDF)return;const {jsPDF}=window.jspdf,doc=new jsPDF({orientation:"landscape",unit:"pt",format:"a4"}),w=doc.internal.pageSize.getWidth(),h=doc.internal.pageSize.getHeight();doc.setFillColor(247,249,252);doc.rect(0,0,w,100,"F");doc.setTextColor(0,113,227);doc.setFont("helvetica","bold");doc.setFontSize(8);doc.text("CTGBOARD RANKING / CHATTOGRAM BOARD",38,25);doc.setTextColor(25,32,45);doc.setFontSize(21);doc.text("HSC 2026 Individual Result",38,52);doc.setFont("helvetica","normal");doc.setFontSize(9);doc.text("Student: "+(student.name||student.student_name||"—")+"   |   Roll: "+student.roll,38,75);doc.text("Institution: "+(student.institute||student.institution||student.institution_name||"—"),38,90);doc.autoTable({startY:120,margin:{left:38,right:38,bottom:60},head:[["SUBJECT","SUBJECT CODE","MARKS","GRADE","GRADE POINT"]],body:subjectRows.map(x=>[x.name,x.code,x.marks??"—",x.grade??"—",x.point??"—"]),theme:"striped",styles:{font:"helvetica",fontSize:9,cellPadding:8},headStyles:{fillColor:[27,38,54]},didDrawPage:()=>{const y=h-34;doc.setDrawColor(225,230,237);doc.line(38,y-12,w-38,y-12);doc.setFont("helvetica","bold");doc.setFontSize(7);doc.setTextColor(177,65,53);doc.text("UNOFFICIAL NOTE",38,y);doc.setFont("helvetica","normal");doc.setTextColor(90,100,115);doc.text("Not an official board-issued marksheet.",115,y);doc.setFont("helvetica","bold");doc.text("Database by Shadat Fatih",w/2,y+14,{align:"center"});doc.setFont("helvetica","normal");doc.text("Page "+doc.internal.getCurrentPageInfo().pageNumber,w-38,y+14,{align:"right"});}});doc.save("HSC-2026-Result-"+student.roll+".pdf")};
 const initial=new URLSearchParams(location.search).get("roll");if(initial){$("roll").value=initial;search()}
