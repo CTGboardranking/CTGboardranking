@@ -595,12 +595,10 @@ body.dark-mode .student-institution {border-color:#263244}
   const gpa=numeric(s.gpa);
   const marks=numeric(s.total_marks);
   const rankClass=s.display_rank===1?"gold":"";
-  const detailURL=(s.individual_url && /^https:\/\/boardexamrankings\.vercel\.app\//i.test(s.individual_url))
-   ?s.individual_url
-   :"https://boardexamrankings.vercel.app/hsc/2026/individual/"+encodeURIComponent(roll)+"/";
+  // Student name stays on CTGBoardRanking; no external source link.
   return `<div class="student-row">
    <div class="student-rank ${rankClass}">${s.display_rank.toLocaleString()}</div>
-   <div class="student-name"><strong><a href="${escapeHTML(detailURL)}" target="_blank" rel="noopener">${escapeHTML(name)}</a></strong><span>Roll: ${escapeHTML(roll)}${s.result_status?" · "+escapeHTML(s.result_status):""}</span></div>
+   <div class="student-name"><strong>${escapeHTML(name)}</strong><span>Roll: ${escapeHTML(roll)}${s.result_status?" · "+escapeHTML(s.result_status):""}</span></div>
    <div class="student-gpa"><strong>${gpa===null?"—":gpa.toFixed(2)}</strong><span>GPA</span></div>
    <div class="student-total"><strong>${marks===null?"—":marks.toLocaleString()}</strong><span>Marks</span></div>
    <div class="student-institution"><strong>${escapeHTML(institute)}</strong><span>Chattogram Board</span></div>
