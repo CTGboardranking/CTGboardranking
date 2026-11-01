@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HSC 2026 Institution Ranking | CTGBoardRanking</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f7fa;color:#172033;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{height:66px;padding:0 max(18px,calc((100% - 1120px)/2));display:flex;align-items:center;justify-content:space-between;background:#fffffff0;border-bottom:1px solid #e7ebf1;position:sticky;top:0}
+a{color:#0878f9;text-decoration:none}.logo{font-weight:800;color:#172033}.nav a{margin-left:16px;font-size:12px;font-weight:650;color:#667085}
+.hero,.content{max-width:1120px;margin:auto;padding-left:20px;padding-right:20px}.hero{padding-top:62px;padding-bottom:30px}.eyebrow{font-size:10px;letter-spacing:1.5px;font-weight:800;color:#0878f9}
+h1{font-size:clamp(40px,7vw,66px);letter-spacing:-3px;line-height:1.02;margin:15px 0}h1 span{color:#0878f9}.hero p{max-width:650px;color:#697586;font-size:14px;line-height:1.7}
+.content{padding-bottom:75px}.panel{background:#fff;border:1px solid #e5eaf1;border-radius:22px;padding:20px;box-shadow:0 14px 45px #182b4610}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}.stat{padding:14px;border:1px solid #e9edf3;border-radius:14px}.stat small{font-size:9px;color:#8a95a5;font-weight:800;letter-spacing:1px}.stat strong{display:block;font-size:23px;margin-top:7px}
+.toolbar{display:flex;gap:10px;margin-bottom:12px}.search{height:48px;flex:1;min-width:0;border:1px solid #e0e6ef;border-radius:13px;padding:0 14px;font:inherit;font-size:13px}.btn{border:0;border-radius:13px;background:#0878f9;color:white;padding:0 18px;font-size:12px;font-weight:800;cursor:pointer}.btn:disabled{opacity:.45}
+.meta{font-size:11px;color:#8a95a5;margin:12px 2px}.table-wrap{overflow:auto;border:1px solid #e9edf3;border-radius:14px}table{border-collapse:collapse;width:100%;min-width:760px}th{background:#f6f8fb;text-align:left;padding:13px 11px;color:#7a8798;font-size:9px;letter-spacing:1px}td{padding:13px 11px;border-top:1px solid #edf0f4;font-size:12px;color:#475467}td strong{color:#172033}.rank{color:#0878f9;font-weight:800}.empty{text-align:center;padding:30px;color:#8a95a5}.pages{display:flex;justify-content:center;align-items:center;gap:15px;padding:18px}.pages button{border:1px solid #e1e7ef;background:white;border-radius:10px;padding:9px 13px}footer{text-align:center;padding:25px;color:#929baa;font-size:10px}
+@media(max-width:600px){.hero{padding-top:42px}h1{letter-spacing:-2px}.panel{padding:12px}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:span 2}.toolbar{flex-direction:column}.btn{height:46px}}
+</style>
+</head>
+<body>
+<header><a class="logo" href="index.html">◧ CTGBoardRanking</a><nav class="nav"><a href="index.html">Home</a><a href="hsc-student-ranking.html">HSC Students</a><a href="hsc-result.html">Individual Result</a></nav></header>
+<section class="hero"><span class="eyebrow">CHATTOGRAM BOARD · HSC 2026</span><h1>Institution<br><span>Ranking.</span></h1><p>Institution-wise HSC 2026 performance based on the statistics available in the database. Institutions without appeared-candidate data are not ranked.</p></section>
+<main class="content"><section class="panel">
+<div class="stats"><div class="stat"><small>INSTITUTIONS WITH DATA</small><strong id="total">—</strong></div><div class="stat"><small>APPEARED</small><strong id="appeared">—</strong></div><div class="stat"><small>PASSED</small><strong id="passed">—</strong></div></div>
+<div class="toolbar"><input id="search" class="search" type="search" placeholder="Search institution, EIIN or district"><button id="pdf" class="btn" disabled>↓ Download PDF</button></div>
+<div id="status" class="meta">Loading institution data…</div>
+<div class="table-wrap"><table><thead><tr><th>RANK</th><th>INSTITUTION</th><th>EIIN</th><th>DISTRICT</th><th>APPEARED</th><th>PASSED</th><th>PASS RATE</th><th>GPA-5</th><th>AVG GPA</th></tr></thead><tbody id="rows"><tr><td colspan="9" class="empty">Loading…</td></tr></tbody></table></div>
+<div class="pages"><button id="prev" disabled>← Previous</button><span id="page">Page 1</span><button id="next" disabled>Next →</button></div>
+</section></main><footer>© 2026 CTGBoardRanking · Unofficial HSC 2026 statistics</footer>
+<script src="js/supabase-config.js"></script>
+<script>
+(()=>{"use strict";
+const $=id=>document.getElementById(id),SIZE=50;let all=[],filtered=[],page=1;
+const num=v=>v===null||v===undefined||v===""||!Number.isFinite(Number(v))?null:Number(v);
+const fmt=v=>v===null?"—":v.toLocaleString("en-US");
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function render(){const start=(page-1)*SIZE,items=filtered.slice(start,start+SIZE),pages=Math.max(1,Math.ceil(filtered.length/SIZE));
+$("rows").innerHTML=items.length?items.map((x,i)=>`<tr><td class="rank">${start+i+1}</td><td><strong>${esc(x.institution_name||"Institution unavailable")}</strong><br><small>${esc(x.thana||"")}</small></td><td>${esc(x.eiin||"—")}</td><td>${esc(x.district||"—")}</td><td>${fmt(num(x.appeared))}</td><td>${fmt(num(x.passed))}</td><td><strong>${num(x.passing_rate)===null?"—":num(x.passing_rate).toFixed(2)+"%"}</strong></td><td>${fmt(num(x.gpa5))}</td><td>${num(x.average_gpa)===null?"—":num(x.average_gpa).toFixed(2)}</td></tr>`).join(""):`<tr><td colspan="9" class="empty">No institution performance data is currently available.</td></tr>`;
+$("page").textContent=`Page ${page} of ${pages}`;$("prev").disabled=page<=1;$("next").disabled=page>=pages;$("pdf").disabled=!items.length;
+$("status").textContent=`${filtered.length.toLocaleString()} institutions · sorted by pass rate, GPA-5 and appeared candidates`;}
+async function load(){try{let offset=0;while(true){const u=new URL(SUPABASE_URL+"/rest/v1/hsc_institutions");u.searchParams.set("select","eiin,institution_name,district,thana,appeared,passed,passing_rate,gpa5,average_gpa,year,board");u.searchParams.set("year","eq.2026");u.searchParams.set("order","passing_rate.desc.nullslast,gpa5.desc.nullslast,appeared.desc.nullslast,institution_name.asc");u.searchParams.set("limit","1000");u.searchParams.set("offset",String(offset));const r=await fetch(u,{headers:{apikey:SUPABASE_PUBLISHABLE_KEY,Authorization:"Bearer "+SUPABASE_PUBLISHABLE_KEY}});if(!r.ok)throw Error("Supabase HTTP "+r.status+" "+(await r.text()).slice(0,200));const batch=await r.json();all.push(...batch);if(batch.length<1000)break;offset+=1000;}
+all=all.filter(x=>num(x.appeared)>0);all.sort((a,b)=>(num(b.passing_rate)??-1)-(num(a.passing_rate)??-1)||(num(b.gpa5)??-1)-(num(a.gpa5)??-1)||(num(b.appeared)??-1)-(num(a.appeared)??-1));
+$("total").textContent=all.length.toLocaleString();$("appeared").textContent=all.reduce((s,x)=>s+(num(x.appeared)||0),0).toLocaleString();$("passed").textContent=all.reduce((s,x)=>s+(num(x.passed)||0),0).toLocaleString();if(!all.length)$("status").textContent="Institution records were found, but appeared counts are zero or missing. Ranking is hidden to avoid misleading results.";filtered=all;render();
+}catch(e){$("status").textContent="Could not load institution data: "+e.message;$("rows").innerHTML='<tr><td colspan="9" class="empty">Check Supabase table access and institution data.</td></tr>';}}
+$("search").addEventListener("input",()=>{const q=$("search").value.trim().toLowerCase();filtered=all.filter(x=>[x.institution_name,x.eiin,x.district,x.thana].join(" ").toLowerCase().includes(q));page=1;render()});
+$("prev").onclick=()=>{page--;render()};$("next").onclick=()=>{page++;render()};
+$("pdf").onclick=()=>{if(!window.jspdf?.jsPDF)return alert("PDF library unavailable.");const {jsPDF}=window.jspdf,doc=new jsPDF({orientation:"landscape",unit:"pt",format:"a4"}),w=doc.internal.pageSize.getWidth(),h=doc.internal.pageSize.getHeight();doc.setFillColor(247,249,252);doc.rect(0,0,w,88,"F");doc.setTextColor(0,113,227);doc.setFont("helvetica","bold");doc.setFontSize(8);doc.text("CTGBOARD RANKING / CHATTOGRAM BOARD",38,26);doc.setTextColor(25,32,45);doc.setFontSize(21);doc.text("HSC 2026 Institution Ranking",38,53);doc.setFont("helvetica","normal");doc.setFontSize(8);doc.text("Generated: "+new Date().toLocaleString("en-GB"),w-38,52,{align:"right"});
+doc.autoTable({startY:102,margin:{left:38,right:38,bottom:58},head:[["RANK","INSTITUTION","EIIN","DISTRICT","APPEARED","PASSED","PASS RATE","GPA-5","AVG GPA"]],body:filtered.map((x,i)=>[i+1,x.institution_name||"—",x.eiin||"—",x.district||"—",fmt(num(x.appeared)),fmt(num(x.passed)),num(x.passing_rate)===null?"—":num(x.passing_rate).toFixed(2)+"%",fmt(num(x.gpa5)),num(x.average_gpa)===null?"—":num(x.average_gpa).toFixed(2)]),theme:"striped",styles:{font:"helvetica",fontSize:7,cellPadding:5},headStyles:{fillColor:[27,38,54]},didDrawPage:()=>{const y=h-34;doc.setDrawColor(225,230,237);doc.line(38,y-12,w-38,y-12);doc.setFont("helvetica","bold");doc.setFontSize(7);doc.setTextColor(177,65,53);doc.text("UNOFFICIAL NOTE",38,y);doc.setFont("helvetica","normal");doc.setTextColor(90,100,115);doc.text("Not an official board-issued ranking.",115,y);doc.setFont("helvetica","bold");doc.text("Database by Shadat Fatih",w/2,y+14,{align:"center"});doc.setFont("helvetica","normal");doc.text("Page "+doc.internal.getCurrentPageInfo().pageNumber,w-38,y+14,{align:"right"});}});doc.save("HSC-2026-Institution-Ranking.pdf");};
+load();})();
+</script></body></html>
