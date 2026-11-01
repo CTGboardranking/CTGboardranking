@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HSC 2026 Institution Ranking | CTGBoardRanking</title>
+<title>Chittagong Education Board | HSC 2026 Institution Ranking</title>
 <meta name="description" content="HSC 2026 institution-wise performance ranking for the 277 EIIN institutions provided for Chattogram Board.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,6 +25,65 @@ h1{font-size:clamp(40px,7vw,68px);letter-spacing:-3.8px;line-height:.99;margin:1
 .rule{font-size:10px;color:var(--muted);line-height:1.6;margin:8px 2px 14px}.status{font-size:10px;color:var(--muted);margin:12px 2px}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:15px}table{border-collapse:collapse;width:100%;min-width:900px}th{background:var(--bg);text-align:left;padding:14px 11px;color:var(--muted);font-size:9px;letter-spacing:.8px;white-space:nowrap}td{padding:13px 11px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);vertical-align:middle}td strong{color:var(--text)}.rank{font-weight:800;color:var(--blue)}.gpa{font-weight:800;color:var(--green)}.inst-bn{display:block;color:var(--muted);font-size:10px;margin-top:4px}.pages{display:flex;justify-content:center;align-items:center;gap:14px;padding:18px 5px 3px;font-size:11px;color:var(--muted)}.pages button{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:10px;padding:9px 13px;font-size:10px;font-weight:700}.pages button:disabled{opacity:.35}.empty{text-align:center;padding:34px;color:var(--muted)}footer{text-align:center;padding:25px;color:var(--muted);font-size:10px}
 @media(max-width:760px){.filters{grid-template-columns:1fr 1fr}.filters .search-field,.filters .btn{grid-column:1/-1}.stats{grid-template-columns:1fr 1fr}.hero{padding-top:42px}h1{letter-spacing:-2.5px}.panel{padding:12px}.nav{gap:10px}.nav a{font-size:10px}}
 @media(max-width:380px){.nav a:nth-child(2){display:none}.stat strong{font-size:20px}}
+
+/* Premium UI refinement */
+:root{--bg:#f3f5f9;--surface:rgba(255,255,255,.88);--text:#111827;--muted:#687386;--line:rgba(148,163,184,.22);--blue:#1769e0;--green:#138a55;--shadow:0 24px 70px rgba(15,23,42,.075)}
+html.dark{--bg:#090d16;--surface:rgba(20,27,41,.92);--text:#f3f6fc;--muted:#a1adbf;--line:rgba(148,163,184,.16);--blue:#69a7ff;--green:#55d69a;--shadow:0 24px 70px rgba(0,0,0,.28)}
+body{background:radial-gradient(ellipse at 12% 0%,rgba(69,130,230,.12),transparent 34%),radial-gradient(ellipse at 92% 8%,rgba(116,91,220,.09),transparent 30%),var(--bg);min-height:100vh}
+header{height:72px;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-bottom:1px solid var(--line);box-shadow:0 4px 24px rgba(15,23,42,.025)}
+.logo{display:flex;align-items:center;gap:9px;font-size:13px;letter-spacing:-.5px}
+.logo:first-letter{color:var(--blue)}
+.nav a{transition:color .2s}.nav a:hover{color:var(--blue)}
+.theme{box-shadow:0 4px 14px rgba(15,23,42,.06);transition:transform .2s,border-color .2s}.theme:active,.btn:active{transform:scale(.97)}
+.hero{padding-top:76px;padding-bottom:38px;position:relative}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid rgba(23,105,224,.16);border-radius:999px;background:rgba(23,105,224,.065);letter-spacing:1.2px}
+h1{font-size:clamp(42px,7.4vw,76px);letter-spacing:-4.5px;line-height:.98;margin:20px 0 16px}
+h1 span{background:linear-gradient(100deg,var(--blue),#7b72e8 78%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:13px;max-width:720px}
+.panel{border-radius:26px;padding:22px;background:var(--surface);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:var(--shadow);border:1px solid var(--line)}
+.stat{border-radius:18px;padding:17px 18px;background:linear-gradient(145deg,rgba(255,255,255,.58),rgba(148,163,184,.045));transition:transform .2s,border-color .2s}
+html.dark .stat{background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012))}
+.stat:hover{transform:translateY(-2px);border-color:rgba(23,105,224,.28)}
+.stat small{letter-spacing:1.15px}
+.stat strong{font-size:clamp(21px,2.5vw,27px);letter-spacing:-1px}
+.field{height:47px;border-radius:13px;background:color-mix(in srgb,var(--bg) 72%,var(--surface));transition:border-color .2s,box-shadow .2s}
+.field:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(23,105,224,.10)}
+.btn{height:47px;border-radius:13px;background:linear-gradient(135deg,#1769e0,#4389ef);box-shadow:0 8px 18px rgba(23,105,224,.2);transition:transform .2s,box-shadow .2s}
+.btn:hover:not(:disabled){box-shadow:0 11px 24px rgba(23,105,224,.28);transform:translateY(-1px)}
+.rule{padding:11px 13px;border-radius:12px;background:rgba(23,105,224,.055);border:1px solid rgba(23,105,224,.09)}
+.status{font-weight:600}
+.table-wrap{border-radius:17px;background:var(--surface)}
+th{position:sticky;top:0;z-index:1;background:color-mix(in srgb,var(--bg) 88%,var(--surface));letter-spacing:.9px}
+tbody tr{transition:background .16s}
+tbody tr:hover{background:rgba(23,105,224,.045)}
+td{padding-top:15px;padding-bottom:15px}
+.rank{display:inline-block;min-width:30px}
+.gpa{font-variant-numeric:tabular-nums}
+.pages button{padding:10px 15px;transition:border-color .2s,background .2s}
+.pages button:not(:disabled):hover{border-color:var(--blue);background:rgba(23,105,224,.07)}
+footer{line-height:1.8;padding:32px 18px 38px}
+@media(max-width:760px){.hero{padding-top:48px;padding-bottom:27px}.panel{padding:13px;border-radius:21px}.stat{padding:14px}.filters{gap:8px}h1{letter-spacing:-2.8px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+
+
+/* Final premium polish */
+.hero{isolation:isolate}
+.hero:before{content:"";position:absolute;z-index:-1;right:4%;top:34px;width:230px;height:230px;border-radius:50%;background:linear-gradient(135deg,rgba(23,105,224,.12),rgba(123,114,232,.08));filter:blur(2px);pointer-events:none}
+.hero:after{content:"";position:absolute;z-index:-1;right:10%;top:82px;width:150px;height:150px;border:1px solid rgba(23,105,224,.13);border-radius:42px;transform:rotate(24deg);pointer-events:none}
+.eyebrow{box-shadow:0 6px 18px rgba(23,105,224,.06)}
+h1{max-width:850px;text-wrap:balance}
+.panel{position:relative;overflow:hidden}
+.panel:before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(23,105,224,.35),rgba(123,114,232,.28),transparent);pointer-events:none}
+.stat{position:relative;overflow:hidden}
+.stat:after{content:"";position:absolute;right:-22px;top:-28px;width:76px;height:76px;border-radius:50%;background:rgba(23,105,224,.045);pointer-events:none}
+.field, .btn, .theme, .pages button{outline-offset:3px}
+.field:focus-visible,.btn:focus-visible,.theme:focus-visible,.pages button:focus-visible{outline:3px solid rgba(23,105,224,.25)}
+.table-wrap{scrollbar-width:thin;scrollbar-color:rgba(104,115,134,.35) transparent}
+.empty{font-weight:600}
+footer{border-top:1px solid var(--line);margin-top:8px}
+@media(max-width:760px){.hero:before{width:145px;height:145px;right:-22px;top:25px}.hero:after{width:95px;height:95px;right:5%;top:55px}.hero p{max-width:95%}}
+@media(prefers-reduced-motion:no-preference){.hero h1,.panel{animation:premiumRise .55s ease both}.panel{animation-delay:.08s}@keyframes premiumRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}}
+
 </style>
 </head>
 <body>
@@ -35,8 +94,8 @@ h1{font-size:clamp(40px,7vw,68px);letter-spacing:-3.8px;line-height:.99;margin:1
 </header>
 <section class="hero">
 <span class="eyebrow">CHATTOGRAM BOARD · HSC 2026</span>
-<h1>Institution<br><span>Ranking.</span></h1>
-<p>Institution-wise HSC 2026 performance for the 277 EIINs provided. Rankings are ordered by GPA-5 count, passing rate, passed candidates and appeared candidates. Only institution-level statistics are shown.</p>
+<h1>Chittagong<br><span>Education Board.</span></h1>
+<p>HSC 2026 Results based Institution Ranking · Institution-wise performance for the 277 provided EIINs. Rankings are ordered by GPA-5 count, passing rate, passed candidates and appeared candidates.</p>
 </section>
 <main class="content"><section class="panel">
 <div class="stats">
@@ -56,7 +115,7 @@ h1{font-size:clamp(40px,7vw,68px);letter-spacing:-3.8px;line-height:.99;margin:1
 <div class="table-wrap"><table><thead><tr><th>RANK</th><th>INSTITUTION</th><th>EIIN</th><th>DISTRICT</th><th>UPAZILA</th><th>APPEARED</th><th>PASSED</th><th>PASS RATE</th><th>GPA-5</th></tr></thead><tbody id="rows"><tr><td colspan="9" class="empty">Loading…</td></tr></tbody></table></div>
 <div class="pages"><button id="prev" disabled>← Previous</button><span id="page">Page 1</span><button id="next" disabled>Next →</button></div>
 </section></main>
-<footer>© 2026 CTGBoardRanking · Unofficial institution-level statistics</footer>
+<footer>HSC 2026 Results based Institution Ranking<br><br>Credit: Shadat Fatih · Unofficial Note: This is an independent institution ranking, not an official ranking published by the Education Board.<br><br>© 2026 CTGBoardRanking</footer>
 <script src="js/supabase-config.js"></script>
 <script>
 (()=>{
@@ -123,11 +182,12 @@ $("prev").onclick=()=>{if(page>1){page--;render()}};
 $("next").onclick=()=>{if(page<Math.ceil(filtered.length/SIZE)){page++;render()}};
 $("pdf").onclick=()=>{
 if(!window.jspdf||!window.jspdf.jsPDF)return alert("PDF library is unavailable.");
-const doc=new window.jspdf.jsPDF({orientation:"landscape",unit:"pt",format:"a4"});
+const doc=new window.jspdf.jsPDF({orientation:"portrait",unit:"pt",format:"a4"});
 const w=doc.internal.pageSize.getWidth(),h=doc.internal.pageSize.getHeight();
-doc.setFont("helvetica","bold");doc.setFontSize(18);doc.setTextColor(20,28,42);doc.text("HSC 2026 Institution Ranking",36,38);
-doc.setFont("helvetica","normal");doc.setFontSize(8);doc.text("277 EIIN dataset · Generated "+new Date().toLocaleString("en-GB"),36,55);
-doc.autoTable({startY:70,margin:{left:30,right:30,bottom:48},head:[["RANK","INSTITUTION","EIIN","DISTRICT","UPAZILA","APPEARED","PASSED","PASS RATE","GPA-5"]],body:filtered.map(x=>[x.rank,x.institution_name,x.eiin,x.district,x.upazila,fmt(x.appeared),fmt(x.passed),number(x.passing_rate).toFixed(2)+"%",fmt(x.gpa5)]),theme:"striped",styles:{font:"helvetica",fontSize:7,cellPadding:4},headStyles:{fillColor:[25,39,59]},didDrawPage:()=>{const y=h-22;doc.setFontSize(7);doc.setTextColor(125,130,140);doc.text("Unofficial institution-level statistics · CTGBoardRanking",30,y);doc.text("Page "+doc.internal.getCurrentPageInfo().pageNumber,w-30,y,{align:"right"})}});
+doc.setFont("helvetica","bold");doc.setFontSize(18);doc.setTextColor(20,28,42);doc.text("Chittagong Education Board",36,38);
+doc.setFont("helvetica","normal");doc.setFontSize(8);doc.text("HSC 2026 Results based Institution Ranking",36,55);
+doc.text("Credit: Shadat Fatih · Unofficial Note: Independent ranking, not an official Board publication.",36,68);
+doc.autoTable({startY:86,margin:{left:24,right:24,bottom:52},head:[["RANK","INSTITUTION","EIIN","DISTRICT","UPAZILA","APPEARED","PASSED","PASS RATE","GPA-5"]],body:filtered.map(x=>[x.rank,x.institution_name,x.eiin,x.district,x.upazila,fmt(x.appeared),fmt(x.passed),number(x.passing_rate).toFixed(2)+"%",fmt(x.gpa5)]),theme:"striped",styles:{font:"helvetica",fontSize:6,cellPadding:3,overflow:"linebreak"},columnStyles:{0:{cellWidth:32},1:{cellWidth:150},2:{cellWidth:42},3:{cellWidth:65},4:{cellWidth:65},5:{cellWidth:48},6:{cellWidth:45},7:{cellWidth:48},8:{cellWidth:42}},headStyles:{fillColor:[25,39,59]},didDrawPage:()=>{const y=h-22;doc.setFontSize(7);doc.setTextColor(125,130,140);doc.text("HSC 2026 Results based Institution Ranking",24,y);doc.text("Page "+doc.internal.getCurrentPageInfo().pageNumber,w-24,y,{align:"right"})}});
 doc.save("HSC-2026-Institution-Ranking.pdf");
 };
 load();
